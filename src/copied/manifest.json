@@ -1,7 +1,7 @@
 {
   // Имя и описание, версия. Все это будет видно в браузере в chrome://extensions/?id=<id расширения>
-  "name": "Signer",
-  "description": "Extension demo",
+  "name": "Enecuum",
+  "description": "Extension wallet",
   "version": "0.0.1",
   "manifest_version": 2,
 
@@ -13,7 +13,8 @@
   // Указание на html для popup
   "browser_action": {
     "default_title": "My Extension",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": "enq.ico"
   },
 
   // Контент скрипты. Здесь у нас одно правило: параллельно всему, что открыто через http или https мы запускаем

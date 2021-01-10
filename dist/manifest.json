@@ -1,7 +1,7 @@
 {
   // Имя и описание, версия. Все это будет видно в браузере в chrome://extensions/?id=<id расширения>
-  "name": "Signer",
-  "description": "Extension demo",
+  "name": "Enecuum Wallet",
+  "description": "Extension wallet",
   "version": "0.0.1",
   "manifest_version": 2,
 
@@ -12,7 +12,7 @@
 
   // Указание на html для popup
   "browser_action": {
-    "default_title": "My Extension",
+    "default_title": "ENECUUM",
     "default_popup": "popup.html"
   },
 
