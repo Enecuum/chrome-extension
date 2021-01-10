@@ -9,12 +9,12 @@
   "background": {
     "scripts": ["background.js"]
   },
-
+  //"content_security_policy": "script-src 'self' 'unsafe-eval';script-src-elem 'self' 'unsafe-eval'; object-src 'self'",
   // Указание на html для popup
   "browser_action": {
     "default_title": "My Extension",
     "default_popup": "popup.html",
-    "default_icon": "enq.ico"
+    "default_icon": "enq.png"
   },
 
   // Контент скрипты. Здесь у нас одно правило: параллельно всему, что открыто через http или https мы запускаем

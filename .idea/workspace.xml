@@ -13,8 +13,7 @@
     <list default="true" id="2556b6dc-7dfa-471c-8dc1-91eaabb62786" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/dist/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/copied/enq.ico" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/copied/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/copied/manifest.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,7 +64,7 @@
       <option name="presentableId" value="Default" />
       <updated>1607405852817</updated>
       <workItem from="1607405854371" duration="10024000" />
-      <workItem from="1610285350246" duration="3660000" />
+      <workItem from="1610285350246" duration="4828000" />
     </task>
     <servers />
   </component>

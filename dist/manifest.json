@@ -1,6 +1,6 @@
 {
   // Имя и описание, версия. Все это будет видно в браузере в chrome://extensions/?id=<id расширения>
-  "name": "Enecuum Wallet",
+  "name": "Enecuum",
   "description": "Extension wallet",
   "version": "0.0.1",
   "manifest_version": 2,
@@ -9,11 +9,12 @@
   "background": {
     "scripts": ["background.js"]
   },
-
+  //"content_security_policy": "script-src 'self' 'unsafe-eval';script-src-elem 'self' 'unsafe-eval'; object-src 'self'",
   // Указание на html для popup
   "browser_action": {
-    "default_title": "ENECUUM",
-    "default_popup": "popup.html"
+    "default_title": "My Extension",
+    "default_popup": "popup.html",
+    "default_icon": "enq.png"
   },
 
   // Контент скрипты. Здесь у нас одно правило: параллельно всему, что открыто через http или https мы запускаем
