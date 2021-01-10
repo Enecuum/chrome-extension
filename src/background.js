@@ -1,19 +1,56 @@
-import {extApi} from "./utils/platform"
-import {portSream} from "./utils/portSream"
-import { EnqExtApi } from "./extAPI"
+import {reaction} from 'mobx';
+import {extensionApi} from "./utils/extensionApi";
+import {PortStream} from "./utils/PortStream";
+import {SignerApp} from "./SignerApp";
+import {loadState, saveState} from "./utils/localStorage";
 
-const app = new EnqExtApi()
+const DEV_MODE = process.env.NODE_ENV !== 'production';
+const IDLE_INTERVAL = 30;
 
+setupApp();
 
-extApi.runtime.onConnect.addListener(connectRemote);
+function setupApp() {
+    const initState = loadState();
+    const app = new SignerApp(initState);
 
-var connectRemote = function (remotePort){
-    const processName = remotePort.name;
-    const PortStream = new portSream(remotePort);
-    if(processName == "contentscript"){
-        const origin = remotePort.sender.url;
-        app.connectPage(PortStream,origin)
-    }else{
-        app.connectPopup(PortStream);
+    if (DEV_MODE) {
+        global.app = app;
+    }
+
+    // Setup state persistence
+    reaction(
+        () => ({
+            vault: app.store.vault
+        }),
+        saveState
+    );
+
+    // update badge
+    reaction(
+        () => app.store.newMessages.length > 0 ? app.store.newMessages.length.toString() : '',
+        text => extensionApi.browserAction.setBadgeText({text}),
+        {fireImmediately: true}
+    );
+
+    // Lock on idle
+    extensionApi.idle.setDetectionInterval(IDLE_INTERVAL);
+    extensionApi.idle.onStateChanged.addListener(state => {
+        if (['locked', 'idle'].indexOf(state) > -1) {
+           app.lock()
+        }
+    });
+
+    // Connect to other contexts
+    extensionApi.runtime.onConnect.addListener(connectRemote);
+
+    function connectRemote(remotePort) {
+        const processName = remotePort.name;
+        const portStream = new PortStream(remotePort);
+        if (processName === 'contentscript') {
+            const origin = remotePort.sender.url
+            app.connectPage(portStream, origin)
+        } else {
+            app.connectPopup(portStream)
+        }
     }
 }
