@@ -1,24 +1,31 @@
-import PostMessageStream from 'post-message-stream';
-import {cbToPromise, setupDnode, transformMethods} from "./utils/setupDnode";
 
+let hello = function (){
+    console.log('hello from Enecuum ext')
+}
+let click = function (){
 
-setupInpageApi().catch(console.error);
+}
 
+var ext_api =  {
+        hello: hello,
+        click:click,
+        task:'',
+}
+
+function checkLib(){
+    if(ENQWeb){
+        console.log('Enecuum lib connected!')
+        global.ENQExt = ext_api
+    }else{
+        console.error('not found ENQ Web lib.')
+    }
+}
 
 async function setupInpageApi() {
-    const connectionStream = new PostMessageStream({
-        name: 'page',
-        target: 'content',
-    });
 
-    const api = {};
-    const dnode = setupDnode(connectionStream, api);
-
-    const pageApi = await new Promise(resolve => {
-        dnode.once('remote', remoteApi => {
-            resolve(transformMethods(cbToPromise, remoteApi))
-        })
-    });
-
-    global.SignerApp = pageApi;
 }
+
+document.addEventListener('DOMContentLoaded', ()=>{
+    checkLib()
+    setupInpageApi()
+});

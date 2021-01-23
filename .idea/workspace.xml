@@ -12,9 +12,27 @@
   <component name="ChangeListManager">
     <list default="true" id="2556b6dc-7dfa-471c-8dc1-91eaabb62786" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babel-mocha.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/background.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/contentscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/contentscript.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/inpage.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/inpage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/dist/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/copied/enq.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/popup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SignerApp.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/background.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/contentscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/contentscript.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/copied/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/copied/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/inpage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/inpage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/popup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/components/Initialize.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/components/Keys.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/components/Sign.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/components/Unlock.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/index.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/app.spec.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,19 +58,21 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/dist" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/dist" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/ui" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/src/copied" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/src/ui" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -65,6 +85,15 @@
       <updated>1607405852817</updated>
       <workItem from="1607405854371" duration="10024000" />
       <workItem from="1610285350246" duration="4828000" />
+      <workItem from="1610533349444" duration="260000" />
+      <workItem from="1610570327045" duration="486000" />
+      <workItem from="1610572906820" duration="4598000" />
+      <workItem from="1610611197579" duration="5767000" />
+      <workItem from="1610838741929" duration="220000" />
+      <workItem from="1610887737094" duration="864000" />
+      <workItem from="1610962203702" duration="204000" />
+      <workItem from="1611308044271" duration="17528000" />
+      <workItem from="1611388173020" duration="26677000" />
     </task>
     <servers />
   </component>
@@ -82,11 +111,5 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="624" y="238" key="run.anything.popup" timestamp="1607412113059">
-      <screen x="0" y="27" width="1920" height="997" />
-    </state>
-    <state x="624" y="238" key="run.anything.popup/0.27.1920.997@0.27.1920.997" timestamp="1607412113059" />
   </component>
 </project>

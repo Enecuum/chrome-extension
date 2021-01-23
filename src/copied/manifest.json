@@ -7,7 +7,7 @@
 
   // Скрипты, которые будут исполнятся в background
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js", "enqweb3.min.js"]
   },
   //"content_security_policy": "script-src 'self' 'unsafe-eval';script-src-elem 'self' 'unsafe-eval'; object-src 'self'",
   // Указание на html для popup
@@ -37,11 +37,11 @@
     "storage",
    // "unlimitedStorage",
     //"clipboardWrite",
-    "idle"
-    //"activeTab",
+    "idle",
+    "activeTab",
     //"webRequest",
     //"notifications",
-    //"tabs"
+    "tabs"
   ],
   // Здесь указываются ресурсы, к которым будет иметь доступ веб страница
   "web_accessible_resources": ["inpage.js"]
