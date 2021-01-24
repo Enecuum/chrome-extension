@@ -12,27 +12,14 @@
   <component name="ChangeListManager">
     <list default="true" id="2556b6dc-7dfa-471c-8dc1-91eaabb62786" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/babel-mocha.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/background.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/contentscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/contentscript.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/inpage.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/inpage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/dist/manifest.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/popup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/SignerApp.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/background.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/contentscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/contentscript.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/copied/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/copied/manifest.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/inpage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/inpage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/popup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/components/Initialize.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/components/Keys.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/components/Sign.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/components/Unlock.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/index.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/app.spec.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,6 +81,7 @@
       <workItem from="1610962203702" duration="204000" />
       <workItem from="1611308044271" duration="17528000" />
       <workItem from="1611388173020" duration="26677000" />
+      <workItem from="1611477915959" duration="3292000" />
     </task>
     <servers />
   </component>

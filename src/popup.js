@@ -11,12 +11,15 @@ async function setupUi() {
         }
         msgHandler(msg, sender)
     })
-
+    global.Port = toBackground
 
     // Запуск интерфейса
     // await initApp(background)
 }
 
-function msgHandler(msg, sender){}
+function msgHandler(msg, sender){
+    console.log(msg)
+    console.log(sender)
+}
 
 setupUi()

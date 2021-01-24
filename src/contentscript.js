@@ -33,24 +33,26 @@ function injectScript(){
 }
 
 async function eventHandler() {
-    document.addEventListener('ENQContent', (e)=>{
-        let address = Math.random().toString(36)
-        switch (e.detail.type){
-            case 'enable':
-                taskId[address] = enable
-                break
-            case 'balanceOf':
-                taskId[address] = balanceOf
-                break
-            case 'tx':
-                taskId[address] = transaction
-                break
-            default:
-                break
-        }
-        toBackground.postMessage({type:e.detail.type,data:e.detail.data, taskId:address, cb:e.detail.cb})
+    document.addEventListener('ENQConnect', (e)=>{
+        setupConnection()
+        document.addEventListener('ENQContent', (e)=>{
+            let address = Math.random().toString(36)
+            switch (e.detail.type){
+                case 'enable':
+                    taskId[address] = enable
+                    break
+                case 'balanceOf':
+                    taskId[address] = balanceOf
+                    break
+                case 'tx':
+                    taskId[address] = transaction
+                    break
+                default:
+                    break
+            }
+            toBackground.postMessage({type:e.detail.type,data:e.detail.data, taskId:address, cb:e.detail.cb})
+        })
     })
-
 }
 
 function enable(msg){
@@ -107,7 +109,7 @@ function injectCb(code){
     script.remove();
 }
 
-setupConnection();
+// setupConnection();
 injectScript();
 eventHandler()
 

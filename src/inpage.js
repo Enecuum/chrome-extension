@@ -16,6 +16,8 @@ function checkLib(){
     if(ENQWeb){
         console.log('Enecuum lib connected!')
         global.ENQExt = ext_api
+        let event = new CustomEvent('ENQConnect',{})
+        document.dispatchEvent(event)
     }else{
         console.error('not found ENQ Web lib.')
     }

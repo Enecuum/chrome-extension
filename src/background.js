@@ -81,11 +81,20 @@ function listPorts(){
 function disconnectHandler(port){
     console.log('disconnected: ' + port.name)
 }
+function connectController(port){
+    if(ports[port.name]){
+        ports[port.name].disconnect()
+        ports[port.name] = port
+    }else{
+        ports[port.name] = port
+    }
+}
 
 //TODO add cleaner connection list
 async function connectHandler(port){
     //console.log(port, port.name)
-    ports[port.name]=port
+    // ports[port.name]=port
+    await connectController(port)
     switch (port.name){
         case 'content':
             port.onMessage.addListener(msgConnectHandler)
