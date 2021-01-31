@@ -1,3 +1,5 @@
+const content = require('./ui/content')
+
 var toBackground = {};
 var taskId = []
 async function setupUi() {
@@ -15,6 +17,9 @@ async function setupUi() {
 
     // Запуск интерфейса
     // await initApp(background)
+    let Content = new content(toBackground)
+    document.addEventListener('DOMContentLoaded',Content.init)
+    global.Content = Content
 }
 
 function msgHandler(msg, sender){
