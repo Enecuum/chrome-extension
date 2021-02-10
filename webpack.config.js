@@ -7,11 +7,12 @@ module.exports = () => {
     const SOURCE_FOLDER = path.resolve(__dirname ,'src');
     const DIST_FOLDER = path.resolve(__dirname, 'dist');
 
-    const COPY = [{
-        from: path.join(SOURCE_FOLDER, 'copied'),
-        to: DIST_FOLDER,
-        ignore: []
-    }];
+    const COPY = {
+        patterns: [{
+            from: path.join(SOURCE_FOLDER, 'copied'),
+            to: DIST_FOLDER
+        }
+        ]};
 
     const plugins = [];
 
