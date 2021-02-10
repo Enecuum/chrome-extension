@@ -50,26 +50,26 @@ async function msgConnectHandler(msg,sender){
     if(msg.taskId){
         // console.log(msg.taskId)
         // sender.postMessage({msg:'all work', taskId:msg.taskId, data:'qqq'})
-        // switch (msg.type){
-        //     case 'enable':
-        //         sender.postMessage({data:user.Alice.pubkey,taskId:msg.taskId, cb:msg.cb})
-        //         break
-        //     case 'balanceOf':
-        //         ENQWeb.Enq.provider = 'http://95.216.207.173'
-        //         answer = await ENQWeb.Net.get.getBalance(msg.data.address, msg.data.token)
-        //         sender.postMessage({data:answer.amount,taskId:msg.taskId,cb:msg.cb})
-        //         break
-        //     case 'tx':
-        //         ENQWeb.Enq.provider = 'http://95.216.207.173'
-        //         ENQWeb.Enq.User = user.genesis
-        //         ENQWeb.Net.post.tx(msg.data.address,ENQWeb.Enq.ticker,msg.data.amount, '', msg.data.token).then(answer=>{
-        //             // console.log(answer)
-        //             sender.postMessage({data:answer.hash,taskId:msg.taskId,cb:msg.cb})
-        //         }).catch(err=>{}) //TODO catch errors
-        //         break
-        //     default:
-        //         break
-        // }
+        switch (msg.type){
+            case 'enable':
+                sender.postMessage({data:user.Alice.pubkey,taskId:msg.taskId, cb:msg.cb})
+                break
+            case 'balanceOf':
+                ENQWeb.Enq.provider = 'http://95.216.207.173'
+                answer = await ENQWeb.Net.get.getBalance(msg.data.address, msg.data.token)
+                sender.postMessage({data:answer.amount,taskId:msg.taskId,cb:msg.cb})
+                break
+            case 'tx':
+                ENQWeb.Enq.provider = 'http://95.216.207.173'
+                ENQWeb.Enq.User = user.genesis
+                ENQWeb.Net.post.tx(msg.data.address,ENQWeb.Enq.ticker,msg.data.amount, '', msg.data.token).then(answer=>{
+                    // console.log(answer)
+                    sender.postMessage({data:answer.hash,taskId:msg.taskId,cb:msg.cb})
+                }).catch(err=>{}) //TODO catch errors
+                break
+            default:
+                break
+        }
         Storage.task.setTask(msg.taskId, {data:msg.data, type:msg.type, cb:msg.cb})
     }else{
         console.log(msg)
