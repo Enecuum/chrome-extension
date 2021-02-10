@@ -78,42 +78,42 @@ function injectCodeGeneration(msg){
         if(msg.cb.inText && msg.cb.id){
             code = `
             document.getElementById('${msg.cb.id}').innerText = "${msg.data}"
-            ENQWeb.Enq.cb = "${msg.data}"
-            ENQWeb.Enq.ready = true
+            ENQWeb.Enq.cb[${msg.cb.taskId}] = "${msg.data}"
+            ENQWeb.Enq.ready[${msg.cb.taskId}] = true
             `
         }
         else if(msg.cb.inDoc && msg.cb.id){
             code=`
             document.${msg.cb.id} = "${msg.data}"
-            ENQWeb.Enq.cb = "${msg.data}"
-            ENQWeb.Enq.ready = true
+            ENQWeb.Enq.cb[${msg.cb.taskId}] = "${msg.data}"
+            ENQWeb.Enq.ready[${msg.cb.taskId}] = true
             `
         }
         else if(msg.cb.inWin && msg.cb.id){
             code=`
             window.${msg.cb.id} = "${msg.data}"
-            ENQWeb.Enq.cb = "${msg.data}"
-            ENQWeb.Enq.ready = true
+            ENQWeb.Enq.cb[${msg.cb.taskId}] = "${msg.data}"
+            ENQWeb.Enq.ready[${msg.cb.taskId}] = true
             `
         }
         else if(msg.cb.inSite && msg.cb.id){
             code=`
             ${msg.cb.id}="${msg.data}"
-            ENQWeb.Enq.cb = "${msg.data}"
-            ENQWeb.Enq.ready = true
+            ENQWeb.Enq.cb[${msg.cb.taskId}] = "${msg.data}"
+            ENQWeb.Enq.ready[${msg.cb.taskId}] = true
             `
         }
         else{
             code = `
-        document.getElementById('${msg.cb}').setAttribute('ENQ', '${msg.data}')
-        ENQWeb.Enq.cb = "${msg.data}"
-        ENQWeb.Enq.ready = true
+        document.getElementById('${msg.cb.cb}').setAttribute('ENQ', '${msg.data}')
+        ENQWeb.Enq.cb[${msg.cb.taskId}] = "${msg.data}"
+        ENQWeb.Enq.ready[${msg.cb.taskId}] = true
         `
         }
     }else{
         code = `
-        ENQWeb.Enq.cb = "${msg.data}"
-        ENQWeb.Enq.ready = true
+        ENQWeb.Enq.cb[${msg.cb.taskId}] = "${msg.data}"
+        ENQWeb.Enq.ready[${msg.cb.taskId}] = true
         `
     }
     return code

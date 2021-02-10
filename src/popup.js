@@ -1,5 +1,5 @@
 const content = require('./ui/content')
-const UI = require('./ui/index')
+// const UI = require('./ui/index')
 
 var toBackground = {};
 var taskId = []
@@ -20,7 +20,7 @@ async function setupUi() {
     let Content = new content(toBackground)
     document.addEventListener('DOMContentLoaded',Content.init)
     global.Content = Content
-    await UI(toBackground)
+    // await UI(toBackground)
 }
 
 function msgHandler(msg, sender){

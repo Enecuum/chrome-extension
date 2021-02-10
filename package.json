@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack --watch",
-    "dist": "NODE_ENV=production webpack",
-    "test": "mocha --require babel-mocha.js"
+    "build": "webpack",
+    "dist": "NODE_ENV=production webpack"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +14,7 @@
     "@babel/core": "^7.12.13",
     "@babel/plugin-proposal-class-properties": "^7.3.0",
     "@babel/plugin-proposal-decorators": "^7.2.3",
+    "@babel/plugin-transform-react-jsx": "^7.12.13",
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
@@ -26,7 +27,6 @@
     "webpack-cli": "^3.1.2"
   },
   "dependencies": {
-    "@waves/waves-transactions": "^3.0.19",
     "crypto-js": "^3.1.9-1",
     "dnode": "^1.2.2",
     "extension-port-stream": "^2.0.0",
