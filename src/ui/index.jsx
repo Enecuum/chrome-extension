@@ -3,14 +3,14 @@ import {render} from 'react-dom'
 import React from "react";
 
 function App(){
-    return (
+    return(
         <div>
-            <h1>hi, new react</h1>
+            <h1>hello, react</h1>
         </div>
     )
 }
 
-export async function initApp(){
+export async function initApp(background){
     render(
         <App/>,
         document.getElementById('app-content')

@@ -42,22 +42,6 @@ function loadUser(){
     return user
 }
 
-function setMainUser(name){
-    let user = loadUser()
-    localStorage.setItem('MainAcc',JSON.stringify(user[name]))
-    return true
-}
-
-function unsetMainUser(){
-    localStorage.removeItem('MainAcc')
-    return true
-}
-
-function getMainUser(){
-    let acc = localStorage.getItem('MainAcc')
-    return acc
-}
-
 function addUser(name, pubkey, prvkey, net){
     let user = loadUser()
     user[name]={
@@ -100,11 +84,6 @@ let storage = function Storage(){
         getUser:getUser,
         removeUser:removeUser,
         clearUsers:clearUsers
-    }
-    this.mainAcc = {
-        get:getMainUser,
-        set:setMainUser,
-        unset:unsetMainUser
     }
 }
 

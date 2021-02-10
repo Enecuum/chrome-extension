@@ -1,5 +1,3 @@
-
-
 const storage = require('./utils/localStorage')
 let Storage = new storage()
 global.disk = Storage
