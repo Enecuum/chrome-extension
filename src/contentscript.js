@@ -129,6 +129,3 @@ function injectCb(code){
 // setupConnection();
 injectScript();
 eventHandler()
-
-
-

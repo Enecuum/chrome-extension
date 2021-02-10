@@ -12,19 +12,21 @@
   <component name="ChangeListManager">
     <list default="true" id="2556b6dc-7dfa-471c-8dc1-91eaabb62786" name="Default Changelist" comment="basic ui, setting background.js">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/babel.config.json" beforeDir="false" afterPath="$PROJECT_DIR$/babel.config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/background.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/contentscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/contentscript.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/enqweb3.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/enqweb3.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/popup.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/popup.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/popup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/background.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/contentscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/contentscript.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/copied/enqweb3.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/copied/enqweb3.min.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/popup.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/content.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/content.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/index.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils/localStorage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/localStorage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

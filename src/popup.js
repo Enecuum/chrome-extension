@@ -1,5 +1,5 @@
 const content = require('./ui/content')
-const UI = require('./ui')
+// const UI = require('./ui/index')
 import {initApp} from "./ui/index";
 
 var toBackground = {};
@@ -21,6 +21,7 @@ async function setupUi() {
     let Content = new content(toBackground)
     // document.addEventListener('DOMContentLoaded',Content.init)
     global.Content = Content
+    // await UI(toBackground)
     await initApp()
 }
 
@@ -28,7 +29,7 @@ function msgHandler(msg, sender){
     console.log(msg)
     console.log(sender)
 }
-document.addEventListener('DOMContentLoaded', ()=>{
+
+document.addEventListener('DOMContentLoaded',()=>{
     setupUi()
 })
-
