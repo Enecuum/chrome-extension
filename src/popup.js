@@ -1,6 +1,9 @@
 const content = require('./ui/content')
 // const UI = require('./ui/index')
 import {initApp} from "./ui/index";
+const Storage = require('./utils/localStorage')
+let storege = new Storage()
+global.disk = storege
 
 var toBackground = {};
 var taskId = []
@@ -19,7 +22,11 @@ async function setupUi() {
 
     // Запуск интерфейса
     let Content = new content(toBackground)
-    // document.addEventListener('DOMContentLoaded',Content.init)
+    // document.addEventListener('DOMContentLoaded',()=>{
+    //     console.log('loaded 2')
+    //     Content.init()
+    // })
+    // Content.init()
     global.Content = Content
     // await UI(toBackground)
     await initApp()
@@ -31,5 +38,6 @@ function msgHandler(msg, sender){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
+    console.log('loaded 1')
     setupUi()
 })
