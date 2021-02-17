@@ -48,28 +48,28 @@ async function msgConnectHandler(msg,sender){
     if(msg.taskId){
         // console.log(msg.taskId)
         // sender.postMessage({msg:'all work', taskId:msg.taskId, data:'qqq'})
-        switch (msg.type){
-            case 'enable':
-                sender.postMessage({data:user.Alice.pubkey,taskId:msg.taskId, cb:msg.cb})
-                break
-            case 'balanceOf':
-                ENQWeb.Enq.provider = 'http://95.216.207.173'
-                answer = await ENQWeb.Net.get.getBalance(msg.data.address, msg.data.token)
-                sender.postMessage({data:answer.amount,taskId:msg.taskId,cb:msg.cb})
-                break
-            case 'tx':
-                ENQWeb.Enq.provider = 'http://95.216.207.173'
-                ENQWeb.Enq.User = user.genesis
-                ENQWeb.Net.post.tx(user.genesis,msg.data.address,ENQWeb.Enq.ticker,msg.data.amount, '', msg.data.token).then(answer=>{
-                    console.log(answer)
-                    sender.postMessage({data:answer.hash,taskId:msg.taskId,cb:msg.cb})
-                }).catch(err=>{
-                    console.log(err)
-                }) //TODO catch errors
-                break
-            default:
-                break
-        }
+        // switch (msg.type){
+        //     case 'enable':
+        //         sender.postMessage({data:user.Alice.pubkey,taskId:msg.taskId, cb:msg.cb})
+        //         break
+        //     case 'balanceOf':
+        //         ENQWeb.Enq.provider = 'http://95.216.207.173'
+        //         answer = await ENQWeb.Net.get.getBalance(msg.data.address, msg.data.token)
+        //         sender.postMessage({data:answer.amount,taskId:msg.taskId,cb:msg.cb})
+        //         break
+        //     case 'tx':
+        //         ENQWeb.Enq.provider = 'http://95.216.207.173'
+        //         ENQWeb.Enq.User = user.genesis
+        //         ENQWeb.Net.post.tx(user.genesis,msg.data.address,ENQWeb.Enq.ticker,msg.data.amount, '', msg.data.token).then(answer=>{
+        //             console.log(answer)
+        //             sender.postMessage({data:answer.hash,taskId:msg.taskId,cb:msg.cb})
+        //         }).catch(err=>{
+        //             console.log(err)
+        //         }) //TODO catch errors
+        //         break
+        //     default:
+        //         break
+        // }
         Storage.task.setTask(msg.taskId, {data:msg.data, type:msg.type, cb:msg.cb})
     }else{
         console.log(msg)
@@ -102,31 +102,72 @@ function connectController(port){
     }
 }
 
-function taskHandler(taskId){
+function search_acc(pubkey){
+    let accs = Storage.user.loadUser()
+    let names = Object.keys(accs)
+    for(let i = 0; i<names.length;i++){
+        if(accs[names[i]].pubkey === pubkey){
+            return accs[names[i]]
+        }
+    }
+    return false
+}
+global.search_acc = search_acc
+
+async function taskHandler(taskId){
     let task = Storage.task.getTask(taskId)
     console.log(task)
-    let acc = Storage.mainAcc.get()
-    switch(task.type){
-        case 'enable':
-            if(typeof acc){
+    let acc = JSON.parse(Storage.mainAcc.get())
+    let data = '';
+    let wallet = '';
+    if(typeof acc === "undefined"){
+        console.log('set main acc!')
+    }else{
+        switch(task.type){
+            case 'enable':
                 console.log('enable. returned: ', acc)
-                // ports.content.postMessage();
-            }
-            break
-        case 'tx':
-            console.log()
-            if(typeof acc){
-                console.log('tx, returned ', acc)
-
-                // ports.content.postMessage()
-            }
-            break
-        case 'balanceOf':
-            console.log()
-            break
-        default:
-            break
+                data = {
+                    pubkey:acc.pubkey,
+                    net:acc.net,
+                }
+                ports.content.postMessage({data:JSON.stringify(data),taskId:taskId, cb:task.cb});
+                Storage.task.removeTask(taskId)
+                break
+            case 'tx':
+                console.log('tx handler work!')
+                data = task.data
+                ENQWeb.Net.provider = acc.net
+                wallet = await search_acc(data.from)
+                if(!wallet){
+                    ports.content.postMessage({data:false,taskId:taskId, cb:task.cb})
+                    Storage.task.removeTask(taskId)
+                }else{
+                    data = await ENQWeb.Net.post.tx_fee_off(wallet, data.to, data.tokenHash, Number(data.value), data.data, data.nonce)
+                    ports.content.postMessage({data:JSON.stringify(data),taskId:taskId, cb:task.cb})
+                    Storage.task.removeTask(taskId)
+                }
+                break
+            case 'balanceOf':
+                console.log(' balanceOf handler work!')
+                data = task.data
+                ENQWeb.Net.provider = acc.net
+                console.log(task.data, ENQWeb.Net.provider)
+                wallet = await search_acc(data.to)
+                if(!wallet){
+                    ports.content.postMessage({data:false,taskId:taskId, cb:task.cb})
+                    Storage.task.removeTask(taskId)
+                }else{
+                    data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash)
+                    ports.content.postMessage({data:JSON.stringify(data),taskId:taskId, cb:task.cb})
+                    console.log({data:JSON.stringify(data),taskId:taskId, cb:task.cb})
+                    Storage.task.removeTask(taskId)
+                }
+                break
+            default:
+                break
+        }
     }
+
 }
 
 //TODO add cleaner connection list
