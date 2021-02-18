@@ -37,6 +37,10 @@ class Login extends React.Component {
                 <div onClick={this.submit}
                      className={[styles.field, styles.button]}>Submit
                 </div>
+                <div
+                className={styles.red}>
+                    hello world
+                </div>
             </div>
         )
     }
