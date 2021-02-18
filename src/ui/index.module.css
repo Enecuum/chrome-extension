@@ -1,3 +1,19 @@
+body {
+    margin: 0;
+}
+
 .field {
-    background: red;
+    background: ghostwhite;
+    padding: 10px;
+    margin: 10px;
+
+    box-sizing: border-box;
+}
+
+.button {
+    cursor: pointer;
+}
+
+input:focus{
+    outline: none;
 }
