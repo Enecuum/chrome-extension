@@ -1,13 +1,14 @@
 const Storage = require('../utils/localStorage')
 
-var Content = function Content(port){
-    let storage= new Storage()
-    function syncTask(){
+let Content = function Content(port) {
+    let storage = new Storage()
+
+    function syncTask() {
         let task = storage.task.loadTask()
         let taskId = Object.keys(task)
-        if(taskId.length>0){
+        if (taskId.length > 0) {
             let html = ``
-            for(let i = 0; i< taskId.length; i++){
+            for (let i = 0; i < taskId.length; i++) {
                 html += `
                 <div class="" >
                     <h5>type: ${task[taskId[i]].type}; id: ${taskId[i]}</h5>
@@ -19,17 +20,18 @@ var Content = function Content(port){
             $('#body').html(html)
         }
     }
-    function syncAcc(){
+
+    function syncAcc() {
         let accs = storage.user.loadUser()
         let names = Object.keys(accs)
-        if(names.length === 0 ){
+        if (names.length === 0) {
             html = addBlock()
             $('#header').html(html)
-        }else{
+        } else {
             let html = ``
             html += addBtn()
-            for(let i = 0; i<names.length; i++){
-                html+=`
+            for (let i = 0; i < names.length; i++) {
+                html += `
                 <div class="">
                     <h5>name: ${names[i]}</h5>
                     <h5>net: ${accs[names[i]].net}</h5>
@@ -40,8 +42,9 @@ var Content = function Content(port){
             $('#header').html(html)
         }
     }
-    function addBlock(){
-        let html = `<div className="container">
+
+    function addBlock() {
+        return `<div className="container">
             <div className="">
                 <input type="text" id="accName" placeholder="acc Name">
             </div>
@@ -60,52 +63,51 @@ var Content = function Content(port){
                 <button addAccBtnCnl className="btn success">Cancel</button>
             </div>
         </div>`
-        return html
     }
 
-    function addBtn(){
+    function addBtn() {
         let html = `<div>
                     <button addBtn class="success">add Acc</button>
                 </div>   `
         return html
     }
 
-    function eventHandler(){
-        $('body').on('click', "[taskId]",function(){
+    function eventHandler() {
+        $('body').on('click', "[taskId]", function () {
             console.log('click task ', $(this).attr('taskId'))
             let task = $(this).attr('taskId')
-            if($(this).attr('taskApply') === 'true'){
-                port.postMessage({taskId:task, agree:true})
-            }else {
-                port.postMessage({taskId:task, agree:false})
+            if ($(this).attr('taskApply') === 'true') {
+                port.postMessage({taskId: task, agree: true})
+            } else {
+                port.postMessage({taskId: task, agree: false})
             }
             syncTask()
         })
-        $('body').on('click', "[addAccBtn]", function (){
+        $('body').on('click', "[addAccBtn]", function () {
             console.log('add ', $('#pvtkey').val())
             let name = $('#accName').val()
             let pvtkey = $('#pvtkey').val()
             let pubkey = ENQWeb.Utils.Sign.getPublicKey(pvtkey, true)
             let net = $('select[name=net]').val()
             console.log(name, pubkey, pvtkey, net)
-            storage.user.addUser(name, pubkey, pvtkey,net)
+            storage.user.addUser(name, pubkey, pvtkey, net)
             storage.mainAcc.set(name)
             syncAcc()
         })
-        $('body').on('click', '[addBtn]', function (){
+        $('body').on('click', '[addBtn]', function () {
             let html = addBlock()
             $('#header').html(html)
         })
-        $('body').on('click', '[addAccBtnCnl]', function (){
+        $('body').on('click', '[addAccBtnCnl]', function () {
             syncAcc()
         })
     }
 
-    this.init = function(){
+    this.init = function () {
         syncAcc()
         syncTask()
         eventHandler()
     }
-}
+};
 
 module.exports = Content
