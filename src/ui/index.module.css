@@ -17,3 +17,8 @@ body {
 input:focus{
     outline: none;
 }
+
+:local .red{
+    margin-top: 100px;
+    background: red;
+}
