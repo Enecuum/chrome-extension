@@ -18,7 +18,8 @@ input:focus{
     outline: none;
 }
 
-:local .red{
-    margin-top: 100px;
+.red{
     background: red;
+    font-size: 20px;
+    margin: 50px;
 }
