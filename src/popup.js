@@ -6,13 +6,13 @@ const Storage = require('./utils/localStorage')
 let storege = new Storage()
 global.disk = storege
 
-var toBackground = {};
-var taskId = []
+let toBackground = {};
+let taskId = []
 
 async function setupUi() {
     toBackground = chrome.runtime.connect({name: 'popup'})
     toBackground.onMessage.addListener((msg, sender, sendResponse) => {
-        var cb = taskId[msg.taskId]
+        let cb = taskId[msg.taskId]
         if (cb) {
             cb(msg)
             delete taskId[msg.taskId]
