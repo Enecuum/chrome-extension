@@ -36,6 +36,9 @@ body {
     width: 380px;
     padding: 10px;
     margin: 10px 10px 0;
+
+    overflow: hidden;
+    border: 1px solid white;
 }
 
 .button {
@@ -46,6 +49,10 @@ body {
     color: white;
 
     user-select: none;
+}
+
+.button.red {
+    background: rgb(255, 10, 103);
 }
 
 input {

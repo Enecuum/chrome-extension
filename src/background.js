@@ -31,7 +31,7 @@ let user = {
     }
 }
 global.users = user
-var ports = {}
+let ports = {}
 
 function setupApp() {
     console.log('background ready')

@@ -1,9 +1,9 @@
 import {extensionApi} from "./utils/extensionApi";
 
 
-var toBackground = {}
-var pageToBack = {}
-var taskId = []
+let toBackground = {}
+let pageToBack = {}
+let taskId = []
 
 
 function setupConnection() {
@@ -12,7 +12,7 @@ function setupConnection() {
     // chrome.runtime.sendMessage({greeting: "Content ready"}, function(response) {});
     toBackground = chrome.runtime.connect({name: 'content'})
     toBackground.onMessage.addListener((msg, sender, sendResponse) => {
-        var cb = taskId[msg.taskId]
+        let cb = taskId[msg.taskId]
         if (cb) {
             cb(msg)
             delete taskId[msg.taskId]
@@ -28,7 +28,7 @@ function injectScript() {
     try {
         // inject in-page script
         let script = document.createElement('script');
-        script.src = extensionApi.extension.getURL('inpage.js');
+        script.src = extensionApi.extension.getURL('inPage.js');
         const container = document.head || document.documentElement;
         container.insertBefore(script, container.children[0]);
         script.onload = () => script.remove();
@@ -75,7 +75,7 @@ function transaction(msg) {
 //TODO check error in msg
 function injectCodeGeneration(msg) {
 
-    var code = ''
+    let code = ''
     if (msg.cb.cb) {
         if (msg.cb.cb.inText && msg.cb.cb.id) {
             code = `
@@ -119,7 +119,7 @@ function injectCodeGeneration(msg) {
 }
 
 function injectCb(code) {
-    var script = document.createElement('script');
+    let script = document.createElement('script');
     script.textContent = code;
     (document.head || document.documentElement).appendChild(script);
     script.remove();

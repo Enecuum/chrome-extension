@@ -1,4 +1,4 @@
-var ext_api = {}
+let ext_api = {}
 
 function checkLib() {
     if (typeof ENQWeb !== "undefined") {
@@ -11,11 +11,11 @@ function checkLib() {
     }
 }
 
-async function setupInpageApi() {
+async function setupInPageApi() {
 
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     checkLib()
-    setupInpageApi().then()
+    setupInPageApi().then()
 });
