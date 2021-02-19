@@ -46,7 +46,8 @@ export function promiseToCb(fn, context) {
             callback = lastArg;
             args.pop()
         } else {
-            callback = () => {};
+            callback = () => {
+            };
         }
         fn.apply(context, args)
             .then(result => setImmediate(callback, null, result))
