@@ -1,17 +1,19 @@
 const content = require('./ui/content')
 // const UI = require('./ui/index')
 import {initApp} from "./ui/index";
+
 const Storage = require('./utils/localStorage')
 let storege = new Storage()
 global.disk = storege
 
 var toBackground = {};
 var taskId = []
+
 async function setupUi() {
-    toBackground = chrome.runtime.connect({name:'popup'})
-    toBackground.onMessage.addListener((msg,sender, sendResponse)=>{
+    toBackground = chrome.runtime.connect({name: 'popup'})
+    toBackground.onMessage.addListener((msg, sender, sendResponse) => {
         var cb = taskId[msg.taskId]
-        if(cb){
+        if (cb) {
             cb(msg)
             delete taskId[msg.taskId]
             return
@@ -32,12 +34,12 @@ async function setupUi() {
     await initApp()
 }
 
-function msgHandler(msg, sender){
+function msgHandler(msg, sender) {
     console.log(msg)
     console.log(sender)
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded', () => {
     console.log('loaded 1')
-    setupUi()
+    setupUi().then()
 })

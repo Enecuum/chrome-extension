@@ -1,8 +1,8 @@
 import {Duplex} from 'readable-stream';
 
 
-export class PortStream extends Duplex{
-    constructor(port){
+export class PortStream extends Duplex {
+    constructor(port) {
         super({objectMode: true});
         this._port = port;
         port.onMessage.addListener(this._onMessage.bind(this));
@@ -23,7 +23,8 @@ export class PortStream extends Duplex{
         this.destroy()
     }
 
-    _read(){}
+    _read() {
+    }
 
     _write(msg, encoding, cb) {
         try {

@@ -1,23 +1,22 @@
-
-function loadTask(){
+function loadTask() {
     let task = localStorage.getItem('Task')
-    if(!task){
+    if (!task) {
         return {}
     }
     task = JSON.parse(task)
     return task
 }
 
-function clearTasks(){
+function clearTasks() {
     return localStorage.removeItem('Task')
 }
 
-function getTask(key){
+function getTask(key) {
     let task = loadTask()
     return task[key]
 }
 
-function removeTask(key){
+function removeTask(key) {
     let task = loadTask()
     delete task[key]
     task = JSON.stringify(task)
@@ -25,7 +24,7 @@ function removeTask(key){
     return task
 }
 
-function setTask(key, value){
+function setTask(key, value) {
     let tasks = loadTask()
     tasks[key] = value
     tasks = JSON.stringify(tasks)
@@ -33,28 +32,28 @@ function setTask(key, value){
     return tasks
 }
 
-function loadUser(){
+function loadUser() {
     let user = localStorage.getItem('User')
-    if(!user){
+    if (!user) {
         return {}
     }
     user = JSON.parse(user)
     return user
 }
 
-function addUser(name, pubkey, prvkey, net){
+function addUser(name, pubkey, prvkey, net) {
     let user = loadUser()
-    user[name]={
-        pubkey:pubkey,
-        prvkey:prvkey,
-        net:net
+    user[name] = {
+        pubkey: pubkey,
+        prvkey: prvkey,
+        net: net
     }
     user = JSON.stringify(user)
     localStorage.setItem('User', user)
     return user
 }
 
-function removeUser(name){
+function removeUser(name) {
     let user = loadUser()
     delete user[name]
     user = JSON.stringify(user)
@@ -62,49 +61,50 @@ function removeUser(name){
     return user
 }
 
-function setMainUser(name){
+function setMainUser(name) {
     let user = loadUser()
-    localStorage.setItem('MainAcc',JSON.stringify(user[name]))
+    localStorage.setItem('MainAcc', JSON.stringify(user[name]))
     return true
 }
 
-function unsetMainUser(){
+function unsetMainUser() {
     localStorage.removeItem('MainAcc')
     return true
 }
 
-function getMainUser(){
+function getMainUser() {
     let acc = localStorage.getItem('MainAcc')
     return acc
 }
 
-function getUser(name){
+function getUser(name) {
     let user = loadUser()
     return user[name]
 }
-function clearUsers(){
+
+function clearUsers() {
     localStorage.removeItem('User')
 }
 
-let storage = function Storage(){
+let storage = function Storage() {
     this.task = {
-        loadTask:loadTask,
-        setTask:setTask,
-        getTask:getTask,
-        removeTask:removeTask,
-        clearTasks:clearTasks
+        loadTask: loadTask,
+        setTask: setTask,
+        getTask: getTask,
+        removeTask: removeTask,
+        clearTasks: clearTasks
     }
     this.user = {
-        loadUser:loadUser,
-        addUser:addUser,
-        getUser:getUser,
-        removeUser:removeUser,
-        clearUsers:clearUsers
+        loadUser: loadUser,
+        addUser: addUser,
+        getUser: getUser,
+        removeUser: removeUser,
+        clearUsers: clearUsers
     }
     this.mainAcc = {
-        get:getMainUser,
-        set:setMainUser,
-        unset:unsetMainUser
+        get: getMainUser,
+        set: setMainUser,
+        unset: unsetMainUser
     }
 }
 

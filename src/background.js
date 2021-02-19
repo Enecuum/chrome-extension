@@ -3,7 +3,7 @@ let Storage = new storage()
 global.disk = Storage
 
 let user = {
-    genesis:{
+    genesis: {
         pubkey:
             "029dd222eeddd5c3340e8d46ae0a22e2c8e301bfee4903bcf8c899766c8ceb3a7d",
         prvkey:
@@ -23,11 +23,12 @@ let user = {
             pubkey:
                 '030b13a13272b663da33468929110c7505f700b955e1aee754cce17d66a3fde200'
         },
-    Eva:{
+    Eva: {
         prvkey:
             '3f7c8d236678d45c4437b33d9206dc7626e4c61dc644ca02350ec80e9c908fdd',
         pubkey:
-            '02b41309909a0c401c38e2dd734a6d7f13733d8c5bfa68639047b189fb78e0855d' }
+            '02b41309909a0c401c38e2dd734a6d7f13733d8c5bfa68639047b189fb78e0855d'
+    }
 }
 global.users = user
 var ports = {}
@@ -38,14 +39,14 @@ function setupApp() {
     chrome.runtime.onConnect.addListener(connectHandler)
 }
 
-async function msgHandler(msg,sender, sendResponse){
+async function msgHandler(msg, sender, sendResponse) {
     console.log(msg)
 }
 
-async function msgConnectHandler(msg,sender){
+async function msgConnectHandler(msg, sender) {
     console.log(msg)
     let answer = ''
-    if(msg.taskId){
+    if (msg.taskId) {
         // console.log(msg.taskId)
         // sender.postMessage({msg:'all work', taskId:msg.taskId, data:'qqq'})
         // switch (msg.type){
@@ -70,67 +71,70 @@ async function msgConnectHandler(msg,sender){
         //     default:
         //         break
         // }
-        Storage.task.setTask(msg.taskId, {data:msg.data, type:msg.type, cb:msg.cb})
-    }else{
+        Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
+    } else {
         console.log(msg)
     }
 }
 
-function msgPopupHandler(msg, sender){
+function msgPopupHandler(msg, sender) {
     console.log(msg)
-    if(msg.agree){
+    if (msg.agree) {
         taskHandler(msg.taskId)
-    }else{
+    } else {
         Storage.task.removeTask(msg.taskId)
         console.log('removed')
     }
 }
 
-function listPorts(){
+function listPorts() {
     console.log(ports)
     global.ports = ports
 }
-function disconnectHandler(port){
+
+function disconnectHandler(port) {
     console.log('disconnected: ' + port.name)
 }
-function connectController(port){
-    if(ports[port.name]){
+
+function connectController(port) {
+    if (ports[port.name]) {
         ports[port.name].disconnect()
         ports[port.name] = port
-    }else{
+    } else {
         ports[port.name] = port
     }
 }
 
-function search_acc(pubkey){
+function search_acc(pubkey) {
     let accs = Storage.user.loadUser()
     let names = Object.keys(accs)
-    for(let i = 0; i<names.length;i++){
-        if(accs[names[i]].pubkey === pubkey){
+    for (let i = 0; i < names.length; i++) {
+        if (accs[names[i]].pubkey === pubkey) {
             return accs[names[i]]
         }
     }
     return false
 }
+
 global.search_acc = search_acc
 
-async function taskHandler(taskId){
+async function taskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     console.log(task)
     let acc = JSON.parse(Storage.mainAcc.get())
     let data = '';
     let wallet = '';
-    if(typeof acc === "undefined"){
+    if (typeof acc === "undefined") {
         console.log('set main acc!')
-    }else{
-        switch(task.type){
+    } else {
+        switch (task.type) {
             case 'enable':
                 console.log('enable. returned: ', acc)
                 data = {
-                    pubkey:acc.pubkey,
-                    net:acc.net,
+                    pubkey: acc.pubkey,
+                    net: acc.net,
                 }
-                ports.content.postMessage({data:JSON.stringify(data),taskId:taskId, cb:task.cb});
+                ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb});
                 Storage.task.removeTask(taskId)
                 break
             case 'tx':
@@ -138,12 +142,12 @@ async function taskHandler(taskId){
                 data = task.data
                 ENQWeb.Net.provider = acc.net
                 wallet = await search_acc(data.from)
-                if(!wallet){
-                    ports.content.postMessage({data:false,taskId:taskId, cb:task.cb})
+                if (!wallet) {
+                    ports.content.postMessage({data: false, taskId: taskId, cb: task.cb})
                     Storage.task.removeTask(taskId)
-                }else{
+                } else {
                     data = await ENQWeb.Net.post.tx_fee_off(wallet, data.to, data.tokenHash, Number(data.value), data.data, data.nonce)
-                    ports.content.postMessage({data:JSON.stringify(data),taskId:taskId, cb:task.cb})
+                    ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
                     Storage.task.removeTask(taskId)
                 }
                 break
@@ -153,13 +157,13 @@ async function taskHandler(taskId){
                 ENQWeb.Net.provider = acc.net
                 console.log(task.data, ENQWeb.Net.provider)
                 wallet = await search_acc(data.to)
-                if(!wallet){
-                    ports.content.postMessage({data:false,taskId:taskId, cb:task.cb})
+                if (!wallet) {
+                    ports.content.postMessage({data: false, taskId: taskId, cb: task.cb})
                     Storage.task.removeTask(taskId)
-                }else{
+                } else {
                     data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash)
-                    ports.content.postMessage({data:JSON.stringify(data),taskId:taskId, cb:task.cb})
-                    console.log({data:JSON.stringify(data),taskId:taskId, cb:task.cb})
+                    ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+                    console.log({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
                     Storage.task.removeTask(taskId)
                 }
                 break
@@ -171,9 +175,9 @@ async function taskHandler(taskId){
 }
 
 //TODO add cleaner connection list
-async function connectHandler(port){
+async function connectHandler(port) {
     await connectController(port)
-    switch (port.name){
+    switch (port.name) {
         case 'content':
             port.onMessage.addListener(msgConnectHandler)
             break

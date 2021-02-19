@@ -1,20 +1,19 @@
 import {extensionApi} from "./utils/extensionApi";
 
 
-
 var toBackground = {}
 var pageToBack = {}
 var taskId = []
 
 
-function setupConnection(){
+function setupConnection() {
     console.log('content ready')
 
     // chrome.runtime.sendMessage({greeting: "Content ready"}, function(response) {});
-    toBackground = chrome.runtime.connect({name:'content'})
-    toBackground.onMessage.addListener((msg,sender, sendResponse)=>{
+    toBackground = chrome.runtime.connect({name: 'content'})
+    toBackground.onMessage.addListener((msg, sender, sendResponse) => {
         var cb = taskId[msg.taskId]
-        if(cb){
+        if (cb) {
             cb(msg)
             delete taskId[msg.taskId]
             return
@@ -25,7 +24,7 @@ function setupConnection(){
 }
 
 
-function injectScript(){
+function injectScript() {
     try {
         // inject in-page script
         let script = document.createElement('script');
@@ -39,11 +38,11 @@ function injectScript(){
 }
 
 async function eventHandler() {
-    document.addEventListener('ENQConnect', (e)=>{
+    document.addEventListener('ENQConnect', (e) => {
         setupConnection()
-        document.addEventListener('ENQContent', (e)=>{
+        document.addEventListener('ENQContent', (e) => {
             let address = Math.random().toString(36)
-            switch (e.detail.type){
+            switch (e.detail.type) {
                 case 'enable':
                     taskId[address] = enable
                     break
@@ -56,62 +55,60 @@ async function eventHandler() {
                 default:
                     break
             }
-            toBackground.postMessage({type:e.detail.type,data:e.detail.data, taskId:address, cb:e.detail.cb})
+            toBackground.postMessage({type: e.detail.type, data: e.detail.data, taskId: address, cb: e.detail.cb})
         })
     })
 }
 
-function enable(msg){
+function enable(msg) {
     injectCb(injectCodeGeneration(msg))
 }
-function balanceOf(msg){
+
+function balanceOf(msg) {
     injectCb(injectCodeGeneration(msg))
 }
-function transaction(msg){
+
+function transaction(msg) {
     injectCb(injectCodeGeneration(msg))
 }
 
 //TODO check error in msg
-function injectCodeGeneration(msg){
+function injectCodeGeneration(msg) {
 
     var code = ''
-    if(msg.cb.cb){
-        if(msg.cb.cb.inText && msg.cb.cb.id){
+    if (msg.cb.cb) {
+        if (msg.cb.cb.inText && msg.cb.cb.id) {
             code = `
             document.getElementById('${msg.cb.cb.id}').innerText = ${msg.data}
             ENQWeb.Enq.cb['${msg.cb.taskId}'] = ${msg.data}
             ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
             `
-        }
-        else if(msg.cb.cb.inDoc && msg.cb.cb.id){
-            code=`
+        } else if (msg.cb.cb.inDoc && msg.cb.cb.id) {
+            code = `
             document.${msg.cb.cb.id} = ${msg.data}
             ENQWeb.Enq.cb['${msg.cb.taskId}'] = ${msg.data}
             ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
             `
-        }
-        else if(msg.cb.cb.inWin && msg.cb.cb.id){
-            code=`
+        } else if (msg.cb.cb.inWin && msg.cb.cb.id) {
+            code = `
             window.${msg.cb.cb.id} = ${msg.data}
             ENQWeb.Enq.cb['${msg.cb.taskId}'] = ${msg.data}
             ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
             `
-        }
-        else if(msg.cb.cb.inSite && msg.cb.cb.id){
-            code=`
+        } else if (msg.cb.cb.inSite && msg.cb.cb.id) {
+            code = `
             ${msg.cb.cb.id}="${msg.data}"
             ENQWeb.Enq.cb['${msg.cb.taskId}'] = ${msg.data}
             ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
             `
-        }
-        else{
+        } else {
             code = `
         document.getElementById('${msg.cb.cb.id}').setAttribute('ENQ', '${msg.data}')
         ENQWeb.Enq.cb['${msg.cb.taskId}'] = "${msg.data}"
         ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
         `
         }
-    }else{
+    } else {
 
         code = `
         ENQWeb.Enq.cb['${msg.cb.taskId}'] = ${msg.data}
@@ -121,10 +118,10 @@ function injectCodeGeneration(msg){
     return code
 }
 
-function injectCb(code){
+function injectCb(code) {
     var script = document.createElement('script');
     script.textContent = code;
-    (document.head||document.documentElement).appendChild(script);
+    (document.head || document.documentElement).appendChild(script);
     script.remove();
 }
 
