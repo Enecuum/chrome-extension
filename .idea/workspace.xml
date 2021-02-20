@@ -10,23 +10,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2556b6dc-7dfa-471c-8dc1-91eaabb62786" name="Default Changelist" comment="Refactoring">
+    <list default="true" id="2556b6dc-7dfa-471c-8dc1-91eaabb62786" name="Default Changelist" comment="Refactoring and UI update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/background.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/contentscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/contentscript.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/enq.png" beforeDir="false" afterPath="$PROJECT_DIR$/dist/enq.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/inpage.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/inpage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/dist/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/popup.html" beforeDir="false" afterPath="$PROJECT_DIR$/dist/popup.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/popup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/background.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contentscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/contentScript.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/inpage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/inPage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/popup.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/contentScript.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/contentScript.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/index.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/index.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/index.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/PortStream.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/extensionApi.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +134,8 @@
       <workItem from="1613561234915" duration="776000" />
       <workItem from="1613572773863" duration="8601000" />
       <workItem from="1613662488818" duration="2765000" />
-      <workItem from="1613674205413" duration="7741000" />
+      <workItem from="1613674205413" duration="8446000" />
+      <workItem from="1613826551363" duration="4448000" />
     </task>
     <task id="LOCAL-00001" summary="connect controller, new event to start connect">
       <created>1611484409314</created>
@@ -172,7 +165,14 @@
       <option name="project" value="LOCAL" />
       <updated>1613747032812</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Refactoring and UI update">
+      <created>1613749695226</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1613749695226</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,6 +212,7 @@
     <MESSAGE value="basic ui, setting background.js" />
     <MESSAGE value="UI update" />
     <MESSAGE value="Refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactoring" />
+    <MESSAGE value="Refactoring and UI update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactoring and UI update" />
   </component>
 </project>

@@ -1,4 +1,4 @@
-import {extensionApi} from "./utils/extensionApi";
+// import {extensionApi} from "./utils/extensionApi";
 
 
 let toBackground = {}
@@ -28,7 +28,7 @@ function injectScript() {
     try {
         // inject in-page script
         let script = document.createElement('script');
-        script.src = extensionApi.extension.getURL('inPage.js');
+        // script.src = extensionApi.extension.getURL('inPage.js');
         const container = document.head || document.documentElement;
         container.insertBefore(script, container.children[0]);
         script.onload = () => script.remove();
