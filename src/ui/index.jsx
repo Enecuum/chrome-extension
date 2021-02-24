@@ -201,6 +201,10 @@ class Transaction extends React.Component {
                            placeholder={'Amount'}
                     />
 
+                    <div onClick={this.submit}
+                         className={styles.field + ' ' + styles.button}>Send
+                    </div>
+
                 </div>
 
                 <div className={styles.header}>
@@ -211,10 +215,6 @@ class Transaction extends React.Component {
                 </div>
 
                 <div className={styles.form}>
-
-                    <div onClick={this.submit}
-                         className={styles.field + ' ' + styles.button}>Send
-                    </div>
 
                     <div onClick={() => this.props.setSend(false)}
                          className={styles.field + ' ' + styles.button}>&laquo; Back

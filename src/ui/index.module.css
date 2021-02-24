@@ -93,7 +93,7 @@ body {
     border-radius: 3px;
     user-select: none;
 
-    border: 1px solid var(--color-blue-super-ligth);
+    border: 1px solid transparent;
     background: var(--color-blue-super-ligth);
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
 }
