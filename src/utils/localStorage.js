@@ -47,8 +47,7 @@ function addUser(publicKey, privateKey, net) {
         privateKey: privateKey,
         net: net
     }
-    user = JSON.stringify(user)
-    localStorage.setItem('User', user)
+    localStorage.setItem('User', JSON.stringify(user))
     return user
 }
 

@@ -21,7 +21,7 @@ class Main extends React.Component {
     }
 
     login(user) {
-        this.setState({isLogin: true, user});
+        this.setState({isLogin: true, user: user});
     }
 
 
