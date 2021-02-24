@@ -4,7 +4,7 @@ body {
     font-weight: 300;
     font-size: 16px;
 
-    width: 360px;
+    width: 300px;
     height: 400px;
     /*margin-bottom: 10px;*/
 
@@ -76,7 +76,7 @@ body {
 }
 
 .field {
-    width: 340px;
+    width: 280px;
     padding: 10px;
     margin: 10px 10px 0;
 
@@ -166,6 +166,7 @@ input::placeholder {
 
 .copy {
     cursor: pointer;
+    border: 1px solid var(--color-blue-super-ligth)
 }
 
 .copy:hover {
