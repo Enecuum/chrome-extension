@@ -159,6 +159,11 @@ input::placeholder {
     color: var(--color-blue)
 }
 
+.usd {
+    font-size: 16px;
+    color: black;
+}
+
 .copy {
     cursor: pointer;
 }
