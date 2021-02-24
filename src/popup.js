@@ -3,8 +3,8 @@ const content = require('./ui/content')
 import {initApp} from "./ui/index";
 
 const Storage = require('./utils/localStorage')
-let storege = new Storage()
-global.disk = storege
+let storage = new Storage()
+global.disk = storage
 
 let toBackground = {};
 let taskId = []

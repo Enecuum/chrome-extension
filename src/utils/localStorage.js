@@ -41,11 +41,10 @@ function loadUser() {
     return user
 }
 
-function addUser(name, pubkey, prvkey, net) {
-    let user = loadUser()
-    user[name] = {
-        pubkey: pubkey,
-        prvkey: prvkey,
+function addUser(publicKey, privateKey, net) {
+    let user = {
+        publicKey: publicKey,
+        privateKey: privateKey,
         net: net
     }
     user = JSON.stringify(user)
@@ -53,12 +52,8 @@ function addUser(name, pubkey, prvkey, net) {
     return user
 }
 
-function removeUser(name) {
-    let user = loadUser()
-    delete user[name]
-    user = JSON.stringify(user)
-    localStorage.setItem('User', user)
-    return user
+function removeUser() {
+    localStorage.setItem('User', '')
 }
 
 function setMainUser(name) {
@@ -87,20 +82,21 @@ function clearUsers() {
 }
 
 let storage = function Storage() {
+
     this.task = {
-        loadTask: loadTask,
-        setTask: setTask,
-        getTask: getTask,
-        removeTask: removeTask,
-        clearTasks: clearTasks
-    }
+        loadTask,
+        setTask,
+        getTask,
+        removeTask,
+        clearTasks
+    },
     this.user = {
-        loadUser: loadUser,
-        addUser: addUser,
-        getUser: getUser,
-        removeUser: removeUser,
-        clearUsers: clearUsers
-    }
+        loadUser,
+        addUser,
+        getUser,
+        removeUser,
+        clearUsers
+    },
     this.mainAcc = {
         get: getMainUser,
         set: setMainUser,

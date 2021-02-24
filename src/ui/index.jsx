@@ -11,25 +11,28 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLogin: false,
-            privateKey: ''
+            user: global.disk.user.loadUser(),
+            isLogin: global.disk.user.loadUser().publicKey,
         }
         this.login = this.login.bind(this)
         this.logout = this.logout.bind(this)
+
+        console.log(global.disk.user.loadUser())
     }
 
-    login(privateKey) {
-        this.setState({isLogin: true, privateKey});
+    login(user) {
+        this.setState({isLogin: true, user});
     }
 
 
     logout() {
+        global.disk.user.removeUser()
         this.setState({isLogin: false});
     }
 
     render() {
         if (this.state.isLogin)
-            return <Account logout={this.logout} privateKey={this.state.privateKey}/>
+            return <Account logout={this.logout} user={this.state.user}/>
         else
             return <Login login={this.login}/>
     }
@@ -51,8 +54,12 @@ class Login extends React.Component {
     }
 
     submit() {
-        console.log(ENQWeb.Utils.Sign.getPublicKey(this.state.value, true))
-        this.props.login(ENQWeb.Utils.Sign.getPublicKey(this.state.value, true))
+        let publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.value, true)
+        if (publicKey) {
+            console.log(publicKey)
+            let user = global.disk.user.addUser(publicKey, this.state.value, 'bit')
+            this.props.login(user)
+        }
     }
 
     generate() {
@@ -122,7 +129,7 @@ class Account extends React.Component {
 
                         <div className={styles.field + ' ' + styles.balance}>{this.state.value} ENQ</div>
                         <div className={styles.field + ' ' + styles.usd}>12.31 USD</div>
-                        <div className={styles.field + ' ' + styles.address}>{this.props.privateKey}</div>
+                        <div className={styles.field + ' ' + styles.address}>{this.props.user.publicKey}</div>
                         <div className={styles.field + ' ' + styles.copy}>COPY</div>
 
                     </div>
