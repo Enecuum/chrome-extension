@@ -1,6 +1,7 @@
 import React from 'react'
 import {render} from 'react-dom'
 import styles from './index.module.css'
+import storage from "../utils/localStorage";
 
 function App() {
     return <Main/>
@@ -9,13 +10,16 @@ function App() {
 class Main extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {isLogin: false}
+        this.state = {
+            isLogin: false,
+            privateKey: ''
+        }
         this.login = this.login.bind(this)
         this.logout = this.logout.bind(this)
     }
 
-    login() {
-        this.setState({isLogin: true});
+    login(privateKey) {
+        this.setState({isLogin: true, privateKey});
     }
 
 
@@ -25,7 +29,7 @@ class Main extends React.Component {
 
     render() {
         if (this.state.isLogin)
-            return <Account logout={this.logout}/>
+            return <Account logout={this.logout} privateKey={this.state.privateKey}/>
         else
             return <Login login={this.login}/>
     }
@@ -34,11 +38,12 @@ class Main extends React.Component {
 class Login extends React.Component {
     constructor(props) {
         super(props);
-        this.handleChange = this.handleChange.bind(this)
-        this.submit = this.submit.bind(this)
         this.state = {
             value: '',
         }
+        this.handleChange = this.handleChange.bind(this)
+        this.submit = this.submit.bind(this)
+        this.generate = this.generate.bind(this)
     }
 
     handleChange(e) {
@@ -46,7 +51,12 @@ class Login extends React.Component {
     }
 
     submit() {
-        this.props.login()
+        console.log(ENQWeb.Utils.Sign.getPublicKey(this.state.value, true))
+        this.props.login(ENQWeb.Utils.Sign.getPublicKey(this.state.value, true))
+    }
+
+    generate() {
+        // this.props.login()
     }
 
     render() {
@@ -57,7 +67,7 @@ class Login extends React.Component {
                     <div className={styles.title}>Enecuum Network</div>
                 </div>
 
-                <div className={styles.circle}></div>
+                {/*<div className={styles.circle}></div>*/}
 
                 {/*<div className={styles.title}>Enecuum Network</div>*/}
                 {/*<div className={styles.text}>Devices connect to the Enecuum blockchain and share untapped data*/}
@@ -79,6 +89,10 @@ class Login extends React.Component {
                          className={styles.field + ' ' + styles.button}>Login
                     </div>
 
+                    <div onClick={this.props.generate}
+                         className={styles.field + ' ' + styles.button}>Generate
+                    </div>
+
                 </div>
             </div>
         )
@@ -88,7 +102,7 @@ class Login extends React.Component {
 class Account extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isSend: false}
+        this.state = {isSend: false, value: 638.31}
         this.setSend = this.setSend.bind(this)
     }
 
@@ -99,15 +113,16 @@ class Account extends React.Component {
     render() {
 
         if (this.state.isSend)
-            return <Transaction setSend={this.setSend}/>
+            return <Transaction setSend={this.setSend} value={this.state.value} />
         else
             return (
                 <div className={styles.main}>
 
                     <div className={styles.header}>
 
-                        <div className={styles.field + ' ' + styles.balance}>638.31 ENQ</div>
-                        <div className={styles.field + ' ' + styles.address}>02c3143abeb50e4153da372868490277c14b2877f05b477e4671722152b0112473</div>
+                        <div className={styles.field + ' ' + styles.balance}>{this.state.value} ENQ</div>
+                        <div className={styles.field + ' ' + styles.usd}>12.31 USD</div>
+                        <div className={styles.field + ' ' + styles.address}>{this.props.privateKey}</div>
                         <div className={styles.field + ' ' + styles.copy}>COPY</div>
 
                     </div>
@@ -136,8 +151,11 @@ class Transaction extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            value: '',
+            value: props.value,
+            left: props.value,
         }
+        this.handleChangeAddress = this.handleChangeAddress.bind(this)
+        this.handleChangeAmount = this.handleChangeAmount.bind(this)
     }
 
     handleChangeAddress(e) {
@@ -145,7 +163,22 @@ class Transaction extends React.Component {
     }
 
     handleChangeAmount(e) {
-        this.setState({amount: e.target.value});
+
+        let left = this.state.value - e.target.value - 0.1
+        let amount = e.target.value
+
+        if (this.state.value - amount < 0) {
+            console.log('BIG')
+            amount = e.target.value
+            left = 0.00
+        }
+
+        this.setState({
+            amount: amount,
+            left: left.toFixed(2),
+        });
+
+        console.log(this.state.value - e.target.value)
     }
 
     render() {
@@ -172,7 +205,7 @@ class Transaction extends React.Component {
 
                 <div className={styles.header}>
 
-                    <div className={styles.balance}>321.31 ENQ left</div>
+                    <div className={styles.balance}>{this.state.left} ENQ left</div>
                     <div className={styles.field + ' ' + styles.copy}>0.1 ENQ commission</div>
 
                 </div>
