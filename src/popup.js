@@ -31,7 +31,7 @@ async function setupUi() {
     // Content.init()
     global.Content = Content
     // await UI(toBackground)
-    await initApp()
+    await initApp(toBackground)
 }
 
 function msgHandler(msg, sender) {
