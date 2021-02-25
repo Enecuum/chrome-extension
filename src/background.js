@@ -1,4 +1,6 @@
 const storage = require('./utils/localStorage')
+import {extensionApi} from "./utils/extensionApi"
+
 let Storage = new storage()
 global.disk = Storage
 
@@ -35,8 +37,9 @@ let ports = {}
 
 function setupApp() {
     console.log('background ready')
-    chrome.runtime.onMessage.addListener(msgHandler)
-    chrome.runtime.onConnect.addListener(connectHandler)
+    extensionApi.runtime.onMessage.addListener(msgHandler)
+    extensionApi.runtime.onConnect.addListener(connectHandler)
+    taskCounter()
 }
 
 async function msgHandler(msg, sender, sendResponse) {
@@ -47,45 +50,52 @@ async function msgConnectHandler(msg, sender) {
     console.log(msg)
     let answer = ''
     if (msg.taskId) {
-        // console.log(msg.taskId)
-        // sender.postMessage({msg:'all work', taskId:msg.taskId, data:'qqq'})
-        // switch (msg.type){
-        //     case 'enable':
-        //         sender.postMessage({data:user.Alice.pubkey,taskId:msg.taskId, cb:msg.cb})
-        //         break
-        //     case 'balanceOf':
-        //         ENQWeb.Enq.provider = 'http://95.216.207.173'
-        //         answer = await ENQWeb.Net.get.getBalance(msg.data.address, msg.data.token)
-        //         sender.postMessage({data:answer.amount,taskId:msg.taskId,cb:msg.cb})
-        //         break
-        //     case 'tx':
-        //         ENQWeb.Enq.provider = 'http://95.216.207.173'
-        //         ENQWeb.Enq.User = user.genesis
-        //         ENQWeb.Net.post.tx(user.genesis,msg.data.address,ENQWeb.Enq.ticker,msg.data.amount, '', msg.data.token).then(answer=>{
-        //             console.log(answer)
-        //             sender.postMessage({data:answer.hash,taskId:msg.taskId,cb:msg.cb})
-        //         }).catch(err=>{
-        //             console.log(err)
-        //         }) //TODO catch errors
-        //         break
-        //     default:
-        //         break
-        // }
         Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
+        if (msg.type === 'balanceOf') {
+            taskHandler(msg.taskId)
+        } else {
+            taskCounter()
+        }
     } else {
         console.log(msg)
     }
+
 }
 
-function msgPopupHandler(msg, sender) {
-    console.log(msg)
-    if (msg.agree) {
-        taskHandler(msg.taskId)
+async function msgPopupHandler(msg, sender) {
+    console.log({msg, sender})
+    if (msg.popup) {
+        if (msg.type === 'tx') {
+            let user = Storage.user.loadUser()
+            let buf = ENQWeb.Net.provider
+            ENQWeb.Net.provider = user.net
+            let wallet = {pubkey: user.publicKey, prvkey: user.privateKey}
+            let data = {
+                from: wallet,
+                to: msg.data.to,
+                amount: Number(msg.data.amount) * 1e10
+            }
+            console.log(ENQWeb.Net.provider)
+            console.log({data})
+            let answer = await ENQWeb.Net.post.tx_fee_off(data)
+            console.log(answer)
+            ENQWeb.Net.provider = buf
+        }
     } else {
-        Storage.task.removeTask(msg.taskId)
-        console.log('removed')
+        if (msg.agree && msg.taskId) {
+            taskHandler(msg.taskId)
+            taskCounter()
+        } else {
+            if (msg.taskId) {
+                // Storage.task.removeTask(msg.taskId)
+                rejectTaskHandler(msg.taskId)
+                console.log('removed')
+                taskCounter()
+            }
+        }
     }
 }
+
 
 function listPorts() {
     console.log(ports)
@@ -105,73 +115,66 @@ function connectController(port) {
     }
 }
 
-function search_acc(pubkey) {
-    let accs = Storage.user.loadUser()
-    let names = Object.keys(accs)
-    for (let i = 0; i < names.length; i++) {
-        if (accs[names[i]].pubkey === pubkey) {
-            return accs[names[i]]
-        }
-    }
-    return false
+function taskCounter() {
+    let tasks = Storage.task.loadTask()
+    let ids = Object.keys(tasks)
+    extensionApi.browserAction.setBadgeText({text: `${ids.length}`})
 }
 
-global.search_acc = search_acc
+global.counterTask = taskCounter
 
 async function taskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     console.log(task)
-    let acc = JSON.parse(Storage.mainAcc.get())
+    let acc = Storage.user.loadUser()
     let data = '';
-    let wallet = '';
-    if (typeof acc === "undefined") {
-        console.log('set main acc!')
-    } else {
-        switch (task.type) {
-            case 'enable':
-                console.log('enable. returned: ', acc)
-                data = {
-                    pubkey: acc.pubkey,
-                    net: acc.net,
-                }
-                ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb});
-                Storage.task.removeTask(taskId)
-                break
-            case 'tx':
-                console.log('tx handler work!')
-                data = task.data
-                ENQWeb.Net.provider = acc.net
-                wallet = await search_acc(data.from)
-                if (!wallet) {
-                    ports.content.postMessage({data: false, taskId: taskId, cb: task.cb})
-                    Storage.task.removeTask(taskId)
-                } else {
-                    data = await ENQWeb.Net.post.tx_fee_off(wallet, data.to, data.tokenHash, Number(data.value), data.data, data.nonce)
-                    ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
-                    Storage.task.removeTask(taskId)
-                }
-                break
-            case 'balanceOf':
-                console.log(' balanceOf handler work!')
-                data = task.data
-                ENQWeb.Net.provider = acc.net
-                console.log(task.data, ENQWeb.Net.provider)
-                wallet = await search_acc(data.to)
-                if (!wallet) {
-                    ports.content.postMessage({data: false, taskId: taskId, cb: task.cb})
-                    Storage.task.removeTask(taskId)
-                } else {
-                    data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash)
-                    ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
-                    console.log({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
-                    Storage.task.removeTask(taskId)
-                }
-                break
-            default:
-                break
-        }
+    let wallet = {pubkey: acc.publicKey, prvkey: acc.privateKey};
+    switch (task.type) {
+        case 'enable':
+            console.log('enable. returned: ', acc)
+            data = {
+                pubkey: acc.publicKey,
+                net: acc.net,
+            }
+            ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb});
+            Storage.task.removeTask(taskId)
+            break
+        case 'tx':
+            console.log('tx handler work!')
+            data = task.data
+            let buf = ENQWeb.Net.provider
+            ENQWeb.Net.provider = data.net || acc.net
+            data.from = wallet
+            data.amount = Number(data.value)
+            data.value = ''
+            data = await ENQWeb.Net.post.tx_fee_off(data)
+            ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+            Storage.task.removeTask(taskId)
+            ENQWeb.Net.provider = buf
+            break
+        case 'balanceOf':
+            console.log(' balanceOf handler work!')
+            data = task.data
+            ENQWeb.Net.provider = data.net || acc.net
+            console.log(task.data, ENQWeb.Net.provider)
+            data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash)
+                .catch(err => {
+                    console.log(err)
+                })
+            ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+            console.log({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+            Storage.task.removeTask(taskId)
+            break
+        default:
+            break
     }
+}
 
+function rejectTaskHandler(taskId) {
+    let task = Storage.task.getTask(taskId)
+    let data = {reject: true}
+    ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+    Storage.task.removeTask(taskId)
 }
 
 //TODO add cleaner connection list
