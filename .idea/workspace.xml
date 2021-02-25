@@ -11,17 +11,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2556b6dc-7dfa-471c-8dc1-91eaabb62786" name="Default Changelist" comment="Refactoring and UI update">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/background.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/contentscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/contentscript.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/enqweb3.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/enqweb3.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/popup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/background.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contentScript.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/contentScript.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/copied/enqweb3.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/copied/enqweb3.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/popup.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/index.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/index.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -141,7 +130,7 @@
       <workItem from="1613662488818" duration="2765000" />
       <workItem from="1613674205413" duration="8446000" />
       <workItem from="1613826551363" duration="4448000" />
-      <workItem from="1614213937350" duration="10328000" />
+      <workItem from="1614213937350" duration="10541000" />
     </task>
     <task id="LOCAL-00001" summary="connect controller, new event to start connect">
       <created>1611484409314</created>

@@ -59,7 +59,7 @@ class Login extends React.Component {
         let publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.value, true)
         if (publicKey) {
             console.log(publicKey)
-            let user = global.disk.user.addUser(publicKey, this.state.value, 'f3')
+            let user = global.disk.user.addUser(publicKey, this.state.value, 'bit')
             this.props.login(user)
         }
     }
