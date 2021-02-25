@@ -233,7 +233,7 @@ class Transaction extends React.Component {
 
     render() {
         if(this.state.isCheckTransaction){
-           return <CheckTransaction background={this.props.background} setCheckTransaction={this.state.isCheckTransaction} address={this.state.address} amount={this.state.amount} myAddress={this.props.publicKey}/>
+           return <CheckTransaction background={this.props.background} setCheckTransaction={this.setCheckTransaction} address={this.state.address} amount={this.state.amount} myAddress={this.props.publicKey}/>
         }else{
             return (
                 <div className={styles.main}>
@@ -255,7 +255,7 @@ class Transaction extends React.Component {
                         />
 
                         <div onClick={this.submit}
-                             className={styles.field + ' ' + styles.button}>Send
+                             className={styles.field + ' ' + styles.button}>Sign
                         </div>
 
                     </div>
@@ -283,10 +283,12 @@ class Transaction extends React.Component {
 class CheckTransaction extends React.Component{
     constructor(props) {
         super(props);
-        // console.log(props)
+        this.submit = this.submit.bind(this)
+        console.log(props)
     }
 
     submit() {
+        console.log('submit work')
         console.log(this.props.amount, this.props.address)
         let data = {
             amount: Number(this.props.amount),
@@ -296,11 +298,12 @@ class CheckTransaction extends React.Component{
     }
 
     render(){
+        console.log(this.props.background)
+        this.props.background.postMessage({test:'123'})
         return(
             <div className={styles.main}>
 
                 <div className={styles.form}>
-
                     <input type="text"
                            value={this.props.myAddress}
                            className={styles.field}
