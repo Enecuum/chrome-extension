@@ -125,11 +125,12 @@ class Account extends React.Component {
         console.log(this.props)
         ENQWeb.Enq.provider = this.props.user.net
         let token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
-        this.state.value = await ENQWeb.Net.get.getBalance(this.props.user.publicKey, token).then(res => {
+        let balance = await ENQWeb.Net.get.getBalance(this.props.user.publicKey, token).then(res => {
             return res.amount / 1e10
         }).catch(err => {
             console.log(err)
         })
+        this.setState({value:balance})
         console.log(this.state.value)
     }
 
