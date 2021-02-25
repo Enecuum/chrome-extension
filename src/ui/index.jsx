@@ -3,13 +3,15 @@ import {render} from 'react-dom'
 import styles from './index.module.css'
 import storage from "../utils/localStorage";
 
-function App() {
-    return <Main/>
+function App(background) {
+    return <Main background={background}/>
 }
+
 
 class Main extends React.Component {
     constructor(props) {
         super(props);
+        this.background = props.background.background
         this.state = {
             user: global.disk.user.loadUser(),
             isLogin: global.disk.user.loadUser().publicKey,
@@ -32,7 +34,7 @@ class Main extends React.Component {
 
     render() {
         if (this.state.isLogin)
-            return <Account logout={this.logout} user={this.state.user}/>
+            return <Account logout={this.logout} user={this.state.user} background={this.background}/>
         else
             return <Login login={this.login}/>
     }
@@ -53,7 +55,7 @@ class Login extends React.Component {
         this.setState({value: e.target.value});
     }
 
-    submit() {
+    async submit() {
         let publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.value, true)
         if (publicKey) {
             console.log(publicKey)
@@ -109,18 +111,33 @@ class Login extends React.Component {
 class Account extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isSend: false, value: 638.31}
+        this.state = {isSend: false, value: 0}
         this.setSend = this.setSend.bind(this)
+        this.balance = this.balance.bind(this)
+        console.log(this)
     }
 
     setSend(value) {
         this.setState({isSend: value});
     }
 
-    render() {
+    async balance(publicKey, net) {
+        console.log(this.props)
+        ENQWeb.Enq.provider = this.props.user.net
+        let token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
+        let balance = await ENQWeb.Net.get.getBalance(this.props.user.publicKey, token).then(res => {
+            return res.amount / 1e10
+        }).catch(err => {
+            console.log(err)
+        })
+        this.setState({value:balance})
+        console.log(this.state.value)
+    }
 
+    render() {
+        this.balance(this.props.user.publicKey, this.props.user.net)
         if (this.state.isSend)
-            return <Transaction setSend={this.setSend} value={this.state.value} />
+            return <Transaction setSend={this.setSend} value={this.state.value} background={this.props.background}/>
         else
             return (
                 <div className={styles.main}>
@@ -136,7 +153,8 @@ class Account extends React.Component {
 
                     <div className={styles.form}>
 
-                        <div onClick={() => {}}
+                        <div onClick={() => {
+                        }}
                              className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Transactions
                         </div>
 
@@ -157,16 +175,22 @@ class Account extends React.Component {
 class Transaction extends React.Component {
     constructor(props) {
         super(props)
+        console.log(this.props)
         this.state = {
             value: props.value,
             left: props.value,
+            address: '',
+            amount: '',
         }
+        this.background = props.background
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
+        this.submit = this.submit.bind(this)
     }
 
     handleChangeAddress(e) {
         this.setState({address: e.target.value});
+        this.state.address = e.target.value
     }
 
     handleChangeAmount(e) {
@@ -184,8 +208,17 @@ class Transaction extends React.Component {
             amount: amount,
             left: left.toFixed(2),
         });
-
+        this.state.amount = amount
         console.log(this.state.value - e.target.value)
+    }
+
+    submit() {
+        console.log(this.state.amount, this.state.address)
+        let data = {
+            amount: Number(this.state.amount),
+            to: this.state.address
+        }
+        this.props.background.postMessage({popup: true, type: 'tx', data: data})
     }
 
     render() {
@@ -235,7 +268,7 @@ class Transaction extends React.Component {
 
 export async function initApp(background) {
     render(
-        <App/>,
+        <App background={background}/>,
         document.getElementById('app-content')
     );
 }
