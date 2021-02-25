@@ -34,8 +34,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
-    /*padding-bottom: 10px;*/
 }
 
 .header {
@@ -166,7 +164,7 @@ input::placeholder {
 
 .copy {
     cursor: pointer;
-    border: 1px solid var(--color-blue-super-ligth)
+    /*border: 1px solid var(--color-blue-super-ligth)*/
 }
 
 .copy:hover {
