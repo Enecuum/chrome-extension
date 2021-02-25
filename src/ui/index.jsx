@@ -139,7 +139,8 @@ class Account extends React.Component {
     render() {
 
         if (this.state.isSendTransaction)
-            return <Transaction setSend={this.setSendTransaction} value={this.state.value} background={this.props.background} publicKey={this.props.user.publicKey}/>
+            return <Transaction setSend={this.setSendTransaction} value={this.state.value}
+                                background={this.props.background} publicKey={this.props.user.publicKey}/>
         else
             return (
                 <div className={styles.main}>
@@ -179,7 +180,7 @@ class Transaction extends React.Component {
         super(props)
         console.log(this.props)
         this.state = {
-            isCheckTransaction:false,
+            isCheckTransaction: false,
             value: props.value,
             left: props.value,
             address: '',
@@ -192,8 +193,8 @@ class Transaction extends React.Component {
         this.submit = this.submit.bind(this)
     }
 
-    setCheckTransaction(value){
-        this.setState({isCheckTransaction:value})
+    setCheckTransaction(value) {
+        this.setState({isCheckTransaction: value})
     }
 
     handleChangeAddress(e) {
@@ -232,9 +233,11 @@ class Transaction extends React.Component {
     }
 
     render() {
-        if(this.state.isCheckTransaction){
-           return <CheckTransaction background={this.props.background} setCheckTransaction={this.setCheckTransaction} address={this.state.address} amount={this.state.amount} myAddress={this.props.publicKey}/>
-        }else{
+        if (this.state.isCheckTransaction) {
+            return <CheckTransaction background={this.props.background} setCheckTransaction={this.setCheckTransaction}
+                                     address={this.state.address} amount={this.state.amount}
+                                     myAddress={this.props.publicKey}/>
+        } else {
             return (
                 <div className={styles.main}>
 
@@ -280,7 +283,7 @@ class Transaction extends React.Component {
     }
 }
 
-class CheckTransaction extends React.Component{
+class CheckTransaction extends React.Component {
     constructor(props) {
         super(props);
         this.submit = this.submit.bind(this)
@@ -297,10 +300,10 @@ class CheckTransaction extends React.Component{
         this.props.background.postMessage({popup: true, type: 'tx', data: data})
     }
 
-    render(){
+    render() {
         console.log(this.props.background)
-        this.props.background.postMessage({test:'123'})
-        return(
+        this.props.background.postMessage({test: '123'})
+        return (
             <div className={styles.main}>
 
                 <div className={styles.form}>
