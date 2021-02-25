@@ -59,7 +59,7 @@ class Login extends React.Component {
         let publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.value, true)
         if (publicKey) {
             console.log(publicKey)
-            let user = global.disk.user.addUser(publicKey, this.state.value, 'bit')
+            let user = global.disk.user.addUser(publicKey, this.state.value, 'f3')
             this.props.login(user)
         }
     }
@@ -139,7 +139,7 @@ class Account extends React.Component {
     render() {
 
         if (this.state.isSendTransaction)
-            return <Transaction setSend={this.setSendTransaction} value={this.state.value} background={this.props.background}/>
+            return <Transaction setSend={this.setSendTransaction} value={this.state.value} background={this.props.background} publicKey={this.props.user.publicKey}/>
         else
             return (
                 <div className={styles.main}>
@@ -179,6 +179,7 @@ class Transaction extends React.Component {
         super(props)
         console.log(this.props)
         this.state = {
+            isCheckTransaction:false,
             value: props.value,
             left: props.value,
             address: '',
@@ -187,7 +188,12 @@ class Transaction extends React.Component {
         this.background = props.background
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
+        this.setCheckTransaction = this.setCheckTransaction.bind(this)
         this.submit = this.submit.bind(this)
+    }
+
+    setCheckTransaction(value){
+        this.setState({isCheckTransaction:value})
     }
 
     handleChangeAddress(e) {
@@ -215,30 +221,100 @@ class Transaction extends React.Component {
     }
 
     submit() {
-        console.log(this.state.amount, this.state.address)
+        // console.log(this.state.amount, this.state.address)
+        // let data = {
+        //     amount: Number(this.state.amount),
+        //     to: this.state.address
+        // }
+        // this.props.background.postMessage({popup: true, type: 'tx', data: data})
+        this.setCheckTransaction(true)
+        console.log('tx btn')
+    }
+
+    render() {
+        if(this.state.isCheckTransaction){
+           return <CheckTransaction background={this.props.background} setCheckTransaction={this.state.isCheckTransaction} address={this.state.address} amount={this.state.amount} myAddress={this.props.publicKey}/>
+        }else{
+            return (
+                <div className={styles.main}>
+
+                    <div className={styles.form}>
+
+                        <input type="text"
+                               onChange={this.handleChangeAddress}
+                               value={this.state.address}
+                               className={styles.field}
+                               placeholder={'Address'}
+                        />
+
+                        <input type="text"
+                               onChange={this.handleChangeAmount}
+                               value={this.state.amount}
+                               className={styles.field}
+                               placeholder={'Amount'}
+                        />
+
+                        <div onClick={this.submit}
+                             className={styles.field + ' ' + styles.button}>Send
+                        </div>
+
+                    </div>
+
+                    <div className={styles.header}>
+
+                        <div className={styles.balance}>{this.state.left.toFixed(2)} ENQ left</div>
+                        <div className={styles.field + ' ' + styles.usd}>0.1 ENQ commission</div>
+
+                    </div>
+
+                    <div className={styles.form}>
+
+                        <div onClick={() => this.props.setSend(false)}
+                             className={styles.field + ' ' + styles.button}>&laquo; Back
+                        </div>
+
+                    </div>
+                </div>
+            )
+        }
+    }
+}
+
+class CheckTransaction extends React.Component{
+    constructor(props) {
+        super(props);
+        // console.log(props)
+    }
+
+    submit() {
+        console.log(this.props.amount, this.props.address)
         let data = {
-            amount: Number(this.state.amount),
-            to: this.state.address
+            amount: Number(this.props.amount),
+            to: this.props.address
         }
         this.props.background.postMessage({popup: true, type: 'tx', data: data})
     }
 
-    render() {
-        return (
+    render(){
+        return(
             <div className={styles.main}>
 
                 <div className={styles.form}>
 
                     <input type="text"
-                           onChange={this.handleChangeAddress}
-                           value={this.state.address}
+                           value={this.props.myAddress}
                            className={styles.field}
                            placeholder={'Address'}
                     />
 
                     <input type="text"
-                           onChange={this.handleChangeAmount}
-                           value={this.state.amount}
+                           value={this.props.address}
+                           className={styles.field}
+                           placeholder={'Address'}
+                    />
+
+                    <input type="text"
+                           value={this.props.amount}
                            className={styles.field}
                            placeholder={'Amount'}
                     />
@@ -249,16 +325,10 @@ class Transaction extends React.Component {
 
                 </div>
 
-                <div className={styles.header}>
-
-                    <div className={styles.balance}>{this.state.left.toFixed(2)} ENQ left</div>
-                    <div className={styles.field + ' ' + styles.usd}>0.1 ENQ commission</div>
-
-                </div>
 
                 <div className={styles.form}>
 
-                    <div onClick={() => this.props.setSend(false)}
+                    <div onClick={() => this.props.setCheckTransaction(false)}
                          className={styles.field + ' ' + styles.button}>&laquo; Back
                     </div>
 
