@@ -72,11 +72,11 @@ class Login extends React.Component {
         return (
             <div className={styles.main}>
 
-                <div className={styles.header}>
-                    <div className={styles.title}>Enecuum Network</div>
-                </div>
+                {/*<div className={styles.header}>*/}
+                {/*    <div className={styles.title}>Enecuum Network</div>*/}
+                {/*</div>*/}
 
-                {/*<div className={styles.circle}></div>*/}
+                {/*<div></div>*/}
 
                 {/*<div className={styles.title}>Enecuum Network</div>*/}
                 {/*<div className={styles.text}>Devices connect to the Enecuum blockchain and share untapped data*/}
@@ -111,40 +111,42 @@ class Login extends React.Component {
 class Account extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isSend: false, value: 0}
-        this.setSend = this.setSend.bind(this)
+        this.state = {isSendTransaction: false, value: 0}
+        this.setSendTransaction = this.setSendTransaction.bind(this)
         this.balance = this.balance.bind(this)
         console.log(this)
+
+        this.balance()
     }
 
-    setSend(value) {
-        this.setState({isSend: value});
+    setSendTransaction(value) {
+        this.setState({isSendTransaction: value});
     }
 
-    async balance(publicKey, net) {
-        console.log(this.props)
+    balance() {
+        // console.log(this.props)
         ENQWeb.Enq.provider = this.props.user.net
         let token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
-        let balance = await ENQWeb.Net.get.getBalance(this.props.user.publicKey, token).then(res => {
-            return res.amount / 1e10
+        ENQWeb.Net.get.getBalance(this.props.user.publicKey, token).then(res => {
+            this.setState({value: res.amount / 1e10})
+            console.log(res.amount / 1e10)
         }).catch(err => {
             console.log(err)
         })
-        this.setState({value:balance})
-        console.log(this.state.value)
+
     }
 
     render() {
-        this.balance(this.props.user.publicKey, this.props.user.net)
-        if (this.state.isSend)
-            return <Transaction setSend={this.setSend} value={this.state.value} background={this.props.background}/>
+
+        if (this.state.isSendTransaction)
+            return <Transaction setSend={this.setSendTransaction} value={this.state.value} background={this.props.background}/>
         else
             return (
                 <div className={styles.main}>
 
                     <div className={styles.header}>
 
-                        <div className={styles.field + ' ' + styles.balance}>{this.state.value} ENQ</div>
+                        <div className={styles.field + ' ' + styles.balance}>{this.state.value.toFixed(2)} ENQ</div>
                         <div className={styles.field + ' ' + styles.usd}>12.31 USD</div>
                         <div className={styles.field + ' ' + styles.address}>{this.props.user.publicKey}</div>
                         <div className={styles.field + ' ' + styles.copy}>COPY</div>
@@ -158,7 +160,7 @@ class Account extends React.Component {
                              className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Transactions
                         </div>
 
-                        <div onClick={() => this.setSend(true)}
+                        <div onClick={() => this.setSendTransaction(true)}
                              className={styles.field + ' ' + styles.button}>Send transaction
                         </div>
 
@@ -206,7 +208,7 @@ class Transaction extends React.Component {
 
         this.setState({
             amount: amount,
-            left: left.toFixed(2),
+            left: left,
         });
         this.state.amount = amount
         console.log(this.state.value - e.target.value)
@@ -249,8 +251,8 @@ class Transaction extends React.Component {
 
                 <div className={styles.header}>
 
-                    <div className={styles.balance}>{this.state.left} ENQ left</div>
-                    <div className={styles.field + ' ' + styles.copy}>0.1 ENQ commission</div>
+                    <div className={styles.balance}>{this.state.left.toFixed(2)} ENQ left</div>
+                    <div className={styles.field + ' ' + styles.usd}>0.1 ENQ commission</div>
 
                 </div>
 
