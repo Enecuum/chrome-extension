@@ -15,7 +15,7 @@ export class TransactionSend extends React.Component {
             <div className={styles.main}>
 
                 <div className={styles.form}>
-                    <div className={styles.field}><a href={this.state.url}>{this.props.txHash}</a></div>
+                    <div className={styles.field}><a href={this.state.url} target="_blank">{this.props.txHash}</a></div>
                 </div>
 
                 <div className={styles.form}>

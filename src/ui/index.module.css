@@ -25,7 +25,11 @@ body {
 
 * {
     box-sizing: border-box;
-    background: rgba(0, 0, 0, 0.05);
+    /*background: rgba(0, 0, 0, 0.05);*/
+}
+
+a {
+    text-decoration: none;
 }
 
 .main {
@@ -80,6 +84,7 @@ body {
     /*width: 280px;*/
     padding: 10px;
     margin: 10px 10px 0;
+    border-radius: 3px;
 
     overflow: hidden;
 }
@@ -153,6 +158,9 @@ input::placeholder {
 .address {
     /*font-size: 8px;*/
     color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .balance {

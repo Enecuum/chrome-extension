@@ -19,6 +19,7 @@ export default class Account extends React.Component {
     }
 
     copyPublicKey() {
+        navigator.clipboard.writeText(this.props.user.publicKey)
     }
 
     balance() {
@@ -51,11 +52,13 @@ export default class Account extends React.Component {
                         <div className={styles.field + ' ' + styles.balance}>{this.state.value.toFixed(2)} ENQ</div>
                         <div className={styles.field + ' ' + styles.usd}>0.0 USD</div>
                         <div className={styles.field + ' ' + styles.address}>{this.props.user.publicKey}</div>
-                        <div className={styles.field + ' ' + styles.copy} onClick={() => this.copyPublicKey(true)}>COPY</div>
+                        <div className={styles.field + ' ' + styles.copy} onClick={() => this.copyPublicKey()}>COPY</div>
 
                     </div>
 
                     <div className={styles.form}>
+
+                        <div onClick={() => {}} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Change network</div>
 
                         <div onClick={() => {}} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Transactions history</div>
 

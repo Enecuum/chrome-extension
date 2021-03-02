@@ -60,7 +60,13 @@ export class Transaction extends React.Component {
 
         console.log(data)
 
-        let response = await ENQWeb.Net.post.tx_fee_off(data)
+        let response
+        try {
+            response = await ENQWeb.Net.post.tx_fee_off(data)
+        } catch (e) {
+
+        }
+
         if (response) {
             this.setState({
                 txHash: response.hash
@@ -68,8 +74,6 @@ export class Transaction extends React.Component {
         }
 
         this.setTransactionSend(true)
-
-        console.log('tx btn')
     }
 
     render() {
