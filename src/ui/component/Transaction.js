@@ -16,12 +16,12 @@ export class Transaction extends React.Component {
         this.background = props.background
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
-        this.setCheckTransaction = this.setCheckTransaction.bind(this)
+        this.setTransactionSend = this.setTransactionSend.bind(this)
         this.submit = this.submit.bind(this)
     }
 
-    setCheckTransaction(value) {
-        this.setState({isCheckTransaction: value})
+    setTransactionSend(value) {
+        this.setState({isTransactionSend: value})
     }
 
     handleChangeAddress(e) {
@@ -48,7 +48,8 @@ export class Transaction extends React.Component {
         console.log(this.state.value - e.target.value)
     }
 
-    submit() {
+    async submit() {
+
         // console.log(this.state.amount, this.state.address)
         // let data = {
         //     amount: Number(this.state.amount),
@@ -60,16 +61,22 @@ export class Transaction extends React.Component {
             amount: Number(this.props.amount),
             to: this.props.address
         }
-        this.props.background.postMessage({popup: true, type: 'tx', data: data})
-        this.setCheckTransaction(true)
+
+        // this.props.background.postMessage({popup: true, type: 'tx', data: data})
+        let response = await ENQWeb.Net.post.tx_fee_off(data)
+        console.log(data)
+
+        this.setTransactionSend(true)
+
         console.log('tx btn')
     }
 
     render() {
-        if (this.state.isCheckTransaction) {
+        if (this.state.isTransactionSend) {
             return <TransactionSend background={this.props.background}
-                                    setCheckTransaction={this.setCheckTransaction}
-                                    address={this.state.address} amount={this.state.amount}
+                                    setTransaction={this.props.setTransaction}
+                                    address={this.state.address}
+                                    amount={this.state.amount}
                                     myAddress={this.props.publicKey}/>
         } else {
             return (
@@ -106,7 +113,7 @@ export class Transaction extends React.Component {
 
                     <div className={styles.form}>
 
-                        <div onClick={() => this.props.setSend(false)}
+                        <div onClick={() => this.props.setTransaction(false)}
                              className={styles.field + ' ' + styles.button}>&laquo; Back
                         </div>
 

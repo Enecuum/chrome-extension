@@ -172,6 +172,7 @@ input::placeholder {
 
 .copy:hover {
     color: var(--color-blue);
+    background: ghostwhite;
     /*font-weight: 400;*/
 }
 
