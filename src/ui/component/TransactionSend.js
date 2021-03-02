@@ -15,7 +15,9 @@ export class TransactionSend extends React.Component {
 
     render() {
         console.log(this.props.background)
+
         this.props.background.postMessage({test: '123'})
+
         return (
             <div className={styles.main}>
 
@@ -42,14 +44,14 @@ export class TransactionSend extends React.Component {
                     {/*     className={styles.field + ' ' + styles.button}>Send*/}
                     {/*</div>*/}
 
-                    <div>Transaction hash</div>
+                    <div className={styles.field}>Hash</div>
 
                 </div>
 
 
                 <div className={styles.form}>
 
-                    <div onClick={() => this.props.setCheckTransaction(false)}
+                    <div class onClick={() => this.props.setTransaction(false)}
                          className={styles.field + ' ' + styles.button}>&laquo; Back
                     </div>
 

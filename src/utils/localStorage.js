@@ -88,14 +88,14 @@ let storage = function Storage() {
         getTask,
         removeTask,
         clearTasks
-    },
+    }
     this.user = {
         loadUser,
         addUser,
         getUser,
         removeUser,
         clearUsers
-    },
+    }
     this.mainAcc = {
         get: getMainUser,
         set: setMainUser,

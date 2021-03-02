@@ -5,22 +5,27 @@ import {Transaction} from "./Transaction";
 export default class Account extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isSendTransaction: false, value: 0}
-        this.setSendTransaction = this.setSendTransaction.bind(this)
+        this.state = {isTransaction: false, value: 0}
+        this.setTransaction = this.setTransaction.bind(this)
         this.balance = this.balance.bind(this)
+        this.copyPublicKey = this.copyPublicKey.bind(this)
         console.log(this)
 
         this.balance()
     }
 
-    setSendTransaction(value) {
-        this.setState({isSendTransaction: value});
+    setTransaction(value) {
+        this.setState({isTransaction: value});
+    }
+
+    copyPublicKey() {
     }
 
     balance() {
         // console.log(this.props)
         ENQWeb.Enq.provider = this.props.user.net
         let token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
+        console.log(token)
         ENQWeb.Net.get.getBalance(this.props.user.publicKey, token).then(res => {
             this.setState({value: res.amount / 1e10})
             console.log(res.amount / 1e10)
@@ -32,9 +37,11 @@ export default class Account extends React.Component {
 
     render() {
 
-        if (this.state.isSendTransaction)
-            return <Transaction setSend={this.setSendTransaction} value={this.state.value}
-                                background={this.props.background} publicKey={this.props.user.publicKey}/>
+        if (this.state.isTransaction)
+            return <Transaction setTransaction={this.setTransaction}
+                                value={this.state.value}
+                                background={this.props.background}
+                                publicKey={this.props.user.publicKey}/>
         else
             return (
                 <div className={styles.main}>
@@ -44,7 +51,7 @@ export default class Account extends React.Component {
                         <div className={styles.field + ' ' + styles.balance}>{this.state.value.toFixed(2)} ENQ</div>
                         <div className={styles.field + ' ' + styles.usd}>0.0 USD</div>
                         <div className={styles.field + ' ' + styles.address}>{this.props.user.publicKey}</div>
-                        <div className={styles.field + ' ' + styles.copy}>COPY</div>
+                        <div className={styles.field + ' ' + styles.copy} onClick={() => this.copyPublicKey(true)}>COPY</div>
 
                     </div>
 
@@ -52,7 +59,7 @@ export default class Account extends React.Component {
 
                         <div onClick={() => {}} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Transactions history</div>
 
-                        <div onClick={() => this.setSendTransaction(true)}
+                        <div onClick={() => this.setTransaction(true)}
                              className={styles.field + ' ' + styles.button}>Send transaction
                         </div>
 
