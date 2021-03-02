@@ -5,7 +5,7 @@ import {Transaction} from "./Transaction";
 export default class Account extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isTransaction: false, value: 0}
+        this.state = {isTransaction: false, amount: 0}
         this.setTransaction = this.setTransaction.bind(this)
         this.balance = this.balance.bind(this)
         this.copyPublicKey = this.copyPublicKey.bind(this)
@@ -28,20 +28,18 @@ export default class Account extends React.Component {
         let token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
         console.log(token)
         ENQWeb.Net.get.getBalance(this.props.user.publicKey, token).then(res => {
-            this.setState({value: res.amount / 1e10})
+            this.setState({amount: res.amount / 1e10})
             console.log(res.amount / 1e10)
         }).catch(err => {
             console.log(err)
         })
-
     }
 
     render() {
 
         if (this.state.isTransaction)
             return <Transaction setTransaction={this.setTransaction}
-                                value={this.state.value}
-                                background={this.props.background}
+                                amount={this.state.amount}
                                 publicKey={this.props.user.publicKey}/>
         else
             return (
@@ -49,7 +47,7 @@ export default class Account extends React.Component {
 
                     <div className={styles.header}>
 
-                        <div className={styles.field + ' ' + styles.balance}>{this.state.value.toFixed(2)} ENQ</div>
+                        <div className={styles.field + ' ' + styles.balance}>{this.state.amount.toFixed(2)} ENQ</div>
                         <div className={styles.field + ' ' + styles.usd}>0.0 USD</div>
                         <div className={styles.field + ' ' + styles.address}>{this.props.user.publicKey}</div>
                         <div className={styles.field + ' ' + styles.copy} onClick={() => this.copyPublicKey()}>COPY</div>

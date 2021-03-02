@@ -10,6 +10,7 @@ export default class Login extends React.Component {
         this.handleChange = this.handleChange.bind(this)
         this.submit = this.submit.bind(this)
         this.generate = this.generate.bind(this)
+        this.network = this.network.bind(this)
     }
 
     handleChange(e) {
@@ -27,6 +28,9 @@ export default class Login extends React.Component {
 
     generate() {
         // this.props.login()
+    }
+
+    network() {
     }
 
     render() {
@@ -59,8 +63,12 @@ export default class Login extends React.Component {
                          className={styles.field + ' ' + styles.button}>Login
                     </div>
 
-                    <div onClick={this.props.generate}
+                    <div onClick={this.generate}
                          className={styles.field + ' ' + styles.button}>Generate
+                    </div>
+
+                    <div onClick={this.network}
+                         className={styles.field + ' ' + styles.button}>Network: BIT
                     </div>
 
                 </div>

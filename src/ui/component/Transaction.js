@@ -5,14 +5,12 @@ import {TransactionSend} from "./TransactionSend";
 export class Transaction extends React.Component {
     constructor(props) {
         super(props)
-        console.log(this.props)
         this.state = {
             isTransactionSend: false,
             address: '',
             amount: '',
             txHash: '',
         }
-        this.background = props.background
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
         this.setTransactionSend = this.setTransactionSend.bind(this)
@@ -25,13 +23,10 @@ export class Transaction extends React.Component {
 
     handleChangeAddress(e) {
         this.setState({address: e.target.value});
-        this.state.address = e.target.value
     }
 
     handleChangeAmount(e) {
-
         let amount = e.target.value
-
         this.setState({amount: amount});
     }
 
@@ -78,8 +73,7 @@ export class Transaction extends React.Component {
 
     render() {
         if (this.state.isTransactionSend) {
-            return <TransactionSend background={this.props.background}
-                                    setTransaction={this.props.setTransaction}
+            return <TransactionSend setTransaction={this.props.setTransaction}
                                     txHash={this.state.txHash}/>
         } else {
             return (
