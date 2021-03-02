@@ -5,12 +5,12 @@ export class TransactionSend extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: "https://bit.enecuum.com/#!/tx/" + this.props.txHash
+            url: `${ENQWeb.Net.provider}/#!/tx/` + this.props.txHash
         }
     }
 
     render() {
-
+        console.log(`${ENQWeb.Net.provider}/#!/tx/`)
         return (
             <div className={styles.main}>
 
