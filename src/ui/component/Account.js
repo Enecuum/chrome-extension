@@ -5,7 +5,7 @@ import {Transaction} from "./Transaction";
 export default class Account extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isTransaction: false, amount: 0}
+        this.state = {isTransaction: false, amount: 0, usd: 0, ticker: ''}
         this.setTransaction = this.setTransaction.bind(this)
         this.balance = this.balance.bind(this)
         this.copyPublicKey = this.copyPublicKey.bind(this)
@@ -29,6 +29,16 @@ export default class Account extends React.Component {
         console.log(token)
         ENQWeb.Net.get.getBalance(this.props.user.publicKey, token).then(res => {
             this.setState({amount: res.amount / 1e10})
+            this.setState({ticker: res.ticker})
+            if (this.props.user.net === 'pulse') {
+                ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
+                    .then(answer => {
+                        if (answer['enq-enecuum'] !== undefined) {
+                            let usd = answer['enq-enecuum'].usd * this.state.amount
+                            this.setState({usd: usd})
+                        }
+                    })
+            }
             console.log(res.amount / 1e10)
         }).catch(err => {
             console.log(err)
@@ -47,18 +57,24 @@ export default class Account extends React.Component {
 
                     <div className={styles.header}>
 
-                        <div className={styles.field + ' ' + styles.balance}>{this.state.amount.toFixed(2)} ENQ</div>
-                        <div className={styles.field + ' ' + styles.usd}>0.0 USD</div>
+                        <div
+                            className={styles.field + ' ' + styles.balance}>{this.state.amount.toFixed(2)} {this.state.ticker}</div>
+                        <div className={styles.field + ' ' + styles.usd}>{this.state.usd.toFixed(2)} USD</div>
                         <div className={styles.field + ' ' + styles.address}>{this.props.user.publicKey}</div>
-                        <div className={styles.field + ' ' + styles.copy} onClick={() => this.copyPublicKey()}>COPY</div>
+                        <div className={styles.field + ' ' + styles.copy} onClick={() => this.copyPublicKey()}>COPY
+                        </div>
 
                     </div>
 
                     <div className={styles.form}>
 
-                        <div onClick={() => {}} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Change network</div>
+                        <div onClick={() => {
+                        }} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Change network
+                        </div>
 
-                        <div onClick={() => {}} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Transactions history</div>
+                        <div onClick={() => {
+                        }} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Transactions history
+                        </div>
 
                         <div onClick={() => this.setTransaction(true)}
                              className={styles.field + ' ' + styles.button}>Send transaction
