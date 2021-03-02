@@ -36,6 +36,7 @@ export default class Login extends React.Component {
             console.log(publicKey)
             let user = global.disk.user.addUser(publicKey, this.state.value, this.state.net)
             this.props.login(user)
+            ENQWeb.Net.provider = this.state.net
         }
     }
 
