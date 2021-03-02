@@ -8,10 +8,9 @@ export class Transaction extends React.Component {
         console.log(this.props)
         this.state = {
             isTransactionSend: false,
-            value: props.value,
-            left: props.value,
             address: '',
             amount: '',
+            txHash: '',
         }
         this.background = props.background
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
@@ -31,21 +30,9 @@ export class Transaction extends React.Component {
 
     handleChangeAmount(e) {
 
-        let left = this.state.value - e.target.value - 0.1
         let amount = e.target.value
 
-        if (this.state.value - amount < 0) {
-            console.log('BIG')
-            amount = e.target.value
-            left = 0.00
-        }
-
-        this.setState({
-            amount: amount,
-            left: left,
-        });
-        this.state.amount = amount
-        console.log(this.state.value - e.target.value)
+        this.setState({amount: amount});
     }
 
     async submit() {
@@ -57,14 +44,28 @@ export class Transaction extends React.Component {
         // }
         // this.props.background.postMessage({popup: true, type: 'tx', data: data})
 
+        // 'amount','data','from','nonce','ticker','to'
+
+        //TODO
+        let user = disk.user.loadUser()
+        let wallet = {pubkey: user.publicKey, prvkey: user.privateKey}
+        ENQWeb.Net.provider = user.net
+
         let data = {
-            amount: Number(this.props.amount),
-            to: this.props.address
+            from:  wallet,
+            amount: Number(this.state.amount) * 1e10,
+            to: this.state.address,
+            data: '',
         }
 
-        // this.props.background.postMessage({popup: true, type: 'tx', data: data})
-        let response = await ENQWeb.Net.post.tx_fee_off(data)
         console.log(data)
+
+        let response = await ENQWeb.Net.post.tx_fee_off(data)
+        if (response) {
+            this.setState({
+                txHash: response.hash
+            })
+        }
 
         this.setTransactionSend(true)
 
@@ -75,9 +76,7 @@ export class Transaction extends React.Component {
         if (this.state.isTransactionSend) {
             return <TransactionSend background={this.props.background}
                                     setTransaction={this.props.setTransaction}
-                                    address={this.state.address}
-                                    amount={this.state.amount}
-                                    myAddress={this.props.publicKey}/>
+                                    txHash={this.state.txHash}/>
         } else {
             return (
                 <div className={styles.main}>

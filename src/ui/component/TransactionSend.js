@@ -4,57 +4,22 @@ import styles from "../index.module.css";
 export class TransactionSend extends React.Component {
     constructor(props) {
         super(props);
-        this.submit = this.submit.bind(this)
-        console.log(props)
-    }
-
-    submit() {
-        console.log('submit work')
-        console.log(this.props.amount, this.props.address)
+        this.state = {
+            url: "https://bit.enecuum.com/#!/tx/" + this.props.txHash
+        }
     }
 
     render() {
-        console.log(this.props.background)
-
-        this.props.background.postMessage({test: '123'})
 
         return (
             <div className={styles.main}>
 
                 <div className={styles.form}>
-                    {/*<input type="text"*/}
-                    {/*       value={this.props.myAddress}*/}
-                    {/*       className={styles.field}*/}
-                    {/*       placeholder={'Address'}*/}
-                    {/*/>*/}
-
-                    {/*<input type="text"*/}
-                    {/*       value={this.props.address}*/}
-                    {/*       className={styles.field}*/}
-                    {/*       placeholder={'Address'}*/}
-                    {/*/>*/}
-
-                    {/*<input type="text"*/}
-                    {/*       value={this.props.amount}*/}
-                    {/*       className={styles.field}*/}
-                    {/*       placeholder={'Amount'}*/}
-                    {/*/>*/}
-
-                    {/*<div onClick={this.submit}*/}
-                    {/*     className={styles.field + ' ' + styles.button}>Send*/}
-                    {/*</div>*/}
-
-                    <div className={styles.field}>Hash</div>
-
+                    <div className={styles.field}><a href={this.state.url}>{this.props.txHash}</a></div>
                 </div>
 
-
                 <div className={styles.form}>
-
-                    <div class onClick={() => this.props.setTransaction(false)}
-                         className={styles.field + ' ' + styles.button}>&laquo; Back
-                    </div>
-
+                    <div onClick={() => this.props.setTransaction(false)} className={styles.field + ' ' + styles.button}>&laquo; Back</div>
                 </div>
             </div>
         )
