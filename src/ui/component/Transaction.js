@@ -47,7 +47,7 @@ export class Transaction extends React.Component {
         ENQWeb.Net.provider = user.net
 
         let data = {
-            from:  wallet,
+            from: wallet,
             amount: Number(this.state.amount) * 1e10,
             to: this.state.address,
             data: '',
