@@ -1,12 +1,14 @@
 import React from "react";
 import styles from "../index.module.css";
 import {Transaction} from "./Transaction";
+import Notification from "./Notification"
 
 export default class Account extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isTransaction: false, amount: 0, usd: 0, ticker: ''}
+        this.state = {isTransaction: false, isNotify:false , amount: 0, usd: 0, ticker: ''}
         this.setTransaction = this.setTransaction.bind(this)
+        this.setNotification = this.setNotification.bind(this)
         this.balance = this.balance.bind(this)
         this.copyPublicKey = this.copyPublicKey.bind(this)
         console.log(this)
@@ -16,6 +18,10 @@ export default class Account extends React.Component {
 
     setTransaction(value) {
         this.setState({isTransaction: value});
+    }
+
+    setNotification(value){
+        this.setState({isNotify: value})
     }
 
     copyPublicKey() {
@@ -47,10 +53,13 @@ export default class Account extends React.Component {
 
     render() {
 
-        if (this.state.isTransaction)
+        if (this.state.isTransaction && !this.state.isNotify)
             return <Transaction setTransaction={this.setTransaction}
                                 amount={this.state.amount}
                                 publicKey={this.props.user.publicKey}/>
+        else if(!this.state.isTransaction && this.state.isNotify){
+            return <Notification setNotify={this.setNotification}/>
+        }
         else
             return (
                 <div className={styles.main}>
@@ -68,8 +77,8 @@ export default class Account extends React.Component {
 
                     <div className={styles.form}>
 
-                        <div onClick={() => {
-                        }} className={styles.field + ' ' + styles.button}>Notification
+                        <div onClick={() => { this.setNotification(true)}} 
+                        className={styles.field + ' ' + styles.button}>Notification
                         </div>
 
                         <div onClick={() => {
