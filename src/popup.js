@@ -1,5 +1,4 @@
 const content = require('./ui/content')
-// const UI = require('./ui/index')
 import {initApp} from "./ui/index";
 
 const Storage = require('./utils/localStorage')
@@ -23,14 +22,8 @@ async function setupUi() {
     global.Port = toBackground
 
     // Запуск интерфейса
-    let Content = new content(toBackground)
-    // document.addEventListener('DOMContentLoaded',()=>{
-    //     console.log('loaded 2')
-    //     Content.init()
-    // })
-    // Content.init()
-    global.Content = Content
-    // await UI(toBackground)
+    // let Content = new content(toBackground)
+    // global.Content = Content
     await initApp(toBackground)
 }
 
