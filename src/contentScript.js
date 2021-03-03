@@ -77,39 +77,6 @@ function injectCodeGeneration(msg) {
 
     let code = ''
     if (msg.cb.cb) {
-        if (msg.cb.cb.inText && msg.cb.cb.id) {
-            code = `
-            document.getElementById('${msg.cb.cb.id}').innerText = ${msg.data}
-            ENQWeb.Enq.cb['${msg.cb.taskId}'] = ${msg.data}
-            ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
-            `
-        } else if (msg.cb.cb.inDoc && msg.cb.cb.id) {
-            code = `
-            document.${msg.cb.cb.id} = ${msg.data}
-            ENQWeb.Enq.cb['${msg.cb.taskId}'] = ${msg.data}
-            ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
-            `
-        } else if (msg.cb.cb.inWin && msg.cb.cb.id) {
-            code = `
-            window.${msg.cb.cb.id} = ${msg.data}
-            ENQWeb.Enq.cb['${msg.cb.taskId}'] = ${msg.data}
-            ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
-            `
-        } else if (msg.cb.cb.inSite && msg.cb.cb.id) {
-            code = `
-            ${msg.cb.cb.id}="${msg.data}"
-            ENQWeb.Enq.cb['${msg.cb.taskId}'] = ${msg.data}
-            ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
-            `
-        } else {
-            code = `
-        document.getElementById('${msg.cb.cb.id}').setAttribute('ENQ', '${msg.data}')
-        ENQWeb.Enq.cb['${msg.cb.taskId}'] = "${msg.data}"
-        ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
-        `
-        }
-    } else {
-
         code = `
         ENQWeb.Enq.cb['${msg.cb.taskId}'] = ${msg.data}
         ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
