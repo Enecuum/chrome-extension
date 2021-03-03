@@ -23,17 +23,19 @@ export default class Requests extends React.Component {
         let ids = Object.keys(task)
         if (ids.length > 0) {
             this.state.url = task[ids[0]].cb.url
-            this.state.taskId = task[ids[0]].cb.taskId
+            this.state.taskId = ids[0]
             this.state.type = task[ids[0]].type
         }
     }
 
     allow() {
-
+        Port.postMessage({allow:true, taskId:this.state.taskId})
+        this.props.setRequests(false)
     }
 
     disallow() {
-
+        Port.postMessage({disallow:true, taskId:this.state.taskId})
+        this.props.setRequests(false)
     }
 
     render() {
