@@ -19,15 +19,15 @@ export default class Login extends React.Component {
     }
 
     handleChange(e) {
-        this.setState({ value: e.target.value });
+        this.setState({value: e.target.value});
     }
 
     setNetwork(value) {
-        this.setState({ isNetwork: value })
+        this.setState({isNetwork: value})
     }
 
     setNet(value) {
-        this.setState({ net: value })
+        this.setState({net: value})
     }
 
     async submit() {
@@ -45,7 +45,7 @@ export default class Login extends React.Component {
     }
 
     network() {
-        this.setState({ isNetwork: true })
+        this.setState({isNetwork: true})
     }
 
     render() {
@@ -71,22 +71,22 @@ export default class Login extends React.Component {
                     <div className={styles.form}>
 
                         <input type="text"
-                            onChange={this.handleChange}
-                            value={this.state.value}
-                            className={styles.field}
-                            placeholder={'Private Key'}
+                               onChange={this.handleChange}
+                               value={this.state.value}
+                               className={styles.field}
+                               placeholder={'Private Key'}
                         />
 
                         <div onClick={this.submit}
-                            className={styles.field + ' ' + styles.button}>Login
+                             className={styles.field + ' ' + styles.button}>Login
                         </div>
 
                         <div onClick={this.generate}
-                            className={styles.field + ' ' + styles.button}>Generate
+                             className={styles.field + ' ' + styles.button}>Generate
                         </div>
 
                         <div onClick={this.network}
-                            className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Network: {this.state.net}
+                             className={styles.field + ' ' + styles.button}>Network: {this.state.net}
                         </div>
 
                     </div>

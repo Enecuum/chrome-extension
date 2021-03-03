@@ -20,12 +20,14 @@ export class TransactionSend extends React.Component {
 
                 <div className={styles.form}>
                     <div className={styles.field}><a href={this.state.url} target="_blank">{this.props.txHash}</a></div>
-                    <div className={styles.field + ' ' + styles.copy + ' ' + styles.header} onClick={() => this.copyHash()}>COPY</div>
+                    <div className={styles.field + ' ' + styles.copy + ' ' + styles.header}
+                         onClick={() => this.copyHash()}>COPY
+                    </div>
                 </div>
 
                 <div className={styles.form}>
                     <div onClick={() => this.props.setTransaction(false)}
-                         className={styles.field + ' ' + styles.button }>&laquo; Back
+                         className={styles.field + ' ' + styles.button}>&laquo; Back
                     </div>
                 </div>
             </div>
