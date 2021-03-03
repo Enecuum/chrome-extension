@@ -17,5 +17,5 @@ async function setupInPageApi() {
 
 document.addEventListener('DOMContentLoaded', () => {
     checkLib()
-    setupInPageApi().then()
+    // setupInPageApi().then()
 });
