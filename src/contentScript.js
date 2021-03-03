@@ -24,7 +24,7 @@ function setupConnection() {
 }
 
 
-function injectScript() {
+function injectScript(){
     try {
         // inject in-page script
         let script = document.createElement('script');
@@ -92,6 +92,8 @@ function injectCb(code) {
     script.remove();
 }
 
-// setupConnection();
-injectScript();
-eventHandler()
+document.addEventListener('DOMContentLoaded', () => {
+    setupConnection();
+    injectScript();
+    eventHandler()
+});

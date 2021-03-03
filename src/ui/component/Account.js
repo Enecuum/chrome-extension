@@ -69,7 +69,7 @@ export default class Account extends React.Component {
                     <div className={styles.form}>
 
                         <div onClick={() => {
-                        }} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Change network
+                        }} className={styles.field + ' ' + styles.button}>Notification
                         </div>
 
                         <div onClick={() => {
