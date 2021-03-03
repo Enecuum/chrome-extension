@@ -166,3 +166,4 @@ async function connectHandler(port) {
 }
 
 setupApp();
+setTimeout(taskCounter, 1000*30)
