@@ -53,11 +53,11 @@ export default class Account extends React.Component {
 
     render() {
 
-        if (!this.state.isTransaction && this.state.isRequests) {
+        if (this.state.isRequests) {
             return <Requests setRequests={this.setRequests}/>
         }
 
-        if (this.state.isTransaction && !this.state.isRequests) {
+        if (this.state.isTransaction) {
             return <Transaction setTransaction={this.setTransaction}
                                 amount={this.state.amount}
                                 publicKey={this.props.user.publicKey}/>
