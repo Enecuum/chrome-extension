@@ -26,6 +26,7 @@ body {
 * {
     box-sizing: border-box;
     background: rgba(0, 0, 0, 0.05);
+    /*display: block;*/
 }
 
 a {
@@ -188,4 +189,5 @@ input::placeholder {
 .disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    box-shadow: none;
 }
