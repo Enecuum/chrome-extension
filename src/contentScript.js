@@ -28,9 +28,10 @@ function injectScript(){
     try {
         // inject in-page script
         let script = document.createElement('script');
-        script.src = extensionApi.extension.getURL('inPage.js');
+        script.src = extensionApi.extension.getURL('inpage.js');
         const container = document.head || document.documentElement;
         container.insertBefore(script, container.children[0]);
+        // (document.head || document.documentElement).appendChild(script)
         script.onload = () => script.remove();
     } catch (e) {
         console.error('Injection failed.', e);
@@ -92,8 +93,6 @@ function injectCb(code) {
     script.remove();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    setupConnection();
+// setupConnection();
     injectScript();
     eventHandler()
-});

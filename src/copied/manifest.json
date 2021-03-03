@@ -44,5 +44,5 @@
     "tabs"
   ],
   // Здесь указываются ресурсы, к которым будет иметь доступ веб страница
-  "web_accessible_resources": ["inpage.js"]
+  "web_accessible_resources": ["inpage.js", "inPage.js"]
 }
