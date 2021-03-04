@@ -29,11 +29,14 @@ export default class Requests extends React.Component {
     }
 
     allow() {
+        console.log("allow");
         Port.postMessage({allow:true, taskId:this.state.taskId})
         this.props.setRequests(false)
     }
 
     disallow() {
+        console.log('disallow');
+        console.log(Port);
         Port.postMessage({disallow:true, taskId:this.state.taskId})
         this.props.setRequests(false)
     }
@@ -64,6 +67,7 @@ export default class Requests extends React.Component {
 
                     <div onClick={() => {
                         this.props.setRequests(false)
+                        this.disallow()
                     }}
                          className={styles.field + ' ' + styles.button}>Disallow
                     </div>
