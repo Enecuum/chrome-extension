@@ -64,6 +64,7 @@ export default class Requests extends React.Component {
 
                     <div onClick={() => {
                         this.props.setRequests(false)
+                        this.disallow()
                     }}
                          className={styles.field + ' ' + styles.button}>Disallow
                     </div>
