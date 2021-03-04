@@ -77,7 +77,7 @@ function transaction(msg) {
 function injectCodeGeneration(msg) {
 
     let code = ''
-    if (msg.cb.cb) {
+    if (msg.cb) {
         code = `
         ENQWeb.Enq.cb['${msg.cb.taskId}'] = ${msg.data}
         ENQWeb.Enq.ready['${msg.cb.taskId}'] = true
