@@ -6,7 +6,8 @@ export default class Network extends React.Component {
         super(props)
 
         this.state = {
-            keys: ['one', 'two']
+            keys: ['one', 'two'],
+            request: ''
         }
     }
 
@@ -23,17 +24,26 @@ export default class Network extends React.Component {
         const items = []
 
         for (const key of this.state.keys) {
-            items.push(<div onClick={() => {}} className={styles.field + ' ' + styles.button}>Transaction</div>)
+            items.push(<div onClick={() => {
+            }} className={styles.field + ' ' + styles.button}>Transaction</div>)
         }
 
         return (
             <div className={styles.main}>
 
-                <div className={styles.form}>
-
-                    {items}
-
+                <div className={styles.header}>
+                    <div className={styles.field + ' ' + styles.text}>List of requests</div>
+                    <div onClick={() => {}}>{items}</div>
                 </div>
+
+                <div className={styles.form}>
+                    <div onClick={() => {
+                        this.props.setNetwork(false)
+                    }}
+                         className={styles.field + ' ' + styles.button}>Back
+                    </div>
+                </div>
+
 
             </div>
         )

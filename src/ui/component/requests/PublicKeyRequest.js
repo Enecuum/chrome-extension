@@ -9,7 +9,6 @@ export default class PublicKeyRequests extends React.Component {
             type: '',
             taskId: ''
         }
-        // this.syncRequest = this.syncRequest.bind(this)
         this.allow = this.allow.bind(this)
         this.disallow = this.disallow.bind(this)
         console.log(this)
