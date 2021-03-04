@@ -53,16 +53,17 @@ async function msgPopupHandler(msg, sender) {
             ENQWeb.Net.provider = buf
         }
     } else {
-        if (msg.agree && msg.taskId) {
+        if (msg.allow && msg.taskId) {
             taskHandler(msg.taskId)
             taskCounter()
-        } else {
-            if (msg.taskId) {
-                // Storage.task.removeTask(msg.taskId)
-                rejectTaskHandler(msg.taskId)
-                console.log('removed')
-                taskCounter()
-            }
+        } else if(msg.disallow && msg.taskId) {
+            // Storage.task.removeTask(msg.taskId)
+            rejectTaskHandler(msg.taskId)
+            console.log('removed')
+            taskCounter()
+        }
+        else{
+            console.log(msg)
         }
     }
 }
@@ -165,3 +166,4 @@ async function connectHandler(port) {
 }
 
 setupApp();
+setTimeout(taskCounter, 1000*30)
