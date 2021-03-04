@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../index.module.css";
 import {Transaction} from "./Transaction";
 import Requests from "./Requests"
+import {TransactionRequest} from "./requests/TransactionRequest";
 
 export default class Account extends React.Component {
     constructor(props) {
@@ -54,7 +55,8 @@ export default class Account extends React.Component {
     render() {
 
         if (this.state.isRequests) {
-            return <Requests setRequests={this.setRequests}/>
+            // return <Requests setRequests={this.setRequests}/>
+            return <TransactionRequest setRequests={this.setRequests}/>
         }
 
         if (this.state.isTransaction) {
