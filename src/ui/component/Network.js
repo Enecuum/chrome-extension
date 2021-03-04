@@ -33,7 +33,7 @@ export default class Network extends React.Component {
                     <div onClick={() => {
                         this.props.setNetwork(false)
                     }}
-                         className={styles.field + ' ' + styles.button}>&laquo; Back
+                         className={styles.field + ' ' + styles.button}>Back
                     </div>
 
                 </div>

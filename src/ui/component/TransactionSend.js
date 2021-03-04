@@ -23,11 +23,18 @@ export class TransactionSend extends React.Component {
                     <div className={styles.field + ' ' + styles.copy + ' ' + styles.header}
                          onClick={() => this.copyHash()}>COPY
                     </div>
+
+                    <div className={styles.field}>From</div>
+                    <div className={styles.field}>To</div>
+                    <div className={styles.field}>Amount</div>
+                    <div className={styles.field}>Data</div>
+                    <div className={styles.field}>Net</div>
+
                 </div>
 
                 <div className={styles.form}>
                     <div onClick={() => this.props.setTransaction(false)}
-                         className={styles.field + ' ' + styles.button}>&laquo; Back
+                         className={styles.field + ' ' + styles.button}>Back
                     </div>
                 </div>
             </div>

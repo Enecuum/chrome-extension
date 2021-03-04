@@ -5,10 +5,9 @@ export default class Requests extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            url: '',
+            url: 'www.example.com',
             type: '',
-            taskId: '',
-            website: 'www.example.com'
+            taskId: ''
         }
         // this.syncRequest = this.syncRequest.bind(this)
         this.allow = this.allow.bind(this)
@@ -40,22 +39,20 @@ export default class Requests extends React.Component {
     }
 
     render() {
-        // this.syncRequest()
+
         return (
             <div className={styles.main}>
 
                 <div className={styles.form + ' ' + styles.header}>
                     <div className={styles.field + ' ' + styles.text}>{this.state.url}</div>
-
                     <div className={styles.field + ' ' + styles.text}>{this.state.type}</div>
-
                 </div>
 
                 <div className={styles.form}>
 
-                    <div onClick={this.allow}
-                         className={styles.field}>{this.state.website}
-                    </div>
+                    {/*<div onClick={this.allow}*/}
+                    {/*     className={styles.field}>{this.state.website}*/}
+                    {/*</div>*/}
 
                     <div onClick={this.allow}
                          className={styles.field}>This website request access to your public key
