@@ -144,9 +144,9 @@ async function taskHandler(taskId) {
 
 function rejectTaskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
+    Storage.task.removeTask(taskId)
     let data = {reject: true}
     ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
-    Storage.task.removeTask(taskId)
 }
 
 //TODO add cleaner connection list
@@ -166,4 +166,4 @@ async function connectHandler(port) {
 }
 
 setupApp();
-setTimeout(taskCounter, 1000*30)
+setTimeout(taskCounter, 1000*15)
