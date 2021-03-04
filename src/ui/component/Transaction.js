@@ -82,6 +82,7 @@ export class Transaction extends React.Component {
                     <div className={styles.form}>
 
                         <input type="text"
+                               spellCheck={false}
                                onChange={this.handleChangeAddress}
                                value={this.state.address}
                                className={styles.field}
@@ -111,7 +112,7 @@ export class Transaction extends React.Component {
                     <div className={styles.form}>
 
                         <div onClick={() => this.props.setTransaction(false)}
-                             className={styles.field + ' ' + styles.button}>&laquo; Back
+                             className={styles.field + ' ' + styles.button}>Back
                         </div>
 
                     </div>

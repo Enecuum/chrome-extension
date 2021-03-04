@@ -71,7 +71,7 @@ export default class Login extends React.Component {
                     <div className={styles.form}>
 
                         <input type="text"
-                               spellcheck="false"
+                               spellCheck={false}
                                onChange={this.handleChange}
                                value={this.state.value}
                                className={styles.field}
