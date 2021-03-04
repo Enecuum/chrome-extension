@@ -55,8 +55,7 @@ export default class Account extends React.Component {
     render() {
 
         if (this.state.isRequests) {
-            // return <Requests setRequests={this.setRequests}/>
-            return <TransactionRequest setRequests={this.setRequests}/>
+            return <Requests setRequests={this.setRequests}/>
         }
 
         if (this.state.isTransaction) {
@@ -83,7 +82,7 @@ export default class Account extends React.Component {
                         <div onClick={() => {
                             this.setRequests(true)
                         }}
-                             className={styles.field + ' ' + styles.button}>Requests
+                             className={styles.field + ' ' + styles.button + ' ' + styles.green}>Requests
                         </div>
 
                         <div onClick={() => {

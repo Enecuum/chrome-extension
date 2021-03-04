@@ -107,6 +107,12 @@ a {
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
 }
 
+.green {
+    /*color: black;*/
+    /*background-color: var(--color-green-super-ligth);*/
+    /*border: 1px solid var(--color-green-ligth);*/
+}
+
 .button.red {
     color: var(--color-red);
     background: white;
