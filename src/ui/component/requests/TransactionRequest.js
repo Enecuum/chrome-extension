@@ -29,7 +29,7 @@ export class TransactionRequest extends React.Component {
                 </div>
 
                 <div className={styles.form}>
-                    <div onClick={() => this.props.setTransaction(false)}
+                    <div onClick={() => this.props.setRequests(false)}
                          className={styles.field + ' ' + styles.button}>Back
                     </div>
                 </div>
