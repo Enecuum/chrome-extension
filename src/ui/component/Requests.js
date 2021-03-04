@@ -7,14 +7,19 @@ export default class Network extends React.Component {
 
         this.state = {
             keys: ['one', 'two'],
-            request: ''
+            requests:{}
         }
+
+        this.getRequests = this.getRequests.bind(this)
     }
 
     getRequests() {
         let tasks = disk.task.loadTask()
         let keys = Object.keys(tasks)
         console.log(tasks)
+        console.log(keys);
+        this.state.keys=keys
+        this.state.requests = tasks
     }
 
     render() {
@@ -25,7 +30,8 @@ export default class Network extends React.Component {
 
         for (const key of this.state.keys) {
             items.push(<div onClick={() => {
-            }} className={styles.field + ' ' + styles.button}>Transaction</div>)
+
+            }} className={styles.field + ' ' + styles.button}>{this.state.requests[key].type}</div>)
         }
 
         return (
@@ -38,7 +44,7 @@ export default class Network extends React.Component {
 
                 <div className={styles.form}>
                     <div onClick={() => {
-                        this.props.setNetwork(false)
+                        this.props.setRequests(false)
                     }}
                          className={styles.field + ' ' + styles.button}>Back
                     </div>
