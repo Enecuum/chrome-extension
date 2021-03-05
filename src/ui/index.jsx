@@ -1,7 +1,7 @@
 import React from 'react'
 import {render} from 'react-dom'
-import Login from './component/Login'
-import Account from './component/Account'
+import Login from './components/Login'
+import Account from './components/Account'
 import styles from './index.module.css'
 
 function App(background) {

@@ -1,25 +1,39 @@
 import React from "react";
 import styles from "../index.module.css";
 
+let names = {
+    enable: 'Share account address',
+    tx: 'Sign transaction'
+}
+
 export default class Network extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            keys: ['one', 'two'],
-            requests:{}
+            keys: [],
+            requests: {}
         }
 
         this.getRequests = this.getRequests.bind(this)
     }
 
     getRequests() {
-        let tasks = disk.task.loadTask()
-        let keys = Object.keys(tasks)
-        console.log(tasks)
-        console.log(keys);
-        this.state.keys=keys
-        this.state.requests = tasks
+        let requests = disk.task.loadTask()
+        let keys = Object.keys(requests)
+
+        // console.log(tasks)
+        // console.log(keys)
+
+        // this.state.keys = keys
+        // this.state.requests = tasks
+
+        this.setState({
+            keys,
+            requests
+        })
+
+
     }
 
     render() {
@@ -29,9 +43,11 @@ export default class Network extends React.Component {
         const items = []
 
         for (const key of this.state.keys) {
-            items.push(<div onClick={() => {
-
-            }} className={styles.field + ' ' + styles.button}>{this.state.requests[key].type}</div>)
+            items.push(
+                <div onClick={() => {}} className={styles.field + ' ' + styles.button}>
+                    {names[this.state.requests[key].type]}
+                </div>
+            )
         }
 
         return (

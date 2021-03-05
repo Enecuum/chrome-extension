@@ -2,7 +2,6 @@ import React from "react";
 import styles from "../index.module.css";
 import {Transaction} from "./Transaction";
 import Requests from "./Requests"
-import {TransactionRequest} from "./requests/TransactionRequest";
 
 export default class Account extends React.Component {
     constructor(props) {
@@ -85,9 +84,9 @@ export default class Account extends React.Component {
                              className={styles.field + ' ' + styles.button + ' ' + styles.green}>Requests
                         </div>
 
-                        <div onClick={() => {
-                        }} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Transactions history
-                        </div>
+                        {/*<div onClick={() => {*/}
+                        {/*}} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Transactions history*/}
+                        {/*</div>*/}
 
                         <div onClick={() => this.setTransaction(true)}
                              className={styles.field + ' ' + styles.button}>Send transaction
