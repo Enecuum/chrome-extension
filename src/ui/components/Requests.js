@@ -22,18 +22,13 @@ export default class Network extends React.Component {
         let requests = disk.task.loadTask()
         let keys = Object.keys(requests)
 
-        // console.log(tasks)
-        // console.log(keys)
-
-        // this.state.keys = keys
-        // this.state.requests = tasks
-
         this.setState({
             keys,
             requests
         })
+    }
 
-
+    rejectAll() {
     }
 
     render() {
@@ -50,12 +45,22 @@ export default class Network extends React.Component {
             )
         }
 
+        console.log(this.state.keys)
+
         return (
             <div className={styles.main}>
 
                 <div className={styles.header}>
+
                     <div className={styles.field + ' ' + styles.text}>List of requests</div>
+
+                    {/*ORDER*/}
                     <div onClick={() => {}}>{items}</div>
+
+                    <div onClick={() => this.rejectAll()}
+                         className={styles.field + ' ' + styles.button}>Reject all
+                    </div>
+
                 </div>
 
                 <div className={styles.form}>
