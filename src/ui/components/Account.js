@@ -11,7 +11,7 @@ export default class Account extends React.Component {
         this.setRequests = this.setRequests.bind(this)
         this.balance = this.balance.bind(this)
         this.copyPublicKey = this.copyPublicKey.bind(this)
-        console.log(this)
+        // console.log(this)
 
         this.balance()
     }

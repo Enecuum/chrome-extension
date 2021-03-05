@@ -13,6 +13,12 @@ export class TransactionRequest extends React.Component {
         navigator.clipboard.writeText(this.props.txHash)
     }
 
+    confirm() {
+    }
+
+    reject() {
+    }
+
     render() {
 
         return (
@@ -28,6 +34,14 @@ export class TransactionRequest extends React.Component {
                     <div className={styles.field}>Nonce: {this.state.nonce}</div>
 
                     {/*<div className={styles.field}>Net: {this.state.net}</div>*/}
+
+                    <div onClick={() => this.confirm()}
+                         className={styles.field + ' ' + styles.button}>Confirm
+                    </div>
+
+                    <div onClick={() => this.reject()}
+                         className={styles.field + ' ' + styles.button}>Reject
+                    </div>
 
                 </div>
 
