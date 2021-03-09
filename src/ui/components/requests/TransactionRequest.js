@@ -22,6 +22,7 @@ export default class TransactionRequest extends React.Component {
     }
 
     confirm() {
+        ENQWeb.Net.post.tx_fee_off( obj )
     }
 
     reject() {
