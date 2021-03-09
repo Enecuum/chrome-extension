@@ -11,7 +11,9 @@ export default class Requests extends React.Component {
         super(props)
 
         this.state = {
-            requests: disk.task.loadTask()
+            requests: disk.task.loadTask(),
+            publicKeyRequest: null,
+            transactionRequest: null
         }
     }
 
@@ -20,11 +22,20 @@ export default class Requests extends React.Component {
 
     render() {
 
+        if (this.state.publicKeyRequest) {
+
+        }
+
+        if (this.state.transactionRequest) {
+
+        }
+
         const items = []
 
         for (const key of Object.keys(this.state.requests)) {
             items.push(
-                <div onClick={() => {}} className={styles.field + ' ' + styles.button}>
+                <div onClick={() => {
+                }} className={styles.field + ' ' + styles.button}>
                     {names[this.state.requests[key].type]}
                 </div>
             )
@@ -38,7 +49,8 @@ export default class Requests extends React.Component {
                     <div className={styles.field + ' ' + styles.text}>List of requests</div>
 
                     {/*ORDER*/}
-                    <div onClick={() => {}}>{items}</div>
+                    <div onClick={() => {
+                    }}>{items}</div>
 
                     <div onClick={() => this.rejectAll()}
                          className={styles.field + ' ' + styles.button}>Reject all

@@ -56,13 +56,12 @@ async function msgPopupHandler(msg, sender) {
         if (msg.allow && msg.taskId) {
             taskHandler(msg.taskId)
             taskCounter()
-        } else if(msg.disallow && msg.taskId) {
+        } else if (msg.disallow && msg.taskId) {
             // Storage.task.removeTask(msg.taskId)
             rejectTaskHandler(msg.taskId)
             console.log('removed')
             taskCounter()
-        }
-        else{
+        } else {
             console.log(msg)
         }
     }
@@ -166,4 +165,4 @@ async function connectHandler(port) {
 }
 
 setupApp();
-setTimeout(taskCounter, 1000*15)
+setTimeout(taskCounter, 1000 * 15)

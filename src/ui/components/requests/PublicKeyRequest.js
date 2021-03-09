@@ -28,12 +28,12 @@ export default class PublicKeyRequests extends React.Component {
     }
 
     allow() {
-        Port.postMessage({allow:true, taskId:this.state.taskId})
+        Port.postMessage({allow: true, taskId: this.state.taskId})
         this.props.setRequests(false)
     }
 
     disallow() {
-        Port.postMessage({disallow:true, taskId:this.state.taskId})
+        Port.postMessage({disallow: true, taskId: this.state.taskId})
         this.props.setRequests(false)
     }
 
