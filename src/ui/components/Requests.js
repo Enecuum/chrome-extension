@@ -6,26 +6,13 @@ let names = {
     tx: 'Sign transaction'
 }
 
-export default class Network extends React.Component {
+export default class Requests extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            keys: [],
-            requests: {}
+            requests: disk.task.loadTask()
         }
-
-        this.getRequests = this.getRequests.bind(this)
-    }
-
-    getRequests() {
-        let requests = disk.task.loadTask()
-        let keys = Object.keys(requests)
-
-        this.setState({
-            keys,
-            requests
-        })
     }
 
     rejectAll() {
@@ -33,19 +20,15 @@ export default class Network extends React.Component {
 
     render() {
 
-        this.getRequests()
-
         const items = []
 
-        for (const key of this.state.keys) {
+        for (const key of Object.keys(this.state.requests)) {
             items.push(
                 <div onClick={() => {}} className={styles.field + ' ' + styles.button}>
                     {names[this.state.requests[key].type]}
                 </div>
             )
         }
-
-        console.log(this.state.keys)
 
         return (
             <div className={styles.main}>

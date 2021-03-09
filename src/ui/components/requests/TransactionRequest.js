@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../index.module.css";
 
-export class TransactionRequest extends React.Component {
+export default class TransactionRequest extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

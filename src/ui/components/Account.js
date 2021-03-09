@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "../index.module.css";
-import {Transaction} from "./Transaction";
+import Transaction from "./Transaction";
 import Requests from "./Requests"
 
 export default class Account extends React.Component {
