@@ -5,8 +5,16 @@ export default class TransactionRequest extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: `${ENQWeb.Net.provider}/#!/tx/` + this.props.txHash
+            url: `${ENQWeb.Net.provider}/#!/tx/` + this.props.txHash,
+            amount: this.props.request.data.value,
+            data: this.props.request.data.data,
+            from: this.props.request.data.from,
+            ticker: this.props.request.data.tokenHash,
+            to: this.props.request.data.to,
+            nonce: this.props.request.data.nonce,
         }
+
+        console.log(this.props.request)
     }
 
     copyHash() {
@@ -46,7 +54,7 @@ export default class TransactionRequest extends React.Component {
                 </div>
 
                 <div className={styles.form}>
-                    <div onClick={() => this.props.setRequests(false)}
+                    <div onClick={() => this.props.back()}
                          className={styles.field + ' ' + styles.button}>Back
                     </div>
                 </div>

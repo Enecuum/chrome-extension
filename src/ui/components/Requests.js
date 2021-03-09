@@ -1,5 +1,7 @@
 import React from "react";
 import styles from "../index.module.css";
+import PublicKeyRequests from "./requests/PublicKeyRequest";
+import TransactionRequest from "./requests/TransactionRequest";
 
 let names = {
     enable: 'Share account address',
@@ -15,6 +17,15 @@ export default class Requests extends React.Component {
             publicKeyRequest: null,
             transactionRequest: null
         }
+
+        this.back = this.back.bind(this)
+    }
+
+    back() {
+        this.setState({
+            publicKeyRequest: null,
+            transactionRequest: null
+        })
     }
 
     rejectAll() {
@@ -23,20 +34,27 @@ export default class Requests extends React.Component {
     render() {
 
         if (this.state.publicKeyRequest) {
-
+            return <PublicKeyRequests back={this.back} request={this.state.publicKeyRequest}/>
         }
 
         if (this.state.transactionRequest) {
-
+            return <TransactionRequest back={this.back} request={this.state.transactionRequest}/>
         }
 
         const items = []
 
         for (const key of Object.keys(this.state.requests)) {
+            let item = this.state.requests[key]
             items.push(
-                <div onClick={() => {
+                <div key={key} onClick={() => {
+
+                    if (item.type === 'enable')
+                        this.setState({publicKeyRequest: item})
+                    else
+                        this.setState({transactionRequest: item})
+
                 }} className={styles.field + ' ' + styles.button}>
-                    {names[this.state.requests[key].type]}
+                    {names[item.type]}
                 </div>
             )
         }
@@ -48,9 +66,7 @@ export default class Requests extends React.Component {
 
                     <div className={styles.field + ' ' + styles.text}>List of requests</div>
 
-                    {/*ORDER*/}
-                    <div onClick={() => {
-                    }}>{items}</div>
+                    {items}
 
                     <div onClick={() => this.rejectAll()}
                          className={styles.field + ' ' + styles.button}>Reject all
