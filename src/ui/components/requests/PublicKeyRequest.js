@@ -61,10 +61,7 @@ export default class PublicKeyRequests extends React.Component {
                          className={styles.field + ' ' + styles.button}>Allow
                     </div>
 
-                    <div onClick={() => {
-                        this.props.setRequests(false)
-                        this.disallow()
-                    }}
+                    <div onClick={this.disallow}
                          className={styles.field + ' ' + styles.button}>Disallow
                     </div>
 

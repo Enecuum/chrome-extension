@@ -64,7 +64,7 @@ export default class Requests extends React.Component {
 
                 <div className={styles.header}>
 
-                    <div className={styles.field + ' ' + styles.text}>List of requests</div>
+                    <div className={styles.field + ' ' + styles.text}>List of requests: {Object.keys(this.state.requests).length}</div>
 
                     {items}
 
