@@ -29,12 +29,12 @@ export default class PublicKeyRequests extends React.Component {
 
     allow() {
         Port.postMessage({allow: true, taskId: this.state.taskId})
-        this.props.setRequests(false)
+        this.props.back()
     }
 
     disallow() {
         Port.postMessage({disallow: true, taskId: this.state.taskId})
-        this.props.setRequests(false)
+        this.props.back()
     }
 
     render() {
@@ -68,9 +68,7 @@ export default class PublicKeyRequests extends React.Component {
                          className={styles.field + ' ' + styles.button}>Disallow
                     </div>
 
-                    <div onClick={() => {
-                        this.props.setRequests(false)
-                    }}
+                    <div onClick={() => this.props.back()}
                          className={styles.field + ' ' + styles.button}>Back
                     </div>
 
