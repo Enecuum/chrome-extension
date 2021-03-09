@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "../index.module.css";
-import {TransactionSend} from "./TransactionSend";
+import TransactionSend from "./TransactionSend";
 
-export class Transaction extends React.Component {
+export default class Transaction extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
