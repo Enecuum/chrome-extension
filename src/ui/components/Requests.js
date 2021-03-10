@@ -14,7 +14,7 @@ export default class Requests extends React.Component {
 
         this.state = {
             requests: disk.list.listOfTask(), // массив самих объектов
-            ids : disk.list.loadList(), // массив очереди идентификаторов
+            ids: disk.list.loadList(), // массив очереди идентификаторов
             publicKeyRequest: null,
             transactionRequest: null,
             taskId: null
@@ -36,11 +36,13 @@ export default class Requests extends React.Component {
     render() {
 
         if (this.state.publicKeyRequest) {
-            return <PublicKeyRequests back={this.back} request={this.state.publicKeyRequest} taskId={this.state.taskId}/>
+            return <PublicKeyRequests back={this.back} request={this.state.publicKeyRequest}
+                                      taskId={this.state.taskId}/>
         }
 
         if (this.state.transactionRequest) {
-            return <TransactionRequest back={this.back} request={this.state.transactionRequest} taskId={this.state.taskId}/>
+            return <TransactionRequest back={this.back} request={this.state.transactionRequest}
+                                       taskId={this.state.taskId}/>
         }
 
         const items = []
@@ -51,9 +53,9 @@ export default class Requests extends React.Component {
                 <div key={key} onClick={() => {
 
                     if (item.type === 'enable')
-                        this.setState({publicKeyRequest: item, taskId:this.state.ids[key]})
+                        this.setState({publicKeyRequest: item, taskId: this.state.ids[key]})
                     else
-                        this.setState({transactionRequest: item, taskId:this.state.ids[key]})
+                        this.setState({transactionRequest: item, taskId: this.state.ids[key]})
 
                 }} className={styles.field + ' ' + styles.button}>
                     {names[item.type]}
@@ -66,7 +68,8 @@ export default class Requests extends React.Component {
 
                 <div className={styles.header}>
 
-                    <div className={styles.field + ' ' + styles.text}>List of requests: {Object.keys(this.state.requests).length}</div>
+                    <div className={styles.field + ' ' + styles.text}>List of
+                        requests: {Object.keys(this.state.requests).length}</div>
 
                     {items}
 

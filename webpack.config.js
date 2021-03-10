@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = () => {
 
     const mode = process.env.NODE_ENV || 'development';
-    const SOURCE_FOLDER = path.resolve(__dirname ,'src');
+    const SOURCE_FOLDER = path.resolve(__dirname, 'src');
     const DIST_FOLDER = path.resolve(__dirname, 'dist');
 
     const COPY = {
@@ -12,7 +12,8 @@ module.exports = () => {
             from: path.join(SOURCE_FOLDER, 'copied'),
             to: DIST_FOLDER
         }
-    ]};
+        ]
+    };
 
     const plugins = [];
 
@@ -33,7 +34,7 @@ module.exports = () => {
         },
         devtool: 'inline-source-map',
         resolve: {
-            extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".styl", ".css",".png", ".jpg", ".gif", ".svg", ".woff", ".woff2", ".ttf", ".otf"]
+            extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".styl", ".css", ".png", ".jpg", ".gif", ".svg", ".woff", ".woff2", ".ttf", ".otf"]
         },
 
         plugins,
