@@ -31,6 +31,11 @@ export default class Requests extends React.Component {
     }
 
     rejectAll() {
+
+        for (let i in this.state.requests) {
+            console.log(this.state.requests[i].cb.taskId)
+            Port.postMessage({disallow: true, taskId: this.state.requests[i].cb.taskId})
+        }
     }
 
     render() {

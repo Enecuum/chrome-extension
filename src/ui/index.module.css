@@ -25,9 +25,17 @@ body {
 
 * {
     box-sizing: border-box;
-    background: rgba(0, 0, 0, 0.02);
+    /*background: rgba(0, 0, 0, 0.02);*/
     /*display: block;*/
     /*overflow-y: scroll;*/
+}
+
+div {
+    background: rgba(0, 0, 0, 0.01);
+}
+
+div:hover {
+    background: rgba(0, 0, 0, 0.02);
 }
 
 a {

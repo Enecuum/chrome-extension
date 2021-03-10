@@ -43,8 +43,8 @@ export default class PublicKeyRequests extends React.Component {
             <div className={styles.main}>
 
                 <div className={styles.form + ' ' + styles.header}>
-                    <div className={styles.field + ' ' + styles.text}>{this.state.url}</div>
-                    <div className={styles.field + ' ' + styles.text}>{this.state.type}</div>
+                    <div className={styles.field}>This website is requesting access to your account address</div>
+                    <div className={styles.field}>{this.state.url}</div>
                 </div>
 
                 <div className={styles.form}>
@@ -52,10 +52,6 @@ export default class PublicKeyRequests extends React.Component {
                     {/*<div onClick={this.allow}*/}
                     {/*     className={styles.field}>{this.state.website}*/}
                     {/*</div>*/}
-
-                    <div onClick={this.allow}
-                         className={styles.field}>This website request access to your public key
-                    </div>
 
                     <div onClick={this.allow}
                          className={styles.field + ' ' + styles.button}>Allow
