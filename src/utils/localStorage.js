@@ -36,6 +36,9 @@ function loadList() {
 
 function addToList(taskId) {
     let list = loadList()
+    if(!list){
+        list = []
+    }
     list.push(taskId)
     localStorage.setItem('list', JSON.stringify(list))
     return true
@@ -57,7 +60,7 @@ function updateList() {
         }
         localStorage.setItem('list', JSON.stringify(ptr))
     } else {
-        localStorage.setItem('list', '')
+        localStorage.setItem('list', '[]')
     }
 }
 

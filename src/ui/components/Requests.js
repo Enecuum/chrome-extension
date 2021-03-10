@@ -13,9 +13,11 @@ export default class Requests extends React.Component {
         super(props)
 
         this.state = {
-            requests: disk.task.loadTask(),
+            requests: disk.list.listOfTask(), // массив самих объектов
+            ids : disk.list.loadList(), // массив очереди идентификаторов
             publicKeyRequest: null,
-            transactionRequest: null
+            transactionRequest: null,
+            taskId: null
         }
 
         this.back = this.back.bind(this)
@@ -34,24 +36,24 @@ export default class Requests extends React.Component {
     render() {
 
         if (this.state.publicKeyRequest) {
-            return <PublicKeyRequests back={this.back} request={this.state.publicKeyRequest}/>
+            return <PublicKeyRequests back={this.back} request={this.state.publicKeyRequest} taskId={this.state.taskId}/>
         }
 
         if (this.state.transactionRequest) {
-            return <TransactionRequest back={this.back} request={this.state.transactionRequest}/>
+            return <TransactionRequest back={this.back} request={this.state.transactionRequest} taskId={this.state.taskId}/>
         }
 
         const items = []
 
-        for (const key of Object.keys(this.state.requests)) {
+        for (let key in this.state.requests) {
             let item = this.state.requests[key]
             items.push(
                 <div key={key} onClick={() => {
 
                     if (item.type === 'enable')
-                        this.setState({publicKeyRequest: item})
+                        this.setState({publicKeyRequest: item, taskId:this.state.ids[key]})
                     else
-                        this.setState({transactionRequest: item})
+                        this.setState({transactionRequest: item, taskId:this.state.ids[key]})
 
                 }} className={styles.field + ' ' + styles.button}>
                     {names[item.type]}
