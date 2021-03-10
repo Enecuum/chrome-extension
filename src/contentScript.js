@@ -48,6 +48,9 @@ function eventContent(e) {
         case 'tx':
             taskId[address] = transaction
             break
+        case 'getProvider':
+            taskId[address] = enable
+            break
         default:
             break
     }
