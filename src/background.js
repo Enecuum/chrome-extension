@@ -75,6 +75,8 @@ function listPorts() {
 
 function disconnectHandler(port) {
     console.log('disconnected: ' + port.name)
+    ports[port.name].disconnect()
+    delete ports[port.name]
 }
 
 function connectController(port) {
