@@ -15,6 +15,7 @@ export default class TransactionRequest extends React.Component {
         }
 
         console.log(this.props.request)
+        console.log(this.props.taskId)
     }
 
     copyHash() {
