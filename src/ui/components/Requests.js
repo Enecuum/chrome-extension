@@ -25,13 +25,22 @@ export default class Requests extends React.Component {
 
     back() {
         this.setState({
+            requests: disk.list.listOfTask(),
+            ids: disk.list.loadList(),
             publicKeyRequest: null,
-            transactionRequest: null
+            transactionRequest: null,
+            taskId: null
         })
     }
 
     rejectAll() {
         Port.postMessage({reject_all: true})
+        this.setState({
+            requests: [],
+            ids: [],
+            publicKeyRequest: null,
+            transactionRequest: null
+        })
     }
 
     render() {

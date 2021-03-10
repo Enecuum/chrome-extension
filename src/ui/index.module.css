@@ -88,6 +88,8 @@ a {
     /*color: black;*/
 
     /*font-weight: 300;*/
+    overflow: auto;
+    white-space: normal !important;
 }
 
 .field {
