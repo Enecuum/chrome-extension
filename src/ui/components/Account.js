@@ -3,14 +3,17 @@ import styles from "../index.module.css";
 import Transaction from "./Transaction";
 import Requests from "./Requests"
 import Password from "./Password";
+import Network from "./Network";
 
 export default class Account extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isTransaction: false, isRequests: false, isPassword: false, amount: 0, usd: 0, ticker: ''}
+        this.state = {isTransaction: false, isRequests: false, isPassword: false, isNetwork: false, amount: 0, usd: 0, ticker: '', net: ''}
         this.setTransaction = this.setTransaction.bind(this)
         this.setRequests = this.setRequests.bind(this)
         this.setPassword = this.setPassword.bind(this)
+        this.setNetwork = this.setNetwork.bind(this)
+        this.setNet = this.setNet.bind(this)
         this.balance = this.balance.bind(this)
         this.copyPublicKey = this.copyPublicKey.bind(this)
         // console.log(this)
@@ -28,6 +31,15 @@ export default class Account extends React.Component {
 
     setPassword(value) {
         this.setState({isPassword: value})
+    }
+
+    setNetwork(value) {
+        this.setState({isNetwork: value})
+    }
+
+    setNet(value) {
+        this.setState({net: value})
+        ENQWeb.Net.provider = value
     }
 
     copyPublicKey() {
@@ -73,6 +85,13 @@ export default class Account extends React.Component {
             return <Password setPassword={this.setPassword}/>
         }
 
+        if (this.state.isPassword) {
+            return <Password setPassword={this.setPassword}/>
+        }
+
+        if (this.state.isNetwork) {
+            return <Network setNetwork={this.setNetwork} setNet={this.setNet} net={this.state.net}/>
+        }
 
         return (
             <div className={styles.main}>
@@ -106,6 +125,10 @@ export default class Account extends React.Component {
 
                     <div onClick={() => this.setPassword(true)}
                          className={styles.field + ' ' + styles.button}>Set password
+                    </div>
+
+                    <div onClick={() => this.setNetwork(true)}
+                         className={styles.field + ' ' + styles.button}>Network: {this.state.net}
                     </div>
 
                     <div onClick={this.props.logout}
