@@ -4,7 +4,12 @@ import {extensionApi} from "./utils/extensionApi";
 let toBackground = {}
 let pageToBack = {}
 let taskId = []
-
+let requests = {
+  'tx':transaction,
+  'balanceOf':balanceOf,
+  'enable':enable,
+  'getProvider':enable
+}
 
 function setupConnection() {
     console.log('content ready')
@@ -38,22 +43,7 @@ function injectScript() {
 
 function eventContent(e) {
     let address = Math.random().toString(36)
-    switch (e.detail.type) {
-        case 'enable':
-            taskId[address] = enable
-            break
-        case 'balanceOf':
-            taskId[address] = balanceOf
-            break
-        case 'tx':
-            taskId[address] = transaction
-            break
-        case 'getProvider':
-            taskId[address] = enable
-            break
-        default:
-            break
-    }
+    taskId[address] = requests[e.detail.type]
     toBackground.postMessage({type: e.detail.type, data: e.detail.data, taskId: address, cb: e.detail.cb})
     document.addEventListener('ENQContent', (e) => {
         eventContent(e)
