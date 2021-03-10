@@ -5,6 +5,12 @@ let Storage = new storage()
 global.disk = Storage
 
 let ports = {}
+let requests ={
+  'tx':true,
+  'enable':true,
+  "balanceOf":false,
+  'getProvider':false
+}
 
 function setupApp() {
     console.log('background ready')
@@ -22,7 +28,7 @@ async function msgConnectHandler(msg, sender) {
     let answer = ''
     if (msg.taskId) {
         Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
-        if (msg.type === 'balanceOf') {
+        if (!requests[msg.type]) {
             taskHandler(msg.taskId)
         } else {
             taskCounter()
@@ -138,6 +144,12 @@ async function taskHandler(taskId) {
             console.log({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
             Storage.task.removeTask(taskId)
             break
+        case 'getProvider':
+            data = {net:acc.net}
+            console.log(data);
+            ports.content.postMessage({data:JSON.stringify(data), taskId: taskId, cb: task.cb})
+            Storage.task.removeTask(taskId)
+            break;
         default:
             break
     }
