@@ -16,7 +16,7 @@ function clearTasks() {
 function listOfTask() {
     let tasks = JSON.parse(localStorage.getItem('list'))
     let list = []
-    if (tasks.length > 0) {
+    if (tasks && tasks.length > 0) {
         for (let id in tasks) {
             // console.log(id)
             list.push(getTask(tasks[id]))
@@ -36,7 +36,7 @@ function loadList() {
 
 function addToList(taskId) {
     let list = loadList()
-    if(!list){
+    if (!list) {
         list = []
     }
     list.push(taskId)
