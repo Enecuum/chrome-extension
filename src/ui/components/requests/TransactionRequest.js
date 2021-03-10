@@ -21,11 +21,13 @@ export default class TransactionRequest extends React.Component {
         navigator.clipboard.writeText(this.props.txHash)
     }
 
-    confirm() {
-        ENQWeb.Net.post.tx_fee_off( obj )
+    async confirm() {
+        console.log({task:this.props})
+        Port.postMessage({allow:true, taskId: this.props.taskId})
     }
 
     reject() {
+        Port.postMessage({disallow:true, taskId: this.props.taskId})
     }
 
     render() {
