@@ -8,7 +8,57 @@ function loadTask() {
 }
 
 function clearTasks() {
-    return localStorage.removeItem('Task')
+    localStorage.removeItem('Task')
+    localStorage.removeItem('list')
+    return true
+}
+
+function listOfTask() {
+    let tasks = JSON.parse(localStorage.getItem('list'))
+    let list = []
+    if (tasks.length > 0) {
+        for (let id in tasks) {
+            // console.log(id)
+            list.push(getTask(tasks[id]))
+        }
+    }
+    return list
+}
+
+function loadList() {
+    let list = JSON.parse(localStorage.getItem('list'))
+    if (list) {
+        return list
+    } else {
+        return []
+    }
+}
+
+function addToList(taskId) {
+    let list = loadList()
+    list.push(taskId)
+    localStorage.setItem('list', JSON.stringify(list))
+    return true
+}
+
+function updateList() {
+    let tasks = loadTask()
+    let ids = Object.keys(tasks)
+    let list = loadList()
+    if (ids.length > 0) {
+        let ptr = []
+        for (let id in ids) {
+            for (let j in list) {
+                if (list[j] === ids[id]) {
+                    ptr.push(list[j])
+                    break;
+                }
+            }
+        }
+        localStorage.setItem('list', JSON.stringify(ptr))
+    } else {
+        localStorage.setItem('list', '')
+    }
 }
 
 function getTask(key) {
@@ -21,6 +71,7 @@ function removeTask(key) {
     delete task[key]
     task = JSON.stringify(task)
     localStorage.setItem('Task', task)
+    updateList()
     return task
 }
 
@@ -29,6 +80,7 @@ function setTask(key, value) {
     tasks[key] = value
     tasks = JSON.stringify(tasks)
     localStorage.setItem('Task', tasks)
+    addToList(key)
     return tasks
 }
 
@@ -95,6 +147,12 @@ let storage = function Storage() {
         getUser,
         removeUser,
         clearUsers
+    }
+    this.list = {
+        listOfTask,
+        loadList,
+        updateList,
+        addToList
     }
     this.mainAcc = {
         get: getMainUser,
