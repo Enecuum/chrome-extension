@@ -70,7 +70,7 @@ function eventConnect() {
     document.addEventListener('ENQContent', (e) => {
         eventContent(e)
     }, {once: true})
-    document.addEventListener('ENQConnect', eventConnect, {once: true})
+    // document.addEventListener('ENQConnect', eventConnect, {once: true})
 }
 
 async function eventHandler() {
