@@ -38,12 +38,12 @@ export default class TransactionRequest extends React.Component {
 
                 <div className={styles.form}>
 
-                    <div className={styles.field}>Amount: {this.state.amount}</div>
-                    <div className={styles.field}>Data: {this.state.data}</div>
                     <div className={styles.field}>From: {this.state.from}</div>
-                    <div className={styles.field}>Ticker: {this.state.ticker}</div>
                     <div className={styles.field}>To: {this.state.to}</div>
+                    <div className={styles.field}>Amount: {this.state.amount}</div>
+                    <div className={styles.field}>Ticker: {this.state.ticker}</div>
                     <div className={styles.field}>Nonce: {this.state.nonce}</div>
+                    <div className={styles.field}>Data: {this.state.data}</div>
 
                     {/*<div className={styles.field}>Net: {this.state.net}</div>*/}
 
