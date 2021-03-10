@@ -67,6 +67,13 @@ async function msgPopupHandler(msg, sender) {
             rejectTaskHandler(msg.taskId)
             console.log('removed')
             taskCounter()
+        }else if(msg.reject_all){
+            let list = Storage.list.loadList()
+            for(let i in list){
+              await rejectTaskHandler(list[i])
+            }
+            console.log('all request rejected');
+            taskCounter()
         } else {
             console.log(msg)
         }
@@ -115,7 +122,11 @@ async function taskHandler(taskId) {
                 pubkey: acc.publicKey,
                 net: acc.net,
             }
-            ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb});
+            try{
+              ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb});
+            } catch(e){
+              console.log('connection close');
+            }
             Storage.task.removeTask(taskId)
             break
         case 'tx':
@@ -127,7 +138,11 @@ async function taskHandler(taskId) {
             data.amount = Number(data.value)
             data.value = ''
             data = await ENQWeb.Net.post.tx_fee_off(data)
-            ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+            try{
+              ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+            } catch(e){
+              console.log('connection close');
+            }
             Storage.task.removeTask(taskId)
             ENQWeb.Net.provider = buf
             break
@@ -140,14 +155,23 @@ async function taskHandler(taskId) {
                 .catch(err => {
                     console.log(err)
                 })
-            ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+            try{
+              ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+
+            } catch(e){
+              console.log('connection close');
+            }
             console.log({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
             Storage.task.removeTask(taskId)
             break
         case 'getProvider':
             data = {net:acc.net}
             console.log(data);
-            ports.content.postMessage({data:JSON.stringify(data), taskId: taskId, cb: task.cb})
+            try{
+              ports.content.postMessage({data:JSON.stringify(data), taskId: taskId, cb: task.cb})
+            }catch(e){
+              console.log('connection close');
+            }
             Storage.task.removeTask(taskId)
             break;
         default:
@@ -159,7 +183,11 @@ function rejectTaskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     Storage.task.removeTask(taskId)
     let data = {reject: true}
-    ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+    try{
+      ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+    }catch(e){
+      console.log('connection close');
+    }
 }
 
 //TODO add cleaner connection list
