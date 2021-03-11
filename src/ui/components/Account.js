@@ -8,7 +8,7 @@ import Network from "./Network";
 export default class Account extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isTransaction: false, isRequests: false, isPassword: false, isNetwork: false, amount: 0, usd: 0, ticker: '', net: ''}
+        this.state = {isTransaction: false, isRequests: false, isPassword: false, isNetwork: false, amount: 0, usd: 0, ticker: '', net: ENQWeb.Net.provider}
         this.setTransaction = this.setTransaction.bind(this)
         this.setRequests = this.setRequests.bind(this)
         this.setPassword = this.setPassword.bind(this)
@@ -110,9 +110,9 @@ export default class Account extends React.Component {
                 <div className={styles.form}>
 
                     <div onClick={() => {
-                        this.setRequests(true)
+                        (disk.list.listOfTask().length > 0 ? this.setRequests(true) : null)
                     }}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.green}>Requests
+                         className={styles.field + ' ' + styles.button + ' ' + (disk.list.listOfTask().length > 0 ? styles.green : styles.disabled)}>Requests
                     </div>
 
                     {/*<div onClick={() => {*/}

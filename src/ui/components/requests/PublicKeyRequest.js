@@ -54,15 +54,15 @@ export default class PublicKeyRequests extends React.Component {
                     {/*</div>*/}
 
                     <div onClick={this.allow}
-                         className={styles.field + ' ' + styles.button}>Allow
+                         className={styles.field + ' ' + styles.button + ' ' + styles.green}>Allow
                     </div>
 
                     <div onClick={this.disallow}
-                         className={styles.field + ' ' + styles.button}>Disallow
+                         className={styles.field + ' ' + styles.button + ' ' + styles.red}>Disallow
                     </div>
 
                     <div onClick={() => this.props.back()}
-                         className={styles.field + ' ' + styles.button}>Back
+                         className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
                     </div>
 
                 </div>
