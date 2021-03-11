@@ -25,6 +25,7 @@ export default class Password extends React.Component {
     save() {
         console.log(this.state.password1)
         console.log(this.state.password2)
+        console.log(this.state.password1 === this.state.password2)
     }
 
     render() {
