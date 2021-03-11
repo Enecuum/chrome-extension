@@ -60,7 +60,7 @@ export default class Password extends React.Component {
                 <div className={styles.form}>
 
                     <div onClick={() => this.props.setPassword(false)}
-                         className={styles.field + ' ' + styles.button}>Back
+                         className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
                     </div>
 
                 </div>

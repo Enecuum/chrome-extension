@@ -45,19 +45,31 @@ export default class Requests extends React.Component {
 
     render() {
 
+        let back = this.state.requests.length === 1 ? () => this.props.setRequests(false) : this.back
+
         if (this.state.publicKeyRequest) {
-            return <PublicKeyRequests back={this.back} request={this.state.publicKeyRequest}
+            return <PublicKeyRequests back={back} request={this.state.publicKeyRequest}
                                       taskId={this.state.taskId}/>
         }
 
         if (this.state.transactionRequest) {
-            return <TransactionRequest back={this.back} request={this.state.transactionRequest}
+            return <TransactionRequest back={back} request={this.state.transactionRequest}
                                        taskId={this.state.taskId}/>
         }
 
         const items = []
 
+        console.log()
+
+        if (this.state.requests.length === 1) {
+            if (this.state.requests[0].type === 'enable')
+                this.setState({publicKeyRequest: this.state.requests[0], taskId: this.state.ids[0]})
+            else
+                this.setState({transactionRequest: this.state.requests[0], taskId: this.state.ids[0]})
+        }
+
         for (let key in this.state.requests) {
+            console.log(key)
             let item = this.state.requests[key]
             items.push(
                 <div key={key} onClick={() => {
@@ -84,7 +96,7 @@ export default class Requests extends React.Component {
                     {items}
 
                     <div onClick={() => this.rejectAll()}
-                         className={styles.field + ' ' + styles.button}>Reject all
+                         className={styles.field + ' ' + styles.button + ' ' + styles.red}>Reject all
                     </div>
 
                 </div>
@@ -93,7 +105,7 @@ export default class Requests extends React.Component {
                     <div onClick={() => {
                         this.props.setRequests(false)
                     }}
-                         className={styles.field + ' ' + styles.button}>Back
+                         className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
                     </div>
                 </div>
 

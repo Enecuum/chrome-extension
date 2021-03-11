@@ -34,7 +34,7 @@ export default class TransactionSend extends React.Component {
 
                 <div className={styles.form}>
                     <div onClick={() => this.props.setTransaction(false)}
-                         className={styles.field + ' ' + styles.button}>Back
+                         className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
                     </div>
                 </div>
             </div>

@@ -119,10 +119,18 @@ a {
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
 }
 
+.back {
+    background: white;
+}
+
 .green {
     /*color: black;*/
-    /*background-color: var(--color-green-super-ligth);*/
-    /*border: 1px solid var(--color-green-ligth);*/
+    /*background-color: var(--color-green-ligth);*/
+    border: 1px solid var(--color-green);
+}
+
+.green:hover {
+    color: var(--color-green) !important;
 }
 
 .button.red {
