@@ -8,7 +8,8 @@ import Network from "./Network";
 export default class Account extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {isTransaction: false, isRequests: false, isPassword: false, isNetwork: false, amount: 0, usd: 0, ticker: '', net: ENQWeb.Net.provider}
+        ENQWeb.Enq.provider = this.props.user.net
+        this.state = {isTransaction: false, isRequests: false, isPassword: false, isNetwork: false, amount: 0, usd: 0, ticker: '', net: ENQWeb.Net.currentProvider}
         this.setTransaction = this.setTransaction.bind(this)
         this.setRequests = this.setRequests.bind(this)
         this.setPassword = this.setPassword.bind(this)
