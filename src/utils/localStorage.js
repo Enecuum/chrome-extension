@@ -80,10 +80,16 @@ function removeTask(key) {
 
 function setTask(key, value) {
     let tasks = loadTask()
-    tasks[key] = value
-    tasks = JSON.stringify(tasks)
-    localStorage.setItem('Task', tasks)
-    addToList(key)
+    if(tasks[key]){
+        tasks[key] = value
+        tasks = JSON.stringify(tasks)
+        localStorage.setItem('Task', tasks)
+    }else{
+        tasks[key] = value
+        tasks = JSON.stringify(tasks)
+        localStorage.setItem('Task', tasks)
+        addToList(key)
+    }
     return tasks
 }
 
@@ -135,6 +141,13 @@ function clearUsers() {
     localStorage.removeItem('User')
 }
 
+function setNet(net){
+    let acc = loadUser()
+    acc.net = net
+    localStorage.setItem('User', JSON.stringify(acc))
+    return acc
+}
+
 let storage = function Storage() {
 
     this.task = {
@@ -149,7 +162,8 @@ let storage = function Storage() {
         addUser,
         getUser,
         removeUser,
-        clearUsers
+        clearUsers,
+        setNet
     }
     this.list = {
         listOfTask,
