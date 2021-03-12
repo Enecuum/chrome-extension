@@ -28,12 +28,12 @@ export default class PublicKeyRequests extends React.Component {
     }
 
     async allow() {
-        await Port.postMessage({allow: true, taskId: this.state.taskId})
+        await global.asyncRequest({allow: true, taskId: this.state.taskId})
         this.props.back()
     }
 
     async disallow() {
-        await Port.postMessage({disallow: true, taskId: this.state.taskId})
+        await global.asyncRequest({disallow: true, taskId: this.state.taskId})
         this.props.back()
     }
 
@@ -43,7 +43,9 @@ export default class PublicKeyRequests extends React.Component {
             <div className={styles.main}>
 
                 <div className={styles.form + ' ' + styles.header}>
-                    <div className={styles.field + ' ' + styles.text}>This website is requesting access to your account address</div>
+                    <div className={styles.field + ' ' + styles.text}>This website is requesting access to your account
+                        address
+                    </div>
                     <div className={styles.field}>{this.state.url}</div>
                 </div>
 

@@ -14,7 +14,7 @@ async function setupUi() {
     toBackground = chrome.runtime.connect({name: 'popup'})
     toBackground.onMessage.addListener(mainListener)
     global.Port = toBackground
-    global.asyncRequrst = asyncRequest
+    global.asyncRequest = asyncRequest
     await initApp(toBackground)
 }
 
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 
-function mainListener(msg, sender, sendResponse){
+function mainListener(msg, sender, sendResponse) {
     let cb = taskId[msg.taskId]
     if (cb) {
         cb(msg)
@@ -39,10 +39,10 @@ function mainListener(msg, sender, sendResponse){
     msgHandler(msg, sender)
 }
 
-function awaitAsync(data){
+function awaitAsync(data) {
     return new Promise((resolve, reject) => {
         let a = setInterval(() => {
-            if (awaitId[data]===true) {
+            if (awaitId[data] === true) {
                 clearInterval(a)
                 resolve()
             }
@@ -50,14 +50,14 @@ function awaitAsync(data){
     })
 }
 
-function asyncRequest(data){
+function asyncRequest(data) {
     data.async = true
-    awaitId[data]=false
+    awaitId[data] = false
     return new Promise(async (resolve, reject) => {
         toBackground.postMessage(data)
         toBackground.onMessage.addListener(asyncMessenger)
         await awaitAsync(data)
-            .then(()=>{
+            .then(() => {
                 console.log('await work')
             })
         delete awaitId[data]
@@ -66,8 +66,8 @@ function asyncRequest(data){
     })
 }
 
-async function asyncMessenger(msg, sender, sendResponse){
-    if(msg.asyncAnswer && msg.data){
+async function asyncMessenger(msg, sender, sendResponse) {
+    if (msg.asyncAnswer && msg.data) {
         awaitId[msg.data] = true
     }
 }

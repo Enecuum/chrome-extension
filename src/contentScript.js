@@ -5,10 +5,10 @@ let toBackground = {}
 let pageToBack = {}
 let taskId = []
 let requests = {
-  'tx':transaction,
-  'balanceOf':balanceOf,
-  'enable':enable,
-  'getProvider':enable
+    'tx': transaction,
+    'balanceOf': balanceOf,
+    'enable': enable,
+    'getProvider': enable
 }
 
 function setupConnection() {
