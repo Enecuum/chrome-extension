@@ -4,6 +4,14 @@ import styles from "../index.module.css";
 export default class Network extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            url: ''
+        }
+        this.handleChangeNetwork = this.handleChangeNetwork.bind(this)
+    }
+
+    handleChangeNetwork() {
+
     }
 
     render() {
@@ -29,6 +37,14 @@ export default class Network extends React.Component {
                     }}
                          className={styles.field + ' ' + styles.button}>BIT
                     </div>
+
+                    <input type="text"
+                           spellCheck={false}
+                           onChange={this.handleChangeNetwork}
+                           value={this.state.url}
+                           className={styles.field}
+                           placeholder={'Custom network url'}
+                    />
 
                     <div onClick={() => {
                         this.props.setNetwork(false)

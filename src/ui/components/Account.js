@@ -27,6 +27,7 @@ export default class Account extends React.Component {
         this.setNetwork = this.setNetwork.bind(this)
         this.setNet = this.setNet.bind(this)
         this.balance = this.balance.bind(this)
+        this.unlock = this.unlock.bind(this)
         this.copyPublicKey = this.copyPublicKey.bind(this)
         // console.log(this)
 
