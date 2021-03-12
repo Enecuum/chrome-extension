@@ -42,7 +42,8 @@ export default class Login extends React.Component {
     }
 
     generate() {
-        // this.props.login()
+        let privateKey = ENQWeb.Utils.generateKey.getByNumber(1)[0].prvkey
+        this.setState({value:privateKey})
     }
 
     render() {
