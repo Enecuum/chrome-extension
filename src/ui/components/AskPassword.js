@@ -17,13 +17,7 @@ export default class AskPassword extends React.Component {
     }
 
     async submit() {
-        // let publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.value, true)
-        // if (publicKey) {
-        //     console.log(publicKey)
-        //     let user = global.disk.user.addUser(publicKey, this.state.value, this.state.net)
-        //     this.props.login(user)
-        //     ENQWeb.Net.provider = this.state.net
-        // }
+        this.props.unlock()
     }
 
     render() {
@@ -41,7 +35,7 @@ export default class AskPassword extends React.Component {
                     />
 
                     <div onClick={this.submit}
-                         className={styles.field + ' ' + styles.button}>Login
+                         className={styles.field + ' ' + styles.button}>Unlock
                     </div>
 
                 </div>

@@ -4,6 +4,7 @@ import Transaction from "./Transaction";
 import Requests from "./Requests"
 import Password from "./Password";
 import Network from "./Network";
+import AskPassword from "./AskPassword";
 
 export default class Account extends React.Component {
     constructor(props) {
@@ -17,7 +18,8 @@ export default class Account extends React.Component {
             amount: 0,
             usd: 0,
             ticker: '',
-            net: ENQWeb.Net.currentProvider
+            net: ENQWeb.Net.currentProvider,
+            isLocked: true,
         }
         this.setTransaction = this.setTransaction.bind(this)
         this.setRequests = this.setRequests.bind(this)
@@ -58,6 +60,12 @@ export default class Account extends React.Component {
         navigator.clipboard.writeText(this.props.user.publicKey)
     }
 
+    unlock() {
+        this.setState({
+            isLocked: false
+        })
+    }
+
     balance() {
         // console.log(this.props)
         ENQWeb.Enq.provider = this.props.user.net
@@ -82,6 +90,10 @@ export default class Account extends React.Component {
     }
 
     render() {
+
+        if (this.state.isLocked) {
+            return <AskPassword unlock={this.unlock} />
+        }
 
         if (this.state.isRequests) {
             return <Requests setRequests={this.setRequests}/>
