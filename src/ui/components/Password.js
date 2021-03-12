@@ -8,29 +8,45 @@ export default class Password extends React.Component {
         this.state = {
             password1: '',
             password2: '',
+            allow: false
         }
         this.handleChangePassword1 = this.handleChangePassword1.bind(this)
         this.handleChangePassword2 = this.handleChangePassword2.bind(this)
+        this.setAllow = this.setAllow.bind(this)
         this.save = this.save.bind(this)
     }
 
     handleChangePassword1(e) {
         this.setState({password1: e.target.value});
+        this.setAllow()
     }
 
     handleChangePassword2(e) {
         this.setState({password2: e.target.value});
+        this.setAllow()
+    }
+
+    setAllow() {
+        console.log(this.state.password1)
+        console.log(this.state.password2)
+        if (this.state.password1 === this.state.password2) {
+            this.setState({allow: true})
+        } else {
+            this.setState({allow: false})
+        }
     }
 
     save() {
-        console.log(this.state.password1)
-        console.log(this.state.password2)
+
         if (this.state.password1 === this.state.password2) {
 
             console.log(this.state.password1)
             //TODO save password here
 
             this.props.setPassword(false)
+
+        } else {
+
         }
     }
 
@@ -58,8 +74,8 @@ export default class Password extends React.Component {
                            placeholder={'Password one more time'}
                     />
 
-                    <div onClick={this.save}
-                         className={styles.field + ' ' + styles.button}>Save
+                    <div onClick={this.state.allow ? this.save : null}
+                         className={styles.field + ' ' + styles.button + ' ' + (this.state.allow ? '' : styles.disabled)}>Save
                     </div>
 
                 </div>
