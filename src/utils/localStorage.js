@@ -80,10 +80,16 @@ function removeTask(key) {
 
 function setTask(key, value) {
     let tasks = loadTask()
-    tasks[key] = value
-    tasks = JSON.stringify(tasks)
-    localStorage.setItem('Task', tasks)
-    addToList(key)
+    if(tasks[key]){
+        tasks[key] = value
+        tasks = JSON.stringify(tasks)
+        localStorage.setItem('Task', tasks)
+    }else{
+        tasks[key] = value
+        tasks = JSON.stringify(tasks)
+        localStorage.setItem('Task', tasks)
+        addToList(key)
+    }
     return tasks
 }
 
