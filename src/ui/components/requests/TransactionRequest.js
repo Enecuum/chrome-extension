@@ -23,12 +23,12 @@ export default class TransactionRequest extends React.Component {
     }
 
     async confirm() {
-        await Port.postMessage({allow: true, taskId: this.props.taskId})
+        await global.asyncRequest({allow: true, taskId: this.props.taskId})
         this.props.back()
     }
 
     async reject() {
-        await Port.postMessage({disallow: true, taskId: this.props.taskId})
+        await global.asyncRequest({disallow: true, taskId: this.props.taskId})
         this.props.back()
     }
 

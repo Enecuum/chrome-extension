@@ -80,11 +80,11 @@ function removeTask(key) {
 
 function setTask(key, value) {
     let tasks = loadTask()
-    if(tasks[key]){
+    if (tasks[key]) {
         tasks[key] = value
         tasks = JSON.stringify(tasks)
         localStorage.setItem('Task', tasks)
-    }else{
+    } else {
         tasks[key] = value
         tasks = JSON.stringify(tasks)
         localStorage.setItem('Task', tasks)
@@ -141,7 +141,7 @@ function clearUsers() {
     localStorage.removeItem('User')
 }
 
-function setNet(net){
+function setNet(net) {
     let acc = loadUser()
     acc.net = net
     localStorage.setItem('User', JSON.stringify(acc))

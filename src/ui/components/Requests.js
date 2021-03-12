@@ -17,10 +17,54 @@ export default class Requests extends React.Component {
             ids: disk.list.loadList(), // массив очереди идентификаторов
             publicKeyRequest: null,
             transactionRequest: null,
-            taskId: null
+            taskId: null,
+            items: []
         }
 
         this.back = this.back.bind(this)
+        this.selectRequest = this.selectRequest.bind(this)
+
+
+    }
+
+    componentDidMount() {
+        this.selectRequest()
+    }
+
+    selectRequest() {
+
+        this.setState({
+            items: []
+        })
+
+        if (this.state.requests.length === 1) {
+            if (this.state.requests[0].type === 'enable')
+                this.selectPublicKeyRequest(this.state.requests[0], this.state.ids[0])
+            else
+                this.selectTransactionRequest(this.state.requests[0], this.state.ids[0])
+        }
+
+        const items = []
+
+        for (let key in this.state.requests) {
+            let item = this.state.requests[key]
+            items.push(
+                <div key={key} onClick={() => {
+
+                    if (item.type === 'enable')
+                        this.selectPublicKeyRequest(item, this.state.ids[key])
+                    else
+                        this.selectTransactionRequest(item, this.state.ids[key])
+
+                }} className={styles.field + ' ' + styles.button}>
+                    {names[item.type]}
+                </div>
+            )
+        }
+
+        this.setState({
+            items
+        })
     }
 
     back() {
@@ -34,14 +78,21 @@ export default class Requests extends React.Component {
     }
 
     async rejectAll() {
-        // Port.postMessage({reject_all: true})
-        await asyncRequrst({reject_all:true})
+        await global.asyncRequest({reject_all: true})
         this.setState({
             requests: [],
             ids: [],
             publicKeyRequest: null,
             transactionRequest: null
         })
+    }
+
+    selectPublicKeyRequest(request, taskId) {
+        this.setState({publicKeyRequest: request, taskId: taskId})
+    }
+
+    selectTransactionRequest(request, taskId) {
+        this.setState({transactionRequest: request, taskId: taskId})
     }
 
     render() {
@@ -58,34 +109,6 @@ export default class Requests extends React.Component {
                                        taskId={this.state.taskId}/>
         }
 
-        const items = []
-
-        console.log()
-
-        if (this.state.requests.length === 1) {
-            if (this.state.requests[0].type === 'enable')
-                this.setState({publicKeyRequest: this.state.requests[0], taskId: this.state.ids[0]})
-            else
-                this.setState({transactionRequest: this.state.requests[0], taskId: this.state.ids[0]})
-        }
-
-        for (let key in this.state.requests) {
-            console.log(key)
-            let item = this.state.requests[key]
-            items.push(
-                <div key={key} onClick={() => {
-
-                    if (item.type === 'enable')
-                        this.setState({publicKeyRequest: item, taskId: this.state.ids[key]})
-                    else
-                        this.setState({transactionRequest: item, taskId: this.state.ids[key]})
-
-                }} className={styles.field + ' ' + styles.button}>
-                    {names[item.type]}
-                </div>
-            )
-        }
-
         return (
             <div className={styles.main}>
 
@@ -94,7 +117,7 @@ export default class Requests extends React.Component {
                     <div className={styles.field + ' ' + styles.text}>List of
                         requests: {Object.keys(this.state.requests).length}</div>
 
-                    {items}
+                    {this.state.items}
 
                     <div onClick={() => this.rejectAll()}
                          className={styles.field + ' ' + styles.button + ' ' + styles.red}>Reject all

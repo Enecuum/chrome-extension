@@ -5,11 +5,11 @@ let Storage = new storage()
 global.disk = Storage
 
 let ports = {}
-let requests ={
-  'tx':true,
-  'enable':true,
-  "balanceOf":false,
-  'getProvider':false
+let requests = {
+    'tx': true,
+    'enable': true,
+    "balanceOf": false,
+    'getProvider': false
 }
 
 function setupApp() {
@@ -62,26 +62,26 @@ async function msgPopupHandler(msg, sender) {
         if (msg.allow && msg.taskId) {
             taskHandler(msg.taskId)
             taskCounter()
-            if(msg.async){
-                ports.popup.postMessage({asyncAnswer:true, data:msg})
+            if (msg.async) {
+                ports.popup.postMessage({asyncAnswer: true, data: msg})
             }
         } else if (msg.disallow && msg.taskId) {
             // Storage.task.removeTask(msg.taskId)
             rejectTaskHandler(msg.taskId)
             console.log('removed')
             taskCounter()
-            if(msg.async){
-                ports.popup.postMessage({asyncAnswer:true, data:msg})
+            if (msg.async) {
+                ports.popup.postMessage({asyncAnswer: true, data: msg})
             }
-        }else if(msg.reject_all){
+        } else if (msg.reject_all) {
             let list = Storage.list.loadList()
-            for(let i in list){
-              await rejectTaskHandler(list[i])
+            for (let i in list) {
+                await rejectTaskHandler(list[i])
             }
             console.log('all request rejected');
             taskCounter()
-            if(msg.async){
-                ports.popup.postMessage({asyncAnswer:true, data:msg})
+            if (msg.async) {
+                ports.popup.postMessage({asyncAnswer: true, data: msg})
             }
         } else {
             console.log(msg)
@@ -131,10 +131,10 @@ async function taskHandler(taskId) {
                 pubkey: acc.publicKey,
                 net: acc.net,
             }
-            try{
-              ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb});
-            } catch(e){
-              console.log('connection close');
+            try {
+                ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb});
+            } catch (e) {
+                console.log('connection close');
             }
             Storage.task.removeTask(taskId)
             break
@@ -147,10 +147,10 @@ async function taskHandler(taskId) {
             data.amount = Number(data.value)
             data.value = ''
             data = await ENQWeb.Net.post.tx_fee_off(data)
-            try{
-              ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
-            } catch(e){
-              console.log('connection close');
+            try {
+                ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+            } catch (e) {
+                console.log('connection close');
             }
             Storage.task.removeTask(taskId)
             ENQWeb.Net.provider = buf
@@ -165,22 +165,22 @@ async function taskHandler(taskId) {
                 .catch(err => {
                     console.log(err)
                 })
-            try{
-              ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+            try {
+                ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
 
-            } catch(e){
-              console.log('connection close');
+            } catch (e) {
+                console.log('connection close');
             }
             console.log({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
             Storage.task.removeTask(taskId)
             break
         case 'getProvider':
-            data = {net:acc.net}
+            data = {net: acc.net}
             console.log(data);
-            try{
-              ports.content.postMessage({data:JSON.stringify(data), taskId: taskId, cb: task.cb})
-            }catch(e){
-              console.log('connection close');
+            try {
+                ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+            } catch (e) {
+                console.log('connection close');
             }
             Storage.task.removeTask(taskId)
             break;
@@ -193,10 +193,10 @@ function rejectTaskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     Storage.task.removeTask(taskId)
     let data = {reject: true}
-    try{
-      ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
-    }catch(e){
-      console.log('connection close');
+    try {
+        ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+    } catch (e) {
+        console.log('connection close');
     }
 }
 
