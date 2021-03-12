@@ -141,6 +141,13 @@ function clearUsers() {
     localStorage.removeItem('User')
 }
 
+function setNet(net){
+    let acc = loadUser()
+    acc.net = net
+    localStorage.setItem('User', JSON.stringify(acc))
+    return acc
+}
+
 let storage = function Storage() {
 
     this.task = {
@@ -155,7 +162,8 @@ let storage = function Storage() {
         addUser,
         getUser,
         removeUser,
-        clearUsers
+        clearUsers,
+        setNet
     }
     this.list = {
         listOfTask,
