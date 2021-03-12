@@ -23,8 +23,6 @@ export default class Requests extends React.Component {
 
         this.back = this.back.bind(this)
         this.selectRequest = this.selectRequest.bind(this)
-
-
     }
 
     componentDidMount() {
@@ -32,10 +30,6 @@ export default class Requests extends React.Component {
     }
 
     selectRequest() {
-
-        this.setState({
-            items: []
-        })
 
         if (this.state.requests.length === 1) {
             if (this.state.requests[0].type === 'enable')
@@ -73,8 +67,10 @@ export default class Requests extends React.Component {
             ids: disk.list.loadList(),
             publicKeyRequest: null,
             transactionRequest: null,
-            taskId: null
+            taskId: null,
+            items: []
         })
+        this.selectRequest()
     }
 
     async rejectAll() {
