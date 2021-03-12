@@ -158,9 +158,10 @@ async function taskHandler(taskId) {
         case 'balanceOf':
             console.log('balanceOf handler work!')
             data = task.data
+            console.log(acc)
             ENQWeb.Net.provider = data.net || acc.net
             console.log(task.data, ENQWeb.Net.provider)
-            data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash)
+            data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
                 .catch(err => {
                     console.log(err)
                 })
