@@ -104,7 +104,7 @@ function connectController(port) {
 function taskCounter() {
     let tasks = Storage.task.loadTask()
     let ids = Object.keys(tasks)
-    extensionApi.browserAction.setBadgeText({text: `${ids.length}`})
+    extensionApi.browserAction.setBadgeText({text: `${ids.length === 0 ? '' : ids.length}`})
 }
 
 global.counterTask = taskCounter
