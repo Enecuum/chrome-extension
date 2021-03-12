@@ -41,6 +41,8 @@ export default class Account extends React.Component {
     setNet(value) {
         this.setState({net: value})
         ENQWeb.Net.provider = value
+        disk.user.setNet(value)
+        this.balance()
     }
 
     copyPublicKey() {
