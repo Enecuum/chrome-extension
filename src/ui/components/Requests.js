@@ -33,8 +33,9 @@ export default class Requests extends React.Component {
         })
     }
 
-    rejectAll() {
-        Port.postMessage({reject_all: true})
+    async rejectAll() {
+        // Port.postMessage({reject_all: true})
+        await asyncRequrst({reject_all:true})
         this.setState({
             requests: [],
             ids: [],
