@@ -62,11 +62,17 @@ async function msgPopupHandler(msg, sender) {
         if (msg.allow && msg.taskId) {
             taskHandler(msg.taskId)
             taskCounter()
+            if(msg.async){
+                ports.popup.postMessage({asyncAnswer:true, data:msg})
+            }
         } else if (msg.disallow && msg.taskId) {
             // Storage.task.removeTask(msg.taskId)
             rejectTaskHandler(msg.taskId)
             console.log('removed')
             taskCounter()
+            if(msg.async){
+                ports.popup.postMessage({asyncAnswer:true, data:msg})
+            }
         }else if(msg.reject_all){
             let list = Storage.list.loadList()
             for(let i in list){
@@ -74,6 +80,9 @@ async function msgPopupHandler(msg, sender) {
             }
             console.log('all request rejected');
             taskCounter()
+            if(msg.async){
+                ports.popup.postMessage({asyncAnswer:true, data:msg})
+            }
         } else {
             console.log(msg)
         }
