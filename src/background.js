@@ -19,6 +19,9 @@ function setupApp() {
     taskCounter()
 }
 
+function checkLockState() {
+}
+
 async function msgHandler(msg, sender, sendResponse) {
     console.log(msg)
 }
@@ -57,6 +60,13 @@ async function msgPopupHandler(msg, sender) {
             let answer = await ENQWeb.Net.post.tx_fee_off(data)
             console.log(answer)
             ENQWeb.Net.provider = buf
+        }
+    } else if (msg.lockState) {
+        if (msg.set) {
+
+        }
+        if (msg.request) {
+
         }
     } else {
         if (msg.allow && msg.taskId) {
