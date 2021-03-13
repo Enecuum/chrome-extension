@@ -238,3 +238,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     setupApp();
     setTimeout(taskCounter, 1000 * 15)
 })
+
+//TODO отслеживать закрытие браузера
+window.addEventListener('beforeunload', ()=>{
+    lockAccount()
+})
