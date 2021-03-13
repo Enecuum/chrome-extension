@@ -98,8 +98,20 @@ function loadUser() {
     if (!user) {
         return {}
     }
-    user = JSON.parse(user)
-    return user
+    if(!checkLock()){
+        user = JSON.parse(user)
+        return user
+    }else{
+        return {}
+    }
+}
+
+function loadUserNotJson(){
+    let user = localStorage.getItem('User')
+    if (!user) {
+        return {}
+    }else
+        return user
 }
 
 function addUser(publicKey, privateKey, net) {
@@ -119,6 +131,16 @@ function removeUser() {
 function getUser(name) {
     let user = loadUser()
     return user[name]
+}
+
+function changeUser(account, json = false){
+    if(json){
+        localStorage.setItem('User', JSON.stringify(account))
+        return true
+    }else{
+        localStorage.setItem('User', account)
+        return true
+    }
 }
 
 function clearUsers() {
@@ -163,16 +185,42 @@ function setPassword(password) {
     return true
 }
 
-function unlock(pass) {
+function unlock(password) {
     let state = JSON.parse(localStorage.getItem('lock'))
     if (!state) {
         return false
     }
-    if (state.pass === pass) {
+    if (state.pass === password.toString()) {
         setLock(false)
         return true
     } else
         return false
+}
+
+function lock(){
+    let state = JSON.parse(localStorage.getItem('lock'))
+    if (!state) {
+        return false
+    }
+    setLock(true)
+}
+
+function removeLock(){
+    localStorage.removeItem('lock')
+    return true
+}
+
+
+function getHashPassword(){
+    let state = JSON.parse(localStorage.getItem('lock'))
+    if (!state) {
+        return false
+    }
+    if(state.pass){
+        return state.pass
+    }else{
+        return false
+    }
 }
 
 let storage = function Storage() {
@@ -190,7 +238,9 @@ let storage = function Storage() {
         getUser,
         removeUser,
         clearUsers,
-        setNet
+        setNet,
+        changeUser,
+        loadUserNotJson
     }
     this.list = {
         listOfTask,
@@ -202,7 +252,10 @@ let storage = function Storage() {
         unlock,
         checkLock,
         setPassword,
-        setLock
+        setLock,
+        getHashPassword,
+        lock,
+        removeLock
     }
 }
 

@@ -16,10 +16,23 @@ function setupApp() {
     console.log('background ready')
     extensionApi.runtime.onMessage.addListener(msgHandler)
     extensionApi.runtime.onConnect.addListener(connectHandler)
+    if(!Storage.lock.checkLock() && Storage.lock.getHashPassword()){
+        lockAccount()
+    }
     taskCounter()
 }
 
-function checkLockState() {
+function lockAccount(){
+    let account = Storage.user.loadUserNotJson()
+    let password = Storage.lock.getHashPassword()
+    if(password){
+        Storage.lock.setLock(true)
+        account = ENQWeb.Utils.crypto.encrypt(account, password)
+        Storage.user.changeUser(account)
+        console.log('account locked')
+    }else {
+        console.log('password not set')
+    }
 }
 
 async function msgHandler(msg, sender, sendResponse) {
@@ -61,13 +74,8 @@ async function msgPopupHandler(msg, sender) {
             console.log(answer)
             ENQWeb.Net.provider = buf
         }
-    } else if (msg.lockState) {
-        if (msg.set) {
-
-        }
-        if (msg.request) {
-
-        }
+    } else if (msg.lock) {
+        lockAccount()
     } else {
         if (msg.allow && msg.taskId) {
             taskHandler(msg.taskId)
@@ -226,5 +234,7 @@ async function connectHandler(port) {
     listPorts()
 }
 
-setupApp();
-setTimeout(taskCounter, 1000 * 15)
+document.addEventListener('DOMContentLoaded',()=>{
+    setupApp();
+    setTimeout(taskCounter, 1000 * 15)
+})

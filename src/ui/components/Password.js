@@ -37,12 +37,14 @@ export default class Password extends React.Component {
     }
 
     save() {
-
+        console.log('work')
         if (this.state.password1 === this.state.password2) {
-
+            console.log('work')
             console.log(this.state.password1)
             //TODO save password here
-
+            console.log(ENQWeb.Utils.crypto.strengthenPassword(this.state.password1))
+            disk.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword(this.state.password1))
+            disk.lock.setLock(false)
             this.props.setPassword(false)
 
         } else {
@@ -74,7 +76,7 @@ export default class Password extends React.Component {
                            placeholder={'Password one more time'}
                     />
 
-                    <div onClick={this.state.allow ? this.save : null}
+                    <div onClick={this.state.allow ? this.save : this.save}
                          className={styles.field + ' ' + styles.button + ' ' + (this.state.allow ? '' : styles.disabled)}>Save
                     </div>
 
