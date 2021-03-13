@@ -15,6 +15,7 @@ class Main extends React.Component {
         this.state = {
             user: global.disk.user.loadUser(),
             isLogin: global.disk.user.loadUser().publicKey,
+            isLocked: disk.lock.checkLock()
         }
         this.login = this.login.bind(this)
         this.logout = this.logout.bind(this)
@@ -32,7 +33,7 @@ class Main extends React.Component {
     }
 
     render() {
-        if (!this.state.isLogin)
+        if (!this.state.isLogin && !this.state.isLocked)
             return <Login login={this.login}/>
         else
             return <Account logout={this.logout} user={this.state.user} background={this.background}/>

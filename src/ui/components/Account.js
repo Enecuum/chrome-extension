@@ -19,7 +19,7 @@ export default class Account extends React.Component {
             usd: 0,
             ticker: '',
             net: ENQWeb.Net.currentProvider,
-            isLocked: true,
+            isLocked: disk.lock.checkLock(),
         }
         this.setTransaction = this.setTransaction.bind(this)
         this.setRequests = this.setRequests.bind(this)
