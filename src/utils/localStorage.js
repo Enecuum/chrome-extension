@@ -116,22 +116,6 @@ function removeUser() {
     localStorage.setItem('User', '')
 }
 
-function setMainUser(name) {
-    let user = loadUser()
-    localStorage.setItem('MainAcc', JSON.stringify(user[name]))
-    return true
-}
-
-function unsetMainUser() {
-    localStorage.removeItem('MainAcc')
-    return true
-}
-
-function getMainUser() {
-    let acc = localStorage.getItem('MainAcc')
-    return acc
-}
-
 function getUser(name) {
     let user = loadUser()
     return user[name]
@@ -146,6 +130,49 @@ function setNet(net) {
     acc.net = net
     localStorage.setItem('User', JSON.stringify(acc))
     return acc
+}
+
+function checkLock() {
+    let state = JSON.parse(localStorage.getItem('lock'))
+    if (state) {
+        if (state.lock)
+            return true
+        else
+            return false
+    } else
+        return false
+}
+
+function setLock(value) {
+    let state = JSON.parse(localStorage.getItem('lock'))
+    if (!state) {
+        state = {}
+    }
+    state.lock = value
+    localStorage.setItem('lock', JSON.stringify(state))
+    return true
+}
+
+function setPassword(password) {
+    let state = JSON.parse(localStorage.getItem('lock'))
+    if (!state) {
+        state = {}
+    }
+    state.pass = password.toString()
+    localStorage.setItem('lock', JSON.stringify(state))
+    return true
+}
+
+function unlock(pass) {
+    let state = JSON.parse(localStorage.getItem('lock'))
+    if (!state) {
+        return false
+    }
+    if (state.pass === pass) {
+        setLock(false)
+        return true
+    } else
+        return false
 }
 
 let storage = function Storage() {
@@ -171,10 +198,11 @@ let storage = function Storage() {
         updateList,
         addToList
     }
-    this.mainAcc = {
-        get: getMainUser,
-        set: setMainUser,
-        unset: unsetMainUser
+    this.lock = {
+        unlock,
+        checkLock,
+        setPassword,
+        setLock
     }
 }
 
