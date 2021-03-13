@@ -29,6 +29,7 @@ class Main extends React.Component {
 
     logout() {
         global.disk.user.removeUser()
+        disk.lock.removeLock()
         this.setState({isLogin: false});
     }
 
