@@ -26,6 +26,7 @@ function lockAccount(){
     let account = Storage.user.loadUserNotJson()
     let password = Storage.lock.getHashPassword()
     if(password){
+        password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^'+password)
         Storage.lock.setLock(true)
         account = ENQWeb.Utils.crypto.encrypt(account, password)
         Storage.user.changeUser(account)
