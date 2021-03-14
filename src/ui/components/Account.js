@@ -93,7 +93,7 @@ export default class Account extends React.Component {
     render() {
 
         if (this.state.isLocked) {
-            return <AskPassword unlock={this.unlock} />
+            return <AskPassword unlock={this.unlock}/>
         }
 
         if (this.state.isRequests) {
