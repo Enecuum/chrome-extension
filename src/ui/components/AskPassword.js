@@ -17,9 +17,10 @@ export default class AskPassword extends React.Component {
     }
 
     async submit() {
-        let hash = ENQWeb.Utils.crypto.strengthenPassword(this.state.password)
+        let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^'+this.state.password)
         if(disk.lock.unlock(hash)){
             console.log('its yes')
+            hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^'+hash)
             let us = JSON.parse(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
             console.log(us)
             disk.user.changeUser(us,true)
