@@ -98,19 +98,19 @@ function loadUser() {
     if (!user) {
         return {}
     }
-    if(!checkLock()){
+    if (!checkLock()) {
         user = JSON.parse(user)
         return user
-    }else{
+    } else {
         return {}
     }
 }
 
-function loadUserNotJson(){
+function loadUserNotJson() {
     let user = localStorage.getItem('User')
     if (!user) {
         return {}
-    }else
+    } else
         return user
 }
 
@@ -133,11 +133,11 @@ function getUser(name) {
     return user[name]
 }
 
-function changeUser(account, json = false){
-    if(json){
+function changeUser(account, json = false) {
+    if (json) {
         localStorage.setItem('User', JSON.stringify(account))
         return true
-    }else{
+    } else {
         localStorage.setItem('User', account)
         return true
     }
@@ -197,7 +197,7 @@ function unlock(password) {
         return false
 }
 
-function lock(){
+function lock() {
     let state = JSON.parse(localStorage.getItem('lock'))
     if (!state) {
         return false
@@ -205,20 +205,20 @@ function lock(){
     setLock(true)
 }
 
-function removeLock(){
+function removeLock() {
     localStorage.removeItem('lock')
     return true
 }
 
 
-function getHashPassword(){
+function getHashPassword() {
     let state = JSON.parse(localStorage.getItem('lock'))
     if (!state) {
         return false
     }
-    if(state.pass){
+    if (state.pass) {
         return state.pass
-    }else{
+    } else {
         return false
     }
 }
