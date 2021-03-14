@@ -16,23 +16,21 @@ function setupApp() {
     console.log('background ready')
     extensionApi.runtime.onMessage.addListener(msgHandler)
     extensionApi.runtime.onConnect.addListener(connectHandler)
-    if (!Storage.lock.checkLock() && Storage.lock.getHashPassword()) {
-        lockAccount()
-    }
     taskCounter()
 }
 
 function lockAccount() {
-    let account = Storage.user.loadUserNotJson()
-    let password = Storage.lock.getHashPassword()
-    if (password) {
+    let account = disk.user.loadUserNotJson()
+    let password = disk.lock.getHashPassword()
+    if (password && !disk.lock.checkLock()) {
         password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
-        Storage.lock.setLock(true)
+        disk.lock.setLock(true)
         account = ENQWeb.Utils.crypto.encrypt(account, password)
-        Storage.user.changeUser(account)
+        disk.user.changeUser(account)
         console.log('account locked')
     } else {
-        console.log('password not set')
+        if(!disk.lock.getHashPassword())
+            console.log('password not set')
     }
 }
 
@@ -241,6 +239,3 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 
 //TODO отслеживать закрытие браузера
-window.addEventListener('beforeunload', () => {
-    lockAccount()
-})
