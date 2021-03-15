@@ -7,8 +7,8 @@ export default class TransactionRequest extends React.Component {
         this.state = {
             url: `${ENQWeb.Net.provider}/#!/tx/` + this.props.txHash,
             amount: this.props.request.data.value,
-            data: this.props.request.data.data,
-            from: this.props.request.data.from,
+            data: JSON.stringify(this.props.request.data.data),
+            from: JSON.stringify(this.props.request.data.from),
             ticker: this.props.request.data.tokenHash,
             to: this.props.request.data.to,
             nonce: this.props.request.data.nonce,

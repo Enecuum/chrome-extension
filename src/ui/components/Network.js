@@ -48,6 +48,7 @@ export default class Network extends React.Component {
 
                     <div onClick={() => {
                         this.props.setNetwork(false)
+                        window.location.reload(false);
                     }}
                          className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
                     </div>
