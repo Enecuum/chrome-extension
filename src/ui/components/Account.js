@@ -18,14 +18,12 @@ export default class Account extends React.Component {
             amount: 0,
             usd: 0,
             ticker: '',
-            net: ENQWeb.Net.currentProvider,
             isLocked: disk.lock.checkLock(),
         }
         this.setTransaction = this.setTransaction.bind(this)
         this.setRequests = this.setRequests.bind(this)
         this.setPassword = this.setPassword.bind(this)
         this.setNetwork = this.setNetwork.bind(this)
-        this.setNet = this.setNet.bind(this)
         this.balance = this.balance.bind(this)
         this.unlock = this.unlock.bind(this)
         this.copyPublicKey = this.copyPublicKey.bind(this)
@@ -47,14 +45,10 @@ export default class Account extends React.Component {
     }
 
     setNetwork(value) {
-        this.setState({isNetwork: value})
-    }
-
-    setNet(value) {
-        this.setState({net: value})
-        ENQWeb.Net.provider = value
-        disk.user.setNet(value)
-        this.balance()
+        this.setState({isNetwork: value}, () => {
+            if (!value)
+                window.location.reload(false);
+        })
     }
 
     copyPublicKey() {
@@ -115,7 +109,7 @@ export default class Account extends React.Component {
         }
 
         if (this.state.isNetwork) {
-            return <Network setNetwork={this.setNetwork} setNet={this.setNet} net={this.state.net}/>
+            return <Network setNetwork={this.setNetwork}/>
         }
 
         return (
@@ -153,7 +147,7 @@ export default class Account extends React.Component {
                     </div>
 
                     <div onClick={() => this.setNetwork(true)}
-                         className={styles.field + ' ' + styles.button}>Network: {this.state.net}
+                         className={styles.field + ' ' + styles.button}>Network: {ENQWeb.Net.currentProvider}
                     </div>
 
                     <div onClick={this.props.logout}

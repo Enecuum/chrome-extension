@@ -2,53 +2,51 @@ import React from "react";
 import styles from "../index.module.css";
 import Network from "./Network"
 
+let net = localStorage.getItem('net')
+if (!net)
+    net = 'bit'
+
+ENQWeb.Net.provider = net
+
 export default class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: '',
+            privateKey: '',
             isNetwork: false,
-            net: 'bit'
         }
-        this.handleChange = this.handleChange.bind(this)
+        this.handleChangePrivateKey = this.handleChangePrivateKey.bind(this)
 
         this.submit = this.submit.bind(this)
         this.generate = this.generate.bind(this)
         this.setNetwork = this.setNetwork.bind(this)
-
-        this.setNet = this.setNet.bind(this)
     }
 
-    handleChange(e) {
-        this.setState({value: e.target.value});
+    handleChangePrivateKey(e) {
+        this.setState({privateKey: e.target.value});
     }
 
     setNetwork(value) {
         this.setState({isNetwork: value})
     }
 
-    setNet(value) {
-        this.setState({net: value})
-    }
-
     async submit() {
-        let publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.value, true)
+        let publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.privateKey, true)
         if (publicKey) {
             console.log(publicKey)
-            let user = global.disk.user.addUser(publicKey, this.state.value, this.state.net)
+            let user = global.disk.user.addUser(publicKey, this.state.privateKey, ENQWeb.Net.provider)
             this.props.login(user)
-            ENQWeb.Net.provider = this.state.net
         }
     }
 
     generate() {
         let privateKey = ENQWeb.Utils.generateKey.getByNumber(1)[0].prvkey
-        this.setState({value: privateKey})
+        this.setState({privateKey: privateKey})
     }
 
     render() {
         if (this.state.isNetwork) {
-            return <Network setNetwork={this.setNetwork} setNet={this.setNet} net={this.state.net}/>
+            return <Network setNetwork={this.setNetwork}/>
         }
 
         return (
@@ -71,8 +69,8 @@ export default class Login extends React.Component {
 
                     <input type="text"
                            spellCheck={false}
-                           onChange={this.handleChange}
-                           value={this.state.value}
+                           onChange={this.handleChangePrivateKey}
+                           value={this.state.privateKey}
                            className={styles.field}
                            placeholder={'Private Key'}
                     />
@@ -86,7 +84,7 @@ export default class Login extends React.Component {
                     </div>
 
                     <div onClick={() => this.setNetwork(true)}
-                         className={styles.field + ' ' + styles.button}>Network: {this.state.net}
+                         className={styles.field + ' ' + styles.button}>Network: {ENQWeb.Net.currentProvider}
                     </div>
 
                 </div>
