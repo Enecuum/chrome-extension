@@ -36,6 +36,12 @@ export default class Requests extends React.Component {
                 this.selectPublicKeyRequest(this.state.requests[0], this.state.ids[0])
             else
                 this.selectTransactionRequest(this.state.requests[0], this.state.ids[0])
+
+            return
+        }
+
+        if (this.state.requests.length === 0) {
+            this.props.setRequests(false)
         }
 
         const items = []
@@ -69,8 +75,7 @@ export default class Requests extends React.Component {
             transactionRequest: null,
             taskId: null,
             items: []
-        })
-        this.selectRequest()
+        }, () => this.selectRequest())
     }
 
     async rejectAll() {

@@ -1,4 +1,3 @@
-const content = require('./ui/content')
 import {initApp} from "./ui/index";
 
 const Storage = require('./utils/localStorage')

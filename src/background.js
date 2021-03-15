@@ -19,20 +19,20 @@ function setupApp() {
     taskCounter()
 }
 
-function lockAccount() {
-    let account = disk.user.loadUserNotJson()
-    let password = disk.lock.getHashPassword()
-    if (password && !disk.lock.checkLock()) {
-        password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
-        disk.lock.setLock(true)
-        account = ENQWeb.Utils.crypto.encrypt(account, password)
-        disk.user.changeUser(account)
-        console.log('account locked')
-    } else {
-        if(!disk.lock.getHashPassword())
-            console.log('password not set')
-    }
-}
+// function lockAccount() {
+//     let account = disk.user.loadUserNotJson()
+//     let password = disk.lock.getHashPassword()
+//     if (password && !disk.lock.checkLock()) {
+//         password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
+//         disk.lock.setLock(true)
+//         account = ENQWeb.Utils.crypto.encrypt(account, password)
+//         disk.user.changeUser(account)
+//         console.log('account locked')
+//     } else {
+//         if (!disk.lock.getHashPassword())
+//             console.log('password not set')
+//     }
+// }
 
 async function msgHandler(msg, sender, sendResponse) {
     console.log(msg)
