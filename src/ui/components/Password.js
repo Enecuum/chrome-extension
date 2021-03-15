@@ -17,13 +17,11 @@ export default class Password extends React.Component {
     }
 
     handleChangePassword1(e) {
-        this.setState({password1: e.target.value});
-        this.setAllow()
+        this.setState({password1: e.target.value}, this.setAllow);
     }
 
     handleChangePassword2(e) {
-        this.setState({password2: e.target.value});
-        this.setAllow()
+        this.setState({password2: e.target.value}, this.setAllow);
     }
 
     setAllow() {
@@ -59,7 +57,7 @@ export default class Password extends React.Component {
 
                 <div className={styles.form}>
 
-                    <input type="text"
+                    <input type="password"
                            spellCheck={false}
                            onChange={this.handleChangePassword1}
                            value={this.state.password1}
@@ -67,7 +65,7 @@ export default class Password extends React.Component {
                            placeholder={'Password'}
                     />
 
-                    <input type="text"
+                    <input type="password"
                            spellCheck={false}
                            onChange={this.handleChangePassword2}
                            value={this.state.password2}

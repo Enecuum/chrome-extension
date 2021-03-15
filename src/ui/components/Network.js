@@ -10,15 +10,15 @@ export default class Network extends React.Component {
         this.handleChangeNetwork = this.handleChangeNetwork.bind(this)
     }
 
-    setNet(value, callback) {
+    setNet(value) {
         this.setState({net: value})
         localStorage.setItem('net', value)
 
         ENQWeb.Net.provider = value
         disk.user.setNet(value)
 
-        if (this.props.callback)
-            this.props.callback()
+        // if (this.props.callback)
+        //     this.props.callback()
     }
 
     handleChangeNetwork(e) {
@@ -30,10 +30,10 @@ export default class Network extends React.Component {
     checkURL() {
         console.log(this.state.url)
         ENQWeb.Net.provider = this.state.url
-        let connect = false
-        if (connect) {
-            console.log('')
-        }
+        // let connect = false
+        // if (connect) {
+        //     console.log('')
+        // }
     }
 
     render() {

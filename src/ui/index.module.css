@@ -100,7 +100,7 @@ a {
 
     /*overflow: hidden;*/
     white-space: nowrap;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
     border: 1px solid transparent;
 }
 
