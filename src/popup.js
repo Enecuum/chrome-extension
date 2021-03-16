@@ -58,15 +58,16 @@ function asyncRequest(data) {
         await awaitAsync(data)
             .then(() => {
                 console.log('await work')
+                delete awaitId[data]
+                toBackground.onMessage.removeListener(asyncMessenger)
+                resolve()
             })
-        delete awaitId[data]
-        toBackground.onMessage.removeListener(asyncMessenger)
-        resolve()
     })
 }
 
 async function asyncMessenger(msg, sender, sendResponse) {
     if (msg.asyncAnswer && msg.data) {
+        console.log('await Messanger worked')
         awaitId[msg.data] = true
     }
 }
