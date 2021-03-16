@@ -142,8 +142,9 @@ export default class Account extends React.Component {
                          className={styles.field + ' ' + styles.button}>Send transaction
                     </div>
 
-                    <div onClick={() => this.setPassword(true)}
-                         className={styles.field + ' ' + styles.button}>Set password
+                    {/*this.setPassword(true)*/}
+                    <div onClick={() => {}}
+                         className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Set password
                     </div>
 
                     <div onClick={() => this.setNetwork(true)}
