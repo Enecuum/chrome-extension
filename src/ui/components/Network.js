@@ -49,9 +49,9 @@ export default class Network extends React.Component {
                     {/*    className={styles.field + ' ' + styles.button}>PULSE</div>*/}
 
                     <div onClick={() => {
-                        this.setNet('f3')
+                        // this.setNet('f3')
                     }}
-                         className={styles.field + ' ' + styles.button}>F3
+                         className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>F3
                     </div>
 
                     <div onClick={() => {
@@ -62,9 +62,10 @@ export default class Network extends React.Component {
 
                     <input type="text"
                            spellCheck={false}
+                           readOnly={true}
                            onChange={this.handleChangeNetwork}
                            value={this.state.url}
-                           className={styles.field}
+                           className={styles.field + ' ' + styles.disabled}
                            placeholder={'Custom network url'}
                     />
 
