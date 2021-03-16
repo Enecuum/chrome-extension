@@ -43,7 +43,7 @@ export default class Network extends React.Component {
 
                 <div className={styles.form}>
 
-                    <div className={styles.field + ' ' + styles.balance}>Network: {ENQWeb.Net.currentProvider}</div>
+                    <div className={styles.field + ' ' + styles.balance}>Network: {ENQWeb.Net.currentProvider.toUpperCase()}</div>
 
                     {/*<div onClick={() => { this.props.setNet('pulse') }}*/}
                     {/*    className={styles.field + ' ' + styles.button}>PULSE</div>*/}
