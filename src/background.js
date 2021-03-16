@@ -84,7 +84,7 @@ async function msgPopupHandler(msg, sender) {
             }
         } else if (msg.disallow && msg.taskId) {
             // Storage.task.removeTask(msg.taskId)
-            rejectTaskHandler(msg.taskId)
+            await rejectTaskHandler(msg.taskId)
             console.log('removed')
             taskCounter()
             if (msg.async) {
@@ -163,7 +163,10 @@ async function taskHandler(taskId) {
             data.from = wallet
             data.amount = Number(data.value)
             data.value = ''
-            data = await ENQWeb.Net.post.tx_fee_off(data)
+            data = await ENQWeb.Net.post.tx_fee_off(data).catch(err=>{
+                console.log(err)
+                return false
+            })
             try {
                 ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
             } catch (e) {
@@ -181,6 +184,7 @@ async function taskHandler(taskId) {
             data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
                 .catch(err => {
                     console.log(err)
+                    return false
                 })
             try {
                 ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
@@ -204,6 +208,7 @@ async function taskHandler(taskId) {
         default:
             break
     }
+    return true
 }
 
 function rejectTaskHandler(taskId) {
@@ -215,6 +220,7 @@ function rejectTaskHandler(taskId) {
     } catch (e) {
         console.log('connection close');
     }
+    return true
 }
 
 //TODO add cleaner connection list
