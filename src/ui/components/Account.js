@@ -112,7 +112,7 @@ export default function Account(props) {
             <div className={styles.form}>
 
                 <div onClick={() => setReceive(true)}
-                     className={styles.field + ' ' + styles.button}>Receive
+                     className={styles.field + ' ' + styles.button}>Credentials
                 </div>
 
                 <div onClick={() => {
