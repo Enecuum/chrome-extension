@@ -220,3 +220,11 @@ input.field::placeholder {
     cursor: not-allowed;
     box-shadow: none;
 }
+
+.private {
+    opacity: 0;
+}
+
+.private:hover {
+    opacity: 0.5;
+}
