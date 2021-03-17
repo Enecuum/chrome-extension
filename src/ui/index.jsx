@@ -30,6 +30,7 @@ class Main extends React.Component {
     logout() {
         global.disk.user.removeUser()
         disk.lock.removeLock()
+        global.asyncRequest({reject_all: true})
         this.setState({isLogin: false});
     }
 

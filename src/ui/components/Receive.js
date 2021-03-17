@@ -32,6 +32,10 @@ export default function Receive(props) {
                      className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
                 </div>
 
+                <div onClick={props.logout}
+                     className={styles.field + ' ' + styles.button + ' ' + styles.red}>Logout
+                </div>
+
             </div>
         </div>
     )
