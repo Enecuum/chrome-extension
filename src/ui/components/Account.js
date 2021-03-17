@@ -19,6 +19,7 @@ export default class Account extends React.Component {
             usd: 0,
             ticker: '',
             isLocked: disk.lock.checkLock(),
+            net: String(ENQWeb.Net.currentProvider)
         }
         this.setTransaction = this.setTransaction.bind(this)
         this.setRequests = this.setRequests.bind(this)
@@ -81,6 +82,10 @@ export default class Account extends React.Component {
             console.log(res.amount / 1e10)
         }).catch(err => {
             console.log(err)
+            this.setState({
+                amount:0,
+                ticker:''
+            })
         })
     }
 
@@ -148,7 +153,7 @@ export default class Account extends React.Component {
                     </div>
 
                     <div onClick={() => this.setNetwork(true)}
-                         className={styles.field + ' ' + styles.button}>Network: {ENQWeb.Net.currentProvider.toUpperCase()}
+                         className={styles.field + ' ' + styles.button}>Network: {this.state.net.toUpperCase()}
                     </div>
 
                     <div onClick={this.props.logout}
