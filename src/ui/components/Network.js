@@ -6,7 +6,7 @@ export default class Network extends React.Component {
         super(props)
         this.state = {
             url: '',
-            net: ENQWeb.Net.currentProvider
+            net: String(ENQWeb.Net.currentProvider)
         }
         this.handleChangeNetwork = this.handleChangeNetwork.bind(this)
     }
