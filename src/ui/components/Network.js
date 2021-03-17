@@ -50,11 +50,8 @@ export default class Network extends React.Component {
                     {/*<div onClick={() => { this.props.setNet('pulse') }}*/}
                     {/*    className={styles.field + ' ' + styles.button}>PULSE</div>*/}
 
-                    <div onClick={() => {
-                        this.setNet('f3')
-                    }}
-                         className={styles.field + ' ' + styles.button}>F3
-                    </div>
+                    {/*<div onClick={() => {this.setNet('f3')}}*/}
+                    {/*     className={styles.field + ' ' + styles.button}>F3</div>*/}
 
                     <div onClick={() => {
                         this.setNet('bit')
