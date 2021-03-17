@@ -76,7 +76,7 @@ export default function Account(props) {
     if (isTransaction) {
         return <Transaction setTransaction={setTransaction}
                             amount={amount}
-                            publicKey={this.props.user.publicKey}/>
+                            publicKey={props.user.publicKey}/>
     }
 
     if (isPassword) {
@@ -92,7 +92,7 @@ export default function Account(props) {
     }
 
     if (isReceive) {
-        return <Receive setReceive={setReceive}/>
+        return <Receive setReceive={setReceive} user={props.user}/>
     }
 
     balance()
@@ -102,16 +102,18 @@ export default function Account(props) {
 
             <div className={styles.header}>
 
-                <div
-                    className={styles.field + ' ' + styles.balance}>{amount} {ticker}</div>
+                <div className={styles.field + ' ' + styles.balance}>{amount} {ticker}</div>
                 <div className={styles.field + ' ' + styles.usd}>{usd} USD</div>
                 <div className={styles.field + ' ' + styles.address}>{props.user.publicKey}</div>
-                <div className={styles.field + ' ' + styles.copy} onClick={() => copyPublicKey()}>COPY
-                </div>
+                <div className={styles.field + ' ' + styles.copy} onClick={() => copyPublicKey()}>COPY</div>
 
             </div>
 
             <div className={styles.form}>
+
+                <div onClick={() => setReceive(true)}
+                     className={styles.field + ' ' + styles.button}>Receive
+                </div>
 
                 <div onClick={() => {
                     (disk.list.listOfTask().length > 0 ? setRequests(true) : null)
