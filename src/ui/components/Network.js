@@ -6,6 +6,7 @@ export default class Network extends React.Component {
         super(props)
         this.state = {
             url: '',
+            net: String(ENQWeb.Net.currentProvider)
         }
         this.handleChangeNetwork = this.handleChangeNetwork.bind(this)
     }
@@ -30,6 +31,7 @@ export default class Network extends React.Component {
     checkURL() {
         console.log(this.state.url)
         ENQWeb.Net.provider = this.state.url
+        disk.user.setNet(ENQWeb.Net.currentProvider)
         // let connect = false
         // if (connect) {
         //     console.log('')
@@ -43,15 +45,15 @@ export default class Network extends React.Component {
 
                 <div className={styles.form}>
 
-                    <div className={styles.field + ' ' + styles.balance}>Network: {ENQWeb.Net.currentProvider.toUpperCase()}</div>
+                    <div className={styles.field + ' ' + styles.balance}>Network: {this.state.net.toUpperCase()}</div>
 
                     {/*<div onClick={() => { this.props.setNet('pulse') }}*/}
                     {/*    className={styles.field + ' ' + styles.button}>PULSE</div>*/}
 
                     <div onClick={() => {
-                        // this.setNet('f3')
+                        this.setNet('f3')
                     }}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>F3
+                         className={styles.field + ' ' + styles.button}>F3
                     </div>
 
                     <div onClick={() => {
