@@ -42,11 +42,19 @@ async function msgConnectHandler(msg, sender) {
     console.log(msg)
     let answer = ''
     if (msg.taskId) {
-        Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
-        if (!requests[msg.type]) {
-            taskHandler(msg.taskId)
-        } else {
-            taskCounter()
+        let acc = await disk.user.loadUser()
+        let lock = await disk.lock.checkLock()
+        if(!acc.net && !lock){
+            console.log('non auth')
+            rejectTaskHandler(msg.taskId)
+        }else{
+            // console.log('auth ok',{acc,lock})
+            Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
+            if (!requests[msg.type]) {
+                taskHandler(msg.taskId)
+            } else {
+                taskCounter()
+            }
         }
     } else {
         console.log(msg)

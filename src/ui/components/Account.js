@@ -46,6 +46,7 @@ export default function Account(props) {
         let token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
         console.log(token)
         ENQWeb.Net.get.getBalance(props.user.publicKey, token).then(res => {
+            console.log(res)
             setAmount(res.amount / 1e10)
             setTicker(res.ticker)
             if (props.user.net === 'pulse') {
@@ -92,7 +93,7 @@ export default function Account(props) {
     }
 
     if (isReceive) {
-        return <Receive setReceive={setReceive} user={props.user}/>
+        return <Receive setReceive={setReceive} logout={props.logout} user={props.user}/>
     }
 
     balance()
@@ -130,18 +131,18 @@ export default function Account(props) {
                 </div>
 
                 {/*this.setPassword(true)*/}
-                <div onClick={() => {
-                }}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Set password
-                </div>
+                {/*<div onClick={() => {*/}
+                {/*}}*/}
+                {/*     className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Set password*/}
+                {/*</div>*/}
 
                 <div onClick={() => setNetwork(true)}
                      className={styles.field + ' ' + styles.button}>Network: {net.toUpperCase()}
                 </div>
 
-                <div onClick={props.logout}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.red}>Logout
-                </div>
+                {/*<div onClick={props.logout}*/}
+                {/*     className={styles.field + ' ' + styles.button + ' ' + styles.red}>Logout*/}
+                {/*</div>*/}
 
             </div>
         </div>
