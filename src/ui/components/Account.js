@@ -33,7 +33,7 @@ export default function Account(props) {
     // }
 
     let copyPublicKey = () => {
-        navigator.clipboard.writeText(this.props.user.publicKey)
+        navigator.clipboard.writeText(props.user.publicKey)
     }
 
     let unlock = () => {
