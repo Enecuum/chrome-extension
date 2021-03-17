@@ -163,7 +163,7 @@ async function taskHandler(taskId) {
             data.from = wallet
             data.amount = Number(data.value)
             data.value = ''
-            data = await ENQWeb.Net.post.tx_fee_off(data).catch(err=>{
+            data = await ENQWeb.Net.post.tx_fee_off(data).catch(err => {
                 console.log(err)
                 return false
             })

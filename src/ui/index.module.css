@@ -205,6 +205,7 @@ input.field::placeholder {
 
 .copy {
     cursor: pointer;
+    text-align: center;
     /*border: 1px solid var(--color-blue-super-ligth)*/
 }
 
