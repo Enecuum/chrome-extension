@@ -19,21 +19,6 @@ function setupApp() {
     taskCounter()
 }
 
-// function lockAccount() {
-//     let account = disk.user.loadUserNotJson()
-//     let password = disk.lock.getHashPassword()
-//     if (password && !disk.lock.checkLock()) {
-//         password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
-//         disk.lock.setLock(true)
-//         account = ENQWeb.Utils.crypto.encrypt(account, password)
-//         disk.user.changeUser(account)
-//         console.log('account locked')
-//     } else {
-//         if (!disk.lock.getHashPassword())
-//             console.log('password not set')
-//     }
-// }
-
 async function msgHandler(msg, sender, sendResponse) {
     console.log(msg)
 }
@@ -42,12 +27,12 @@ async function msgConnectHandler(msg, sender) {
     console.log(msg)
     let answer = ''
     if (msg.taskId) {
-        let acc = await disk.user.loadUser()
-        let lock = await disk.lock.checkLock()
-        if(!acc.net && !lock){
+        let acc = disk.user.loadUser()
+        let lock = disk.lock.checkLock()
+        if (!acc.net && !lock) {
             console.log('non auth')
             rejectTaskHandler(msg.taskId)
-        }else{
+        } else {
             // console.log('auth ok',{acc,lock})
             Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
             if (!requests[msg.type]) {
@@ -231,7 +216,6 @@ function rejectTaskHandler(taskId) {
     return true
 }
 
-//TODO add cleaner connection list
 async function connectHandler(port) {
     await connectController(port)
     switch (port.name) {
@@ -251,5 +235,3 @@ document.addEventListener('DOMContentLoaded', () => {
     setupApp();
     setTimeout(taskCounter, 1000 * 15)
 })
-
-//TODO отслеживать закрытие браузера
