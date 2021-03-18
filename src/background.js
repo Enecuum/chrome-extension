@@ -70,7 +70,7 @@ async function msgPopupHandler(msg, sender) {
         lockAccount()
     } else {
         if (msg.allow && msg.taskId) {
-            taskHandler(msg.taskId)
+            await taskHandler(msg.taskId)
             taskCounter()
             if (msg.async) {
                 ports.popup.postMessage({asyncAnswer: true, data: msg})
