@@ -42,7 +42,7 @@ export default function Account(props) {
 
     useEffect(() => {
         balance()
-    });
+    },[]);
 
     let balance = () => {
         // console.log(this.props)
@@ -64,10 +64,7 @@ export default function Account(props) {
             }
             console.log(res.amount / 1e10)
         }).catch(err => {
-            console.log(err)
-            //TODO here bug
-            // setAmount(0)
-            // setTicker('')
+            console.log('error: ',err)
         })
     }
 
