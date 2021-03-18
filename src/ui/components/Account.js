@@ -65,8 +65,9 @@ export default function Account(props) {
             console.log(res.amount / 1e10)
         }).catch(err => {
             console.log(err)
-            setAmount(0)
-            setTicker('')
+            //TODO here bug
+            // setAmount(0)
+            // setTicker('')
         })
     }
 
