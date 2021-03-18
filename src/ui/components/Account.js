@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import styles from "../index.module.css";
 import Transaction from "./Transaction";
 import Requests from "./Requests"
@@ -39,6 +39,10 @@ export default function Account(props) {
     let unlock = () => {
         setLocked(false)
     }
+
+    useEffect(() => {
+        balance()
+    });
 
     let balance = () => {
         // console.log(this.props)
@@ -96,8 +100,6 @@ export default function Account(props) {
         return <Receive setReceive={setReceive} logout={props.logout} user={props.user}/>
     }
 
-    balance()
-
     return (
         <div className={styles.main}>
 
@@ -112,10 +114,6 @@ export default function Account(props) {
 
             <div className={styles.form}>
 
-                <div onClick={() => setReceive(true)}
-                     className={styles.field + ' ' + styles.button}>Credentials
-                </div>
-
                 <div onClick={() => {
                     (disk.list.listOfTask().length > 0 ? setRequests(true) : null)
                 }}
@@ -128,6 +126,10 @@ export default function Account(props) {
 
                 <div onClick={() => setTransaction(true)}
                      className={styles.field + ' ' + styles.button}>Send transaction
+                </div>
+
+                <div onClick={() => setReceive(true)}
+                     className={styles.field + ' ' + styles.button}>Credentials
                 </div>
 
                 {/*this.setPassword(true)*/}
