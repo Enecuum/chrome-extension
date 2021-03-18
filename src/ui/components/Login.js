@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../index.module.css";
 import Network from "./Network"
+import Header from "./Header";
 
 let net = localStorage.getItem('net')
 if (!net)
@@ -51,6 +52,8 @@ export default class Login extends React.Component {
 
         return (
             <div className={styles.main}>
+
+                <Header/>
 
                 {/*<div className={styles.header}>*/}
                 {/*    <div className={styles.title}>Enecuum Network</div>*/}
