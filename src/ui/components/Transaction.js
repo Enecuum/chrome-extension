@@ -79,7 +79,7 @@ export default class Transaction extends React.Component {
             return (
                 <div className={styles.main}>
 
-                    <div className={styles.form}>
+                    <div className={styles.header}>
 
                         <input type="text"
                                spellCheck={false}

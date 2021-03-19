@@ -32,6 +32,8 @@ export default function Account(props) {
     //     })
     // }
 
+    // useEffect(() => {},[]);
+
     let copyPublicKey = () => {
         navigator.clipboard.writeText(props.user.publicKey)
     }
@@ -39,10 +41,6 @@ export default function Account(props) {
     let unlock = () => {
         setLocked(false)
     }
-
-    useEffect(() => {
-        balance()
-    },[]);
 
     let balance = () => {
         // console.log(this.props)
@@ -97,6 +95,8 @@ export default function Account(props) {
     if (isReceive) {
         return <Receive setReceive={setReceive} logout={props.logout} user={props.user}/>
     }
+
+    balance()
 
     return (
         <div className={styles.main}>

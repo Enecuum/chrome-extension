@@ -6,7 +6,7 @@ export default function Header(props) {
     return (
         <div className={styles.header}>
 
-            <img src='../../copied/128.png'/>
+            <img id={'logo'} src='./128.png'/>
 
         </div>
     )
