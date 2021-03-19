@@ -42,7 +42,8 @@ export default class PublicKeyRequests extends React.Component {
         return (
             <div className={styles.main}>
 
-                <div className={styles.form + ' ' + styles.header}>
+                <div className={styles.header}>
+
                     <div className={styles.field + ' ' + styles.text}>This website is requesting access to your account
                         address
                     </div>

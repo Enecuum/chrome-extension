@@ -12,7 +12,7 @@ export default function Receive(props) {
 
         <div className={styles.main}>
 
-            <div className={styles.form}>
+            <div className={styles.header}>
 
                 <div className={styles.field}>Public key</div>
 
@@ -28,12 +28,12 @@ export default function Receive(props) {
 
             <div className={styles.form}>
 
-                <div onClick={() => props.setReceive(false)}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
-                </div>
-
                 <div onClick={props.logout}
                      className={styles.field + ' ' + styles.button + ' ' + styles.red}>Logout
+                </div>
+
+                <div onClick={() => props.setReceive(false)}
+                     className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
                 </div>
 
             </div>

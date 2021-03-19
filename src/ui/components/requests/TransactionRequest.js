@@ -37,7 +37,7 @@ export default class TransactionRequest extends React.Component {
         return (
             <div className={styles.main}>
 
-                <div className={styles.form}>
+                <div className={styles.data}>
 
                     <div className={styles.field}>From: {this.state.from}</div>
                     <div className={styles.field}>To: {this.state.to}</div>
