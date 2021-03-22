@@ -7,6 +7,7 @@ import Network from "./Network";
 import AskPassword from "./AskPassword";
 import Receive from "./Receive";
 import Header from "../elements/Header";
+import Address from "../elements/Address";
 
 export default function Account(props) {
 
@@ -104,12 +105,15 @@ export default function Account(props) {
 
             <Header/>
 
+            <Address/>
+
             <div className={styles.content}>
 
-                <div className={styles.field + ' ' + styles.balance}>{amount} {ticker}</div>
-                <div className={styles.field + ' ' + styles.usd}>{usd} USD</div>
-                <div className={styles.field + ' ' + styles.address}>{props.user.publicKey}</div>
-                <div className={styles.field + ' ' + styles.copy} onClick={() => copyPublicKey()}>COPY</div>
+                <img src='./48.png'/>
+                <div className={styles.balance}>{amount.toFixed(4)} {ticker}</div>
+                <div className={styles.usd}>${usd} USD</div>
+                {/*<div className={styles.field + ' ' + styles.address}>{props.user.publicKey}</div>*/}
+                {/*<div className={styles.field + ' ' + styles.copy} onClick={() => copyPublicKey()}>COPY</div>*/}
 
             </div>
 
@@ -118,7 +122,7 @@ export default function Account(props) {
                 <div onClick={() => {
                     (disk.list.listOfTask().length > 0 ? setRequests(true) : null)
                 }}
-                     className={styles.field + ' ' + styles.button + ' ' + (disk.list.listOfTask().length > 0 ? styles.green : styles.disabled)}>Requests
+                     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon + ' ' + (disk.list.listOfTask().length > 0 ? styles.green : styles.disabled)}>Requests
                 </div>
 
                 {/*<div onClick={() => {*/}
@@ -126,11 +130,11 @@ export default function Account(props) {
                 {/*</div>*/}
 
                 <div onClick={() => setTransaction(true)}
-                     className={styles.field + ' ' + styles.button}>Send transaction
+                     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Send transaction
                 </div>
 
                 <div onClick={() => setReceive(true)}
-                     className={styles.field + ' ' + styles.button}>Credentials
+                     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Credentials
                 </div>
 
                 {/*this.setPassword(true)*/}
@@ -140,7 +144,7 @@ export default function Account(props) {
                 {/*</div>*/}
 
                 <div onClick={() => setNetwork(true)}
-                     className={styles.field + ' ' + styles.button}>Network: {net.toUpperCase()}
+                     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Network: {net.toUpperCase()}
                 </div>
 
                 {/*<div onClick={props.logout}*/}
