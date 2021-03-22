@@ -72,6 +72,12 @@ a {
     padding-bottom: 50px;
 }
 
+.logo_small {
+    width: 80px;
+    height: 80px;
+    padding: 10px;
+}
+
 .welcome1 {
     width: 100%;
     padding-left: 20px;
