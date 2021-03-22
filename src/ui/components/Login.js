@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../index.module.css";
 import Network from "./Network"
-import Header from "./Header";
+import Header from "../elements/Header";
 
 let net = localStorage.getItem('net')
 if (!net)
@@ -53,20 +53,15 @@ export default class Login extends React.Component {
         return (
             <div className={styles.main}>
 
-                <Header/>
+                <div className={styles.content}>
+                    <img className={styles.logo} src='./128.png'/>
 
-                {/*<div className={styles.header}>*/}
-                {/*    <div className={styles.title}>Enecuum Network</div>*/}
-                {/*</div>*/}
+                    <div className={styles.welcome1}>Welcome</div>
+                    <div className={styles.welcome1}>to Enecuum</div>
 
-                {/*<div></div>*/}
-
-                {/*<div className={styles.title}>Enecuum Network</div>*/}
-                {/*<div className={styles.text}>Devices connect to the Enecuum blockchain and share untapped data*/}
-                {/*    processing capacity. The more devices connected, the higher the network speed, with uncapped*/}
-                {/*    scalability potential. Connecting millions of distributed devices will create a truly decentralized,*/}
-                {/*    secure and stable system.*/}
-                {/*</div>*/}
+                    <div className={styles.welcome2}>Connecting you to network and the</div>
+                    <div className={styles.welcome2}>Decentralized Web.</div>
+                </div>
 
                 <div className={styles.form}>
 
@@ -87,7 +82,7 @@ export default class Login extends React.Component {
                     </div>
 
                     <div onClick={() => this.setNetwork(true)}
-                         className={styles.field + ' ' + styles.button}>Network: {ENQWeb.Net.currentProvider.toUpperCase()}
+                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Network: {ENQWeb.Net.currentProvider.toUpperCase()}
                     </div>
 
                 </div>
