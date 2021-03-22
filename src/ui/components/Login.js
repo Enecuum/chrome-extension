@@ -53,7 +53,7 @@ export default class Login extends React.Component {
         return (
             <div className={styles.main}>
 
-                <Header/>
+                {/*<Header/>*/}
 
                 {/*<div className={styles.header}>*/}
                 {/*    <div className={styles.title}>Enecuum Network</div>*/}
