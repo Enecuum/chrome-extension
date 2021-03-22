@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import styles from "../index.module.css";
+import styles from "./elements.module.css";
 
 export default function Address(props) {
 
