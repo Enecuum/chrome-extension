@@ -6,6 +6,7 @@ import Password from "./Password";
 import Network from "./Network";
 import AskPassword from "./AskPassword";
 import Receive from "./Receive";
+import Header from "../elements/Header";
 
 export default function Account(props) {
 
@@ -101,7 +102,9 @@ export default function Account(props) {
     return (
         <div className={styles.main}>
 
-            <div className={styles.header}>
+            <Header/>
+
+            <div className={styles.content}>
 
                 <div className={styles.field + ' ' + styles.balance}>{amount} {ticker}</div>
                 <div className={styles.field + ' ' + styles.usd}>{usd} USD</div>

@@ -12,7 +12,7 @@ export default function Receive(props) {
 
         <div className={styles.main}>
 
-            <div className={styles.header}>
+            <div className={styles.content}>
 
                 <div className={styles.field}>Public key</div>
 
