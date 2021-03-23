@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../index.module.css";
+import styles from "../css/index.module.css";
 import Network from "./Network"
 import Header from "../elements/Header";
 
@@ -54,7 +54,7 @@ export default class Login extends React.Component {
             <div className={styles.main}>
 
                 <div className={styles.content}>
-                    <img className={styles.logo} src='./128.png'/>
+                    <img className={styles.logo} src='./images/128.png'/>
 
                     <div className={styles.welcome1}>Welcome</div>
                     <div className={styles.welcome1}>to Enecuum</div>

@@ -2,7 +2,7 @@ import React from 'react'
 import {render} from 'react-dom'
 import Login from './components/Login'
 import Account from './components/Account'
-import styles from './index.module.css'
+import styles from './css/index.module.css'
 
 function App(background) {
     return <Main background={background}/>
