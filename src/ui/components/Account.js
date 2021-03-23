@@ -109,7 +109,7 @@ export default function Account(props) {
 
             <div className={styles.content}>
 
-                <img src='./images/48.png'/>
+                <img className={styles.content_logo} src='./images/48.png'/>
                 <div className={styles.balance}>{amount.toFixed(4)} {ticker}</div>
                 <div className={styles.usd}>${usd} USD</div>
                 {/*<div className={styles.field + ' ' + styles.address}>{props.user.publicKey}</div>*/}
@@ -117,22 +117,29 @@ export default function Account(props) {
 
             </div>
 
-            <div className={styles.form}>
+            <div className={styles.center}>
 
-                <div className={styles.field + ' ' + styles.button + ' ' + styles.button_icon} onClick={() => copyPublicKey()}>Copy</div>
-
-                <div onClick={() => {
-                    (disk.list.listOfTask().length > 0 ? setRequests(true) : null)
-                }}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon + ' ' + (disk.list.listOfTask().length > 0 ? styles.green : styles.disabled)}>Requests
+                <div onClick={() => copyPublicKey()}>
+                    <div className={styles.icon_container}><img className={styles.icon} src={'./icons/8.png'}/></div>
+                    <div>Copy</div>
                 </div>
+
+                {/*<div onClick={() => {*/}
+                {/*    (disk.list.listOfTask().length > 0 ? setRequests(true) : null)*/}
+                {/*}}*/}
+                {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon + ' ' + (disk.list.listOfTask().length > 0 ? styles.green : styles.disabled)}>*/}
+                {/*    <div>Requests</div>*/}
+                {/*    <img className={styles.icon} src={'./icons/12.png'}/>*/}
+                {/*</div>*/}
 
                 {/*<div onClick={() => {*/}
                 {/*}} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Transactions history*/}
                 {/*</div>*/}
 
-                <div onClick={() => setTransaction(true)}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Send Transaction
+                <div onClick={() => setTransaction(true)}>
+                    <div className={styles.icon_container}><img className={styles.icon} src={'./icons/12.png'}/></div>
+                    <div>Send</div>
+                    <div>Transaction</div>
                 </div>
 
                 {/*<div onClick={() => setReceive(true)}*/}
@@ -145,15 +152,25 @@ export default function Account(props) {
                 {/*     className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Set password*/}
                 {/*</div>*/}
 
-                <div onClick={() => setNetwork(true)}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Network: {net.toUpperCase()}
+                {/*<div onClick={props.logout}*/}
+                {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Logout*/}
+                {/*</div>*/}
+
+            </div>
+
+            <div className={styles.bottom}>
+                <div className={styles.bottom_tabs}>
+                    <div>Assets</div>
+                    <div>Activity</div>
                 </div>
 
-                <div onClick={props.logout}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Logout
+                <div className={styles.bottom_list}>
+                    List
                 </div>
 
             </div>
+
+
         </div>
     )
 }
