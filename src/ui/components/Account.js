@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import styles from "../index.module.css";
+import styles from "../css/index.module.css";
 import Transaction from "./Transaction";
 import Requests from "./Requests"
 import Password from "./Password";
@@ -109,7 +109,7 @@ export default function Account(props) {
 
             <div className={styles.content}>
 
-                <img src='./48.png'/>
+                <img src='./images/48.png'/>
                 <div className={styles.balance}>{amount.toFixed(4)} {ticker}</div>
                 <div className={styles.usd}>${usd} USD</div>
                 {/*<div className={styles.field + ' ' + styles.address}>{props.user.publicKey}</div>*/}
@@ -118,6 +118,8 @@ export default function Account(props) {
             </div>
 
             <div className={styles.form}>
+
+                <div className={styles.field + ' ' + styles.button + ' ' + styles.button_icon} onClick={() => copyPublicKey()}>Copy</div>
 
                 <div onClick={() => {
                     (disk.list.listOfTask().length > 0 ? setRequests(true) : null)
@@ -130,12 +132,12 @@ export default function Account(props) {
                 {/*</div>*/}
 
                 <div onClick={() => setTransaction(true)}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Send transaction
+                     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Send Transaction
                 </div>
 
-                <div onClick={() => setReceive(true)}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Credentials
-                </div>
+                {/*<div onClick={() => setReceive(true)}*/}
+                {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Credentials*/}
+                {/*</div>*/}
 
                 {/*this.setPassword(true)*/}
                 {/*<div onClick={() => {*/}
@@ -147,9 +149,9 @@ export default function Account(props) {
                      className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Network: {net.toUpperCase()}
                 </div>
 
-                {/*<div onClick={props.logout}*/}
-                {/*     className={styles.field + ' ' + styles.button + ' ' + styles.red}>Logout*/}
-                {/*</div>*/}
+                <div onClick={props.logout}
+                     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Logout
+                </div>
 
             </div>
         </div>

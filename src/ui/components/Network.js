@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../index.module.css";
+import styles from "../css/index.module.css";
 
 export default class Network extends React.Component {
     constructor(props) {
