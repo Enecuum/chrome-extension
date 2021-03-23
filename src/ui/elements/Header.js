@@ -1,12 +1,22 @@
 import React, {useState} from "react";
-import styles from "../css/elements.module.css";
+import elements from "../css/elements.module.css";
+import styles from "../css/index.module.css";
 
 export default function Header(props) {
 
-    return (
-        <div className={styles.header}>
+    let net = 'BIT'
+    let network = {}
 
-            <img className={styles.logo_small} src='./images/logo_white.png'/>
+    return (
+        <div className={elements.header}>
+
+            <img className={elements.logo_small} src='./images/logo_white.png'/>
+
+            <div onClick={() => network.setNetwork(true)}
+                 className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Network: {net.toUpperCase()}
+            </div>
+
+            <img className={elements.logo_small} src='./images/logo_white.png'/>
 
         </div>
     )

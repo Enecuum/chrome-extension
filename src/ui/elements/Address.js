@@ -1,10 +1,10 @@
 import React, {useState} from "react";
-import styles from "../css/elements.module.css";
+import elements from "../css/elements.module.css";
 
 export default function Address(props) {
 
     return (
-        <div className={styles.address_row}>
+        <div className={elements.address_row}>
 
             <div>· Not connected</div>
 

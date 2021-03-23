@@ -189,7 +189,12 @@ async function taskHandler(taskId) {
             Storage.task.removeTask(taskId)
             break
         case 'getProvider':
-            data = {net: acc.net}
+            ENQWeb.Net.provider = acc.net
+            if(task.cb.fullUrl){
+                data = {net: ENQWeb.Net.provider}
+            }else{
+                data = {net: ENQWeb.Net.currentProvider}
+            }
             console.log(data);
             try {
                 ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
