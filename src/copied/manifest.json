@@ -36,10 +36,7 @@
         }
     ],
     "permissions": [
-        "storage",
-        "idle",
-        "activeTab",
-        "tabs"
+        "storage"
     ],
     "web_accessible_resources": [
         "inpage.js",
