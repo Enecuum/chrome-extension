@@ -142,7 +142,7 @@ async function taskHandler(taskId) {
                 net: acc.net,
             }
             try {
-                ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb});
+                ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb});
             } catch (e) {
                 console.log('connection close');
             }
@@ -161,7 +161,7 @@ async function taskHandler(taskId) {
                 return false
             })
             try {
-                ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+                ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
             } catch (e) {
                 console.log('connection close');
             }
@@ -180,7 +180,7 @@ async function taskHandler(taskId) {
                     return false
                 })
             try {
-                ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+                ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
 
             } catch (e) {
                 console.log('connection close');
@@ -197,7 +197,7 @@ async function taskHandler(taskId) {
             }
             console.log(data);
             try {
-                ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+                ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
             } catch (e) {
                 console.log('connection close');
             }
@@ -214,7 +214,7 @@ function rejectTaskHandler(taskId) {
     Storage.task.removeTask(taskId)
     let data = {reject: true}
     try {
-        ports.content.postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+        ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
     } catch (e) {
         console.log('connection close');
     }
@@ -231,6 +231,7 @@ async function connectHandler(port) {
             port.onMessage.addListener(msgPopupHandler)
             break
         default:
+            port.onMessage.addListener(msgConnectHandler)
             break
     }
     listPorts()
