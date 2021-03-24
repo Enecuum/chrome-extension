@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from "react";
+import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+// import 'react-tabs/style/react-tabs.css';
 import styles from "../css/index.module.css";
 import Transaction from "./Transaction";
 import Requests from "./Requests"
@@ -64,12 +66,12 @@ export default function Account(props) {
             }
             console.log(res.amount / 1e10)
         }).catch(err => {
-            console.log('error: ',err)
+            console.log('error: ', err)
         })
     }
 
     if (isLocked) {
-        return <AskPassword unlock={unlock}/>
+        return <AskPassword unlock={unlock} modalFunctions={modalFunctions}/>
     }
 
     if (isRequests) {
@@ -158,17 +160,32 @@ export default function Account(props) {
 
             </div>
 
-            <div className={styles.bottom}>
-                <div className={styles.bottom_tabs}>
-                    <div>Assets</div>
-                    <div>Activity</div>
-                </div>
+            <Tabs className={styles.bottom}>
 
-                <div className={styles.bottom_list}>
-                    List
-                </div>
+                <TabList className={styles.bottom_tabs}>
+                    <Tab>Assets</Tab>
+                    <Tab>Activity</Tab>
+                </TabList>
 
-            </div>
+                <TabPanel>
+                    <div className={styles.bottom_list}>
+                        <div>Asset 1</div>
+                        <div>Asset 2</div>
+                        <div>Asset 3</div>
+                        <div>Asset 4</div>
+                    </div>
+                </TabPanel>
+
+                <TabPanel>
+                    <div className={styles.bottom_list}>
+                        <div>Activity 1</div>
+                        <div>Activity 2</div>
+                        <div>Activity 3</div>
+                        <div>Activity 4</div>
+                    </div>
+                </TabPanel>
+
+            </Tabs>
 
 
         </div>
