@@ -16,7 +16,7 @@ export default function Header(props) {
                  className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Network: {net.toUpperCase()}
             </div>
 
-            <img className={elements.logo_small} src='./images/logo_white.png'/>
+            <img className={elements.logo_small} src='./icons/10.png'/>
 
         </div>
     )

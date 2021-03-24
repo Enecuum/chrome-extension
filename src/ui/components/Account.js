@@ -29,6 +29,7 @@ export default function Account(props) {
 
     const [net, setNet] = useState(String(ENQWeb.Net.currentProvider));
 
+    const [activeTab, setActiveTab] = useState(0);
     // setNetwork(value) {
     //     this.setState({isNetwork: value}, () => {
     //         if (!value)
@@ -162,28 +163,92 @@ export default function Account(props) {
 
             <Tabs className={styles.bottom}>
 
-                <TabList className={styles.bottom_tabs}>
-                    <Tab>Assets</Tab>
-                    <Tab>Activity</Tab>
-                </TabList>
+                <div className={styles.bottom_tabs}>
+                    <div onClick={() => setActiveTab(0)} className={(activeTab === 0 ? ' ' + styles.bottom_tab_active : '')}>Assets</div>
+                    <div onClick={() => setActiveTab(1)} className={(activeTab === 1 ? ' ' + styles.bottom_tab_active : '')}>Activity</div>
+                </div>
 
-                <TabPanel>
-                    <div className={styles.bottom_list}>
-                        <div>Asset 1</div>
-                        <div>Asset 2</div>
-                        <div>Asset 3</div>
-                        <div>Asset 4</div>
-                    </div>
-                </TabPanel>
+                <div className={styles.bottom_list + (activeTab === 0 ? '' : ' ' + styles.bottom_list_disabled)}>
 
-                <TabPanel>
-                    <div className={styles.bottom_list}>
-                        <div>Activity 1</div>
-                        <div>Activity 2</div>
-                        <div>Activity 3</div>
-                        <div>Activity 4</div>
+                    <div className={styles.asset}>
+                        <img className={styles.icon} src={'./icons/8.png'}/>
+                        <div>
+                            <div>{amount.toFixed(4)} {ticker}</div>
+                            <div>${usd} USD</div>
+                        </div>
                     </div>
-                </TabPanel>
+
+                    <div className={styles.asset}>
+                        <img className={styles.icon} src={'./icons/8.png'}/>
+                        <div>
+                            <div>{amount.toFixed(4)} {ticker}</div>
+                            <div>${usd} USD</div>
+                        </div>
+                    </div>
+
+                    <div className={styles.asset}>
+                        <img className={styles.icon} src={'./icons/8.png'}/>
+                        <div>
+                            <div>{amount.toFixed(4)} {ticker}</div>
+                            <div>${usd} USD</div>
+                        </div>
+                    </div>
+
+                    <div className={styles.asset}>
+                        <img className={styles.icon} src={'./icons/8.png'}/>
+                        <div>
+                            <div>{amount.toFixed(4)} {ticker}</div>
+                            <div>${usd} USD</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles.bottom_list + (activeTab === 1 ? '' : ' ' + styles.bottom_list_disabled)}>
+
+                    <div className={styles.asset}>
+                        <img className={styles.icon} src={'./icons/8.png'}/>
+                        <div>
+                            <div>Send BIT</div>
+                            <div className={styles.text_small}>Aug 20, 2020 - To: 023dsfd343412sdfsf2323</div>
+                        </div>
+                        <div>
+                            -6000000...
+                        </div>
+                    </div>
+
+                    <div className={styles.asset}>
+                        <img className={styles.icon} src={'./icons/8.png'}/>
+                        <div>
+                            <div>Send BIT</div>
+                            <div className={styles.text_small}>Aug 20, 2020 - To: 023dsfd343412sdfsf2323</div>
+                        </div>
+                        <div>
+                            -6000000...
+                        </div>
+                    </div>
+
+                    <div className={styles.asset}>
+                        <img className={styles.icon} src={'./icons/8.png'}/>
+                        <div>
+                            <div>Send BIT</div>
+                            <div className={styles.text_small}>Aug 20, 2020 - To: 023dsfd343412sdfsf2323</div>
+                        </div>
+                        <div>
+                            -6000000...
+                        </div>
+                    </div>
+
+                    <div className={styles.asset}>
+                        <img className={styles.icon} src={'./icons/8.png'}/>
+                        <div>
+                            <div>Send BIT</div>
+                            <div className={styles.text_small}>Aug 20, 2020 - To: 023dsfd343412sdfsf2323</div>
+                        </div>
+                        <div>
+                            -6000000...
+                        </div>
+                    </div>
+                </div>
 
             </Tabs>
 

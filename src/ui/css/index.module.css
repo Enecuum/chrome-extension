@@ -22,7 +22,9 @@ body {
     --color-green-ligth: rgba(50, 255, 10, .5);
     --color-green-super-ligth: rgba(50, 255, 10, .2);
 
-    --font-size-small: 12px;
+    --color-gray-ligth: rgba(255, 255, 255, .1);
+
+    --font-size-small: 8px;
     --font-size-normal: 16px;
     --font-size-big: 26px;
     --font-size-giant: 40px;
@@ -49,6 +51,23 @@ a {
     flex-direction: column;
 }
 
+.text_small {
+    font-size: var(--font-size-small);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .content {
     width: 100%;
     height: 100%;
@@ -64,6 +83,18 @@ a {
     /*justify-content: center;*/
     padding-bottom: 10px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .login_logo {
@@ -313,7 +344,7 @@ input.field::placeholder {
     height: 100px;
 
 
-    background: darkgoldenrod;
+    /*background: darkgoldenrod;*/
 }
 
 .bottom_tabs {
@@ -324,23 +355,63 @@ input.field::placeholder {
     display: flex;
     flex-direction: row;
 
-    background: gray;
+    /*background: gray;*/
+    border-bottom: 1px solid var(--color-gray-ligth);
+}
+
+ul {
+    /*list-style-type: none !important;*/
+    /*padding-inline-start: 0 !important;*/
 }
 
 .bottom_tabs > div {
+    margin: 0;
     width: 50%;
     text-align: center;
-    border-bottom: 1px solid black;
+
+    border-bottom: 4px solid transparent;
+    cursor: pointer;
+
+    color: var(--color-gray-ligth);
 }
 
-.bottom_tabs > div:first-child {
+.bottom_tabs > div:hover {
+    border-bottom: 4px solid var(--color-blue-ligth);
+}
+
+.bottom_tabs > div.bottom_tab_active {
     width: 50%;
-    text-align: center;
-    border-bottom: 4px solid red;
+    color: var(--color-blue);
+    border-bottom: 4px solid var(--color-blue);
 }
 
 .bottom_list {
     width: 100%;
     height: 500px;
-    background: green;
+    /*background: green;*/
+}
+
+.bottom_list_disabled {
+    display: none;
+}
+
+.asset {
+    display: flex;
+    flex-direction: row;
+    height: 60px;
+
+    /*background: lightblue;*/
+}
+
+.asset div {
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.asset img {
+    width: 20px;
+    height: 20px;
+    margin: 20px;
 }
