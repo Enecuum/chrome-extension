@@ -34,11 +34,18 @@ async function msgConnectHandler(msg, sender) {
             rejectTaskHandler(msg.taskId)
         } else {
             // console.log('auth ok',{acc,lock})
-            Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
-            if (!requests[msg.type]) {
-                taskHandler(msg.taskId)
-            } else {
-                taskCounter()
+            if (!ports[msg.cb.url].enabled){
+                if(msg.type === 'enable'){
+                    Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
+                    taskCounter()
+                }
+            }else{
+                Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
+                if (!requests[msg.type]){
+                    taskHandler(msg.taskId)
+                } else {
+                    taskCounter()
+                }
             }
         }
     } else {
@@ -143,63 +150,70 @@ async function taskHandler(taskId) {
             }
             try {
                 ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb});
+                ports[task.cb.url].enabled = true
             } catch (e) {
                 console.log('connection close');
             }
             Storage.task.removeTask(taskId)
             break
         case 'tx':
-            console.log('tx handler work!')
-            data = task.data
-            let buf = ENQWeb.Net.provider
-            ENQWeb.Net.provider = data.net || acc.net
-            data.from = wallet
-            data.amount = Number(data.value)
-            data.value = ''
-            data = await ENQWeb.Net.post.tx_fee_off(data).catch(err => {
-                console.log(err)
-                return false
-            })
-            try {
-                ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
-            } catch (e) {
-                console.log('connection close');
-            }
-            Storage.task.removeTask(taskId)
-            ENQWeb.Net.provider = buf
-            break
-        case 'balanceOf':
-            console.log('balanceOf handler work!')
-            data = task.data
-            console.log(acc)
-            ENQWeb.Net.provider = data.net || acc.net
-            console.log(task.data, ENQWeb.Net.provider)
-            data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
-                .catch(err => {
+            if(ports[task.cb.url].enabled){
+                console.log('tx handler work!')
+                data = task.data
+                let buf = ENQWeb.Net.provider
+                ENQWeb.Net.provider = acc.net
+                data.from = wallet
+                data.amount = Number(data.value)
+                data.value = ''
+                data = await ENQWeb.Net.post.tx_fee_off(data).catch(err => {
                     console.log(err)
                     return false
                 })
-            try {
-                ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
-
-            } catch (e) {
-                console.log('connection close');
+                try {
+                    ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+                } catch (e) {
+                    console.log('connection close');
+                }
+                ENQWeb.Net.provider = buf
             }
-            console.log({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+            Storage.task.removeTask(taskId)
+            break
+        case 'balanceOf':
+            console.log('balanceOf handler work!')
+            if(ports[task.cb.url].enabled){
+                data = task.data
+                console.log(acc)
+                ENQWeb.Net.provider = data.net || acc.net
+                console.log(task.data, ENQWeb.Net.provider)
+                data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
+                    .catch(err => {
+                        console.log(err)
+                        return false
+                    })
+                try {
+                    ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+
+                } catch (e) {
+                    console.log('connection close');
+                }
+                console.log({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+            }
             Storage.task.removeTask(taskId)
             break
         case 'getProvider':
-            ENQWeb.Net.provider = acc.net
-            if(task.cb.fullUrl){
-                data = {net: ENQWeb.Net.provider}
-            }else{
-                data = {net: ENQWeb.Net.currentProvider}
-            }
-            console.log(data);
-            try {
-                ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
-            } catch (e) {
-                console.log('connection close');
+            if(ports[task.cb.url].enabled){
+                ENQWeb.Net.provider = acc.net
+                if(task.cb.fullUrl){
+                    data = {net: ENQWeb.Net.provider}
+                }else{
+                    data = {net: ENQWeb.Net.currentProvider}
+                }
+                console.log(data);
+                try {
+                    ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+                } catch (e) {
+                    console.log('connection close');
+                }
             }
             Storage.task.removeTask(taskId)
             break;
