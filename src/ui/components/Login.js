@@ -78,12 +78,12 @@ export default class Login extends React.Component {
                     </div>
 
                     <div onClick={this.generate}
-                         className={styles.field + ' ' + styles.button}>Generate
+                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Generate
                     </div>
 
-                    <div onClick={() => this.setNetwork(true)}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Network: {ENQWeb.Net.currentProvider.toUpperCase()}
-                    </div>
+                    {/*<div onClick={() => this.setNetwork(true)}*/}
+                    {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Network: {ENQWeb.Net.currentProvider.toUpperCase()}*/}
+                    {/*</div>*/}
 
                 </div>
             </div>
