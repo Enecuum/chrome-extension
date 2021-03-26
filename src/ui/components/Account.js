@@ -11,15 +11,14 @@ import Receive from "./Receive";
 import Header from "../elements/Header";
 import Address from "../elements/Address";
 
+let names = {
+    enable: 'Share account address',
+    tx: 'Sign transaction'
+}
+
 export default function Account(props) {
 
     ENQWeb.Enq.provider = props.user.net
-
-    const [isTransaction, setTransaction] = useState(false);
-    const [isRequests, setRequests] = useState(false);
-    const [isPassword, setPassword] = useState(false);
-    const [isNetwork, setNetwork] = useState(false);
-    const [isReceive, setReceive] = useState(false);
 
     const [amount, setAmount] = useState(0);
     const [usd, setUSD] = useState(0);
@@ -30,6 +29,7 @@ export default function Account(props) {
     const [net, setNet] = useState(String(ENQWeb.Net.currentProvider));
 
     const [activeTab, setActiveTab] = useState(0);
+
     // setNetwork(value) {
     //     this.setState({isNetwork: value}, () => {
     //         if (!value)
@@ -71,37 +71,26 @@ export default function Account(props) {
         })
     }
 
-    if (isLocked) {
-        return <AskPassword unlock={unlock} modalFunctions={modalFunctions}/>
-    }
-
-    if (isRequests) {
-        return <Requests setRequests={setRequests}/>
-    }
-
-    if (isTransaction) {
-        return <Transaction setTransaction={setTransaction}
-                            amount={amount}
-                            publicKey={props.user.publicKey}/>
-    }
-
-    if (isPassword) {
-        return <Password setPassword={setPassword}/>
-    }
-
-    if (isPassword) {
-        return <Password setPassword={setPassword}/>
-    }
-
-    if (isNetwork) {
-        return <Network setNetwork={setNetwork}/>
-    }
-
-    if (isReceive) {
-        return <Receive setReceive={setReceive} logout={props.logout} user={props.user}/>
-    }
-
     balance()
+
+    let activity = disk.list.listOfTask()
+    let activityElements = []
+
+    for (let key in activity) {
+        let item = activity[key]
+        activityElements.push(
+            <div key={key} onClick={() => {
+
+                if (item.type === 'enable')
+                    selectPublicKeyRequest(item, activity[key])
+                else
+                    selectTransactionRequest(item, activity[key])
+
+            }} className={styles.field + ' ' + styles.button}>
+                {names[item.type]}
+            </div>
+        )
+    }
 
     return (
         <div className={styles.main}>
@@ -178,76 +167,12 @@ export default function Account(props) {
                         </div>
                     </div>
 
-                    <div className={styles.asset}>
-                        <img className={styles.icon} src={'./icons/8.png'}/>
-                        <div>
-                            <div>{amount.toFixed(4)} {ticker}</div>
-                            <div>${usd} USD</div>
-                        </div>
-                    </div>
-
-                    <div className={styles.asset}>
-                        <img className={styles.icon} src={'./icons/8.png'}/>
-                        <div>
-                            <div>{amount.toFixed(4)} {ticker}</div>
-                            <div>${usd} USD</div>
-                        </div>
-                    </div>
-
-                    <div className={styles.asset}>
-                        <img className={styles.icon} src={'./icons/8.png'}/>
-                        <div>
-                            <div>{amount.toFixed(4)} {ticker}</div>
-                            <div>${usd} USD</div>
-                        </div>
-                    </div>
                 </div>
 
                 <div className={styles.bottom_list + (activeTab === 1 ? '' : ' ' + styles.bottom_list_disabled)}>
 
-                    <div className={styles.asset}>
-                        <img className={styles.icon} src={'./icons/8.png'}/>
-                        <div>
-                            <div>Send BIT</div>
-                            <div className={styles.text_small}>Aug 20, 2020 - To: 023dsfd343412sdfsf2323</div>
-                        </div>
-                        <div>
-                            -6000000...
-                        </div>
-                    </div>
+                    {activityElements}
 
-                    <div className={styles.asset}>
-                        <img className={styles.icon} src={'./icons/8.png'}/>
-                        <div>
-                            <div>Send BIT</div>
-                            <div className={styles.text_small}>Aug 20, 2020 - To: 023dsfd343412sdfsf2323</div>
-                        </div>
-                        <div>
-                            -6000000...
-                        </div>
-                    </div>
-
-                    <div className={styles.asset}>
-                        <img className={styles.icon} src={'./icons/8.png'}/>
-                        <div>
-                            <div>Send BIT</div>
-                            <div className={styles.text_small}>Aug 20, 2020 - To: 023dsfd343412sdfsf2323</div>
-                        </div>
-                        <div>
-                            -6000000...
-                        </div>
-                    </div>
-
-                    <div className={styles.asset}>
-                        <img className={styles.icon} src={'./icons/8.png'}/>
-                        <div>
-                            <div>Send BIT</div>
-                            <div className={styles.text_small}>Aug 20, 2020 - To: 023dsfd343412sdfsf2323</div>
-                        </div>
-                        <div>
-                            -6000000...
-                        </div>
-                    </div>
                 </div>
 
             </Tabs>

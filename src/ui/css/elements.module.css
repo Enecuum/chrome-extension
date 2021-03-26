@@ -8,6 +8,32 @@
     justify-content: space-between;
 }
 
+.logo_small {
+    width: 30px;
+    height: 30px;
+    margin: 20px;
+    /*padding: 10px;*/
+    /*filter: brightness(100%);*/
+}
+
+.network_status {
+    height: 70px;
+    line-height: 70px;
+    /*background-color: red;*/
+}
+
+.account_logo_small {
+    width: 20px;
+    height: 20px;
+    margin: 25px;
+    /*padding: 10px;*/
+    /*filter: brightness(100%);*/
+}
+
+
+
+
+
 .address_row {
     /*background: blue;*/
     width: 100%;
@@ -39,20 +65,4 @@
 
 .address_row div {
     /*background: rgba(100, 100, 100, 0.5);*/
-}
-
-.logo_small {
-    width: 30px;
-    height: 30px;
-    margin: 20px;
-    /*padding: 10px;*/
-    /*filter: brightness(100%);*/
-}
-
-.account_logo_small {
-    width: 20px;
-    height: 20px;
-    margin: 25px;
-    /*padding: 10px;*/
-    /*filter: brightness(100%);*/
 }
