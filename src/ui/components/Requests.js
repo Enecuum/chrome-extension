@@ -101,16 +101,6 @@ export default class Requests extends React.Component {
 
         let back = this.state.requests.length === 1 ? () => this.props.setRequests(false) : this.back
 
-        if (this.state.publicKeyRequest) {
-            return <PublicKeyRequests back={back} request={this.state.publicKeyRequest}
-                                      taskId={this.state.taskId}/>
-        }
-
-        if (this.state.transactionRequest) {
-            return <TransactionRequest back={back} request={this.state.transactionRequest}
-                                       taskId={this.state.taskId}/>
-        }
-
         return (
             <div className={styles.main}>
 

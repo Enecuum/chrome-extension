@@ -1,10 +1,6 @@
 import React from 'react'
 import {render} from 'react-dom'
-import Main from "./Main";
-
-function App(background) {
-    return <Main background={background}/>
-}
+import App from "./App";
 
 export async function initApp(background) {
     render(
