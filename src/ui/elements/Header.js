@@ -12,11 +12,11 @@ export default function Header(props) {
 
             <img className={elements.logo_small} src='./images/logo_white.png'/>
 
-            <div onClick={() => network.setNetwork(true)}
-                 className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Network: {net.toUpperCase()}
-            </div>
+            {/*<div onClick={() => network.setNetwork(true)}*/}
+            {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Network: {net.toUpperCase()}*/}
+            {/*</div>*/}
 
-            <img className={elements.logo_small} src='./icons/10.png'/>
+            <img className={elements.account_logo_small} src='./icons/5.png'/>
 
         </div>
     )
