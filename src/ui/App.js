@@ -7,8 +7,10 @@ import Password from "./components/Password";
 import Network from "./components/Network";
 import Receive from "./components/Receive";
 import Account from "./components/Account";
+import PublicKeyRequests from "./components/requests/PublicKeyRequest";
+import TransactionRequest from "./components/requests/TransactionRequest";
 
-export default function Main(props) {
+export default function App(props) {
 
     const [isTransaction, setTransaction] = useState(false);
     const [isRequests, setRequests] = useState(false);
@@ -50,17 +52,19 @@ export default function Main(props) {
         return <Lock unlock={unlock}/>
     }
 
-    if (isRequests) {
-        return <Requests setRequests={setRequests}/>
-    }
+    // if (publicKeyRequest) {
+    //     return <PublicKeyRequests request={this.state.publicKeyRequest}
+    //                               taskId={this.state.taskId}/>
+    // }
+    //
+    // if (transactionRequest) {
+    //     return <TransactionRequest request={this.state.transactionRequest}
+    //                                taskId={this.state.taskId}/>
+    // }
 
     if (isTransaction) {
         return <Transaction setTransaction={setTransaction}
                             publicKey={props.user.publicKey}/>
-    }
-
-    if (isPassword) {
-        return <Password setPassword={setPassword}/>
     }
 
     if (isPassword) {
@@ -72,7 +76,7 @@ export default function Main(props) {
     }
 
     if (isReceive) {
-        return <Receive setReceive={setReceive} logout={props.logout} user={props.user}/>
+        return <Receive setReceive={setReceive} user={props.user}/>
     }
 
     return <Account user={user} />
