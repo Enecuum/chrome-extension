@@ -162,6 +162,9 @@ a {
     border: 1px solid transparent;
 }
 
+
+
+
 .button {
     cursor: pointer;
     text-align: center;
@@ -222,6 +225,8 @@ a {
     color: ghostwhite;
 }
 
+/*INPUT*/
+
 input.field {
     background: transparent;
     width: calc(100% - 20px);
@@ -239,17 +244,19 @@ input.field {
 }
 
 input.field:hover {
-    border: 1px solid var(--color-blue-ligth)
+    /*border: 1px solid var(--color-blue-ligth)*/
 }
 
 input.field:focus {
-    border: 1px solid var(--color-blue);
+    /*border: 1px solid var(--color-blue);*/
     outline: none;
 }
 
 input.field::placeholder {
     color: white;
 }
+
+/*FORM*/
 
 .form {
     /*border-top: 1px solid var(--color-blue-ligth);*/
@@ -260,6 +267,8 @@ input.field::placeholder {
     bottom: 0;
     width: 100%;
 }
+
+/*FIELDS*/
 
 .address {
     /*font-size: 8px;*/
@@ -400,7 +409,7 @@ ul {
     flex-direction: row;
     height: 60px;
 
-    /*background: lightblue;*/
+    background: lightblue;
 }
 
 .asset div {

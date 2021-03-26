@@ -11,9 +11,6 @@
             "lockAccount.js"
         ]
     },
-    "chrome_url_overrides": {
-        "newtab": "popup.html"
-    },
     "browser_action": {
         "default_title": "Enecuum Wallet",
         "default_popup": "popup.html",
