@@ -2,7 +2,7 @@ import React from "react";
 import styles from "../css/index.module.css";
 import Network from "./Network"
 
-export default class AskPassword extends React.Component {
+export default class Lock extends React.Component {
     constructor(props) {
         super(props);
         this.state = {

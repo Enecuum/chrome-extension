@@ -6,7 +6,7 @@ import Transaction from "./Transaction";
 import Requests from "./Requests"
 import Password from "./Password";
 import Network from "./Network";
-import AskPassword from "./AskPassword";
+import Lock from "./Lock";
 import Receive from "./Receive";
 import Header from "../elements/Header";
 import Address from "../elements/Address";
