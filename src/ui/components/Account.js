@@ -162,14 +162,65 @@ export default function Account(props) {
                 <div className={styles.bottom_list + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
                     <div className={styles.asset}>
-                        <img className={styles.icon} src="./icons/8.png" />
+                        <img className={styles.icon} src="./icons/1.png" />
                         <div>
                             <div>
                                 {amount.toFixed(4)}
                                 {' '}
                                 {ticker}
                             </div>
+                            <div className={styles.usd}>
+                                $
+                                {usd}
+                                {' '}
+                                USD
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={styles.asset}>
+                        <img className={styles.icon} src="./icons/2.png" />
+                        <div>
                             <div>
+                                {amount.toFixed(4)}
+                                {' '}
+                                {ticker}
+                            </div>
+                            <div className={styles.usd}>
+                                $
+                                {usd}
+                                {' '}
+                                USD
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={styles.asset}>
+                        <img className={styles.icon} src="./icons/3.png" />
+                        <div>
+                            <div>
+                                {amount.toFixed(4)}
+                                {' '}
+                                {ticker}
+                            </div>
+                            <div className={styles.usd}>
+                                $
+                                {usd}
+                                {' '}
+                                USD
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={styles.asset}>
+                        <img className={styles.icon} src="./icons/4.png" />
+                        <div>
+                            <div>
+                                {amount.toFixed(4)}
+                                {' '}
+                                {ticker}
+                            </div>
+                            <div className={styles.usd}>
                                 $
                                 {usd}
                                 {' '}
@@ -180,7 +231,7 @@ export default function Account(props) {
 
                     <div
                       onClick={() => {}}
-                      className={`${styles.field} ${styles.button}`}
+                      className={`${styles.field} ${styles.button} ${styles.button_blue}`}
                     >
                         Add token
                     </div>

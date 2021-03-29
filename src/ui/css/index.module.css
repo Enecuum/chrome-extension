@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-size: 16px;
 
     /*margin-bottom: 10px;*/
@@ -30,18 +30,16 @@ body {
     --font-size-big: 26px;
     --font-size-super-big: 34px;
     --font-size-giant: 40px;
-}
 
-main {
-    width: 350px;
+    min-width: 350px;
     height: 600px;
 }
 
-@media only screen and (max-width: 400px) {
-    main {
-        width: 100%;
-        background: red;
-    }
+main {
+    width: 100%;
+    /*height: 100%;*/
+    padding-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 * {
@@ -166,11 +164,11 @@ a {
     /*width: 280px;*/
     padding: 10px;
     margin: 10px 10px 0;
-    border-radius: 3px;
+    /*border-radius: 3px;*/
 
     /*overflow: hidden;*/
     white-space: nowrap;
-    border: 1px solid transparent;
+    /*border: 1px solid transparent;*/
 }
 
 
@@ -251,7 +249,7 @@ input.field {
     border-bottom: 1px solid white;
     /*border-radius: 3px;*/
 
-    /*box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.1);*/
+    box-shadow: none;
 }
 
 input.field:hover {
@@ -389,8 +387,16 @@ input.field::placeholder {
 
 .bottom_list {
     width: 100%;
-    height: 500px;
+    height: 100%;
     /*background: green;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.bottom_list > div:last-child {
+    /*position: absolute;*/
+    /*bottom: 0;*/
 }
 
 .bottom_list_disabled {
@@ -401,6 +407,8 @@ input.field::placeholder {
     display: flex;
     flex-direction: row;
     height: 70px;
+
+    background: rgba(0, 0 ,0, 0.1);
 }
 
 .asset > div {
