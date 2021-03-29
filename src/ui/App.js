@@ -25,8 +25,8 @@ export default function App(props) {
 
     let user = global.disk.user.loadUser()
 
-    let login = (user) => {
-        user = user
+    let login = (_user) => {
+        user = _user
         setLogin(true)
     }
 
@@ -64,7 +64,7 @@ export default function App(props) {
 
     if (isTransaction) {
         return <Transaction setTransaction={setTransaction}
-                            publicKey={props.user.publicKey}/>
+                            publicKey={user.publicKey}/>
     }
 
     if (isPassword) {
@@ -76,7 +76,7 @@ export default function App(props) {
     }
 
     if (isReceive) {
-        return <Receive setReceive={setReceive} user={props.user}/>
+        return <Receive setReceive={setReceive} user={user}/>
     }
 
     return <Account user={user} />

@@ -12,6 +12,7 @@ body {
 
     color: white;
 
+    --color-blue-dark: rgb(50, 60, 105);
     --color-blue: rgb(10, 103, 255);
     --color-blue-ligth: rgba(10, 103, 255, .5);
     --color-blue-super-ligth: rgba(10, 103, 255, .2);

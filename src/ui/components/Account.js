@@ -10,6 +10,7 @@ import Lock from "./Lock";
 import Receive from "./Receive";
 import Header from "../elements/Header";
 import Address from "../elements/Address";
+import Menu from "../elements/Menu";
 
 let names = {
     enable: 'Share account address',
@@ -27,6 +28,8 @@ export default function Account(props) {
     const [isLocked, setLocked] = useState(disk.lock.checkLock());
 
     const [net, setNet] = useState(String(ENQWeb.Net.currentProvider));
+
+    const [menu, setMenu] = useState(false);
 
     const [activeTab, setActiveTab] = useState(0);
 
@@ -92,10 +95,17 @@ export default function Account(props) {
         )
     }
 
+    let renderMenu = () => {
+        if (menu)
+            return <Menu/>
+    }
+
     return (
         <div className={styles.main}>
 
-            <Header/>
+            <Header setMenu={setMenu}/>
+
+            {renderMenu()}
 
             <Address/>
 

@@ -15,11 +15,11 @@ export default function Header(props) {
             {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Network: {net.toUpperCase()}*/}
             {/*</div>*/}
 
-            <div className={styles.network_status}>
+            <div className={styles.network_status} onClick={props.setMenu}>
                 Network: {net.toUpperCase()}
             </div>
 
-            <img className={styles.account_logo_small} src='./icons/5.png'/>
+            <img className={styles.account_logo_small} src='./icons/5.png' onClick={props.setMenu}/>
 
         </div>
     )
