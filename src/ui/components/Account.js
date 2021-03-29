@@ -1,40 +1,41 @@
-import React, {useState, useEffect} from "react";
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
+import React, { useState, useEffect } from 'react'
+import {
+    Tab, Tabs, TabList, TabPanel,
+} from 'react-tabs'
 // import 'react-tabs/style/react-tabs.css';
-import styles from "../css/index.module.css";
-import Transaction from "./Transaction";
-import Requests from "./Requests"
-import Password from "./Password";
-import Network from "./Network";
-import Lock from "./Lock";
-import Receive from "./Receive";
-import Header from "../elements/Header";
-import Address from "../elements/Address";
-import Menu from "../elements/Menu";
+import styles from '../css/index.module.css'
+import Transaction from './Transaction'
+import Requests from './Requests'
+import Password from './Password'
+import Network from './Network'
+import Lock from './Lock'
+import Receive from './Receive'
+import Header from '../elements/Header'
+import Address from '../elements/Address'
+import Menu from '../elements/Menu'
 
-let names = {
+const names = {
     enable: 'Share account address',
-    tx: 'Sign transaction'
+    tx: 'Sign transaction',
 }
 
 export default function Account(props) {
-
     ENQWeb.Enq.provider = props.user.net
 
-    const [amount, setAmount] = useState(0);
-    const [usd, setUSD] = useState(0);
-    const [ticker, setTicker] = useState('');
+    const [amount, setAmount] = useState(0)
+    const [usd, setUSD] = useState(0)
+    const [ticker, setTicker] = useState('')
 
-    const [isLocked, setLocked] = useState(disk.lock.checkLock());
+    const [isLocked, setLocked] = useState(disk.lock.checkLock())
 
-    const [net, setNet] = useState(String(ENQWeb.Net.currentProvider));
+    const [net, setNet] = useState(String(ENQWeb.Net.currentProvider))
 
-    const [menu, setMenu] = useState(false);
-    let clickMenu = () => {
+    const [menu, setMenu] = useState(false)
+    const clickMenu = () => {
         setMenu(!menu)
     }
 
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(0)
 
     // setNetwork(value) {
     //     this.setState({isNetwork: value}, () => {
@@ -45,126 +46,154 @@ export default function Account(props) {
 
     // useEffect(() => {},[]);
 
-    let copyPublicKey = () => {
+    const copyPublicKey = () => {
         navigator.clipboard.writeText(props.user.publicKey)
     }
 
-    let unlock = () => {
+    const unlock = () => {
         setLocked(false)
     }
 
-    let balance = () => {
+    const balance = () => {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
-        let token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
+        const token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
         console.log(token)
-        ENQWeb.Net.get.getBalance(props.user.publicKey, token).then(res => {
+        ENQWeb.Net.get.getBalance(props.user.publicKey, token).then((res) => {
             console.log(res)
             setAmount(res.amount / 1e10)
             setTicker(res.ticker)
             if (props.user.net === 'pulse') {
                 ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
-                    .then(answer => {
+                    .then((answer) => {
                         if (answer['enq-enecuum'] !== undefined) {
-                            let usd = answer['enq-enecuum'].usd * amount
+                            const usd = answer['enq-enecuum'].usd * amount
                             setUSD(usd)
                         }
                     })
             }
             console.log(res.amount / 1e10)
-        }).catch(err => {
+        }).catch((err) => {
             console.log('error: ', err)
         })
     }
 
     balance()
 
-    let activity = disk.list.listOfTask()
-    let activityElements = []
+    const activity = disk.list.listOfTask()
+    const activityElements = []
 
-    for (let key in activity) {
-        let item = activity[key]
+    for (const key in activity) {
+        const item = activity[key]
         activityElements.push(
-            <div key={key} onClick={() => {
-
-                if (item.type === 'enable')
-                    selectPublicKeyRequest(item, activity[key])
-                else
-                    selectTransactionRequest(item, activity[key])
-
-            }} className={styles.field + ' ' + styles.button}>
+            <div
+                key={key} onClick={() => {
+                    if (item.type === 'enable') selectPublicKeyRequest(item, activity[key])
+                    else selectTransactionRequest(item, activity[key])
+                }} className={`${styles.field} ${styles.button}`}
+            >
                 {names[item.type]}
-            </div>
+            </div>,
         )
     }
 
-    let renderMenu = () => {
-        if (menu)
-            return <Menu logout={props.logout}/>
+    const renderMenu = () => {
+        if (menu) return <Menu logout={props.logout} />
     }
 
     return (
         <div className={styles.main}>
 
-            <Header clickMenu={clickMenu}/>
+            <Header clickMenu={clickMenu} />
 
             {renderMenu()}
 
-            <Address/>
+            <Address />
 
             <div className={styles.content}>
 
-                <img className={styles.content_logo} src='./images/48.png'/>
-                <div className={styles.balance}>{amount.toFixed(4)} {ticker}</div>
-                <div className={styles.usd}>${usd} USD</div>
+                <img className={styles.content_logo} src="./images/48.png" alt="" />
+                <div className={styles.balance}>
+                    {amount.toFixed(4)}
+                    {' '}
+                    {ticker}
+                </div>
+                <div className={styles.usd}>
+                    $
+                    {usd}
+                    {' '}
+                    USD
+                </div>
 
             </div>
 
             <div className={styles.center}>
 
                 <div className={styles.circle_button} onClick={() => copyPublicKey()}>
-                    <div className={styles.icon_container}><img className={styles.icon} src={'./icons/8.png'}/></div>
+                    <div className={styles.icon_container}><img className={styles.icon} src="./icons/8.png" /></div>
                     <div>Copy</div>
                 </div>
 
                 <div className={styles.circle_button} onClick={() => setTransaction(true)}>
-                    <div className={styles.icon_container}><img className={styles.icon} src={'./icons/12.png'}/></div>
+                    <div className={styles.icon_container}><img className={styles.icon} src="./icons/12.png" /></div>
                     <div>Send</div>
                     <div>Transaction</div>
                 </div>
 
             </div>
 
-            <Tabs className={styles.bottom}>
+            <div className={styles.bottom}>
 
                 <div className={styles.bottom_tabs}>
-                    <div onClick={() => setActiveTab(0)} className={(activeTab === 0 ? ' ' + styles.bottom_tab_active : '')}>Assets</div>
-                    <div onClick={() => setActiveTab(1)} className={(activeTab === 1 ? ' ' + styles.bottom_tab_active : '')}>Activity</div>
+                    <div
+                        onClick={() => setActiveTab(0)}
+                        className={(activeTab === 0 ? ` ${styles.bottom_tab_active}` : '')}
+                    >
+                        Assets
+                    </div>
+                    <div
+                        onClick={() => setActiveTab(1)}
+                        className={(activeTab === 1 ? ` ${styles.bottom_tab_active}` : '')}
+                    >
+                        Activity
+                    </div>
                 </div>
 
-                <div className={styles.bottom_list + (activeTab === 0 ? '' : ' ' + styles.bottom_list_disabled)}>
+                <div className={styles.bottom_list + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
                     <div className={styles.asset}>
-                        <img className={styles.icon} src={'./icons/8.png'}/>
+                        <img className={styles.icon} src="./icons/8.png" />
                         <div>
-                            <div>{amount.toFixed(4)} {ticker}</div>
-                            <div>${usd} USD</div>
+                            <div>
+                                {amount.toFixed(4)}
+                                {' '}
+                                {ticker}
+                            </div>
+                            <div>
+                                $
+                                {usd}
+                                {' '}
+                                USD
+                            </div>
                         </div>
                     </div>
 
-                    <div onClick={() => {}}
-                         className={styles.field + ' ' + styles.button}>Add token
+                    <div
+                      onClick={() => {}}
+                      className={`${styles.field} ${styles.button}`}
+                    >
+                        Add token
                     </div>
 
                 </div>
 
-                <div className={styles.bottom_list + (activeTab === 1 ? '' : ' ' + styles.bottom_list_disabled)}>
+                <div className={styles.bottom_list + (activeTab === 1 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
                     {activityElements}
 
                 </div>
 
-            </Tabs>
+            </div>
 
 
         </div>

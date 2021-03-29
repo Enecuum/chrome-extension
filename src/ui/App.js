@@ -39,7 +39,7 @@ export default function App(props) {
     }
 
 
-    if (isLogin) return <Login login={login} />
+    if (!isLogin) return <Login login={login} />
 
     const unlock = () => {
         setLocked(false)
@@ -63,10 +63,10 @@ export default function App(props) {
 
     if (isTransaction) {
         return (
-          <Transaction
-                setTransaction={setTransaction}
-                publicKey={user.publicKey}
-            />
+            <Transaction
+            setTransaction={setTransaction}
+            publicKey={user.publicKey}
+          />
         )
     }
 
