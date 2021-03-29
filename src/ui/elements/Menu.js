@@ -9,7 +9,7 @@ export default function Menu(props) {
     return (
         <div className={styles.menu}>
 
-            <div className={styles.lock}><img src={'./icons/1.png'}/></div>
+            <div className={styles.lock}><img src={'./icons/9.png'}/></div>
             <div className={styles.title}>My accounts</div>
             <div>Account 1</div>
             <div>Account 2</div>

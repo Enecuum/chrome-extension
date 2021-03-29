@@ -87,12 +87,17 @@
 }
 
 .menu .title {
-    color: red;
+    font-size: var(--font-size-big);
 }
 
 .menu .lock {
     position: absolute;
     top: 0;
     right: 0;
+
+}
+
+.menu .lock img {
     width: 20px;
+    background: red;
 }
