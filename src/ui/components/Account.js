@@ -29,7 +29,10 @@ export default function Account(props) {
 
     const [net, setNet] = useState(String(ENQWeb.Net.currentProvider));
 
-    const [menu, setMenu] = useState(false);
+    const [menu, setMenu] = useState(true);
+    let clickMenu = () => {
+        setMenu(!menu)
+    }
 
     const [activeTab, setActiveTab] = useState(0);
 
@@ -103,7 +106,7 @@ export default function Account(props) {
     return (
         <div className={styles.main}>
 
-            <Header setMenu={setMenu}/>
+            <Header clickMenu={clickMenu}/>
 
             {renderMenu()}
 
