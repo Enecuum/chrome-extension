@@ -44,7 +44,6 @@
         "react-async": "^10.0.1",
         "react-dev-utils": "^11.0.3",
         "react-dom": "^16.14.0",
-        "react-tabs": "^3.2.1",
         "uuid": "^3.3.2"
     }
 }
