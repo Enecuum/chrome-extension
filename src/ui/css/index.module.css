@@ -12,8 +12,10 @@ body {
 
     color: white;
 
+
+    --color-blue-super-dark: rgb(40, 45, 70);
     --color-blue-dark: rgb(50, 60, 105);
-    --color-blue: rgb(10, 103, 255);
+    --color-blue: rgb(60, 130, 240);
     --color-blue-ligth: rgba(10, 103, 255, .5);
     --color-blue-super-ligth: rgba(10, 103, 255, .2);
     --color-red: rgb(255, 50, 10);
@@ -25,9 +27,10 @@ body {
 
     --color-gray-ligth: rgba(255, 255, 255, .1);
 
-    --font-size-small: 8px;
+    --font-size-small: 12px;
     --font-size-normal: 16px;
     --font-size-big: 26px;
+    --font-size-super-big: 34px;
     --font-size-giant: 40px;
 }
 
@@ -104,17 +107,14 @@ a {
     padding-bottom: 50px;
 }
 
-.address_logo {
-    width: 100px;
-    padding-left: 10px;
-    padding-top: 170px;
-    padding-bottom: 50px;
+.content_logo {
+    width: 30px;
+    height: 30px;
+    margin: 20px;
 }
 
-.content_logo {
-    padding-top: 30px;
-    padding-bottom: 20px;
-}
+
+
 
 .welcome1 {
     width: 100%;
@@ -280,41 +280,20 @@ input.field::placeholder {
 }
 
 .balance {
-    font-size: 36px;
+    font-size: var(--font-size-super-big);
     /*color: var(--color-blue)*/
 }
 
 .usd {
-    /*font-size: 16px;*/
-    /*color: black;*/
-    padding-top: 10px;
+    padding-top: 5px;
+    color: var(--color-gray-ligth)
 }
 
-.copy {
-    cursor: pointer;
-    text-align: center;
-    /*border: 1px solid var(--color-blue-super-ligth)*/
-}
-
-.copy:hover {
-    color: var(--color-blue);
-    background: ghostwhite;
-    /*font-weight: 400;*/
-}
-
-.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-
-.private {
-    opacity: 0;
-}
-
-.private:hover {
-    opacity: 0.5;
-}
+/*.disabled {*/
+/*    opacity: 0.5;*/
+/*    cursor: not-allowed;*/
+/*    box-shadow: none;*/
+/*}*/
 
 .icon {
     height: 15px;
@@ -333,10 +312,17 @@ input.field::placeholder {
     margin-bottom: 10px;
 }
 
+.circle_button {
+    font-size: var(--font-size-small);
+    color: var(--color-blue);
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
 .center {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .center div {
@@ -352,6 +338,7 @@ input.field::placeholder {
 
     width: 100%;
     height: 100px;
+    margin-top: 20px;
 
 
     /*background: darkgoldenrod;*/
@@ -367,11 +354,6 @@ input.field::placeholder {
 
     /*background: gray;*/
     border-bottom: 1px solid var(--color-gray-ligth);
-}
-
-ul {
-    /*list-style-type: none !important;*/
-    /*padding-inline-start: 0 !important;*/
 }
 
 .bottom_tabs > div {
@@ -408,13 +390,11 @@ ul {
 .asset {
     display: flex;
     flex-direction: row;
-    height: 60px;
-
-    background: lightblue;
+    height: 70px;
 }
 
 .asset div {
-    height: 60px;
+    height: 70px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;

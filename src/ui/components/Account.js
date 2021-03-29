@@ -29,7 +29,7 @@ export default function Account(props) {
 
     const [net, setNet] = useState(String(ENQWeb.Net.currentProvider));
 
-    const [menu, setMenu] = useState(true);
+    const [menu, setMenu] = useState(false);
     let clickMenu = () => {
         setMenu(!menu)
     }
@@ -100,7 +100,7 @@ export default function Account(props) {
 
     let renderMenu = () => {
         if (menu)
-            return <Menu/>
+            return <Menu logout={props.logout}/>
     }
 
     return (
@@ -117,49 +117,21 @@ export default function Account(props) {
                 <img className={styles.content_logo} src='./images/48.png'/>
                 <div className={styles.balance}>{amount.toFixed(4)} {ticker}</div>
                 <div className={styles.usd}>${usd} USD</div>
-                {/*<div className={styles.field + ' ' + styles.address}>{props.user.publicKey}</div>*/}
-                {/*<div className={styles.field + ' ' + styles.copy} onClick={() => copyPublicKey()}>COPY</div>*/}
 
             </div>
 
             <div className={styles.center}>
 
-                <div onClick={() => copyPublicKey()}>
+                <div className={styles.circle_button} onClick={() => copyPublicKey()}>
                     <div className={styles.icon_container}><img className={styles.icon} src={'./icons/8.png'}/></div>
                     <div>Copy</div>
                 </div>
 
-                {/*<div onClick={() => {*/}
-                {/*    (disk.list.listOfTask().length > 0 ? setRequests(true) : null)*/}
-                {/*}}*/}
-                {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon + ' ' + (disk.list.listOfTask().length > 0 ? styles.green : styles.disabled)}>*/}
-                {/*    <div>Requests</div>*/}
-                {/*    <img className={styles.icon} src={'./icons/12.png'}/>*/}
-                {/*</div>*/}
-
-                {/*<div onClick={() => {*/}
-                {/*}} className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Transactions history*/}
-                {/*</div>*/}
-
-                <div onClick={() => setTransaction(true)}>
+                <div className={styles.circle_button} onClick={() => setTransaction(true)}>
                     <div className={styles.icon_container}><img className={styles.icon} src={'./icons/12.png'}/></div>
                     <div>Send</div>
                     <div>Transaction</div>
                 </div>
-
-                {/*<div onClick={() => setReceive(true)}*/}
-                {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Credentials*/}
-                {/*</div>*/}
-
-                {/*this.setPassword(true)*/}
-                {/*<div onClick={() => {*/}
-                {/*}}*/}
-                {/*     className={styles.field + ' ' + styles.button + ' ' + styles.disabled}>Set password*/}
-                {/*</div>*/}
-
-                {/*<div onClick={props.logout}*/}
-                {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Logout*/}
-                {/*</div>*/}
 
             </div>
 
@@ -178,6 +150,10 @@ export default function Account(props) {
                             <div>{amount.toFixed(4)} {ticker}</div>
                             <div>${usd} USD</div>
                         </div>
+                    </div>
+
+                    <div onClick={() => {}}
+                         className={styles.field + ' ' + styles.button}>Add token
                     </div>
 
                 </div>

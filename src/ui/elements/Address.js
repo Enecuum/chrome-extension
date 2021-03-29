@@ -9,8 +9,8 @@ export default function Address(props) {
             <div>· Not connected</div>
 
             <div>
-                <div>Account 1</div>
-                <div>02c3...2473</div>
+                <div className={elements.account_name}>Account 1</div>
+                <div className={elements.address_string}>02c3...2473</div>
             </div>
 
             <div></div>

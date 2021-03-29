@@ -19,7 +19,7 @@ export default function Menu(props) {
             <div>Show in blockchain explorer</div>
             <div>Network: PULSE</div>
             <div>Network: BIT</div>
-            <div>Logout</div>
+            <div onClick={props.logout}>Logout</div>
 
         </div>
     )
