@@ -6,16 +6,20 @@ body {
     /*margin-bottom: 10px;*/
 
     /*background: white;*/
-    background: rgb(30, 32, 51);
+
+    background: var(--color-blue-background);
 
     color: white;
 
+    --color-blue-background: rgb(30, 32, 51);
 
-    --color-blue-super-dark: rgb(40, 45, 70);
-    --color-blue-dark: rgb(50, 60, 105);
-    --color-blue: rgb(60, 130, 240);
-    --color-blue-ligth: rgba(10, 103, 255, .5);
-    --color-blue-super-ligth: rgba(10, 103, 255, .2);
+    --color-blue-super-dark: rgb(40, 45, 70); /*Header*/
+    --color-blue-dark: rgb(50, 60, 105); /*Menu*/
+    --color-blue: rgb(60, 130, 240); /*Text*/
+    --color-blue-ligth: rgba(10, 103, 255, .5); /*Button*/
+
+    /*--color-blue-super-ligth: rgba(10, 103, 255, .2);*/
+
     --color-red: rgb(255, 50, 10);
     --color-red-ligth: rgba(255, 50, 10, .5);
     --color-red-super-ligth: rgba(255, 50, 10, .2);
@@ -241,7 +245,7 @@ a {
 /*INPUT*/
 
 input.field {
-    background: transparent;
+    background: var(--color-blue-background);
     width: calc(100% - 20px);
     /*margin-top: 0;*/
     font-family: 'Open Sans', sans-serif;
@@ -250,10 +254,9 @@ input.field {
     color: white;
 
     /*border: 1px solid var(--color-blue-super-ligth);*/
+    border: none;
     border-bottom: 1px solid white;
     /*border-radius: 3px;*/
-
-    box-shadow: none;
 }
 
 input.field:hover {

@@ -89,5 +89,5 @@ export default function App(props) {
     if (isTransactionRequest)
         return <TransactionRequest />
 
-    return <Account user={user} logout={logout} setPassword={setPassword} setNetwork={setNetwork} setReceive={setReceive} setTransaction={setTransaction} setPublicKeyRequest={setPublicKeyRequest} setTransactionRequest={setTransactionRequest} />
+    return <Account user={user} logout={logout} setLocked={setLocked} setPassword={setPassword} setNetwork={setNetwork} setReceive={setReceive} setTransaction={setTransaction} setPublicKeyRequest={setPublicKeyRequest} setTransactionRequest={setTransactionRequest} />
 }
