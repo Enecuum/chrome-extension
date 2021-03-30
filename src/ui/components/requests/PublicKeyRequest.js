@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../css/index.module.css";
 
-export default class PublicKeyRequests extends React.Component {
+export default class PublicKeyRequest extends React.Component {
     constructor(props) {
         super(props)
         this.state = {

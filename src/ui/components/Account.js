@@ -26,7 +26,7 @@ export default function Account(props) {
     const [usd, setUSD] = useState(0)
     const [ticker, setTicker] = useState('')
 
-    const [isLocked, setLocked] = useState(disk.lock.checkLock())
+    // const [isLocked, setLocked] = useState(disk.lock.checkLock())
 
     const [net, setNet] = useState(String(ENQWeb.Net.currentProvider))
 
@@ -90,7 +90,7 @@ export default function Account(props) {
                 key={key} onClick={() => {
                     if (item.type === 'enable') selectPublicKeyRequest(item, activity[key])
                     else selectTransactionRequest(item, activity[key])
-                }} className={`${styles.field} ${styles.button}`}
+                }} className={`${styles.activity}`}
             >
                 {names[item.type]}
             </div>,
@@ -182,43 +182,9 @@ export default function Account(props) {
                         <img className={styles.icon} src="./icons/2.png" />
                         <div>
                             <div>
-                                {amount.toFixed(4)}
+                                0.00
                                 {' '}
-                                {ticker}
-                            </div>
-                            <div className={styles.usd}>
-                                $
-                                {usd}
-                                {' '}
-                                USD
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={styles.asset}>
-                        <img className={styles.icon} src="./icons/3.png" />
-                        <div>
-                            <div>
-                                {amount.toFixed(4)}
-                                {' '}
-                                {ticker}
-                            </div>
-                            <div className={styles.usd}>
-                                $
-                                {usd}
-                                {' '}
-                                USD
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={styles.asset}>
-                        <img className={styles.icon} src="./icons/4.png" />
-                        <div>
-                            <div>
-                                {amount.toFixed(4)}
-                                {' '}
-                                {ticker}
+                                USDT
                             </div>
                             <div className={styles.usd}>
                                 $
@@ -231,14 +197,14 @@ export default function Account(props) {
 
                     <div
                       onClick={() => {}}
-                      className={`${styles.field} ${styles.button} ${styles.button_blue}`}
+                      className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}
                     >
                         Add token
                     </div>
 
                 </div>
 
-                <div className={styles.bottom_list + (activeTab === 1 ? '' : ` ${styles.bottom_list_disabled}`)}>
+                <div className={`${styles.bottom_list} ${activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
 
                     {activityElements}
 
