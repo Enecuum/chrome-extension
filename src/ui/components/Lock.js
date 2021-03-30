@@ -33,6 +33,16 @@ export default class Lock extends React.Component {
         return (
             <div className={styles.main}>
 
+                <div className={styles.content}>
+                    <img className={styles.login_logo} src="./images/logo_white.png" />
+
+                    <div className={styles.welcome1}>Welcome</div>
+                    <div className={styles.welcome1}>to Enecuum</div>
+
+                    <div className={styles.welcome2}>Connecting you to network and the</div>
+                    <div className={styles.welcome2}>Decentralized Web.</div>
+                </div>
+
                 <div className={styles.form}>
 
                     <input type="text"
@@ -44,7 +54,7 @@ export default class Lock extends React.Component {
                     />
 
                     <div onClick={this.submit}
-                         className={styles.field + ' ' + styles.button}>Unlock
+                         className={`${styles.field} ${styles.button} ${styles.button_blue}`}>Unlock
                     </div>
 
                 </div>

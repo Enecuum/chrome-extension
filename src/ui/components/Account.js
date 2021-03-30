@@ -50,9 +50,9 @@ export default function Account(props) {
         navigator.clipboard.writeText(props.user.publicKey)
     }
 
-    const unlock = () => {
-        setLocked(false)
-    }
+    // const unlock = () => {
+    //     setLocked(false)
+    // }
 
     const balance = () => {
         // console.log(this.props)
@@ -103,7 +103,7 @@ export default function Account(props) {
     }
 
     const renderMenu = () => {
-        if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} />
+        if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} setLocked={props.setLocked} />
     }
 
     return (
@@ -162,7 +162,7 @@ export default function Account(props) {
                         onClick={() => setActiveTab(1)}
                         className={(activeTab === 1 ? ` ${styles.bottom_tab_active}` : '')}
                     >
-                        Activity<sup>{activity.length}</sup>
+                        Activity <sup>{activity.length}</sup>
                     </div>
                 </div>
 

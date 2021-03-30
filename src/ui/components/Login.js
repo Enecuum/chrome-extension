@@ -53,7 +53,7 @@ export default class Login extends React.Component {
             <div className={styles.main}>
 
                 <div className={styles.content}>
-                    <img className={styles.login_logo} src="./images/128.png" />
+                    <img className={styles.login_logo} src="./images/logo_white.png" />
 
                     <div className={styles.welcome1}>Welcome</div>
                     <div className={styles.welcome1}>to Enecuum</div>

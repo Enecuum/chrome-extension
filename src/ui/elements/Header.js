@@ -3,8 +3,7 @@ import styles from "../css/elements.module.css";
 
 export default function Header(props) {
 
-    let net = 'BIT'
-    let network = {}
+    let net = ENQWeb.Net.currentProvider
 
     return (
         <div className={styles.header}>
