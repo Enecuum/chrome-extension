@@ -32,7 +32,7 @@ body {
     --font-size-giant: 40px;
 
     min-width: 350px;
-    height: 600px;
+    height: 630px;
 }
 
 main {
@@ -435,9 +435,28 @@ input.field::placeholder {
 }
 
 .activity {
-    background: red;
+    display: flex;
+    flex-direction: row;
+    height: 70px;
+
+    background: rgba(0, 0 ,0, 0.1);
 }
 
 .activity div {
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 10px;
+}
 
+.asset > div > div:last-child {
+    padding-bottom: 10px;
+    /*background: red;*/
+}
+
+.asset img {
+    width: 20px;
+    height: 20px;
+    margin: 20px;
 }

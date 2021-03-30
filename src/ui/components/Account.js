@@ -85,6 +85,7 @@ export default function Account(props) {
 
     for (const key in activity) {
         const item = activity[key]
+        console.log(item)
         activityElements.push(
             <div
                 key={key} onClick={() => {
@@ -92,13 +93,17 @@ export default function Account(props) {
                     else selectTransactionRequest(item, activity[key])
                 }} className={`${styles.activity}`}
             >
-                {names[item.type]}
+                <img className={styles.content_logo} src="./images/48.png" alt="" />
+                <div>
+                    <div>{item.type}</div>
+                    <div>{names[item.type]}</div>
+                </div>
             </div>,
         )
     }
 
     const renderMenu = () => {
-        if (menu) return <Menu logout={props.logout} />
+        if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} />
     }
 
     return (
@@ -108,7 +113,7 @@ export default function Account(props) {
 
             {renderMenu()}
 
-            <Address />
+            <Address publickKey={props.user.publicKey} />
 
             <div className={styles.content}>
 
@@ -142,6 +147,8 @@ export default function Account(props) {
 
             </div>
 
+            {/*TABS*/}
+
             <div className={styles.bottom}>
 
                 <div className={styles.bottom_tabs}>
@@ -155,7 +162,7 @@ export default function Account(props) {
                         onClick={() => setActiveTab(1)}
                         className={(activeTab === 1 ? ` ${styles.bottom_tab_active}` : '')}
                     >
-                        Activity
+                        Activity<sup>{activity.length}</sup>
                     </div>
                 </div>
 
