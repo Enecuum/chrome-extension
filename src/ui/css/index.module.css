@@ -195,6 +195,10 @@ a {
     border: 1px solid var(--color-blue-ligth);
 }
 
+.button_add_token {
+    margin-bottom: 20px;
+}
+
 .button.button_icon {
     text-align: left;
     display: flex;
@@ -416,10 +420,11 @@ input.field::placeholder {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding-top: 10px;
 }
 
-.asset > div > div {
-    padding: 5px;
+.asset > div > div:last-child {
+    padding-bottom: 10px;
     /*background: red;*/
 }
 
@@ -427,4 +432,12 @@ input.field::placeholder {
     width: 20px;
     height: 20px;
     margin: 20px;
+}
+
+.activity {
+    background: red;
+}
+
+.activity div {
+
 }

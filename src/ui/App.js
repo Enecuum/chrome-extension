@@ -9,17 +9,18 @@ import Receive from './components/Receive'
 import Account from './components/Account'
 
 
-import PublicKeyRequests from './components/requests/PublicKeyRequest'
+import PublicKeyRequest from './components/requests/PublicKeyRequest'
 import TransactionRequest from './components/requests/TransactionRequest'
 
 export default function App(props) {
-    const [isTransaction, setTransaction] = useState(false)
-    const [isRequests, setRequests] = useState(false)
     const [isPassword, setPassword] = useState(false)
     const [isNetwork, setNetwork] = useState(false)
     const [isReceive, setReceive] = useState(false)
+    const [isTransaction, setTransaction] = useState(false)
 
-    const { background } = props.background
+    const [isPublicKeyRequest, setPublicKeyRequest] = useState({})
+    const [isTransactionRequest, setTransactionRequest] = useState({})
+
     let user = global.disk.user.loadUser()
 
     const [isLogin, setLogin] = useState(!!user.privateKey)
@@ -82,5 +83,11 @@ export default function App(props) {
         return <Receive setReceive={setReceive} user={user} />
     }
 
-    return <Account user={user} logout={logout} />
+    if (isPublicKeyRequest)
+        return <PublicKeyRequest />
+
+    if (isTransactionRequest)
+        return <TransactionRequest />
+
+    return <Account user={user} logout={logout} setPassword={setPassword} setNetwork={setNetwork} setReceive={setReceive} setTransaction={setTransaction} setPublicKeyRequest={setPublicKeyRequest} setTransactionRequest={setTransactionRequest} />
 }
