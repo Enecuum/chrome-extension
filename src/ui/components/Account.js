@@ -93,7 +93,7 @@ export default function Account(props) {
                     else selectTransactionRequest(item, activity[key])
                 }} className={`${styles.activity}`}
             >
-                <img className={styles.content_logo} src="./images/48.png" alt="" />
+                <img className={styles.content_logo} src="./icons/12.png" alt="" />
                 <div>
                     <div>{item.type}</div>
                     <div>{names[item.type]}</div>
