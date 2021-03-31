@@ -14,7 +14,7 @@ let requests = {
 function setupConnection() {
     console.log('content ready')
     // chrome.runtime.sendMessage({greeting: "Content ready"}, function(response) {});
-    toBackground = extensionApi.runtime.connect({name: 'content'})
+    toBackground = extensionApi.runtime.connect({name: window.origin})
     toBackground.onMessage.addListener((msg, sender, sendResponse) => {
         let cb = taskId[msg.taskId]
         if (cb) {
