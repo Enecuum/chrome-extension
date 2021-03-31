@@ -102,6 +102,50 @@ export default function Account(props) {
         )
     }
 
+    const assets = [{
+        amount: amount,
+        ticker: ticker,
+        usd: usd
+    }]
+    const assetsElements = []
+
+    let renderAssets = () => {
+        for (const key in assets) {
+            const item = assets[key]
+            assetsElements.push(
+                <div key={key} className={styles.asset}>
+                    <img className={styles.icon} src="./icons/1.png" />
+                    <div>
+                        <div>
+                            {item.amount.toFixed(4)}
+                            {' '}
+                            {item.ticker}
+                        </div>
+                        <div className={styles.usd}>
+                            $
+                            {item.usd}
+                            {' '}
+                            USD
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+
+        return assetsElements
+    }
+
+    renderAssets()
+
+    let addAsset = () => {
+        assets.push({
+            amount: 0,
+            ticker: 'USDT',
+            usd: '0.00'
+        })
+        renderAssets()
+    }
+
     const renderMenu = () => {
         if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} setLocked={props.setLocked} />
     }
@@ -168,42 +212,10 @@ export default function Account(props) {
 
                 <div className={styles.bottom_list + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
-                    <div className={styles.asset}>
-                        <img className={styles.icon} src="./icons/1.png" />
-                        <div>
-                            <div>
-                                {amount.toFixed(4)}
-                                {' '}
-                                {ticker}
-                            </div>
-                            <div className={styles.usd}>
-                                $
-                                {usd}
-                                {' '}
-                                USD
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={styles.asset}>
-                        <img className={styles.icon} src="./icons/2.png" />
-                        <div>
-                            <div>
-                                0.00
-                                {' '}
-                                USDT
-                            </div>
-                            <div className={styles.usd}>
-                                $
-                                {usd}
-                                {' '}
-                                USD
-                            </div>
-                        </div>
-                    </div>
+                    {assetsElements}
 
                     <div
-                      onClick={() => {}}
+                      onClick={() => {addAsset}}
                       className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}
                     >
                         Add token
