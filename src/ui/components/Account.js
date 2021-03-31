@@ -108,7 +108,6 @@ export default function Account(props) {
         usd: usd
     }]
     const assetsElements = []
-
     let renderAssets = () => {
         for (const key in assets) {
             const item = assets[key]
@@ -134,7 +133,6 @@ export default function Account(props) {
 
         return assetsElements
     }
-
     renderAssets()
 
     let addAsset = () => {
@@ -215,7 +213,7 @@ export default function Account(props) {
                     {assetsElements}
 
                     <div
-                      onClick={() => {addAsset}}
+                      onClick={addAsset}
                       className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}
                     >
                         Add token

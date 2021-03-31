@@ -34,11 +34,18 @@ async function msgConnectHandler(msg, sender) {
             rejectTaskHandler(msg.taskId)
         } else {
             // console.log('auth ok',{acc,lock})
-            Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
-            if (!requests[msg.type]) {
-                taskHandler(msg.taskId)
-            } else {
-                taskCounter()
+            if (!ports[msg.cb.url].enabled){
+                if(msg.type === 'enable'){
+                    Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
+                    taskCounter()
+                }
+            }else{
+                Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
+                if (!requests[msg.type]){
+                    taskHandler(msg.taskId)
+                } else {
+                    taskCounter()
+                }
             }
         }
     } else {
