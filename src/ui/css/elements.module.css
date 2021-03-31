@@ -95,6 +95,17 @@
     /*background: rgba(100, 100, 100, 0.5);*/
 }
 
+.address_row .connect {
+    cursor: pointer;
+}
+
+.address_row .connect:hover {
+    color: var(--color-blue)
+}
+
+
+
+
 .menu {
     position: absolute;
     top: 80px;
@@ -102,6 +113,8 @@
     left: 40px;
     background: var(--color-blue-dark);
     padding-bottom: 20px;
+
+    z-index: 2;
 }
 
 .menu > div {
@@ -112,6 +125,8 @@
     font-size: var(--font-size-big);
     border-bottom: 1px solid var(--color-blue);
     padding-bottom: 10px;
+
+    letter-spacing: 1px;
 }
 
 .menu .separator {

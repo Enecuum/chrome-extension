@@ -6,7 +6,7 @@ export default function Address(props) {
     return (
         <div className={elements.address_row}>
 
-            <div>· Not connected</div>
+            <div className={elements.connect}>· Not connected</div>
 
             <div>
                 <div className={elements.account_name}>Account 1</div>

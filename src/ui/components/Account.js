@@ -83,6 +83,8 @@ export default function Account(props) {
     const activity = disk.list.listOfTask()
     const activityElements = []
 
+    let date = 'Aug 20, 2020 - '
+
     for (const key in activity) {
         const item = activity[key]
         console.log(item)
@@ -95,8 +97,8 @@ export default function Account(props) {
             >
                 <img className={styles.content_logo} src="./icons/12.png" alt="" />
                 <div>
-                    <div>{item.type}</div>
                     <div>{names[item.type]}</div>
+                    <div className={styles.time}>{date + item.cb.url}</div>
                 </div>
             </div>,
         )
@@ -133,7 +135,7 @@ export default function Account(props) {
 
         return assetsElements
     }
-    renderAssets()
+
 
     let addAsset = () => {
         assets.push({
@@ -143,6 +145,9 @@ export default function Account(props) {
         })
         renderAssets()
     }
+
+    addAsset()
+    // renderAssets()
 
     const renderMenu = () => {
         if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} setLocked={props.setLocked} />
