@@ -46,22 +46,32 @@ export default class TransactionRequest extends React.Component {
                     <div className={styles.field}>Nonce: {this.state.nonce}</div>
                     <div className={styles.field}>Data: {this.state.data}</div>
 
-                    {/*<div className={styles.field}>Net: {this.state.net}</div>*/}
-
-                    <div onClick={() => this.confirm()}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.green}>Confirm
-                    </div>
-
-                    <div onClick={() => this.reject()}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.red}>Reject
-                    </div>
-
                 </div>
 
                 <div className={styles.form}>
-                    <div onClick={() => this.props.setTransactionRequest(false)}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
+
+                    {/*<div onClick={this.allow}*/}
+                    {/*     className={styles.field}>{this.state.website}*/}
+                    {/*</div>*/}
+
+                    <div onClick={this.reject}
+                         className={styles.field + ' ' + styles.button}>Reject
                     </div>
+
+                    <div className={styles.buttons_field}>
+
+                        <div onClick={() => this.props.setTransactionRequest(false)}
+                             className={styles.field + ' ' + styles.button}>Back
+                        </div>
+
+                        <div onClick={this.confirm}
+                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Confirm
+                        </div>
+
+                    </div>
+
+
+
                 </div>
             </div>
         )

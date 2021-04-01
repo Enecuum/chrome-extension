@@ -74,6 +74,10 @@ a {
     flex-direction: column;
 }
 
+.data {
+    overflow: hidden;
+}
+
 .text_small {
     font-size: var(--font-size-small);
 }
@@ -190,7 +194,7 @@ a {
     justify-content: center;
 
     /*background: red;*/
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
 }
 
 .buttons_field div {
@@ -320,7 +324,6 @@ input.field::placeholder {
 .form {
     /*border-top: 1px solid var(--color-blue-ligth);*/
     /*box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.2);*/
-    padding-bottom: 20px;
 
     position: absolute;
     bottom: 0;
@@ -343,12 +346,10 @@ input.field::placeholder {
 }
 
 .usd {
-    padding-top: 5px;
     color: var(--color-gray-ligth)
 }
 
 .time {
-    padding-top: 20px;
     color: var(--color-gray-ligth);
     white-space: normal !important;
 
