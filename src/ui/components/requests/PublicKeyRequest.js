@@ -44,17 +44,23 @@ export default class PublicKeyRequest extends React.Component {
 
                 <div className={styles.content}>
 
-                    <div onClick={() => this.props.setPublicKeyRequest(false)}>Back</div>
+                    <div className={styles.request_header} onClick={() => this.props.setPublicKeyRequest(false)}>❮ Back</div>
 
-                    <img src="./images/logo_white.png" />
+                    <img className={styles.request_logo} src="./images/enq.png" />
 
-                    <div className={styles.field}>{this.state.url}</div>
+                    <div className={styles.field + ' ' + styles.request_text_gray}>{this.state.url}</div>
 
-                    <div className={styles.welcome2}>This website is requesting access to your account address</div>
-                    <div className={styles.welcome2}>Allow this site to:</div>
+                    <div className={styles.request_text1}>This website is requesting access to your account address</div>
+                    <div className={styles.field + ' ' + styles.request_text_gray}>Allow this site to:</div>
 
-                    <div className={styles.welcome2}>View the address of your permitted accounts (required)</div>
-                    <div className={styles.welcome2}>View selected network</div>
+                    <div className={styles.request_text2}>
+                        <img src={'./icons/10.png'} />
+                        <div>View the address of your permitted accounts (required)</div>
+                    </div>
+                    <div className={styles.request_text2}>
+                        <img src={'./icons/10.png'} />
+                        <div>View selected network</div>
+                    </div>
 
                 </div>
 
@@ -70,12 +76,12 @@ export default class PublicKeyRequest extends React.Component {
 
                     <div className={styles.buttons_field}>
 
-                        <div onClick={this.disallow}
-                             className={styles.field + ' ' + styles.button}>Disallow
-                        </div>
-
                         <div onClick={() => this.props.setPublicKeyRequest(false)}
                              className={styles.field + ' ' + styles.button}>Back
+                        </div>
+
+                        <div onClick={this.disallow}
+                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Disallow
                         </div>
 
                     </div>
