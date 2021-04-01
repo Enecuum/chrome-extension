@@ -44,10 +44,18 @@ export default class PublicKeyRequest extends React.Component {
 
                 <div className={styles.content}>
 
-                    <div className={styles.field + ' ' + styles.text}>This website is requesting access to your account
-                        address
-                    </div>
+                    <div onClick={() => this.props.setPublicKeyRequest(false)}>Back</div>
+
+                    <img src="./images/logo_white.png" />
+
                     <div className={styles.field}>{this.state.url}</div>
+
+                    <div className={styles.welcome2}>This website is requesting access to your account address</div>
+                    <div className={styles.welcome2}>Allow this site to:</div>
+
+                    <div className={styles.welcome2}>View the address of your permitted accounts (required)</div>
+                    <div className={styles.welcome2}>View selected network</div>
+
                 </div>
 
                 <div className={styles.form}>
@@ -57,16 +65,22 @@ export default class PublicKeyRequest extends React.Component {
                     {/*</div>*/}
 
                     <div onClick={this.allow}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.green}>Allow
+                         className={styles.field + ' ' + styles.button}>Allow
                     </div>
 
-                    <div onClick={this.disallow}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.red}>Disallow
+                    <div className={styles.buttons_field}>
+
+                        <div onClick={this.disallow}
+                             className={styles.field + ' ' + styles.button}>Disallow
+                        </div>
+
+                        <div onClick={() => this.props.setPublicKeyRequest(false)}
+                             className={styles.field + ' ' + styles.button}>Back
+                        </div>
+
                     </div>
 
-                    <div onClick={() => this.props.setPublicKeyRequest(false)}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
-                    </div>
+
 
                 </div>
 

@@ -20,7 +20,7 @@ export default class TransactionSend extends React.Component {
 
                 <div className={styles.form}>
                     <div className={styles.field}><a href={this.state.url} target="_blank">{this.props.txHash}</a></div>
-                    <div className={styles.field + ' ' + styles.copy + ' ' + styles.content}
+                    <div className={styles.field}
                          onClick={() => this.copyHash()}>COPY
                     </div>
 

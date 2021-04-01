@@ -182,7 +182,11 @@ a {
 }
 
 
-
+.buttons_field {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
 
 .button {
     cursor: pointer;
@@ -203,6 +207,10 @@ a {
 .button.button_blue {
     background: var(--color-blue-ligth);
     border: 1px solid var(--color-blue-ligth);
+}
+
+.button.small {
+    width: 50%;
 }
 
 .button.button_icon {
