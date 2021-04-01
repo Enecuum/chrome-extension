@@ -78,8 +78,6 @@ export default function Account(props) {
         })
     }
 
-    balance()
-
     const activity = disk.list.listOfTask()
     const activityElements = []
 
@@ -91,8 +89,8 @@ export default function Account(props) {
         activityElements.push(
             <div
                 key={key} onClick={() => {
-                    if (item.type === 'enable') selectPublicKeyRequest(item, activity[key])
-                    else selectTransactionRequest(item, activity[key])
+                    if (item.type === 'enable') props.setPublicKeyRequest(item)
+                    else props.setTransactionRequest(item)
                 }} className={`${styles.activity}`}
             >
                 <img className={styles.content_logo} src="./icons/12.png" alt="" />
@@ -153,6 +151,8 @@ export default function Account(props) {
         if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} setLocked={props.setLocked} />
     }
 
+    balance()
+
     return (
         <div className={styles.main}>
 
@@ -181,12 +181,12 @@ export default function Account(props) {
 
             <div className={styles.center}>
 
-                <div className={styles.circle_button} onClick={() => copyPublicKey()}>
+                <div className={styles.circle_button} onClick={copyPublicKey}>
                     <div className={styles.icon_container}><img className={styles.icon} src="./icons/8.png" /></div>
                     <div>Copy</div>
                 </div>
 
-                <div className={styles.circle_button} onClick={() => setTransaction(true)}>
+                <div className={styles.circle_button} onClick={() => props.setTransaction(true)}>
                     <div className={styles.icon_container}><img className={styles.icon} src="./icons/12.png" /></div>
                     <div>Send</div>
                     <div>Transaction</div>
