@@ -59,7 +59,7 @@ export default class TransactionRequest extends React.Component {
                 </div>
 
                 <div className={styles.form}>
-                    <div onClick={() => this.props.back()}
+                    <div onClick={() => this.props.setTransactionRequest(false)}
                          className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
                     </div>
                 </div>
