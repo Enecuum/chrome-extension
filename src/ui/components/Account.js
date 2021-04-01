@@ -89,10 +89,10 @@ export default function Account(props) {
                     else props.setTransactionRequest(item)
                 }} className={`${styles.activity}`}
             >
-                <img className={styles.content_logo} src="./icons/12.png" alt="" />
+                <img className={styles.icon} src="./icons/12.png" alt="" />
                 <div>
                     <div>{names[item.type]}</div>
-                    <div className={styles.time}>{date + item.cb.url}</div>
+                    <div className={styles.time}>{date + item.cb.url.substring(0, 10)}</div>
                 </div>
             </div>,
         )
