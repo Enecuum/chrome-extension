@@ -87,9 +87,10 @@ export default function App(props) {
         return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} />
 
     if (isTransactionRequest)
-        return <TransactionRequest setTransactionRequest={setTransactionRequest} />
+        return <TransactionRequest setTransactionRequest={setTransactionRequest} request={disk.list.listOfTask()[0]} />
 
-    return <Account user={user} logout={logout}
+    return <Account user={user}
+                    logout={logout}
                     setLocked={setLocked}
                     setPassword={setPassword}
                     setNetwork={setNetwork}

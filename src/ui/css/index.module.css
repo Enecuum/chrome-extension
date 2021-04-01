@@ -349,7 +349,9 @@ input.field::placeholder {
 
 .time {
     padding-top: 20px;
-    color: var(--color-gray-ligth)
+    color: var(--color-gray-ligth);
+    white-space: normal !important;
+
 }
 
 /*.disabled {*/
