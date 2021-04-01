@@ -18,7 +18,7 @@ export default function App(props) {
     const [isReceive, setReceive] = useState(false)
     const [isTransaction, setTransaction] = useState(false)
 
-    const [isPublicKeyRequest, setPublicKeyRequest] = useState(true)
+    const [isPublicKeyRequest, setPublicKeyRequest] = useState(false)
     const [isTransactionRequest, setTransactionRequest] = useState(false)
 
     let user = global.disk.user.loadUser()
