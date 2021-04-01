@@ -23,11 +23,11 @@ export default class Login extends React.Component {
     }
 
     handleChangePrivateKey(e) {
-        this.setState({ privateKey: e.target.value })
+        this.setState({privateKey: e.target.value})
     }
 
     setNetwork(value) {
-        this.setState({ isNetwork: value })
+        this.setState({isNetwork: value})
     }
 
     async submit() {
@@ -41,19 +41,19 @@ export default class Login extends React.Component {
 
     generate() {
         const privateKey = ENQWeb.Utils.generateKey.getByNumber(1)[0].prvkey
-        this.setState({ privateKey: privateKey })
+        this.setState({privateKey: privateKey})
     }
 
     render() {
         if (this.state.isNetwork) {
-            return <Network setNetwork={this.setNetwork} />
+            return <Network setNetwork={this.setNetwork}/>
         }
 
         return (
             <div className={styles.main}>
 
                 <div className={styles.content}>
-                    <img className={styles.login_logo} src="./images/logo_white.png" />
+                    <img className={styles.login_logo} src="./images/logo_white.png"/>
 
                     <div className={styles.welcome1}>Welcome</div>
                     <div className={styles.welcome1}>to Enecuum</div>
@@ -65,26 +65,26 @@ export default class Login extends React.Component {
                 <div className={styles.form}>
 
                     <input
-                      type="text"
-                      spellCheck={false}
-                      onChange={this.handleChangePrivateKey}
-                      value={this.state.privateKey}
-                      className={styles.field}
-                      placeholder="Private Key"
+                        type="text"
+                        spellCheck={false}
+                        onChange={this.handleChangePrivateKey}
+                        value={this.state.privateKey}
+                        className={styles.field}
+                        placeholder="Private Key"
                     />
 
                     <div
-                      onClick={this.submit}
-                      className={`${styles.field} ${styles.button}`}
+                        onClick={this.submit}
+                        className={`${styles.field} ${styles.button}`}
                     >
-Login
+                        Login
                     </div>
 
                     <div
-                      onClick={this.generate}
-                      className={`${styles.field} ${styles.button} ${styles.button_blue}`}
+                        onClick={this.generate}
+                        className={`${styles.field} ${styles.button} ${styles.button_blue}`}
                     >
-Generate
+                        Generate
                     </div>
 
                     {/* <div onClick={() => this.setNetwork(true)} */}
