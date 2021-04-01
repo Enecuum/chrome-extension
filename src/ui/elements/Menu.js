@@ -5,7 +5,7 @@ export default function Menu(props) {
     const [amount, setAmount] = useState(0)
 
     const expand = () => chrome.tabs.create({ url: 'popup.html' })
-    const window = () => chrome.windows.create({ url: 'popup.html', width: 350 })
+    const window = () => chrome.windows.create({ url: 'popup.html', width: 350, height: 600, type: "popup" })
 
     const explorer = () => chrome.tabs.create({ url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + props.publickKey})
 
