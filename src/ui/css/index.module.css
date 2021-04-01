@@ -17,6 +17,7 @@ body {
     --color-blue-dark: rgb(50, 60, 105); /*Menu*/
     --color-blue: rgb(60, 130, 240); /*Text*/
     --color-blue-ligth: rgba(10, 103, 255, .5); /*Button*/
+    --color-blue-button: rgba(56, 70, 115, 1); /*Button*/
 
     /*--color-blue-super-ligth: rgba(10, 103, 255, .2);*/
 
@@ -27,7 +28,7 @@ body {
     --color-green-ligth: rgba(50, 255, 10, .5);
     --color-green-super-ligth: rgba(50, 255, 10, .2);
 
-    --color-gray-ligth: rgba(255, 255, 255, .1);
+    --color-gray-ligth: rgba(233, 233, 233, 0.1);
 
     --font-size-small: 12px;
     --font-size-normal: 16px;
@@ -173,7 +174,7 @@ a {
 .field {
     /*width: 280px;*/
     padding: 10px;
-    margin: 10px 10px 0;
+    margin: 20px 20px 0;
     /*border-radius: 3px;*/
 
     /*overflow: hidden;*/
@@ -183,10 +184,32 @@ a {
 
 
 .buttons_field {
+    width: 100%;
     display: flex;
     flex-direction: row;
-    width: 100%;
+    justify-content: center;
+
+    /*background: red;*/
+    padding-bottom: 10px;
 }
+
+.buttons_field div {
+    width: 50%;
+}
+
+.buttons_field div:first-child {
+    margin-right: 10px !important;
+}
+
+.buttons_field div:last-child {
+    margin-left: 10px !important;
+}
+
+
+
+
+
+
 
 .button {
     cursor: pointer;
@@ -199,14 +222,14 @@ a {
     border-radius: 3px;
     user-select: none;
 
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    /*background: var(--color-blue-super-ligth);*/
+    border: 1px solid var(--color-blue-button);
+    background: var(--color-blue-button);
     /*box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);*/
 }
 
 .button.button_blue {
-    background: var(--color-blue-ligth);
-    border: 1px solid var(--color-blue-ligth);
+    background: var(--color-blue);
+    border: 1px solid var(--color-blue);
 }
 
 .button.small {
@@ -248,13 +271,19 @@ a {
 .button:hover {
     background: var(--color-blue);
     color: ghostwhite;
-    /*border: 1px solid var(--color-blue);*/
+    border: 1px solid var(--color-blue);
 }
 
 .button.red:hover {
     background: var(--color-red);
     color: ghostwhite;
 }
+
+
+
+
+
+
 
 /*INPUT*/
 
@@ -319,7 +348,7 @@ input.field::placeholder {
 }
 
 .time {
-    padding-top: 5px;
+    padding-top: 20px;
     color: var(--color-gray-ligth)
 }
 
@@ -377,7 +406,7 @@ input.field::placeholder {
 
     /*background: red;*/
 
-    /*background: rgba(255, 255, 255, 0.2);*/
+    /*background: var(--color-blue);*/
 
 
     /*background: darkgoldenrod;*/
@@ -480,7 +509,7 @@ input.field::placeholder {
 }
 
 .button_add_token {
-    width: calc(100% - 40px);
+    width: calc(100% - 50px);
     position: absolute;
     bottom: 20px;
     left: 10px;
@@ -520,4 +549,58 @@ input.field::placeholder {
 .activity > div > div:last-child {
     padding-bottom: 10px;
     /*background: red;*/
+}
+
+.request_header {
+    width: 100%;
+    /*height: 70px;*/
+    /*line-height: 70px;*/
+    text-align: left;
+    padding-top: 20px;
+    padding-bottom: 10px;
+
+    margin-left: 50px;
+
+    /*background: red;*/
+}
+
+.request_logo {
+    width: 60px;
+    height: 60px;
+    /*margin: 20px;*/
+
+    padding: 10px;
+    background: white;
+    border-radius: 50%;
+}
+
+.request_text1 {
+    padding-top: 10px;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: var(--font-size-big);
+}
+
+.request_text_gray {
+    color: var(--color-gray-ligth)
+}
+
+.request_text2 {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding-top: 20px;
+    text-align: left;
+    align-items: start;
+}
+
+.request_text2 > div {
+    margin-left: 20px;
+}
+
+.request_text2 img {
+    width: 20px;
+    height: 20px;
+
+    margin-left: 20px;
 }
