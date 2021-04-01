@@ -18,7 +18,7 @@ export default function App(props) {
     const [isReceive, setReceive] = useState(false)
     const [isTransaction, setTransaction] = useState(false)
 
-    const [isPublicKeyRequest, setPublicKeyRequest] = useState(false)
+    const [isPublicKeyRequest, setPublicKeyRequest] = useState(true)
     const [isTransactionRequest, setTransactionRequest] = useState(false)
 
     let user = global.disk.user.loadUser()
@@ -89,5 +89,12 @@ export default function App(props) {
     if (isTransactionRequest)
         return <TransactionRequest setTransactionRequest={setTransactionRequest} />
 
-    return <Account user={user} logout={logout} setLocked={setLocked} setPassword={setPassword} setNetwork={setNetwork} setReceive={setReceive} setTransaction={setTransaction} setPublicKeyRequest={setPublicKeyRequest} setTransactionRequest={setTransactionRequest} />
+    return <Account user={user} logout={logout}
+                    setLocked={setLocked}
+                    setPassword={setPassword}
+                    setNetwork={setNetwork}
+                    setReceive={setReceive}
+                    setTransaction={setTransaction}
+                    setPublicKeyRequest={setPublicKeyRequest}
+                    setTransactionRequest={setTransactionRequest} />
 }
