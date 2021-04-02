@@ -40,7 +40,13 @@ export default function Account(props) {
     //     })
     // }
 
-    // useEffect(() => {},[]);
+    const getConnects = async () => {
+        let a = await asyncRequest({connectionList: true})
+        console.log(a)
+    }
+
+    getConnects()
+
 
     const copyPublicKey = () => {
         navigator.clipboard.writeText(props.user.publicKey)

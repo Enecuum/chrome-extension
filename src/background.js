@@ -75,7 +75,9 @@ async function msgPopupHandler(msg, sender) {
         }
     } else if (msg.lock) {
         lockAccount()
-    } else {
+    } else if(msg.connectionList){
+        ports.popup.postMessage({asyncAnswer: true, data: msg, ports:ports})
+    }else {
         if (msg.allow && msg.taskId) {
             await taskHandler(msg.taskId)
             taskCounter()
