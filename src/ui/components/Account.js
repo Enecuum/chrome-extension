@@ -42,7 +42,7 @@ export default function Account(props) {
 
     const getConnects = async () => {
         let a = await asyncRequest({connectionList: true})
-        console.log(a)
+        console.log(a.ports)
     }
 
     getConnects()
@@ -146,8 +146,8 @@ export default function Account(props) {
         renderAssets()
     }
 
-    addAsset()
-    // renderAssets()
+    // addAsset()
+    renderAssets()
 
     const renderMenu = () => {
         if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} setLocked={props.setLocked} setPassword={props.setPassword} />

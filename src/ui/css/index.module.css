@@ -142,7 +142,6 @@ a {
 .welcome1 {
     width: 100%;
     padding-left: 20px;
-    line-height: 1;
     text-align: left;
     font-size: var(--font-size-giant);
     font-weight: 800;
@@ -384,6 +383,11 @@ input.field::placeholder {
     margin-left: 20px;
     margin-right: 20px;
     cursor: pointer;
+}
+
+.circle_button > div {
+    /*background: red;*/
+    line-height: 16px;
 }
 
 .center {
