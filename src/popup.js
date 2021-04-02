@@ -7,6 +7,7 @@ global.disk = storage
 let toBackground = {};
 let taskId = []
 let awaitId = []
+let dataId = []
 let time = 200
 
 async function setupUi() {
@@ -52,6 +53,7 @@ function awaitAsync(data) {
 function asyncRequest(data) {
     data.async = true
     awaitId[data] = false
+    let answer = '';
     return new Promise(async (resolve, reject) => {
         toBackground.postMessage(data)
         toBackground.onMessage.addListener(asyncMessenger)
@@ -59,8 +61,10 @@ function asyncRequest(data) {
             .then(() => {
                 console.log('await work')
                 delete awaitId[data]
+                answer = dataId[data]
+                delete dataId[data]
                 toBackground.onMessage.removeListener(asyncMessenger)
-                resolve()
+                resolve(answer)
             })
     })
 }
@@ -69,5 +73,6 @@ async function asyncMessenger(msg, sender, sendResponse) {
     if (msg.asyncAnswer && msg.data) {
         console.log('await Messanger worked')
         awaitId[msg.data] = true
+        dataId[msg.data] = msg
     }
 }
