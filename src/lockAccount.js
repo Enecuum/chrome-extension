@@ -1,8 +1,7 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function (){
     console.log('lock loaded. status: ', disk.lock.checkLock())
-    global.lockAccount = lockAccount()
-    $('window').on('unload', function () {
-        if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
+    $('window').on('unload',function (){
+        if(!disk.lock.checkLock() && disk.lock.getHashPassword()){
             lockAccount()
         }
     })
@@ -18,7 +17,11 @@ function lockAccount() {
         disk.user.changeUser(account)
         console.log('account locked')
     } else {
-        if (!disk.lock.getHashPassword())
+        if(!disk.lock.getHashPassword())
             console.log('password not set')
     }
+}
+
+global.lockAccount = function (){
+    return lockAccount()
 }

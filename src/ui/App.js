@@ -40,7 +40,7 @@ export default function App(props) {
     }
 
 
-    if (!isLogin) return <Login login={login} />
+    if (!isLogin && !isLocked) return <Login login={login} />
 
     const unlock = () => {
         setLocked(false)
