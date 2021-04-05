@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function (){
     console.log('lock loaded. status: ', disk.lock.checkLock())
-    $('window').on('unload',function (){
+    window.onunload = function (){
         if(!disk.lock.checkLock() && disk.lock.getHashPassword()){
             lockAccount()
         }
-    })
+    }
 })
 
 function lockAccount() {
