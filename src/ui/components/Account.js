@@ -49,7 +49,6 @@ export default function Account(props) {
         console.log(a.ports)
     }
 
-    getConnects()
 
 
     const copyPublicKey = () => {
@@ -164,7 +163,10 @@ export default function Account(props) {
         if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} setLocked={props.setLocked} setPassword={props.setPassword} />
     }
 
-    balance()
+    useEffect(() => {
+        balance()
+        getConnects()
+    },[]);
 
     return (
         <div className={styles.main}>
