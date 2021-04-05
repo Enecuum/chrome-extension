@@ -1,9 +1,12 @@
 document.addEventListener('DOMContentLoaded', function (){
     console.log('lock loaded. status: ', disk.lock.checkLock())
-    window.onunload = function (){
+    window.onbeforeunload = function (){
         if(!disk.lock.checkLock() && disk.lock.getHashPassword()){
             lockAccount()
         }
+    }
+    window.onunload = function (){
+        window.location.reload(false)
     }
 })
 
