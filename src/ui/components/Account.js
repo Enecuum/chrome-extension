@@ -12,7 +12,11 @@ import Menu from '../elements/Menu'
 
 const names = {
     enable: 'Share account address',
-    tx: 'Sign transaction',
+    tx: 'Send transaction',
+}
+
+const shortAddress = (address) => {
+    return address.substring(0, 5) + '...' + address.substring(address.length - 3, address.length - 1)
 }
 
 export default function Account(props) {
@@ -83,7 +87,8 @@ export default function Account(props) {
     const activity = disk.list.listOfTask()
     const activityElements = []
 
-    let date = 'Aug 20, 2020 - '
+    // &nbsp;
+    let date = 'Aug 20, 2020 · '
 
     for (const key in activity) {
         const item = activity[key]
@@ -95,11 +100,17 @@ export default function Account(props) {
                     else props.setTransactionRequest(item)
                 }} className={`${styles.activity}`}
             >
-                <img className={styles.icon} src="./icons/12.png" alt="" />
+                <img className={styles.icon} src={(item.type === 'enable' ? './icons/13.png' : './icons/12.png')} alt="" />
                 <div>
                     <div>{names[item.type]}</div>
-                    <div className={styles.time}>{date + item.cb.url.substring(0, 10)}</div>
+                    <div className={styles.time}>{
+                        date +
+                        (item.data ? 'To: ' + shortAddress(item.data.to) : item.cb.url)}</div>
                 </div>
+                {item.data ?
+                <div className={styles.activity_data}>
+                    <div>{'-' + (item.data.value / 1e10) + ' ' + ticker}</div>
+                </div> : ''}
             </div>,
         )
     }
@@ -122,7 +133,7 @@ export default function Account(props) {
                             {' '}
                             {item.ticker}
                         </div>
-                        <div className={styles.usd}>
+                        <div className={styles.time}>
                             $
                             {item.usd}
                             {' '}

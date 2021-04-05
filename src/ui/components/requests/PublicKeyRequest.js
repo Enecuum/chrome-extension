@@ -50,7 +50,11 @@ export default class PublicKeyRequest extends React.Component {
 
                     <div className={styles.field + ' ' + styles.request_text_gray}>{this.state.url}</div>
 
-                    <div className={styles.request_text1}>This website is requesting access to your account address</div>
+                    <div className={styles.request_text1}>
+                        <div>This website is requesting</div>
+                        <div>access to your account</div>
+                        <div>address</div>
+                    </div>
                     <div className={styles.field + ' ' + styles.request_text_gray}>Allow this site to:</div>
 
                     <div className={styles.request_text2}>

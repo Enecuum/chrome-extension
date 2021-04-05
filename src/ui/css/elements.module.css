@@ -162,3 +162,9 @@
 .button_link:hover {
     color: var(--color-blue)
 }
+
+.separatorBig {
+    width: 100%;
+    height: 20px;
+    /*background: red;*/
+}
