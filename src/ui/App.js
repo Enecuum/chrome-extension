@@ -24,7 +24,7 @@ export default function App(props) {
     let user = global.disk.user.loadUser()
 
     const [isLogin, setLogin] = useState(!!user.privateKey)
-    const [isLocked, setLocked] = useState(disk.lock.checkLock())
+    const [isLocked, setLocked] = useState(false)
 
     const login = (_user) => {
         user = _user
@@ -84,10 +84,10 @@ export default function App(props) {
     }
 
     if (isPublicKeyRequest)
-        return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} />
+        return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} request={isPublicKeyRequest} />
 
     if (isTransactionRequest)
-        return <TransactionRequest setTransactionRequest={setTransactionRequest} request={disk.list.listOfTask()[0]} />
+        return <TransactionRequest setTransactionRequest={setTransactionRequest} request={isTransactionRequest} />
 
     return <Account user={user}
                     logout={logout}

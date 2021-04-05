@@ -33,6 +33,7 @@ export default function Menu(props) {
             <div className={styles.button_link} onClick={explorer}>Show in blockchain explorer</div>
             <div className={styles.button_link} onClick={() => setNet('pulse')}>Network: PULSE</div>
             <div className={styles.button_link} onClick={() => setNet('bit')}>Network: BIT</div>
+            <div className={styles.button_link} onClick={() => setNet('bit-dev')}>Network: BIT-DEV</div>
             <div className={styles.button_link} onClick={props.logout}>Logout</div>
 
         </div>

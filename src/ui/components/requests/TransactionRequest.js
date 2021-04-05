@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "../../css/index.module.css";
+import Separator from "../../elements/Separator";
 
 export default class TransactionRequest extends React.Component {
     constructor(props) {
@@ -70,7 +71,7 @@ export default class TransactionRequest extends React.Component {
 
                     </div>
 
-
+                    <Separator />
 
                 </div>
             </div>

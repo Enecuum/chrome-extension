@@ -2,6 +2,7 @@ import React from 'react'
 import styles from '../css/index.module.css'
 import Network from './Network'
 import Header from '../elements/Header'
+import Separator from "../elements/Separator";
 
 let net = localStorage.getItem('net')
 if (!net) net = 'bit'
@@ -91,7 +92,10 @@ export default class Login extends React.Component {
                     {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Network: {ENQWeb.Net.currentProvider.toUpperCase()} */}
                     {/* </div> */}
 
+                    <Separator/>
+
                 </div>
+
             </div>
         )
     }
