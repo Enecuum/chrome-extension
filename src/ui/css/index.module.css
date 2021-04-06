@@ -74,10 +74,6 @@ a {
     flex-direction: column;
 }
 
-.data {
-    overflow: hidden;
-}
-
 .text_small {
     font-size: var(--font-size-small);
 }
@@ -643,4 +639,49 @@ input.field::placeholder {
     height: 20px;
 
     margin-left: 20px;
+}
+
+.data {
+    background: var(--color-blue-button);
+    margin: 20px;
+    padding: 20px;
+    height: 200px;
+
+    border-radius: 3px;
+}
+
+.transaction_network {
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-right: 20px;
+    width: 100%;
+    text-align: right;
+    font-size: var(--font-size-small);
+}
+
+.transaction_from_to {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.transaction_url {
+    color: var(--color-gray-ligth);
+    font-weight: 300;
+    font-size: var(--font-size-small);
+    padding-top: 20px;
+}
+
+.transaction_type {
+    border: 1px solid var(--color-blue);
+    font-size: var(--font-size-small);
+    border-radius: 3px;
+    padding: 5px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.transaction_amount {
+    font-size: var(--font-size-super-big);
+    padding-top: 20px;
 }

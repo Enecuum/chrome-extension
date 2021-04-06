@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from "../../css/index.module.css";
 import Separator from "../../elements/Separator";
 
@@ -13,6 +13,7 @@ export default class TransactionRequest extends React.Component {
             ticker: this.props.request.data.tokenHash,
             to: this.props.request.data.to,
             nonce: this.props.request.data.nonce,
+            activeTab: 0
         }
 
         console.log(this.props.request)
@@ -38,14 +39,62 @@ export default class TransactionRequest extends React.Component {
         return (
             <div className={styles.main}>
 
+                <div className={styles.transaction_network}>
+                    Network: {ENQWeb.Net.currentProvider.toUpperCase()}
+                </div>
+
                 <div className={styles.data}>
 
-                    <div className={styles.field}>From: {this.state.from}</div>
-                    <div className={styles.field}>To: {this.state.to}</div>
-                    <div className={styles.field}>Amount: {this.state.amount}</div>
-                    <div className={styles.field}>Ticker: {this.state.ticker}</div>
-                    <div className={styles.field}>Nonce: {this.state.nonce}</div>
-                    <div className={styles.field}>Data: {this.state.data}</div>
+                    <div className={styles.transaction_from_to}>
+
+                        <div>{shortAddress(this.state.from.replaceAll('"', ''))}</div>
+
+                        <div>❯</div>
+
+                        <div>{shortAddress(this.state.to)}</div>
+
+                    </div>
+
+                    <div className={styles.transaction_url}>{this.props.request.cb.url}</div>
+
+                    <div className={styles.transaction_type}>SWAP EXACT TOKENS FOR TOKEN</div>
+
+                    {/*<div className={styles.field}>Ticker: {this.state.ticker}</div>*/}
+                    {/*<div className={styles.field}>Nonce: {this.state.nonce}</div>*/}
+                    {/*<div className={styles.field}>Data: {this.state.data}</div>*/}
+                    <div className={styles.transaction_amount}>{(this.state.amount / 1e10) + ' ENQ'}</div>
+
+                </div>
+
+                <div className={styles.bottom_tabs}>
+                    <div
+                        onClick={() => this.setState({activeTab: 0})}
+                        className={(this.state.activeTab === 0 ? ` ${styles.bottom_tab_active}` : '')}
+                    >
+                        Details
+                    </div>
+                    <div
+                        onClick={() => this.setState({activeTab: 1})}
+                        className={(this.state.activeTab === 1 ? ` ${styles.bottom_tab_active}` : '')}
+                    >
+                        Data
+                    </div>
+                </div>
+
+                <div
+                    className={styles.bottom_list + (this.state.activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
+
+                    <div>
+                        <div>TOTAL</div>
+                        <div>{(this.state.amount / 1e10) + ' ENQ'}</div>
+                    </div>
+
+                </div>
+
+                <div
+                    className={`${styles.bottom_list} ${this.state.activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
+
+                    <div>{this.props.request.data.data}</div>
 
                 </div>
 
@@ -59,22 +108,18 @@ export default class TransactionRequest extends React.Component {
                          className={styles.field + ' ' + styles.button}>Reject
                     </div>
 
-                    <div className={styles.buttons_field}>
-
-                        <div onClick={() => this.props.setTransactionRequest(false)}
-                             className={styles.field + ' ' + styles.button}>Back
-                        </div>
-
-                        <div onClick={this.confirm}
-                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Confirm
-                        </div>
-
+                    <div onClick={this.confirm}
+                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Confirm
                     </div>
 
-                    <Separator />
+                    <Separator/>
 
                 </div>
             </div>
         )
     }
+}
+
+const shortAddress = (address) => {
+    return address.substring(0, 5) + '...' + address.substring(address.length - 3, address.length - 1)
 }
