@@ -45,11 +45,14 @@ export default function Account(props) {
     // }
 
     const getConnects = async () => {
-        let a = await asyncRequest({connectionList: true})
-        console.log(a.ports)
+        let connects = await asyncRequest({connectionList: true})
+        console.log(connects.ports)
     }
 
-
+    const getHistory = async () => {
+        let history = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, 0)
+        console.log(history)
+    }
 
     const copyPublicKey = () => {
         navigator.clipboard.writeText(props.user.publicKey)
@@ -165,7 +168,8 @@ export default function Account(props) {
 
     useEffect(() => {
         balance()
-        getConnects()
+        getConnects().then()
+        getHistory().then()
     },[]);
 
     return (
