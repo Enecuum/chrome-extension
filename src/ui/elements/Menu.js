@@ -19,8 +19,10 @@ export default function Menu(props) {
 
     const locked = async () => {
         console.log('LOCK')
-        props.setLocked(true)
-        await asyncRequest({lock: true})
+        if(disk.lock.getHashPassword()){
+            props.setLocked(true)
+            await asyncRequest({lock: true})
+        }
         //TODO закрыть попап
     }
 
