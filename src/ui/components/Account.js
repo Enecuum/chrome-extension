@@ -146,7 +146,7 @@ export default function Account(props) {
             const item = assets[key]
             assetsElements.push(
                 <div key={key} className={styles.asset}>
-                    <img className={styles.icon} src="./images/logo_white.png"/>
+                    <img className={styles.icon} src="./images/enq.png"/>
                     <div>
                         <div>
                             {item.amount.toFixed(4)}
@@ -198,7 +198,7 @@ export default function Account(props) {
 
             {renderMenu()}
 
-            <Address publickKey={props.user.publicKey} connections={connections}/>
+            <Address publicKey={props.user.publicKey} connections={connections}/>
 
             <div className={styles.content}>
 

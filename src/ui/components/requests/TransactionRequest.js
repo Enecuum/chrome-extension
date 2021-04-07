@@ -57,7 +57,7 @@ export default class TransactionRequest extends React.Component {
 
                         <div>❯</div>
 
-                        <div>{shortAddress(this.state.to)}</div>
+                        <div title={this.state.to}>{shortAddress(this.state.to)}</div>
 
                     </div>
 
