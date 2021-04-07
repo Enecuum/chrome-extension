@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../css/index.module.css";
 import TransactionSend from "./TransactionSend";
+import Separator from "../elements/Separator";
 
 export default class Transaction extends React.Component {
     constructor(props) {
@@ -96,10 +97,6 @@ export default class Transaction extends React.Component {
                                placeholder={'Amount'}
                         />
 
-                        <div onClick={this.submit}
-                             className={styles.field + ' ' + styles.button}>Send
-                        </div>
-
                     </div>
 
                     {/*<div className={styles.header}>*/}
@@ -111,9 +108,15 @@ export default class Transaction extends React.Component {
 
                     <div className={styles.form}>
 
-                        <div onClick={() => this.props.setTransaction(false)}
-                             className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
+                        <div onClick={this.submit}
+                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Send
                         </div>
+
+                        <div onClick={() => this.props.setTransaction(false)}
+                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Back
+                        </div>
+
+                        <Separator />
 
                     </div>
                 </div>

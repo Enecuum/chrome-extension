@@ -70,7 +70,7 @@ export default class Password extends React.Component {
                            spellCheck={false}
                            onChange={this.handleChangePassword1}
                            value={this.state.password1}
-                           className={styles.field}
+                           className={styles.field + ' ' + styles.password}
                            placeholder={'New password (min 8 chars)'}
                     />
 
@@ -78,7 +78,7 @@ export default class Password extends React.Component {
                            spellCheck={false}
                            onChange={this.handleChangePassword2}
                            value={this.state.password2}
-                           className={styles.field}
+                           className={styles.field + ' ' + styles.password}
                            placeholder={'Confirm password'}
                     />
 

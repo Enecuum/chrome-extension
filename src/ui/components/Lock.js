@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../css/index.module.css";
 import Network from "./Network"
+import Separator from "../elements/Separator";
 
 export default class Lock extends React.Component {
     constructor(props) {
@@ -56,6 +57,8 @@ export default class Lock extends React.Component {
                     <div onClick={this.submit}
                          className={`${styles.field} ${styles.button} ${styles.button_blue}`}>Unlock
                     </div>
+
+                    <Separator />
 
                 </div>
             </div>

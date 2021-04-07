@@ -251,7 +251,7 @@ export default function Account(props) {
 
                 </div>
 
-                <div className={`${styles.bottom_list} ${activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
+                <div className={`${styles.bottom_list} ${styles.bottom_list_activity} ${activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
 
                     {activityElements}
 
