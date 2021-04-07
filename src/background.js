@@ -34,18 +34,24 @@ async function msgConnectHandler(msg, sender) {
             rejectTaskHandler(msg.taskId)
         } else {
             // console.log('auth ok',{acc,lock})
-            if (!ports[msg.cb.url].enabled){
-                if(msg.type === 'enable'){
+            if (!ports[msg.cb.url].enabled) {
+                if (msg.type === 'enable') {
                     Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
                     taskCounter()
                 }
-            }else{
-                if(msg.type === 'tx'){
-                    Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb, net:msg.net, hash:msg.txHash})
-                }else{
+            } else {
+                if (msg.type === 'tx') {
+                    Storage.task.setTask(msg.taskId, {
+                        data: msg.data,
+                        type: msg.type,
+                        cb: msg.cb,
+                        net: msg.net,
+                        hash: msg.txHash
+                    })
+                } else {
                     Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
                 }
-                if (!requests[msg.type]){
+                if (!requests[msg.type]) {
                     taskHandler(msg.taskId)
                 } else {
                     taskCounter()
@@ -79,9 +85,9 @@ async function msgPopupHandler(msg, sender) {
         }
     } else if (msg.lock) {
         lockAccount()
-    } else if(msg.connectionList){
-        ports.popup.postMessage({asyncAnswer: true, data: msg, ports:ports})
-    }else {
+    } else if (msg.connectionList) {
+        ports.popup.postMessage({asyncAnswer: true, data: msg, ports: ports})
+    } else {
         if (msg.allow && msg.taskId) {
             await taskHandler(msg.taskId)
             taskCounter()
@@ -163,7 +169,7 @@ async function taskHandler(taskId) {
             Storage.task.removeTask(taskId)
             break
         case 'tx':
-            if(ports[task.cb.url].enabled){
+            if (ports[task.cb.url].enabled) {
                 console.log('tx handler work!')
                 data = task.data
                 let buf = ENQWeb.Net.provider
@@ -186,7 +192,7 @@ async function taskHandler(taskId) {
             break
         case 'balanceOf':
             console.log('balanceOf handler work!')
-            if(ports[task.cb.url].enabled){
+            if (ports[task.cb.url].enabled) {
                 data = task.data
                 console.log(acc)
                 ENQWeb.Net.provider = data.net || acc.net
@@ -207,11 +213,11 @@ async function taskHandler(taskId) {
             Storage.task.removeTask(taskId)
             break
         case 'getProvider':
-            if(ports[task.cb.url].enabled){
+            if (ports[task.cb.url].enabled) {
                 ENQWeb.Net.provider = acc.net
-                if(task.cb.fullUrl){
+                if (task.cb.fullUrl) {
                     data = {net: ENQWeb.Net.provider}
-                }else{
+                } else {
                     data = {net: ENQWeb.Net.currentProvider}
                 }
                 console.log(data);
