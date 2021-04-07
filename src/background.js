@@ -40,7 +40,11 @@ async function msgConnectHandler(msg, sender) {
                     taskCounter()
                 }
             }else{
-                Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
+                if(msg.type === 'tx'){
+                    Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb, net:msg.net, hash:msg.txHash})
+                }else{
+                    Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
+                }
                 if (!requests[msg.type]){
                     taskHandler(msg.taskId)
                 } else {
