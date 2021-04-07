@@ -28,12 +28,12 @@ export default class TransactionRequest extends React.Component {
 
     async confirm() {
         await global.asyncRequest({allow: true, taskId: this.props.taskId})
-        this.props.back()
+        this.props.setTransactionRequest(false)
     }
 
     async reject() {
         await global.asyncRequest({disallow: true, taskId: this.props.taskId})
-        this.props.back()
+        this.props.setTransactionRequest(false)
     }
 
     render() {
@@ -101,7 +101,7 @@ export default class TransactionRequest extends React.Component {
                 <div
                     className={`${styles.bottom_list} ${this.state.activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
 
-                    <div className={styles.transaction_data_data}>{this.props.request.data.data ? ENQWeb.Utils.ofd.parse(this.props.request.data.data) : 'No data for you, sorry'}</div>
+                    <div className={styles.transaction_data_data}>{this.props.request.data.data ? ENQWeb.Utils.ofd.parse(this.props.request.data.data) : 'No data'}</div>
 
                 </div>
 

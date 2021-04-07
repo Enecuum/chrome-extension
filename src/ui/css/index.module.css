@@ -320,6 +320,10 @@ input.field::placeholder {
     color: white;
 }
 
+input.field.password {
+    /*letter-spacing: 4px;*/
+}
+
 /*FORM*/
 
 .form {
@@ -467,6 +471,10 @@ input.field::placeholder {
     padding-bottom: 80px;
 }
 
+.bottom_list_activity {
+    padding-bottom: 0;
+}
+
 .bottom_list > div:last-child {
     /*position: absolute;*/
     /*bottom: 0;*/
@@ -599,6 +607,7 @@ input.field::placeholder {
 
     margin-left: 50px;
 
+    cursor: pointer;
     /*background: red;*/
 }
 
@@ -628,7 +637,7 @@ input.field::placeholder {
     width: 100%;
     display: flex;
     flex-direction: row;
-    padding-top: 20px;
+    padding-top: 10px;
     text-align: left;
     align-items: start;
     padding-left: 10px;

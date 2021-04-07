@@ -30,12 +30,12 @@ export default class PublicKeyRequest extends React.Component {
 
     async allow() {
         await global.asyncRequest({allow: true, taskId: this.state.taskId})
-        this.props.back()
+        this.props.setPublicKeyRequest(false)
     }
 
     async disallow() {
         await global.asyncRequest({disallow: true, taskId: this.state.taskId})
-        this.props.back()
+        this.props.setPublicKeyRequest(false)
     }
 
     render() {
@@ -59,11 +59,11 @@ export default class PublicKeyRequest extends React.Component {
                     <div className={styles.field + ' ' + styles.request_text_gray}>Allow this site to:</div>
 
                     <div className={styles.request_text2}>
-                        <img src={'./icons/10.png'} />
+                        <img src={'./icons/13.png'} />
                         <div>View the address of your permitted accounts (required)</div>
                     </div>
                     <div className={styles.request_text2}>
-                        <img src={'./icons/10.png'} />
+                        <img src={'./icons/13.png'} />
                         <div>View selected network</div>
                     </div>
 
