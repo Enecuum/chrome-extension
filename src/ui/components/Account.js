@@ -26,6 +26,8 @@ export default function Account(props) {
     const [usd, setUSD] = useState(0)
     const [ticker, setTicker] = useState('')
 
+    const [connections, setConnections] = useState(0)
+
     const [isLocked, setLocked] = useState(disk.lock.checkLock())
 
     const [net, setNet] = useState(String(ENQWeb.Net.currentProvider))
@@ -46,7 +48,16 @@ export default function Account(props) {
 
     const getConnects = async () => {
         let connects = await asyncRequest({connectionList: true})
-        console.log(connects.ports)
+        let counter = 0;
+        for(let key in connects.ports){
+            if(connects.ports[key].enabled){
+                counter++
+            }
+        }
+
+        console.log(counter)
+
+        setConnections(counter)
     }
 
     const getHistory = async () => {
@@ -104,9 +115,9 @@ export default function Account(props) {
         activityElements.push(
             <div
                 key={key} onClick={() => {
-                    if (item.type === 'enable') props.setPublicKeyRequest(item)
-                    else props.setTransactionRequest(item)
-                }} className={`${styles.activity}`}
+                if (item.type === 'enable') props.setPublicKeyRequest(item)
+                else props.setTransactionRequest(item)
+            }} className={`${styles.activity}`}
             >
                 <img className={styles.icon} src={(item.type === 'enable' ? './icons/13.png' : './icons/12.png')} alt="" />
                 <div>
@@ -116,9 +127,9 @@ export default function Account(props) {
                         (item.data ? 'To: ' + shortAddress(item.data.to) : item.cb.url)}</div>
                 </div>
                 {item.data ?
-                <div className={styles.activity_data}>
-                    <div>{'-' + (item.data.value / 1e10) + ' ' + ticker}</div>
-                </div> : ''}
+                    <div className={styles.activity_data}>
+                        <div>{'-' + (item.data.value / 1e10) + ' ' + ticker}</div>
+                    </div> : ''}
             </div>,
         )
     }
@@ -173,9 +184,9 @@ export default function Account(props) {
     }
 
     useEffect(() => {
-        balance()
         getConnects().then()
         getHistory().then()
+        balance()
     },[]);
 
     return (
@@ -185,7 +196,7 @@ export default function Account(props) {
 
             {renderMenu()}
 
-            <Address publickKey={props.user.publicKey} />
+            <Address publickKey={props.user.publicKey} connections={connections}/>
 
             <div className={styles.content}>
 
@@ -243,8 +254,8 @@ export default function Account(props) {
                     {assetsElements}
 
                     <div
-                      onClick={addAsset}
-                      className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}
+                        onClick={addAsset}
+                        className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}
                     >
                         Add token
                     </div>
