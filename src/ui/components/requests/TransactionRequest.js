@@ -23,7 +23,7 @@ export default class TransactionRequest extends React.Component {
         console.log(this.props.taskId)
 
         this.confirm = this.confirm.bind(this)
-        this.confirm = this.reject.bind(this)
+        this.reject = this.reject.bind(this)
     }
 
     copyHash() {
