@@ -9,12 +9,12 @@ export default class TransactionRequest extends React.Component {
         super(props);
         this.state = {
             url: `${ENQWeb.Net.provider}/#!/tx/` + this.props.txHash,
-            amount: this.props.request.data.value,
-            data: JSON.stringify(this.props.request.data.data),
-            from: JSON.stringify(this.props.request.data.from),
-            ticker: this.props.request.data.tokenHash,
-            to: this.props.request.data.to,
-            nonce: this.props.request.data.nonce,
+            amount: this.props.request.tx.value,
+            data: JSON.stringify(this.props.request.tx.data),
+            from: JSON.stringify(this.props.request.tx.from),
+            ticker: this.props.request.tx.tokenHash,
+            to: this.props.request.tx.to,
+            nonce: this.props.request.tx.nonce,
             activeTab: 0,
             taskId: this.props.request.cb.taskId,
         }
