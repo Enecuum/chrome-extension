@@ -57,6 +57,10 @@ main {
     box-sizing: border-box;
 }
 
+*::-webkit-scrollbar {
+    display: none;
+}
+
 div {
     /*background: rgba(0, 255, 0, 0.02);*/
 }
