@@ -1,16 +1,20 @@
+import {extensionApi} from './utils/extensionApi'
+
 document.addEventListener('DOMContentLoaded', function (){
     console.log('lock loaded. status: ', disk.lock.checkLock())
-    window.onbeforeunload = function (){
-        if(!disk.lock.checkLock() && disk.lock.getHashPassword()){
-            lockAccount()
-        }
-    }
-    window.onunload = function (){
-        window.location.reload(false)
-    }
+    extensionApi.windows.onRemoved.addListener(  function (){
+        extensionApi.windows.getAll(async wins=>{
+            if(wins.length === 0){
+                if(!disk.lock.checkLock() && disk.lock.getHashPassword()){
+                    await LockAccount()
+                }
+            }
+        })
+
+    })
 })
 
-function lockAccount() {
+function LockAccount() {
     let account = disk.user.loadUserNotJson()
     let password = disk.lock.getHashPassword()
     if (password && !disk.lock.checkLock()) {
@@ -26,5 +30,5 @@ function lockAccount() {
 }
 
 global.lockAccount = function (){
-    return lockAccount()
+    return LockAccount()
 }
