@@ -1,11 +1,11 @@
 import {extensionApi} from './utils/extensionApi'
 
-document.addEventListener('DOMContentLoaded', function (){
+document.addEventListener('DOMContentLoaded', function () {
     console.log('lock loaded. status: ', disk.lock.checkLock())
-    extensionApi.windows.onRemoved.addListener(  function (){
-        extensionApi.windows.getAll(async wins=>{
-            if(wins.length === 0){
-                if(!disk.lock.checkLock() && disk.lock.getHashPassword()){
+    extensionApi.windows.onRemoved.addListener(function () {
+        extensionApi.windows.getAll(async wins => {
+            if (wins.length === 0) {
+                if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
                     await LockAccount()
                 }
             }
@@ -24,11 +24,11 @@ function LockAccount() {
         disk.user.changeUser(account)
         console.log('account locked')
     } else {
-        if(!disk.lock.getHashPassword())
+        if (!disk.lock.getHashPassword())
             console.log('password not set')
     }
 }
 
-global.lockAccount = function (){
+global.lockAccount = function () {
     return LockAccount()
 }
