@@ -24,7 +24,7 @@ export default function Address(props) {
 
             <div>
                 <div className={elements.account_name}>Account 1</div>
-                <div className={elements.address_string}>{shortAddress(props.publickKey)}</div>
+                <div className={elements.address_string} title={props.publicKey}>{shortAddress(props.publicKey)}</div>
             </div>
 
             <div></div>

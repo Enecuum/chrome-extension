@@ -526,8 +526,8 @@ input.field.password {
     margin: 20px;
     padding: 10px;
 
-    border: 1px solid var(--color-blue);
-    background: var(--color-blue);
+    border: 1px solid white;
+    background: white;
     border-radius: 50%;
 }
 
@@ -571,8 +571,8 @@ input.field.password {
     margin: 20px;
     padding: 10px;
 
-    border: 1px solid white;
-    background: white;
+    border: 1px solid var(--color-blue);
+    background: var(--color-blue);
     border-radius: 50%;
 }
 
