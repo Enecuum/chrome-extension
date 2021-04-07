@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "../css/index.module.css";
+import Separator from "../elements/Separator";
 
 export default class TransactionSend extends React.Component {
     constructor(props) {
@@ -18,11 +19,15 @@ export default class TransactionSend extends React.Component {
         return (
             <div className={styles.main}>
 
-                <div className={styles.form}>
-                    <div className={styles.field}><a href={this.state.url} target="_blank">{this.props.txHash}</a></div>
-                    <div className={styles.field}
-                         onClick={() => this.copyHash()}>COPY
-                    </div>
+                <div className={styles.content}>
+
+                    <div className={styles.request_header} onClick={() => this.props.setTransaction(false)}>❮ Back</div>
+
+                    <div className={styles.balance}>TX</div>
+
+                    <div className={styles.field}>{shortHash(this.props.txHash)}</div>
+
+
 
                     {/*<div className={styles.field}>From: {this.state.from}</div>*/}
                     {/*<div className={styles.field}>To: {this.state.to}</div>*/}
@@ -33,11 +38,27 @@ export default class TransactionSend extends React.Component {
                 </div>
 
                 <div className={styles.form}>
-                    <div onClick={() => this.props.setTransaction(false)}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
+
+                    <div className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}
+                         onClick={() => this.copyHash()}><a href={this.state.url} target="_blank">Open transaction page</a>
                     </div>
+
+                    <div className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}
+                         onClick={() => this.copyHash()}>Copy transaction hash
+                    </div>
+
+                    <div onClick={() => this.props.setTransaction(false)}
+                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Back
+                    </div>
+
+                    <Separator />
+
                 </div>
             </div>
         )
     }
+}
+
+const shortHash = (address) => {
+    return address.substring(0, 10) + '...' + address.substring(address.length - 3, address.length - 1)
 }
