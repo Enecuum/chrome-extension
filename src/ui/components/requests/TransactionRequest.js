@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import styles from "../../css/index.module.css";
 import Separator from "../../elements/Separator";
 
+let fee = 0.1
+
 export default class TransactionRequest extends React.Component {
     constructor(props) {
         super(props);
@@ -66,7 +68,7 @@ export default class TransactionRequest extends React.Component {
 
                 </div>
 
-                <div className={styles.bottom_tabs}>
+                <div className={styles.bottom_tabs + ' ' + styles.data_bottom_tabs}>
                     <div
                         onClick={() => this.setState({activeTab: 0})}
                         className={(this.state.activeTab === 0 ? ` ${styles.bottom_tab_active}` : '')}
@@ -84,9 +86,14 @@ export default class TransactionRequest extends React.Component {
                 <div
                     className={styles.bottom_list + (this.state.activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
-                    <div>
+                    <div className={styles.transaction_data_fee}>
+                        <div>FEE</div>
+                        <div>{fee + ' ENQ'}</div>
+                    </div>
+
+                    <div className={styles.transaction_data_amount}>
                         <div>TOTAL</div>
-                        <div>{(this.state.amount / 1e10) + ' ENQ'}</div>
+                        <div>{(this.state.amount / 1e10) + fee + ' ENQ'}</div>
                     </div>
 
                 </div>
@@ -94,7 +101,7 @@ export default class TransactionRequest extends React.Component {
                 <div
                     className={`${styles.bottom_list} ${this.state.activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
 
-                    <div>{this.props.request.data.data}</div>
+                    <div className={styles.transaction_data_data}>{this.props.request.data.data ? ENQWeb.Utils.ofd.parse(this.props.request.data.data) : 'No data for you, sorry'}</div>
 
                 </div>
 

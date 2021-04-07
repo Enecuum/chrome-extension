@@ -244,6 +244,10 @@ a {
     justify-content: space-between;
 }
 
+.button_disabled {
+    opacity: 0.1;
+}
+
 
 
 
@@ -515,6 +519,7 @@ input.field::placeholder {
     padding: 10px;
 
     border: 1px solid var(--color-blue);
+    background: var(--color-blue);
     border-radius: 50%;
 }
 
@@ -559,6 +564,7 @@ input.field::placeholder {
     padding: 10px;
 
     border: 1px solid white;
+    background: white;
     border-radius: 50%;
 }
 
@@ -650,6 +656,10 @@ input.field::placeholder {
     border-radius: 3px;
 }
 
+.data_bottom_tabs > div {
+    width: 30% !important;
+}
+
 .transaction_network {
     padding-left: 20px;
     padding-top: 20px;
@@ -684,4 +694,44 @@ input.field::placeholder {
 .transaction_amount {
     font-size: var(--font-size-super-big);
     padding-top: 20px;
+}
+
+.transaction_data_amount {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    padding: 0 20px 20px;
+}
+
+.transaction_data_amount > div:first-child {
+    color: var(--color-gray-ligth);
+    font-size: var(--font-size-small);
+}
+
+.transaction_data_amount > div:last-child {
+    color: var(--color-blue);
+    font-size: var(--font-size-big);
+}
+
+.transaction_data_fee {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    padding: 20px;
+}
+
+.transaction_data_fee > div:first-child {
+    color: var(--color-gray-ligth);
+    font-size: var(--font-size-small);
+}
+
+.transaction_data_fee > div:last-child {
+    color: var(--color-blue);
+    font-size: var(--font-size-big);
+}
+
+.transaction_data_data {
+    padding: 20px;
 }
