@@ -22,9 +22,9 @@ export default class PublicKeyRequest extends React.Component {
         let task = disk.task.loadTask()
         let ids = Object.keys(task)
         if (ids.length > 0) {
-            this.state.url = task[ids[0]].cb.url
-            this.state.taskId = ids[0]
-            this.state.type = task[ids[0]].type
+            this.state.url = this.props.request.cb.url
+            this.state.taskId = this.props.request.cb.taskId
+            this.state.type = this.props.request.type
         }
     }
 
