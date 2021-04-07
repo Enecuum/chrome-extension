@@ -63,7 +63,11 @@ export default class TransactionRequest extends React.Component {
 
                     <div className={styles.transaction_url}>{this.props.request.cb.url}</div>
 
-                    <div className={styles.transaction_type}>SWAP EXACT TOKENS FOR TOKEN</div>
+                    <div className={styles.transaction_type}>TOKEN TRANSFER</div>
+
+                    {/*SWAP TOKEN*/}
+
+                    {/*SWAP EXACT TOKENS FOR*/}
 
                     {/*<div className={styles.field}>Ticker: {this.state.ticker}</div>*/}
                     {/*<div className={styles.field}>Nonce: {this.state.nonce}</div>*/}

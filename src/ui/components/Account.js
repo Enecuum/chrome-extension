@@ -146,7 +146,7 @@ export default function Account(props) {
             const item = assets[key]
             assetsElements.push(
                 <div key={key} className={styles.asset}>
-                    <img className={styles.icon} src="./icons/17.png"/>
+                    <img className={styles.icon} src="./images/logo_white.png"/>
                     <div>
                         <div>
                             {item.amount.toFixed(4)}
