@@ -35,7 +35,7 @@ export default class Lock extends React.Component {
             <div className={styles.main}>
 
                 <div className={styles.content}>
-                    <img className={styles.login_logo} src="./images/logo_white.png" />
+                    <img className={styles.login_logo} src="./images/logo_white.png"/>
 
                     <div className={styles.welcome1}>Welcome</div>
                     <div className={styles.welcome1}>to Enecuum</div>
@@ -58,7 +58,7 @@ export default class Lock extends React.Component {
                          className={`${styles.field} ${styles.button} ${styles.button_blue}`}>Unlock
                     </div>
 
-                    <Separator />
+                    <Separator/>
 
                 </div>
             </div>

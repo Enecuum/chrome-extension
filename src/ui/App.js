@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import Login from './components/Login'
 import Lock from './components/Lock'
 import Requests from './components/Requests'
@@ -35,21 +35,21 @@ export default function App(props) {
     const logout = () => {
         global.disk.user.removeUser()
         disk.lock.removeLock()
-        global.asyncRequest({ reject_all: true })
+        global.asyncRequest({reject_all: true})
         setLogin(false)
     }
 
 
-    if (!isLogin && !isLocked) return <Login login={login} />
+    if (!isLogin && !isLocked) return <Login login={login}/>
 
     const unlock = () => {
         setLocked(false)
     }
 
-    if (isLocked) return <Lock unlock={unlock} />
+    if (isLocked) return <Lock unlock={unlock}/>
 
     if (isLocked) {
-        return <Lock unlock={unlock} />
+        return <Lock unlock={unlock}/>
     }
 
     // if (publicKeyRequest) {
@@ -65,29 +65,29 @@ export default function App(props) {
     if (isTransaction) {
         return (
             <Transaction
-            setTransaction={setTransaction}
-            publicKey={user.publicKey}
-          />
+                setTransaction={setTransaction}
+                publicKey={user.publicKey}
+            />
         )
     }
 
     if (isPassword) {
-        return <Password setPassword={setPassword} />
+        return <Password setPassword={setPassword}/>
     }
 
     if (isNetwork) {
-        return <Network setNetwork={setNetwork} />
+        return <Network setNetwork={setNetwork}/>
     }
 
     if (isReceive) {
-        return <Receive setReceive={setReceive} user={user} />
+        return <Receive setReceive={setReceive} user={user}/>
     }
 
     if (isPublicKeyRequest)
-        return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} request={isPublicKeyRequest} />
+        return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} request={isPublicKeyRequest}/>
 
     if (isTransactionRequest)
-        return <TransactionRequest setTransactionRequest={setTransactionRequest} request={isTransactionRequest} />
+        return <TransactionRequest setTransactionRequest={setTransactionRequest} request={isTransactionRequest}/>
 
     return <Account user={user}
                     logout={logout}
@@ -97,5 +97,5 @@ export default function App(props) {
                     setReceive={setReceive}
                     setTransaction={setTransaction}
                     setPublicKeyRequest={setPublicKeyRequest}
-                    setTransactionRequest={setTransactionRequest} />
+                    setTransactionRequest={setTransactionRequest}/>
 }

@@ -45,9 +45,11 @@ export default class PublicKeyRequest extends React.Component {
 
                 <div className={styles.content}>
 
-                    <div className={styles.request_header} onClick={() => this.props.setPublicKeyRequest(false)}>❮ Back</div>
+                    <div className={styles.request_header} onClick={() => this.props.setPublicKeyRequest(false)}>❮
+                        Back
+                    </div>
 
-                    <img className={styles.request_logo} src="./images/enq.png" />
+                    <img className={styles.request_logo} src="./images/enq.png"/>
 
                     <div className={styles.field + ' ' + styles.request_text_gray}>{this.state.url}</div>
 
@@ -59,11 +61,11 @@ export default class PublicKeyRequest extends React.Component {
                     <div className={styles.field + ' ' + styles.request_text_gray}>Allow this site to:</div>
 
                     <div className={styles.request_text2}>
-                        <img src={'./icons/13.png'} />
+                        <img src={'./icons/13.png'}/>
                         <div>View the address of your permitted accounts (required)</div>
                     </div>
                     <div className={styles.request_text2}>
-                        <img src={'./icons/13.png'} />
+                        <img src={'./icons/13.png'}/>
                         <div>View selected network</div>
                     </div>
 
@@ -91,7 +93,7 @@ export default class PublicKeyRequest extends React.Component {
 
                     </div>
 
-                    <Separator />
+                    <Separator/>
 
                 </div>
 

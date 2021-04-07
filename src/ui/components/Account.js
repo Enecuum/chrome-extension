@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 import styles from '../css/index.module.css'
 import Transaction from './Transaction'
 import Requests from './Requests'
@@ -49,8 +49,8 @@ export default function Account(props) {
     const getConnects = async () => {
         let connects = await asyncRequest({connectionList: true})
         let counter = 0;
-        for(let key in connects.ports){
-            if(connects.ports[key].enabled){
+        for (let key in connects.ports) {
+            if (connects.ports[key].enabled) {
                 counter++
             }
         }
@@ -119,7 +119,8 @@ export default function Account(props) {
                 else props.setTransactionRequest(item)
             }} className={`${styles.activity}`}
             >
-                <img className={styles.icon} src={(item.type === 'enable' ? './icons/13.png' : './icons/12.png')} alt="" />
+                <img className={styles.icon} src={(item.type === 'enable' ? './icons/13.png' : './icons/12.png')}
+                     alt=""/>
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>{
@@ -145,7 +146,7 @@ export default function Account(props) {
             const item = assets[key]
             assetsElements.push(
                 <div key={key} className={styles.asset}>
-                    <img className={styles.icon} src="./icons/17.png" />
+                    <img className={styles.icon} src="./icons/17.png"/>
                     <div>
                         <div>
                             {item.amount.toFixed(4)}
@@ -180,19 +181,20 @@ export default function Account(props) {
     renderAssets()
 
     const renderMenu = () => {
-        if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} setLocked={props.setLocked} setPassword={props.setPassword} />
+        if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} setLocked={props.setLocked}
+                               setPassword={props.setPassword}/>
     }
 
     useEffect(() => {
         getConnects().then()
         getHistory().then()
         balance()
-    },[]);
+    }, []);
 
     return (
         <div className={styles.main}>
 
-            <Header clickMenu={clickMenu} />
+            <Header clickMenu={clickMenu}/>
 
             {renderMenu()}
 
@@ -200,7 +202,7 @@ export default function Account(props) {
 
             <div className={styles.content}>
 
-                <img className={styles.content_logo} src="./images/48.png" alt="" />
+                <img className={styles.content_logo} src="./images/48.png" alt=""/>
                 <div className={styles.balance}>
                     {amount.toFixed(4)}
                     {' '}
@@ -218,12 +220,12 @@ export default function Account(props) {
             <div className={styles.center}>
 
                 <div className={styles.circle_button} onClick={copyPublicKey}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./icons/8.png" /></div>
+                    <div className={styles.icon_container}><img className={styles.icon} src="./icons/8.png"/></div>
                     <div>Copy</div>
                 </div>
 
                 <div className={styles.circle_button} onClick={() => props.setTransaction(true)}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./icons/12.png" /></div>
+                    <div className={styles.icon_container}><img className={styles.icon} src="./icons/12.png"/></div>
                     <div>Send</div>
                     <div>Transaction</div>
                 </div>
@@ -262,7 +264,8 @@ export default function Account(props) {
 
                 </div>
 
-                <div className={`${styles.bottom_list} ${styles.bottom_list_activity} ${activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
+                <div
+                    className={`${styles.bottom_list} ${styles.bottom_list_activity} ${activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
 
                     {activityElements}
 
