@@ -57,7 +57,7 @@ export default class Password extends React.Component {
             <div className={styles.main}>
 
                 <div className={styles.content}>
-                    <img className={styles.login_logo} src="./images/logo_white.png" />
+                    <img className={styles.login_logo} src="./images/logo_white.png"/>
 
                     <div className={styles.welcome1}>Create</div>
                     <div className={styles.welcome1}>Password</div>
@@ -90,7 +90,7 @@ export default class Password extends React.Component {
                          className={styles.field + ' ' + styles.button}>Back
                     </div>
 
-                    <Separator />
+                    <Separator/>
 
                 </div>
             </div>

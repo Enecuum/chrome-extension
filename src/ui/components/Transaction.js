@@ -116,7 +116,7 @@ export default class Transaction extends React.Component {
                              className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Back
                         </div>
 
-                        <Separator />
+                        <Separator/>
 
                     </div>
                 </div>

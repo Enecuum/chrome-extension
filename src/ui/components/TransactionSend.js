@@ -28,7 +28,6 @@ export default class TransactionSend extends React.Component {
                     <div className={styles.field}>{shortHash(this.props.txHash)}</div>
 
 
-
                     {/*<div className={styles.field}>From: {this.state.from}</div>*/}
                     {/*<div className={styles.field}>To: {this.state.to}</div>*/}
                     {/*<div className={styles.field}>Amount: {this.state.amount}</div>*/}
@@ -40,7 +39,8 @@ export default class TransactionSend extends React.Component {
                 <div className={styles.form}>
 
                     <div className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}
-                         onClick={() => this.copyHash()}><a href={this.state.url} target="_blank">Open transaction page</a>
+                         onClick={() => this.copyHash()}><a href={this.state.url} target="_blank">Open transaction
+                        page</a>
                     </div>
 
                     <div className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}
@@ -51,7 +51,7 @@ export default class TransactionSend extends React.Component {
                          className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Back
                     </div>
 
-                    <Separator />
+                    <Separator/>
 
                 </div>
             </div>
