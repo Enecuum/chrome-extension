@@ -46,7 +46,7 @@ export default class Lock extends React.Component {
 
                 <div className={styles.form}>
 
-                    <input type="text"
+                    <input type="password"
                            spellCheck={false}
                            onChange={this.handleChangePassword}
                            value={this.state.password}
