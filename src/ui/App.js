@@ -24,7 +24,7 @@ export default function App(props) {
     let user = global.disk.user.loadUser()
 
     const [isLogin, setLogin] = useState(!!user.privateKey)
-    const [isLocked, setLocked] = useState(false)
+    const [isLocked, setLocked] = useState(disk.lock.checkLock())
 
     const login = (_user) => {
         user = _user

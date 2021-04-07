@@ -26,7 +26,7 @@ export default function Account(props) {
     const [usd, setUSD] = useState(0)
     const [ticker, setTicker] = useState('')
 
-    // const [isLocked, setLocked] = useState(disk.lock.checkLock())
+    const [isLocked, setLocked] = useState(disk.lock.checkLock())
 
     const [net, setNet] = useState(String(ENQWeb.Net.currentProvider))
 
