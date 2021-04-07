@@ -42,7 +42,7 @@ async function msgConnectHandler(msg, sender) {
             } else {
                 if (msg.type === 'tx') {
                     Storage.task.setTask(msg.taskId, {
-                        data: msg.data,
+                        tx: msg.tx,
                         type: msg.type,
                         cb: msg.cb,
                         net: msg.net,
