@@ -1,12 +1,26 @@
-import React, {useState} from "react";
+import React, {useState , useEffect} from "react";
 import elements from "../css/elements.module.css";
 
 export default function Address(props) {
 
+    let [status, setStatus] = useState('')
+
+    async function checkConnect(count){
+        console.log(count)
+        if(count === 0)
+            return setStatus(`Not connected`)
+        else
+            return setStatus('Connected')
+    }
+
+    useEffect(()=>{
+        checkConnect(props.connections).then()
+    })
+
     return (
         <div className={elements.address_row}>
 
-            <div className={elements.connect}>·&nbsp;Not connected</div>
+            <div className={elements.connect}>·&nbsp; {status}</div>
 
             <div>
                 <div className={elements.account_name}>Account 1</div>
