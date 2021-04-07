@@ -11,7 +11,7 @@ export default class TransactionRequest extends React.Component {
             url: `${ENQWeb.Net.provider}/#!/tx/` + this.props.txHash,
             amount: this.props.request.tx.value,
             data: JSON.stringify(this.props.request.tx.data),
-            from: JSON.stringify(this.props.request.tx.from),
+            from: JSON.stringify(this.props.request.tx.from).replaceAll('"', ''),
             ticker: this.props.request.tx.tokenHash,
             to: this.props.request.tx.to,
             nonce: this.props.request.tx.nonce,
@@ -53,11 +53,11 @@ export default class TransactionRequest extends React.Component {
 
                     <div className={styles.transaction_from_to}>
 
-                        <div>{shortAddress(this.state.from.replaceAll('"', ''))}</div>
+                        <div title={this.state.from + '\n\nCopy address to clipboard'}>{shortAddress(this.state.from)}</div>
 
                         <div>❯</div>
 
-                        <div title={this.state.to}>{shortAddress(this.state.to)}</div>
+                        <div title={this.state.to + '\n\nCopy address to clipboard'}>{shortAddress(this.state.to)}</div>
 
                     </div>
 

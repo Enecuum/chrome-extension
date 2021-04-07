@@ -76,6 +76,7 @@
 
 .address_row .address_string {
     padding-bottom: 10px;
+    cursor: pointer;
 }
 
 .address_row > div {
