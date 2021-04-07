@@ -17,6 +17,10 @@ export default function Address(props) {
         checkConnect(props.connections).then()
     })
 
+    const copyPublicKey = () => {
+        navigator.clipboard.writeText(props.publicKey)
+    }
+
     return (
         <div className={elements.address_row}>
 
@@ -24,7 +28,7 @@ export default function Address(props) {
 
             <div>
                 <div className={elements.account_name}>Account 1</div>
-                <div className={elements.address_string} title={props.publicKey}>{shortAddress(props.publicKey)}</div>
+                <div className={elements.address_string} onClick={copyPublicKey} title={props.publicKey + '\nCopy address to clipboard'}>{shortAddress(props.publicKey)}</div>
             </div>
 
             <div></div>
