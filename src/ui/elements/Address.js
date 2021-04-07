@@ -1,19 +1,19 @@
-import React, {useState , useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import elements from "../css/elements.module.css";
 
 export default function Address(props) {
 
     let [status, setStatus] = useState('')
 
-    async function checkConnect(count){
+    async function checkConnect(count) {
         console.log(count)
-        if(count === 0)
+        if (count === 0)
             return setStatus(`Not connected`)
         else
             return setStatus('Connected')
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         checkConnect(props.connections).then()
     })
 

@@ -15,11 +15,15 @@ export default class TransactionRequest extends React.Component {
             ticker: this.props.request.data.tokenHash,
             to: this.props.request.data.to,
             nonce: this.props.request.data.nonce,
-            activeTab: 0
+            activeTab: 0,
+            taskId: this.props.request.cb.taskId,
         }
 
         console.log(this.props.request)
         console.log(this.props.taskId)
+
+        this.confirm = this.confirm.bind(this)
+        this.confirm = this.reject.bind(this)
     }
 
     copyHash() {
@@ -27,12 +31,12 @@ export default class TransactionRequest extends React.Component {
     }
 
     async confirm() {
-        await global.asyncRequest({allow: true, taskId: this.props.taskId})
+        await global.asyncRequest({allow: true, taskId: this.state.taskId})
         this.props.setTransactionRequest(false)
     }
 
     async reject() {
-        await global.asyncRequest({disallow: true, taskId: this.props.taskId})
+        await global.asyncRequest({disallow: true, taskId: this.state.taskId})
         this.props.setTransactionRequest(false)
     }
 
