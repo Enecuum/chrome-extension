@@ -37,7 +37,7 @@ export default function Menu(props) {
             <div className={styles.separator}/>
 
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
-            <div className={styles.button_link} onClick={expand}>Expand</div>
+            {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
             <div className={styles.button_link} onClick={Window}>Window</div>
             <div className={styles.button_link} onClick={explorer}>Show in blockchain explorer</div>
             {/*<div className={styles.button_link} onClick={() => setNet('pulse')}>Network: PULSE</div>*/}
