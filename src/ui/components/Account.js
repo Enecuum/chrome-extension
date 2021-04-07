@@ -51,6 +51,12 @@ export default function Account(props) {
 
     const getHistory = async () => {
         let history = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, 0)
+
+        let tx = {
+            type: 'tx',
+
+        }
+
         console.log(history)
     }
 
@@ -128,7 +134,7 @@ export default function Account(props) {
             const item = assets[key]
             assetsElements.push(
                 <div key={key} className={styles.asset}>
-                    <img className={styles.icon} src="./icons/1.png" />
+                    <img className={styles.icon} src="./icons/17.png" />
                     <div>
                         <div>
                             {item.amount.toFixed(4)}

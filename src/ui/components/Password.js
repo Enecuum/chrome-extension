@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../css/index.module.css";
 import TransactionSend from "./TransactionSend";
+import Separator from "../elements/Separator";
 
 export default class Password extends React.Component {
     constructor(props) {
@@ -55,6 +56,14 @@ export default class Password extends React.Component {
 
             <div className={styles.main}>
 
+                <div className={styles.content}>
+                    <img className={styles.login_logo} src="./images/logo_white.png" />
+
+                    <div className={styles.welcome1}>Create</div>
+                    <div className={styles.welcome1}>Password</div>
+
+                </div>
+
                 <div className={styles.form}>
 
                     <input type="password"
@@ -62,7 +71,7 @@ export default class Password extends React.Component {
                            onChange={this.handleChangePassword1}
                            value={this.state.password1}
                            className={styles.field}
-                           placeholder={'Password'}
+                           placeholder={'New password (min 8 chars)'}
                     />
 
                     <input type="password"
@@ -70,16 +79,18 @@ export default class Password extends React.Component {
                            onChange={this.handleChangePassword2}
                            value={this.state.password2}
                            className={styles.field}
-                           placeholder={'Password one more time'}
+                           placeholder={'Confirm password'}
                     />
 
                     <div onClick={this.state.allow ? this.save : this.save}
-                         className={styles.field + ' ' + styles.button + ' ' + (this.state.allow ? '' : styles.disabled)}>Save
+                         className={styles.field + ' ' + styles.button + ' ' + (this.state.allow ? '' : styles.button_disabled)}>Save
                     </div>
 
                     <div onClick={() => this.props.setPassword(false)}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.back}>Back
+                         className={styles.field + ' ' + styles.button}>Back
                     </div>
+
+                    <Separator />
 
                 </div>
             </div>
