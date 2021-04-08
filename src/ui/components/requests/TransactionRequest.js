@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import styles from "../../css/index.module.css";
 import Separator from "../../elements/Separator";
+import elements from "../../css/elements.module.css";
 
 let fee = 0.1
+const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
 export default class TransactionRequest extends React.Component {
     constructor(props) {
@@ -53,11 +55,15 @@ export default class TransactionRequest extends React.Component {
 
                     <div className={styles.transaction_from_to}>
 
-                        <div title={this.state.from + '\n\nCopy address to clipboard'}>{shortAddress(this.state.from)}</div>
+                        <div className={styles.transaction_address_copy} onClick={() => {
+                            navigator.clipboard.writeText(this.state.from)
+                        }} title={this.state.from + copyText}>{shortAddress(this.state.from)}</div>
 
                         <div>❯</div>
 
-                        <div title={this.state.to + '\n\nCopy address to clipboard'}>{shortAddress(this.state.to)}</div>
+                        <div className={styles.transaction_address_copy} onClick={() => {
+                            navigator.clipboard.writeText(this.state.to)
+                        }}  title={this.state.to + copyText}>{shortAddress(this.state.to)}</div>
 
                     </div>
 

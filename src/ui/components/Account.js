@@ -26,7 +26,7 @@ export default function Account(props) {
     const [usd, setUSD] = useState(0)
     const [ticker, setTicker] = useState('')
 
-    const [connections, setConnections] = useState(0)
+    const [connectionsCounter, setConnectionsCounter] = useState(0)
 
     const [isLocked, setLocked] = useState(disk.lock.checkLock())
 
@@ -57,7 +57,7 @@ export default function Account(props) {
 
         console.log(counter)
 
-        setConnections(counter)
+        setConnectionsCounter(counter)
     }
 
     const getHistory = async () => {
@@ -198,7 +198,7 @@ export default function Account(props) {
 
             {renderMenu()}
 
-            <Address publicKey={props.user.publicKey} connections={connections}/>
+            <Address publicKey={props.user.publicKey} connectionsCounter={connectionsCounter}/>
 
             <div className={styles.content}>
 

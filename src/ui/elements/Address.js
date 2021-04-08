@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from "react";
 import elements from "../css/elements.module.css";
 
+const copyText = ('\n\nCopy address to clipboard').toUpperCase()
+
 export default function Address(props) {
 
     let [status, setStatus] = useState('')
@@ -14,11 +16,12 @@ export default function Address(props) {
     }
 
     useEffect(() => {
-        checkConnect(props.connections).then()
+        checkConnect(props.connectionsCounter).then()
     })
 
     const showConnections = async () => {
-        console.log((await asyncRequest({connectionList: true})).ports)
+        const ports = (await asyncRequest({connectionList: true})).ports
+        console.log(ports)
     }
 
     const copyPublicKey = () => {
@@ -28,11 +31,11 @@ export default function Address(props) {
     return (
         <div className={elements.address_row}>
 
-            <div className={elements.connect} onClick={showConnections}>·&nbsp; {status}</div>
+            <div className={elements.connect} onClick={showConnections}>·&nbsp;&nbsp;{status}</div>
 
             <div>
                 <div className={elements.account_name}>Account 1</div>
-                <div className={elements.address_string} onClick={copyPublicKey} title={props.publicKey + '\n\nCopy address to clipboard'}>{shortAddress(props.publicKey)}</div>
+                <div className={elements.address_string} onClick={copyPublicKey} title={props.publicKey + copyText}>{shortAddress(props.publicKey)}</div>
             </div>
 
             <div></div>
