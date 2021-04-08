@@ -688,6 +688,10 @@ input.field.password {
     justify-content: space-between;
 }
 
+.transaction_address_copy {
+    cursor: pointer;
+}
+
 .transaction_url {
     color: var(--color-gray-ligth);
     font-weight: 300;
