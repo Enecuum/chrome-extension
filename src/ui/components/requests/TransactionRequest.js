@@ -110,7 +110,7 @@ export default class TransactionRequest extends React.Component {
                     className={`${styles.bottom_list} ${this.state.activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
 
                     <div
-                        className={styles.transaction_data_data}>{(this.props.request.data.data ? 'Data' : 'No data')}</div>
+                        className={styles.transaction_data_data}>{(this.props.request.tx.data ? 'Data' : 'No data')}</div>
 
                 </div>
 
