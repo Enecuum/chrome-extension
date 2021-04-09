@@ -26,8 +26,8 @@ export default class Password extends React.Component {
     }
 
     setAllow() {
-        console.log(this.state.password1)
-        console.log(this.state.password2)
+        // console.log(this.state.password1)
+        // console.log(this.state.password2)
         if (this.state.password1 === this.state.password2) {
             this.setState({allow: true})
         } else {
@@ -39,12 +39,13 @@ export default class Password extends React.Component {
         console.log('work')
         if (this.state.password1 === this.state.password2) {
             console.log('work')
-            console.log(this.state.password1)
+            // console.log(this.state.password1)
             //TODO save password here
             console.log(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
             disk.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
             disk.lock.setLock(false)
             this.props.setPassword(false)
+            this.props.login()
         } else {
 
         }
