@@ -78,7 +78,7 @@ export default class TransactionRequest extends React.Component {
                     {/*<div className={styles.field}>Ticker: {this.state.ticker}</div>*/}
                     {/*<div className={styles.field}>Nonce: {this.state.nonce}</div>*/}
                     {/*<div className={styles.field}>Data: {this.state.data}</div>*/}
-                    <div className={styles.transaction_amount}>{(this.state.amount / 1e10) + ' ENQ'}</div>
+                    <div className={styles.transaction_amount}>{(this.state.amount / 1e10) - fee + ' ENQ'}</div>
 
                 </div>
 
@@ -107,7 +107,7 @@ export default class TransactionRequest extends React.Component {
 
                     <div className={styles.transaction_data_amount}>
                         <div>TOTAL</div>
-                        <div>{(this.state.amount / 1e10) + fee + ' ENQ'}</div>
+                        <div>{(this.state.amount / 1e10) + ' ENQ'}</div>
                     </div>
 
                 </div>

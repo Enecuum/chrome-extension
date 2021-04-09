@@ -55,7 +55,7 @@ export default function App(props) {
         setLocked(false)
     }
 
-    if (isLocked) return <Lock unlock={unlock}/>
+    if (isLocked) return <Lock unlock={unlock} logout={logout}/>
 
     if (isTransaction) {
         return (

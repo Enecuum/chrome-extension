@@ -58,6 +58,10 @@ export default class Lock extends React.Component {
                          className={`${styles.field} ${styles.button} ${styles.button_blue}`}>Unlock
                     </div>
 
+                    <div onClick={this.logout}
+                         className={`${styles.field} ${styles.button}`}>Logout
+                    </div>
+
                     <Separator/>
 
                 </div>
