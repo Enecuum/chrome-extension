@@ -22,14 +22,20 @@ export default function App(props) {
     const [isTransactionRequest, setTransactionRequest] = useState(false)
 
     let user = global.disk.user.loadUser()
+    console.log(user)
 
     const [isLogin, setLogin] = useState(!!user.privateKey)
     const [isLocked, setLocked] = useState(disk.lock.checkLock())
 
     const login = (_user) => {
         user = _user
+        setPassword(true)
+    }
+
+    const login2 = () => {
+        console.log('login2')
+        setPassword(false)
         setLogin(true)
-        console.log(isLogin)
     }
 
     const logout = () => {
@@ -39,6 +45,9 @@ export default function App(props) {
         setLogin(false)
     }
 
+    if (isPassword || (!!user.publicKey && !disk.lock.getHashPassword())) {
+        return <Password setPassword={setPassword} login={login2}/>
+    }
 
     if (!isLogin && !isLocked) return <Login login={login}/>
 
@@ -48,20 +57,6 @@ export default function App(props) {
 
     if (isLocked) return <Lock unlock={unlock}/>
 
-    if (isLocked) {
-        return <Lock unlock={unlock}/>
-    }
-
-    // if (publicKeyRequest) {
-    //     return <PublicKeyRequests request={this.state.publicKeyRequest}
-    //                               taskId={this.state.taskId}/>
-    // }
-    //
-    // if (transactionRequest) {
-    //     return <TransactionRequest request={this.state.transactionRequest}
-    //                                taskId={this.state.taskId}/>
-    // }
-
     if (isTransaction) {
         return (
             <Transaction
@@ -69,10 +64,6 @@ export default function App(props) {
                 publicKey={user.publicKey}
             />
         )
-    }
-
-    if (isPassword) {
-        return <Password setPassword={setPassword}/>
     }
 
     if (isNetwork) {
