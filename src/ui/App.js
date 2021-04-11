@@ -43,6 +43,7 @@ export default function App(props) {
         disk.lock.removeLock()
         global.asyncRequest({reject_all: true})
         setLogin(false)
+        setLocked(false);
     }
 
     if (isPassword || (!!user.publicKey && !disk.lock.getHashPassword())) {

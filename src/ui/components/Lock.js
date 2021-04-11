@@ -11,10 +11,15 @@ export default class Lock extends React.Component {
         }
         this.handleChangePassword = this.handleChangePassword.bind(this)
         this.submit = this.submit.bind(this)
+        this.logout = this.logout.bind(this)
     }
 
     handleChangePassword(e) {
         this.setState({password: e.target.value});
+    }
+
+    async logout(){
+        await this.props.logout()
     }
 
     async submit() {
