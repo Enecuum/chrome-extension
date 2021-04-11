@@ -9,10 +9,19 @@ export default function Address(props) {
 
     async function checkConnect(count) {
         console.log(count)
-        if (count === 0)
+        let tasks = disk.list.listOfTask()
+        let found = false
+        tasks.forEach(key=>{
+            if(key.type === 'enable'){
+                setStatus('Await connect');
+                found = true;
+            }
+        })
+        if (count === 0 && !found)
             return setStatus(`Not connected`)
         else
-            return setStatus('Connected')
+            if(count > 0 && !found)
+                return setStatus(`Connected ${count}`);
     }
 
     useEffect(() => {
@@ -22,6 +31,17 @@ export default function Address(props) {
     const showConnections = async () => {
         const ports = (await asyncRequest({connectionList: true})).ports
         console.log(ports)
+        console.log(status)
+        if(status === 'Await connect'){
+            console.log('yep')
+            let task = (await disk.list.listOfTask())
+            task.forEach((key, request)=>{
+                if(key.type === 'enable' && !request){
+                    request = true;
+                    props.setPublicKeyRequest(key);
+                }
+            })
+        }
     }
 
     const copyPublicKey = () => {
