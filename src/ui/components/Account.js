@@ -198,7 +198,7 @@ export default function Account(props) {
 
             {renderMenu()}
 
-            <Address publicKey={props.user.publicKey} connectionsCounter={connectionsCounter}/>
+            <Address publicKey={props.user.publicKey} connectionsCounter={connectionsCounter} setPublicKeyRequest={props.setPublicKeyRequest}/>
 
             <div className={styles.content}>
 
