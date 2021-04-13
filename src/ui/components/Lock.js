@@ -20,6 +20,7 @@ export default class Lock extends React.Component {
 
     async logout(){
         await this.props.logout()
+        await disk.promise.sendPromise({account:true, logout:true})
     }
 
     async submit() {

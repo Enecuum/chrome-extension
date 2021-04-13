@@ -52,6 +52,9 @@ async function msgHandler(msg, sender, sendResponse) {
         }
         sendResponse({response:true})
     }
+    if(msg.account && msg.logout){
+        Account = {}
+    }
 }
 
 async function msgConnectHandler(msg, sender) {
