@@ -99,6 +99,9 @@ function loadUser() {
         return {}
     }
     if (!checkLock()) {
+        if(this.name === 'popup'){
+            return sendPromise({account:true, request:true})
+        }
         user = JSON.parse(user)
         return user
     } else {
@@ -223,9 +226,21 @@ function getHashPassword() {
     }
 }
 
-let storage = function Storage() {
+function sendPromise(obj){
+    return new Promise((resolve) => {
+        chrome.runtime.sendMessage(obj, answer=>{
+            if(answer.response !== undefined)
+                resolve(answer.response)
+            else
+                resolve(answer)
+        })
+    })
+}
 
+let storage = function Storage(name) {
+    this.name = name
     this.task = {
+        name,
         loadTask,
         setTask,
         getTask,
@@ -233,6 +248,7 @@ let storage = function Storage() {
         clearTasks
     }
     this.user = {
+        name,
         loadUser,
         addUser,
         getUser,
@@ -243,12 +259,14 @@ let storage = function Storage() {
         loadUserNotJson
     }
     this.list = {
+        name,
         listOfTask,
         loadList,
         updateList,
         addToList
     }
     this.lock = {
+        name,
         unlock,
         checkLock,
         setPassword,
@@ -256,6 +274,9 @@ let storage = function Storage() {
         getHashPassword,
         lock,
         removeLock
+    }
+    this.promise = {
+        sendPromise
     }
 }
 
