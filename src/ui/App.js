@@ -61,6 +61,7 @@ export default function App(props) {
     const logout = () => {
         global.disk.user.removeUser()
         disk.lock.removeLock()
+        disk.promise.sendPromise({account:true, logout:true})
         global.asyncRequest({reject_all: true})
         setLogin(false)
         setLocked(false);
