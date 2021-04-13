@@ -35,8 +35,13 @@ export default class Login extends React.Component {
         const publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.privateKey, true)
         if (publicKey) {
             console.log(publicKey)
-            const user = global.disk.user.addUser(publicKey, this.state.privateKey, ENQWeb.Net.provider)
-            this.props.login(user)
+            let data = {
+                publicKey:publicKey,
+                privateKey:this.state.privateKey,
+                net:ENQWeb.Net.provider
+            }
+            await global.disk.promise.sendPromise({account: true, set: true, data})
+            this.props.login(data)
         }
     }
 

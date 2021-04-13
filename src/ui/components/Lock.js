@@ -23,15 +23,19 @@ export default class Lock extends React.Component {
     }
 
     async submit() {
-        let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password)
-        if (disk.lock.unlock(hash)) {
-            console.log('its yes')
-            hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
-            let us = JSON.parse(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
-            console.log(us)
-            disk.user.changeUser(us, true)
+        // let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password)
+        // if (disk.lock.unlock(hash)) {
+        //     console.log('its yes')
+        //     hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
+        //     let us = JSON.parse(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
+        //     console.log(us)
+        //     disk.user.changeUser(us, true)
+        //     this.props.unlock()
+        //     window.location.reload(false);
+        // }
+        if(await disk.promise.sendPromise({account:true, unlock:true, password: this.state.password})){
             this.props.unlock()
-            window.location.reload(false);
+            window.location.reload(false)
         }
     }
 

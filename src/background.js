@@ -1,7 +1,7 @@
 const storage = require('./utils/localStorage')
 import {extensionApi} from './utils/extensionApi'
 
-let Storage = new storage()
+let Storage = new storage('background')
 global.disk = Storage
 
 let ports = {}
@@ -12,6 +12,8 @@ let requests = {
     'getProvider': false
 }
 
+let Account = {}
+
 function setupApp() {
     console.log('background ready')
     extensionApi.runtime.onMessage.addListener(msgHandler)
@@ -21,6 +23,35 @@ function setupApp() {
 
 async function msgHandler(msg, sender, sendResponse) {
     console.log(msg)
+    if(msg.account && msg.request){
+        if(!disk.lock.checkLock())
+            sendResponse({response:Account})
+        else
+            sendResponse({response:false})
+    }
+    if(msg.account && msg.unlock && msg.password){
+        let acc = decryptAccount(msg.password)
+        if(acc){
+            Account = acc
+            sendResponse({response:true})
+        }else{
+            sendResponse({response:false})
+        }
+    }
+    if(msg.account && msg.set && msg.data){
+        Account = msg.data
+        disk.user.addUser(msg.data.publicKey, msg.data.privateKey, msg.data.net)
+        sendResponse({response:Account})
+    }
+    if(msg.account && msg.encrypt){
+        if(msg.again){
+            disk.user.addUser(Account.publicKey, Account.privateKey, Account.net)
+            encryptAccount()
+        }else{
+            encryptAccount()
+        }
+        sendResponse({response:true})
+    }
 }
 
 async function msgConnectHandler(msg, sender) {
@@ -85,6 +116,7 @@ async function msgPopupHandler(msg, sender) {
             ENQWeb.Net.provider = buf
         }
     } else if (msg.lock) {
+        Account = {}
         lockAccount()
     } else if (msg.connectionList) {
         ports.popup.postMessage({asyncAnswer: true, data: msg, ports: ports})

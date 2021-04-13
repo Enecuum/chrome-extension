@@ -1,7 +1,7 @@
 import {initApp} from "./ui/index";
 
 const Storage = require('./utils/localStorage')
-let storage = new Storage()
+let storage = new Storage('popup')
 global.disk = storage
 
 let toBackground = {};

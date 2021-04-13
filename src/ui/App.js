@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Login from './components/Login'
 import Lock from './components/Lock'
 import Requests from './components/Requests'
@@ -17,18 +17,38 @@ export default function App(props) {
     const [isNetwork, setNetwork] = useState(false)
     const [isReceive, setReceive] = useState(false)
     const [isTransaction, setTransaction] = useState(false)
-
+    const [user, setUser] = useState({});
     const [isPublicKeyRequest, setPublicKeyRequest] = useState(false)
     const [isTransactionRequest, setTransactionRequest] = useState(false)
+    const [isLogin, setLogin] = useState(false)
 
-    let user = global.disk.user.loadUser()
-    console.log(user)
+    const checkLock = ()=>{
+        if(disk.lock.checkLock() && disk.lock.getHashPassword())
+            return true
+        else
+            return false
+    }
 
-    const [isLogin, setLogin] = useState(!!user.privateKey)
-    const [isLocked, setLocked] = useState(disk.lock.checkLock())
+    const [isLocked, setLocked] = useState(checkLock)
+
+
+    const getUser = async ()=>{
+        let acc = await global.disk.user.loadUser()
+        setUser(acc)
+        setLogin(!!acc.privateKey)
+    }
+
+    useEffect(()=>{
+        getUser().then()
+    }, [])
+
+
+
+
+
 
     const login = (_user) => {
-        user = _user
+        setUser(_user)
         setPassword(true)
     }
 
