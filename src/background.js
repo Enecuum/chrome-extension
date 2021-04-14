@@ -61,7 +61,7 @@ async function msgConnectHandler(msg, sender) {
     console.log(msg)
     let answer = ''
     if (msg.taskId) {
-        let acc = disk.user.loadUser()
+        let acc = Account
         let lock = disk.lock.checkLock()
         if (!acc.net && !lock) {
             console.log('non auth')
@@ -80,8 +80,7 @@ async function msgConnectHandler(msg, sender) {
                         tx: msg.tx,
                         type: msg.type,
                         cb: msg.cb,
-                        net: msg.net,
-                        hash: msg.txHash
+                        data:msg.data,
                     })
                 } else {
                     Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
@@ -186,7 +185,7 @@ global.counterTask = taskCounter
 async function taskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     console.log(task)
-    let acc = Storage.user.loadUser()
+    let acc = Account
     let data = '';
     let wallet = {pubkey: acc.publicKey, prvkey: acc.privateKey};
     switch (task.type) {
@@ -207,7 +206,7 @@ async function taskHandler(taskId) {
         case 'tx':
             if (ports[task.cb.url].enabled) {
                 console.log('tx handler work!')
-                data = task.data
+                data = task.tx
                 let buf = ENQWeb.Net.provider
                 ENQWeb.Net.provider = acc.net
                 data.from = wallet
