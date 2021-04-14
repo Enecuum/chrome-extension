@@ -102,7 +102,7 @@ async function msgPopupHandler(msg, sender) {
     console.log({msg, sender})
     if (msg.popup) {
         if (msg.type === 'tx') {
-            let user = Storage.user.loadUser()
+            let user = Account
             let buf = ENQWeb.Net.provider
             ENQWeb.Net.provider = user.net
             let wallet = {pubkey: user.publicKey, prvkey: user.privateKey}
@@ -207,6 +207,7 @@ async function taskHandler(taskId) {
             if (ports[task.cb.url].enabled) {
                 console.log('tx handler work!')
                 data = task.tx
+                console.log(data)
                 let buf = ENQWeb.Net.provider
                 ENQWeb.Net.provider = acc.net
                 data.from = wallet
