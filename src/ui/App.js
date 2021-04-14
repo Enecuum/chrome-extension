@@ -65,6 +65,7 @@ export default function App(props) {
         global.asyncRequest({reject_all: true})
         setLogin(false)
         setLocked(false);
+        window.location.reload(false);
     }
 
     if (isPassword || (!!user.publicKey && !disk.lock.getHashPassword())) {
