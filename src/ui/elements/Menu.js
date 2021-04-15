@@ -26,6 +26,9 @@ export default function Menu(props) {
         //TODO закрыть попап
     }
 
+    const version = chrome.runtime.getManifest().version
+    console.log(version)
+
     return (
         <div className={styles.menu}>
 
@@ -43,7 +46,7 @@ export default function Menu(props) {
             {/*<div className={styles.button_link} onClick={() => setNet('pulse')}>Network: PULSE</div>*/}
             <div className={styles.button_link} onClick={() => setNet('bit')}>Network: BIT</div>
             <div className={styles.button_link} onClick={() => setNet('bit-dev')}>Network: BIT-DEV</div>
-            <div className={styles.button_link} onClick={props.logout}>Logout</div>
+            <div className={styles.button_link_logout}><div className={styles.button_link} onClick={props.logout}>Logout</div><div className={styles.version}>{version}</div></div>
 
         </div>
     )
