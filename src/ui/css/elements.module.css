@@ -156,6 +156,20 @@
     cursor: pointer;
 }
 
+.button_link_logout {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.version {
+    opacity: 0.1;
+}
+
+.version:hover {
+    opacity: 0.8;
+}
+
 .button_link_active {
     color: var(--color-blue)
 }
