@@ -9,11 +9,14 @@ export default function Menu(props) {
 
     const explorer = () => chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + props.publickKey})
 
-    const setNet = (value) => {
+    const setNet = async (value) => {
 
         localStorage.setItem('net', value)
         ENQWeb.Net.provider = value
-        disk.user.setNet(value)
+        await disk.user.loadUser().then(async acc=>{
+            acc.net = value;
+            await disk.promise.sendPromise({account:true, set:true, data:acc})
+        })
         location.reload(false)
     }
 
