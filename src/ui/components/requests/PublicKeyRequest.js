@@ -31,11 +31,21 @@ export default class PublicKeyRequest extends React.Component {
     async allow() {
         await global.asyncRequest({allow: true, taskId: this.state.taskId})
         this.props.setPublicKeyRequest(false)
+        await this.closeModalWindow()
+
     }
 
     async disallow() {
         await global.asyncRequest({disallow: true, taskId: this.state.taskId})
         this.props.setPublicKeyRequest(false)
+        await this.closeModalWindow()
+    }
+
+    closeModalWindow(){
+        let params = getUrlVars()
+        if(params.enable){
+            window.close()
+        }
     }
 
     render() {
