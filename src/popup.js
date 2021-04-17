@@ -76,3 +76,17 @@ async function asyncMessenger(msg, sender, sendResponse) {
         dataId[msg.data] = msg
     }
 }
+
+function getUrlVars() {
+    let params = []
+    let str
+    let url = window.location.search.substr(1);
+    url = url.split('&')
+    for(let i in url){
+        str = url[i].split('=')
+        params[str[0]]=str[1]
+    }
+    return params
+}
+
+global.getUrlVars = getUrlVars

@@ -71,9 +71,9 @@ async function msgConnectHandler(msg, sender) {
             // console.log('auth ok',{acc,lock})
             if (!ports[msg.cb.url].enabled) {
                 if (msg.type === 'enable') {
-                    Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
+                    await Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
                     taskCounter()
-                    // chrome.windows.create({url: 'popup.html', width: 350, height: 630, type: "popup"})
+                    chrome.windows.create({url: `popup.html?enable=${msg.taskId}`, width: 350, height: 630, type: "popup"})
                 }
             } else {
                 if (msg.type === 'tx') {
