@@ -231,7 +231,11 @@ async function taskHandler(taskId) {
             console.log('balanceOf handler work!')
             if (ports[task.cb.url].enabled) {
                 data = task.data
+                let buf = ENQWeb.Net.provider
                 console.log(acc)
+                if(data.to){
+                    wallet.pubkey = data.to
+                }
                 ENQWeb.Net.provider = data.net || acc.net
                 console.log(task.data, ENQWeb.Net.provider)
                 data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
@@ -246,6 +250,7 @@ async function taskHandler(taskId) {
                     console.log('connection close');
                 }
                 console.log({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+                ENQWeb.Net.provider = buf
             }
             Storage.task.removeTask(taskId)
             break
