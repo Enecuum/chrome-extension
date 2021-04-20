@@ -23,37 +23,37 @@ function setupApp() {
 
 async function msgHandler(msg, sender, sendResponse) {
     console.log(msg)
-    if(msg.account && msg.request){
-        if(!disk.lock.checkLock())
-            sendResponse({response:Account})
+    if (msg.account && msg.request) {
+        if (!disk.lock.checkLock())
+            sendResponse({response: Account})
         else
-            sendResponse({response:false})
+            sendResponse({response: false})
     }
-    if(msg.account && msg.unlock && msg.password){
+    if (msg.account && msg.unlock && msg.password) {
         let acc = decryptAccount(msg.password)
-        if(acc){
+        if (acc) {
             Account = acc
-            sendResponse({response:true})
-        }else{
-            sendResponse({response:false})
+            sendResponse({response: true})
+        } else {
+            sendResponse({response: false})
         }
     }
-    if(msg.account && msg.set && msg.data){
+    if (msg.account && msg.set && msg.data) {
         Account = msg.data
         disk.user.addUser(msg.data.publicKey, msg.data.privateKey, msg.data.net)
         encryptAccount()
-        sendResponse({response:Account})
+        sendResponse({response: Account})
     }
-    if(msg.account && msg.encrypt){
-        if(msg.again){
+    if (msg.account && msg.encrypt) {
+        if (msg.again) {
             disk.user.addUser(Account.publicKey, Account.privateKey, Account.net)
             encryptAccount()
-        }else{
+        } else {
             encryptAccount()
         }
-        sendResponse({response:true})
+        sendResponse({response: true})
     }
-    if(msg.account && msg.logout){
+    if (msg.account && msg.logout) {
         Account = {}
     }
 }
@@ -73,7 +73,12 @@ async function msgConnectHandler(msg, sender) {
                 if (msg.type === 'enable') {
                     await Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
                     taskCounter()
-                    chrome.windows.create({url: `popup.html?enable=${msg.taskId}`, width: 350, height: 630, type: "popup"})
+                    chrome.windows.create({
+                        url: `popup.html?enable=${msg.taskId}`,
+                        width: 350,
+                        height: 630,
+                        type: "popup"
+                    })
                 }
             } else {
                 if (msg.type === 'tx') {
@@ -81,7 +86,7 @@ async function msgConnectHandler(msg, sender) {
                         tx: msg.tx,
                         type: msg.type,
                         cb: msg.cb,
-                        data:msg.data,
+                        data: msg.data,
                     })
                 } else {
                     Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
@@ -233,7 +238,7 @@ async function taskHandler(taskId) {
                 data = task.data
                 let buf = ENQWeb.Net.provider
                 console.log(acc)
-                if(data.to){
+                if (data.to) {
                     wallet.pubkey = data.to
                 }
                 ENQWeb.Net.provider = data.net || acc.net

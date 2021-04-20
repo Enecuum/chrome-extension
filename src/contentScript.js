@@ -50,7 +50,7 @@ function eventContent(e) {
             tx: e.detail.tx,
             taskId: address,
             cb: e.detail.cb,
-            data:e.detail.data
+            data: e.detail.data
         })
     else
         toBackground.postMessage({type: e.detail.type, data: e.detail.data, taskId: address, cb: e.detail.cb})

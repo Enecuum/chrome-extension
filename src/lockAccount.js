@@ -3,11 +3,11 @@ import {extensionApi} from './utils/extensionApi'
 document.addEventListener('DOMContentLoaded', function () {
     console.log('lock loaded. status: ', disk.lock.checkLock())
     if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
-        LockAccount()
+        lockAccount()
     }
 })
 
-function LockAccount(){
+function lockAccount() {
     disk.lock.setLock(true)
     console.log('account locked')
 }
@@ -26,27 +26,27 @@ function encryptAccount() {
     }
 }
 
-function decryptAccount(password){
+function decryptAccount(password) {
     let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
     if (disk.lock.unlock(hash)) {
         hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
         console.log(hash)
         console.log(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
         return JSON.parse(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
-    }else{
+    } else {
         return false
     }
 }
 
 
 global.lockAccount = function () {
-    return LockAccount()
+    return lockAccount()
 }
 
-global.encryptAccount = function (){
+global.encryptAccount = function () {
     return encryptAccount()
 }
 
-global.decryptAccount = function (password){
+global.decryptAccount = function (password) {
     return decryptAccount(password)
 }
