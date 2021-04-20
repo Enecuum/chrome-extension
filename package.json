@@ -44,6 +44,7 @@
         "react-async": "^10.0.1",
         "react-dev-utils": "^11.0.3",
         "react-dom": "^16.14.0",
-        "uuid": "^3.3.2"
+        "uuid": "^3.3.2",
+        "enqweb3": "git+ssh://github.com/Enecuum/web-enq.git"
     }
 }

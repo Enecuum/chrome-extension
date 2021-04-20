@@ -5,7 +5,7 @@ export default function Menu(props) {
     const [amount, setAmount] = useState(0)
 
     const expand = () => chrome.tabs.create({url: 'popup.html'})
-    const Window = () => chrome.windows.create({url: 'popup.html', width: 350, height: 630, type: "popup"})
+    const window = () => chrome.windows.create({url: 'popup.html', width: 350, height: 630, type: "popup"})
 
     const explorer = () => chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + props.publickKey})
 
@@ -26,7 +26,7 @@ export default function Menu(props) {
             props.setLocked(true)
             await asyncRequest({lock: true})
         }
-        //TODO закрыть попап
+        //TODO close popup
     }
 
     const version = chrome.runtime.getManifest().version
@@ -44,7 +44,7 @@ export default function Menu(props) {
 
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
-            <div className={styles.button_link} onClick={Window}>Window</div>
+            <div className={styles.button_link} onClick={window}>Popup on</div>
             <div className={styles.button_link} onClick={explorer}>Show in blockchain explorer</div>
             {/*<div className={styles.button_link} onClick={() => setNet('pulse')}>Network: PULSE</div>*/}
             <div className={styles.button_link} onClick={() => setNet('bit')}>Network: BIT</div>

@@ -11,8 +11,7 @@ module.exports = () => {
         patterns: [{
             from: path.join(SOURCE_FOLDER, 'copied'),
             to: DIST_FOLDER
-        }
-        ]
+        }]
     };
 
     const plugins = [];
