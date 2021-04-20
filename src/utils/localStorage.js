@@ -99,8 +99,8 @@ function loadUser() {
         return {}
     }
     if (!checkLock()) {
-        if(this.name === 'popup'){
-            return sendPromise({account:true, request:true})
+        if (this.name === 'popup') {
+            return sendPromise({account: true, request: true})
         }
         user = JSON.parse(user)
         return user
@@ -226,10 +226,10 @@ function getHashPassword() {
     }
 }
 
-function sendPromise(obj){
+function sendPromise(obj) {
     return new Promise((resolve) => {
-        chrome.runtime.sendMessage(obj, answer=>{
-            if(answer.response !== undefined)
+        chrome.runtime.sendMessage(obj, answer => {
+            if (answer.response !== undefined)
                 resolve(answer.response)
             else
                 resolve(answer)

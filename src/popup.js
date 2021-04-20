@@ -82,9 +82,9 @@ function getUrlVars() {
     let str
     let url = window.location.search.substr(1);
     url = url.split('&')
-    for(let i in url){
+    for (let i in url) {
         str = url[i].split('=')
-        params[str[0]]=str[1]
+        params[str[0]] = str[1]
     }
     return params
 }
