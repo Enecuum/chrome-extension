@@ -23,8 +23,8 @@ module.exports = () => {
         entry: {
             popup: path.resolve(SOURCE_FOLDER, 'popup.js'),
             background: path.resolve(SOURCE_FOLDER, 'background.js'),
-            contentscript: path.resolve(SOURCE_FOLDER, 'contentScript.js'),
-            inpage: path.resolve(SOURCE_FOLDER, 'inPage.js'),
+            contentScript: path.resolve(SOURCE_FOLDER, 'contentScript.js'),
+            inPage: path.resolve(SOURCE_FOLDER, 'inPage.js'),
             lockAccount: path.resolve(SOURCE_FOLDER, 'lockAccount.js'),
         },
         output: {
