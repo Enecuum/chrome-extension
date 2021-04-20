@@ -18,9 +18,9 @@ export default class Lock extends React.Component {
         this.setState({password: e.target.value});
     }
 
-    async logout(){
+    async logout() {
         await this.props.logout()
-        await disk.promise.sendPromise({account:true, logout:true})
+        await disk.promise.sendPromise({account: true, logout: true})
     }
 
     async submit() {
@@ -34,7 +34,7 @@ export default class Lock extends React.Component {
         //     this.props.unlock()
         //     window.location.reload(false);
         // }
-        if(await disk.promise.sendPromise({account:true, unlock:true, password: this.state.password})){
+        if (await disk.promise.sendPromise({account: true, unlock: true, password: this.state.password})) {
             this.props.unlock()
             window.location.reload(false)
         }

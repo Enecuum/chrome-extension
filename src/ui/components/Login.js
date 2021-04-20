@@ -36,9 +36,9 @@ export default class Login extends React.Component {
         if (publicKey) {
             console.log(publicKey)
             let data = {
-                publicKey:publicKey,
-                privateKey:this.state.privateKey,
-                net:ENQWeb.Net.provider
+                publicKey: publicKey,
+                privateKey: this.state.privateKey,
+                net: ENQWeb.Net.provider
             }
             await global.disk.promise.sendPromise({account: true, set: true, data})
             this.props.login(data)
