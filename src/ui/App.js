@@ -22,8 +22,8 @@ export default function App(props) {
     const [isTransactionRequest, setTransactionRequest] = useState(false)
     const [isLogin, setLogin] = useState(false)
 
-    const checkLock = ()=>{
-        if(disk.lock.checkLock() && disk.lock.getHashPassword())
+    const checkLock = () => {
+        if (disk.lock.checkLock() && disk.lock.getHashPassword())
             return true
         else
             return false
@@ -32,19 +32,15 @@ export default function App(props) {
     const [isLocked, setLocked] = useState(checkLock)
 
 
-    const getUser = async ()=>{
+    const getUser = async () => {
         let acc = await global.disk.user.loadUser()
         setUser(acc)
         setLogin(!!acc.privateKey)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getUser().then()
     }, [])
-
-
-
-
 
 
     const login = (_user) => {
@@ -61,7 +57,7 @@ export default function App(props) {
     const logout = () => {
         global.disk.user.removeUser()
         disk.lock.removeLock()
-        disk.promise.sendPromise({account:true, logout:true})
+        disk.promise.sendPromise({account: true, logout: true})
         global.asyncRequest({reject_all: true})
         setLogin(false)
         setLocked(false);

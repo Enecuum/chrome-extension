@@ -103,10 +103,10 @@ export default function Account(props) {
         })
     }
 
-    const openEnable = ()=>{
+    const openEnable = () => {
         let params = getUrlVars()
         let task = disk.task.loadTask()
-        if(task[params.enable] && !isLocked){
+        if (task[params.enable] && !isLocked) {
             props.setPublicKeyRequest(task[params.enable])
         }
     }
@@ -207,7 +207,8 @@ export default function Account(props) {
 
             {renderMenu()}
 
-            <Address publicKey={props.user.publicKey} connectionsCounter={connectionsCounter} setPublicKeyRequest={props.setPublicKeyRequest}/>
+            <Address publicKey={props.user.publicKey} connectionsCounter={connectionsCounter}
+                     setPublicKeyRequest={props.setPublicKeyRequest}/>
 
             <div className={styles.content}>
 

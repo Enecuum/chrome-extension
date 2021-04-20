@@ -63,7 +63,7 @@ export default class TransactionRequest extends React.Component {
 
                         <div className={styles.transaction_address_copy} onClick={() => {
                             navigator.clipboard.writeText(this.state.to)
-                        }}  title={this.state.to + copyText}>{shortAddress(this.state.to)}</div>
+                        }} title={this.state.to + copyText}>{shortAddress(this.state.to)}</div>
 
                     </div>
 

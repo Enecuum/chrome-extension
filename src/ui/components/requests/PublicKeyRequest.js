@@ -41,9 +41,9 @@ export default class PublicKeyRequest extends React.Component {
         await this.closeModalWindow()
     }
 
-    closeModalWindow(){
+    closeModalWindow() {
         let params = getUrlVars()
-        if(params.enable){
+        if (params.enable) {
             window.close()
         }
     }

@@ -11,17 +11,16 @@ export default function Address(props) {
         console.log(count)
         let tasks = disk.list.listOfTask()
         let found = false
-        tasks.forEach(key=>{
-            if(key.type === 'enable'){
+        tasks.forEach(key => {
+            if (key.type === 'enable') {
                 setStatus('Await connect');
                 found = true;
             }
         })
         if (count === 0 && !found)
             return setStatus(`Not connected`)
-        else
-            if(count > 0 && !found)
-                return setStatus(`Connected ${count}`);
+        else if (count > 0 && !found)
+            return setStatus(`Connected ${count}`);
     }
 
     useEffect(() => {
@@ -32,11 +31,11 @@ export default function Address(props) {
         const ports = (await asyncRequest({connectionList: true})).ports
         console.log(ports)
         console.log(status)
-        if(status === 'Await connect'){
+        if (status === 'Await connect') {
             console.log('yep')
             let task = (await disk.list.listOfTask())
-            task.forEach((key, request)=>{
-                if(key.type === 'enable' && !request){
+            task.forEach((key, request) => {
+                if (key.type === 'enable' && !request) {
                     request = true;
                     props.setPublicKeyRequest(key);
                 }
@@ -55,7 +54,8 @@ export default function Address(props) {
 
             <div>
                 <div className={elements.account_name}>Account 1</div>
-                <div className={elements.address_string} onClick={copyPublicKey} title={props.publicKey + copyText}>{shortAddress(props.publicKey)}</div>
+                <div className={elements.address_string} onClick={copyPublicKey}
+                     title={props.publicKey + copyText}>{shortAddress(props.publicKey)}</div>
             </div>
 
             <div></div>

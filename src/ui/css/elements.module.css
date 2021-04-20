@@ -39,6 +39,7 @@
     /*padding: 20px;*/
 
 }
+
 .menu_icon_div img {
     width: 20px;
     margin-right: 20px;
@@ -50,7 +51,6 @@
 .menu_icon_div img:hover {
     filter: none;
 }
-
 
 
 .address_row {
@@ -103,8 +103,6 @@
 .address_row .connect:hover {
     color: var(--color-blue)
 }
-
-
 
 
 .menu {

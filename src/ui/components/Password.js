@@ -45,10 +45,10 @@ export default class Password extends React.Component {
             console.log(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
             disk.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
             disk.lock.setLock(false)
-            if(checkPass){
-                disk.promise.sendPromise({account:true, encrypt:true, again:true})
-            }else{
-                disk.promise.sendPromise({account:true, encrypt:true})
+            if (checkPass) {
+                disk.promise.sendPromise({account: true, encrypt: true, again: true})
+            } else {
+                disk.promise.sendPromise({account: true, encrypt: true})
             }
             this.props.setPassword(false)
             this.props.login()

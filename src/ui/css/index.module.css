@@ -83,18 +83,6 @@ a {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 .content {
     width: 100%;
     height: 100%;
@@ -112,18 +100,6 @@ a {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 .login_logo {
     width: 100px;
     padding-top: 70px;
@@ -135,8 +111,6 @@ a {
     height: 30px;
     margin: 20px;
 }
-
-
 
 
 .welcome1 {
@@ -211,11 +185,6 @@ a {
 }
 
 
-
-
-
-
-
 .button {
     cursor: pointer;
     text-align: center;
@@ -253,9 +222,6 @@ a {
 }
 
 
-
-
-
 .back {
     background: white;
 }
@@ -287,11 +253,6 @@ a {
     background: var(--color-red);
     color: ghostwhite;
 }
-
-
-
-
-
 
 
 /*INPUT*/
@@ -495,7 +456,7 @@ input.field.password {
     flex-direction: row;
     height: 70px;
 
-    background: rgba(0, 0 ,0, 0.1);
+    background: rgba(0, 0, 0, 0.1);
 
     cursor: pointer;
 }
@@ -553,7 +514,7 @@ input.field.password {
 }
 
 .activity:hover {
-    background: rgba(0, 0 ,0, 0.1);
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .activity > div {
@@ -591,14 +552,6 @@ input.field.password {
     width: 30%;
     /*background: red;*/
 }
-
-
-
-
-
-
-
-
 
 
 .request_header {

@@ -13,9 +13,9 @@ export default function Menu(props) {
 
         localStorage.setItem('net', value)
         ENQWeb.Net.provider = value
-        await disk.user.loadUser().then(async acc=>{
+        await disk.user.loadUser().then(async acc => {
             acc.net = value;
-            await disk.promise.sendPromise({account:true, set:true, data:acc})
+            await disk.promise.sendPromise({account: true, set: true, data: acc})
         })
         location.reload(false)
     }
@@ -49,7 +49,10 @@ export default function Menu(props) {
             {/*<div className={styles.button_link} onClick={() => setNet('pulse')}>Network: PULSE</div>*/}
             <div className={styles.button_link} onClick={() => setNet('bit')}>Network: BIT</div>
             <div className={styles.button_link} onClick={() => setNet('bit-dev')}>Network: BIT-DEV</div>
-            <div className={styles.button_link_logout}><div className={styles.button_link} onClick={props.logout}>Logout</div><div className={styles.version}>{version}</div></div>
+            <div className={styles.button_link_logout}>
+                <div className={styles.button_link} onClick={props.logout}>Logout</div>
+                <div className={styles.version}>{version}</div>
+            </div>
 
         </div>
     )
