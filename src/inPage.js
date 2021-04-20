@@ -9,7 +9,7 @@ function checkLib() {
         // let event = new CustomEvent('ENQConnect',{})
         // document.dispatchEvent(event)
     } else {
-        console.log('not found ENQ Web lib.')
+        // console.log('not found ENQ Web lib.')
     }
 }
 

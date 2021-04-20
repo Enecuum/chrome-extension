@@ -38,12 +38,18 @@ export default class Password extends React.Component {
     save() {
         console.log('work')
         if (this.state.password1 === this.state.password2) {
+            let checkPass = disk.lock.getHashPassword()
             console.log('work')
             // console.log(this.state.password1)
             //TODO save password here
             console.log(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
             disk.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
             disk.lock.setLock(false)
+            if(checkPass){
+                disk.promise.sendPromise({account:true, encrypt:true, again:true})
+            }else{
+                disk.promise.sendPromise({account:true, encrypt:true})
+            }
             this.props.setPassword(false)
             this.props.login()
         } else {

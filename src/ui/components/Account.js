@@ -103,6 +103,14 @@ export default function Account(props) {
         })
     }
 
+    const openEnable = ()=>{
+        let params = getUrlVars()
+        let task = disk.task.loadTask()
+        if(task[params.enable] && !isLocked){
+            props.setPublicKeyRequest(task[params.enable])
+        }
+    }
+
     const activity = disk.list.listOfTask()
     const activityElements = []
 
@@ -125,7 +133,7 @@ export default function Account(props) {
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>{
                         date +
-                        (item.data ? 'To: ' + shortAddress(item.data.to) : item.cb.url)}</div>
+                        (item.data ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}</div>
                 </div>
                 {item.data ?
                     <div className={styles.activity_data}>
@@ -189,6 +197,7 @@ export default function Account(props) {
         getConnects().then()
         getHistory().then()
         balance()
+        openEnable()
     }, []);
 
     return (

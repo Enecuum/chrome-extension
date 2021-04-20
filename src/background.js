@@ -1,7 +1,7 @@
 const storage = require('./utils/localStorage')
 import {extensionApi} from './utils/extensionApi'
 
-let Storage = new storage()
+let Storage = new storage('background')
 global.disk = Storage
 
 let ports = {}
@@ -12,6 +12,8 @@ let requests = {
     'getProvider': false
 }
 
+let Account = {}
+
 function setupApp() {
     console.log('background ready')
     extensionApi.runtime.onMessage.addListener(msgHandler)
@@ -21,13 +23,46 @@ function setupApp() {
 
 async function msgHandler(msg, sender, sendResponse) {
     console.log(msg)
+    if(msg.account && msg.request){
+        if(!disk.lock.checkLock())
+            sendResponse({response:Account})
+        else
+            sendResponse({response:false})
+    }
+    if(msg.account && msg.unlock && msg.password){
+        let acc = decryptAccount(msg.password)
+        if(acc){
+            Account = acc
+            sendResponse({response:true})
+        }else{
+            sendResponse({response:false})
+        }
+    }
+    if(msg.account && msg.set && msg.data){
+        Account = msg.data
+        disk.user.addUser(msg.data.publicKey, msg.data.privateKey, msg.data.net)
+        encryptAccount()
+        sendResponse({response:Account})
+    }
+    if(msg.account && msg.encrypt){
+        if(msg.again){
+            disk.user.addUser(Account.publicKey, Account.privateKey, Account.net)
+            encryptAccount()
+        }else{
+            encryptAccount()
+        }
+        sendResponse({response:true})
+    }
+    if(msg.account && msg.logout){
+        Account = {}
+    }
 }
 
 async function msgConnectHandler(msg, sender) {
     console.log(msg)
     let answer = ''
     if (msg.taskId) {
-        let acc = disk.user.loadUser()
+        let acc = Account
         let lock = disk.lock.checkLock()
         if (!acc.net && !lock) {
             console.log('non auth')
@@ -36,9 +71,9 @@ async function msgConnectHandler(msg, sender) {
             // console.log('auth ok',{acc,lock})
             if (!ports[msg.cb.url].enabled) {
                 if (msg.type === 'enable') {
-                    Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
+                    await Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
                     taskCounter()
-                    // chrome.windows.create({url: 'popup.html', width: 350, height: 630, type: "popup"})
+                    chrome.windows.create({url: `popup.html?enable=${msg.taskId}`, width: 350, height: 630, type: "popup"})
                 }
             } else {
                 if (msg.type === 'tx') {
@@ -46,8 +81,7 @@ async function msgConnectHandler(msg, sender) {
                         tx: msg.tx,
                         type: msg.type,
                         cb: msg.cb,
-                        net: msg.net,
-                        hash: msg.txHash
+                        data:msg.data,
                     })
                 } else {
                     Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
@@ -69,7 +103,7 @@ async function msgPopupHandler(msg, sender) {
     console.log({msg, sender})
     if (msg.popup) {
         if (msg.type === 'tx') {
-            let user = Storage.user.loadUser()
+            let user = Account
             let buf = ENQWeb.Net.provider
             ENQWeb.Net.provider = user.net
             let wallet = {pubkey: user.publicKey, prvkey: user.privateKey}
@@ -85,6 +119,7 @@ async function msgPopupHandler(msg, sender) {
             ENQWeb.Net.provider = buf
         }
     } else if (msg.lock) {
+        Account = {}
         lockAccount()
     } else if (msg.connectionList) {
         ports.popup.postMessage({asyncAnswer: true, data: msg, ports: ports})
@@ -151,7 +186,7 @@ global.counterTask = taskCounter
 async function taskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     console.log(task)
-    let acc = Storage.user.loadUser()
+    let acc = Account
     let data = '';
     let wallet = {pubkey: acc.publicKey, prvkey: acc.privateKey};
     switch (task.type) {
@@ -172,7 +207,8 @@ async function taskHandler(taskId) {
         case 'tx':
             if (ports[task.cb.url].enabled) {
                 console.log('tx handler work!')
-                data = task.data
+                data = task.tx
+                console.log(data)
                 let buf = ENQWeb.Net.provider
                 ENQWeb.Net.provider = acc.net
                 data.from = wallet
@@ -195,7 +231,11 @@ async function taskHandler(taskId) {
             console.log('balanceOf handler work!')
             if (ports[task.cb.url].enabled) {
                 data = task.data
+                let buf = ENQWeb.Net.provider
                 console.log(acc)
+                if(data.to){
+                    wallet.pubkey = data.to
+                }
                 ENQWeb.Net.provider = data.net || acc.net
                 console.log(task.data, ENQWeb.Net.provider)
                 data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
@@ -210,6 +250,7 @@ async function taskHandler(taskId) {
                     console.log('connection close');
                 }
                 console.log({data: JSON.stringify(data), taskId: taskId, cb: task.cb})
+                ENQWeb.Net.provider = buf
             }
             Storage.task.removeTask(taskId)
             break
