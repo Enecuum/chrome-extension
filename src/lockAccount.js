@@ -2,33 +2,51 @@ import {extensionApi} from './utils/extensionApi'
 
 document.addEventListener('DOMContentLoaded', function () {
     console.log('lock loaded. status: ', disk.lock.checkLock())
-    extensionApi.windows.onRemoved.addListener(function () {
-        extensionApi.windows.getAll(async wins => {
-            if (wins.length === 0) {
-                if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
-                    await LockAccount()
-                }
-            }
-        })
-
-    })
+    if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
+        LockAccount()
+    }
 })
 
-function LockAccount() {
+function LockAccount(){
+    disk.lock.setLock(true)
+    console.log('account locked')
+}
+
+function encryptAccount() {
     let account = disk.user.loadUserNotJson()
     let password = disk.lock.getHashPassword()
     if (password && !disk.lock.checkLock()) {
         password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
-        disk.lock.setLock(true)
         account = ENQWeb.Utils.crypto.encrypt(account, password)
         disk.user.changeUser(account)
-        console.log('account locked')
+        console.log('account encrypted')
     } else {
         if (!disk.lock.getHashPassword())
             console.log('password not set')
     }
 }
 
+function decryptAccount(password){
+    let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
+    if (disk.lock.unlock(hash)) {
+        hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
+        console.log(hash)
+        console.log(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
+        return JSON.parse(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
+    }else{
+        return false
+    }
+}
+
+
 global.lockAccount = function () {
     return LockAccount()
+}
+
+global.encryptAccount = function (){
+    return encryptAccount()
+}
+
+global.decryptAccount = function (password){
+    return decryptAccount(password)
 }
