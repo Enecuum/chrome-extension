@@ -6,10 +6,15 @@ module.exports = () => {
     const mode = process.env.NODE_ENV || 'development';
     const SOURCE_FOLDER = path.resolve(__dirname, 'src');
     const DIST_FOLDER = path.resolve(__dirname, 'dist');
+    const LIB_FILE = path.resolve(__dirname + '/node_modules/enqweb3/prebuild/enqweb3lib.min.js')
 
     const COPY = {
         patterns: [{
             from: path.join(SOURCE_FOLDER, 'copied'),
+            to: DIST_FOLDER
+        },
+        {
+            from: LIB_FILE,
             to: DIST_FOLDER
         }]
     };

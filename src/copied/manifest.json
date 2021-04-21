@@ -6,7 +6,7 @@
     "background": {
         "scripts": [
             "background.js",
-            "enqweb3.min.js",
+            "enqweb3lib.min.js",
             "lockAccount.js"
         ]
     },
