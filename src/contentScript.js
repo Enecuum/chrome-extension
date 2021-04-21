@@ -8,7 +8,8 @@ let requests = {
     'tx': transaction,
     'balanceOf': balanceOf,
     'enable': enable,
-    'getProvider': enable
+    'getProvider': enable,
+    'getVersion':enable
 }
 
 function setupConnection() {
