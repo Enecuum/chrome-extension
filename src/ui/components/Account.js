@@ -133,7 +133,7 @@ export default function Account(props) {
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>{
                         date +
-                        (item.data ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}</div>
+                        (item.tx ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}</div>
                 </div>
                 {item.data ?
                     <div className={styles.activity_data}>
