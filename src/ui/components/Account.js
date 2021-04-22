@@ -106,8 +106,10 @@ export default function Account(props) {
     const openEnable = () => {
         let params = getUrlVars()
         let task = disk.task.loadTask()
-        if (task[params.enable] && !isLocked) {
-            props.setPublicKeyRequest(task[params.enable])
+        if (params.type === 'enable') {
+            if (task[params.id] && !isLocked) {
+                props.setPublicKeyRequest(task[params.id])
+            }
         }
     }
 
