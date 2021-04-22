@@ -9,7 +9,8 @@ let requests = {
     'tx': true,
     'enable': true,
     "balanceOf": false,
-    'getProvider': false
+    'getProvider': false,
+    'getVersion': false,
 }
 
 let Account = {}
@@ -74,7 +75,7 @@ async function msgConnectHandler(msg, sender) {
                     await Storage.task.setTask(msg.taskId, {data: msg.data, type: msg.type, cb: msg.cb})
                     taskCounter()
                     chrome.windows.create({
-                        url: `popup.html?enable=${msg.taskId}`,
+                        url: `popup.html?type=enable&id=${msg.taskId}`,
                         width: 350,
                         height: 630,
                         type: "popup"
@@ -275,7 +276,18 @@ async function taskHandler(taskId) {
                 }
             }
             Storage.task.removeTask(taskId)
-            break;
+            break
+        case 'getVersion':
+            if (ports[task.cb.url].enabled) {
+                console.log('version: ', extensionApi.app.getDetails().version)
+                ports[task.cb.url].postMessage({
+                    data: JSON.stringify(extensionApi.app.getDetails().version),
+                    taskId: taskId,
+                    cb: task.cb
+                })
+            }
+            Storage.task.removeTask(taskId)
+            break
         default:
             break
     }

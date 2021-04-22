@@ -43,7 +43,7 @@ export default class PublicKeyRequest extends React.Component {
 
     closeModalWindow() {
         let params = getUrlVars()
-        if (params.enable) {
+        if (params.type === 'enable') {
             window.close()
         }
     }
