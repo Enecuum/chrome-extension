@@ -1,12 +1,12 @@
 {
     "name": "Enecuum",
     "description": "Enecuum Wallet",
-    "version": "0.1.2",
+    "version": "0.1.5",
     "manifest_version": 2,
     "background": {
         "scripts": [
+            "enqweb3lib.ext.min.js",
             "background.js",
-            "enqweb3lib.min.js",
             "lockAccount.js"
         ]
     },
