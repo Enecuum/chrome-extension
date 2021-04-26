@@ -49,20 +49,19 @@ export default function Account(props) {
     // }
 
     let connectsElements = []
-    connectsElements.push(
-        <div key={'1111'} onClick={() => {}} className={`${styles.connect}`}>
-        <div>
-            <div>faucet-bit.enecuum.com</div>
-            <div className={styles.time}>26.04.2021</div>
-        </div>
-    </div>)
-    connectsElements.push(
-        <div key={'1111'} onClick={() => {}} className={`${styles.connect}`}>
-            <div>
-                <div>http://95.216.207.173:8000</div>
-                <div className={styles.time}>26.04.2021</div>
-            </div>
-        </div>)
+    let addConnect = (url, date) => {
+        connectsElements.push(
+            <div key={url} onClick={() => {}} className={`${styles.connect}`}>
+                <div>
+                    <div>{url}</div>
+                    <div className={styles.time}>{date}</div>
+                </div>
+            </div>)
+    }
+
+    addConnect('faucet-bit.enecuum.com', '26.04.2021')
+    addConnect('http://95.216.207.173:8000', '26.04.2021')
+    addConnect('google.com', '26.07.2022')
 
     const getConnects = async () => {
         let connects = await asyncRequest({connectionList: true})
@@ -72,7 +71,8 @@ export default function Account(props) {
                 counter++
 
                 //TODO add element
-                connectsElements.push(connects.ports[key])
+                // connectsElements.push(connects.ports[key])
+                addConnect(connects.ports[key], 'now')
             }
         }
 

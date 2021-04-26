@@ -569,7 +569,23 @@ input.field.password::placeholder {
 
 .connect {
     height: 70px;
-    padding: 20px;
+}
+
+.connect > div {
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 10px;
+    padding-left: 20px;
+}
+
+.connect > div > div:last-child {
+    padding-bottom: 10px;
+}
+
+.connect:hover {
+    background: rgba(0, 0, 0, 0.1);
 }
 
 
