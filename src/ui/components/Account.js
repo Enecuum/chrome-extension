@@ -34,6 +34,8 @@ export default function Account(props) {
 
     const [isConnects, setConnects] = useState(false)
 
+    const [assets, setAssets] = useState([])
+
     const [menu, setMenu] = useState(false)
     const clickMenu = () => {
         setMenu(!menu)
@@ -118,6 +120,12 @@ export default function Account(props) {
                         }
                     })
             }
+            setAssets([{
+                amount: res.amount / 1e10,
+                ticker: res.ticker,
+                usd: usd,
+                image: './images/enq.png'
+            }])
             console.log(res.amount / 1e10)
         }).catch((err) => {
             console.log('error: ', err)
@@ -166,18 +174,13 @@ export default function Account(props) {
         )
     }
 
-    const assets = [{
-        amount: amount,
-        ticker: ticker,
-        usd: usd
-    }]
     const assetsElements = []
     let renderAssets = () => {
         for (const key in assets) {
             const item = assets[key]
             assetsElements.push(
                 <div key={key} className={styles.asset}>
-                    <img className={styles.icon} src="./images/enq.png"/>
+                    <img className={styles.icon} src={item.image}/>
                     <div>
                         <div>
                             {item.amount.toFixed(4)}
@@ -194,18 +197,18 @@ export default function Account(props) {
                 </div>
             )
         }
-
-        return assetsElements
     }
 
 
     let addAsset = () => {
-        assets.push({
+        setAssets([...assets, {
             amount: 0,
-            ticker: 'USDT',
-            usd: '0.00'
-        })
-        renderAssets()
+            ticker: 'COIN',
+            usd: '0.00',
+            image: './icons/3.png'
+        }])
+        // renderAssets()
+        // console.log(assetsElements)
     }
 
     // addAsset()
@@ -299,10 +302,7 @@ export default function Account(props) {
 
                     {assetsElements}
 
-                    <div
-                        onClick={addAsset}
-                        className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}
-                    >
+                    <div onClick={addAsset} className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}>
                         Add token
                     </div>
 
