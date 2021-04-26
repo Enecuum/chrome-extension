@@ -10,6 +10,7 @@ body {
     background: var(--color-blue-background);
 
     color: white;
+    --color-white: white;
 
     --color-blue-background: rgb(30, 32, 51);
 
@@ -111,6 +112,11 @@ a {
     width: 30px;
     height: 30px;
     margin: 20px;
+
+    padding: 5px;
+
+    border-radius: 50%;
+    background-color: var(--color-white);
 }
 
 

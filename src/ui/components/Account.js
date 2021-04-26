@@ -137,9 +137,9 @@ export default function Account(props) {
                         date +
                         (item.tx ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}</div>
                 </div>
-                {item.data ?
+                {item.tx ?
                     <div className={styles.activity_data}>
-                        <div>{'-' + (item.data.value / 1e10) + ' ' + ticker}</div>
+                        <div>{'-' + (item.tx.value / 1e10) + ' ' + ticker}</div>
                     </div> : ''}
             </div>,
         )
