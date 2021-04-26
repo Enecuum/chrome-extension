@@ -49,6 +49,20 @@ export default function Account(props) {
     // }
 
     let connectsElements = []
+    connectsElements.push(
+        <div key={'1111'} onClick={() => {}} className={`${styles.connect}`}>
+        <div>
+            <div>faucet-bit.enecuum.com</div>
+            <div className={styles.time}>26.04.2021</div>
+        </div>
+    </div>)
+    connectsElements.push(
+        <div key={'1111'} onClick={() => {}} className={`${styles.connect}`}>
+            <div>
+                <div>http://95.216.207.173:8000</div>
+                <div className={styles.time}>26.04.2021</div>
+            </div>
+        </div>)
 
     const getConnects = async () => {
         let connects = await asyncRequest({connectionList: true})

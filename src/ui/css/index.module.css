@@ -567,6 +567,11 @@ input.field.password::placeholder {
     /*background: red;*/
 }
 
+.connect {
+    height: 70px;
+    padding: 20px;
+}
+
 
 .request_header {
     width: 100%;
