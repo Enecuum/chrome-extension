@@ -32,14 +32,22 @@ export default function Address(props) {
         console.log(ports)
         console.log(status)
         if (status === 'Await connect') {
-            console.log('yep')
-            let task = (await disk.list.listOfTask())
+
+            let task = await disk.list.listOfTask()
+
+            //TODO enable?
             task.forEach((key, request) => {
                 if (key.type === 'enable' && !request) {
                     request = true;
                     props.setPublicKeyRequest(key);
                 }
             })
+        }
+        if (status === 'Connected') {
+            props.setConnects(true)
+        }
+        if (status === 'Not connected') {
+            props.setConnects(true)
         }
     }
 

@@ -32,6 +32,8 @@ export default function Account(props) {
 
     const [net, setNet] = useState(String(ENQWeb.Net.currentProvider))
 
+    const [isConnects, setConnects] = useState(false)
+
     const [menu, setMenu] = useState(false)
     const clickMenu = () => {
         setMenu(!menu)
@@ -46,12 +48,17 @@ export default function Account(props) {
     //     })
     // }
 
+    let connectsElements = []
+
     const getConnects = async () => {
         let connects = await asyncRequest({connectionList: true})
         let counter = 0;
         for (let key in connects.ports) {
             if (connects.ports[key].enabled) {
                 counter++
+
+                //TODO add element
+                connectsElements.push(connects.ports[key])
             }
         }
 
@@ -209,7 +216,12 @@ export default function Account(props) {
 
             {renderMenu()}
 
-            <Address publicKey={props.user.publicKey} connectionsCounter={connectionsCounter}
+            <Address publicKey={props.user.publicKey}
+                     connectionsCounter={connectionsCounter}
+                     setConnects={() => {
+                         setConnects(true)
+                         setActiveTab(2)
+                     }}
                      setPublicKeyRequest={props.setPublicKeyRequest}/>
 
             <div className={styles.content}>
@@ -261,6 +273,12 @@ export default function Account(props) {
                     >
                         Activity <sup>{activity.length}</sup>
                     </div>
+                    {isConnects && activeTab === 2 && <div
+                        onClick={() => setActiveTab(2)}
+                        className={(activeTab === 2 ? ` ${styles.bottom_tab_active}` : '')}
+                    >
+                        Connects
+                    </div>}
                 </div>
 
                 <div className={styles.bottom_list + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
@@ -280,6 +298,13 @@ export default function Account(props) {
                     className={`${styles.bottom_list} ${styles.bottom_list_activity} ${activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
 
                     {activityElements}
+
+                </div>
+
+                <div
+                    className={`${styles.bottom_list} ${styles.bottom_list_activity} ${activeTab === 2 ? '' : `${styles.bottom_list_disabled}`}`}>
+
+                    {connectsElements}
 
                 </div>
 
