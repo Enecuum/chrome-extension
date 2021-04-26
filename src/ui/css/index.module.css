@@ -37,6 +37,8 @@ body {
     --font-size-super-big: 34px;
     --font-size-giant: 40px;
 
+    --font-weight-big: 600;
+
     position: relative;
 
     min-width: 350px;
@@ -293,7 +295,12 @@ input.field::placeholder {
 }
 
 input.field.password {
-    /*letter-spacing: 4px;*/
+    letter-spacing: 4px;
+    font-weight: 400;
+}
+
+input.field.password::placeholder {
+    letter-spacing: normal;
 }
 
 /*FORM*/

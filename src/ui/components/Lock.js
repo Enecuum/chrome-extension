@@ -39,6 +39,7 @@ export default class Lock extends React.Component {
             this.props.unlock()
             window.location.reload(false)
         }
+        console.log('TODO bug')
     }
 
     render() {
