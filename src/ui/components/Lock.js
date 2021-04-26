@@ -34,6 +34,7 @@ export default class Lock extends React.Component {
         //     this.props.unlock()
         //     window.location.reload(false);
         // }
+
         if (await disk.promise.sendPromise({account: true, unlock: true, password: this.state.password})) {
             this.props.unlock()
             window.location.reload(false)

@@ -13,14 +13,17 @@ import PublicKeyRequest from './components/requests/PublicKeyRequest'
 import TransactionRequest from './components/requests/TransactionRequest'
 
 export default function App(props) {
-    const [isPassword, setPassword] = useState(false)
+    const [isPassword, setPassword] = useState(!disk.lock.getHashPassword())
+    const [isLogin, setLogin] = useState(false)
+
+    const [user, setUser] = useState({});
+
     const [isNetwork, setNetwork] = useState(false)
     const [isReceive, setReceive] = useState(false)
     const [isTransaction, setTransaction] = useState(false)
-    const [user, setUser] = useState({});
+
     const [isPublicKeyRequest, setPublicKeyRequest] = useState(false)
     const [isTransactionRequest, setTransactionRequest] = useState(false)
-    const [isLogin, setLogin] = useState(false)
 
     const checkLock = () => {
         if (disk.lock.checkLock() && disk.lock.getHashPassword())
@@ -31,11 +34,10 @@ export default function App(props) {
 
     const [isLocked, setLocked] = useState(checkLock)
 
-
     const getUser = async () => {
-        let acc = await global.disk.user.loadUser()
-        setUser(acc)
-        setLogin(!!acc.privateKey)
+        let account = await global.disk.user.loadUser()
+        setUser(account)
+        setLogin(!!account.privateKey)
     }
 
     useEffect(() => {
@@ -43,14 +45,13 @@ export default function App(props) {
     }, [])
 
 
-    const login = (_user) => {
-        setUser(_user)
-        setPassword(true)
+    const login = () => {
+        setPassword(false)
     }
 
-    const login2 = () => {
+    const login2 = (_user) => {
         console.log('login2')
-        setPassword(false)
+        setUser(_user)
         setLogin(true)
     }
 
@@ -64,11 +65,11 @@ export default function App(props) {
         window.location.reload(false);
     }
 
-    if (isPassword || (!!user.publicKey && !disk.lock.getHashPassword())) {
-        return <Password setPassword={setPassword} login={login2}/>
+    if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
+        return <Password setPassword={setPassword} login={login}/>
     }
 
-    if (!isLogin && !isLocked) return <Login login={login}/>
+    if (!isLogin && !isLocked) return <Login login={login2}/>
 
     const unlock = () => {
         setLocked(false)
