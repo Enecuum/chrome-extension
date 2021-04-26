@@ -31,7 +31,7 @@ async function msgHandler(msg, sender, sendResponse) {
             sendResponse({response: false})
     }
     if (msg.account && msg.unlock && msg.password) {
-        let acc = decryptAccount(msg.password)
+        let account = decryptAccount(msg.password)
         if (acc) {
             Account = acc
             sendResponse({response: true})
@@ -63,9 +63,9 @@ async function msgConnectHandler(msg, sender) {
     console.log(msg)
     let answer = ''
     if (msg.taskId) {
-        let acc = Account
+        let account = Account
         let lock = disk.lock.checkLock()
-        if (!acc.net && !lock) {
+        if (!account.net && !lock) {
             console.log('non auth')
             rejectTaskHandler(msg.taskId)
         } else {
@@ -192,15 +192,15 @@ global.counterTask = taskCounter
 async function taskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     console.log(task)
-    let acc = Account
+    let account = Account
     let data = '';
-    let wallet = {pubkey: acc.publicKey, prvkey: acc.privateKey};
+    let wallet = {pubkey: account.publicKey, prvkey: account.privateKey};
     switch (task.type) {
         case 'enable':
             console.log('enable. returned: ', acc)
             data = {
-                pubkey: acc.publicKey,
-                net: acc.net,
+                pubkey: account.publicKey,
+                net: account.net,
             }
             try {
                 ports[task.cb.url].postMessage({data: JSON.stringify(data), taskId: taskId, cb: task.cb});
@@ -216,7 +216,7 @@ async function taskHandler(taskId) {
                 data = task.tx
                 console.log(data)
                 let buf = ENQWeb.Net.provider
-                ENQWeb.Net.provider = acc.net
+                ENQWeb.Net.provider = account.net
                 data.from = wallet
                 data.amount = Number(data.value)
                 data.value = ''
@@ -242,7 +242,7 @@ async function taskHandler(taskId) {
                 if (data.to) {
                     wallet.pubkey = data.to
                 }
-                ENQWeb.Net.provider = data.net || acc.net
+                ENQWeb.Net.provider = data.net || account.net
                 console.log(task.data, ENQWeb.Net.provider)
                 data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
                     .catch(err => {
@@ -262,7 +262,7 @@ async function taskHandler(taskId) {
             break
         case 'getProvider':
             if (ports[task.cb.url].enabled) {
-                ENQWeb.Net.provider = acc.net
+                ENQWeb.Net.provider = account.net
                 if (task.cb.fullUrl) {
                     data = {net: ENQWeb.Net.provider}
                 } else {
