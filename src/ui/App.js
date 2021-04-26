@@ -32,7 +32,7 @@ export default function App(props) {
             return false
     }
 
-    const [isLocked, setLocked] = useState(checkLock)
+    const [isLock, setLock] = useState(checkLock)
 
     const getUser = async () => {
         let account = await global.disk.user.loadUser()
@@ -61,7 +61,7 @@ export default function App(props) {
         disk.promise.sendPromise({account: true, logout: true})
         global.asyncRequest({reject_all: true})
         setLogin(false)
-        setLocked(false);
+        setLock(false);
         window.location.reload(false);
     }
 
@@ -69,13 +69,13 @@ export default function App(props) {
         return <Password setPassword={setPassword} login={login}/>
     }
 
-    if (!isLogin && !isLocked) return <Login login={login2}/>
+    if (!isLogin && !isLock) return <Login login={login2}/>
 
     const unlock = () => {
-        setLocked(false)
+        setLock(false)
     }
 
-    if (isLocked) return <Lock unlock={unlock} logout={logout}/>
+    if (isLock) return <Lock unlock={unlock} logout={logout}/>
 
     if (isTransaction) {
         return (
@@ -102,7 +102,7 @@ export default function App(props) {
 
     return <Account user={user}
                     logout={logout}
-                    setLocked={setLocked}
+                    setLock={setLock}
                     setPassword={setPassword}
                     setNetwork={setNetwork}
                     setReceive={setReceive}

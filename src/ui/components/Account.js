@@ -191,7 +191,7 @@ export default function Account(props) {
     renderAssets()
 
     const renderMenu = () => {
-        if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} setLocked={props.setLocked}
+        if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} setLock={props.setLock}
                                setPassword={props.setPassword}/>
     }
 
