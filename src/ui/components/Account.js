@@ -33,6 +33,7 @@ export default function Account(props) {
     const [net, setNet] = useState(String(ENQWeb.Net.currentProvider))
 
     const [isConnects, setConnects] = useState(false)
+    const [connectsElements, setConnectsElements] = useState([])
 
     const [assets, setAssets] = useState([])
 
@@ -50,15 +51,13 @@ export default function Account(props) {
     //     })
     // }
 
-    let connectsElements = []
     let addConnect = (url, date) => {
-        connectsElements.push(
-            <div key={url} onClick={() => {}} className={`${styles.connect}`}>
-                <div>
-                    <div>{url}</div>
-                    <div className={styles.time}>{date}</div>
-                </div>
-            </div>)
+        console.log('addConnect')
+        let elements = [...connectsElements]
+        elements.push()
+        console.log(elements)
+        setConnectsElements(elements)
+        console.log(connectsElements)
     }
 
     // addConnect('faucet-bit.enecuum.com', '26.04.2021')
@@ -74,7 +73,7 @@ export default function Account(props) {
 
                 //TODO add element
                 // connectsElements.push(connects.ports[key])
-                addConnect(connects.ports[key], 'now')
+                // addConnect(connects.ports[key], 'now')
             }
         }
 
@@ -150,7 +149,7 @@ export default function Account(props) {
 
     for (const key in activity) {
         const item = activity[key]
-        console.log(item)
+        // console.log(item)
         activityElements.push(
             <div
                 key={key} onClick={() => {
@@ -168,7 +167,7 @@ export default function Account(props) {
                 </div>
                 {item.tx ?
                     <div className={styles.activity_data}>
-                        <div>{'-' + (item.tx.value / 1e10) + ' ' + ticker}</div>
+                        <div>{'-' + (item.tx.value / 1e10) + ' ' + (ticker ? ticker : 'COIN')}</div>
                     </div> : ''}
             </div>,
         )
@@ -233,7 +232,19 @@ export default function Account(props) {
             <Address publicKey={props.user.publicKey}
                      connectionsCounter={connectionsCounter}
                      setConnects={(connects) => {
-                         console.log(connects)
+                         // console.log(connects)
+                         let elements = []
+                         for (const key in connects) {
+                             if (connects[key].enabled)
+                                 elements.push(<div key={key} onClick={() => {}} className={`${styles.connect}`}>
+                                 <div>
+                                     <div>{key}</div>
+                                     {/*<div className={styles.time}>{date}</div>*/}
+                                     <div></div>
+                                 </div>
+                             </div>)
+                         }
+                         setConnectsElements(elements)
                          setConnects(true)
                          setActiveTab(2)
                      }}
