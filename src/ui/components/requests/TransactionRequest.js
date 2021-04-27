@@ -6,7 +6,7 @@ import elements from "../../css/elements.module.css";
 let fee = 0.1
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
-export default function TransactionRequest(props){
+export default function TransactionRequest(props) {
 
     const [activeTab, setActiveTab] = useState(0)
     const [url, setUrl] = useState(`${ENQWeb.Net.provider}/#!/tx/` + props.txHash)
@@ -17,46 +17,49 @@ export default function TransactionRequest(props){
     const [amount, setAmount] = useState(props.request.tx.value)
     const [nonce, setNonce] = useState(props.request.tx.nonce)
     const [taskId, setTaskId] = useState(props.request.cb.taskId)
-    const [dataText, setDataText] = useState('')
+    const [dataText, setDataText] = useState([])
 
 
-    const copyHash = () =>{
+    const copyHash = () => {
         navigator.clipboard.writeText(props.txHash)
     }
 
-    const confirm = async ()=>{
+    const confirm = async () => {
         await global.asyncRequest({allow: true, taskId: taskId})
         this.props.setTransactionRequest(false)
     }
 
-    const parseData = ()=>{
-        let dataText;
+    const parseData = () => {
+        let dataTextArray = []
         let field = data
-        if(ENQWeb.Utils.ofd.isContract(field)){
+        if (ENQWeb.Utils.ofd.isContract(field)) {
+
             field = ENQWeb.Utils.ofd.parse(field);
-            if(field.type){
-                dataText='<div>Type: ' + field.type + '</div>';
+
+            if (field.type) {
+                dataTextArray.push(<div key={'type'}>{field.type}</div>)
             }
-            if(field.parameters){
-                for(let key in field.parameters){
+            if (field.parameters) {
+                for (let key in field.parameters) {
                     // console.log(key, field.parameters[key]);
-                    dataText+=`<div>${key}: ${field.parameters[key]} </div>`
+                    dataTextArray.push(<div key={key}>{key}: {field.parameters[key]}</div>)
                 }
             }
-        }else{
-            dataText = field;
+        } else {
+            dataTextArray.push(field);
         }
-        setDataText(dataText)
+
+        setDataText(dataTextArray)
     }
 
-    const reject = async ()=>{
+    const reject = async () => {
         await global.asyncRequest({disallow: true, taskId: taskId})
         props.setTransactionRequest(false)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         parseData()
-    },[])
+    }, [])
 
     return (
         <div className={styles.main}>
@@ -126,11 +129,9 @@ export default function TransactionRequest(props){
 
             </div>
 
-            <div
-                className={`${styles.bottom_list} ${activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
+            <div className={`${styles.bottom_list} ${activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
 
-                <div
-                    className={styles.transaction_data_data}>{(props.request.tx.data ? dataText : 'No data')}</div>
+                <div className={styles.transaction_data_data}>{(props.request.tx.data ? dataText : 'No data')}</div>
 
             </div>
 

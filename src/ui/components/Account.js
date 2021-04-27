@@ -162,7 +162,7 @@ export default function Account(props) {
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>{
-                        date +
+                        new Date(item.data.date).toDateString() + ' ' +
                         (item.tx ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}</div>
                 </div>
                 {item.tx ?
