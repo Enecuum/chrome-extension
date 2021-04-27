@@ -40,7 +40,7 @@ export default class Login extends React.Component {
                 privateKey: this.state.privateKey,
                 net: ENQWeb.Net.provider
             }
-            await global.disk.promise.sendPromise({account: true, set: true, data})
+            await global.disk.promise.sendPromise({account: true, set: true, data:data})
             this.props.login(data)
         }
     }
