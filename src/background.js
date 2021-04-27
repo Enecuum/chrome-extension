@@ -197,7 +197,7 @@ async function taskHandler(taskId) {
     let wallet = {pubkey: account.publicKey, prvkey: account.privateKey};
     switch (task.type) {
         case 'enable':
-            console.log('enable. returned: ', acc)
+            console.log('enable. returned: ', account)
             data = {
                 pubkey: account.publicKey,
                 net: account.net,
@@ -238,7 +238,7 @@ async function taskHandler(taskId) {
             if (ports[task.cb.url].enabled) {
                 data = task.data
                 let buf = ENQWeb.Net.provider
-                console.log(acc)
+                console.log(account)
                 if (data.to) {
                     wallet.pubkey = data.to
                 }
