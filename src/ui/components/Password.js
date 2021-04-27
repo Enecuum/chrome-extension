@@ -48,7 +48,7 @@ export default class Password extends React.Component {
             if (checkPass) {
                 disk.promise.sendPromise({account: true, encrypt: true, again: true})
             } else {
-                disk.promise.sendPromise({account: true, encrypt: true})
+                // disk.promise.sendPromise({account: true, encrypt: true})
             }
             this.props.setPassword(false)
             this.props.login()
