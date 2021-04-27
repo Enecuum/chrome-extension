@@ -44,7 +44,7 @@ export default class Transaction extends React.Component {
 
         //TODO
         let user = await disk.user.loadUser()
-        console.log(user)
+        // console.log(user)
         let wallet = {pubkey: user.publicKey, prvkey: user.privateKey}
         ENQWeb.Net.provider = user.net
 
@@ -55,7 +55,7 @@ export default class Transaction extends React.Component {
             data: '',
         }
 
-        console.log(data)
+        // console.log(data)
 
         let response
         try {

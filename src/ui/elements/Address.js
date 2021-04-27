@@ -8,7 +8,7 @@ export default function Address(props) {
     let [status, setStatus] = useState('')
 
     async function checkConnect(count) {
-        console.log(count)
+        // console.log(count)
         let tasks = disk.list.listOfTask()
         let found = false
         tasks.forEach(key => {
@@ -33,22 +33,34 @@ export default function Address(props) {
         console.log(status)
         if (status === 'Await connect') {
 
-            let task = await disk.list.listOfTask()
+            let tasks = await disk.list.listOfTask()
 
-            //TODO enable?
-            task.forEach((key, request) => {
+            //TODO rename enable please, allow website access or something
+            tasks.forEach((key, request) => {
+                console.log(request)
                 if (key.type === 'enable' && !request) {
-                    request = true;
                     props.setPublicKeyRequest(key);
                 }
             })
         }
-        if (status === 'Connected') {
-            props.setConnects(true)
+        if (status.startsWith('Connected')) {
+
+            console.log('Connected')
+
+            let tasks = await disk.list.listOfTask()
+            let connects = []
+
+            tasks.forEach((key, request) => {
+                if (key.type === 'enable' && !request) {
+                    connects.push(key)
+                }
+            })
+
+            props.setConnects(connects)
         }
-        if (status === 'Not connected') {
-            props.setConnects(true)
-        }
+        // if (status === 'Not connected') {
+        //     props.setConnects(true)
+        // }
     }
 
     const copyPublicKey = () => {

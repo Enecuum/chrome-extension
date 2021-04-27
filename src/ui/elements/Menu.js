@@ -7,7 +7,10 @@ export default function Menu(props) {
     const expand = () => chrome.tabs.create({url: 'popup.html'})
     const window = () => chrome.windows.create({url: 'popup.html', width: 350, height: 630, type: "popup"})
 
-    const explorer = () => chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + props.publickKey})
+    const explorer = () => {
+        // console.log('open explorer')
+        chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + props.publickKey})
+    }
 
     const setNet = async (value) => {
 
@@ -30,7 +33,6 @@ export default function Menu(props) {
     }
 
     const version = chrome.runtime.getManifest().version
-    console.log(version)
 
     return (
         <div className={styles.menu}>

@@ -61,9 +61,9 @@ export default function Account(props) {
             </div>)
     }
 
-    addConnect('faucet-bit.enecuum.com', '26.04.2021')
-    addConnect('http://95.216.207.173:8000', '26.04.2021')
-    addConnect('google.com', '26.07.2022')
+    // addConnect('faucet-bit.enecuum.com', '26.04.2021')
+    // addConnect('http://95.216.207.173:8000', '26.04.2021')
+    // addConnect('google.com', '26.07.2022')
 
     const getConnects = async () => {
         let connects = await asyncRequest({connectionList: true})
@@ -78,7 +78,7 @@ export default function Account(props) {
             }
         }
 
-        console.log(counter)
+        // console.log(counter)
 
         setConnectionsCounter(counter)
     }
@@ -91,7 +91,7 @@ export default function Account(props) {
 
         }
 
-        console.log(history)
+        // console.log(history)
     }
 
     const copyPublicKey = () => {
@@ -106,9 +106,9 @@ export default function Account(props) {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
         const token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
-        console.log(token)
+        // console.log(token)
         ENQWeb.Net.get.getBalance(props.user.publicKey, token).then((res) => {
-            console.log(res)
+            // console.log(res)
             setAmount(res.amount / 1e10)
             setTicker(res.ticker)
             if (props.user.net === 'pulse') {
@@ -126,9 +126,9 @@ export default function Account(props) {
                 usd: usd,
                 image: './images/enq.png'
             }])
-            console.log(res.amount / 1e10)
+            // console.log(res.amount / 1e10)
         }).catch((err) => {
-            console.log('error: ', err)
+            console.err('error: ', err)
         })
     }
 
@@ -207,11 +207,8 @@ export default function Account(props) {
             usd: '0.00',
             image: './icons/3.png'
         }])
-        // renderAssets()
-        // console.log(assetsElements)
     }
 
-    // addAsset()
     renderAssets()
 
     const renderMenu = () => {
@@ -235,7 +232,8 @@ export default function Account(props) {
 
             <Address publicKey={props.user.publicKey}
                      connectionsCounter={connectionsCounter}
-                     setConnects={() => {
+                     setConnects={(connects) => {
+                         console.log(connects)
                          setConnects(true)
                          setActiveTab(2)
                      }}

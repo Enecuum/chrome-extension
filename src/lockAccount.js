@@ -1,7 +1,7 @@
 import {extensionApi} from './utils/extensionApi'
 
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('lock loaded. status: ', disk.lock.checkLock())
+    // console.log('lock loaded. status: ', disk.lock.checkLock())
     if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
         lockAccount()
     }
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function lockAccount() {
     disk.lock.setLock(true)
-    console.log('account locked')
+    // console.log('account locked')
 }
 
 function encryptAccount() {
@@ -19,7 +19,7 @@ function encryptAccount() {
         password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
         account = ENQWeb.Utils.crypto.encrypt(account, password)
         disk.user.changeUser(account)
-        console.log('account encrypted')
+        // console.log('account encrypted')
     } else {
         if (!disk.lock.getHashPassword())
             console.log('password not set')
@@ -30,8 +30,8 @@ function decryptAccount(password) {
     let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
     if (disk.lock.unlock(hash)) {
         hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
-        console.log(hash)
-        console.log(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
+        // console.log(hash)
+        // console.log(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
         return JSON.parse(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
     } else {
         return false

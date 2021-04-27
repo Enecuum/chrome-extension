@@ -34,7 +34,7 @@ export default class Login extends React.Component {
     async submit() {
         const publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.privateKey, true)
         if (publicKey) {
-            console.log(publicKey)
+            // console.log(publicKey)
             let data = {
                 publicKey: publicKey,
                 privateKey: this.state.privateKey,

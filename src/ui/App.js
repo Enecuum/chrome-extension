@@ -41,6 +41,8 @@ export default function App(props) {
     }
 
     useEffect(() => {
+        const version = chrome.runtime.getManifest().version
+        console.log(version)
         getUser().then()
     }, [])
 
@@ -50,7 +52,7 @@ export default function App(props) {
     }
 
     const login2 = (_user) => {
-        console.log('login2')
+        // console.log('login2')
         setUser(_user)
         setLogin(true)
     }

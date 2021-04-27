@@ -18,7 +18,6 @@ function listOfTask() {
     let list = []
     if (tasks && tasks.length > 0) {
         for (let id in tasks) {
-            // console.log(id)
             list.push(getTask(tasks[id]))
         }
     }

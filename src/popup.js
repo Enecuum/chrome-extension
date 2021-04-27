@@ -19,12 +19,12 @@ async function setupUi() {
 }
 
 function msgHandler(msg, sender) {
-    console.log(msg)
-    console.log(sender)
+    // console.log(msg)
+    // console.log(sender)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('loaded 1')
+    // console.log('loaded 1')
     setupUi().then()
 })
 
@@ -59,7 +59,7 @@ function asyncRequest(data) {
         toBackground.onMessage.addListener(asyncMessenger)
         await awaitAsync(data)
             .then(() => {
-                console.log('await work')
+                // console.log('await work')
                 delete awaitId[data]
                 answer = dataId[data]
                 delete dataId[data]
@@ -71,7 +71,7 @@ function asyncRequest(data) {
 
 async function asyncMessenger(msg, sender, sendResponse) {
     if (msg.asyncAnswer && msg.data) {
-        console.log('await Messanger worked')
+        // console.log('await Messanger worked')
         awaitId[msg.data] = true
         dataId[msg.data] = msg
     }

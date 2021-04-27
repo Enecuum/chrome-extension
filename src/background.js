@@ -16,14 +16,14 @@ let requests = {
 let Account = {}
 
 function setupApp() {
-    console.log('background ready')
+    // console.log('background ready')
     extensionApi.runtime.onMessage.addListener(msgHandler)
     extensionApi.runtime.onConnect.addListener(connectHandler)
     taskCounter()
 }
 
 async function msgHandler(msg, sender, sendResponse) {
-    console.log(msg)
+    // console.log(msg)
     if (msg.account && msg.request) {
         if (!disk.lock.checkLock())
             sendResponse({response: Account})
@@ -60,13 +60,13 @@ async function msgHandler(msg, sender, sendResponse) {
 }
 
 async function msgConnectHandler(msg, sender) {
-    console.log(msg)
+    // console.log(msg)
     let answer = ''
     if (msg.taskId) {
         let account = Account
         let lock = disk.lock.checkLock()
         if (!account.net && !lock) {
-            console.log('non auth')
+            // console.log('non auth')
             rejectTaskHandler(msg.taskId)
         } else {
             // console.log('auth ok',{acc,lock})
@@ -100,13 +100,13 @@ async function msgConnectHandler(msg, sender) {
             }
         }
     } else {
-        console.log(msg)
+        // console.log(msg)
     }
 
 }
 
 async function msgPopupHandler(msg, sender) {
-    console.log({msg, sender})
+    // console.log({msg, sender})
     if (msg.popup) {
         if (msg.type === 'tx') {
             let user = Account
@@ -119,9 +119,9 @@ async function msgPopupHandler(msg, sender) {
                 amount: Number(msg.data.amount) * 1e10
             }
             console.log(ENQWeb.Net.provider)
-            console.log({data})
+            // console.log({data})
             let answer = await ENQWeb.Net.post.tx_fee_off(data)
-            console.log(answer)
+            // console.log(answer)
             ENQWeb.Net.provider = buf
         }
     } else if (msg.lock) {
@@ -139,7 +139,7 @@ async function msgPopupHandler(msg, sender) {
         } else if (msg.disallow && msg.taskId) {
             // Storage.task.removeTask(msg.taskId)
             await rejectTaskHandler(msg.taskId)
-            console.log('removed')
+            // console.log('removed')
             taskCounter()
             if (msg.async) {
                 ports.popup.postMessage({asyncAnswer: true, data: msg})
@@ -149,20 +149,20 @@ async function msgPopupHandler(msg, sender) {
             for (let i in list) {
                 await rejectTaskHandler(list[i])
             }
-            console.log('all request rejected');
+            // console.log('all request rejected');
             taskCounter()
             if (msg.async) {
                 ports.popup.postMessage({asyncAnswer: true, data: msg})
             }
         } else {
-            console.log(msg)
+            // console.log(msg)
         }
     }
 }
 
 
 function listPorts() {
-    console.log(ports)
+    // console.log(ports)
     global.ports = ports
 }
 
