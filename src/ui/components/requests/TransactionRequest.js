@@ -21,8 +21,8 @@ export default class TransactionRequest extends React.Component {
             taskId: this.props.request.cb.taskId,
         }
 
-        console.log(this.props.request)
-        console.log(this.props.taskId)
+        // console.log(this.props.request)
+        // console.log(this.props.taskId)
 
         this.confirm = this.confirm.bind(this)
         this.reject = this.reject.bind(this)

@@ -68,7 +68,7 @@ export default function App(props) {
     }
 
     if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
-        return <Password setPassword={setPassword} login={login}/>
+        return <Password setPassword={setPassword} login={login} publicKey={user.publicKey}/>
     }
 
     if (!isLogin && !isLock) return <Login login={login2}/>
