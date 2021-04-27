@@ -32,8 +32,8 @@ async function msgHandler(msg, sender, sendResponse) {
     }
     if (msg.account && msg.unlock && msg.password) {
         let account = decryptAccount(msg.password)
-        if (acc) {
-            Account = acc
+        if (account) {
+            Account = account
             sendResponse({response: true})
         } else {
             sendResponse({response: false})
