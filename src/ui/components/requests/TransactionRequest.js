@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react";
-import styles from "../../css/index.module.css";
-import Separator from "../../elements/Separator";
-import elements from "../../css/elements.module.css";
+import React, { useState, useEffect } from 'react'
+import styles from '../../css/index.module.css'
+import Separator from '../../elements/Separator'
+import elements from '../../css/elements.module.css'
 
 let fee = 0.1
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -11,7 +11,8 @@ export default function TransactionRequest(props) {
     const [activeTab, setActiveTab] = useState(0)
     const [url, setUrl] = useState(`${ENQWeb.Net.provider}/#!/tx/` + props.txHash)
     const [data, setData] = useState(props.request.tx.data)
-    const [from, setFrom] = useState(JSON.stringify(props.request.tx.from).replaceAll('"', ''),)
+    const [from, setFrom] = useState(JSON.stringify(props.request.tx.from)
+        .replaceAll('"', ''),)
     const [ticker, setTicker] = useState(props.request.tx.tokenHash)
     const [to, setTo] = useState(props.request.tx.to)
     const [amount, setAmount] = useState(props.request.tx.value)
@@ -24,17 +25,12 @@ export default function TransactionRequest(props) {
         navigator.clipboard.writeText(props.txHash)
     }
 
-    const confirm = async () => {
-        await global.asyncRequest({allow: true, taskId: taskId})
-        this.props.setTransactionRequest(false)
-    }
-
     const parseData = () => {
         let dataTextArray = []
         let field = data
         if (ENQWeb.Utils.ofd.isContract(field)) {
 
-            field = ENQWeb.Utils.ofd.parse(field);
+            field = ENQWeb.Utils.ofd.parse(field)
 
             if (field.type) {
                 dataTextArray.push(<div key={'type'}>{field.type}</div>)
@@ -46,15 +42,35 @@ export default function TransactionRequest(props) {
                 }
             }
         } else {
-            dataTextArray.push(field);
+            dataTextArray.push(field)
         }
 
         setDataText(dataTextArray)
     }
 
-    const reject = async () => {
-        await global.asyncRequest({disallow: true, taskId: taskId})
+    const closeModalWindow = () => {
+        let params = getUrlVars()
+        if (params.type === 'tx') {
+            window.close()
+        }
+    }
+
+    const confirm = async () => {
+        await global.asyncRequest({
+            allow: true,
+            taskId: taskId
+        })
         props.setTransactionRequest(false)
+        closeModalWindow()
+    }
+
+    const reject = async () => {
+        await global.asyncRequest({
+            disallow: true,
+            taskId: taskId
+        })
+        props.setTransactionRequest(false)
+        closeModalWindow()
     }
 
     useEffect(() => {

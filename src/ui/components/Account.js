@@ -131,12 +131,17 @@ export default function Account(props) {
         })
     }
 
-    const openEnable = () => {
+    const openPopup = () => {
         let params = getUrlVars()
         let task = disk.task.loadTask()
         if (params.type === 'enable') {
             if (task[params.id] && !isLocked) {
                 props.setPublicKeyRequest(task[params.id])
+            }
+        }
+        if (params.type === 'tx') {
+            if (task[params.id] && !isLocked) {
+                props.setTransactionRequest(task[params.id])
             }
         }
     }
@@ -219,7 +224,7 @@ export default function Account(props) {
         getConnects().then()
         getHistory().then()
         balance()
-        openEnable()
+        openPopup()
     }, []);
 
     return (
