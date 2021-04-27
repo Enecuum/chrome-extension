@@ -28,39 +28,26 @@ export default function Address(props) {
     })
 
     const showConnections = async () => {
-        const ports = (await asyncRequest({connectionList: true})).ports
-        console.log(ports)
-        console.log(status)
+
         if (status === 'Await connect') {
 
             let tasks = await disk.list.listOfTask()
 
             //TODO rename enable please, allow website access or something
-            tasks.forEach((key, request) => {
-                console.log(request)
-                if (key.type === 'enable' && !request) {
-                    props.setPublicKeyRequest(key);
+            tasks.forEach((task, request) => {
+                // console.log(request)
+                // console.log(task)
+                if (task.type === 'enable') {
+                    // console.log(task)
+                    props.setPublicKeyRequest(task);
                 }
             })
         }
         if (status.startsWith('Connected')) {
 
-            console.log('Connected')
-
-            let tasks = await disk.list.listOfTask()
-            let connects = []
-
-            tasks.forEach((key, request) => {
-                if (key.type === 'enable' && !request) {
-                    connects.push(key)
-                }
-            })
-
-            props.setConnects(connects)
+            const ports = (await asyncRequest({connectionList: true})).ports
+            props.setConnects(ports)
         }
-        // if (status === 'Not connected') {
-        //     props.setConnects(true)
-        // }
     }
 
     const copyPublicKey = () => {

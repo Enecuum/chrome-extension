@@ -61,7 +61,7 @@ export default class Lock extends React.Component {
                            spellCheck={false}
                            onChange={this.handleChangePassword}
                            value={this.state.password}
-                           className={styles.field}
+                           className={styles.field + ' ' + styles.password}
                            placeholder={'Password'}
                     />
 

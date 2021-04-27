@@ -55,9 +55,7 @@ export default class PublicKeyRequest extends React.Component {
 
                 <div className={styles.content}>
 
-                    <div className={styles.request_header} onClick={() => this.props.setPublicKeyRequest(false)}>❮
-                        Back
-                    </div>
+                    <div className={styles.request_header} onClick={() => this.props.setPublicKeyRequest(false)}></div>
 
                     <img className={styles.request_logo} src="./images/enq.png"/>
 
@@ -93,14 +91,16 @@ export default class PublicKeyRequest extends React.Component {
 
                     <div className={styles.buttons_field}>
 
-                        <div onClick={() => this.props.setPublicKeyRequest(false)}
-                             className={styles.field + ' ' + styles.button}>Back
-                        </div>
+                        {/*<div onClick={() => this.props.setPublicKeyRequest(false)}*/}
+                        {/*     className={styles.field + ' ' + styles.button}>Back*/}
+                        {/*</div>*/}
 
-                        <div onClick={this.disallow}
-                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Disallow
-                        </div>
 
+
+                    </div>
+
+                    <div onClick={this.disallow}
+                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Disallow
                     </div>
 
                     <Separator/>
