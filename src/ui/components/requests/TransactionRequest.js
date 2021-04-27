@@ -37,12 +37,12 @@ export default function TransactionRequest(props){
         if(ENQWeb.Utils.ofd.isContract(field)){
             field = ENQWeb.Utils.ofd.parse(field);
             if(field.type){
-                dataText='Type: ' + field.type + '\n';
+                dataText='<div>Type: ' + field.type + '</div>';
             }
             if(field.parameters){
                 for(let key in field.parameters){
                     // console.log(key, field.parameters[key]);
-                    dataText+=`${key}: ${field.parameters[key]} \n`
+                    dataText+=`<div>${key}: ${field.parameters[key]} </div>`
                 }
             }
         }else{
