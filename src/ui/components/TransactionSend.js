@@ -15,7 +15,7 @@ export default class TransactionSend extends React.Component {
     }
 
     render() {
-        console.log(`${ENQWeb.Net.provider}/#!/tx/`)
+        // console.log(`${ENQWeb.Net.provider}/#!/tx/`)
         return (
             <div className={styles.main}>
 

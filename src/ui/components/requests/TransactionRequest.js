@@ -6,8 +6,6 @@ import elements from "../../css/elements.module.css";
 let fee = 0.1
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
-
-
 export default function TransactionRequest(props){
 
     const [activeTab, setActiveTab] = useState(0)

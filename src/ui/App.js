@@ -41,6 +41,8 @@ export default function App(props) {
     }
 
     useEffect(() => {
+        const version = chrome.runtime.getManifest().version
+        console.log(version)
         getUser().then()
     }, [])
 
@@ -50,7 +52,7 @@ export default function App(props) {
     }
 
     const login2 = (_user) => {
-        console.log('login2')
+        // console.log('login2')
         setUser(_user)
         setLogin(true)
     }
@@ -66,7 +68,7 @@ export default function App(props) {
     }
 
     if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
-        return <Password setPassword={setPassword} login={login}/>
+        return <Password setPassword={setPassword} login={login} publicKey={user.publicKey}/>
     }
 
     if (!isLogin && !isLock) return <Login login={login2}/>
