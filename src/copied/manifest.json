@@ -34,8 +34,5 @@
             "all_frames": true
         }
     ],
-    "permissions": [],
-    "web_accessible_resources": [
-        "inPage.js"
-    ]
+    "permissions": []
 }
