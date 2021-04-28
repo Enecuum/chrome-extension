@@ -78,18 +78,22 @@ async function msgConnectHandler(msg, sender) {
             // console.log('auth ok',{acc,lock})
             if (!ports[msg.cb.url].enabled) {
                 if (msg.type === 'enable') {
-                    await Storage.task.setTask(msg.taskId, {
-                        data: msg.data,
-                        type: msg.type,
-                        cb: msg.cb
-                    })
-                    taskCounter()
-                    chrome.windows.create({
-                        url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
-                        width: 350,
-                        height: 630,
-                        type: 'popup'
-                    })
+                    if(typeof msg.data !== 'object' || msg.data.version < '0.1.6'){
+                        console.log('old version of ENQWeb lib')
+                    }else{
+                        await Storage.task.setTask(msg.taskId, {
+                            data: msg.data,
+                            type: msg.type,
+                            cb: msg.cb
+                        })
+                        taskCounter()
+                        chrome.windows.create({
+                            url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
+                            width: 350,
+                            height: 630,
+                            type: 'popup'
+                        })
+                    }
                 }
             } else {
                 if (msg.type === 'tx') {
