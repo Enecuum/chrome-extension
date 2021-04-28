@@ -102,7 +102,7 @@ export default function TransactionRequest(props) {
 
                 <div className={styles.transaction_url}>{props.request.cb.url}</div>
 
-                <div className={styles.transaction_type}>TOKEN TRANSFER</div>
+                <div className={styles.transaction_type}>{ENQWeb.Utils.ofd.isContract(data) ? (ENQWeb.Utils.ofd.parse(data)).type.toUpperCase():'TOKEN TRANSFER'}</div>
 
                 {/*SWAP TOKEN*/}
 
