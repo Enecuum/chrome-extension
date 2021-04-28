@@ -27,6 +27,9 @@ function setupApp() {
     extensionApi.runtime.onMessage.addListener(msgHandler)
     extensionApi.runtime.onConnect.addListener(connectHandler)
     taskCounter()
+    if (!Storage.config.getConfig()) {
+        Storage.config.initConfig()
+    }
 }
 
 async function msgHandler(msg, sender, sendResponse) {
@@ -71,6 +74,8 @@ async function msgConnectHandler(msg, sender) {
     // console.log(msg)
     let answer = ''
     if (msg.taskId) {
+        popupOpenMethods.enable = disk.config.getConfig().openEnablePopup
+        popupOpenMethods.tx = disk.config.getConfig().openTxPopup
         let account = Account
         let lock = disk.lock.checkLock()
         if (!account.net && !lock) {
@@ -80,21 +85,23 @@ async function msgConnectHandler(msg, sender) {
             // console.log('auth ok',{acc,lock})
             if (!ports[msg.cb.url].enabled) {
                 if (msg.type === 'enable') {
-                    if(typeof msg.data !== 'object' || msg.data.version < VALID_VERSION_LIB){
+                    if (typeof msg.data !== 'object' || msg.data.version < VALID_VERSION_LIB) {
                         console.log('old version of ENQWeb lib')
-                    }else{
+                    } else {
                         await Storage.task.setTask(msg.taskId, {
                             data: msg.data,
                             type: msg.type,
                             cb: msg.cb
                         })
                         taskCounter()
-                        chrome.windows.create({
-                            url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
-                            width: 350,
-                            height: 630,
-                            type: 'popup'
-                        })
+                        if (popupOpenMethods.enable) {
+                            chrome.windows.create({
+                                url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
+                                width: 350,
+                                height: 630,
+                                type: 'popup'
+                            })
+                        }
                     }
                 }
             } else {
@@ -395,6 +402,6 @@ async function connectHandler(port) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    setupApp();
+    setupApp()
     setTimeout(taskCounter, 1000 * 15)
 })
