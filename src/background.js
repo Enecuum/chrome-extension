@@ -18,6 +18,8 @@ let popupOpenMethods = {
     'tx': true
 }
 
+const VALID_VERSION_LIB = '0.1.6'
+
 let Account = {}
 
 function setupApp() {
@@ -78,7 +80,7 @@ async function msgConnectHandler(msg, sender) {
             // console.log('auth ok',{acc,lock})
             if (!ports[msg.cb.url].enabled) {
                 if (msg.type === 'enable') {
-                    if(typeof msg.data !== 'object' || msg.data.version < '0.1.6'){
+                    if(typeof msg.data !== 'object' || msg.data.version < VALID_VERSION_LIB){
                         console.log('old version of ENQWeb lib')
                     }else{
                         await Storage.task.setTask(msg.taskId, {
