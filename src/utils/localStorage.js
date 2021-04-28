@@ -53,7 +53,7 @@ function updateList() {
             for (let j in list) {
                 if (list[j] === ids[id]) {
                     ptr.push(list[j])
-                    break;
+                    break
                 }
             }
         }
@@ -99,7 +99,10 @@ function loadUser() {
     }
     if (!checkLock()) {
         if (this.name === 'popup') {
-            return sendPromise({account: true, request: true})
+            return sendPromise({
+                account: true,
+                request: true
+            })
         }
         user = JSON.parse(user)
         return user
@@ -112,8 +115,9 @@ function loadUserNotJson() {
     let user = localStorage.getItem('User')
     if (!user) {
         return {}
-    } else
+    } else {
         return user
+    }
 }
 
 function addUser(publicKey, privateKey, net) {
@@ -159,12 +163,14 @@ function setNet(net) {
 function checkLock() {
     let state = JSON.parse(localStorage.getItem('lock'))
     if (state) {
-        if (state.lock)
+        if (state.lock) {
             return true
-        else
+        } else {
             return false
-    } else
+        }
+    } else {
         return false
+    }
 }
 
 function setLock(value) {
@@ -195,8 +201,9 @@ function unlock(password) {
     if (state.pass === password.toString()) {
         setLock(false)
         return true
-    } else
+    } else {
         return false
+    }
 }
 
 function lock() {
@@ -228,12 +235,44 @@ function getHashPassword() {
 function sendPromise(obj) {
     return new Promise((resolve) => {
         chrome.runtime.sendMessage(obj, answer => {
-            if (answer.response !== undefined)
+            if (answer.response !== undefined) {
                 resolve(answer.response)
-            else
+            } else {
                 resolve(answer)
+            }
         })
     })
+}
+
+function initConfig() {
+    let config = {
+        openTxPopup: true,
+        openEnablePopup: true
+    }
+    localStorage.setItem('config', JSON.stringify(config))
+    return true
+}
+
+function getConfig() {
+    let config = JSON.parse(localStorage.getItem('config'))
+    if (!config) {
+        return false
+    }
+    return config
+}
+
+function setConfig(config) {
+    if (!config) {
+        console.log('error in setting config')
+        return false
+    } else {
+        if (config.openTxPopup === undefined || config.openEnablePopup === undefined) {
+            return false
+        } else {
+            localStorage.setItem('config', JSON.stringify(config))
+            return true
+        }
+    }
 }
 
 let storage = function Storage(name) {
@@ -273,6 +312,11 @@ let storage = function Storage(name) {
         getHashPassword,
         lock,
         removeLock
+    }
+    this.config = {
+        initConfig,
+        getConfig,
+        setConfig
     }
     this.promise = {
         sendPromise
