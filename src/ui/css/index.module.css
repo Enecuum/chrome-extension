@@ -514,6 +514,9 @@ input.field.password::placeholder {
     width: calc(100% - 40px);
     position: absolute;
     bottom: 20px;
+    cursor: not-allowed;
+
+    opacity: .1;
 }
 
 /*ACTIVITY*/

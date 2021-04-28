@@ -26,8 +26,6 @@ export default class Password extends React.Component {
     }
 
     setAllow() {
-        // console.log(this.state.password1)
-        // console.log(this.state.password2)
         if (this.state.password1 === this.state.password2) {
             this.setState({allow: true})
         } else {
@@ -36,13 +34,9 @@ export default class Password extends React.Component {
     }
 
     save() {
-        console.log('work')
         if (this.state.password1 === this.state.password2) {
             let checkPass = disk.lock.getHashPassword()
-            console.log('work')
-            // console.log(this.state.password1)
-            //TODO save password here
-            console.log(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
+
             disk.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
             disk.lock.setLock(false)
             if (checkPass) {
@@ -50,6 +44,7 @@ export default class Password extends React.Component {
             } else {
                 // disk.promise.sendPromise({account: true, encrypt: true})
             }
+
             this.props.setPassword(false)
             this.props.login()
         } else {
@@ -78,7 +73,7 @@ export default class Password extends React.Component {
                            onChange={this.handleChangePassword1}
                            value={this.state.password1}
                            className={styles.field + ' ' + styles.password}
-                           placeholder={'New password (min 8 chars)'}
+                           placeholder={'New password'} // (min 8 chars)
                     />
 
                     <input type="password"

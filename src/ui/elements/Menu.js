@@ -67,17 +67,17 @@ export default function Menu(props) {
             <div className={styles.lock} onClick={locked}><img src="./images/lock.png"/></div>
             <div className={styles.title}>My accounts</div>
             <div className={styles.button_link + ' ' + styles.button_link_active}>Account 1</div>
-            <div className={styles.button_link}>Account 2</div>
+            {/*<div className={styles.button_link}>Account 2</div>*/}
 
             <div className={styles.separator}/>
 
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
-            <div className={styles.button_link} onClick={window}>Open popup</div>
+            <div className={styles.button_link} onClick={window}>Window</div>
             <div className={styles.button_link} onClick={explorer}>Show in blockchain explorer</div>
             {/*<div className={styles.button_link} onClick={() => setNet('pulse')}>Network: PULSE</div>*/}
             <div className={styles.button_link} onClick={() => setNet('bit')}>Network: BIT</div>
-            <div className={styles.button_link} onClick={() => setNet('bit-dev')}>Network: BIT-DEV</div>
+            {/*<div className={styles.button_link} onClick={() => setNet('bit-dev')}>Network: BIT-DEV</div>*/}
             <div className={styles.button_link} onClick={() => changeOpenPopup('enable')}>Open popup on
                 Enable {openEnable}</div>
             <div className={styles.button_link} onClick={() => changeOpenPopup('tx')}>Open popup on TX {openTx}</div>
