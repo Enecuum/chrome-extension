@@ -150,7 +150,6 @@ export default function Account(props) {
     const activityElements = []
 
     // &nbsp;
-    let date = 'Aug 20, 2020 · '
 
     for (const key in activity) {
         const item = activity[key]
@@ -167,7 +166,7 @@ export default function Account(props) {
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>{
-                        new Date(item.data.date).toDateString() + ' ' +
+                        new Date(item.data.date).toISOString().slice(0, 10) + ' ' +
                         (item.tx ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}</div>
                 </div>
                 {item.tx ?
@@ -316,7 +315,7 @@ export default function Account(props) {
 
                     {assetsElements}
 
-                    <div onClick={addAsset} className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}>
+                    <div onClick={() => {}} className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}>
                         Add token
                     </div>
 
