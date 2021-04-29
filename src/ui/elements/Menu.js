@@ -57,12 +57,14 @@ export default function Menu(props) {
 
         let config = await disk.config.getConfig()
 
-        console.log(config)
+        // console.log(config)
 
-        config.openEnablePopup = !config.openEnablePopup
-        config.openTxPopup = !config.openTxPopup
+        let openPopup = !config.openEnablePopup
 
-        setOpenEnable(config.openEnablePopup)
+        config.openEnablePopup = openPopup
+        config.openTxPopup = openPopup
+
+        setOpenEnable(openPopup)
 
         await disk.config.setConfig(config)
     }

@@ -71,6 +71,8 @@ export default function App(props) {
         window.location.reload(false);
     }
 
+    // global.disconnectAllPorts()
+
     if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
         return <Password setPassword={setPassword} login={login} publicKey={user.publicKey}/>
     }
