@@ -12,7 +12,10 @@ export default function TransactionRequest(props) {
     const [activeTab, setActiveTab] = useState(0)
     const [url, setUrl] = useState(`${ENQWeb.Net.provider}/#!/tx/` + props.txHash)
     const [data, setData] = useState(props.request.tx.data)
-    const [from, setFrom] = useState(JSON.stringify(props.request.tx.from.pubkey).replaceAll('"', ''))
+
+    //TODO
+    let fromString = props.request.tx.from.pubkey ? props.request.tx.from.pubkey : props.request.tx.from
+    const [from, setFrom] = useState(JSON.stringify(fromString).replaceAll('"', ''))
     const [ticker, setTicker] = useState(props.request.tx.tokenHash)
     const [to, setTo] = useState(props.request.tx.to)
     const [amount, setAmount] = useState(props.request.tx.value)
