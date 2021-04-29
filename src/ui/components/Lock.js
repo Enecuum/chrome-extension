@@ -12,6 +12,8 @@ export default class Lock extends React.Component {
         this.handleChangePassword = this.handleChangePassword.bind(this)
         this.submit = this.submit.bind(this)
         this.logout = this.logout.bind(this)
+
+        // this.setConfirm = props.setConfirm
     }
 
     handleChangePassword(e) {
@@ -20,7 +22,7 @@ export default class Lock extends React.Component {
 
     async logout() {
         await this.props.logout()
-        await disk.promise.sendPromise({account: true, logout: true})
+        // await disk.promise.sendPromise({account: true, logout: true})
     }
 
     async submit() {
@@ -69,7 +71,7 @@ export default class Lock extends React.Component {
                          className={`${styles.field} ${styles.button} ${styles.button_blue}`}>Unlock
                     </div>
 
-                    <div onClick={this.logout}
+                    <div onClick={() => this.props.setConfirm(true)}
                          className={`${styles.field} ${styles.button}`}>Logout
                     </div>
 

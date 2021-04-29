@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import elements from "../css/elements.module.css";
+import {shortAddress} from "../Utils";
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
@@ -69,8 +70,4 @@ export default function Address(props) {
 
         </div>
     )
-}
-
-const shortAddress = (address) => {
-    return address.substring(0, 5) + '...' + address.substring(address.length - 3, address.length - 1)
 }
