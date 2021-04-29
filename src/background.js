@@ -217,6 +217,14 @@ function listPorts() {
     global.ports = ports
 }
 
+// function disconnectAllPorts() {
+//     for (let port in ports) {
+//         console.log(port)
+//     }
+// }
+//
+// global.disconnectAllPorts = disconnectAllPorts
+
 function disconnectHandler(port) {
     console.log('disconnected: ' + port.name)
     ports[port.name].disconnect()
