@@ -11,10 +11,13 @@ import Account from './components/Account'
 
 import PublicKeyRequest from './components/requests/PublicKeyRequest'
 import TransactionRequest from './components/requests/TransactionRequest'
+import Confirm from "./components/Confirm";
 
 export default function App(props) {
     const [isPassword, setPassword] = useState(!disk.lock.getHashPassword())
     const [isLogin, setLogin] = useState(false)
+
+    const [isConfirm, setConfirm] = useState(false)
 
     const [user, setUser] = useState({});
 
@@ -42,7 +45,8 @@ export default function App(props) {
 
     useEffect(() => {
         const version = chrome.runtime.getManifest().version
-        console.log(version)
+        console.log('App: ' + version)
+        console.log('Lib: ' + ENQWeb.version)
         getUser().then()
     }, [])
 
@@ -77,7 +81,11 @@ export default function App(props) {
         setLock(false)
     }
 
-    if (isLock) return <Lock unlock={unlock} logout={logout}/>
+    if (isConfirm)
+        return <Confirm setConfirm={setConfirm} logout={logout}/>
+
+    if (isLock)
+        return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
 
     if (isTransaction) {
         return (
@@ -106,6 +114,7 @@ export default function App(props) {
                     logout={logout}
                     setLock={setLock}
                     setPassword={setPassword}
+                    setConfirm={setConfirm}
                     setNetwork={setNetwork}
                     setReceive={setReceive}
                     setTransaction={setTransaction}

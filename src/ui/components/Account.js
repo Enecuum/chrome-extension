@@ -9,14 +9,11 @@ import Receive from './Receive'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
+import {shortAddress} from "../Utils";
 
 const names = {
     enable: 'Share account address',
     tx: 'Send transaction',
-}
-
-const shortAddress = (address) => {
-    return address.substring(0, 5) + '...' + address.substring(address.length - 3, address.length - 1)
 }
 
 export default function Account(props) {
@@ -215,7 +212,10 @@ export default function Account(props) {
     renderAssets()
 
     const renderMenu = () => {
-        if (menu) return <Menu logout={props.logout} publickKey={props.user.publicKey} setLock={props.setLock}
+        if (menu) return <Menu logout={props.logout}
+                               publickKey={props.user.publicKey}
+                               setLock={props.setLock}
+                               setConfirm={props.setConfirm}
                                setPassword={props.setPassword}/>
     }
 
