@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import elements from '../../css/elements.module.css'
-import {shortAddress} from "../../Utils";
+import { shortAddress } from '../../Utils'
 
 let fee = 0.1
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -13,7 +13,7 @@ export default function TransactionRequest(props) {
     const [activeTab, setActiveTab] = useState(0)
     const [url, setUrl] = useState(`${ENQWeb.Net.provider}/#!/tx/` + props.txHash)
     const [data, setData] = useState(props.request.tx.data)
-    const [from, setFrom] = useState(jsonFrom.pubkey?jsonFrom.pubkey.replaceAll('"',''):jsonFrom.replaceAll('"',''))
+    const [from, setFrom] = useState(jsonFrom.pubkey ? jsonFrom.pubkey.replaceAll('"', '') : jsonFrom.replaceAll('"', ''))
     const [ticker, setTicker] = useState(props.request.tx.tokenHash)
     const [to, setTo] = useState(props.request.tx.to)
     const [amount, setAmount] = useState(props.request.tx.value)
@@ -103,7 +103,8 @@ export default function TransactionRequest(props) {
 
                 <div className={styles.transaction_url}>{props.request.cb.url}</div>
 
-                <div className={styles.transaction_type}>{ENQWeb.Utils.ofd.isContract(data) ? (ENQWeb.Utils.ofd.parse(data)).type.toUpperCase():'TOKEN TRANSFER'}</div>
+                <div
+                    className={styles.transaction_type}>{ENQWeb.Utils.ofd.isContract(data) ? (ENQWeb.Utils.ofd.parse(data)).type.toUpperCase() : 'TOKEN TRANSFER'}</div>
 
                 {/*SWAP TOKEN*/}
 
