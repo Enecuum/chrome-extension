@@ -39,7 +39,7 @@ export default function TransactionRequest(props) {
             if (field.parameters) {
                 for (let key in field.parameters) {
                     // console.log(key, field.parameters[key]);
-                    dataTextArray.push(<div key={key}>{key}: {field.parameters[key]}</div>)
+                    dataTextArray.push(<div key={key}>{key}: {field.parameters[key].toString()}</div>)
                 }
             }
         } else {
