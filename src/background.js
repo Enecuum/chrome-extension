@@ -67,6 +67,14 @@ async function msgHandler(msg, sender, sendResponse) {
     }
     if (msg.account && msg.logout) {
         Account = {}
+        disconnectPorts()
+    }
+    if(msg.ports && msg.disconnect){
+        if(msg.all)
+            disconnectPorts()
+        if(msg.name)
+            disconnectPorts(msg.name)
+
     }
 }
 
@@ -239,6 +247,24 @@ function connectController(port) {
         ports[port.name] = port
     }
 }
+
+function disconnectPorts(name){
+    if(!name){
+        for(let key in ports){
+            // console.log(key,ports[key]);
+            if(ports[key].name !== 'popup'){
+                ports[key].disconnect()
+                delete ports[key];
+            }
+        }
+    }else{
+        ports[name].disconnect()
+        delete ports[name]
+    }
+    return true
+}
+
+global.disconnectPorts = disconnectPorts
 
 function taskCounter() {
     let tasks = Storage.task.loadTask()
