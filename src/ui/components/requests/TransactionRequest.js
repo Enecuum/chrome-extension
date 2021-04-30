@@ -9,10 +9,11 @@ const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
 export default function TransactionRequest(props) {
 
+    const [jsonFrom] = useState(JSON.stringify(props.request.tx.from))
     const [activeTab, setActiveTab] = useState(0)
     const [url, setUrl] = useState(`${ENQWeb.Net.provider}/#!/tx/` + props.txHash)
     const [data, setData] = useState(props.request.tx.data)
-    const [from, setFrom] = useState(JSON.stringify(props.request.tx.from.pubkey).replaceAll('"', ''))
+    const [from, setFrom] = useState(jsonFrom.pubkey?jsonFrom.pubkey.replaceAll('"',''):jsonFrom.replaceAll('"',''))
     const [ticker, setTicker] = useState(props.request.tx.tokenHash)
     const [to, setTo] = useState(props.request.tx.to)
     const [amount, setAmount] = useState(props.request.tx.value)
