@@ -69,11 +69,13 @@ async function msgHandler(msg, sender, sendResponse) {
         Account = {}
         disconnectPorts()
     }
-    if(msg.ports && msg.disconnect){
-        if(msg.all)
+    if (msg.ports && msg.disconnect) {
+        if (msg.all) {
             disconnectPorts()
-        if(msg.name)
+        }
+        if (msg.name) {
             disconnectPorts(msg.name)
+        }
 
     }
 }
@@ -248,16 +250,16 @@ function connectController(port) {
     }
 }
 
-function disconnectPorts(name){
-    if(!name){
-        for(let key in ports){
+function disconnectPorts(name) {
+    if (!name) {
+        for (let key in ports) {
             // console.log(key,ports[key]);
-            if(ports[key].name !== 'popup'){
+            if (ports[key].name !== 'popup') {
                 ports[key].disconnect()
-                delete ports[key];
+                delete ports[key]
             }
         }
-    }else{
+    } else {
         ports[name].disconnect()
         delete ports[name]
     }
