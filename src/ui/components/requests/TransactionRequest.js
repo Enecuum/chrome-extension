@@ -9,7 +9,7 @@ const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
 export default function TransactionRequest(props) {
 
-    const [jsonFrom] = useState(JSON.stringify(props.request.tx.from))
+    const [jsonFrom] = useState(props.request.tx.from)
     const [activeTab, setActiveTab] = useState(0)
     const [url, setUrl] = useState(`${ENQWeb.Net.provider}/#!/tx/` + props.txHash)
     const [data, setData] = useState(props.request.tx.data)
