@@ -7,6 +7,7 @@ function createWindow () {
   const mainWindow = new BrowserWindow({
     width: 350,
     height: 630,
+    icon: __dirname + '/src/copied/images/enq.png',
     webPreferences: {
       // preload: path.join(__dirname, 'preload.js')
     }
