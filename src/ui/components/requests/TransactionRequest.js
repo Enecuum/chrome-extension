@@ -21,6 +21,19 @@ export default function TransactionRequest(props) {
     const [taskId, setTaskId] = useState(props.request.cb.taskId)
     const [dataText, setDataText] = useState([])
 
+    // token transfer (data не парсится)
+    // create token
+    // delegate
+    // undelegate
+    // create pos
+    // pos reward -> claim reward
+    // transfer
+    // mint
+    // burn
+    // create pool
+    // add liquidity
+    // remove liqudity
+    // swap
 
     const copyHash = () => {
         navigator.clipboard.writeText(props.txHash)
