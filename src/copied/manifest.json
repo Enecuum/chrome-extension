@@ -21,7 +21,7 @@
         "48": "images/48.png",
         "128": "images/128.png"
     },
-    "content_security_policy": "script-src 'self' https://www.googletagmanager.com; object-src 'self'",
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
     "content_scripts": [
         {
             "matches": [
