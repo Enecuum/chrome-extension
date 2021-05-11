@@ -30,7 +30,6 @@ module.exports = () => {
             background: path.resolve(SOURCE_FOLDER, 'background.js'),
             contentScript: path.resolve(SOURCE_FOLDER, 'contentScript.js'),
             lockAccount: path.resolve(SOURCE_FOLDER, 'lockAccount.js'),
-            googleAnalytics: path.resolve(SOURCE_FOLDER, 'googleAnalytics.js'),
         },
         output: {
             filename: '[name].js',
