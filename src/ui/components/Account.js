@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 import styles from '../css/index.module.css'
 import Transaction from './Transaction'
 import Requests from './Requests'
@@ -9,7 +9,7 @@ import Receive from './Receive'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import { shortAddress } from '../Utils'
+import {shortAddress} from '../Utils'
 
 const names = {
     enable: 'Share account address',
@@ -33,6 +33,7 @@ export default function Account(props) {
     const [connectsElements, setConnectsElements] = useState([])
 
     const [assets, setAssets] = useState([])
+    const [activity, setActivity] = useState(disk.list.listOfTask())
 
     const [menu, setMenu] = useState(false)
     const clickMenu = () => {
@@ -62,7 +63,7 @@ export default function Account(props) {
     // addConnect('google.com', '26.07.2022')
 
     const getConnects = async () => {
-        let connects = await asyncRequest({ connectionList: true })
+        let connects = await asyncRequest({connectionList: true})
         let counter = 0
         for (let key in connects.ports) {
             if (connects.ports[key].enabled) {
@@ -87,7 +88,22 @@ export default function Account(props) {
 
         }
 
-        // console.log(history)
+        console.log(history.records)
+        console.log(activity)
+
+        let oldActivity = []
+        for (let id in history.records) {
+            console.log(history.records[id])
+            oldActivity.push({
+                data: {date: history.records[id].time * 1000},
+                tx: {
+                    to: history.records[id].hash,
+                    value: history.records[id].amount
+                },
+                type: 'tx'})
+        }
+
+        setActivity([...activity, ...oldActivity])
     }
 
     const copyPublicKey = () => {
@@ -103,17 +119,25 @@ export default function Account(props) {
         ENQWeb.Enq.provider = props.user.net
         const token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
         // console.log(token)
+
+        let tokens = []
+
         ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
             .then((res) => {
-                // console.log(res)
+                // console.log(res.map(a => a.ticker + ': ' + a.amount / 1e10))
                 let amount = 0
                 let ticker = ''
                 for (let i in res) {
                     if (res[i].token === token) {
                         amount = Number(res[i].amount)
                         ticker = res[i].ticker
-                        break
-                    }
+                    } else
+                        tokens.push({
+                            amount: Number(res[i].amount) / 1e10,
+                            ticker: res[i].ticker,
+                            usd: 0,
+                            image: './icons/3.png'
+                        })
                 }
                 setAmount(amount / 1e10)
                 setTicker(ticker)
@@ -131,7 +155,7 @@ export default function Account(props) {
                     ticker: ticker,
                     usd: usd,
                     image: './images/enq.png'
-                }])
+                }, ...tokens])
                 // console.log(res.amount / 1e10)
             })
             .catch((err) => {
@@ -154,7 +178,6 @@ export default function Account(props) {
         }
     }
 
-    const activity = disk.list.listOfTask()
     const activityElements = []
 
     // &nbsp;
@@ -237,10 +260,8 @@ export default function Account(props) {
     }
 
     useEffect(() => {
-        getConnects()
-            .then()
-        getHistory()
-            .then()
+        getConnects().then()
+        getHistory().then()
         balance()
         openPopup()
     }, [])

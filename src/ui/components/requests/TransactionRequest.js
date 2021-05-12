@@ -147,6 +147,12 @@ export default function TransactionRequest(props) {
                 >
                     Data
                 </div>
+                <div
+                    onClick={() => setActiveTab(2)}
+                    className={(activeTab === 2 ? ` ${styles.bottom_tab_active}` : '')}
+                >
+                    Raw
+                </div>
             </div>
 
             <div
@@ -167,6 +173,12 @@ export default function TransactionRequest(props) {
             <div className={`${styles.bottom_list} ${activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
 
                 <div className={styles.transaction_data_data}>{(props.request.tx.data ? dataText : 'No data')}</div>
+
+            </div>
+
+            <div className={`${styles.bottom_list} ${activeTab === 2 ? '' : `${styles.bottom_list_disabled}`}`}>
+
+                <div className={styles.transaction_data_data}>{props.request.tx.data}</div>
 
             </div>
 
