@@ -103,10 +103,19 @@ export default function Account(props) {
         ENQWeb.Enq.provider = props.user.net
         const token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
         // console.log(token)
-        ENQWeb.Net.get.getBalance(props.user.publicKey, token).then((res) => {
+        ENQWeb.Net.get.getBalanceAll(props.user.publicKey).then((res) => {
             // console.log(res)
-            setAmount(res.amount / 1e10)
-            setTicker(res.ticker)
+            let amount = 0
+            let ticker = ""
+            for(let i in res){
+                if(res[i].token === token){
+                    amount = Number(res[i].amount)
+                    ticker = res[i].ticker
+                    break
+                }
+            }
+            setAmount(amount / 1e10)
+            setTicker(ticker)
             if (props.user.net === 'pulse') {
                 ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
                     .then((answer) => {
@@ -117,8 +126,8 @@ export default function Account(props) {
                     })
             }
             setAssets([{
-                amount: res.amount / 1e10,
-                ticker: res.ticker,
+                amount: amount / 1e10,
+                ticker: ticker,
                 usd: usd,
                 image: './images/enq.png'
             }])
