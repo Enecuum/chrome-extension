@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from '../css/index.module.css'
 import Transaction from './Transaction'
 import Requests from './Requests'
@@ -9,7 +9,7 @@ import Receive from './Receive'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import {shortAddress} from "../Utils";
+import { shortAddress } from '../Utils'
 
 const names = {
     enable: 'Share account address',
@@ -62,8 +62,8 @@ export default function Account(props) {
     // addConnect('google.com', '26.07.2022')
 
     const getConnects = async () => {
-        let connects = await asyncRequest({connectionList: true})
-        let counter = 0;
+        let connects = await asyncRequest({ connectionList: true })
+        let counter = 0
         for (let key in connects.ports) {
             if (connects.ports[key].enabled) {
                 counter++
@@ -103,38 +103,40 @@ export default function Account(props) {
         ENQWeb.Enq.provider = props.user.net
         const token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
         // console.log(token)
-        ENQWeb.Net.get.getBalanceAll(props.user.publicKey).then((res) => {
-            // console.log(res)
-            let amount = 0
-            let ticker = ""
-            for(let i in res){
-                if(res[i].token === token){
-                    amount = Number(res[i].amount)
-                    ticker = res[i].ticker
-                    break
+        ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
+            .then((res) => {
+                // console.log(res)
+                let amount = 0
+                let ticker = ''
+                for (let i in res) {
+                    if (res[i].token === token) {
+                        amount = Number(res[i].amount)
+                        ticker = res[i].ticker
+                        break
+                    }
                 }
-            }
-            setAmount(amount / 1e10)
-            setTicker(ticker)
-            if (props.user.net === 'pulse') {
-                ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
-                    .then((answer) => {
-                        if (answer['enq-enecuum'] !== undefined) {
-                            const usd = answer['enq-enecuum'].usd * amount
-                            setUSD(usd)
-                        }
-                    })
-            }
-            setAssets([{
-                amount: amount / 1e10,
-                ticker: ticker,
-                usd: usd,
-                image: './images/enq.png'
-            }])
-            // console.log(res.amount / 1e10)
-        }).catch((err) => {
-            console.err('error: ', err)
-        })
+                setAmount(amount / 1e10)
+                setTicker(ticker)
+                if (props.user.net === 'pulse') {
+                    ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
+                        .then((answer) => {
+                            if (answer['enq-enecuum'] !== undefined) {
+                                const usd = answer['enq-enecuum'].usd * amount
+                                setUSD(usd)
+                            }
+                        })
+                }
+                setAssets([{
+                    amount: amount / 1e10,
+                    ticker: ticker,
+                    usd: usd,
+                    image: './images/enq.png'
+                }])
+                // console.log(res.amount / 1e10)
+            })
+            .catch((err) => {
+                console.err('error: ', err)
+            })
     }
 
     const openPopup = () => {
@@ -163,8 +165,11 @@ export default function Account(props) {
         activityElements.push(
             <div
                 key={key} onClick={() => {
-                if (item.type === 'enable') props.setPublicKeyRequest(item)
-                else props.setTransactionRequest(item)
+                if (item.type === 'enable') {
+                    props.setPublicKeyRequest(item)
+                } else {
+                    props.setTransactionRequest(item)
+                }
             }} className={`${styles.activity}`}
             >
                 <img className={styles.icon} src={(item.type === 'enable' ? './icons/13.png' : './icons/12.png')}
@@ -172,7 +177,8 @@ export default function Account(props) {
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>{
-                        new Date(item.data.date).toISOString().slice(0, 10) + ' ' +
+                        new Date(item.data.date).toISOString()
+                            .slice(0, 10) + ' ' +
                         (item.tx ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}</div>
                 </div>
                 {item.tx ?
@@ -221,19 +227,23 @@ export default function Account(props) {
     renderAssets()
 
     const renderMenu = () => {
-        if (menu) return <Menu logout={props.logout}
-                               publickKey={props.user.publicKey}
-                               setLock={props.setLock}
-                               setConfirm={props.setConfirm}
-                               setPassword={props.setPassword}/>
+        if (menu) {
+            return <Menu logout={props.logout}
+                         publickKey={props.user.publicKey}
+                         setLock={props.setLock}
+                         setConfirm={props.setConfirm}
+                         setPassword={props.setPassword}/>
+        }
     }
 
     useEffect(() => {
-        getConnects().then()
-        getHistory().then()
+        getConnects()
+            .then()
+        getHistory()
+            .then()
         balance()
         openPopup()
-    }, []);
+    }, [])
 
     return (
         <div className={styles.main}>
@@ -248,14 +258,16 @@ export default function Account(props) {
                          // console.log(connects)
                          let elements = []
                          for (const key in connects) {
-                             if (connects[key].enabled)
-                                 elements.push(<div key={key} onClick={() => {}} className={`${styles.connect}`}>
-                                 <div>
-                                     <div>{key}</div>
-                                     {/*<div className={styles.time}>{date}</div>*/}
-                                     <div></div>
-                                 </div>
-                             </div>)
+                             if (connects[key].enabled) {
+                                 elements.push(<div key={key} onClick={() => {
+                                 }} className={`${styles.connect}`}>
+                                     <div>
+                                         <div>{key}</div>
+                                         {/*<div className={styles.time}>{date}</div>*/}
+                                         <div></div>
+                                     </div>
+                                 </div>)
+                             }
                          }
                          setConnectsElements(elements)
                          setConnects(true)
@@ -324,7 +336,8 @@ export default function Account(props) {
 
                     {assetsElements}
 
-                    <div onClick={() => {}} className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}>
+                    <div onClick={() => {
+                    }} className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}>
                         Add token
                     </div>
 
