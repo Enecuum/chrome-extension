@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 
 export default function Analytics() {
     const initAnalytics = () => {
@@ -11,12 +11,12 @@ export default function Analytics() {
     };
 
     useEffect(() => {
-        (function() {
-            var ga = document.createElement('script');
+        (function () {
+            const ga = document.createElement('script');
             ga.type = 'text/javascript';
             ga.async = true;
             ga.src = 'https://ssl.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0];
+            const s = document.getElementsByTagName('script')[0];
             s.parentNode.insertBefore(ga, s);
             initAnalytics();
         })();

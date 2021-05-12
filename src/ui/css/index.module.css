@@ -743,4 +743,7 @@ input.field.password::placeholder {
 
 .transaction_data_data {
     padding: 20px;
+    user-select: text;
+    background: red;
+    word-wrap: break-word;
 }
