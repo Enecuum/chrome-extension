@@ -91,6 +91,10 @@ export default function TransactionRequest(props) {
         parseData()
     }, [])
 
+    console.log(amount)
+    console.log((amount / 1e10))
+    console.log(amount - fee * 1e10)
+
     return (
         <div className={styles.main}>
 
@@ -130,7 +134,7 @@ export default function TransactionRequest(props) {
                 {/*<div className={styles.field}>Ticker: {this.state.ticker}</div>*/}
                 {/*<div className={styles.field}>Nonce: {this.state.nonce}</div>*/}
                 {/*<div className={styles.field}>Data: {this.state.data}</div>*/}
-                <div className={styles.transaction_amount}>{(amount / 1e10) - fee + ' ENQ'}</div>
+                <div className={styles.transaction_amount}>{(amount - fee * 1e10) / 1e10 + ' ENQ'}</div>
 
             </div>
 
