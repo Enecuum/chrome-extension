@@ -14,12 +14,15 @@ import {shortAddress} from '../Utils'
 const names = {
     enable: 'Share account address',
     tx: 'Send transaction',
+    history: 'Transaction'
 }
+
+let tickers = {}
 
 export default function Account(props) {
     ENQWeb.Enq.provider = props.user.net
 
-    const [amount, setAmount] = useState(0)
+    const [amount, setAmount] = useState(BigInt(0))
     const [usd, setUSD] = useState(0)
     const [ticker, setTicker] = useState('')
 
@@ -93,14 +96,20 @@ export default function Account(props) {
 
         let oldActivity = []
         for (let id in history.records) {
-            console.log(history.records[id])
+            // console.log(history.records[id])
             oldActivity.push({
                 data: {date: history.records[id].time * 1000},
                 tx: {
                     to: history.records[id].hash,
+                    from: {
+                        pubkey: history.records[id].hash,
+                    },
                     value: history.records[id].amount
                 },
-                type: 'tx'})
+                cb: {
+                    taskId: 0,
+                },
+                type: 'history'})
         }
 
         setActivity([...activity, ...oldActivity])
@@ -118,28 +127,32 @@ export default function Account(props) {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
         const token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
-        // console.log(token)
+        console.log(token)
 
         let tokens = []
 
         ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
             .then((res) => {
-                // console.log(res.map(a => a.ticker + ': ' + a.amount / 1e10))
+                // console.log(res.map(a => a.ticker + ': ' + a.amount))
                 let amount = 0
                 let ticker = ''
                 for (let i in res) {
+
+                    tickers[res[i].token] = res[i].ticker
+
                     if (res[i].token === token) {
-                        amount = Number(res[i].amount)
+                        amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
                     } else
                         tokens.push({
-                            amount: Number(res[i].amount) / 1e10,
+                            amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
                             usd: 0,
                             image: './icons/3.png'
                         })
                 }
-                setAmount(amount / 1e10)
+                console.log(tickers)
+                setAmount(amount)
                 setTicker(ticker)
                 if (props.user.net === 'pulse') {
                     ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
@@ -151,7 +164,7 @@ export default function Account(props) {
                         })
                 }
                 setAssets([{
-                    amount: amount / 1e10,
+                    amount: amount,
                     ticker: ticker,
                     usd: usd,
                     image: './images/enq.png'
@@ -159,7 +172,7 @@ export default function Account(props) {
                 // console.log(res.amount / 1e10)
             })
             .catch((err) => {
-                console.err('error: ', err)
+                console.error('error: ', err)
             })
     }
 
@@ -221,7 +234,7 @@ export default function Account(props) {
                     <img className={styles.icon} src={item.image}/>
                     <div>
                         <div>
-                            {item.amount.toFixed(4)}
+                            {(Number(item.amount) / 1e10).toFixed(4)}
                             {' '}
                             {item.ticker}
                         </div>
@@ -300,7 +313,7 @@ export default function Account(props) {
 
                 <img className={styles.content_logo} src="./images/48.png" alt=""/>
                 <div className={styles.balance}>
-                    {amount.toFixed(4)}
+                    {(Number(amount) / 1e10).toFixed(4)}
                     {' '}
                     {ticker}
                 </div>

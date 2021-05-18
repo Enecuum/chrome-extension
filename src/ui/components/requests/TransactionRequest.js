@@ -4,19 +4,23 @@ import Separator from '../../elements/Separator'
 import elements from '../../css/elements.module.css'
 import { shortAddress } from '../../Utils'
 
-let fee = 0.1
+let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
 export default function TransactionRequest(props) {
+
+    console.log(props.request.tx)
 
     const [jsonFrom] = useState(props.request.tx.from)
     const [activeTab, setActiveTab] = useState(0)
     const [url, setUrl] = useState(`${ENQWeb.Net.provider}/#!/tx/` + props.txHash)
     const [data, setData] = useState(props.request.tx.data)
     const [from, setFrom] = useState(jsonFrom.pubkey ? jsonFrom.pubkey.replaceAll('"', '') : jsonFrom.replaceAll('"', ''))
-    const [ticker, setTicker] = useState(props.request.tx.tokenHash)
+
+    //TODO
+    const [ticker, setTicker] = useState('BIT')
     const [to, setTo] = useState(props.request.tx.to)
-    const [amount, setAmount] = useState(props.request.tx.value)
+    const [amount, setAmount] = useState(BigInt(props.request.tx.value))
     const [nonce, setNonce] = useState(props.request.tx.nonce)
     const [taskId, setTaskId] = useState(props.request.cb.taskId)
     const [dataText, setDataText] = useState([])
@@ -91,9 +95,9 @@ export default function TransactionRequest(props) {
         parseData()
     }, [])
 
-    console.log(amount)
-    console.log((amount / 1e10))
-    console.log(amount - fee * 1e10)
+    // console.log(amount)
+    // console.log((amount / 1e10))
+    // console.log(amount - fee * 1e10)
 
     return (
         <div className={styles.main}>
@@ -134,7 +138,7 @@ export default function TransactionRequest(props) {
                 {/*<div className={styles.field}>Ticker: {this.state.ticker}</div>*/}
                 {/*<div className={styles.field}>Nonce: {this.state.nonce}</div>*/}
                 {/*<div className={styles.field}>Data: {this.state.data}</div>*/}
-                <div className={styles.transaction_amount}>{(amount - fee * 1e10) / 1e10 + ' ENQ'}</div>
+                <div className={styles.transaction_amount}>{Number(amount - fee) / 1e10 + ' ' + ticker}</div>
 
             </div>
 
@@ -164,12 +168,12 @@ export default function TransactionRequest(props) {
 
                 <div className={styles.transaction_data_fee}>
                     <div>FEE</div>
-                    <div>{fee + ' ENQ'}</div>
+                    <div>{Number(fee) / 1e10 + ' ' + ticker}</div>
                 </div>
 
                 <div className={styles.transaction_data_amount}>
                     <div>TOTAL</div>
-                    <div>{(amount / 1e10) + ' ENQ'}</div>
+                    <div>{(Number(amount) / 1e10) + ' ' + ticker}</div>
                 </div>
 
             </div>
