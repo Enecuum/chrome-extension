@@ -4,7 +4,7 @@ import Separator from '../../elements/Separator'
 import elements from '../../css/elements.module.css'
 import { shortAddress } from '../../Utils'
 
-let fee = BigInt(0.1 * 1e10)
+// let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
 export default function TransactionRequest(props) {
@@ -24,6 +24,7 @@ export default function TransactionRequest(props) {
     const [nonce, setNonce] = useState(props.request.tx.nonce)
     const [taskId, setTaskId] = useState(props.request.cb.taskId)
     const [dataText, setDataText] = useState([])
+    const [fee, setFee] = useState(BigInt(0.1 * 1e10))
 
     // token transfer (data не парсится)
     // create token
@@ -43,7 +44,20 @@ export default function TransactionRequest(props) {
         navigator.clipboard.writeText(props.txHash)
     }
 
+    const initTickerAndFee = async ()=>{
+        let tokenHash = props.request.tx.tokenHash
+        let tokenInfo = await ENQWeb.Net.get.token_info(tokenHash)
+        if(tokenInfo.length === 0 ){
+            console.warn('token info error...')
+        }else{
+            setTicker(tokenInfo[0].ticker)
+            let originAmount = amount - BigInt(props.request.data.fee_value)
+            setFee(await ENQWeb.Web.fee_counter(tokenHash, originAmount))
+        }
+    }
+
     const parseData = () => {
+        initTickerAndFee()
         let dataTextArray = []
         let field = data
         if (ENQWeb.Utils.ofd.isContract(field)) {
@@ -65,6 +79,8 @@ export default function TransactionRequest(props) {
 
         setDataText(dataTextArray)
     }
+
+
 
     const closeModalWindow = () => {
         let params = getUrlVars()
