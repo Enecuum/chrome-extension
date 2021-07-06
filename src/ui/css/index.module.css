@@ -520,6 +520,15 @@ input.field.password::placeholder {
     opacity: .1;
 }
 
+.button_reject_all {
+    width: calc(100% - 40px);
+    position: absolute;
+    bottom: 20px;
+    /*cursor: not-allowed;*/
+
+    /*opacity: .4;*/
+}
+
 /*ACTIVITY*/
 
 .activity {
@@ -744,6 +753,6 @@ input.field.password::placeholder {
 .transaction_data_data {
     padding: 20px;
     user-select: text;
-    background: red;
+    /*background: red;*/
     word-wrap: break-word;
 }

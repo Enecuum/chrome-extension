@@ -23,7 +23,7 @@ export default function Account(props) {
     ENQWeb.Enq.provider = props.user.net
 
     const [amount, setAmount] = useState(BigInt(0))
-    const [usd, setUSD] = useState(0)
+    const [usd, setUSD] = useState(BigInt(0))
     const [ticker, setTicker] = useState('')
 
     const [connectionsCounter, setConnectionsCounter] = useState(0)
@@ -60,6 +60,7 @@ export default function Account(props) {
         setConnectsElements(elements)
         console.log(connectsElements)
     }
+
 
     // addConnect('faucet-bit.enecuum.com', '26.04.2021')
     // addConnect('http://95.216.207.173:8000', '26.04.2021')
@@ -109,7 +110,8 @@ export default function Account(props) {
                 cb: {
                     taskId: 0,
                 },
-                type: 'history'})
+                type: 'history'
+            })
         }
 
         setActivity([...activity, ...oldActivity])
@@ -158,8 +160,10 @@ export default function Account(props) {
                     ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
                         .then((answer) => {
                             if (answer['enq-enecuum'] !== undefined) {
-                                const usd = answer['enq-enecuum'].usd * amount
-                                setUSD(usd)
+
+                                const usd = BigInt(answer['enq-enecuum'].usd * 1e10)
+                                const value = usd * amount / BigInt(1e10)
+                                setUSD(value)
                             }
                         })
                 }
@@ -225,6 +229,18 @@ export default function Account(props) {
         )
     }
 
+    //Reject all
+    let rejectAll = async () => {
+        for (const key in activity) {
+            const item = activity[key]
+            await global.asyncRequest({
+                disallow: true,
+                taskId: item.cb.taskId
+            })
+            setActivity([])
+        }
+    }
+
     const assetsElements = []
     let renderAssets = () => {
         for (const key in assets) {
@@ -240,7 +256,7 @@ export default function Account(props) {
                         </div>
                         <div className={styles.time}>
                             $
-                            {item.usd}
+                            {(Number(item.usd) / 1e10).toFixed(2)}
                             {' '}
                             USD
                         </div>
@@ -274,7 +290,7 @@ export default function Account(props) {
 
     useEffect(() => {
         getConnects().then()
-        getHistory().then()
+        // getHistory().then()
         balance()
         openPopup()
     }, [])
@@ -319,7 +335,7 @@ export default function Account(props) {
                 </div>
                 <div className={styles.usd}>
                     $
-                    {usd}
+                    {(Number(usd) / 1e10).toFixed(2)}
                     {' '}
                     USD
                 </div>
@@ -371,16 +387,21 @@ export default function Account(props) {
                     {assetsElements}
 
                     <div onClick={() => {
-                    }} className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}>
+                    }}
+                         className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}>
                         Add token
                     </div>
 
                 </div>
 
-                <div
-                    className={`${styles.bottom_list} ${styles.bottom_list_activity} ${activeTab === 1 ? '' : `${styles.bottom_list_disabled}`}`}>
+                <div className={styles.bottom_list + (activeTab === 1 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
                     {activityElements}
+
+                    {activityElements.length > 1 && <div onClick={rejectAll}
+                                                         className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
+                        Reject all
+                    </div>}
 
                 </div>
 
