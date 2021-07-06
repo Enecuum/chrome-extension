@@ -2,10 +2,13 @@ import React from 'react'
 import styles from '../css/index.module.css'
 import Network from './Network'
 import Header from '../elements/Header'
-import Separator from "../elements/Separator";
+import Separator from '../elements/Separator'
 
 let net = localStorage.getItem('net')
-if (!net) net = 'bit'
+if (!net) {
+    net = 'bit'
+    localStorage.setItem('net', net)
+}
 
 ENQWeb.Net.provider = net
 
@@ -24,11 +27,11 @@ export default class Login extends React.Component {
     }
 
     handleChangePrivateKey(e) {
-        this.setState({privateKey: e.target.value})
+        this.setState({ privateKey: e.target.value })
     }
 
     setNetwork(value) {
-        this.setState({isNetwork: value})
+        this.setState({ isNetwork: value })
     }
 
     async submit() {
@@ -40,14 +43,18 @@ export default class Login extends React.Component {
                 privateKey: this.state.privateKey,
                 net: ENQWeb.Net.provider
             }
-            await global.disk.promise.sendPromise({account: true, set: true, data:data})
+            await global.disk.promise.sendPromise({
+                account: true,
+                set: true,
+                data: data
+            })
             this.props.login(data)
         }
     }
 
     generate() {
         const privateKey = ENQWeb.Utils.generateKey.getByNumber(1)[0].prvkey
-        this.setState({privateKey: privateKey})
+        this.setState({ privateKey: privateKey })
     }
 
     render() {
