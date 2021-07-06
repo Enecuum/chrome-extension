@@ -51,8 +51,12 @@ export default function TransactionRequest(props) {
             console.warn('token info error...')
         }else{
             setTicker(tokenInfo[0].ticker)
-            let originAmount = amount - BigInt(props.request.data.fee_value)
-            setFee(await ENQWeb.Web.fee_counter(tokenHash, originAmount))
+            if(props.request.data.fee_use !== false){
+                let originAmount = amount - BigInt(props.request.data.fee_value)
+                setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, originAmount)))
+            }else{
+                setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, amount)))
+            }
         }
     }
 
