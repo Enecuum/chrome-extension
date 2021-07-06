@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Login from './components/Login'
 import Lock from './components/Lock'
 import Requests from './components/Requests'
@@ -11,7 +11,7 @@ import Account from './components/Account'
 
 import PublicKeyRequest from './components/requests/PublicKeyRequest'
 import TransactionRequest from './components/requests/TransactionRequest'
-import Confirm from "./components/Confirm";
+import Confirm from './components/Confirm'
 
 export default function App(props) {
     const [isPassword, setPassword] = useState(!disk.lock.getHashPassword())
@@ -19,7 +19,7 @@ export default function App(props) {
 
     const [isConfirm, setConfirm] = useState(false)
 
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState({})
 
     const [isNetwork, setNetwork] = useState(false)
     const [isReceive, setReceive] = useState(false)
@@ -29,10 +29,11 @@ export default function App(props) {
     const [isTransactionRequest, setTransactionRequest] = useState(false)
 
     const checkLock = () => {
-        if (disk.lock.checkLock() && disk.lock.getHashPassword())
+        if (disk.lock.checkLock() && disk.lock.getHashPassword()) {
             return true
-        else
+        } else {
             return false
+        }
     }
 
     const [isLock, setLock] = useState(checkLock)
@@ -47,7 +48,8 @@ export default function App(props) {
         const version = chrome.runtime.getManifest().version
         console.log('App: ' + version)
         console.log('Lib: ' + ENQWeb.version)
-        getUser().then()
+        getUser()
+            .then()
     }, [])
 
 
@@ -64,11 +66,15 @@ export default function App(props) {
     const logout = () => {
         global.disk.user.removeUser()
         disk.lock.removeLock()
-        disk.promise.sendPromise({account: true, logout: true})
-        global.asyncRequest({reject_all: true})
+        disk.promise.sendPromise({
+            account: true,
+            logout: true
+        })
+        global.asyncRequest({ reject_all: true })
         setLogin(false)
-        setLock(false);
-        window.location.reload(false);
+        setLock(false)
+        window.location.reload(false)
+        localStorage.removeItem('net')
     }
 
     // global.disconnectAllPorts()
@@ -83,11 +89,13 @@ export default function App(props) {
         setLock(false)
     }
 
-    if (isConfirm)
+    if (isConfirm) {
         return <Confirm setConfirm={setConfirm} logout={logout}/>
+    }
 
-    if (isLock)
+    if (isLock) {
         return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
+    }
 
     if (isTransaction) {
         return (
@@ -106,11 +114,14 @@ export default function App(props) {
         return <Receive setReceive={setReceive} user={user}/>
     }
 
-    if (isPublicKeyRequest)
+    if (isPublicKeyRequest) {
         return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} request={isPublicKeyRequest}/>
+    }
 
-    if (isTransactionRequest)
-        return <TransactionRequest setTransactionRequest={setTransactionRequest} request={isTransactionRequest} user={user}/>
+    if (isTransactionRequest) {
+        return <TransactionRequest setTransactionRequest={setTransactionRequest} request={isTransactionRequest}
+                                   user={user}/>
+    }
 
     return <Account user={user}
                     logout={logout}
