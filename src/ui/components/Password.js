@@ -88,7 +88,8 @@ export default class Password extends React.Component {
                          className={styles.field + ' ' + styles.button + ' ' + (this.state.allow ? '' : styles.button_disabled)}>Save
                     </div>
 
-                    {this.props.publicKey && <div onClick={() => this.props.setPassword(false)} className={styles.field + ' ' + styles.button}>Back</div>}
+                    {this.props.publicKey && <div onClick={() => this.props.setPassword(false)}
+                                                  className={styles.field + ' ' + styles.button}>Back</div>}
 
                     <Separator/>
 

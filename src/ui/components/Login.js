@@ -27,11 +27,11 @@ export default class Login extends React.Component {
     }
 
     handleChangePrivateKey(e) {
-        this.setState({ privateKey: e.target.value })
+        this.setState({privateKey: e.target.value})
     }
 
     setNetwork(value) {
-        this.setState({ isNetwork: value })
+        this.setState({isNetwork: value})
     }
 
     async submit() {
@@ -54,7 +54,7 @@ export default class Login extends React.Component {
 
     generate() {
         const privateKey = ENQWeb.Utils.generateKey.getByNumber(1)[0].prvkey
-        this.setState({ privateKey: privateKey })
+        this.setState({privateKey: privateKey})
     }
 
     render() {

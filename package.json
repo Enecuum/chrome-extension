@@ -49,6 +49,6 @@
         "react-dev-utils": "^11.0.3",
         "react-dom": "^16.14.0",
         "uuid": "^3.3.2",
-        "enqweb3": "git+ssh://github.com/Enecuum/web3-enq.git#0.2.0"
+        "enqweb3": "git+ssh://github.com/Enecuum/web3-enq.git#0.2.1.dev"
     }
 }

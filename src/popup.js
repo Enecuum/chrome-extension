@@ -13,9 +13,20 @@ let time = 200
 // TODO electron support
 if (!chrome.runtime) {
     chrome.runtime = {}
-    chrome.runtime.connect = () => {return {onMessage: {addListener: () => {}}}}
-    chrome.runtime.sendMessage = () => {return {response: true}}
-    chrome.runtime.getManifest = () => {return {version: 'electron'}}
+    chrome.runtime.connect = () => {
+        return {
+            onMessage: {
+                addListener: () => {
+                }
+            }
+        }
+    }
+    chrome.runtime.sendMessage = () => {
+        return {response: true}
+    }
+    chrome.runtime.getManifest = () => {
+        return {version: 'electron'}
+    }
 
     console.log(chrome.runtime)
 }
