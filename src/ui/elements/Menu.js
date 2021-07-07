@@ -7,7 +7,7 @@ export default function Menu(props) {
     // let enablePopup = (await disk.config.getConfig).openEnablePopup
     const [openEnable, setOpenEnable] = useState(false)
     // const [openTx, setOpenTx] = useState((disk.config.getConfig).openTxPopup)
-    const expand = () => chrome.tabs.create({ url: 'popup.html' })
+    const expand = () => chrome.tabs.create({url: 'popup.html'})
     const window = () => chrome.windows.create({
         url: 'popup.html',
         width: 350,
@@ -25,7 +25,7 @@ export default function Menu(props) {
 
     const explorer = () => {
         // console.log('open explorer')
-        chrome.tabs.create({ url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + props.publickKey })
+        chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + props.publickKey})
     }
 
     const setNet = async (value) => {
@@ -48,7 +48,7 @@ export default function Menu(props) {
         console.log('LOCK')
         if (disk.lock.getHashPassword()) {
             props.setLock(true)
-            await asyncRequest({ lock: true })
+            await asyncRequest({lock: true})
         }
         //TODO close popup
     }
@@ -88,7 +88,8 @@ export default function Menu(props) {
             <div className={styles.button_link} onClick={() => setNet('pulse')}>Network: PULSE</div>
             <div className={styles.button_link} onClick={() => setNet('bit')}>Network: BIT</div>
             <div className={styles.button_link} onClick={() => setNet('bit-dev')}>Network: BIT-DEV</div>
-            <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup window: {openEnable ? 'ON' : 'OFF'}</div>
+            <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
+                window: {openEnable ? 'ON' : 'OFF'}</div>
             {/*<div className={styles.button_link} onClick={() => changeOpenPopup('tx')}>Open popup on TX {openTx}</div>*/}
             <div className={styles.button_link_logout}>
                 <div className={styles.button_link} onClick={() => props.setConfirm(true)}>Logout</div>

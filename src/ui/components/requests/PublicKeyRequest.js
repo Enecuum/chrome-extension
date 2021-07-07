@@ -96,7 +96,6 @@ export default class PublicKeyRequest extends React.Component {
                         {/*</div>*/}
 
 
-
                     </div>
 
                     <div onClick={this.disallow}

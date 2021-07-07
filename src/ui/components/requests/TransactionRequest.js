@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import elements from '../../css/elements.module.css'
-import { shortAddress } from '../../Utils'
+import {shortAddress} from '../../Utils'
 
 // let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -44,24 +44,24 @@ export default function TransactionRequest(props) {
         navigator.clipboard.writeText(props.txHash)
     }
 
-    const initTickerAndFee = async ()=>{
+    const initTickerAndFee = async () => {
         let tokenHash = props.request.tx.tokenHash
         let tokenInfo = await ENQWeb.Net.get.token_info(tokenHash)
-        if(tokenInfo.length === 0 ){
+        if (tokenInfo.length === 0) {
             console.warn('token info error...')
-        }else{
+        } else {
             setTicker(tokenInfo[0].ticker)
-            if(props.request.data.fee_use !== false){
+            if (props.request.data.fee_use !== false) {
                 let originAmount = amount - BigInt(props.request.data.fee_value)
                 setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, originAmount)))
-            }else{
+            } else {
                 setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, amount)))
             }
         }
     }
 
     const parseData = () => {
-        initTickerAndFee()
+        initTickerAndFee().then()
         let dataTextArray = []
         let field = data
         if (ENQWeb.Utils.ofd.isContract(field)) {
@@ -83,7 +83,6 @@ export default function TransactionRequest(props) {
 
         setDataText(dataTextArray)
     }
-
 
 
     const closeModalWindow = () => {
@@ -146,10 +145,10 @@ export default function TransactionRequest(props) {
 
                 <div
                     className={styles.transaction_type}>{
-                        ENQWeb.Utils.ofd.isContract(data) ?
-                            (ENQWeb.Utils.ofd.parse(data)).type.toUpperCase().replace('_', ' ') :
-                            'TOKEN TRANSFER'
-                    }</div>
+                    ENQWeb.Utils.ofd.isContract(data) ?
+                        (ENQWeb.Utils.ofd.parse(data)).type.toUpperCase().replace('_', ' ') :
+                        'TOKEN TRANSFER'
+                }</div>
 
                 {/*SWAP TOKEN*/}
 

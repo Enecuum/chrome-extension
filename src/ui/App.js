@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import Login from './components/Login'
 import Lock from './components/Lock'
 import Requests from './components/Requests'
@@ -70,7 +70,7 @@ export default function App(props) {
             account: true,
             logout: true
         })
-        global.asyncRequest({ reject_all: true })
+        global.asyncRequest({reject_all: true})
         setLogin(false)
         setLock(false)
         window.location.reload(false)
