@@ -153,7 +153,7 @@ export default function Account(props) {
                             image: './icons/3.png'
                         })
                 }
-                console.log(tickers)
+                // console.log(tickers)
                 setAmount(amount)
                 setTicker(ticker)
                 if (props.user.net === 'pulse') {
@@ -233,6 +233,7 @@ export default function Account(props) {
     let rejectAll = async () => {
         for (const key in activity) {
             const item = activity[key]
+            // global.asyncRequest({reject_all: true})
             await global.asyncRequest({
                 disallow: true,
                 taskId: item.cb.taskId

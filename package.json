@@ -43,12 +43,14 @@
         "webpack-cli": "^3.1.2"
     },
     "dependencies": {
+        "@ledgerhq/hw-app-eth": "^6.1.0",
+        "@ledgerhq/hw-transport-webusb": "^6.1.0",
         "crypto-js": "^3.1.9-1",
+        "enqweb3": "git+ssh://github.com/Enecuum/web3-enq.git#0.2.1.dev",
         "react": "^17.0.2",
         "react-async": "^10.0.1",
         "react-dev-utils": "^11.0.3",
         "react-dom": "^16.14.0",
-        "uuid": "^3.3.2",
-        "enqweb3": "git+ssh://github.com/Enecuum/web3-enq.git#0.2.1.dev"
+        "uuid": "^3.3.2"
     }
 }
