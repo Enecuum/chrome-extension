@@ -1,8 +1,16 @@
 import React, {useEffect, useState} from 'react'
 import styles from '../css/elements.module.css'
+import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
+import Eth from "@ledgerhq/hw-app-eth";
+
+TransportWebUSB.isSupported().then((result) => {
+    console.log('WebUSB Supported: ' + result)
+})
 
 export default function Menu(props) {
     const [amount, setAmount] = useState(0)
+
+    const [ledger, setLedger] = useState()
 
     // let enablePopup = (await disk.config.getConfig).openEnablePopup
     const [openEnable, setOpenEnable] = useState(false)
@@ -21,6 +29,7 @@ export default function Menu(props) {
     useEffect(() => {
         let config = disk.config.getConfig()
         setOpenEnable(config.openEnablePopup)
+        // connectLedger()
     }, []);
 
     const explorer = () => {
@@ -69,6 +78,20 @@ export default function Menu(props) {
         await disk.config.setConfig(config)
     }
 
+    const connectLedger = () => {
+        TransportWebUSB.create().then(transport => {
+            console.log(transport)
+            setLedger(transport)
+
+            const eth = new Eth(transport)
+            console.log(eth)
+
+            eth.getAddress("44'/60'/0'/0/0").then(o => {
+                console.log(o.address)
+            })
+        })
+    }
+
     const version = chrome.runtime.getManifest().version
 
     return (
@@ -88,6 +111,7 @@ export default function Menu(props) {
             <div className={styles.button_link} onClick={() => setNet('pulse')}>Network: PULSE</div>
             <div className={styles.button_link} onClick={() => setNet('bit')}>Network: BIT</div>
             <div className={styles.button_link} onClick={() => setNet('bit-dev')}>Network: BIT-DEV</div>
+            <div className={[styles.button_link]} onClick={connectLedger}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div>
             <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>
             {/*<div className={styles.button_link} onClick={() => changeOpenPopup('tx')}>Open popup on TX {openTx}</div>*/}
