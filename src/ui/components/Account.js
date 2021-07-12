@@ -161,7 +161,7 @@ export default function Account(props) {
                         .then((answer) => {
                             if (answer['enq-enecuum'] !== undefined) {
 
-                                const usd = BigInt(answer['enq-enecuum'].usd * 1e10)
+                                const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
                                 const value = usd * amount / BigInt(1e10)
                                 setUSD(value)
                             }

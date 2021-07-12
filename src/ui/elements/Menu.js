@@ -11,6 +11,7 @@ export default function Menu(props) {
     const [amount, setAmount] = useState(0)
 
     const [ledger, setLedger] = useState()
+    const [ethAddress, setEthAddress] = useState()
 
     // let enablePopup = (await disk.config.getConfig).openEnablePopup
     const [openEnable, setOpenEnable] = useState(false)
@@ -29,7 +30,7 @@ export default function Menu(props) {
     useEffect(() => {
         let config = disk.config.getConfig()
         setOpenEnable(config.openEnablePopup)
-        // connectLedger()
+        connectLedger()
     }, []);
 
     const explorer = () => {
@@ -80,18 +81,16 @@ export default function Menu(props) {
 
     const connectLedger = () => {
         TransportWebUSB.create().then(transport => {
+
             console.log(transport)
-            setLedger(transport)
 
             const eth = new Eth(transport)
             console.log(eth)
 
             eth.getAddress("44'/60'/0'/0/0").then(o => {
+                setLedger(transport)
+                setEthAddress(o.address)
                 console.log(o.address)
-            })
-
-            eth.signTransaction("44'/60'/0'/0/0", "").then(transaction => {
-                console.log(transaction)
             })
         })
     }
@@ -104,7 +103,7 @@ export default function Menu(props) {
             <div className={styles.lock} onClick={locked}><img src="./images/lock.png"/></div>
             <div className={styles.title}>My accounts</div>
             <div className={styles.button_link + ' ' + styles.button_link_active}>Account 1</div>
-            {/*<div className={styles.button_link}>Account 2</div>*/}
+            {ethAddress && <div className={styles.button_link}>Ledger: {ethAddress.substring(0,10) + '..'}</div>}
 
             <div className={styles.separator}/>
 
@@ -112,9 +111,11 @@ export default function Menu(props) {
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
             <div className={styles.button_link} onClick={window}>Window</div>
             <div className={styles.button_link} onClick={explorer}>Show in blockchain explorer</div>
-            <div className={styles.button_link} onClick={() => setNet('pulse')}>Network: PULSE</div>
-            <div className={styles.button_link} onClick={() => setNet('bit')}>Network: BIT</div>
-            <div className={styles.button_link} onClick={() => setNet('bit-dev')}>Network: BIT-DEV</div>
+            <div className={styles.row}>
+            <div className={styles.button_link} onClick={() => setNet('pulse')}>PULSE</div>&nbsp;/&nbsp;
+            <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>&nbsp;/&nbsp;
+            <div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>
+            </div>
             <div className={[styles.button_link]} onClick={connectLedger}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div>
             <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>
