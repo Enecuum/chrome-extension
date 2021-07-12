@@ -89,6 +89,10 @@ export default function Menu(props) {
             eth.getAddress("44'/60'/0'/0/0").then(o => {
                 console.log(o.address)
             })
+
+            eth.signTransaction("44'/60'/0'/0/0", "").then(transaction => {
+                console.log(transaction)
+            })
         })
     }
 
