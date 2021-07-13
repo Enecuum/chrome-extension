@@ -5,6 +5,9 @@ import Separator from "../elements/Separator";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
 
+const rsasign = require('jsrsasign');
+const crypto = require('crypto')
+
 export default class Transaction extends React.Component {
     constructor(props) {
         super(props)
@@ -17,8 +20,13 @@ export default class Transaction extends React.Component {
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
+        this.handleChangeData = this.handleChangeData.bind(this)
         this.setTransactionSend = this.setTransactionSend.bind(this)
         this.submit = this.submit.bind(this)
+
+        this.hash_tx_fields = this.hash_tx_fields.bind(this)
+        this.ecdsa_sign = this.ecdsa_sign.bind(this)
+        this.signWithLedger = this.signWithLedger.bind(this)
     }
 
     setTransactionSend(value) {
@@ -32,6 +40,11 @@ export default class Transaction extends React.Component {
     handleChangeAmount(e) {
         let amount = e.target.value
         this.setState({amount: amount});
+    }
+
+    handleChangeData(e) {
+        let data = e.target.value
+        this.setState({data: data});
     }
 
     async submit() {
@@ -76,7 +89,60 @@ export default class Transaction extends React.Component {
         this.setTransactionSend(true)
     }
 
-    async connectLedger() {
+    async hash_tx_fields(tx) {
+        if (!tx)
+            return undefined;
+        let model = ['amount', 'data', 'from', 'nonce', 'ticker', 'to'];
+        let str;
+        try {
+            str = model.map(v =>
+                crypto.createHash('sha256')
+                    .update(tx[v].toString().toLowerCase())
+                    .digest('hex')
+            ).join('');
+        } catch (e) {
+            if (e instanceof TypeError) {
+                console.warn('Old tx format, skip new fields...');
+                return undefined;
+            }
+        }
+        return crypto.createHash('sha256').update(str).digest('hex');
+    }
+
+    raw_tx_hex(tx) {
+        if (!tx)
+            return undefined;
+        let model = ['amount', 'data', 'from', 'nonce', 'ticker', 'to'];
+        let str = '';
+        try {
+            model.map(v => {
+                // console.log(tx[v])
+                // console.log(tx[v].toString())
+                // console.log(tx[v].toString().hexEncode())
+                str += tx[v].toString().hexEncode()
+            })
+        } catch (e) {
+            if (e instanceof TypeError) {
+                console.warn(e);
+                return undefined;
+            }
+        }
+        return str;
+    }
+
+    ecdsa_sign(skey, msg) {
+        let sig = new rsasign.Signature({'alg': 'SHA256withECDSA'});
+        try {
+            sig.init({d: skey, curve: 'secp256k1'});
+            sig.updateString(msg);
+            return sig.sign();
+        } catch (err) {
+            console.error('Signing error: ', err);
+            return null;
+        }
+    }
+
+    async signWithLedger() {
 
         TransportWebUSB.create().then(transport => {
             const eth = new Eth(transport)
@@ -87,31 +153,32 @@ export default class Transaction extends React.Component {
                 console.log(o.address)
 
                 let user = await disk.user.loadUser()
-                // console.log(user)
-                let wallet = {pubkey: user.publicKey, prvkey: user.privateKey}
-                ENQWeb.Net.provider = user.net
-
-                let data = {
-                    from: wallet,
-                    amount: Number(this.state.amount) * 1e10,
-                    to: this.state.address,
-                    data: this.state.data,
-                }
-
                 let tx = {
-                    to: data.to,
-                    from: data.from.pubkey,
-                    ticker: data.tokenHash || web.Enq.token[web.Enq.provider],
-                    amount: data.amount,
-                    nonce: data.nonce || Math.floor(Math.random() * 1e10)
+                    amount: Number(this.state.amount) * 1e10,
+                    data: this.state.data,
+                    from: user.publicKey,
+                    nonce: Math.floor(Math.random() * 1e10),
+                    ticker: await ENQWeb.Enq.ticker,
+                    to: this.state.address,
                 };
 
-                tx.hash = await web.Utils.Sign.hash_tx_fields(tx)
-                tx.sign = await web.Utils.Sign.ecdsa_sign(data.from.prvkey, tx.hash);
+                let hex = this.raw_tx_hex(tx)
+                console.log(tx)
+                console.log(hex)
 
-                eth.signTransaction("44'/60'/0'/0/0", "").then(transaction => {
+                tx.hash = await this.hash_tx_fields(tx)
+                console.log(tx)
+                tx.sign = await this.ecdsa_sign(user.privateKey, tx.hash);
+                console.log(tx)
+
+                eth.signTransaction("44'/60'/0'/0/0", hex).then(transaction => {
                     console.log(transaction)
+                }).catch(e => {
+                    console.log(e)
                 })
+
+            }).catch(e => {
+                console.log(e)
             })
         })
     }
@@ -142,7 +209,7 @@ export default class Transaction extends React.Component {
                         />
 
                         <input type="text"
-                               onChange={this.handleChangeAmount}
+                               onChange={this.handleChangeData}
                                value={this.state.data}
                                className={styles.field}
                                placeholder={'Data'}
@@ -163,7 +230,7 @@ export default class Transaction extends React.Component {
                              className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Send
                         </div>
 
-                        <div onClick={this.connectLedger}
+                        <div onClick={this.signWithLedger}
                              className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Sign with Ledger
                         </div>
 
@@ -178,4 +245,14 @@ export default class Transaction extends React.Component {
             )
         }
     }
+}
+
+String.prototype.hexEncode = function () {
+    let hex, i;
+    let result = "";
+    for (i = 0; i < this.length; i++) {
+        hex = this.charCodeAt(i).toString(16);
+        result += ("000" + hex).slice(-4);
+    }
+    return result
 }
