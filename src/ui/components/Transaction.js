@@ -201,8 +201,17 @@ export default class Transaction extends React.Component {
                 let serializedTx = txMain.serialize().toString('hex');
                 console.log(serializedTx)
 
-                eth.signTransaction("44'/60'/0'/0/0", serializedTx).then(transaction => {
+                // eth.signTransaction("44'/60'/0'/0/0", serializedTx).then(transaction => {
+                //     console.log(transaction)
+                // }).catch(e => {
+                //     console.log(e)
+                // })
+
+                eth.signPersonalMessage("44'/60'/0'/0/0", 'test'.hexEncode()).then(transaction => {
                     console.log(transaction)
+
+                    // web3.eth.sendTransaction()
+
                 }).catch(e => {
                     console.log(e)
                 })
