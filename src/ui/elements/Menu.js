@@ -7,6 +7,8 @@ TransportWebUSB.isSupported().then((result) => {
     console.log('WebUSB Supported: ' + result)
 })
 
+global.WebUSB = TransportWebUSB
+
 export default function Menu(props) {
     const [amount, setAmount] = useState(0)
 
@@ -30,7 +32,8 @@ export default function Menu(props) {
     useEffect(() => {
         let config = disk.config.getConfig()
         setOpenEnable(config.openEnablePopup)
-        connectLedger()
+        // connectLedger()
+        checkConnectLedger()
     }, []);
 
     const explorer = () => {
@@ -79,6 +82,17 @@ export default function Menu(props) {
         await disk.config.setConfig(config)
     }
 
+    const checkConnectLedger = () =>{
+        TransportWebUSB.list().then(devices=>{
+            // console.log('dievs: ', devices);
+            if(devices.length > 0){
+                setLedger(true)
+            }else{
+                setLedger(false)
+            }
+        })
+    }
+
     const connectLedger = () => {
         TransportWebUSB.create().then(transport => {
 
@@ -92,6 +106,7 @@ export default function Menu(props) {
                 setEthAddress(o.address)
                 console.log(o.address)
             })
+
         })
     }
 
