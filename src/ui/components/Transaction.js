@@ -7,6 +7,10 @@ import Eth from "@ledgerhq/hw-app-eth";
 
 const rsasign = require('jsrsasign');
 const crypto = require('crypto')
+import {Transaction as tx} from 'ethereumjs-tx'
+
+const Web3 = require('web3');
+const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/my_api_key'));
 
 export default class Transaction extends React.Component {
     constructor(props) {
@@ -16,7 +20,8 @@ export default class Transaction extends React.Component {
             address: '',
             amount: '',
             txHash: '',
-            data: ''
+            data: '',
+            unlock: false
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
@@ -153,7 +158,7 @@ export default class Transaction extends React.Component {
                 console.log(o.address)
 
                 let user = await disk.user.loadUser()
-                let tx = {
+                let enqTX = {
                     amount: Number(this.state.amount) * 1e10,
                     data: this.state.data,
                     from: user.publicKey,
@@ -162,16 +167,41 @@ export default class Transaction extends React.Component {
                     to: this.state.address,
                 };
 
-                let hex = this.raw_tx_hex(tx)
-                console.log(tx)
-                console.log(hex)
+                // let hex = this.raw_tx_hex(tx)
+                // console.log(enqTX)
+                // console.log(hex)
 
-                tx.hash = await this.hash_tx_fields(tx)
-                console.log(tx)
-                tx.sign = await this.ecdsa_sign(user.privateKey, tx.hash);
-                console.log(tx)
+                // enqTX.hash = await this.hash_tx_fields(tx)
+                // console.log(enqTX)
+                // enqTX.sign = await this.ecdsa_sign(user.privateKey, enqTX.hash);
+                // console.log(enqTX)
 
-                eth.signTransaction("44'/60'/0'/0/0", hex).then(transaction => {
+                // let rawTx = {
+                //     nonce: web3.utils.toHex(1),
+                //     gasPrice: web3.utils.toHex(20000000000),
+                //     gasLimit: web3.utils.toHex(30000000000),
+                //     to: '',
+                //     value: web3.utils.toHex(1000000),
+                //     data: '0xc0de',
+                //     networkId: 3
+                // };
+                // console.log(rawTx)
+
+                let testData = '0x7f4e616d65526567000000000000000000000000000000000000000000000000003057307f4e616d6552656700000000000000000000000000000000000000000000000000573360455760415160566000396000f20036602259604556330e0f600f5933ff33560f601e5960003356576000335700604158600035560f602b590033560f60365960003356573360003557600035335700'
+
+                const txMain = new tx({
+                    nonce: 0,
+                    gasPrice: 100,
+                    gasLimit: 1000000000,
+                    value: 0,
+                    data: testData,
+                })
+
+                // const txMain = new tx(rawTx)
+                let serializedTx = txMain.serialize().toString('hex');
+                console.log(serializedTx)
+
+                eth.signTransaction("44'/60'/0'/0/0", serializedTx).then(transaction => {
                     console.log(transaction)
                 }).catch(e => {
                     console.log(e)
@@ -179,6 +209,7 @@ export default class Transaction extends React.Component {
 
             }).catch(e => {
                 console.log(e)
+                // this.setState({unlock: false});
             })
         })
     }
@@ -231,7 +262,7 @@ export default class Transaction extends React.Component {
                         </div>
 
                         <div onClick={this.signWithLedger}
-                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Sign with Ledger
+                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Sign with Ledger {this.state.unlock ? '' : '(unlock first)'}
                         </div>
 
                         <div onClick={() => this.props.setTransaction(false)}
