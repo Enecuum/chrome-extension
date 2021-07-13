@@ -10,7 +10,7 @@ const crypto = require('crypto')
 import {Transaction as tx} from 'ethereumjs-tx'
 
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/my_api_key'));
+const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/c6ffc7b60a174cf6817cd3b56e6019e2'));
 
 export default class Transaction extends React.Component {
     constructor(props) {
@@ -189,29 +189,31 @@ export default class Transaction extends React.Component {
 
                 let testData = '0x7f4e616d65526567000000000000000000000000000000000000000000000000003057307f4e616d6552656700000000000000000000000000000000000000000000000000573360455760415160566000396000f20036602259604556330e0f600f5933ff33560f601e5960003356576000335700604158600035560f602b590033560f60365960003356573360003557600035335700'
 
+                console.log(web3.eth.gasPrice, typeof web3.eth.gasPrice);
                 const txMain = new tx({
                     nonce: 0,
-                    gasPrice: 100,
-                    gasLimit: 1000000000,
-                    value: 0,
+                    gas:28*1e9,
+                    // gasPrice: 100,
+                    // gasLimit: 10000000000000,
+                    value: '0x' + web3.utils.toWei('0.0005', "ether").toString(),
                     data: testData,
-                })
+                }, {"chain": "ropsten"})
 
                 // const txMain = new tx(rawTx)
                 let serializedTx = txMain.serialize().toString('hex');
                 console.log(serializedTx)
 
-                // eth.signTransaction("44'/60'/0'/0/0", serializedTx).then(transaction => {
-                //     console.log(transaction)
-                // }).catch(e => {
-                //     console.log(e)
-                // })
-
-                eth.signPersonalMessage("44'/60'/0'/0/0", 'test'.hexEncode()).then(transaction => {
+                eth.signTransaction("44'/60'/0'/0/0", serializedTx).then(transaction => {
+                    console.log('its test tx');
                     console.log(transaction)
-
-                    // web3.eth.sendTransaction()
-
+                    txMain.v = '0x' + transaction.v
+                    txMain.r = '0x' + transaction.r
+                    txMain.s = '0x' + transaction.s
+                    const signedTx = new tx(txMain)
+                    const signedSerializedTx = signedTx.serialize().toString('hex')
+                    web3.eth.sendSignedTransaction('0x' + signedSerializedTx).then(txHash=>{
+                        console.log("tx hash: ",{txHash})
+                    })
                 }).catch(e => {
                     console.log(e)
                 })
