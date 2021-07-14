@@ -180,19 +180,31 @@ export default function Account(props) {
             })
     }
 
-    const openPopup = () => {
+    const openPopup = async () => {
         let params = getUrlVars()
         let task = disk.task.loadTask()
         if (params.type === 'enable') {
             if (task[params.id] && !isLocked) {
                 props.setPublicKeyRequest(task[params.id])
+                return false
             }
         }
         if (params.type === 'tx') {
             if (task[params.id] && !isLocked) {
                 props.setTransactionRequest(task[params.id])
+                return false
             }
         }
+
+        if ( params.type === 'connectLedger' ) {
+            if ( !isLocked ) {
+                // props.setTransactionRequest(task[params.id])
+                props.setConnectLedger(true)
+                return false
+            }
+        }
+
+        return true
     }
 
     const activityElements = []
@@ -290,10 +302,13 @@ export default function Account(props) {
     }
 
     useEffect(() => {
-        getConnects().then()
-        // getHistory().then()
-        balance()
-        openPopup()
+        openPopup().then(result =>{
+            if(result === true){
+                getConnects().then()
+                // getHistory().then()
+                balance()
+            }
+        })
     }, [])
 
     return (
