@@ -7,7 +7,8 @@ TransportWebUSB.isSupported().then((result) => {
     console.log('WebUSB Supported: ' + result)
 })
 
-global.WebUSB = TransportWebUSB
+// global.WebUSB = TransportWebUSB
+// global.transportWebUSB = {}
 
 export default function Menu(props) {
     const [amount, setAmount] = useState(0)
@@ -81,18 +82,21 @@ export default function Menu(props) {
         await disk.config.setConfig(config)
     }
 
-    const checkConnectLedger = () => {
-        TransportWebUSB.list().then(devices => {
-            // console.log('dievs: ', devices);
-            if (devices.length > 0) {
-                // setLedger(true)
-            } else {
-                // setLedger(false)
-            }
-        })
-    }
+    // const checkConnectLedger = () => {
+    //     TransportWebUSB.list().then(devices => {
+    //         // console.log('dievs: ', devices);
+    //         if (devices.length > 0) {
+    //             // setLedger(true)
+    //         } else {
+    //             // setLedger(false)
+    //         }
+    //     })
+    // }
 
     const connectLedger = () => {
+
+        console.log(global.transportWebUSB)
+
         TransportWebUSB.create().then(transport => {
 
             console.log(transport)
@@ -103,6 +107,8 @@ export default function Menu(props) {
             eth.getAddress("44'/60'/0'/0/0").then(o => {
                 setLedger(transport)
                 setEthAddress(o.address)
+
+                global.transportWebUSB = transport
                 console.log(o.address)
             })
 
@@ -126,7 +132,7 @@ export default function Menu(props) {
             <div className={styles.lock} onClick={locked}><img src="./images/lock.png"/></div>
             <div className={styles.title}>My accounts</div>
             <div className={styles.button_link + ' ' + styles.button_link_active}>Account 1</div>
-            {ethAddress && <div className={styles.button_link}>Ledger: {ethAddress.substring(0, 10) + '..'}</div>}
+            {ethAddress ? <div className={styles.button_link} onClick={openConnectLedger}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div> : <div className={styles.button_link} onClick={openConnectLedger}>Connect ledger</div>}
 
             <div className={styles.separator}/>
 
@@ -141,8 +147,6 @@ export default function Menu(props) {
                 &nbsp;/&nbsp;
                 <div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>
             </div>
-            <div className={[styles.button_link]}
-                 onClick={openConnectLedger}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div>
             <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>
             {/*<div className={styles.button_link} onClick={() => changeOpenPopup('tx')}>Open popup on TX {openTx}</div>*/}
