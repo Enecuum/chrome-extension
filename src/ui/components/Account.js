@@ -196,8 +196,8 @@ export default function Account(props) {
             }
         }
 
-        if ( params.type === 'connectLedger' ) {
-            if ( !isLocked ) {
+        if (params.type === 'connectLedger') {
+            if (!isLocked) {
                 // props.setTransactionRequest(task[params.id])
                 props.setConnectLedger(true)
                 return false
@@ -302,8 +302,8 @@ export default function Account(props) {
     }
 
     useEffect(() => {
-        openPopup().then(result =>{
-            if(result === true){
+        openPopup().then(result => {
+            if (result === true) {
                 getConnects().then()
                 // getHistory().then()
                 balance()

@@ -126,8 +126,8 @@ export default function App(props) {
                                    user={user}/>
     }
 
-    if(isConnectLedger) {
-        return <ConnectLedger />
+    if (isConnectLedger) {
+        return <ConnectLedger/>
     }
 
     return <Account user={user}
@@ -140,5 +140,5 @@ export default function App(props) {
                     setTransaction={setTransaction}
                     setPublicKeyRequest={setPublicKeyRequest}
                     setTransactionRequest={setTransactionRequest}
-                    setConnectLedger={setConnectLedger} />
+                    setConnectLedger={setConnectLedger}/>
 }
