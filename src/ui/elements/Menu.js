@@ -32,8 +32,7 @@ export default function Menu(props) {
     useEffect(() => {
         let config = disk.config.getConfig()
         setOpenEnable(config.openEnablePopup)
-        // connectLedger()
-        checkConnectLedger()
+        connectLedger()
     }, []);
 
     const explorer = () => {
@@ -86,9 +85,9 @@ export default function Menu(props) {
         TransportWebUSB.list().then(devices => {
             // console.log('dievs: ', devices);
             if (devices.length > 0) {
-                setLedger(true)
+                // setLedger(true)
             } else {
-                setLedger(false)
+                // setLedger(false)
             }
         })
     }

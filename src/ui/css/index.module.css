@@ -390,6 +390,26 @@ input.field.password::placeholder {
     text-align: center;
 }
 
+.center_vertical {
+    width: 100%;
+    /*background-color: red;*/
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: center;*/
+    box-sizing: border-box;
+}
+
+.center_vertical div {
+    width: calc(100% - 40px);
+    border: 1px solid white;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+.center_vertical div:hover {
+    border: 1px solid var(--color-blue);
+}
+
 .bottom {
     /*position: absolute;*/
     /*bottom: 0;*/
