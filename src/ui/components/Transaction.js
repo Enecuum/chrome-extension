@@ -187,36 +187,55 @@ export default class Transaction extends React.Component {
                 // };
                 // console.log(rawTx)
 
-                let testData = '0x7f4e616d65526567000000000000000000000000000000000000000000000000003057307f4e616d6552656700000000000000000000000000000000000000000000000000573360455760415160566000396000f20036602259604556330e0f600f5933ff33560f601e5960003356576000335700604158600035560f602b590033560f60365960003356573360003557600035335700'
-
                 console.log(web3.eth.gasPrice, typeof web3.eth.gasPrice);
+
+                // let testData = '0x7f4e616d65526567000000000000000000000000000000000000000000000000003057307f4e616d6552656700000000000000000000000000000000000000000000000000573360455760415160566000396000f20036602259604556330e0f600f5933ff33560f601e5960003356576000335700604158600035560f602b590033560f60365960003356573360003557600035335700'
+                let testData = '0x'
+
+                let resultGas = await web3.eth.estimateGas({
+                    to: '0x923Fb7937145222deB3d9cAD6f425838370233B8',
+                    data: testData
+                });
+                // console.log(resultGas)
+
+                // let gas = 500 * 1e9
+                // let gas = 15092388
+                // console.log(gas)
+                let value = web3.utils.toWei('0.0001', 'ether').toString()
+                console.log(value)
+
+                // console.log(web3.eth.gasPrice, typeof web3.eth.gasPrice);
                 const txMain = new tx({
                     nonce: 0,
-                    gas:28*1e9,
-                    // gasPrice: 100,
-                    // gasLimit: 10000000000000,
-                    value: '0x' + web3.utils.toWei('0.0005', "ether").toString(),
+                    to: '0x923Fb7937145222deB3d9cAD6f425838370233B8',
+                    gasPrice: 10,
+                    gasLimit: 21000,
+                    value: '0x' + value,
                     data: testData,
-                }, {"chain": "ropsten"})
+                }, {'chain': 'ropsten'})
 
+                console.log(txMain)
                 // const txMain = new tx(rawTx)
+
                 let serializedTx = txMain.serialize().toString('hex');
                 console.log(serializedTx)
 
                 eth.signTransaction("44'/60'/0'/0/0", serializedTx).then(transaction => {
-                    console.log('its test tx');
                     console.log(transaction)
                     txMain.v = '0x' + transaction.v
                     txMain.r = '0x' + transaction.r
                     txMain.s = '0x' + transaction.s
                     const signedTx = new tx(txMain)
                     const signedSerializedTx = signedTx.serialize().toString('hex')
-                    web3.eth.sendSignedTransaction('0x' + signedSerializedTx).then(txHash=>{
-                        console.log("tx hash: ",{txHash})
+
+                    web3.eth.sendSignedTransaction('0x' + signedSerializedTx).then(txHash => {
+                        console.log('tx hash: ', {txHash})
                     })
+
                 }).catch(e => {
                     console.log(e)
                 })
+
 
             }).catch(e => {
                 console.log(e)
@@ -273,7 +292,8 @@ export default class Transaction extends React.Component {
                         </div>
 
                         <div onClick={this.signWithLedger}
-                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Sign with Ledger {this.state.unlock ? '' : '(unlock first)'}
+                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Sign with
+                            Ledger {this.state.unlock ? '' : '(unlock first)'}
                         </div>
 
                         <div onClick={() => this.props.setTransaction(false)}

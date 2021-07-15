@@ -28,12 +28,12 @@ export default function ConnectLedger(props) {
         }
     }
 
-    const checkConnectLedger = () =>{
-        TransportWebUSB.list().then(devices=>{
+    const checkConnectLedger = () => {
+        TransportWebUSB.list().then(devices => {
             // console.log('dievs: ', devices);
-            if(devices.length > 0){
+            if (devices.length > 0) {
                 setLedger(true)
-            }else{
+            } else {
                 setLedger(false)
             }
         })
@@ -64,17 +64,19 @@ export default function ConnectLedger(props) {
 
     return (
         <div className={styles.main}>
-            
+
             <div className={styles.field}>Please connect your device and unlock him</div>
 
-            <div className={styles.field }>Status: {ledger ? 'Connected':'Try connecting'} </div>
-            
-            <div className={styles.field }>{ethAddress ? 'eth Address: \n' + ethAddress : ''}</div>
+            <div className={styles.field}>Status: {ledger ? 'Connected' : 'Try connecting'} </div>
 
-            <div className={styles.field + ' ' + styles.button + ' ' + styles.button_blue} onClick={connectLedger}>Connect</div>
+            <div className={styles.field}>{ethAddress ? 'ETH Address: \n' + ethAddress : ''}</div>
+
+            <div className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}
+                 onClick={connectLedger}>Connect
+            </div>
 
             <div onClick={closeModalWindow}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Close
+                 className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Close
             </div>
 
         </div>

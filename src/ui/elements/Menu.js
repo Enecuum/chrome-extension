@@ -82,12 +82,12 @@ export default function Menu(props) {
         await disk.config.setConfig(config)
     }
 
-    const checkConnectLedger = () =>{
-        TransportWebUSB.list().then(devices=>{
+    const checkConnectLedger = () => {
+        TransportWebUSB.list().then(devices => {
             // console.log('dievs: ', devices);
-            if(devices.length > 0){
+            if (devices.length > 0) {
                 setLedger(true)
-            }else{
+            } else {
                 setLedger(false)
             }
         })
@@ -110,7 +110,7 @@ export default function Menu(props) {
         })
     }
 
-    const openConnectLedger = ()=>{
+    const openConnectLedger = () => {
         chrome.windows.create({
             url: 'popup.html?type=connectLedger',
             width: 350,
@@ -127,7 +127,7 @@ export default function Menu(props) {
             <div className={styles.lock} onClick={locked}><img src="./images/lock.png"/></div>
             <div className={styles.title}>My accounts</div>
             <div className={styles.button_link + ' ' + styles.button_link_active}>Account 1</div>
-            {ethAddress && <div className={styles.button_link}>Ledger: {ethAddress.substring(0,10) + '..'}</div>}
+            {ethAddress && <div className={styles.button_link}>Ledger: {ethAddress.substring(0, 10) + '..'}</div>}
 
             <div className={styles.separator}/>
 
@@ -136,11 +136,14 @@ export default function Menu(props) {
             <div className={styles.button_link} onClick={window}>Window</div>
             <div className={styles.button_link} onClick={explorer}>Show in blockchain explorer</div>
             <div className={styles.row}>
-            <div className={styles.button_link} onClick={() => setNet('pulse')}>PULSE</div>&nbsp;/&nbsp;
-            <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>&nbsp;/&nbsp;
-            <div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>
+                <div className={styles.button_link} onClick={() => setNet('pulse')}>PULSE</div>
+                &nbsp;/&nbsp;
+                <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>
+                &nbsp;/&nbsp;
+                <div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>
             </div>
-            <div className={[styles.button_link]} onClick={openConnectLedger}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div>
+            <div className={[styles.button_link]}
+                 onClick={openConnectLedger}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div>
             <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>
             {/*<div className={styles.button_link} onClick={() => changeOpenPopup('tx')}>Open popup on TX {openTx}</div>*/}
