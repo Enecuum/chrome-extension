@@ -187,7 +187,8 @@ export default class Transaction extends React.Component {
                 // };
                 // console.log(rawTx)
 
-                console.log(web3.eth.gasPrice, typeof web3.eth.gasPrice);
+                let gasPrice = await web3.eth.gasPrice
+                console.log(gasPrice, typeof gasPrice);
 
                 // let testData = '0x7f4e616d65526567000000000000000000000000000000000000000000000000003057307f4e616d6552656700000000000000000000000000000000000000000000000000573360455760415160566000396000f20036602259604556330e0f600f5933ff33560f601e5960003356576000335700604158600035560f602b590033560f60365960003356573360003557600035335700'
                 let testData = '0x'

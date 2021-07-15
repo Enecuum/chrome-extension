@@ -10,12 +10,13 @@ import Eth from "@ledgerhq/hw-app-eth";
 //     console.log('WebUSB Supported: ' + result)
 // })
 
-global.WebUSB = TransportWebUSB
+// global.WebUSB = TransportWebUSB
 
 export default function ConnectLedger() {
 
     //TODO
     // const [taskId, setTaskId] = useState(props.request.cb.taskId)
+    const [usbDevice, setUsbDevice] = useState(false)
     const [ledger, setLedger] = useState(false)
     const [ethAddress, setEthAddress] = useState('')
     const [eth2Address, setEth2Address] = useState('')
@@ -42,11 +43,23 @@ export default function ConnectLedger() {
     //     })
     // }
 
+    const checkDevice = () => {
+        TransportWebUSB.list().then(devices => {
+            console.log(devices)
+            let output = devices.length > 0 && devices.find(device => device.manufacturerName === 'Ledger')
+            console.log(!!output)
+            setUsbDevice(!!output)
+        })
+    }
+
     const connectLedger = () => {
+
+        console.log(global)
+        console.log(global.transportWebUSB)
+
         TransportWebUSB.create().then(transport => {
 
             console.log(transport)
-
 
             const eth = new Eth(transport)
             console.log(eth)
@@ -72,6 +85,8 @@ export default function ConnectLedger() {
                             eth.getAddress("44'/60'/0'/0/4").then(o => {
                                 setEth5Address(o.address)
                                 console.log(o.address)
+
+                                global.transportWebUSB = transport
                             })
                         })
                     })
@@ -82,14 +97,18 @@ export default function ConnectLedger() {
             //     console.log(o.address)
             // })
 
+        }).catch(error => {
+            console.log(error)
         })
     }
 
 
     useEffect(() => {
+        checkDevice()
         connectLedger()
     }, [])
 
+    //
 
     return (
         <div className={styles.main}>
@@ -100,7 +119,7 @@ export default function ConnectLedger() {
 
                     {!ledger && <div className={styles.field}>Connect and unlock device</div>}
 
-                    <div className={styles.field}>Status: {ledger ? 'connected' : 'not connected'} </div>
+                    <div className={styles.field}>Status: {ledger ? 'connected' : (usbDevice ? 'locked' : 'not connected')} </div>
 
                     {ethAddress && <div className={styles.field}>{shortAddress2(ethAddress)}</div>}
                     {eth2Address && <div className={styles.field}>{shortAddress2(eth2Address)}</div>}
@@ -113,7 +132,7 @@ export default function ConnectLedger() {
                 <div className={styles.form}>
 
                     {!ledger && <div className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}
-                         onClick={connectLedger}>Connect
+                                     onClick={connectLedger}>Connect
                     </div>}
 
                     <div onClick={closeModalWindow}
