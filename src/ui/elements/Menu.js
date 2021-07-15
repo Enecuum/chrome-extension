@@ -110,6 +110,15 @@ export default function Menu(props) {
         })
     }
 
+    const openConnectLedger = ()=>{
+        chrome.windows.create({
+            url: 'popup.html?type=connectLedger',
+            width: 350,
+            height: 630,
+            type: 'popup'
+        })
+    }
+
     const version = chrome.runtime.getManifest().version
 
     return (
@@ -131,7 +140,7 @@ export default function Menu(props) {
             <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>&nbsp;/&nbsp;
             <div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>
             </div>
-            <div className={[styles.button_link]} onClick={connectLedger}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div>
+            <div className={[styles.button_link]} onClick={openConnectLedger}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div>
             <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>
             {/*<div className={styles.button_link} onClick={() => changeOpenPopup('tx')}>Open popup on TX {openTx}</div>*/}
