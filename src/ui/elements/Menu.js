@@ -33,7 +33,7 @@ export default function Menu(props) {
     useEffect(() => {
         let config = disk.config.getConfig()
         setOpenEnable(config.openEnablePopup)
-        connectLedger()
+        // connectLedger()
     }, []);
 
     const explorer = () => {
@@ -105,6 +105,7 @@ export default function Menu(props) {
             console.log(eth)
 
             eth.getAddress("44'/60'/0'/0/0").then(o => {
+
                 setLedger(transport)
                 setEthAddress(o.address)
 
