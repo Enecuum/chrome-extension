@@ -275,6 +275,43 @@ function setConfig(config) {
     }
 }
 
+function getBalance(){
+    let state = JSON.parse(localStorage.getItem('balance'))
+    if (!state) {
+        state = {}
+    }
+    return state
+}
+
+
+function setBalance(balance){
+    let state = JSON.parse(localStorage.getItem('balance'))
+    if (!state) {
+        state = {}
+    }
+    state = balance
+    localStorage.setItem('balance', JSON.stringify(state))
+    return true
+}
+
+function getAssets(){
+    let state = JSON.parse(localStorage.getItem('assets'))
+    if (!state) {
+        state = {}
+    }
+    return state
+}
+
+function setAssets(tokens){
+    let state = JSON.parse(localStorage.getItem('assets'))
+    if (!state) {
+        state = {}
+    }
+    state = tokens
+    localStorage.setItem('assets', JSON.stringify(state))
+    return true
+}
+
 let storage = function Storage(name) {
     this.name = name
     this.task = {
@@ -320,6 +357,12 @@ let storage = function Storage(name) {
     }
     this.promise = {
         sendPromise
+    }
+    this.balance = {
+        getBalance,
+        setBalance, 
+        getAssets, 
+        setAssets
     }
 }
 

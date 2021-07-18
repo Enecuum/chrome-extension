@@ -125,12 +125,42 @@ export default function Account(props) {
     //     setLocked(false)
     // }
 
+    const setBufferBalances = (bufer, ...tokens)=>{
+        bufer.amount = bufer.amount.toString();
+        bufer.usd = bufer.usd.toString();
+        disk.balance.setBalance(bufer)
+        for(let i in tokens){
+            tokens[i].amount = tokens[i].amount.toString();
+            tokens[i].usd = tokens[i].usd.toString();
+        }
+        disk.balance.setAssets(tokens);
+    }
+
+    const getBufferBalances = ()=> {
+        let main = disk.balance.getBalance();
+        let assets = disk.balance.getAssets();
+        if(main.amount != undefined){
+            setAmount(BigInt(main.amount))
+            setTicker(main.ticker)
+            setUSD(BigInt(main.usd))
+            if(assets.length > 0){
+                for( let i in assets){
+                    assets[i].amount = BigInt(assets[i].amount)
+                    assets[i].usd = BigInt(assets[i].usd)
+                }
+            }
+            main.image = './icons/3.png';
+            setAssets([main, ...assets])
+        }
+        
+        
+    }
+
     const balance = () => {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
         const token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
         console.log(token)
-
         let tokens = []
 
         ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
@@ -139,12 +169,11 @@ export default function Account(props) {
                 let amount = 0
                 let ticker = ''
                 for (let i in res) {
-
-                    tickers[res[i].token] = res[i].ticker
-
+                    
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
+                        
                     } else
                         tokens.push({
                             amount: BigInt(res[i].amount),
@@ -173,6 +202,13 @@ export default function Account(props) {
                     usd: usd,
                     image: './images/enq.png'
                 }, ...tokens])
+
+                setBufferBalances({
+                    amount: amount,
+                    ticker: ticker,
+                    usd: usd,
+                    image: './images/enq.png'
+                }, ...tokens)
                 // console.log(res.amount / 1e10)
             })
             .catch((err) => {
@@ -304,6 +340,7 @@ export default function Account(props) {
     useEffect(() => {
         openPopup().then(result => {
             if (result === true) {
+                getBufferBalances()
                 getConnects().then()
                 // getHistory().then()
                 balance()
