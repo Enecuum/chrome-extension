@@ -34,7 +34,7 @@ export default function ConnectLedger(props) {
             })
     }
 
-    //TODO доделать рендер и нормальную отрисовку по сраницам 
+    //TODO доделать рендер и нормальную отрисовку по сраницам и убрать ошибку
     const renderPages = async (transactions)=>{
         let txList = []
         let info = ''
