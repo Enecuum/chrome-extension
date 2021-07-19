@@ -13,6 +13,8 @@ import PublicKeyRequest from './components/requests/PublicKeyRequest'
 import TransactionRequest from './components/requests/TransactionRequest'
 import ConnectLedger from './components/requests/ConnectLedger'
 import Confirm from './components/Confirm'
+import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
+import Eth from "@ledgerhq/hw-app-eth";
 
 export default function App(props) {
     const [isPassword, setPassword] = useState(!disk.lock.getHashPassword())
@@ -30,6 +32,7 @@ export default function App(props) {
     const [isTransactionRequest, setTransactionRequest] = useState(false)
 
     const [isConnectLedger, setConnectLedger] = useState(false)
+    const [ledgerTransport, setLedgerTransport] = useState()
 
     const checkLock = () => {
         if (disk.lock.checkLock() && disk.lock.getHashPassword()) {
@@ -78,6 +81,25 @@ export default function App(props) {
         setLock(false)
         window.location.reload(false)
         localStorage.removeItem('net')
+    }
+
+    const createLedgerTransport = () => {
+
+        TransportWebUSB.create().then(transport => {
+
+            const eth = new Eth(transport)
+            console.log(eth)
+
+            eth.getAddress("44'/60'/0'/0/0").then(async o => {
+
+                console.log(o.address)
+                // this.setState({
+                //     address: o.address
+                // })
+
+                setLedgerTransport(transport)
+            })
+        })
     }
 
     // global.disconnectAllPorts()
