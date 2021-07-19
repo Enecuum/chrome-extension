@@ -21,7 +21,8 @@ export default class Transaction extends React.Component {
             amount: '0.0001',
             txHash: '',
             data: '0x',
-            unlock: false
+            unlock: false,
+            getLedgerTransport: this.props.getLedgerTransport
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
@@ -32,6 +33,8 @@ export default class Transaction extends React.Component {
         this.hash_tx_fields = this.hash_tx_fields.bind(this)
         this.ecdsa_sign = this.ecdsa_sign.bind(this)
         this.signWithLedger = this.signWithLedger.bind(this)
+
+        // this.setTransactionSend = this.getLedgerTransport.bind(this)
     }
 
     setTransactionSend(value) {
@@ -149,111 +152,114 @@ export default class Transaction extends React.Component {
 
     async signWithLedger() {
 
-        TransportWebUSB.create().then(transport => {
+        let transport = await this.props.getLedgerTransport()
 
-            const eth = new Eth(transport)
-            console.log(eth)
+        console.log(transport)
 
-            eth.getAddress("44'/60'/0'/0/0").then(async o => {
+        const eth = new Eth(transport)
+        console.log(eth)
 
-                console.log(o.address)
-                this.setState({
-                    address: o.address
-                })
+        eth.getAddress("44'/60'/0'/0/0").then(async o => {
 
-                let user = await disk.user.loadUser()
-                let enqTX = {
-                    amount: Number(this.state.amount) * 1e10,
-                    data: this.state.data,
-                    from: user.publicKey,
-                    nonce: Math.floor(Math.random() * 1e10),
-                    ticker: await ENQWeb.Enq.ticker,
-                    to: this.state.address,
-                };
+            console.log(o.address)
+            this.setState({
+                address: o.address
+            })
 
-                // let hex = this.raw_tx_hex(tx)
-                // console.log(enqTX)
-                // console.log(hex)
+            let user = await disk.user.loadUser()
+            let enqTX = {
+                amount: Number(this.state.amount) * 1e10,
+                data: this.state.data,
+                from: user.publicKey,
+                nonce: Math.floor(Math.random() * 1e10),
+                ticker: await ENQWeb.Enq.ticker,
+                to: this.state.address,
+            };
 
-                // enqTX.hash = await this.hash_tx_fields(tx)
-                // console.log(enqTX)
-                // enqTX.sign = await this.ecdsa_sign(user.privateKey, enqTX.hash);
-                // console.log(enqTX)
+            // let hex = this.raw_tx_hex(tx)
+            // console.log(enqTX)
+            // console.log(hex)
 
-                // let rawTx = {
-                //     nonce: web3.utils.toHex(1),
-                //     gasPrice: web3.utils.toHex(20000000000),
-                //     gasLimit: web3.utils.toHex(30000000000),
-                //     to: '',
-                //     value: web3.utils.toHex(1000000),
-                //     data: '0xc0de',
-                //     networkId: 3
-                // };
-                // console.log(rawTx)
+            // enqTX.hash = await this.hash_tx_fields(tx)
+            // console.log(enqTX)
+            // enqTX.sign = await this.ecdsa_sign(user.privateKey, enqTX.hash);
+            // console.log(enqTX)
 
-                let gasPrice = await web3.eth.gasPrice
-                console.log(gasPrice, typeof gasPrice);
+            // let rawTx = {
+            //     nonce: web3.utils.toHex(1),
+            //     gasPrice: web3.utils.toHex(20000000000),
+            //     gasLimit: web3.utils.toHex(30000000000),
+            //     to: '',
+            //     value: web3.utils.toHex(1000000),
+            //     data: '0xc0de',
+            //     networkId: 3
+            // };
+            // console.log(rawTx)
 
-                // let testData = '0x7f4e616d65526567000000000000000000000000000000000000000000000000003057307f4e616d6552656700000000000000000000000000000000000000000000000000573360455760415160566000396000f20036602259604556330e0f600f5933ff33560f601e5960003356576000335700604158600035560f602b590033560f60365960003356573360003557600035335700'
-                // let testData = '0x'
+            let gasPrice = await web3.eth.gasPrice
+            console.log(gasPrice, typeof gasPrice);
 
-                let resultGas = await web3.eth.estimateGas({
-                    to: this.state.address,
-                    data: this.state.data
-                });
-                console.log(resultGas)
+            // let testData = '0x7f4e616d65526567000000000000000000000000000000000000000000000000003057307f4e616d6552656700000000000000000000000000000000000000000000000000573360455760415160566000396000f20036602259604556330e0f600f5933ff33560f601e5960003356576000335700604158600035560f602b590033560f60365960003356573360003557600035335700'
+            // let testData = '0x'
 
-                // let gas = 500 * 1e9
-                // let gas = 15092388
-                // console.log(gas)
-                let value = web3.utils.toWei(this.state.amount, 'ether').toString()
-                console.log(value)
+            let resultGas = await web3.eth.estimateGas({
+                to: this.state.address,
+                data: this.state.data
+            });
+            console.log(resultGas)
 
-                // console.log(web3.eth.gasPrice, typeof web3.eth.gasPrice);
-                const txMain = new tx({
-                    nonce: web3.utils.toHex(1048576),
-                    from: this.state.address,
-                    to: this.state.address,
-                    gasPrice: web3.utils.toHex(20e9),
-                    gasLimit: web3.utils.toHex(21000),
-                    value: web3.utils.toHex(web3.utils.toWei(this.state.amount, 'ether')), // 1 eth
-                    data: this.state.data,
-                    chainId: '0x03'
-                }, {chain: 'ropsten', hardfork: 'petersburg'})
+            // let gas = 500 * 1e9
+            // let gas = 15092388
+            // console.log(gas)
+            let value = web3.utils.toWei(this.state.amount, 'ether').toString()
+            console.log(value)
+
+            // console.log(web3.eth.gasPrice, typeof web3.eth.gasPrice);
+            const txMain = new tx({
+                nonce: web3.utils.toHex(1048576),
+                from: this.state.address,
+                to: this.state.address,
+                gasPrice: web3.utils.toHex(20e9),
+                gasLimit: web3.utils.toHex(21000),
+                value: web3.utils.toHex(web3.utils.toWei(this.state.amount, 'ether')), // 1 eth
+                data: this.state.data,
+                chainId: '0x03'
+            }, {chain: 'ropsten', hardfork: 'petersburg'})
+
+            console.log(txMain)
+            // const txMain = new tx(rawTx)
+
+            let serializedTx = txMain.serialize().toString('hex');
+            console.log(serializedTx)
+
+            eth.signTransaction("44'/60'/0'/0/0", serializedTx).then(transaction => {
+
+                console.log(transaction)
+
+                txMain.v = '0x' + transaction.v
+                txMain.r = '0x' + transaction.r
+                txMain.s = '0x' + transaction.s
 
                 console.log(txMain)
-                // const txMain = new tx(rawTx)
 
-                let serializedTx = txMain.serialize().toString('hex');
-                console.log(serializedTx)
+                const signedTx = new tx(txMain)
+                const signedSerializedTx = signedTx.serialize().toString('hex')
 
-                eth.signTransaction("44'/60'/0'/0/0", serializedTx).then(transaction => {
-
-                    console.log(transaction)
-
-                    txMain.v = '0x' + transaction.v
-                    txMain.r = '0x' + transaction.r
-                    txMain.s = '0x' + transaction.s
-
-                    console.log(txMain)
-
-                    const signedTx = new tx(txMain)
-                    const signedSerializedTx = signedTx.serialize().toString('hex')
-
-                    web3.eth.sendSignedTransaction('0x' + signedSerializedTx).then(txHash => {
-                        console.log('tx hash: ', {txHash})
-                    })
-
-                }).catch(e => {
-                    console.log(e)
+                web3.eth.sendSignedTransaction('0x' + signedSerializedTx).then(txHash => {
+                    console.log('tx hash: ', {txHash})
                 })
-
 
             }).catch(e => {
                 console.log(e)
-                // this.setState({unlock: false});
             })
+
+
+        }).catch(e => {
+            console.log(e)
+            // this.setState({unlock: false});
         })
+
+        // TransportWebUSB.create().then(transport => {})
     }
 
     render() {
