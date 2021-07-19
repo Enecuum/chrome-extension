@@ -12,7 +12,7 @@ import Eth from "@ledgerhq/hw-app-eth";
 
 // global.WebUSB = TransportWebUSB
 
-export default function ConnectLedger() {
+export default function ConnectLedger(props) {
 
     //TODO
     // const [taskId, setTaskId] = useState(props.request.cb.taskId)
@@ -52,60 +52,49 @@ export default function ConnectLedger() {
         })
     }
 
-    const connectLedger = () => {
+    const connectLedger = async () => {
 
-        console.log(global)
-        console.log(global.transportWebUSB)
+        let transport = await props.getLedgerTransport()
 
-        TransportWebUSB.create().then(transport => {
+        console.log(transport)
 
-            console.log(transport)
+        const eth = new Eth(transport)
+        console.log(eth)
 
-            const eth = new Eth(transport)
-            console.log(eth)
+        eth.getAddress("44'/60'/0'/0/0").then(o => {
 
-            eth.getAddress("44'/60'/0'/0/0").then(o => {
+            setLedger(transport)
+            setEthAddress(o.address)
+            console.log(o.address)
 
-                setLedger(transport)
-                setEthAddress(o.address)
+            eth.getAddress("44'/60'/0'/0/1").then(o => {
+                setEth2Address(o.address)
                 console.log(o.address)
 
-                eth.getAddress("44'/60'/0'/0/1").then(o => {
-                    setEth2Address(o.address)
+                eth.getAddress("44'/60'/0'/0/2").then(o => {
+                    setEth3Address(o.address)
                     console.log(o.address)
 
-                    eth.getAddress("44'/60'/0'/0/2").then(o => {
-                        setEth3Address(o.address)
+                    eth.getAddress("44'/60'/0'/0/3").then(o => {
+                        setEth4Address(o.address)
                         console.log(o.address)
 
-                        eth.getAddress("44'/60'/0'/0/3").then(o => {
-                            setEth4Address(o.address)
+                        eth.getAddress("44'/60'/0'/0/4").then(o => {
+                            setEth5Address(o.address)
                             console.log(o.address)
 
-                            eth.getAddress("44'/60'/0'/0/4").then(o => {
-                                setEth5Address(o.address)
-                                console.log(o.address)
-
-                                global.transportWebUSB = transport
-                            })
+                            global.transportWebUSB = transport
                         })
                     })
                 })
             })
-            // eth.getAddress("44'/60'/0'/0/1").then(o => {
-            //     // setEthAddress(shortAddress(o.address))
-            //     console.log(o.address)
-            // })
-
-        }).catch(error => {
-            console.log(error)
         })
     }
 
 
     useEffect(() => {
         checkDevice()
-        connectLedger()
+        connectLedger().then(r => {})
     }, [])
 
     //

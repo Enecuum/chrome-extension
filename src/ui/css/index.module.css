@@ -401,9 +401,12 @@ input.field.password::placeholder {
 
 .center_vertical div {
     width: calc(100% - 40px);
-    border: 1px solid white;
+    /*border-left: 1px solid white;*/
+    /*border-right: 1px solid white;*/
     border-radius: 3px;
     box-sizing: border-box;
+
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .center_vertical div:hover {

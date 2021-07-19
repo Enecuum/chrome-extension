@@ -83,23 +83,37 @@ export default function App(props) {
         localStorage.removeItem('net')
     }
 
-    const createLedgerTransport = () => {
+    const createLedgerTransport = async () => {
 
-        TransportWebUSB.create().then(transport => {
+        return await TransportWebUSB.create().then(async transport => {
 
             const eth = new Eth(transport)
             console.log(eth)
 
-            eth.getAddress("44'/60'/0'/0/0").then(async o => {
+            return await eth.getAddress("44'/60'/0'/0/0").then(async o => {
 
                 console.log(o.address)
+
                 // this.setState({
                 //     address: o.address
                 // })
 
                 setLedgerTransport(transport)
+
+                return transport
             })
         })
+    }
+
+    const getLedgerTransport = async () => {
+
+        console.log(ledgerTransport)
+
+        // if (!ledgerTransport)
+            return await createLedgerTransport()
+
+        // else
+        //     return ledgerTransport
     }
 
     // global.disconnectAllPorts()
@@ -127,6 +141,7 @@ export default function App(props) {
             <Transaction
                 setTransaction={setTransaction}
                 publicKey={user.publicKey}
+                getLedgerTransport={getLedgerTransport}
             />
         )
     }
@@ -149,7 +164,7 @@ export default function App(props) {
     }
 
     if (isConnectLedger) {
-        return <ConnectLedger/>
+        return <ConnectLedger getLedgerTransport={getLedgerTransport}/>
     }
 
     return <Account user={user}
