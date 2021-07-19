@@ -9,9 +9,11 @@ import Receive from './components/Receive'
 import Account from './components/Account'
 
 
+
 import PublicKeyRequest from './components/requests/PublicKeyRequest'
 import TransactionRequest from './components/requests/TransactionRequest'
 import ConnectLedger from './components/requests/ConnectLedger'
+import ShowAllTransactions from './components/requests/ShowAllTransactions'
 import Confirm from './components/Confirm'
 
 export default function App(props) {
@@ -30,6 +32,8 @@ export default function App(props) {
     const [isTransactionRequest, setTransactionRequest] = useState(false)
 
     const [isConnectLedger, setConnectLedger] = useState(false)
+
+    const [isShowAllTransactions, setShowAllTransactions] = useState(false)
 
     const checkLock = () => {
         if (disk.lock.checkLock() && disk.lock.getHashPassword()) {
@@ -127,7 +131,11 @@ export default function App(props) {
     }
 
     if (isConnectLedger) {
-        return <ConnectLedger/>
+        return <ConnectLedger user={user} />
+    }
+
+    if(isShowAllTransactions){
+        return  <ShowAllTransactions setShowAllTransactions={setShowAllTransactions} user={user} />
     }
 
     return <Account user={user}
@@ -140,5 +148,6 @@ export default function App(props) {
                     setTransaction={setTransaction}
                     setPublicKeyRequest={setPublicKeyRequest}
                     setTransactionRequest={setTransactionRequest}
-                    setConnectLedger={setConnectLedger}/>
+                    setConnectLedger={setConnectLedger}
+                    setShowAllTransactions={setShowAllTransactions} />
 }

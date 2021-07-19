@@ -125,6 +125,7 @@ export default function Menu(props) {
         })
     }
 
+
     const version = chrome.runtime.getManifest().version
 
     return (
@@ -151,6 +152,7 @@ export default function Menu(props) {
             <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>
             {/*<div className={styles.button_link} onClick={() => changeOpenPopup('tx')}>Open popup on TX {openTx}</div>*/}
+            <div className={styles.button_link} onClick={()=>{props.setShowAllTransactions(true)}}>Show transactions</div>
             <div className={styles.button_link_logout}>
                 <div className={styles.button_link} onClick={() => props.setConfirm(true)}>Logout</div>
                 <div className={styles.version}>{version}</div>

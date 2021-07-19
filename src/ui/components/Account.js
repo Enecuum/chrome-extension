@@ -152,8 +152,8 @@ export default function Account(props) {
             main.image = './icons/3.png';
             setAssets([main, ...assets])
         }
-        
-        
+
+
     }
 
     const balance = () => {
@@ -169,11 +169,11 @@ export default function Account(props) {
                 let amount = 0
                 let ticker = ''
                 for (let i in res) {
-                    
+
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
-                        
+
                     } else
                         tokens.push({
                             amount: BigInt(res[i].amount),
@@ -234,8 +234,14 @@ export default function Account(props) {
 
         if (params.type === 'connectLedger') {
             if (!isLocked) {
-                // props.setTransactionRequest(task[params.id])
                 props.setConnectLedger(true)
+                return false
+            }
+        }
+
+        if(params.type === 'allTx'){
+            if(!isLocked){
+                props.setShowAllTransactions(true)
                 return false
             }
         }
@@ -333,7 +339,8 @@ export default function Account(props) {
                          publickKey={props.user.publicKey}
                          setLock={props.setLock}
                          setConfirm={props.setConfirm}
-                         setPassword={props.setPassword}/>
+                         setPassword={props.setPassword}
+                         setShowAllTransactions={props.setShowAllTransactions}/>
         }
     }
 
