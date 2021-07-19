@@ -212,13 +212,14 @@ export default class Transaction extends React.Component {
                 // console.log(web3.eth.gasPrice, typeof web3.eth.gasPrice);
                 const txMain = new tx({
                     nonce: web3.utils.toHex(1048576),
+                    from: this.state.address,
                     to: this.state.address,
                     gasPrice: web3.utils.toHex(20e9),
                     gasLimit: web3.utils.toHex(21000),
                     value: web3.utils.toHex(web3.utils.toWei(this.state.amount, 'ether')), // 1 eth
                     data: this.state.data,
                     chainId: '0x03'
-                })
+                }, {chain: 'ropsten', hardfork: 'petersburg'})
 
                 console.log(txMain)
                 // const txMain = new tx(rawTx)
