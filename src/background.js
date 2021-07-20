@@ -18,7 +18,7 @@ let popupOpenMethods = {
     'tx': true
 }
 
-const VALID_VERSION_LIB = '0.2.0'
+const VALID_VERSION_LIB = '0.2.3'
 
 let Account = {}
 
