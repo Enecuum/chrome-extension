@@ -77,6 +77,7 @@ export default function Menu(props) {
             <div className={styles.lock} onClick={locked}><img src="./images/lock.png"/></div>
             <div className={styles.title}>My accounts</div>
             <div className={styles.button_link + ' ' + styles.button_link_active}>Account 1</div>
+            <div className={styles.button_link + ' ' + styles.button_link_active}>Connect Ledger</div>
             {/*<div className={styles.button_link}>Account 2</div>*/}
 
             <div className={styles.separator}/>
