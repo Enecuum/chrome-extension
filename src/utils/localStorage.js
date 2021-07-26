@@ -275,6 +275,13 @@ function setConfig(config) {
     }
 }
 
+function resultTask(taskId, result){
+    let task = getTask(taskId)
+    task.result = result
+    setTask(taskId, task)
+    return true
+}
+
 let storage = function Storage(name) {
     this.name = name
     this.task = {
@@ -283,7 +290,8 @@ let storage = function Storage(name) {
         setTask,
         getTask,
         removeTask,
-        clearTasks
+        clearTasks,
+        resultTask
     }
     this.user = {
         name,
