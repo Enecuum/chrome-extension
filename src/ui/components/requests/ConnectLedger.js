@@ -94,7 +94,8 @@ export default function ConnectLedger(props) {
 
     useEffect(() => {
         checkDevice()
-        connectLedger().then(r => {})
+        connectLedger().then(r => {
+        })
     }, [])
 
     //
@@ -108,7 +109,8 @@ export default function ConnectLedger(props) {
 
                     {!ledger && <div className={styles.field}>Connect and unlock device</div>}
 
-                    <div className={styles.field}>Status: {ledger ? 'connected' : (usbDevice ? 'locked' : 'not connected')} </div>
+                    <div
+                        className={styles.field}>Status: {ledger ? 'connected' : (usbDevice ? 'locked' : 'not connected')} </div>
 
                     {ethAddress && <div className={styles.field}>{shortAddress2(ethAddress)}</div>}
                     {eth2Address && <div className={styles.field}>{shortAddress2(eth2Address)}</div>}

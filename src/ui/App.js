@@ -110,7 +110,7 @@ export default function App(props) {
         console.log(ledgerTransport)
 
         // if (!ledgerTransport)
-            return await createLedgerTransport()
+        return await createLedgerTransport()
 
         // else
         //     return ledgerTransport

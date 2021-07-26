@@ -1,7 +1,7 @@
 {
     "name": "Enecuum",
     "description": "Enecuum Wallet",
-    "version": "0.2.0",
+    "version": "0.2.2",
     "manifest_version": 2,
     "background": {
         "scripts": [
@@ -13,7 +13,7 @@
     "browser_action": {
         "default_title": "Enecuum Wallet",
         "default_popup": "popup.html",
-        "default_icon": "images/enq.png"
+        "default_icon": "images/logo_white.png"
     },
     "icons": {
         "16": "images/16.png",
