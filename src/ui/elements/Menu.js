@@ -133,7 +133,9 @@ export default function Menu(props) {
             <div className={styles.lock} onClick={locked}><img src="./images/lock.png"/></div>
             <div className={styles.title}>My accounts</div>
             <div className={styles.button_link + ' ' + styles.button_link_active}>Account 1</div>
-            {ethAddress ? <div className={styles.button_link} onClick={openConnectLedger}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div> : <div className={styles.button_link} onClick={openConnectLedger}>Connect ledger</div>}
+            {ethAddress ? <div className={styles.button_link}
+                               onClick={openConnectLedger}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div> :
+                <div className={styles.button_link} onClick={openConnectLedger}>Connect ledger</div>}
 
             <div className={styles.separator}/>
 
