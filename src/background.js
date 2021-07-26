@@ -11,11 +11,12 @@ let requestsMethods = {
     'balanceOf': false,
     'getProvider': false,
     'getVersion': false,
+    'sign':true
 }
 
 let popupOpenMethods = {
     'enable': true,
-    'tx': true
+    'tx': true,
 }
 
 const VALID_VERSION_LIB = '0.2.0'
@@ -396,6 +397,21 @@ async function taskHandler(taskId) {
                     taskId: taskId,
                     cb: task.cb
                 })
+            }
+            Storage.task.removeTask(taskId)
+            break
+        case 'sign':
+            console.log('sign work')
+            if (ports[task.cb.url].enabled) {
+                try {
+                    ports[task.cb.url].postMessage({
+                        data: JSON.stringify(task.result),
+                        taskId: taskId,
+                        cb: task.cb
+                    })
+                } catch (e) {
+                    console.log('connection close')
+                }
             }
             Storage.task.removeTask(taskId)
             break

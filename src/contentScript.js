@@ -9,7 +9,8 @@ let requests = {
     'balanceOf': balanceOf,
     'enable': enable,
     'getProvider': enable,
-    'getVersion': enable
+    'getVersion': enable,
+    'sign':enable
 }
 
 function setupConnection() {
