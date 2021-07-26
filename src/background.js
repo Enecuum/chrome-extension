@@ -17,6 +17,7 @@ let requestsMethods = {
 let popupOpenMethods = {
     'enable': true,
     'tx': true,
+    // 'sign':true
 }
 
 const VALID_VERSION_LIB = '0.2.0'
@@ -87,6 +88,7 @@ async function msgConnectHandler(msg, sender) {
     if (msg.taskId) {
         popupOpenMethods.enable = disk.config.getConfig().openEnablePopup
         popupOpenMethods.tx = disk.config.getConfig().openTxPopup
+        // popupOpenMethods.tx = disk.config.getConfig().openSignPopup
         let account = Account
         let lock = disk.lock.checkLock()
         if (!account.net && !lock) {

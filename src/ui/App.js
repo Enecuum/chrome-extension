@@ -122,11 +122,6 @@ export default function App(props) {
 
     // global.disconnectAllPorts()
 
-    if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
-        return <Password setPassword={setPassword} login={login} publicKey={user.publicKey}/>
-    }
-
-    if (!isLogin && !isLock) return <Login login={login2}/>
 
     const unlock = () => {
         setLock(false)
@@ -134,10 +129,6 @@ export default function App(props) {
 
     if (isConfirm) {
         return <Confirm setConfirm={setConfirm} logout={logout}/>
-    }
-
-    if (isLock) {
-        return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
     }
 
     if (isTransaction) {
@@ -174,6 +165,16 @@ export default function App(props) {
     if(isSignRequest){
         return <SignRequest setSignRequest={setSignRequest} request={isSignRequest} getLedgerTransport={getLedgerTransport}/>
     }
+
+    if (isLock) {
+        return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
+    }
+
+    if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
+        return <Password setPassword={setPassword} login={login} publicKey={user.publicKey}/>
+    }
+
+    if (!isLogin && !isLock) return <Login login={login2}/>
 
     return <Account user={user}
                     logout={logout}
