@@ -13,7 +13,7 @@ import PublicKeyRequest from './components/requests/PublicKeyRequest'
 import TransactionRequest from './components/requests/TransactionRequest'
 import ConnectLedger from './components/requests/ConnectLedger'
 import Confirm from './components/Confirm'
-import Sign from './components/requests/SignRequest'
+
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
 import SignRequest from "./components/requests/SignRequest";
