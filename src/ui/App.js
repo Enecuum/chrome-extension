@@ -17,6 +17,7 @@ import Confirm from './components/Confirm'
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
 import SignRequest from "./components/requests/SignRequest";
+import Loading from "./components/Loading";
 
 export default function App(props) {
     const [isPassword, setPassword] = useState(!disk.lock.getHashPassword())
@@ -37,6 +38,8 @@ export default function App(props) {
     const [isConnectLedger, setConnectLedger] = useState(false)
     const [ledgerTransport, setLedgerTransport] = useState()
 
+    const [isLoading, setLoading] = useState(false)
+
 
     const checkLock = () => {
         if (disk.lock.checkLock() && disk.lock.getHashPassword()) {
@@ -52,14 +55,16 @@ export default function App(props) {
         let account = await global.disk.user.loadUser()
         setUser(account)
         setLogin(!!account.privateKey)
+
     }
 
     useEffect(() => {
+        setLoading(true)
         const version = chrome.runtime.getManifest().version
         console.log('App: ' + version)
         console.log('Lib: ' + ENQWeb.version)
         getUser()
-            .then()
+            .then(()=>{setLoading(false)})
     }, [])
 
 
@@ -167,6 +172,10 @@ export default function App(props) {
                             getLedgerTransport={getLedgerTransport}/>
     }
 
+    if(isLoading){
+        return <Loading />
+    }
+
     if (isLock) {
         return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
     }
@@ -188,5 +197,6 @@ export default function App(props) {
                     setPublicKeyRequest={setPublicKeyRequest}
                     setTransactionRequest={setTransactionRequest}
                     setConnectLedger={setConnectLedger}
-                    setSignRequest={setSignRequest}/>
+                    setSignRequest={setSignRequest}
+                    setLoading={setLoading}/>
 }

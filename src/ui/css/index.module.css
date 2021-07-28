@@ -649,6 +649,14 @@ input.field.password::placeholder {
     border-radius: 50%;
 }
 
+.loading_logo {
+    width: 120px;
+    height: 120px;
+
+    padding: 10px;
+    border-radius: 50%;
+}
+
 .request_text1 {
     padding-top: 10px;
     padding-left: 10px;
