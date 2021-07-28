@@ -11,11 +11,21 @@ let requestsMethods = {
     'balanceOf': false,
     'getProvider': false,
     'getVersion': false,
+    'sign':true
 }
+
+let os = {
+    'Win':370,
+    'Mac':350,
+    'Linux':350
+}
+
+let WinReg = /Win/
 
 let popupOpenMethods = {
     'enable': true,
-    'tx': true
+    'tx': true,
+    'sign':true
 }
 
 const VALID_VERSION_LIB = '0.2.0'
@@ -86,6 +96,7 @@ async function msgConnectHandler(msg, sender) {
     if (msg.taskId) {
         popupOpenMethods.enable = disk.config.getConfig().openEnablePopup
         popupOpenMethods.tx = disk.config.getConfig().openTxPopup
+        popupOpenMethods.sign = disk.config.getConfig().openSignPopup
         let account = Account
         let lock = disk.lock.checkLock()
         if (!account.net && !lock) {
@@ -105,12 +116,21 @@ async function msgConnectHandler(msg, sender) {
                         })
                         taskCounter()
                         if (popupOpenMethods.enable) {
-                            chrome.windows.create({
-                                url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
-                                width: 350,
-                                height: 630,
-                                type: 'popup'
-                            })
+                            if(WinReg.test(navigator.platform)){
+                                chrome.windows.create({
+                                    url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
+                                    width: os.Win,
+                                    height: 630,
+                                    type: 'popup'
+                                })
+                            }else{
+                                chrome.windows.create({
+                                    url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
+                                    width: 350,
+                                    height: 630,
+                                    type: 'popup'
+                                })
+                            }
                         }
                     }
                 }
@@ -135,12 +155,21 @@ async function msgConnectHandler(msg, sender) {
                     taskCounter()
                 }
                 if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
-                    chrome.windows.create({
-                        url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
-                        width: 350,
-                        height: 630,
-                        type: 'popup'
-                    })
+                    if(WinReg.test(navigator.platform)){
+                        chrome.windows.create({
+                            url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
+                            width: os.Win,
+                            height: 630,
+                            type: 'popup'
+                        })
+                    }else{
+                        chrome.windows.create({
+                            url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
+                            width: 350,
+                            height: 630,
+                            type: 'popup'
+                        })
+                    }
                 }
             }
         }
@@ -396,6 +425,21 @@ async function taskHandler(taskId) {
                     taskId: taskId,
                     cb: task.cb
                 })
+            }
+            Storage.task.removeTask(taskId)
+            break
+        case 'sign':
+            console.log('sign work')
+            if (ports[task.cb.url].enabled) {
+                try {
+                    ports[task.cb.url].postMessage({
+                        data: JSON.stringify(task.result),
+                        taskId: taskId,
+                        cb: task.cb
+                    })
+                } catch (e) {
+                    console.log('connection close')
+                }
             }
             Storage.task.removeTask(taskId)
             break

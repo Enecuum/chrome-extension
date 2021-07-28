@@ -76,6 +76,7 @@ export default function Menu(props) {
 
         config.openEnablePopup = openPopup
         config.openTxPopup = openPopup
+        config.openSignPopup = openPopup
 
         setOpenEnable(openPopup)
 
