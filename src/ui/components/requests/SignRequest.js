@@ -23,12 +23,12 @@ export default function SignRequest(props) {
     }
 
 
-    const allow = ()=>{
+    const allow = () => {
         props.setSignRequest(false);
         closeModalWindow();
     }
 
-    const ledgerAllow = async ()=>{
+    const ledgerAllow = async () => {
 
         let transport = await props.getLedgerTransport();
         const eth = new Eth(transport);
@@ -39,7 +39,7 @@ export default function SignRequest(props) {
                 v = "0" + v;
             }
             let signature = "0x" + result['r'] + result['s'] + v
-            return {signature:signature, r:result['r'], s:result['s'], v:v}
+            return {signature: signature, r: result['r'], s: result['s'], v: v}
         })
         signedMsg.msg = msg;
         signedMsg.hash = hash;
@@ -50,7 +50,7 @@ export default function SignRequest(props) {
         closeModalWindow();
     }
 
-    const disallow = async ()=>{
+    const disallow = async () => {
         await global.asyncRequest({
             disallow: true,
             taskId: taskId

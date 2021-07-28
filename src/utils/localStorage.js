@@ -248,7 +248,7 @@ function initConfig() {
     let config = {
         openTxPopup: true,
         openEnablePopup: true,
-        openSignPopup:true
+        openSignPopup: true
     }
     localStorage.setItem('config', JSON.stringify(config))
     return true
@@ -276,7 +276,7 @@ function setConfig(config) {
     }
 }
 
-function resultTask(taskId, result){
+function resultTask(taskId, result) {
     let task = getTask(taskId)
     task.result = result
     setTask(taskId, task)
