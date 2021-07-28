@@ -40,6 +40,9 @@ export default function App(props) {
 
     const [isLoading, setLoading] = useState(false)
 
+    const sleepTime = 200
+
+    const sleep = (time)=> {return new Promise(r => setTimeout(r, time));}
 
     const checkLock = () => {
         if (disk.lock.checkLock() && disk.lock.getHashPassword()) {
@@ -55,7 +58,7 @@ export default function App(props) {
         let account = await global.disk.user.loadUser()
         setUser(account)
         setLogin(!!account.privateKey)
-
+        await sleep(sleepTime)
     }
 
     useEffect(() => {
