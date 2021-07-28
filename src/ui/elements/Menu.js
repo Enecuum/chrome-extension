@@ -20,15 +20,31 @@ export default function Menu(props) {
     const [openEnable, setOpenEnable] = useState(false)
     // const [openTx, setOpenTx] = useState((disk.config.getConfig).openTxPopup)
     const expand = () => chrome.tabs.create({url: 'popup.html'})
-    const window = () => chrome.windows.create({
-        url: 'popup.html',
-        width: 350,
-        height: 630,
-        type: 'popup'
-    })
+    const os = {
+        'Win': 370,
+        'Mac': 350,
+        'Linux': 350
+    }
 
-    // console.log(enablePopup)
+    const WinReg = /Win/
 
+    const window = () => {
+        if (WinReg.test(navigator.platform)) {
+            chrome.windows.create({
+                url: `popup.html`,
+                width: os.Win,
+                height: 630,
+                type: 'popup'
+            })
+        } else {
+            chrome.windows.create({
+                url: `popup.html`,
+                width: 350,
+                height: 630,
+                type: 'popup'
+            })
+        }
+    }
 
     useEffect(() => {
         let config = disk.config.getConfig()
@@ -118,12 +134,21 @@ export default function Menu(props) {
     }
 
     const openConnectLedger = () => {
-        chrome.windows.create({
-            url: 'popup.html?type=connectLedger',
-            width: 350,
-            height: 630,
-            type: 'popup'
-        })
+        if (WinReg.test(navigator.platform)) {
+            chrome.windows.create({
+                url: 'popup.html?type=connectLedger',
+                width: os.Win,
+                height: 630,
+                type: 'popup'
+            })
+        } else {
+            chrome.windows.create({
+                url: 'popup.html?type=connectLedger',
+                width: 350,
+                height: 630,
+                type: 'popup'
+            })
+        }
     }
 
     const version = chrome.runtime.getManifest().version

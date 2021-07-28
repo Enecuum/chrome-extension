@@ -40,9 +40,11 @@ export default function App(props) {
 
     const [isLoading, setLoading] = useState(false)
 
-    const sleepTime = 200
+    const [isSleepTime, setSleepTime] = useState(200)
 
-    const sleep = (time)=> {return new Promise(r => setTimeout(r, time));}
+    const sleep = (time) => {
+        return new Promise(r => setTimeout(r, time));
+    }
 
     const checkLock = () => {
         if (disk.lock.checkLock() && disk.lock.getHashPassword()) {
@@ -58,16 +60,22 @@ export default function App(props) {
         let account = await global.disk.user.loadUser()
         setUser(account)
         setLogin(!!account.privateKey)
-        await sleep(sleepTime)
+        if(getUrlVars().type !== undefined){
+            await sleep(isSleepTime)
+        }
     }
 
     useEffect(() => {
-        setLoading(true)
+        if(getUrlVars().type !== undefined){
+            setLoading(true)
+        }
         const version = chrome.runtime.getManifest().version
         console.log('App: ' + version)
         console.log('Lib: ' + ENQWeb.version)
         getUser()
-            .then(()=>{setLoading(false)})
+            .then(() => {
+                setLoading(false)
+            })
     }, [])
 
 
@@ -175,8 +183,8 @@ export default function App(props) {
                             getLedgerTransport={getLedgerTransport}/>
     }
 
-    if(isLoading){
-        return <Loading />
+    if (isLoading) {
+        return <Loading/>
     }
 
     if (isLock) {
