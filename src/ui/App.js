@@ -32,7 +32,7 @@ export default function App(props) {
 
     const [isPublicKeyRequest, setPublicKeyRequest] = useState(false)
     const [isTransactionRequest, setTransactionRequest] = useState(false)
-    const [isSignRequest,setSignRequest] = useState(false)
+    const [isSignRequest, setSignRequest] = useState(false)
 
     const [isConnectLedger, setConnectLedger] = useState(false)
     const [ledgerTransport, setLedgerTransport] = useState()
@@ -162,8 +162,9 @@ export default function App(props) {
         return <ConnectLedger getLedgerTransport={getLedgerTransport}/>
     }
 
-    if(isSignRequest){
-        return <SignRequest setSignRequest={setSignRequest} request={isSignRequest} getLedgerTransport={getLedgerTransport}/>
+    if (isSignRequest) {
+        return <SignRequest setSignRequest={setSignRequest} request={isSignRequest}
+                            getLedgerTransport={getLedgerTransport}/>
     }
 
     if (isLock) {

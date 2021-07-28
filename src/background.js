@@ -11,13 +11,13 @@ let requestsMethods = {
     'balanceOf': false,
     'getProvider': false,
     'getVersion': false,
-    'sign':true
+    'sign': true
 }
 
 let os = {
-    'Win':370,
-    'Mac':350,
-    'Linux':350
+    'Win': 370,
+    'Mac': 350,
+    'Linux': 350
 }
 
 let WinReg = /Win/
@@ -25,7 +25,7 @@ let WinReg = /Win/
 let popupOpenMethods = {
     'enable': true,
     'tx': true,
-    'sign':true
+    'sign': true
 }
 
 const VALID_VERSION_LIB = '0.2.0'
@@ -116,14 +116,14 @@ async function msgConnectHandler(msg, sender) {
                         })
                         taskCounter()
                         if (popupOpenMethods.enable) {
-                            if(WinReg.test(navigator.platform)){
+                            if (WinReg.test(navigator.platform)) {
                                 chrome.windows.create({
                                     url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
                                     width: os.Win,
                                     height: 630,
                                     type: 'popup'
                                 })
-                            }else{
+                            } else {
                                 chrome.windows.create({
                                     url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
                                     width: 350,
@@ -155,14 +155,14 @@ async function msgConnectHandler(msg, sender) {
                     taskCounter()
                 }
                 if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
-                    if(WinReg.test(navigator.platform)){
+                    if (WinReg.test(navigator.platform)) {
                         chrome.windows.create({
                             url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
                             width: os.Win,
                             height: 630,
                             type: 'popup'
                         })
-                    }else{
+                    } else {
                         chrome.windows.create({
                             url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
                             width: 350,

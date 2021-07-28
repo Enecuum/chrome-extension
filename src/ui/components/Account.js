@@ -196,7 +196,7 @@ export default function Account(props) {
                 return false
             }
         }
-        if(params.type === 'sign'){
+        if (params.type === 'sign') {
             if (task[params.id] && !isLocked) {
                 props.setSignRequest(task[params.id])
                 return false
@@ -315,7 +315,7 @@ export default function Account(props) {
         openPopup().then(result => {
             if (result === true) {
                 getConnects().then()
-                // getHistory().then()
+                getHistory().then()
                 balance()
             }
         })

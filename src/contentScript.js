@@ -10,7 +10,7 @@ let requests = {
     'enable': enable,
     'getProvider': enable,
     'getVersion': enable,
-    'sign':enable
+    'sign': enable
 }
 
 function setupConnection() {
