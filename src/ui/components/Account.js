@@ -14,7 +14,8 @@ import {shortAddress} from '../Utils'
 const names = {
     enable: 'Share account address',
     tx: 'Send transaction',
-    history: 'Transaction'
+    history: 'Transaction',
+    sign: 'Sign message'
 }
 
 let tickers = {}
@@ -195,7 +196,12 @@ export default function Account(props) {
                 return false
             }
         }
-
+        if(params.type === 'sign'){
+            if (task[params.id] && !isLocked) {
+                props.setSignRequest(task[params.id])
+                return false
+            }
+        }
         if (params.type === 'connectLedger') {
             if (!isLocked) {
                 // props.setTransactionRequest(task[params.id])
@@ -219,8 +225,12 @@ export default function Account(props) {
                 key={key} onClick={() => {
                 if (item.type === 'enable') {
                     props.setPublicKeyRequest(item)
-                } else {
+                }
+                if (item.type === 'tx') {
                     props.setTransactionRequest(item)
+                }
+                if (item.type === 'sign') {
+                    props.setSignRequest(item)
                 }
             }} className={`${styles.activity}`}
             >
