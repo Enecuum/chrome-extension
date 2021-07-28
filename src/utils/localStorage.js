@@ -247,7 +247,8 @@ function sendPromise(obj) {
 function initConfig() {
     let config = {
         openTxPopup: true,
-        openEnablePopup: true
+        openEnablePopup: true,
+        openSignPopup:true
     }
     localStorage.setItem('config', JSON.stringify(config))
     return true

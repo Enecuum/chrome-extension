@@ -17,7 +17,7 @@ export default function SignRequest(props) {
 
     const closeModalWindow = () => {
         let params = getUrlVars()
-        if (params.type === 'connectLedger') {
+        if (params.type === 'sign') {
             window.close()
         }
     }

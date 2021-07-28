@@ -196,7 +196,12 @@ export default function Account(props) {
                 return false
             }
         }
-
+        if(params.type === 'sign'){
+            if (task[params.id] && !isLocked) {
+                props.setSignRequest(task[params.id])
+                return false
+            }
+        }
         if (params.type === 'connectLedger') {
             if (!isLocked) {
                 // props.setTransactionRequest(task[params.id])
