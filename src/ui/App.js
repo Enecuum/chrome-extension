@@ -60,13 +60,14 @@ export default function App(props) {
         let account = await global.disk.user.loadUser()
         setUser(account)
         setLogin(!!account.privateKey)
-        if(getUrlVars().type !== undefined){
+
+        if (getUrlVars().type !== undefined) {
             await sleep(isSleepTime)
         }
     }
 
     useEffect(() => {
-        if(getUrlVars().type !== undefined){
+        if (getUrlVars().type !== undefined) {
             setLoading(true)
         }
         const version = chrome.runtime.getManifest().version

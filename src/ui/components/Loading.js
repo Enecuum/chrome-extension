@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from '../css/index.module.css'
-import Spinner from  "../elements/Spinner"
+import Spinner from "../elements/Spinner"
 
 export default function Loading(props) {
 
@@ -15,7 +15,7 @@ export default function Loading(props) {
                 <div className={styles.request_text1}>
                     <div>Loading...</div>
                     <div>Please Wait</div>
-                    <Spinner />
+                    <Spinner/>
                 </div>
 
             </div>
