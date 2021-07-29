@@ -208,10 +208,10 @@ export default function Account(props) {
                      alt=""/>
                 <div>
                     <div>{names[item.type]}</div>
-                    <div className={styles.time}>{
-                        new Date(item.data.date).toISOString()
-                            .slice(0, 10) + ' ' +
-                        (item.tx ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}</div>
+                    <div className={styles.time}>
+                        {/*{new Date(item.time).toISOString().slice(0, 10) + ' '}*/}
+                        {(item.tx ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}
+                    </div>
                 </div>
                 {item.tx ?
                     <div className={styles.activity_data}>
@@ -231,12 +231,14 @@ export default function Account(props) {
         for (let id in history.records) {
             // console.log(history.records[id])
             oldActivity.push({
-                data: {date: history.records[id].time * 1000},
+                data: history.records[id].data,
+                time: history.records[id].time * 1000,
                 tx: {
-                    to: history.records[id].hash,
+                    to: '000000000000000',
                     from: {
-                        pubkey: history.records[id].hash,
+                        pubkey: '000000000000000',
                     },
+                    hash: history.records[id].hash,
                     value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
                 },
                 cb: {
@@ -251,13 +253,17 @@ export default function Account(props) {
 
     for (const key in history) {
         const item = history[key]
-        console.log(item)
+        // console.log(item)
         historyElements.push(
             <div
                 key={key} onClick={() => {
-                // if (item.type === 'history') {
-                //     props.setTransactionHistory(item)
-                // }
+                //TODO
+                if (item.type === 'iin') {
+                    props.setTransactionHistory(item)
+                }
+                if (item.type === 'iout') {
+                    props.setTransactionHistory(item)
+                }
             }} className={`${styles.activity}`}
             >
                 <img className={styles.icon} src={(item.tx.value > 0 ? './icons/22.png' : './icons/12.png')}
@@ -265,8 +271,8 @@ export default function Account(props) {
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>
-                        {new Date(item.data.date).toISOString().slice(0, 10)}
-                        <div className={styles.history_link} onClick={() => explorer(item.tx.to)}>{(item.tx ? shortAddress(item.tx.to) : item.cb.url)}</div>
+                        {/*{new Date(item.time).toISOString().slice(0, 10)}*/}
+                        <div className={styles.history_link} onClick={() => explorer(item.tx.hash)}>{shortAddress(item.tx.hash)}</div>
                     </div>
                 </div>
                 {item.tx ?
