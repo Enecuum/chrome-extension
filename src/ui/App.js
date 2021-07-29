@@ -17,6 +17,7 @@ import Confirm from './components/Confirm'
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
 import SignRequest from "./components/requests/SignRequest";
+import TransactionHistory from "./components/requests/TransactionHistory";
 
 export default function App(props) {
     const [isPassword, setPassword] = useState(!disk.lock.getHashPassword())
@@ -32,6 +33,8 @@ export default function App(props) {
 
     const [isPublicKeyRequest, setPublicKeyRequest] = useState(false)
     const [isTransactionRequest, setTransactionRequest] = useState(false)
+    const [isTransactionHistory, setTransactionHistory] = useState(false)
+
     const [isSignRequest, setSignRequest] = useState(false)
 
     const [isConnectLedger, setConnectLedger] = useState(false)
@@ -158,6 +161,11 @@ export default function App(props) {
                                    user={user}/>
     }
 
+    if (isTransactionHistory) {
+        return <TransactionHistory setTransactionRequest={setTransactionHistory} request={isTransactionHistory}
+                                   user={user}/>
+    }
+
     if (isConnectLedger) {
         return <ConnectLedger getLedgerTransport={getLedgerTransport}/>
     }
@@ -187,6 +195,7 @@ export default function App(props) {
                     setTransaction={setTransaction}
                     setPublicKeyRequest={setPublicKeyRequest}
                     setTransactionRequest={setTransactionRequest}
+                    setTransactionHistory={setTransactionHistory}
                     setConnectLedger={setConnectLedger}
                     setSignRequest={setSignRequest}/>
 }
