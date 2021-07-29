@@ -14,7 +14,8 @@ import {shortAddress} from '../Utils'
 const names = {
     enable: 'Share account address',
     tx: 'Send transaction',
-    history: 'Transaction',
+    iin: 'Transaction in',
+    iout: 'Transaction out',
     sign: 'Sign message'
 }
 
@@ -38,6 +39,7 @@ export default function Account(props) {
 
     const [assets, setAssets] = useState([])
     const [activity, setActivity] = useState(disk.list.listOfTask())
+    const [history, setHistory] = useState([])
 
     const [menu, setMenu] = useState(false)
     const clickMenu = () => {
@@ -83,39 +85,6 @@ export default function Account(props) {
         // console.log(counter)
 
         setConnectionsCounter(counter)
-    }
-
-    const getHistory = async () => {
-        let history = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, 0)
-
-        let tx = {
-            type: 'tx',
-
-        }
-
-        console.log(history.records)
-        console.log(activity)
-
-        let oldActivity = []
-        for (let id in history.records) {
-            // console.log(history.records[id])
-            oldActivity.push({
-                data: {date: history.records[id].time * 1000},
-                tx: {
-                    to: history.records[id].hash,
-                    from: {
-                        pubkey: history.records[id].hash,
-                    },
-                    value: history.records[id].amount
-                },
-                cb: {
-                    taskId: 0,
-                },
-                type: 'history'
-            })
-        }
-
-        setActivity([...activity, ...oldActivity])
     }
 
     const copyPublicKey = () => {
@@ -214,6 +183,7 @@ export default function Account(props) {
     }
 
     const activityElements = []
+    const historyElements = []
 
     // &nbsp;
 
@@ -246,6 +216,62 @@ export default function Account(props) {
                 {item.tx ?
                     <div className={styles.activity_data}>
                         <div>{'-' + (item.tx.value / 1e10) + ' ' + (ticker ? ticker : 'COIN')}</div>
+                    </div> : ''}
+            </div>,
+        )
+    }
+
+    const getHistory = async () => {
+        let history = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, 0)
+
+        console.log(history.records)
+        console.log(activity)
+
+        let oldActivity = []
+        for (let id in history.records) {
+            // console.log(history.records[id])
+            oldActivity.push({
+                data: {date: history.records[id].time * 1000},
+                tx: {
+                    to: history.records[id].hash,
+                    from: {
+                        pubkey: history.records[id].hash,
+                    },
+                    value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
+                },
+                cb: {
+                    taskId: 0,
+                },
+                type: history.records[id].rectype
+            })
+        }
+
+        setHistory(oldActivity)
+    }
+
+    for (const key in history) {
+        const item = history[key]
+        console.log(item)
+        historyElements.push(
+            <div
+                key={key} onClick={() => {
+                // if (item.type === 'history') {
+                //     props.setTransactionHistory(item)
+                // }
+            }} className={`${styles.activity}`}
+            >
+                <img className={styles.icon} src={(item.tx.value > 0 ? './icons/22.png' : './icons/12.png')}
+                     alt=""/>
+                <div>
+                    <div>{names[item.type]}</div>
+                    <div className={styles.time}>
+                        {new Date(item.data.date).toISOString().slice(0, 10) + ' '}
+                        <a href={''}>{(item.tx ? shortAddress(item.tx.to) : item.cb.url)}</a>
+                    </div>
+                </div>
+                {item.tx ?
+                    <div className={styles.activity_data}>
+                        <div>{(item.tx.value / 1e10) + ' ' + (ticker ? ticker : 'COIN')}</div>
                     </div> : ''}
             </div>,
         )
@@ -314,7 +340,7 @@ export default function Account(props) {
     useEffect(() => {
         openPopup().then(result => {
             if (result === true) {
-                getConnects().then()
+                // getConnects().then()
                 getHistory().then()
                 balance()
             }
@@ -428,6 +454,10 @@ export default function Account(props) {
                                                          className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
                         Reject all
                     </div>}
+
+                    <div className={styles.history_title}>History</div>
+
+                    {historyElements}
 
                 </div>
 
