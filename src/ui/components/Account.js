@@ -265,8 +265,8 @@ export default function Account(props) {
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>
-                        {new Date(item.data.date).toISOString().slice(0, 10) + ' '}
-                        <a href={''}>{(item.tx ? shortAddress(item.tx.to) : item.cb.url)}</a>
+                        {new Date(item.data.date).toISOString().slice(0, 10)}
+                        <div className={styles.history_link} onClick={() => explorer(item.tx.to)}>{(item.tx ? shortAddress(item.tx.to) : item.cb.url)}</div>
                     </div>
                 </div>
                 {item.tx ?
@@ -335,6 +335,11 @@ export default function Account(props) {
                          setConfirm={props.setConfirm}
                          setPassword={props.setPassword}/>
         }
+    }
+
+    const explorer = (hash) => {
+        // console.log('open explorer')
+        chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash})
     }
 
     useEffect(() => {
@@ -434,7 +439,7 @@ export default function Account(props) {
                     </div>}
                 </div>
 
-                <div className={styles.bottom_list + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
+                <div className={styles.bottom_assets + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
                     {assetsElements}
 
