@@ -162,7 +162,8 @@ export default function App(props) {
     }
 
     if (isTransactionHistory) {
-        return <TransactionHistory setTransactionRequest={setTransactionHistory} request={isTransactionHistory}
+        return <TransactionHistory setTransactionRequest={setTransactionHistory}
+                                   request={isTransactionHistory}
                                    user={user}/>
     }
 

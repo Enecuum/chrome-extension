@@ -746,6 +746,13 @@ input.field.password::placeholder {
     font-size: var(--font-size-small);
 }
 
+.transaction_history_back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+}
+
 .transaction_from_to {
     display: flex;
     flex-direction: row;

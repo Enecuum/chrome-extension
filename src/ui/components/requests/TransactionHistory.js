@@ -42,6 +42,8 @@ export default function TransactionHistory(props) {
     // remove liqudity
     // swap
 
+    let typeIn = props.request.rectype === 'iin'
+
     const copyHash = () => {
         navigator.clipboard.writeText(props.txHash)
     }
@@ -53,13 +55,8 @@ export default function TransactionHistory(props) {
             console.warn('token info error...')
         } else {
             setTicker(tokenInfo[0].ticker)
-            if (props.request.data.fee_use !== false) {
-                let originAmount = amount - BigInt(props.request.data.fee_value)
-                setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, originAmount)))
-            } else {
-                setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, amount)))
-            }
         }
+        setFee(BigInt((typeIn ? 1 : -1) * props.request.tx.fee_value))
     }
 
     const parseData = () => {
@@ -121,16 +118,34 @@ export default function TransactionHistory(props) {
         navigator.clipboard.writeText(props.request.tx.to)
     }
 
+    const getTransaction = async () => {
+        let transaction = await ENQWeb.Net.get.tx(props.request.tx.hash)
+
+        if (typeIn)
+            setFrom(transaction.from)
+        else
+            setTo(transaction.to)
+
+        console.log(transaction)
+    }
+
     useEffect(() => {
         parseData()
+        getTransaction().then()
     }, [])
 
     // console.log(amount)
     // console.log((amount / 1e10))
     // console.log(amount - fee * 1e10)
 
+    console.log(props.request.rectype)
+
+    console.log(typeIn)
+
     return (
         <div className={styles.main}>
+
+            <div className={styles.transaction_history_back} onClick={() => props.setTransactionRequest(false)}>❮ Back</div>
 
             <div className={styles.transaction_network}>
                 Network: {ENQWeb.Net.currentProvider.toUpperCase()}
@@ -141,14 +156,14 @@ export default function TransactionHistory(props) {
                 <div className={styles.transaction_from_to}>
 
                     <div className={styles.transaction_address_copy} onClick={() => {
-                        navigator.clipboard.writeText(from)
-                    }} title={from + copyText}>{shortAddress(from)}</div>
+                        navigator.clipboard.writeText(typeIn ? to : from)
+                    }} title={from + copyText}>{shortAddress(typeIn ? to : from)}</div>
 
-                    <div>❯</div>
+                    <div>{typeIn ? '❮' : '❯'}</div>
 
                     <div className={styles.transaction_address_copy} onClick={() => {
-                        navigator.clipboard.writeText(to)
-                    }} title={to + copyText}>{shortAddress(to)}</div>
+                        navigator.clipboard.writeText(typeIn ? from : to)
+                    }} title={to + copyText}>{shortAddress(typeIn ? from : to)}</div>
 
                 </div>
 
