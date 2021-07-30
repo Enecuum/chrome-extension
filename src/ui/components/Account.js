@@ -209,7 +209,7 @@ export default function Account(props) {
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>
-                        {/*{new Date(item.time).toISOString().slice(0, 10) + ' '}*/}
+                        {new Date(item.data.date).toISOString().slice(0, 10) + ' '}
                         {(item.tx ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}
                     </div>
                 </div>
@@ -231,14 +231,19 @@ export default function Account(props) {
         for (let id in history.records) {
             // console.log(history.records[id])
             oldActivity.push({
-                data: history.records[id].data,
-                time: history.records[id].time * 1000,
+                data: {
+                    date: history.records[id].time * 1000,
+                },
+                rectype: history.records[id].rectype,
                 tx: {
-                    to: '000000000000000',
+                    to: history.records[id].rectype === 'iin' ? props.user.publicKey : '00000',
                     from: {
-                        pubkey: '000000000000000',
+                        pubkey: history.records[id].rectype !== 'iin' ? props.user.publicKey : '00000',
                     },
+                    data: history.records[id].data,
                     hash: history.records[id].hash,
+                    fee_value: history.records[id].fee_value,
+                    tokenHash: history.records[id].token_hash,
                     value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
                 },
                 cb: {
@@ -271,7 +276,7 @@ export default function Account(props) {
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>
-                        {/*{new Date(item.time).toISOString().slice(0, 10)}*/}
+                        {new Date(item.data.date).toISOString().slice(0, 10)}
                         <div className={styles.history_link} onClick={() => explorer(item.tx.hash)}>{shortAddress(item.tx.hash)}</div>
                     </div>
                 </div>

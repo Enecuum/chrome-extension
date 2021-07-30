@@ -37,7 +37,7 @@ export default function Menu(props) {
     }, []);
 
     const explorer = () => {
-        // console.log('open explorer')
+        console.log('open explorer')
         chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + props.publickKey})
     }
 
