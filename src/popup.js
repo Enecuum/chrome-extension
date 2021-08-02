@@ -1,10 +1,10 @@
-import {initApp} from "./ui/index";
+import { initApp } from './ui/index'
 
 const Storage = require('./utils/localStorage')
 let storage = new Storage('popup')
 global.disk = storage
 
-let toBackground = {};
+let toBackground = {}
 let taskId = []
 let awaitId = []
 let dataId = []
@@ -22,17 +22,17 @@ if (!chrome.runtime) {
         }
     }
     chrome.runtime.sendMessage = () => {
-        return {response: true}
+        return { response: true }
     }
     chrome.runtime.getManifest = () => {
-        return {version: 'electron'}
+        return { version: 'electron' }
     }
 
     console.log(chrome.runtime)
 }
 
 async function setupUi() {
-    toBackground = chrome.runtime.connect({name: 'popup'})
+    toBackground = chrome.runtime.connect({ name: 'popup' })
     toBackground.onMessage.addListener(mainListener)
     global.Port = toBackground
     global.asyncRequest = asyncRequest
@@ -46,7 +46,8 @@ function msgHandler(msg, sender) {
 
 document.addEventListener('DOMContentLoaded', () => {
     // console.log('loaded 1')
-    setupUi().then()
+    setupUi()
+        .then()
 })
 
 
@@ -74,7 +75,7 @@ function awaitAsync(data) {
 function asyncRequest(data) {
     data.async = true
     awaitId[data] = false
-    let answer = '';
+    let answer = ''
     return new Promise(async (resolve, reject) => {
         toBackground.postMessage(data)
         toBackground.onMessage.addListener(asyncMessenger)
@@ -101,7 +102,7 @@ async function asyncMessenger(msg, sender, sendResponse) {
 function getUrlVars() {
     let params = []
     let str
-    let url = window.location.search.substr(1);
+    let url = window.location.search.substr(1)
     url = url.split('&')
     for (let i in url) {
         str = url[i].split('=')
