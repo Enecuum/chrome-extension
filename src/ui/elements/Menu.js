@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../css/elements.module.css'
 
 export default function Menu(props) {
@@ -7,41 +7,20 @@ export default function Menu(props) {
     // let enablePopup = (await disk.config.getConfig).openEnablePopup
     const [openEnable, setOpenEnable] = useState(false)
     // const [openTx, setOpenTx] = useState((disk.config.getConfig).openTxPopup)
-    const expand = () => chrome.tabs.create({url: 'popup.html'})
-    const os = {
-        'Win': 370,
-        'Mac': 350,
-        'Linux': 350
-    }
-
-    const WinReg = /Win/
+    const expand = () => chrome.tabs.create({ url: 'popup.html' })
 
     const window = () => {
-        if (WinReg.test(navigator.platform)) {
-            chrome.windows.create({
-                url: `popup.html`,
-                width: os.Win,
-                height: 630,
-                type: 'popup'
-            })
-        } else {
-            chrome.windows.create({
-                url: `popup.html`,
-                width: 350,
-                height: 630,
-                type: 'popup'
-            })
-        }
+        disk.promise.sendPromise({ window: true })
     }
 
     useEffect(() => {
         let config = disk.config.getConfig()
         setOpenEnable(config.openEnablePopup)
-    }, []);
+    }, [])
 
     const explorer = () => {
         // console.log('open explorer')
-        chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + props.publickKey})
+        chrome.tabs.create({ url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + props.publickKey })
     }
 
     const setNet = async (value) => {
@@ -64,7 +43,7 @@ export default function Menu(props) {
         console.log('LOCK')
         if (disk.lock.getHashPassword()) {
             props.setLock(true)
-            await asyncRequest({lock: true})
+            await asyncRequest({ lock: true })
         }
         //TODO close popup
     }
