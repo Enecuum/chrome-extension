@@ -215,7 +215,7 @@ export default function Account(props) {
                 </div>
                 {item.tx ?
                     <div className={styles.activity_data}>
-                        <div>{'-' + (item.tx.value / 1e10) + ' ' + (ticker ? ticker : 'COIN')}</div>
+                        <div>{'-' + (item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (ticker ? ticker : 'COIN')}</div>
                     </div> : ''}
             </div>,
         )
@@ -282,7 +282,7 @@ export default function Account(props) {
                 </div>
                 {item.tx ?
                     <div className={styles.activity_data}>
-                        <div>{(item.tx.value / 1e10) + ' ' + (ticker ? ticker : 'COIN')}</div>
+                        <div>{(item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (ticker ? ticker : 'COIN')}</div>
                     </div> : ''}
             </div>,
         )
