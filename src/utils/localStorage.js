@@ -120,14 +120,10 @@ function loadUserNotJson() {
     }
 }
 
-function addUser(publicKey, privateKey, net) {
-    let user = {
-        publicKey: publicKey,
-        privateKey: privateKey,
-        net: net
-    }
-    localStorage.setItem('User', JSON.stringify(user))
-    return user
+function addUser(obj) {
+    // obj: {publicKey, privateKey, net, token}
+    localStorage.setItem('User', JSON.stringify(obj))
+    return obj
 }
 
 function removeUser() {
