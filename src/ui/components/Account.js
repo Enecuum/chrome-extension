@@ -98,9 +98,8 @@ export default function Account(props) {
     const balance = () => {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
-        const token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
+        const token = props.user.token //ENQWeb.Enq.token[ENQWeb.Enq.provider]
         console.log(token)
-
         let tokens = []
 
         ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
@@ -120,7 +119,8 @@ export default function Account(props) {
                             amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
                             usd: 0,
-                            image: './icons/3.png'
+                            image:res[i].token  === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png': './icons/3.png',
+                            tokenHash:res[i].token
                         })
                 }
                 // console.log(tickers)
@@ -132,7 +132,7 @@ export default function Account(props) {
                             if (answer['enq-enecuum'] !== undefined) {
 
                                 const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
-                                const value = usd * amount / BigInt(1e10)
+                                const value = usd * BigInt(amount) / BigInt(1e10)
                                 setUSD(value)
                             }
                         })
@@ -141,7 +141,8 @@ export default function Account(props) {
                     amount: amount,
                     ticker: ticker,
                     usd: usd,
-                    image: './images/enq.png'
+                    image: token === ENQWeb.Enq.ticker ? './images/enq.png': './icons/3.png',
+                    tokenHash:token
                 }, ...tokens])
                 // console.log(res.amount / 1e10)
             })
@@ -301,13 +302,29 @@ export default function Account(props) {
         }
     }
 
+    let changeToken = async(hash)=>{
+        console.log(hash);
+        let user = props.user;
+        user.token = hash;
+        await disk.promise.sendPromise({
+            account:true,
+            set:true,
+            data:user
+        })
+        // window.location.reload(false)
+        await balance()
+        await renderAssets()
+    }
+
     const assetsElements = []
     let renderAssets = () => {
         for (const key in assets) {
             const item = assets[key]
             assetsElements.push(
-                <div key={key} className={styles.asset}>
-                    <img className={styles.icon} src={item.image}/>
+                <div key={key} className={styles.asset} onClick={()=>{
+                    changeToken(item.tokenHash)
+                }}>
+                    <img className={styles.icon} src={item.image} />
                     <div>
                         <div>
                             {(Number(item.amount) / 1e10).toFixed(4)}
