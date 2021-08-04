@@ -245,6 +245,7 @@ export default function Account(props) {
                     hash: history.records[id].hash,
                     fee_value: history.records[id].fee_value,
                     tokenHash: history.records[id].token_hash,
+                    ticker: (await ENQWeb.Net.get.token_info(history.records[id].token_hash))[0].ticker || false,
                     value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
                 },
                 cb: {
@@ -283,7 +284,7 @@ export default function Account(props) {
                 </div>
                 {item.tx ?
                     <div className={styles.activity_data}>
-                        <div>{(item.tx.value / 1e10) + ' ' + (ticker ? ticker : 'COIN')}</div>
+                        <div>{(item.tx.value / 1e10) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
                     </div> : ''}
             </div>,
         )
