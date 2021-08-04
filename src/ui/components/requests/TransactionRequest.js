@@ -20,7 +20,7 @@ export default function TransactionRequest(props) {
     //TODO
     const [ticker, setTicker] = useState('BIT')
     const [to, setTo] = useState(props.request.tx.to)
-    const [amount, setAmount] = useState(BigInt(props.request.tx.value))
+    const [amount, setAmount] = useState(props.request.tx.value ? BigInt(props.request.tx.value) : BigInt(props.request.tx.amount))
     const [nonce, setNonce] = useState(props.request.tx.nonce)
     const [taskId, setTaskId] = useState(props.request.cb.taskId)
     const [dataText, setDataText] = useState([])
