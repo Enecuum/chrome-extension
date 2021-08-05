@@ -279,6 +279,24 @@ function resultTask(taskId, result) {
     return true
 }
 
+function getTokens(){
+    let tokens = JSON.parse(localStorage.getItem('tokens'))
+    if (!tokens) {
+        tokens = {}
+    }
+    return tokens
+}
+
+function clearTokens(){
+    localStorage.removeItem('tokens')
+    return true
+}
+
+function setTokens(obj){
+    //obj:{net, tokens[]}
+    localStorage.setItem('tokens', JSON.stringify(obj))
+    return true
+}
 let storage = function Storage(name) {
     this.name = name
     this.task = {
@@ -322,6 +340,11 @@ let storage = function Storage(name) {
         initConfig,
         getConfig,
         setConfig
+    }
+    this.tokens = {
+        getTokens,
+        setTokens,
+        clearTokens
     }
     this.promise = {
         sendPromise
