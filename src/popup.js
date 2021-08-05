@@ -90,9 +90,9 @@ function asyncRequest(data) {
     })
 }
 
-async function cacheTokenInfo(tokens){
+async function cacheTokenInfo(tokens) {
     // let tokens = await  ENQWeb.Enq.sendAPI('get_tickers_all');
-    disk.tokens.setTokens({net:ENQWeb.Enq.provider, tokens:tokens})
+    disk.tokens.setTokens({net: ENQWeb.Enq.provider, tokens: tokens})
     return true
 }
 

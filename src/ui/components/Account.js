@@ -120,8 +120,8 @@ export default function Account(props) {
                             amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
                             usd: 0,
-                            image:res[i].token  === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png': './icons/3.png',
-                            tokenHash:res[i].token
+                            image: res[i].token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png' : './icons/3.png',
+                            tokenHash: res[i].token
                         })
                 }
                 // console.log(tickers)
@@ -143,8 +143,8 @@ export default function Account(props) {
                     amount: amount,
                     ticker: ticker,
                     usd: usd,
-                    image: token === ENQWeb.Enq.ticker ? './images/enq.png': './icons/3.png',
-                    tokenHash:token
+                    image: token === ENQWeb.Enq.ticker ? './images/enq.png' : './icons/3.png',
+                    tokenHash: token
                 }, ...tokens])
                 // console.log(res.amount / 1e10)
             })
@@ -190,7 +190,7 @@ export default function Account(props) {
 
     // &nbsp;
 
-    const findTickerInCache = async (hash)=>{
+    const findTickerInCache = async (hash) => {
         return allTokens[hash] !== undefined ? allTokens[hash] : (await ENQWeb.Net.get.token_info(hash)).ticker
     }
 
@@ -225,7 +225,7 @@ export default function Account(props) {
 
                         <div>{'-' + (item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (ticker ? ticker : 'COIN')}</div>
 
-//                         <div>{'-' + (item.tx.value / 1e10) + ' ' + (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN')}</div>
+                        // <div>{'-' + (item.tx.value / 1e10) + ' ' + (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN')}</div>
 
                     </div> : ''}
             </div>,
@@ -289,7 +289,8 @@ export default function Account(props) {
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>
                         {new Date(item.data.date).toISOString().slice(0, 10)}
-                        <div className={styles.history_link} onClick={() => explorer(item.tx.hash)}>{shortAddress(item.tx.hash)}</div>
+                        <div className={styles.history_link}
+                             onClick={() => explorer(item.tx.hash)}>{shortAddress(item.tx.hash)}</div>
                     </div>
                 </div>
                 {item.tx ?
@@ -297,7 +298,7 @@ export default function Account(props) {
 
                         <div>{(item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (ticker ? ticker : 'COIN')}</div>
 
-//                         <div>{(item.tx.value / 1e10) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
+                        // <div>{(item.tx.value / 1e10) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
 
                     </div> : ''}
             </div>,
@@ -317,14 +318,14 @@ export default function Account(props) {
         }
     }
 
-    let changeToken = async(hash)=>{
+    let changeToken = async (hash) => {
         console.log(hash);
         let user = props.user;
         user.token = hash;
         await disk.promise.sendPromise({
-            account:true,
-            set:true,
-            data:user
+            account: true,
+            set: true,
+            data: user
         })
         // window.location.reload(false)
         await balance()
@@ -336,10 +337,10 @@ export default function Account(props) {
         for (const key in assets) {
             const item = assets[key]
             assetsElements.push(
-                <div key={key} className={styles.asset} onClick={()=>{
+                <div key={key} className={styles.asset} onClick={() => {
                     changeToken(item.tokenHash)
                 }}>
-                    <img className={styles.icon} src={item.image} />
+                    <img className={styles.icon} src={item.image}/>
                     <div>
                         <div>
                             {(Number(item.amount) / 1e10).toFixed(4)}

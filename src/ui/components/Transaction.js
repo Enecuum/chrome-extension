@@ -8,6 +8,7 @@ import Eth from "@ledgerhq/hw-app-eth";
 const rsasign = require('jsrsasign');
 const crypto = require('crypto')
 import {Transaction as tx} from 'ethereumjs-tx'
+import TransactionHistory from "./requests/TransactionHistory";
 
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/c6ffc7b60a174cf6817cd3b56e6019e2'));
@@ -18,9 +19,9 @@ export default class Transaction extends React.Component {
         this.state = {
             isTransactionSend: false,
             address: '',
-            amount: '0.0001',
+            amount: '0.0',
             txHash: '',
-            data: '0x',
+            data: '',
             unlock: false,
             getLedgerTransport: this.props.getLedgerTransport
         }
@@ -297,8 +298,8 @@ export default class Transaction extends React.Component {
 
     render() {
         if (this.state.isTransactionSend) {
-            return <TransactionSend setTransaction={this.props.setTransaction}
-                                    txHash={this.state.txHash}/>
+            return <TransactionSend setTransaction={this.props.setTransaction} txHash={this.state.txHash}/>
+            // return <TransactionHistory setTransaction={this.props.setTransaction} txHash={this.state.txHash}/>
         } else {
             return (
                 <div className={styles.main}>
@@ -342,10 +343,10 @@ export default class Transaction extends React.Component {
                              className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Send
                         </div>
 
-                        <div onClick={this.signWithLedger}
-                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Sign with
-                            Ledger {this.state.unlock ? '' : ''}
-                        </div>
+                        {/*<div onClick={this.signWithLedger}*/}
+                        {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Sign with*/}
+                        {/*    Ledger {this.state.unlock ? '' : ''}*/}
+                        {/*</div>*/}
 
                         <div onClick={() => this.props.setTransaction(false)}
                              className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Back

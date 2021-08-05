@@ -114,6 +114,11 @@ export default function TransactionHistory(props) {
         chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash})
     }
 
+    const explorerLink = (hash) => {
+        // console.log('open explorer')
+        return 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash
+    }
+
     const copyHashString = () => {
         navigator.clipboard.writeText(props.request.tx.to)
     }
@@ -138,14 +143,15 @@ export default function TransactionHistory(props) {
     // console.log((amount / 1e10))
     // console.log(amount - fee * 1e10)
 
-    console.log(props.request.rectype)
+    // console.log(props.request.rectype)
 
-    console.log(typeIn)
+    // console.log(typeIn)
 
     return (
         <div className={styles.main}>
 
-            <div className={styles.transaction_history_back} onClick={() => props.setTransactionRequest(false)}>❮ Back</div>
+            <div className={styles.transaction_history_back} onClick={() => props.setTransactionRequest(false)}>❮ Back
+            </div>
 
             <div className={styles.transaction_network}>
                 Network: {ENQWeb.Net.currentProvider.toUpperCase()}
@@ -172,7 +178,7 @@ export default function TransactionHistory(props) {
                 <div
                     className={styles.transaction_type}>{
                     ENQWeb.Utils.ofd.isContract(data) ?
-                        (ENQWeb.Utils.ofd.parse(data)).type.toUpperCase().replace('_', ' ') :
+                        (ENQWeb.Utils.ofd.parse(data)).type.toUpperCase().replaceAll('_', ' ') :
                         'TOKEN TRANSFER'
                 }</div>
 
@@ -245,8 +251,10 @@ export default function TransactionHistory(props) {
                      className={styles.field + ' ' + styles.button}>Copy transaction hash
                 </div>
 
-                <div onClick={() => explorer(props.request.tx.hash)}
-                     className={styles.field + ' ' + styles.button}>Open in explorer
+                <div onClick={() => {
+                }}
+                     className={styles.field + ' ' + styles.button}>
+                    <a href={explorerLink(props.request.tx.hash)} target="_blank">Open in explorer</a>
                 </div>
 
                 <Separator/>
