@@ -27,7 +27,6 @@ export default function Account(props) {
     const [amount, setAmount] = useState(BigInt(0))
     const [usd, setUSD] = useState(BigInt(0))
     const [ticker, setTicker] = useState('')
-
     const [connectionsCounter, setConnectionsCounter] = useState(0)
 
     const [isLocked, setLocked] = useState(disk.lock.checkLock())
@@ -42,6 +41,9 @@ export default function Account(props) {
     const [history, setHistory] = useState([])
 
     const [menu, setMenu] = useState(false)
+
+    const [allTokens, setAllTokens] = useState((disk.tokens.getTokens()).tokens)
+
     const clickMenu = () => {
         setMenu(!menu)
     }
@@ -98,9 +100,8 @@ export default function Account(props) {
     const balance = () => {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
-        const token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
+        const token = props.user.token //ENQWeb.Enq.token[ENQWeb.Enq.provider]
         console.log(token)
-
         let tokens = []
 
         ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
@@ -111,7 +112,6 @@ export default function Account(props) {
                 for (let i in res) {
 
                     tickers[res[i].token] = res[i].ticker
-
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
@@ -120,19 +120,21 @@ export default function Account(props) {
                             amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
                             usd: 0,
-                            image: './icons/3.png'
+                            image:res[i].token  === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png': './icons/3.png',
+                            tokenHash:res[i].token
                         })
                 }
                 // console.log(tickers)
                 setAmount(amount)
                 setTicker(ticker)
+                cacheTokens(tickers).then()
                 if (props.user.net === 'pulse') {
                     ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
                         .then((answer) => {
                             if (answer['enq-enecuum'] !== undefined) {
 
                                 const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
-                                const value = usd * amount / BigInt(1e10)
+                                const value = usd * BigInt(amount) / BigInt(1e10)
                                 setUSD(value)
                             }
                         })
@@ -141,7 +143,8 @@ export default function Account(props) {
                     amount: amount,
                     ticker: ticker,
                     usd: usd,
-                    image: './images/enq.png'
+                    image: token === ENQWeb.Enq.ticker ? './images/enq.png': './icons/3.png',
+                    tokenHash:token
                 }, ...tokens])
                 // console.log(res.amount / 1e10)
             })
@@ -187,9 +190,13 @@ export default function Account(props) {
 
     // &nbsp;
 
+    const findTickerInCache = async (hash)=>{
+        return allTokens[hash] !== undefined ? allTokens[hash] : (await ENQWeb.Net.get.token_info(hash)).ticker
+    }
+
     for (const key in activity) {
         const item = activity[key]
-        // console.log(item)
+        console.log(item)
         activityElements.push(
             <div
                 key={key} onClick={() => {
@@ -215,7 +222,7 @@ export default function Account(props) {
                 </div>
                 {item.tx ?
                     <div className={styles.activity_data}>
-                        <div>{'-' + (item.tx.value / 1e10) + ' ' + (ticker ? ticker : 'COIN')}</div>
+                        <div>{'-' + (item.tx.value / 1e10) + ' ' + (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN')}</div>
                     </div> : ''}
             </div>,
         )
@@ -244,6 +251,7 @@ export default function Account(props) {
                     hash: history.records[id].hash,
                     fee_value: history.records[id].fee_value,
                     tokenHash: history.records[id].token_hash,
+                    ticker: await findTickerInCache(history.records[id].token_hash) || false,
                     value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
                 },
                 cb: {
@@ -282,7 +290,7 @@ export default function Account(props) {
                 </div>
                 {item.tx ?
                     <div className={styles.activity_data}>
-                        <div>{(item.tx.value / 1e10) + ' ' + (ticker ? ticker : 'COIN')}</div>
+                        <div>{(item.tx.value / 1e10) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
                     </div> : ''}
             </div>,
         )
@@ -301,13 +309,29 @@ export default function Account(props) {
         }
     }
 
+    let changeToken = async(hash)=>{
+        console.log(hash);
+        let user = props.user;
+        user.token = hash;
+        await disk.promise.sendPromise({
+            account:true,
+            set:true,
+            data:user
+        })
+        // window.location.reload(false)
+        await balance()
+        await renderAssets()
+    }
+
     const assetsElements = []
     let renderAssets = () => {
         for (const key in assets) {
             const item = assets[key]
             assetsElements.push(
-                <div key={key} className={styles.asset}>
-                    <img className={styles.icon} src={item.image}/>
+                <div key={key} className={styles.asset} onClick={()=>{
+                    changeToken(item.tokenHash)
+                }}>
+                    <img className={styles.icon} src={item.image} />
                     <div>
                         <div>
                             {(Number(item.amount) / 1e10).toFixed(4)}

@@ -90,6 +90,12 @@ function asyncRequest(data) {
     })
 }
 
+async function cacheTokenInfo(tokens){
+    // let tokens = await  ENQWeb.Enq.sendAPI('get_tickers_all');
+    disk.tokens.setTokens({net:ENQWeb.Enq.provider, tokens:tokens})
+    return true
+}
+
 async function asyncMessenger(msg, sender, sendResponse) {
     if (msg.asyncAnswer && msg.data) {
         // console.log('await Messanger worked')
@@ -111,3 +117,4 @@ function getUrlVars() {
 }
 
 global.getUrlVars = getUrlVars
+global.cacheTokens = cacheTokenInfo
