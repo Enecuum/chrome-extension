@@ -62,7 +62,7 @@ async function msgHandler(msg, sender, sendResponse) {
     }
     if (msg.account && msg.set && msg.data) {
         Account = msg.data
-        disk.user.addUser(msg.data.publicKey, msg.data.privateKey, msg.data.net)
+        disk.user.addUser(Account)
         encryptAccount()
         sendResponse({response: Account})
     }
