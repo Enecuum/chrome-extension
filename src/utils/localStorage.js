@@ -279,7 +279,7 @@ function resultTask(taskId, result) {
     return true
 }
 
-function getTokens(){
+function getTokens() {
     let tokens = JSON.parse(localStorage.getItem('tokens'))
     if (!tokens) {
         tokens = {}
@@ -287,16 +287,17 @@ function getTokens(){
     return tokens
 }
 
-function clearTokens(){
+function clearTokens() {
     localStorage.removeItem('tokens')
     return true
 }
 
-function setTokens(obj){
+function setTokens(obj) {
     //obj:{net, tokens[]}
     localStorage.setItem('tokens', JSON.stringify(obj))
     return true
 }
+
 let storage = function Storage(name) {
     this.name = name
     this.task = {

@@ -42,7 +42,7 @@ export default class Login extends React.Component {
                 publicKey: publicKey,
                 privateKey: this.state.privateKey,
                 net: ENQWeb.Net.provider,
-                token:ENQWeb.Enq.ticker
+                token: ENQWeb.Enq.ticker
             }
             await global.disk.promise.sendPromise({
                 account: true,

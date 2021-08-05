@@ -55,7 +55,7 @@ export default function Menu(props) {
                     data: account
                 })
             })
-        cacheTokens().then(()=>{
+        cacheTokens().then(() => {
             location.reload(false)
         })
     }

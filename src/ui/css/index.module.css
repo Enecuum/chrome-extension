@@ -79,6 +79,10 @@ a {
     cursor: pointer;
 }
 
+.button a {
+    color: var(--color-white);
+}
+
 a:hover {
     color: var(--color-blue-ligth);
     text-decoration: none;
@@ -632,7 +636,7 @@ input.field.password::placeholder {
 }
 
 .activity > div:nth-child(2) {
-    min-width: 50%;
+    min-width: 42%;
 }
 
 .activity > div.activity_data {
