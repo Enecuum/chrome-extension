@@ -27,7 +27,6 @@ export default function Account(props) {
     const [amount, setAmount] = useState(BigInt(0))
     const [usd, setUSD] = useState(BigInt(0))
     const [ticker, setTicker] = useState('')
-
     const [connectionsCounter, setConnectionsCounter] = useState(0)
 
     const [isLocked, setLocked] = useState(disk.lock.checkLock())
@@ -42,6 +41,9 @@ export default function Account(props) {
     const [history, setHistory] = useState([])
 
     const [menu, setMenu] = useState(false)
+
+    const [allTokens, setAllTokens] = useState((disk.tokens.getTokens()).tokens)
+
     const clickMenu = () => {
         setMenu(!menu)
     }
@@ -110,7 +112,6 @@ export default function Account(props) {
                 for (let i in res) {
 
                     tickers[res[i].token] = res[i].ticker
-
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
@@ -126,6 +127,7 @@ export default function Account(props) {
                 // console.log(tickers)
                 setAmount(amount)
                 setTicker(ticker)
+                cacheTokens(tickers).then()
                 if (props.user.net === 'pulse') {
                     ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
                         .then((answer) => {
@@ -188,9 +190,13 @@ export default function Account(props) {
 
     // &nbsp;
 
+    const findTickerInCache = async (hash)=>{
+        return allTokens[hash] !== undefined ? allTokens[hash] : (await ENQWeb.Net.get.token_info(hash)).ticker
+    }
+
     for (const key in activity) {
         const item = activity[key]
-        // console.log(item)
+        console.log(item)
         activityElements.push(
             <div
                 key={key} onClick={() => {
@@ -216,7 +222,7 @@ export default function Account(props) {
                 </div>
                 {item.tx ?
                     <div className={styles.activity_data}>
-                        <div>{'-' + (item.tx.value / 1e10) + ' ' + (ticker ? ticker : 'COIN')}</div>
+                        <div>{'-' + (item.tx.value / 1e10) + ' ' + (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN')}</div>
                     </div> : ''}
             </div>,
         )
@@ -245,7 +251,7 @@ export default function Account(props) {
                     hash: history.records[id].hash,
                     fee_value: history.records[id].fee_value,
                     tokenHash: history.records[id].token_hash,
-                    ticker: (await ENQWeb.Net.get.token_info(history.records[id].token_hash))[0].ticker || false,
+                    ticker: await findTickerInCache(history.records[id].token_hash) || false,
                     value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
                 },
                 cb: {

@@ -55,7 +55,9 @@ export default function Menu(props) {
                     data: account
                 })
             })
-        location.reload(false)
+        cacheTokens().then(()=>{
+            location.reload(false)
+        })
     }
 
     const locked = async () => {
