@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from '../css/index.module.css'
 import Transaction from './Transaction'
 import Requests from './Requests'
@@ -9,7 +9,7 @@ import Receive from './Receive'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import {shortAddress} from '../Utils'
+import { shortAddress } from '../Utils'
 
 const names = {
     enable: 'Share account address',
@@ -72,7 +72,7 @@ export default function Account(props) {
     // addConnect('google.com', '26.07.2022')
 
     const getConnects = async () => {
-        let connects = await asyncRequest({connectionList: true})
+        let connects = await asyncRequest({ connectionList: true })
         let counter = 0
         for (let key in connects.ports) {
             if (connects.ports[key].enabled) {
@@ -115,7 +115,7 @@ export default function Account(props) {
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
-                    } else
+                    } else {
                         tokens.push({
                             amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
@@ -123,11 +123,13 @@ export default function Account(props) {
                             image: res[i].token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png' : './icons/3.png',
                             tokenHash: res[i].token
                         })
+                    }
                 }
                 // console.log(tickers)
                 setAmount(amount)
                 setTicker(ticker)
-                cacheTokens(tickers).then()
+                cacheTokens(tickers)
+                    .then()
                 if (props.user.net === 'pulse') {
                     ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
                         .then((answer) => {
@@ -216,7 +218,8 @@ export default function Account(props) {
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>
-                        {new Date(item.data.date).toISOString().slice(0, 10) + ' '}
+                        {new Date(item.data.date).toISOString()
+                            .slice(0, 10) + ' '}
                         {(item.tx ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}
                     </div>
                 </div>
@@ -288,7 +291,8 @@ export default function Account(props) {
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>
-                        {new Date(item.data.date).toISOString().slice(0, 10)}
+                        {new Date(item.data.date).toISOString()
+                            .slice(0, 10)}
                         <div className={styles.history_link}
                              onClick={() => explorer(item.tx.hash)}>{shortAddress(item.tx.hash)}</div>
                     </div>
@@ -319,9 +323,9 @@ export default function Account(props) {
     }
 
     let changeToken = async (hash) => {
-        console.log(hash);
-        let user = props.user;
-        user.token = hash;
+        console.log(hash)
+        let user = props.user
+        user.token = hash
         await disk.promise.sendPromise({
             account: true,
             set: true,
@@ -383,17 +387,19 @@ export default function Account(props) {
 
     const explorer = (hash) => {
         // console.log('open explorer')
-        chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash})
+        chrome.tabs.create({ url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash })
     }
 
     useEffect(() => {
-        openPopup().then(result => {
-            if (result === true) {
-                // getConnects().then()
-                getHistory().then()
-                balance()
-            }
-        })
+        openPopup()
+            .then(result => {
+                if (result === true) {
+                    // getConnects().then()
+                    getHistory()
+                        .then()
+                    balance()
+                }
+            })
     }, [])
 
     return (
