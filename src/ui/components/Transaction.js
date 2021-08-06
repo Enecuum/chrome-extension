@@ -34,7 +34,6 @@ export default class Transaction extends React.Component {
         this.hash_tx_fields = this.hash_tx_fields.bind(this)
         this.ecdsa_sign = this.ecdsa_sign.bind(this)
         this.signWithLedger = this.signWithLedger.bind(this)
-        console.log(props.user)
         // this.setTransactionSend = this.getLedgerTransport.bind(this)
     }
 
@@ -84,7 +83,7 @@ export default class Transaction extends React.Component {
             tokenHash: this.props.user.token
         }
 
-        console.log(data)
+        // console.log(data)
 
         let response
         try {
