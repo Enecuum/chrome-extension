@@ -34,7 +34,7 @@ export default class Transaction extends React.Component {
         this.hash_tx_fields = this.hash_tx_fields.bind(this)
         this.ecdsa_sign = this.ecdsa_sign.bind(this)
         this.signWithLedger = this.signWithLedger.bind(this)
-
+        console.log(props.user)
         // this.setTransactionSend = this.getLedgerTransport.bind(this)
     }
 
@@ -77,10 +77,11 @@ export default class Transaction extends React.Component {
             from: wallet,
             amount: Number(this.state.amount) * 1e10,
             to: this.state.address,
-            data: '',
+            data: this.state.data,
+            tokenHash: this.props.user.token
         }
 
-        // console.log(data)
+        console.log(data)
 
         let response
         try {
@@ -296,6 +297,11 @@ export default class Transaction extends React.Component {
         // TransportWebUSB.create().then(transport => {})
     }
 
+    getTicker(hash){
+        let tokens = (disk.tokens.getTokens()).tokens
+        return tokens[hash] ? tokens[hash] : 'COIN'
+    }
+
     render() {
         if (this.state.isTransactionSend) {
             return <TransactionSend setTransaction={this.props.setTransaction} txHash={this.state.txHash}/>
@@ -303,6 +309,14 @@ export default class Transaction extends React.Component {
         } else {
             return (
                 <div className={styles.main}>
+
+                    <div className={styles.transaction_network}>
+                        Network: {ENQWeb.Net.currentProvider.toUpperCase()}
+                    </div>
+
+                    <div className={styles.transaction_network}>
+                        Token: {this.getTicker(this.props.user.token)}
+                    </div>
 
                     <div className={styles.content}>
 
