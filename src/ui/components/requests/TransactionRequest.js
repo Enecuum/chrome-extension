@@ -146,7 +146,7 @@ export default function TransactionRequest(props) {
                 <div
                     className={styles.transaction_type}>{
                     ENQWeb.Utils.ofd.isContract(data) ?
-                        (ENQWeb.Utils.ofd.parse(data)).type.toUpperCase().replace('_', ' ') :
+                        (ENQWeb.Utils.ofd.parse(data)).type.toUpperCase().replaceAll('_', ' ') :
                         'TOKEN TRANSFER'
                 }</div>
 
