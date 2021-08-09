@@ -145,7 +145,7 @@ export default function Account(props) {
                     amount: amount,
                     ticker: ticker,
                     usd: usd,
-                    image: token === ENQWeb.Enq.ticker ? './images/enq.png' : './icons/3.png',
+                    image: token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png' : './icons/3.png',
                     tokenHash: token
                 }, ...tokens])
                 // console.log(res.amount / 1e10)

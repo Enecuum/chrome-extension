@@ -48,14 +48,19 @@ export default function Menu(props) {
         await disk.user.loadUser()
             .then(async account => {
                 account.net = value
-                account.token = ENQWeb.Enq.ticker
+                account.token = ENQWeb.Enq.token[ENQWeb.Net.provider]
                 await disk.promise.sendPromise({
                     account: true,
                     set: true,
                     data: account
                 })
             })
-        cacheTokens().then(() => {
+        let balances = await  ENQWeb.Net.get.getBalanceAll(props.publickKey)
+        let tokens = {}
+        for(let i in balances){
+            tokens[balances[i].token] = balances[i].ticker
+        }
+        cacheTokens(tokens).then(() => {
             location.reload(false)
         })
     }
