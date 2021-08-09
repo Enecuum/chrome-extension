@@ -45,7 +45,7 @@ export default function TransactionRequest(props) {
     }
 
     const initTickerAndFee = async () => {
-        let tokenHash = props.request.tx.ticker
+        let tokenHash = props.request.tx.ticker ? props.request.tx.ticker : props.request.tx.tokenHash
         let tokenInfo = await ENQWeb.Net.get.token_info(tokenHash)
         if (tokenInfo.length === 0) {
             console.warn('token info error...')

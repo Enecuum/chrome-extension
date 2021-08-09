@@ -341,7 +341,8 @@ async function taskHandler(taskId) {
                 let buf = ENQWeb.Net.provider
                 ENQWeb.Net.provider = account.net
                 data.from = wallet
-                data.amount = Number(data.value)
+                data.amount = data.value ? Number(data.value) : Number(data.amount)
+                data.tokenHash = data.ticker ? data.ticker : data.tokenHash
                 data.value = ''
                 data = await ENQWeb.Net.post.tx_fee_off(data)
                     .catch(err => {
@@ -350,7 +351,7 @@ async function taskHandler(taskId) {
                     })
                 try {
                     ports[task.cb.url].postMessage({
-                        data: JSON.stringify(data),
+                        data: JSON.stringify({hash:data.hash? data.hash : 'Error'}),
                         taskId: taskId,
                         cb: task.cb
                     })
