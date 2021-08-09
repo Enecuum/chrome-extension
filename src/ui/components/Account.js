@@ -338,7 +338,7 @@ export default function Account(props) {
             const item = assets[key]
             assetsElements.push(
                 <div key={key} className={styles.asset} onClick={() => {
-                    changeToken(item.tokenHash)
+                    // changeToken(item.tokenHash)
                 }}>
                     <img className={styles.icon} src={item.image}/>
                     <div>
@@ -504,9 +504,13 @@ export default function Account(props) {
                         Reject all
                     </div>}
 
-                    <div className={styles.history_title}>History</div>
+                    {historyElements.length > 0 && <div>
 
-                    {historyElements}
+                        <div className={styles.history_title}>History</div>
+
+                        {historyElements}
+
+                    </div>}
 
                 </div>
 
