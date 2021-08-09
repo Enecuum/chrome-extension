@@ -59,7 +59,9 @@ export default function App(props) {
 
     useEffect(() => {
         const version = chrome.runtime.getManifest().version
+        const prod = false
         console.log('App: ' + version)
+        // console.log('Prod: ' + prod)
         console.log('Lib: ' + ENQWeb.version)
         getUser()
             .then()
@@ -162,7 +164,7 @@ export default function App(props) {
     }
 
     if (isTransactionHistory) {
-        return <TransactionHistory setTransactionRequest={setTransactionHistory}
+        return <TransactionHistory setTransactionHistory={setTransactionHistory}
                                    request={isTransactionHistory}
                                    user={user}/>
     }

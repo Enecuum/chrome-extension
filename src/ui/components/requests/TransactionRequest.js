@@ -121,6 +121,9 @@ export default function TransactionRequest(props) {
     return (
         <div className={styles.main}>
 
+            <div className={styles.transaction_history_back} onClick={() => props.setTransactionRequest(false)}>❮ Back
+            </div>
+
             <div className={styles.transaction_network}>
                 Network: {ENQWeb.Net.currentProvider.toUpperCase()}
             </div>
