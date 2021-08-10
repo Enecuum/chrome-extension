@@ -504,13 +504,9 @@ export default function Account(props) {
                         Reject all
                     </div>}
 
-                    {historyElements.length > 0 && <div>
+                    {historyElements.length > 0 && <div className={styles.history_title}>History</div>}
 
-                        <div className={styles.history_title}>History</div>
-
-                        {historyElements}
-
-                    </div>}
+                    {historyElements}
 
                 </div>
 
