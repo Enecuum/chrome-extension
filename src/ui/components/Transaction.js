@@ -39,7 +39,11 @@ export default class Transaction extends React.Component {
         this.ecdsa_sign = this.ecdsa_sign.bind(this)
         this.signWithLedger = this.signWithLedger.bind(this)
         this.feeCount = this.feeCount.bind(this)
+        this.decimalsSearch = this.decimalsSearch.bind(this)
         // this.setTransactionSend = this.getLedgerTransport.bind(this)
+
+        this.feeCount()
+        this.decimalsSearch()
     }
 
     setTransactionSend(value) {
@@ -163,6 +167,17 @@ export default class Transaction extends React.Component {
     feeCount(){
         ENQweb3lib.fee_counter(this.props.isTransaction.token, this.state.amount).then(fee=>{
             this.setState({fee:fee/this.state.decimals})
+        })
+    }
+
+    decimalsSearch(){
+        ENQWeb.Net.get.token_info(this.props.isTransaction.token).then(info=>{
+            if(info.length === 0 ){
+                console.warn('token not found...')
+            }else{
+                let decimals = 10**info[0].decimals
+                this.setState({decimals:decimals})
+            }
         })
     }
 
@@ -310,8 +325,6 @@ export default class Transaction extends React.Component {
 
 
     render() {
-        this.feeCount()
-
         if (this.state.isTransactionSend) {
             return <TransactionSend setTransaction={this.props.setTransaction} txHash={this.state.txHash}/>
             // return <TransactionHistory setTransaction={this.props.setTransaction} txHash={this.state.txHash}/>
@@ -359,7 +372,7 @@ export default class Transaction extends React.Component {
                         <div className="">
                             {this.props.isTransaction.balance ? Number(this.props.isTransaction.balance - BigInt(Number(this.state.amount)*this.state.decimals) - BigInt(this.state.fee*this.state.decimals))/this.state.decimals : "0.0"} {this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}
                         </div>
-                        
+
                     </div>
 
                     <div className={styles.transaction_network}>
