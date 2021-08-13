@@ -20,14 +20,14 @@ export default class Transaction extends React.Component {
         super(props)
         this.state = {
             isTransactionSend: false,
-            decimals:1e10,
+            decimals: 1e10,
             address: '',
             amount: '0.0',
             txHash: '',
             data: '',
             unlock: false,
             getLedgerTransport: this.props.getLedgerTransport,
-            fee:0
+            fee: 0
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
@@ -87,7 +87,7 @@ export default class Transaction extends React.Component {
             amount: Number(this.state.amount) * 1e10,
             to: this.state.address,
             data: '',
-            tokenHash:user.token
+            tokenHash: user.token
         }
 
         // console.log(data)
@@ -164,19 +164,19 @@ export default class Transaction extends React.Component {
         }
     }
 
-    feeCount(){
-        ENQweb3lib.fee_counter(this.props.isTransaction.token, this.state.amount).then(fee=>{
-            this.setState({fee:fee/this.state.decimals})
+    feeCount() {
+        ENQweb3lib.fee_counter(this.props.isTransaction.token, this.state.amount).then(fee => {
+            this.setState({fee: fee / this.state.decimals})
         })
     }
 
-    decimalsSearch(){
-        ENQWeb.Net.get.token_info(this.props.isTransaction.token).then(info=>{
-            if(info.length === 0 ){
+    decimalsSearch() {
+        ENQWeb.Net.get.token_info(this.props.isTransaction.token).then(info => {
+            if (info.length === 0) {
                 console.warn('token not found...')
-            }else{
-                let decimals = 10**info[0].decimals
-                this.setState({decimals:decimals})
+            } else {
+                let decimals = 10 ** info[0].decimals
+                this.setState({decimals: decimals})
             }
         })
     }
@@ -370,7 +370,7 @@ export default class Transaction extends React.Component {
                         </div>
 
                         <div className="">
-                            {this.props.isTransaction.balance ? Number(this.props.isTransaction.balance - BigInt(Number(this.state.amount)*this.state.decimals) - BigInt(this.state.fee*this.state.decimals))/this.state.decimals : "0.0"} {this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}
+                            {this.props.isTransaction.balance ? Number(this.props.isTransaction.balance - BigInt(Number(this.state.amount) * this.state.decimals) - BigInt(this.state.fee * this.state.decimals)) / this.state.decimals : "0.0"} {this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}
                         </div>
 
                     </div>

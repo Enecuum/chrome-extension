@@ -37,10 +37,10 @@ function setupApp() {
 
 async function msgHandler(msg, sender, sendResponse) {
     // console.log(msg)
-    if(msg.window){
-        if(msg.url != undefined){
+    if (msg.window) {
+        if (msg.url != undefined) {
             createPopupWindow(msg.url);
-        }else{
+        } else {
             createPopupWindow(false);
         }
     }
@@ -187,7 +187,7 @@ async function msgPopupHandler(msg, sender) {
                 from: wallet,
                 to: msg.data.to,
                 amount: Number(msg.data.amount) * 1e10,
-                tokenHash:user.token
+                tokenHash: user.token
             }
             console.log(ENQWeb.Net.provider)
             // console.log({data})
@@ -345,7 +345,7 @@ async function taskHandler(taskId) {
                     })
                 try {
                     ports[task.cb.url].postMessage({
-                        data: JSON.stringify({hash:data.hash? data.hash : 'Error'}),
+                        data: JSON.stringify({hash: data.hash ? data.hash : 'Error'}),
                         taskId: taskId,
                         cb: task.cb
                     })

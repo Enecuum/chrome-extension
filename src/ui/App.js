@@ -142,7 +142,7 @@ export default function App(props) {
                 setTransaction={setTransaction}
                 isTransaction={isTransaction}
                 publicKey={user.publicKey}
-                token = {user.token}
+                token={user.token}
                 getLedgerTransport={getLedgerTransport}
             />
         )
