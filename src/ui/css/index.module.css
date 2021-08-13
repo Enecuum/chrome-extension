@@ -825,6 +825,7 @@ input.field.password::placeholder {
 }
 
 .transaction_data_data {
+    width: 340px;
     padding: 20px;
     user-select: text;
     /*background: red;*/

@@ -14,13 +14,6 @@ let requestsMethods = {
     'sign': true
 }
 
-let os = {
-    'Win': 370,
-    'Mac': 350,
-    'Linux': 350
-}
-
-let WinReg = /Win/
 
 let popupOpenMethods = {
     'enable': true,
@@ -44,6 +37,13 @@ function setupApp() {
 
 async function msgHandler(msg, sender, sendResponse) {
     // console.log(msg)
+    if(msg.window){
+        if(msg.url != undefined){
+            createPopupWindow(msg.url);
+        }else{
+            createPopupWindow(false);
+        }
+    }
     if (msg.account && msg.request) {
         if (!disk.lock.checkLock()) {
             sendResponse({response: Account})
@@ -116,21 +116,7 @@ async function msgConnectHandler(msg, sender) {
                         })
                         taskCounter()
                         if (popupOpenMethods.enable) {
-                            if (WinReg.test(navigator.platform)) {
-                                chrome.windows.create({
-                                    url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
-                                    width: os.Win,
-                                    height: 630,
-                                    type: 'popup'
-                                })
-                            } else {
-                                chrome.windows.create({
-                                    url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
-                                    width: 350,
-                                    height: 630,
-                                    type: 'popup'
-                                })
-                            }
+                            createPopupWindow(`popup.html?type=${msg.type}&id=${msg.taskId}`)
                         }
                     }
                 }
@@ -155,21 +141,7 @@ async function msgConnectHandler(msg, sender) {
                     taskCounter()
                 }
                 if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
-                    if (WinReg.test(navigator.platform)) {
-                        chrome.windows.create({
-                            url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
-                            width: os.Win,
-                            height: 630,
-                            type: 'popup'
-                        })
-                    } else {
-                        chrome.windows.create({
-                            url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
-                            width: 350,
-                            height: 630,
-                            type: 'popup'
-                        })
-                    }
+                    createPopupWindow(`popup.html?type=${msg.type}&id=${msg.taskId}`)
                 }
             }
         }
@@ -177,6 +149,27 @@ async function msgConnectHandler(msg, sender) {
         // console.log(msg)
     }
 
+}
+
+function createPopupWindow(url) {
+    const os_width = {
+        'Win': 370,
+        'Mac': 350,
+        'Linux': 350
+    }
+    const os_height = {
+        'Win': 630,
+        'Mac': 630,
+        'Linux': 600
+    }
+    const WinReg = /Win/
+    const LinuxReg = /Linux/
+    chrome.windows.create({
+        url: url ? url : "popup.html",
+        width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
+        height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
+        type: 'popup'
+    })
 }
 
 async function msgPopupHandler(msg, sender) {
@@ -193,7 +186,8 @@ async function msgPopupHandler(msg, sender) {
             let data = {
                 from: wallet,
                 to: msg.data.to,
-                amount: Number(msg.data.amount) * 1e10
+                amount: Number(msg.data.amount) * 1e10,
+                tokenHash:user.token
             }
             console.log(ENQWeb.Net.provider)
             // console.log({data})

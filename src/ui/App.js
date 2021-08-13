@@ -140,7 +140,9 @@ export default function App(props) {
         return (
             <Transaction
                 setTransaction={setTransaction}
+                isTransaction={isTransaction}
                 publicKey={user.publicKey}
+                token = {user.token}
                 getLedgerTransport={getLedgerTransport}
             />
         )

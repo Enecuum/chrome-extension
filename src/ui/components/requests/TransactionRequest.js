@@ -10,6 +10,7 @@ const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 export default function TransactionRequest(props) {
 
     console.log(props.request.tx)
+    ENQWeb.Enq.provider = props.user.net;
 
     const [jsonFrom] = useState(props.request.tx.from)
     const [activeTab, setActiveTab] = useState(0)
