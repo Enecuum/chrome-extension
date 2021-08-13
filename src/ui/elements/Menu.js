@@ -20,12 +20,9 @@ export default function Menu(props) {
     const [openEnable, setOpenEnable] = useState(false)
     // const [openTx, setOpenTx] = useState((disk.config.getConfig).openTxPopup)
     const expand = () => chrome.tabs.create({url: 'popup.html'})
-    const window = () => chrome.windows.create({
-        url: 'popup.html',
-        width: 350,
-        height: 630,
-        type: 'popup'
-    })
+    const window = () => {
+        disk.promise.sendPromise({window:true})
+    }
 
     // console.log(enablePopup)
 

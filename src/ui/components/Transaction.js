@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styles from "../css/index.module.css";
 import TransactionSend from "./TransactionSend";
 import Separator from "../elements/Separator";
@@ -13,17 +13,21 @@ import TransactionHistory from "./requests/TransactionHistory";
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/c6ffc7b60a174cf6817cd3b56e6019e2'));
 
+//TODO decimals to tokens
+
 export default class Transaction extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             isTransactionSend: false,
+            decimals:1e10,
             address: '',
             amount: '0.0',
             txHash: '',
             data: '',
             unlock: false,
-            getLedgerTransport: this.props.getLedgerTransport
+            getLedgerTransport: this.props.getLedgerTransport,
+            fee:0
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
@@ -34,8 +38,12 @@ export default class Transaction extends React.Component {
         this.hash_tx_fields = this.hash_tx_fields.bind(this)
         this.ecdsa_sign = this.ecdsa_sign.bind(this)
         this.signWithLedger = this.signWithLedger.bind(this)
-
+        this.feeCount = this.feeCount.bind(this)
+        this.decimalsSearch = this.decimalsSearch.bind(this)
         // this.setTransactionSend = this.getLedgerTransport.bind(this)
+
+        this.feeCount()
+        this.decimalsSearch()
     }
 
     setTransactionSend(value) {
@@ -49,6 +57,7 @@ export default class Transaction extends React.Component {
     handleChangeAmount(e) {
         let amount = e.target.value
         this.setState({amount: amount});
+        this.feeCount()
     }
 
     handleChangeData(e) {
@@ -78,6 +87,7 @@ export default class Transaction extends React.Component {
             amount: Number(this.state.amount) * 1e10,
             to: this.state.address,
             data: '',
+            tokenHash:user.token
         }
 
         // console.log(data)
@@ -152,6 +162,23 @@ export default class Transaction extends React.Component {
             console.error('Signing error: ', err);
             return null;
         }
+    }
+
+    feeCount(){
+        ENQweb3lib.fee_counter(this.props.isTransaction.token, this.state.amount).then(fee=>{
+            this.setState({fee:fee/this.state.decimals})
+        })
+    }
+
+    decimalsSearch(){
+        ENQWeb.Net.get.token_info(this.props.isTransaction.token).then(info=>{
+            if(info.length === 0 ){
+                console.warn('token not found...')
+            }else{
+                let decimals = 10**info[0].decimals
+                this.setState({decimals:decimals})
+            }
+        })
     }
 
     async signWithLedger() {
@@ -296,6 +323,7 @@ export default class Transaction extends React.Component {
         // TransportWebUSB.create().then(transport => {})
     }
 
+
     render() {
         if (this.state.isTransactionSend) {
             return <TransactionSend setTransaction={this.props.setTransaction} txHash={this.state.txHash}/>
@@ -303,6 +331,10 @@ export default class Transaction extends React.Component {
         } else {
             return (
                 <div className={styles.main}>
+
+                    <div className={styles.transaction_network}>
+                        Network: {ENQWeb.Net.currentProvider.toUpperCase()}
+                    </div>
 
                     <div className={styles.content}>
 
@@ -328,6 +360,23 @@ export default class Transaction extends React.Component {
                                placeholder={'Data'}
                         />
 
+                    </div>
+
+
+                    <div className={styles.transaction_network}>
+
+                        <div className="">
+                            You will have left after sending the transaction:
+                        </div>
+
+                        <div className="">
+                            {this.props.isTransaction.balance ? Number(this.props.isTransaction.balance - BigInt(Number(this.state.amount)*this.state.decimals) - BigInt(this.state.fee*this.state.decimals))/this.state.decimals : "0.0"} {this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}
+                        </div>
+
+                    </div>
+
+                    <div className={styles.transaction_network}>
+                        Fee: {this.state.fee}
                     </div>
 
                     {/*<div className={styles.header}>*/}

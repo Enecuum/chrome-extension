@@ -223,7 +223,7 @@ export default function Account(props) {
                 {item.tx ?
                     <div className={styles.activity_data}>
 
-                        <div>{'-' + (item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (ticker ? ticker : 'COIN')}</div>
+                        <div>{'-' + (item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
 
                         {/*<div>{'-' + (item.tx.value / 1e10) + ' ' + (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN')}</div>*/}
 
@@ -296,7 +296,7 @@ export default function Account(props) {
                 {item.tx ?
                     <div className={styles.activity_data}>
 
-                        <div>{(item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (ticker ? ticker : 'COIN')}</div>
+                        <div>{(item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
 
                         {/*<div>{(item.tx.value / 1e10) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>*/}
 
@@ -450,7 +450,7 @@ export default function Account(props) {
                     <div>Copy</div>
                 </div>
 
-                <div className={styles.circle_button} onClick={() => props.setTransaction(true)}>
+                <div className={styles.circle_button} onClick={() => props.setTransaction({balance:amount, ticker:ticker, token:props.user.token})}>
                     <div className={styles.icon_container}><img className={styles.icon} src="./icons/12.png"/></div>
                     <div>Send</div>
                     <div>Transaction</div>
