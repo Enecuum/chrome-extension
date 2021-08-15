@@ -145,11 +145,11 @@ export default function Menu(props) {
             <div className={styles.button_link} onClick={window}>Window</div>
             <div className={styles.button_link} onClick={explorer}>Show in blockchain explorer</div>
             <div className={styles.row}>
-                {/*<div className={styles.button_link} onClick={() => setNet('pulse')}>PULSE</div>*/}
-                {/*&nbsp;/&nbsp;*/}
+                <div className={styles.button_link} onClick={() => setNet('pulse')}>PULSE</div>
+                &nbsp;/&nbsp;
                 <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>
-                {/*&nbsp;/&nbsp;*/}
-                {/*<div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>*/}
+                &nbsp;/&nbsp;
+                <div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>
             </div>
             <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>
