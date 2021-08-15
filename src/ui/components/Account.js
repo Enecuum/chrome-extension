@@ -42,7 +42,7 @@ export default function Account(props) {
 
     const [menu, setMenu] = useState(false)
 
-    const [allTokens, setAllTokens] = useState((disk.tokens.getTokens()).tokens)
+    const [allTokens, setAllTokens] = useState((disk.tokens.getTokens()).tokens ? (disk.tokens.getTokens()).tokens : {})
 
     const clickMenu = () => {
         setMenu(!menu)
