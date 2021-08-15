@@ -518,6 +518,10 @@ input.field.password::placeholder {
     cursor: pointer;
 }
 
+.asset_select {
+    background: rgba(0, 0, 0, 0.2);
+}
+
 .asset > div {
     height: 70px;
     display: flex;
