@@ -332,10 +332,6 @@ export default class Transaction extends React.Component {
             return (
                 <div className={styles.main}>
 
-                    <div className={styles.transaction_network}>
-                        Network: {ENQWeb.Net.currentProvider.toUpperCase()}
-                    </div>
-
                     <div className={styles.content}>
 
                         <input type="text"
@@ -363,13 +359,17 @@ export default class Transaction extends React.Component {
                     </div>
 
 
-                    <div className={styles.transaction_network}>
+                    <div>
 
-                        <div className="">
+                        <div className={styles.field}>
+                            Network: {ENQWeb.Net.currentProvider.toUpperCase()}
+                        </div>
+
+                        <div className={styles.field}>
                             You will have left after sending the transaction:
                         </div>
 
-                        <div className="">
+                        <div className={styles.field}>
                             {this.props.isTransaction.balance ? Number(this.props.isTransaction.balance - BigInt(Number(this.state.amount) * this.state.decimals) - BigInt(this.state.fee * this.state.decimals)) / this.state.decimals : "0.0"} {this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}
                         </div>
 

@@ -225,8 +225,6 @@ export default function Account(props) {
 
                         <div>{'-' + (item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
 
-                        {/*<div>{'-' + (item.tx.value / 1e10) + ' ' + (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN')}</div>*/}
-
                     </div> : ''}
             </div>,
         )
@@ -298,8 +296,6 @@ export default function Account(props) {
 
                         <div>{(item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
 
-                        {/*<div>{(item.tx.value / 1e10) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>*/}
-
                     </div> : ''}
             </div>,
         )
@@ -338,7 +334,7 @@ export default function Account(props) {
             const item = assets[key]
             assetsElements.push(
                 <div key={key} className={styles.asset} onClick={() => {
-                    // changeToken(item.tokenHash)
+                    changeToken(item.tokenHash)
                 }}>
                     <img className={styles.icon} src={item.image}/>
                     <div>
