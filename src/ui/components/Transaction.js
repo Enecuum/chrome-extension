@@ -366,18 +366,16 @@ export default class Transaction extends React.Component {
                         </div>
 
                         <div className={styles.field}>
-                            You will have left after sending the transaction:
+                            Fee: {this.state.fee}
                         </div>
 
                         <div className={styles.field}>
-                            {this.props.isTransaction.balance ? Number(this.props.isTransaction.balance - BigInt(Number(this.state.amount) * this.state.decimals) - BigInt(this.state.fee * this.state.decimals)) / this.state.decimals : "0.0"} {this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}
+                            You will have left: {this.props.isTransaction.balance ? (Number(this.props.isTransaction.balance - BigInt(Number(this.state.amount) * this.state.decimals) - BigInt(this.state.fee * this.state.decimals)) / this.state.decimals).toFixed(4) : "0.0"} {this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}
                         </div>
 
                     </div>
 
-                    <div className={styles.transaction_network}>
-                        Fee: {this.state.fee}
-                    </div>
+
 
                     {/*<div className={styles.header}>*/}
 
