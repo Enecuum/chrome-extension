@@ -196,7 +196,7 @@ export default function Account(props) {
 
     for (const key in activity) {
         const item = activity[key]
-        console.log(item)
+        // console.log(item)
         activityElements.push(
             <div
                 key={key} onClick={() => {
@@ -330,11 +330,34 @@ export default function Account(props) {
 
     const assetsElements = []
     let renderAssets = () => {
-        for (const key in assets) {
-            const item = assets[key]
+
+        // основной токен сверху
+        // текущий токен выделить
+        // console.log(assets)
+        let mainToken = assets.find(element => element.tokenHash === ENQWeb.Net.ticker)
+        console.log(mainToken)
+
+        let assetsSort = assets.sort((a, b) =>  Number(b.amount) - Number(a.amount))
+        assetsSort.splice(assets.indexOf(mainToken), 1)
+        console.log(assetsSort)
+        if (mainToken)
+            assetsSort.unshift(mainToken)
+
+        // console.log(mainToken)
+        // console.log(assets[0])
+        // console.log(assetsSort.indexOf(assets[0]))
+
+        for (const key in assetsSort) {
+            const item = assetsSort[key]
+
+            // console.log(ENQWeb.Net.ticker)
+            // console.log(props.user.token)
+            // console.log(item.tokenHash)
+            // console.log(item.tokenHash === ENQWeb.Net.ticker)
+
             assetsElements.push(
-                <div key={key} className={styles.asset} onClick={() => {
-                    changeToken(item.tokenHash)
+                <div key={key} className={styles.asset + ' ' + (props.user.token === item.tokenHash ?  styles.asset_select : '')} onClick={() => {
+                    changeToken(item.tokenHash).then()
                 }}>
                     <img className={styles.icon} src={item.image}/>
                     <div>
