@@ -191,6 +191,8 @@ export default function TransactionHistory(props) {
                 {/*<div className={styles.field}>Data: {this.state.data}</div>*/}
                 <div className={styles.transaction_amount}>{Number(amount - fee) / 1e10 + ' ' + ticker}</div>
 
+                <a href={explorerLink(props.request.tx.hash)} target="_blank">Open in explorer</a>
+
             </div>
 
             <div className={styles.bottom_tabs + ' ' + styles.data_bottom_tabs}>
@@ -251,11 +253,11 @@ export default function TransactionHistory(props) {
                      className={styles.field + ' ' + styles.button}>Copy transaction hash
                 </div>
 
-                <div onClick={() => {
-                }}
-                     className={styles.field + ' ' + styles.button}>
-                    <a href={explorerLink(props.request.tx.hash)} target="_blank">Open in explorer</a>
-                </div>
+                {/*<div onClick={() => {*/}
+                {/*}}*/}
+                {/*     className={styles.field + ' ' + styles.button}>*/}
+                {/*    */}
+                {/*</div>*/}
 
                 <Separator/>
 

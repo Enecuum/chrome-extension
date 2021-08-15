@@ -830,4 +830,7 @@ input.field.password::placeholder {
     user-select: text;
     /*background: red;*/
     word-wrap: break-word;
+
+    max-height: 190px;
+    overflow: scroll;
 }
