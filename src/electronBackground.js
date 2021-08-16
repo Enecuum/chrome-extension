@@ -1,4 +1,4 @@
-// import {encryptAccount, decryptAccount, lockAccount} from "./lockAccount"
+import {encryptAccount, decryptAccount, lockAccount} from "./lockAccount"
 
 export function electronMsgHandler(msg){
     return new Promise((resolve, reject) => {
