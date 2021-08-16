@@ -36,7 +36,7 @@ let version = chrome.runtime.getManifest().version
 async function setupUi() {
     if( version === 'electron' ){
         global.asyncRequest = asyncRequest
-        // global.electronBack = electronMsgHandler
+        global.electronBack = electronMsgHandler
         await initApp()
     }else{
         toBackground = chrome.runtime.connect({name: 'popup'})

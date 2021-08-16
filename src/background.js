@@ -1,7 +1,9 @@
 const storage = require('./utils/localStorage')
 import {extensionApi} from './utils/extensionApi'
-import {encryptAccount, decryptAccount, lockAccount} from "./lockAccount"
 
+import {encryptAccount, decryptAccount, lockAccount} from "./lockAccount"
+import {say} from "./lockAccount"
+say()
 
 let Storage = new storage('background')
 global.disk = Storage
