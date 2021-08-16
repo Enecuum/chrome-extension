@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import styles from "../css/elements.module.css";
+import {toggleFullScreen} from "../Utils";
 
 export default function Header(props) {
 
@@ -8,7 +9,7 @@ export default function Header(props) {
     return (
         <div className={styles.header}>
 
-            <img className={styles.logo_small} src='./images/logo_white.png'/>
+            <img className={styles.logo_small} src='./images/logo_white.png' onClick={toggleFullScreen}/>
 
             {/*<div onClick={() => network.setNetwork(true)}*/}
             {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_icon}>Network: {net.toUpperCase()}*/}
