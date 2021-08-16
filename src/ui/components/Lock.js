@@ -16,6 +16,7 @@ export default class Lock extends React.Component {
         this.logout = this.logout.bind(this)
 
         // this.setConfirm = props.setConfirm
+        window.scrollTo(0, 0);
     }
 
     handleChangePassword(e) {
