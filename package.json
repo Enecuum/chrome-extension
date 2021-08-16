@@ -10,7 +10,8 @@
         "dist": "NODE_ENV=production webpack",
         "test": "mocha --require babel-mocha.js",
         "electron": "electron ./dist",
-        "pack": "electron-builder --win --mac -c.mac.identity=null"
+        "pack": "electron-builder --win --mac -c.mac.identity=null",
+        "node": "node node.js"
     },
     "build": {
         "appId": "app.enecuum.com",
