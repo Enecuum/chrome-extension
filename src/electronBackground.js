@@ -1,6 +1,6 @@
-import {encryptAccount, decryptAccount, lockAccount} from "./lockAccount"
+import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
 
-export function electronMsgHandler(msg){
+export function electronMsgHandler(msg) {
     return new Promise((resolve, reject) => {
         if (msg.window) {
             if (msg.url != undefined) {
