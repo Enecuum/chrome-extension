@@ -1,0 +1,8 @@
+{
+    "name": "Enecuum",
+    "version": "1.0.0",
+    "description": "Enecuum wallet",
+    "main": "main.js",
+    "author": "Enecuum",
+    "license": ""
+}

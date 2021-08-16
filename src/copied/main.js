@@ -7,14 +7,14 @@ function createWindow () {
   const mainWindow = new BrowserWindow({
     width: 350,
     height: 630,
-    icon: __dirname + '/src/copied/images/enq.png',
+    icon: __dirname + './images/enq.png',
     webPreferences: {
       // preload: path.join(__dirname, './dist/lockAccount')
     }
   })
 
   // and load the index.html of the app.
-  mainWindow.loadFile('dist/popup.html')
+  mainWindow.loadFile('./popup.html')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
