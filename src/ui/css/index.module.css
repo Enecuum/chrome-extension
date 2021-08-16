@@ -269,6 +269,26 @@ a:hover {
     border: 1px solid var(--color-blue);
 }
 
+/*.button:hover a:hover {*/
+/*    background-color: white;*/
+/*    padding: 5px 80px;*/
+/*    border-radius: 3px;*/
+/*}*/
+
+/*.button > a:hover {*/
+/*    color: var(--color-blue-super-dark);*/
+/*}*/
+
+
+.button.button_link:hover {
+    background-color: var(--color-blue-dark);
+    color: red;
+}
+
+.button.button_link img {
+    padding-top: 2px;
+}
+
 .button.red:hover {
     background: var(--color-red);
     color: ghostwhite;
@@ -516,6 +536,10 @@ input.field.password::placeholder {
     background: rgba(0, 0, 0, 0.1);
 
     cursor: pointer;
+}
+
+.asset:hover {
+    background: rgba(0, 0, 0, 0.15);
 }
 
 .asset_select {

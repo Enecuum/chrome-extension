@@ -9,7 +9,7 @@ import Receive from './Receive'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import {shortAddress} from '../Utils'
+import {shortHash, explorerTX, explorerAddress} from '../Utils'
 
 const names = {
     enable: 'Share account address',
@@ -186,7 +186,6 @@ export default function Account(props) {
     }
 
     const activityElements = []
-    const historyElements = []
 
     // &nbsp;
 
@@ -217,7 +216,8 @@ export default function Account(props) {
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>
                         {new Date(item.data.date).toISOString().slice(0, 10) + ' '}
-                        {(item.tx ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}
+                        {(item.tx ? <div className={styles.history_link}
+                                                  onClick={() => explorerAddress(item.tx.to)}>To: {shortHash(item.tx.to)}</div> : item.cb.url)}
                     </div>
                 </div>
                 {item.tx ?
@@ -264,42 +264,49 @@ export default function Account(props) {
         }
 
         setHistory(oldActivity)
+        renderHistory()
     }
 
-    for (const key in history) {
-        const item = history[key]
-        // console.log(item)
-        historyElements.push(
-            <div
-                key={key} onClick={() => {
-                //TODO
-                if (item.type === 'iin') {
-                    props.setTransactionHistory(item)
-                }
-                if (item.type === 'iout') {
-                    props.setTransactionHistory(item)
-                }
-            }} className={`${styles.activity}`}
-            >
-                <img className={styles.icon} src={(item.tx.value > 0 ? './icons/22.png' : './icons/12.png')}
-                     alt=""/>
-                <div>
-                    <div>{names[item.type]}</div>
-                    <div className={styles.time}>
-                        {new Date(item.data.date).toISOString().slice(0, 10)}
-                        <div className={styles.history_link}
-                             onClick={() => explorer(item.tx.hash)}>{shortAddress(item.tx.hash)}</div>
+    const historyElements = []
+    let renderHistory = () => {
+        for (const key in history) {
+            const item = history[key]
+            // console.log(item)
+            historyElements.push(
+                <div
+                    key={key} onClick={() => {
+                    //TODO
+                    if (item.type === 'iin') {
+                        props.setTransactionHistory(item)
+                    }
+                    if (item.type === 'iout') {
+                        props.setTransactionHistory(item)
+                    }
+                }} className={`${styles.activity}`}
+                >
+                    <img className={styles.icon} src={(item.tx.value > 0 ? './icons/22.png' : './icons/12.png')}
+                         alt=""/>
+                    <div>
+                        <div>{names[item.type]}</div>
+                        <div className={styles.time}>
+                            {new Date(item.data.date).toISOString().slice(0, 10)}
+                            <div className={styles.history_link}
+                                 onClick={() => explorerTX(item.tx.hash)}>{shortHash(item.tx.hash)}</div>
+                        </div>
                     </div>
-                </div>
-                {item.tx ?
-                    <div className={styles.activity_data}>
+                    {item.tx ?
+                        <div className={styles.activity_data}>
 
-                        <div>{(item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
+                            <div>{(item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
 
-                    </div> : ''}
-            </div>,
-        )
+                        </div> : ''}
+                </div>,
+            )
+        }
     }
+
+    //TODO
+    renderHistory()
 
     //Reject all
     let rejectAll = async () => {
@@ -331,8 +338,6 @@ export default function Account(props) {
     const assetsElements = []
     let renderAssets = () => {
 
-        // основной токен сверху
-        // текущий токен выделить
         // console.log(assets)
         let mainToken = assets.find(element => element.tokenHash === ENQWeb.Net.ticker)
         console.log(mainToken)
@@ -400,17 +405,25 @@ export default function Account(props) {
         }
     }
 
-    const explorer = (hash) => {
-        // console.log('open explorer')
-        chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash})
-    }
+    // const explorer = (hash) => {
+    //     // console.log('open explorer')
+    //     chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash})
+    // }
+    //
+    // const explorerAddress = (hash) => {
+    //     // console.log('open explorer')
+    //     chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + hash})
+    // }
 
     useEffect(() => {
         openPopup().then(result => {
             if (result === true) {
                 // getConnects().then()
-                getHistory().then()
+                getHistory().then(() => {
+                    renderHistory()
+                })
                 balance()
+
             }
         })
     }, [])

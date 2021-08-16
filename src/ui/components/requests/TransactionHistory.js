@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import elements from '../../css/elements.module.css'
-import {shortAddress} from '../../Utils'
+import {explorerLink, explorerTX, shortHash} from '../../Utils'
 
 // let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -109,15 +109,10 @@ export default function TransactionHistory(props) {
         closeModalWindow()
     }
 
-    const explorer = (hash) => {
-        // console.log('open explorer')
-        chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash})
-    }
-
-    const explorerLink = (hash) => {
-        // console.log('open explorer')
-        return 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash
-    }
+    // const explorer = (hash) => {
+    //     // console.log('open explorer')
+    //     chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash})
+    // }
 
     const copyHashString = () => {
         navigator.clipboard.writeText(props.request.tx.to)
@@ -163,13 +158,13 @@ export default function TransactionHistory(props) {
 
                     <div className={styles.transaction_address_copy} onClick={() => {
                         navigator.clipboard.writeText(typeIn ? to : from)
-                    }} title={from + copyText}>{shortAddress(typeIn ? to : from)}</div>
+                    }} title={from + copyText}>{shortHash(typeIn ? to : from)}</div>
 
                     <div>{typeIn ? '❮' : '❯'}</div>
 
                     <div className={styles.transaction_address_copy} onClick={() => {
                         navigator.clipboard.writeText(typeIn ? from : to)
-                    }} title={to + copyText}>{shortAddress(typeIn ? from : to)}</div>
+                    }} title={to + copyText}>{shortHash(typeIn ? from : to)}</div>
 
                 </div>
 
@@ -247,10 +242,9 @@ export default function TransactionHistory(props) {
                 {/*     className={styles.field}>{this.state.website}*/}
                 {/*</div>*/}
 
-                {activeTab === 0 && <div onClick={() => {
-                }}
-                                         className={styles.field + ' ' + styles.button}>
-                    <a href={explorerLink(props.request.tx.hash)} target="_blank">Open in explorer</a>
+                {activeTab === 0 && <div onClick={() => {explorerTX(props.request.tx.hash)}}
+                                         className={styles.field + ' ' + styles.button + ' ' + styles.button_link}>
+                    <a href={explorerLink(props.request.tx.hash)} target="_blank">Open in explorer <img className={styles.icon} src={'./icons/7.png'} alt=""/></a>
                 </div>}
 
                 <div onClick={copyHashString}
