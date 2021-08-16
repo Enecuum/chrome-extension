@@ -2,6 +2,8 @@ import React from "react";
 import styles from "../css/index.module.css";
 import Network from "./Network"
 import Separator from "../elements/Separator";
+import {toggleFullScreen} from "../Utils";
+import App from "../App";
 
 export default class Lock extends React.Component {
     constructor(props) {
@@ -48,7 +50,7 @@ export default class Lock extends React.Component {
             <div className={styles.main}>
 
                 <div className={styles.content}>
-                    <img className={styles.login_logo} src="./images/logo_white.png"/>
+                    <img className={styles.login_logo} src="./images/logo_white.png" onClick={toggleFullScreen}/>
 
                     <div className={styles.welcome1}>Welcome</div>
                     <div className={styles.welcome1}>to Enecuum</div>

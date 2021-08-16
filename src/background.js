@@ -169,7 +169,7 @@ function createPopupWindow(url) {
     const WinReg = /Win/
     const LinuxReg = /Linux/
     chrome.windows.create({
-        url: url ? url : "popup.html",
+        url: url ? url : "index.html",
         width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
         height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
         type: 'popup'

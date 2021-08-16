@@ -20,11 +20,24 @@ const explorerLink = (hash) => {
     return 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash
 }
 
+function toggleFullScreen() {
+    console.log('toggleFullScreen')
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().then();
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen().then();
+        }
+    }
+}
+
+
 
 module.exports = {
     shortHash,
     shortHashLong,
     explorerTX,
     explorerAddress,
-    explorerLink
+    explorerLink,
+    toggleFullScreen
 }

@@ -11,16 +11,12 @@ module.exports = () => {
     const COPY = {
         patterns: [
             {
-                from: path.join(SOURCE_FOLDER, 'copied/popup.html'),
-                to: path.join(SOURCE_FOLDER, 'copied/index.html'),
-            },
-            {
                 from: path.join(SOURCE_FOLDER, 'copied'),
                 to: DIST_FOLDER
             },
             {
                 from: LIB_FILE,
-                to: DIST_FOLDER
+                to: path.join(DIST_FOLDER, 'lib'),
             }]
     };
 
