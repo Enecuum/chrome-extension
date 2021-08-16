@@ -7,12 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 
-function lockAccount() {
+export function lockAccount() {
     disk.lock.setLock(true)
     // console.log('account locked')
 }
 
-function encryptAccount() {
+export function encryptAccount() {
     let account = disk.user.loadUserNotJson()
     let password = disk.lock.getHashPassword()
     if (password && !disk.lock.checkLock()) {
@@ -26,7 +26,7 @@ function encryptAccount() {
     }
 }
 
-function decryptAccount(password) {
+export function decryptAccount(password) {
     let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
     if (disk.lock.unlock(hash)) {
         hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
@@ -39,14 +39,14 @@ function decryptAccount(password) {
 }
 
 
-global.lockAccount = function () {
-    return lockAccount()
-}
-
-global.encryptAccount = function () {
-    return encryptAccount()
-}
-
-global.decryptAccount = function (password) {
-    return decryptAccount(password)
-}
+// global.lockAccount = function () {
+//     return lockAccount()
+// }
+//
+// global.encryptAccount = function () {
+//     return encryptAccount()
+// }
+//
+// global.decryptAccount = function (password) {
+//     return decryptAccount(password)
+// }
