@@ -9,14 +9,19 @@ module.exports = () => {
     const LIB_FILE = path.resolve(__dirname + '/node_modules/enqweb3/dist/enqweb3lib.ext.min.js')
 
     const COPY = {
-        patterns: [{
-            from: path.join(SOURCE_FOLDER, 'copied'),
-            to: DIST_FOLDER
-        },
-        {
-            from: LIB_FILE,
-            to: DIST_FOLDER
-        }]
+        patterns: [
+            {
+                from: path.join(SOURCE_FOLDER, 'copied/popup.html'),
+                to: path.join(SOURCE_FOLDER, 'copied/index.html'),
+            },
+            {
+                from: path.join(SOURCE_FOLDER, 'copied'),
+                to: DIST_FOLDER
+            },
+            {
+                from: LIB_FILE,
+                to: DIST_FOLDER
+            }]
     };
 
     const plugins = [];
