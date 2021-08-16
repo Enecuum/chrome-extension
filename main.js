@@ -9,7 +9,7 @@ function createWindow () {
     height: 630,
     icon: __dirname + '/src/copied/images/enq.png',
     webPreferences: {
-      // preload: path.join(__dirname, 'preload.js')
+      // preload: path.join(__dirname, './dist/lockAccount')
     }
   })
 

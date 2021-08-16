@@ -1,3 +1,5 @@
+const { electronMsgHandler } = require('../electronBackground')
+
 function loadTask() {
     let task = localStorage.getItem('Task')
     if (!task) {
@@ -230,13 +232,24 @@ function getHashPassword() {
 
 function sendPromise(obj) {
     return new Promise((resolve) => {
-        chrome.runtime.sendMessage(obj, answer => {
-            if (answer.response !== undefined) {
-                resolve(answer.response)
-            } else {
-                resolve(answer)
-            }
-        })
+        if(chrome.runtime.getManifest().version === 'electron'){
+            console.log('electron send promise');
+            electronMsgHandler(obj).then(answer=>{
+                if (answer.response !== undefined) {
+                    resolve(answer.response);
+                } else {
+                    resolve(answer);
+                }
+            })
+        }else{
+            chrome.runtime.sendMessage(obj, answer => {
+                if (answer.response !== undefined) {
+                    resolve(answer.response);
+                } else {
+                    resolve(answer);
+                }
+            })
+        }
     })
 }
 
@@ -351,5 +364,6 @@ let storage = function Storage(name) {
         sendPromise
     }
 }
+
 
 module.exports = storage

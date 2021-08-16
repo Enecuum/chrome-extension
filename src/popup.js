@@ -1,5 +1,5 @@
 import {initApp} from "./ui/index";
-
+import {electronMsgHandler} from "./electronBackground"
 const Storage = require('./utils/localStorage')
 let storage = new Storage('popup')
 global.disk = storage
@@ -31,12 +31,20 @@ if (!chrome.runtime) {
     console.log(chrome.runtime)
 }
 
+let version = chrome.runtime.getManifest().version
+
 async function setupUi() {
-    toBackground = chrome.runtime.connect({name: 'popup'})
-    toBackground.onMessage.addListener(mainListener)
-    global.Port = toBackground
-    global.asyncRequest = asyncRequest
-    await initApp(toBackground)
+    if( version === 'electron' ){
+        global.asyncRequest = asyncRequest
+        // global.electronBack = electronMsgHandler
+        await initApp()
+    }else{
+        toBackground = chrome.runtime.connect({name: 'popup'})
+        toBackground.onMessage.addListener(mainListener)
+        global.Port = toBackground
+        global.asyncRequest = asyncRequest
+        await initApp(toBackground)
+    }
 }
 
 function msgHandler(msg, sender) {
@@ -45,7 +53,6 @@ function msgHandler(msg, sender) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // console.log('loaded 1')
     setupUi().then()
 })
 
