@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import elements from "../css/elements.module.css";
-import {shortAddress} from "../Utils";
+import {shortHash} from "../Utils";
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
@@ -63,7 +63,7 @@ export default function Address(props) {
             <div>
                 <div className={elements.account_name}>Account 1</div>
                 <div className={elements.address_string} onClick={copyPublicKey}
-                     title={props.publicKey + copyText}>{shortAddress(props.publicKey)}</div>
+                     title={props.publicKey + copyText}>{shortHash(props.publicKey)}</div>
             </div>
 
             <div></div>

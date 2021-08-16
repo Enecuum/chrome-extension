@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import {shortAddress2} from '../../Utils'
+import {shortHashLong} from '../../Utils'
 
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
@@ -112,11 +112,11 @@ export default function ConnectLedger(props) {
                     <div
                         className={styles.field}>Status: {ledger ? 'connected' : (usbDevice ? 'locked' : 'not connected')} </div>
 
-                    {ethAddress && <div className={styles.field}>{shortAddress2(ethAddress)}</div>}
-                    {eth2Address && <div className={styles.field}>{shortAddress2(eth2Address)}</div>}
-                    {eth3Address && <div className={styles.field}>{shortAddress2(eth3Address)}</div>}
-                    {eth4Address && <div className={styles.field}>{shortAddress2(eth4Address)}</div>}
-                    {eth5Address && <div className={styles.field}>{shortAddress2(eth5Address)}</div>}
+                    {ethAddress && <div className={styles.field}>{shortHashLong(ethAddress)}</div>}
+                    {eth2Address && <div className={styles.field}>{shortHashLong(eth2Address)}</div>}
+                    {eth3Address && <div className={styles.field}>{shortHashLong(eth3Address)}</div>}
+                    {eth4Address && <div className={styles.field}>{shortHashLong(eth4Address)}</div>}
+                    {eth5Address && <div className={styles.field}>{shortHashLong(eth5Address)}</div>}
 
                 </div>
 
