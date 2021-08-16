@@ -1,20 +1,19 @@
 {
     "name": "Enecuum",
     "description": "Enecuum Wallet",
-    "version": "0.2.3",
+    "version": "0.3.0",
     "manifest_version": 2,
-    "display": "standalone",
     "background": {
         "scripts": [
             "lib/enqweb3lib.ext.min.js",
-            "background.js",
-            "lockAccount.js"
+            "js/background.js",
+            "js/lockAccount.js"
         ]
     },
     "browser_action": {
         "default_title": "Enecuum Wallet",
         "default_popup": "index.html",
-        "default_icon": "images/enq.png"
+        "default_icon":  "images/enq.png"
     },
     "icons": {
         "16": "images/16.png",
@@ -30,7 +29,7 @@
                 "https://*/*"
             ],
             "js": [
-                "contentScript.js"
+                "js/contentScript.js"
             ],
             "run_at": "document_start",
             "all_frames": true
