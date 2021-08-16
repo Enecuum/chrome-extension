@@ -10,7 +10,7 @@
         "dist": "NODE_ENV=production webpack",
         "test": "mocha --require babel-mocha.js",
         "electron": "electron ./dist",
-        "pack": "electron-builder -c.mac.identity=null"
+        "pack": "electron-builder --win --mac -c.mac.identity=null"
     },
     "build": {
         "appId": "app.enecuum.com",
@@ -19,9 +19,12 @@
             "output": "./desktop"
         },
         "mac": {
-            "category": "public.app-category.finance"
+            "category": "public.app-category.finance",
+            "icon": "./dist/images/enq.icns"
         },
-        "icon": "./dist/images/enq.icns"
+        "win": {
+            "icon": "./dist/images/512.png"
+        }
     },
     "author": "Enecuum",
     "license": "ISC",
