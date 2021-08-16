@@ -9,16 +9,21 @@
         "start": "webpack --watch",
         "dist": "NODE_ENV=production webpack",
         "test": "mocha --require babel-mocha.js",
-        "electron": "electron .",
-        "pack": "electron-builder --dir"
+        "electron": "electron ./dist",
+        "pack": "electron-builder -c.mac.identity=null"
     },
     "build": {
         "appId": "app.enecuum.com",
+        "directories": {
+            "app": "./dist",
+            "output": "./desktop"
+        },
         "mac": {
-            "category": "app.enecuum.com"
-        }
+            "category": "public.app-category.finance"
+        },
+        "icon": "./dist/images/enq.icns"
     },
-    "author": "",
+    "author": "Enecuum",
     "license": "ISC",
     "devDependencies": {
         "@babel/core": "^7.12.13",
