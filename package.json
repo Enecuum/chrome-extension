@@ -9,7 +9,14 @@
         "start": "webpack --watch",
         "dist": "NODE_ENV=production webpack",
         "test": "mocha --require babel-mocha.js",
-        "electron": "electron ."
+        "electron": "electron .",
+        "pack": "electron-builder --dir"
+    },
+    "build": {
+        "appId": "app.enecuum.com",
+        "mac": {
+            "category": "app.enecuum.com"
+        }
     },
     "author": "",
     "license": "ISC",
@@ -40,7 +47,8 @@
         "mocha": "^8.2.1",
         "style-loader": "^2.0.0",
         "webpack": "^4.28.2",
-        "webpack-cli": "^3.1.2"
+        "webpack-cli": "^3.1.2",
+        "electron-builder": "^22.11.7"
     },
     "dependencies": {
         "@ledgerhq/hw-app-eth": "^6.2.0",
