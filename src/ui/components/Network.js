@@ -32,6 +32,7 @@ export default class Network extends React.Component {
         console.log(this.state.url)
         ENQWeb.Net.provider = this.state.url
         disk.user.setNet(ENQWeb.Net.currentProvider)
+
         // let connect = false
         // if (connect) {
         //     console.log('')
