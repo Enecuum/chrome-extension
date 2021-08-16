@@ -1,5 +1,3 @@
-const { electronMsgHandler } = require('../electronBackground')
-
 function loadTask() {
     let task = localStorage.getItem('Task')
     if (!task) {
@@ -234,7 +232,7 @@ function sendPromise(obj) {
     return new Promise((resolve) => {
         if(chrome.runtime.getManifest().version === 'electron'){
             console.log('electron send promise');
-            electronMsgHandler(obj).then(answer=>{
+            electronBack(obj).then(answer=>{
                 if (answer.response !== undefined) {
                     resolve(answer.response);
                 } else {

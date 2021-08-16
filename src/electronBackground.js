@@ -53,7 +53,6 @@ export function electronMsgHandler(msg){
             if (msg.name) {
                 // disconnectPorts(msg.name)
             }
-
         }
     })
 }

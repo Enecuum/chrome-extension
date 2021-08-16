@@ -38,17 +38,17 @@ function decryptAccount(password) {
     }
 }
 
-global.lockAccount = function () {
-    return lockAccount()
-}
-
-global.encryptAccount = function () {
-    return encryptAccount()
-}
-
-global.decryptAccount = function (password) {
-    return decryptAccount(password)
-}
+// global.lockAccount = function () {
+//     return lockAccount()
+// }
+//
+// global.encryptAccount = function () {
+//     return encryptAccount()
+// }
+//
+// global.decryptAccount = function (password) {
+//     return decryptAccount(password)
+// }
 
 export {lockAccount, encryptAccount, decryptAccount}
 function say(){
