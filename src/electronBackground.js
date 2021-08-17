@@ -36,6 +36,7 @@ export function electronMsgHandler(msg) {
         }
         if (msg.account && msg.encrypt) {
             if (msg.again) {
+                //TODO HERE (a, b, c) => addUser(obj) ?
                 disk.user.addUser(ENQWeb.Enq.User.publicKey, ENQWeb.Enq.User.privateKey, ENQWeb.Enq.User.net)
                 encryptAccount()
             } else {

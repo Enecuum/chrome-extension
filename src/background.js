@@ -72,6 +72,7 @@ async function msgHandler(msg, sender, sendResponse) {
     }
     if (msg.account && msg.encrypt) {
         if (msg.again) {
+            //TODO HERE (a, b, c) => addUser(obj) ?
             disk.user.addUser(Account.publicKey, Account.privateKey, Account.net)
             encryptAccount()
         } else {
