@@ -28,7 +28,7 @@ export function electronMsgHandler(msg) {
                 console.log(account)
                 console.log(ENQWeb.Enq.User)
                 disk.user.addUser(account)
-                // encryptAccount()
+                encryptAccount()
                 resolve({response: account})
             } else {
                 resolve({response: false})

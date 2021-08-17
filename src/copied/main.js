@@ -8,9 +8,7 @@ function createWindow () {
     width: 350,
     height: 630,
     icon: __dirname + './images/enq.png',
-    webPreferences: {
-      // preload: path.join(__dirname, './dist/lockAccount')
-    }
+    webPreferences: {}
   })
 
   // and load the index.html of the app.
