@@ -582,6 +582,12 @@ input.field.password::placeholder {
     width: 20px;
     height: 20px;
     margin: 20px;
+
+    transform: rotate(-30deg);
+}
+
+.asset:first-child > img {
+    transform: rotate(0);
 }
 
 .asset > div > div:last-child {
