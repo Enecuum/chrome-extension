@@ -486,7 +486,7 @@ export default function Account(props) {
                      onClick={() => props.setTransaction({balance: amount, ticker: ticker, token: props.user.token})}>
                     <div className={styles.icon_container}><img className={styles.icon} src="./icons/12.png"/></div>
                     <div>Send</div>
-                    <div>Transaction</div>
+                    {/*<div>Transaction</div>*/}
                 </div>
 
             </div>
