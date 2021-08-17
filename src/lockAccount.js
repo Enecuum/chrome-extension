@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // console.log('lock loaded. status: ', disk.lock.checkLock())
+    console.log('lock status: ', !disk.lock.checkLock())
+    console.log('hash password: ', disk.lock.checkLock())
     if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
         lockAccount()
     }
@@ -16,7 +17,7 @@ function encryptAccount() {
     console.log(account)
     let password = disk.lock.getHashPassword()
     if (password && !disk.lock.checkLock()) {
-        // password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
+        password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
         account = ENQWeb.Utils.crypto.encrypt(account, password)
         disk.user.changeUser(account)
         // console.log('account encrypted')
@@ -30,9 +31,13 @@ function decryptAccount(password) {
     let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
     if (disk.lock.unlock(hash)) {
         hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
-        // console.log(hash)
-        // console.log(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
-        return JSON.parse(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
+        console.log(hash)
+        console.log(disk.user.loadUserNotJson())
+        let accountString = ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash)
+        console.log(accountString)
+        let account = JSON.parse(accountString)
+        console.log(account)
+        return account
     } else {
         return false
     }

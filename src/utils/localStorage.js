@@ -122,6 +122,7 @@ function loadUserNotJson() {
 
 function addUser(obj) {
     // obj: {publicKey, privateKey, net, token}
+    console.log(obj)
     localStorage.setItem('User', JSON.stringify(obj))
     return obj
 }

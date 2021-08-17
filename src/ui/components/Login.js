@@ -5,14 +5,6 @@ import Header from '../elements/Header'
 import Separator from '../elements/Separator'
 import {toggleFullScreen} from "../Utils";
 
-let net = localStorage.getItem('net')
-if (!net) {
-    net = 'bit'
-    localStorage.setItem('net', net)
-}
-
-ENQWeb.Net.provider = net
-
 export default class Login extends React.Component {
     constructor(props) {
         super(props)

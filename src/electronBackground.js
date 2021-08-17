@@ -2,6 +2,9 @@ import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
 
 export function electronMsgHandler(msg) {
     return new Promise((resolve, reject) => {
+
+        console.log(msg)
+
         if (msg.window) {
             if (msg.url != undefined) {
                 createPopupWindow(msg.url);
@@ -22,22 +25,28 @@ export function electronMsgHandler(msg) {
             let account = decryptAccount(msg.password)
             if (account) {
                 ENQWeb.Enq.User = account
-                resolve({response: true})
+                console.log(account)
+                console.log(ENQWeb.Enq.User)
+                disk.user.addUser(account)
+                // encryptAccount()
+                resolve({response: account})
             } else {
                 resolve({response: false})
             }
         }
         if (msg.account && msg.set && msg.data) {
-            ENQWeb.Enq.User = msg.data
+            // ENQWeb.Enq.User = msg.data
             //TODO HERE ENQWeb.Enq.User = ''
-            disk.user.addUser(ENQWeb.Enq.User)
+            disk.user.addUser(msg.data)
             encryptAccount()
+            // console.log(ENQWeb.Enq.User)
             resolve({response: ENQWeb.Enq.User})
         }
         if (msg.account && msg.encrypt) {
             if (msg.again) {
                 //TODO HERE (a, b, c) => addUser(obj) ?
-                disk.user.addUser(ENQWeb.Enq.User.publicKey, ENQWeb.Enq.User.privateKey, ENQWeb.Enq.User.net)
+                // disk.user.addUser(ENQWeb.Enq.User.publicKey, ENQWeb.Enq.User.privateKey, ENQWeb.Enq.User.net)
+                disk.user.addUser(msg.data)
                 encryptAccount()
             } else {
                 encryptAccount()
