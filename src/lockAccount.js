@@ -1,5 +1,3 @@
-import {extensionApi} from './utils/extensionApi'
-
 document.addEventListener('DOMContentLoaded', function () {
     // console.log('lock loaded. status: ', disk.lock.checkLock())
     if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
@@ -14,9 +12,11 @@ function lockAccount() {
 
 function encryptAccount() {
     let account = disk.user.loadUserNotJson()
+    //TODO HERE {}
+    console.log(account)
     let password = disk.lock.getHashPassword()
     if (password && !disk.lock.checkLock()) {
-        password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
+        // password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
         account = ENQWeb.Utils.crypto.encrypt(account, password)
         disk.user.changeUser(account)
         // console.log('account encrypted')
@@ -51,7 +51,8 @@ function decryptAccount(password) {
 // }
 
 export {lockAccount, encryptAccount, decryptAccount}
-function say(){
+
+function say() {
     console.log("hello")
 }
 
