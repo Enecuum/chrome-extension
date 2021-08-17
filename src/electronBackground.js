@@ -29,6 +29,7 @@ export function electronMsgHandler(msg) {
         }
         if (msg.account && msg.set && msg.data) {
             ENQWeb.Enq.User = msg.data
+            //TODO HERE ENQWeb.Enq.User = ''
             disk.user.addUser(ENQWeb.Enq.User)
             encryptAccount()
             resolve({response: ENQWeb.Enq.User})

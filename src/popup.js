@@ -1,5 +1,6 @@
 import {initApp} from "./ui/index";
 import {electronMsgHandler} from "./electronBackground"
+
 const Storage = require('./utils/localStorage')
 let storage = new Storage('popup')
 global.disk = storage
@@ -34,11 +35,11 @@ if (!chrome.runtime) {
 let version = chrome.runtime.getManifest().version
 
 async function setupUi() {
-    if( version === 'electron' ){
+    if (version === 'electron') {
         global.asyncRequest = asyncRequest
         global.electronBack = electronMsgHandler
         await initApp()
-    }else{
+    } else {
         toBackground = chrome.runtime.connect({name: 'popup'})
         toBackground.onMessage.addListener(mainListener)
         global.Port = toBackground

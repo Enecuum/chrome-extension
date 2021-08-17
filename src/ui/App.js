@@ -54,6 +54,7 @@ export default function App(props) {
     const getUser = async () => {
         let account = await global.disk.user.loadUser()
         setUser(account)
+        console.log(account)
         setLogin(!!account.privateKey)
     }
 
