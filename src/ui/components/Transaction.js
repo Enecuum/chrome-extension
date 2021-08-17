@@ -349,6 +349,8 @@ export default class Transaction extends React.Component {
                                placeholder={'Amount'}
                         />
 
+                        <div className={styles.field_ticker}>{this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}</div>
+
                         <input type="text"
                                onChange={this.handleChangeData}
                                value={this.state.data}
@@ -366,11 +368,13 @@ export default class Transaction extends React.Component {
                         </div>
 
                         <div className={styles.field}>
-                            Fee: {this.state.fee}
+                            Fee: {this.state.fee + ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN")}
                         </div>
 
                         <div className={styles.field}>
-                            You will have left: {this.props.isTransaction.balance ? (Number(this.props.isTransaction.balance - BigInt(Number(this.state.amount) * this.state.decimals) - BigInt(this.state.fee * this.state.decimals)) / this.state.decimals).toFixed(4) : "0.0"} {this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}
+                            Balance after: {this.props.isTransaction.balance ?
+                            (Number(this.props.isTransaction.balance - BigInt(Number(this.state.amount) * this.state.decimals) - BigInt(this.state.fee * this.state.decimals)) / this.state.decimals).toFixed(4)
+                            : "0.0"} {this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}
                         </div>
 
                     </div>
