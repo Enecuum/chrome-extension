@@ -156,16 +156,19 @@ async function msgConnectHandler(msg, sender) {
 
 }
 
+let mainHeight = 600
+let mainWidth = 350
+
 function createPopupWindow(url) {
     const os_width = {
-        'Win': 370,
-        'Mac': 350,
-        'Linux': 350
+        'Win': mainWidth + 20,
+        'Mac': mainWidth,
+        'Linux': mainWidth
     }
     const os_height = {
-        'Win': 630,
-        'Mac': 630,
-        'Linux': 600
+        'Win': mainHeight + 30,
+        'Mac': mainHeight + 30,
+        'Linux': mainHeight
     }
     const WinReg = /Win/
     const LinuxReg = /Linux/
