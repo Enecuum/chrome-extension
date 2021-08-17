@@ -29,7 +29,7 @@ ENQWeb.Net.provider = net
 
 export default function App(props) {
     const [isPassword, setPassword] = useState(!disk.lock.getHashPassword())
-    const [isLogin, setLogin] = useState(false)
+    const [isLogin, setLogin] = useState(true)
 
     const [isConfirm, setConfirm] = useState(false)
 
@@ -79,12 +79,13 @@ export default function App(props) {
 
     const login = () => {
         setPassword(false)
+        setLogin(true)
     }
 
     const login2 = (_user) => {
         // console.log('login2')
         setUser(_user)
-        setLogin(true)
+        setLogin(false)
     }
 
     const logout = () => {
@@ -95,7 +96,7 @@ export default function App(props) {
             logout: true
         })
         global.asyncRequest({reject_all: true})
-        setLogin(false)
+        setLogin(true)
         setLock(false)
         window.location.reload(false)
         localStorage.removeItem('net')
@@ -141,7 +142,7 @@ export default function App(props) {
         console.log(_user)
         setUser(_user)
         setLock(false)
-        setLogin(true)
+        setLogin(false)
     }
 
     if (isConfirm) {
@@ -200,7 +201,7 @@ export default function App(props) {
         return <Password setPassword={setPassword} login={login} publicKey={user.publicKey}/>
     }
 
-    if (!isLogin && !isLock) return <Login login={login2}/>
+    if (isLogin) return <Login login={login2}/>
 
     return <Account user={user}
                     logout={logout}
