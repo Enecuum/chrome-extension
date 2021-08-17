@@ -32,6 +32,12 @@ if (!chrome.runtime) {
     console.log(chrome.runtime)
 }
 
+if (!chrome.runtime.getManifest) {
+    chrome.runtime.getManifest = () => {
+        return {version: '0.3.0 web'}
+    }
+}
+
 let version = chrome.runtime.getManifest().version
 
 async function setupUi() {
