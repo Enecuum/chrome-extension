@@ -39,11 +39,10 @@ export default class Lock extends React.Component {
         //     window.location.reload(false);
         // }
 
-        if (await disk.promise.sendPromise({account: true, unlock: true, password: this.state.password})) {
-            this.props.unlock()
-            window.location.reload(false)
-        }
-        // console.log('TODO bug')
+        let user = await disk.promise.sendPromise({account: true, unlock: true, password: this.state.password})
+        console.log(user)
+        if (user)
+            this.props.unlock(user)
     }
 
     render() {

@@ -19,6 +19,14 @@ import Eth from "@ledgerhq/hw-app-eth";
 import SignRequest from "./components/requests/SignRequest";
 import TransactionHistory from "./components/requests/TransactionHistory";
 
+let net = localStorage.getItem('net')
+if (!net) {
+    net = 'bit'
+    localStorage.setItem('net', net)
+}
+
+ENQWeb.Net.provider = net
+
 export default function App(props) {
     const [isPassword, setPassword] = useState(!disk.lock.getHashPassword())
     const [isLogin, setLogin] = useState(false)
@@ -129,8 +137,11 @@ export default function App(props) {
     // global.disconnectAllPorts()
 
 
-    const unlock = () => {
+    const unlock = (_user) => {
+        console.log(_user)
+        setUser(_user)
         setLock(false)
+        setLogin(true)
     }
 
     if (isConfirm) {
