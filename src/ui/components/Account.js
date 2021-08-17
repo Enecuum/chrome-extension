@@ -9,7 +9,7 @@ import Receive from './Receive'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import {shortHash, explorerTX, explorerAddress} from '../Utils'
+import {shortHash, explorerTX, explorerAddress, generateIcon} from '../Utils'
 
 const names = {
     enable: 'Share account address',
@@ -157,24 +157,6 @@ export default function Account(props) {
             .catch((err) => {
                 console.error('error: ', err)
             })
-    }
-
-    const generateIcon = (token) => {
-        console.log(token)
-        let canvas = document.createElement("canvas")
-        canvas.width = 20
-        canvas.height = 20
-        let ctx = canvas.getContext('2d')
-        generateSegment(ctx)
-        let url = canvas.toDataURL()
-        return url;
-    }
-
-    const generateSegment = (ctx) => {
-        ctx.beginPath()
-        ctx.rect(0, 0, 20, 20)
-        ctx.fillStyle = 'red'
-        ctx.fill()
     }
 
     const openPopup = async () => {
