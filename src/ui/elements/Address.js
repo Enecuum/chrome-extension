@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import elements from "../css/elements.module.css";
 import {shortHash} from "../Utils";
+import styles from "../css/index.module.css";
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
@@ -58,7 +59,9 @@ export default function Address(props) {
     return (
         <div className={elements.address_row}>
 
-            <div className={elements.connect} onClick={showConnections}>·&nbsp;&nbsp;{status}</div>
+            {!props.isMainToken ? <div onClick={props.setMainToken}>❮ Back</div> : <div className={elements.connect} onClick={showConnections}>·&nbsp;&nbsp;{status}</div>}
+
+            {/*{console.log(props.isMainToken)}*/}
 
             <div>
                 <div className={elements.account_name}>Account 1</div>

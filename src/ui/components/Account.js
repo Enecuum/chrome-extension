@@ -237,10 +237,15 @@ export default function Account(props) {
     }
 
     const getHistory = async () => {
-        let history = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, 0)
 
-        console.log(history.records)
-        console.log(activity)
+        let history = {}
+        history.records = []
+        for (let i = 0; i < 4; i++) {
+            let historyRecords = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, i)
+            history.records = history.records.concat(historyRecords.records)
+        }
+
+        // console.log(history.records)
 
         let oldActivity = []
         for (let id in history.records) {
@@ -275,7 +280,9 @@ export default function Account(props) {
 
     const historyElements = []
     let renderHistory = () => {
-        for (const key in history) {
+        // console.log(props.user.token)
+        // console.log(history)
+        for (const key in history.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
             const item = history[key]
             // console.log(item)
             historyElements.push(
@@ -339,6 +346,8 @@ export default function Account(props) {
         // window.location.reload(false)
         await balance()
         await renderAssets()
+        setActiveTab(props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? 0 : 1)
+        window.scrollTo(0, 0);
     }
 
     const assetsElements = []
@@ -346,11 +355,11 @@ export default function Account(props) {
 
         // console.log(assets)
         let mainToken = assets.find(element => element.tokenHash === ENQWeb.Net.ticker)
-        console.log(mainToken)
+        // console.log(mainToken)
 
-        let assetsSort = assets.sort((a, b) =>  Number(b.amount) - Number(a.amount))
+        let assetsSort = assets.sort((a, b) =>  Number(a.amount) - Number(b.amount))
         assetsSort.splice(assets.indexOf(mainToken), 1)
-        console.log(assetsSort)
+        // console.log(assetsSort)
         if (mainToken)
             assetsSort.unshift(mainToken)
 
@@ -443,6 +452,10 @@ export default function Account(props) {
 
             <Address publicKey={props.user.publicKey}
                      connectionsCounter={connectionsCounter}
+                     isMainToken={props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider]}
+                     setMainToken={() => {
+                         changeToken(ENQWeb.Enq.token[ENQWeb.Enq.provider]).then()
+                     }}
                      setConnects={(connects) => {
                          // console.log(connects)
                          let elements = []
@@ -501,13 +514,15 @@ export default function Account(props) {
 
             <div className={styles.bottom}>
 
+                {/*{console.log(props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider])}*/}
+
                 <div className={styles.bottom_tabs}>
-                    <div
+                    {(activeTab === 0 || props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider]) && <div
                         onClick={() => setActiveTab(0)}
                         className={(activeTab === 0 ? ` ${styles.bottom_tab_active}` : '')}
                     >
                         Assets
-                    </div>
+                    </div>}
                     <div
                         onClick={() => setActiveTab(1)}
                         className={(activeTab === 1 ? ` ${styles.bottom_tab_active}` : '')}

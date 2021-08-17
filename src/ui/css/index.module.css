@@ -195,9 +195,10 @@ a:hover {
 
 .field_ticker {
     width: 100%;
-    margin-right: 40px;
+    margin-right: 60px;
     margin-top: -32px;
     text-align: right;
+    pointer-events: none;
 }
 
 .buttons_field {

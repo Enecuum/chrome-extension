@@ -20,8 +20,12 @@ const explorerLink = (hash) => {
     return 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash
 }
 
+//TODO
+let icons = {}
 const generateIcon = (token) => {
-    console.log(token)
+    if (icons[token])
+        return icons[token]
+
     let canvas = document.createElement("canvas")
     canvas.width = 20
     canvas.height = 20
@@ -30,11 +34,12 @@ const generateIcon = (token) => {
     generateSegment(ctx, hashStringToColor(token.substring(token.length/3, token.length*2/3)), 10)
     generateSegment(ctx, hashStringToColor(token.substring(0, token.length/3)), 5)
     let url = canvas.toDataURL()
+    icons[token] = url
     return url;
 }
 
 const generateSegment = (ctx, color, move) => {
-    console.log(color)
+    // console.log(color)
     ctx.beginPath()
     ctx.rect(0, 0, move, 20)
     ctx.fillStyle = color
