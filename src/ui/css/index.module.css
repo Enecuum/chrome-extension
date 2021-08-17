@@ -400,6 +400,7 @@ input.field.password::placeholder {
 .icon {
     height: 15px;
 
+    /*background: red;*/
     /*height: 16px;*/
 }
 

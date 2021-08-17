@@ -27,6 +27,7 @@ export default function Account(props) {
     const [amount, setAmount] = useState(BigInt(0))
     const [usd, setUSD] = useState(BigInt(0))
     const [ticker, setTicker] = useState('')
+    const [logo, setLogo] = useState('./images/enq.png')
     const [connectionsCounter, setConnectionsCounter] = useState(0)
 
     const [isLocked, setLocked] = useState(disk.lock.checkLock())
@@ -101,7 +102,7 @@ export default function Account(props) {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
         const token = props.user.token //ENQWeb.Enq.token[ENQWeb.Enq.provider]
-        console.log(token)
+        // console.log(token)
         let tokens = []
 
         ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
@@ -109,24 +110,29 @@ export default function Account(props) {
                 // console.log(res.map(a => a.ticker + ': ' + a.amount))
                 let amount = 0
                 let ticker = ''
+                let image = ''
                 for (let i in res) {
 
                     tickers[res[i].token] = res[i].ticker
+
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
-                    } else
+                        image = res[i].token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png' : generateIcon(res[i].token)
+                    } else {
                         tokens.push({
                             amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
                             usd: 0,
-                            image: res[i].token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png' : './icons/3.png',
+                            image: res[i].token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png' : generateIcon(res[i].token),
                             tokenHash: res[i].token
                         })
+                    }
                 }
                 // console.log(tickers)
                 setAmount(amount)
                 setTicker(ticker)
+                setLogo(image)
                 cacheTokens(tickers).then()
                 if (props.user.net === 'pulse') {
                     ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
@@ -143,7 +149,7 @@ export default function Account(props) {
                     amount: amount,
                     ticker: ticker,
                     usd: usd,
-                    image: token === ENQWeb.Enq.ticker ? './images/enq.png' : './icons/3.png',
+                    image: image,
                     tokenHash: token
                 }, ...tokens])
                 // console.log(res.amount / 1e10)
@@ -151,6 +157,24 @@ export default function Account(props) {
             .catch((err) => {
                 console.error('error: ', err)
             })
+    }
+
+    const generateIcon = (token) => {
+        console.log(token)
+        let canvas = document.createElement("canvas")
+        canvas.width = 20
+        canvas.height = 20
+        let ctx = canvas.getContext('2d')
+        generateSegment(ctx)
+        let url = canvas.toDataURL()
+        return url;
+    }
+
+    const generateSegment = (ctx) => {
+        ctx.beginPath()
+        ctx.rect(0, 0, 20, 20)
+        ctx.fillStyle = 'red'
+        ctx.fill()
     }
 
     const openPopup = async () => {
@@ -460,7 +484,7 @@ export default function Account(props) {
 
             <div className={styles.content}>
 
-                <img className={styles.content_logo} src="./images/48.png" alt=""/>
+                <img className={styles.content_logo} src={logo} alt=""/>
                 <div className={styles.balance}>
                     {(Number(amount) / 1e10).toFixed(4)}
                     {' '}
