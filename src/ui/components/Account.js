@@ -238,14 +238,16 @@ export default function Account(props) {
 
     const getHistory = async () => {
 
-        let history = {}
-        history.records = []
-        for (let i = 0; i < 4; i++) {
-            let historyRecords = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, i)
-            history.records = history.records.concat(historyRecords.records)
-        }
+        // let history = {}
+        // history.records = []
+        // for (let i = 0; i < 4; i++) {
+        //     let historyRecords = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, i)
+        //     history.records = history.records.concat(historyRecords.records)
+        // }
 
-        // console.log(history.records)
+        let history = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, 0)
+
+        console.log(history.records)
 
         let oldActivity = []
         for (let id in history.records) {
