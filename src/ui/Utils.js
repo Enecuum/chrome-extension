@@ -26,8 +26,9 @@ const generateIcon = (token) => {
     canvas.width = 20
     canvas.height = 20
     let ctx = canvas.getContext('2d')
-    generateSegment(ctx, hashStringToColor(token.substring(0, token.length/2)), 0)
-    generateSegment(ctx, hashStringToColor(token.substring(token.length/2, token.length)), 10)
+    generateSegment(ctx, hashStringToColor(token.substring(token.length*2/3, token.length)), 20)
+    generateSegment(ctx, hashStringToColor(token.substring(token.length/3, token.length*2/3)), 10)
+    generateSegment(ctx, hashStringToColor(token.substring(0, token.length/3)), 5)
     let url = canvas.toDataURL()
     return url;
 }
@@ -35,24 +36,24 @@ const generateIcon = (token) => {
 const generateSegment = (ctx, color, move) => {
     console.log(color)
     ctx.beginPath()
-    ctx.rect(0 + move, 0, 10 + move, 20)
+    ctx.rect(0, 0, move, 20)
     ctx.fillStyle = color
     ctx.fill()
 }
 
-function djb2(str){
-    var hash = 5381;
-    for (var i = 0; i < str.length; i++) {
+function djb2(str) {
+    let hash = 5381
+    for (let i = 0; i < str.length; i++) {
         hash = ((hash << 5) + hash) + str.charCodeAt(i); /* hash * 33 + c */
     }
-    return hash;
+    return hash
 }
 
 function hashStringToColor(token) {
-    var hash = djb2(token)
-    var r = (hash & 0xFF0000) >> 16;
-    var g = (hash & 0x00FF00) >> 8;
-    var b = hash & 0x0000FF;
+    let hash = djb2(token)
+    let r = (hash & 0xFF0000) >> 16
+    let g = (hash & 0x00FF00) >> 8
+    let b = hash & 0x0000FF;
     return "#" + ("0" + r.toString(16)).substr(-2) + ("0" + g.toString(16)).substr(-2) + ("0" + b.toString(16)).substr(-2);
 }
 
