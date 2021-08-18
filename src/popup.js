@@ -11,7 +11,12 @@ let awaitId = []
 let dataId = []
 let time = 200
 
-// TODO electron support
+let alterVersion = '0.3.0'
+
+let electron = navigator.userAgent.toLowerCase().includes('electron')
+let mobile = navigator.userAgent.toLowerCase().includes('mobile')
+alterVersion += electron ? ' web electron' : (mobile ? ' web mobile' : ' web')
+
 if (!chrome.runtime) {
     chrome.runtime = {}
     chrome.runtime.connect = () => {
@@ -26,26 +31,26 @@ if (!chrome.runtime) {
         return {response: true}
     }
     chrome.runtime.getManifest = () => {
-        return {version: 'electron'}
+        return {version: alterVersion}
     }
-
     console.log(chrome.runtime)
 }
 
 if (!chrome.runtime.getManifest) {
     chrome.runtime.getManifest = () => {
-        return {version: '0.3.0 web'}
+        return {version: alterVersion}
     }
 }
 
 let version = chrome.runtime.getManifest().version
 
 async function setupUi() {
-    if (version === 'electron') {
+
+    if (version.includes('web')) {
         global.asyncRequest = asyncRequest
         global.electronBack = electronMsgHandler
         await initApp()
-    } else {
+    } else { // extension
         toBackground = chrome.runtime.connect({name: 'popup'})
         toBackground.onMessage.addListener(mainListener)
         global.Port = toBackground

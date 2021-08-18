@@ -14,7 +14,7 @@ function lockAccount() {
 function encryptAccount() {
     let account = disk.user.loadUserNotJson()
     //TODO HERE {}
-    console.log(account)
+    // console.log(account)
     let password = disk.lock.getHashPassword()
     if (password && !disk.lock.checkLock()) {
         password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
@@ -31,12 +31,12 @@ function decryptAccount(password) {
     let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
     if (disk.lock.unlock(hash)) {
         hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
-        console.log(hash)
-        console.log(disk.user.loadUserNotJson())
+        // console.log(hash)
+        // console.log(disk.user.loadUserNotJson())
         let accountString = ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash)
-        console.log(accountString)
+        // console.log(accountString)
         let account = JSON.parse(accountString)
-        console.log(account)
+        // console.log(account)
         return account
     } else {
         return false

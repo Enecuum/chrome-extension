@@ -62,7 +62,7 @@ export default function App(props) {
     const getUser = async () => {
         let account = await global.disk.user.loadUser()
         setUser(account)
-        console.log(account)
+        // console.log(account)
         setLogin(!!account.privateKey)
     }
 
@@ -139,7 +139,7 @@ export default function App(props) {
 
 
     const unlock = (_user) => {
-        console.log(_user)
+        // console.log(_user)
         setUser(_user)
         setLock(false)
         setLogin(false)

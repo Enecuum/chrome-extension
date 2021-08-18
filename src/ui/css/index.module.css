@@ -138,10 +138,11 @@ a:hover {
     height: 30px;
     margin: 20px;
 
-    padding: 5px;
+    /*padding: 5px;*/
 
     border-radius: 50%;
     background-color: var(--color-white);
+    border: 1px solid white;
 }
 
 
@@ -579,13 +580,13 @@ input.field.password::placeholder {
     /*background: red;*/
 }
 
-.asset img {
-    width: 20px;
-    height: 20px;
-    margin: 20px;
+/*.asset img {*/
+/*    width: 20px;*/
+/*    height: 20px;*/
+/*    margin: 20px;*/
 
-    transform: rotate(-30deg);
-}
+/*    transform: rotate(-30deg);*/
+/*}*/
 
 .asset:first-child > img {
     transform: rotate(0);
@@ -600,11 +601,12 @@ input.field.password::placeholder {
     width: 40px;
     height: 40px;
     margin: 15px 20px;
-    padding: 10px;
+    /*padding: 10px;*/
 
     border: 1px solid white;
     background: white;
     border-radius: 50%;
+    transform: rotate(-30deg);
 }
 
 .button_add_token {

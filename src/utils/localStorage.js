@@ -122,7 +122,7 @@ function loadUserNotJson() {
 
 function addUser(obj) {
     // obj: {publicKey, privateKey, net, token}
-    console.log(obj)
+    // console.log(obj)
     localStorage.setItem('User', JSON.stringify(obj))
     return obj
 }
@@ -231,16 +231,16 @@ function getHashPassword() {
 
 function sendPromise(obj) {
     return new Promise((resolve) => {
-        if(chrome.runtime.getManifest().version === 'electron'){
-            console.log('electron send promise');
-            electronBack(obj).then(answer=>{
+        if (chrome.runtime.getManifest().version.includes('web')) {
+            // console.log('electron send promise');
+            electronBack(obj).then(answer => {
                 if (answer.response !== undefined) {
                     resolve(answer.response);
                 } else {
                     resolve(answer);
                 }
             })
-        }else{
+        } else {
             chrome.runtime.sendMessage(obj, answer => {
                 if (answer.response !== undefined) {
                     resolve(answer.response);
