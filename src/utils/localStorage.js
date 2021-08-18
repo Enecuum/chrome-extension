@@ -364,5 +364,4 @@ let storage = function Storage(name) {
     }
 }
 
-
 module.exports = storage
