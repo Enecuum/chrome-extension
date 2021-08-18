@@ -68,26 +68,26 @@ export function electronMsgHandler(msg) {
     })
 }
 
-function createPopupWindow(url) {
-    const os_width = {
-        'Win': 370,
-        'Mac': 350,
-        'Linux': 350
-    }
-    const os_height = {
-        'Win': 630,
-        'Mac': 630,
-        'Linux': 600
-    }
-    const WinReg = /Win/
-    const LinuxReg = /Linux/
-    chrome.windows.create({
-        url: url ? url : "index.html",
-        width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
-        height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
-        type: 'popup'
-    })
-}
+// function createPopupWindow(url) {
+//     const os_width = {
+//         'Win': 370,
+//         'Mac': 350,
+//         'Linux': 350
+//     }
+//     const os_height = {
+//         'Win': 630,
+//         'Mac': 630,
+//         'Linux': 600
+//     }
+//     const WinReg = /Win/
+//     const LinuxReg = /Linux/
+//     chrome.windows.create({
+//         url: url ? url : "index.html",
+//         width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
+//         height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
+//         type: 'popup'
+//     })
+// }
 
 async function msgPopupHandler(msg, sender) {
     // console.log({msg, sender})

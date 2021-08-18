@@ -13,11 +13,15 @@ let time = 200
 
 let alterVersion = '0.3.0'
 
+console.log(navigator.userAgent)
 let electron = navigator.userAgent.toLowerCase().includes('electron')
 let mobile = navigator.userAgent.toLowerCase().includes('mobile')
 alterVersion += electron ? ' web electron' : (mobile ? ' web mobile' : ' web')
 
-if (!chrome.runtime) {
+global.chrome = (typeof chrome === 'undefined') ? {} : chrome;
+
+if (!chrome || !chrome.runtime) {
+
     chrome.runtime = {}
     chrome.runtime.connect = () => {
         return {

@@ -109,11 +109,6 @@ export default function TransactionHistory(props) {
         closeModalWindow()
     }
 
-    // const explorer = (hash) => {
-    //     // console.log('open explorer')
-    //     chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash})
-    // }
-
     const copyHashString = () => {
         navigator.clipboard.writeText(props.request.tx.to)
     }

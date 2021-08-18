@@ -19,7 +19,6 @@ export default function Menu(props) {
     // let enablePopup = (await disk.config.getConfig).openEnablePopup
     const [openEnable, setOpenEnable] = useState(false)
     // const [openTx, setOpenTx] = useState((disk.config.getConfig).openTxPopup)
-    const expand = () => chrome.tabs.create({url: 'popup.html'})
     const window = () => {
         disk.promise.sendPromise({window: true})
     }
@@ -127,6 +126,7 @@ export default function Menu(props) {
     }
 
     const version = chrome.runtime.getManifest().version
+    // const version = 'VERSION DEBUG'
 
     return (
         <div className={styles.menu}>
