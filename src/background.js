@@ -121,7 +121,7 @@ async function msgConnectHandler(msg, sender) {
                         })
                         taskCounter()
                         if (popupOpenMethods.enable) {
-                            createPopupWindow(`popup.html?type=${msg.type}&id=${msg.taskId}`)
+                            createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
                         }
                     }
                 }
@@ -146,7 +146,7 @@ async function msgConnectHandler(msg, sender) {
                     taskCounter()
                 }
                 if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
-                    createPopupWindow(`popup.html?type=${msg.type}&id=${msg.taskId}`)
+                    createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
                 }
             }
         }

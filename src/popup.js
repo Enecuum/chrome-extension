@@ -11,16 +11,25 @@ let awaitId = []
 let dataId = []
 let time = 200
 
-let alterVersion = '0.3.0'
+global.chrome = (typeof chrome === 'undefined') ? {} : chrome;
 
 console.log(navigator.userAgent)
 let electron = navigator.userAgent.toLowerCase().includes('electron')
 let mobile = navigator.userAgent.toLowerCase().includes('mobile')
-alterVersion += electron ? ' web electron' : (mobile ? ' web mobile' : ' web')
 
-global.chrome = (typeof chrome === 'undefined') ? {} : chrome;
+if (!chrome.runtime) {
 
-if (!chrome || !chrome.runtime) {
+    chrome.manifest = (function () {
+        let manifestObject = false;
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {if (xhr.readyState == 4) {manifestObject = JSON.parse(xhr.responseText)}}
+        xhr.open("GET", '/manifest.json', false)
+        try {xhr.send()} catch (e) {}
+        return manifestObject
+    })()
+
+    let alterVersion = chrome.manifest.version
+    alterVersion += electron ? ' web electron' : (mobile ? ' web mobile' : ' web')
 
     chrome.runtime = {}
     chrome.runtime.connect = () => {
