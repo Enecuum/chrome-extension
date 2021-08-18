@@ -3,7 +3,7 @@ import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
 export function electronMsgHandler(msg) {
     return new Promise((resolve, reject) => {
 
-        console.log(msg)
+        // console.log(msg)
 
         if (msg.window) {
             if (msg.url != undefined) {
@@ -25,8 +25,8 @@ export function electronMsgHandler(msg) {
             let account = decryptAccount(msg.password)
             if (account) {
                 ENQWeb.Enq.User = account
-                console.log(account)
-                console.log(ENQWeb.Enq.User)
+                // console.log(account)
+                // console.log(ENQWeb.Enq.User)
                 disk.user.addUser(account)
                 encryptAccount()
                 resolve({response: account})

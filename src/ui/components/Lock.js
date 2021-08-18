@@ -40,7 +40,7 @@ export default class Lock extends React.Component {
         // }
 
         let user = await disk.promise.sendPromise({account: true, unlock: true, password: this.state.password})
-        console.log(user)
+        // console.log(user)
         if (user)
             this.props.unlock(user)
     }
