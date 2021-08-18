@@ -1,5 +1,5 @@
 import {initApp} from "./ui/index";
-import {electronMsgHandler} from "./handler"
+import {MsgHandler} from "./handler"
 
 const Storage = require('./utils/localStorage')
 let storage = new Storage('popup')
@@ -61,7 +61,7 @@ async function setupUi() {
 
     if (version.includes('web')) {
         global.asyncRequest = asyncRequest
-        global.electronBack = electronMsgHandler
+        global.electronBack = MsgHandler
         await initApp()
     } else { // extension
         toBackground = chrome.runtime.connect({name: 'popup'})
