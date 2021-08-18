@@ -1,5 +1,5 @@
 import {initApp} from "./ui/index";
-import {electronMsgHandler} from "./electronBackground"
+import {electronMsgHandler} from "./hendler"
 
 const Storage = require('./utils/localStorage')
 let storage = new Storage('popup')
