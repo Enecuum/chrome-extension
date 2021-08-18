@@ -7,11 +7,12 @@
     "module": "commonjs",
     "scripts": {
         "start": "webpack --watch",
-        "dist": "NODE_ENV=production webpack",
+        "make": "NODE_ENV=production webpack",
         "test": "mocha --require babel-mocha.js",
         "electron": "electron ./dist",
         "pack": "electron-builder --win --mac -c.mac.identity=null",
-        "node": "node node.js"
+        "prod": "pm2 start ./ecosystem.config.js --only prod",
+        "stop": "pm2 stop prod"
     },
     "build": {
         "appId": "app.enecuum.com",
