@@ -1,7 +1,7 @@
 const storage = require('./utils/localStorage')
 import {extensionApi} from './utils/extensionApi'
-
 import {decryptAccount, encryptAccount, lockAccount, say} from "./lockAccount"
+import {MsgHandler} from "./handler"
 
 say()
 
@@ -40,50 +40,54 @@ function setupApp() {
 }
 
 async function msgHandler(msg, sender, sendResponse) {
-    // console.log(msg)
-    if (msg.window) {
-        if (msg.url != undefined) {
-            createPopupWindow(msg.url);
-        } else {
-            createPopupWindow(false);
-        }
-    }
-    if (msg.account && msg.request) {
-        if (!disk.lock.checkLock()) {
-            sendResponse({response: Account})
-        } else {
-            sendResponse({response: false})
-        }
-    }
-    if (msg.account && msg.unlock && msg.password) {
-        let account = decryptAccount(msg.password)
-        if (account) {
-            Account = account
-            sendResponse({response: true})
-        } else {
-            sendResponse({response: false})
-        }
-    }
-    if (msg.account && msg.set && msg.data) {
-        Account = msg.data
-        disk.user.addUser(Account)
-        encryptAccount()
-        sendResponse({response: Account})
-    }
-    if (msg.account && msg.encrypt) {
-        if (msg.again) {
-            //TODO HERE (a, b, c) => addUser(obj) ?
-            disk.user.addUser(Account.publicKey, Account.privateKey, Account.net)
-            encryptAccount()
-        } else {
-            encryptAccount()
-        }
-        sendResponse({response: true})
-    }
-    if (msg.account && msg.logout) {
-        Account = {}
-        disconnectPorts()
-    }
+    // // console.log(msg)
+    // if (msg.window) {
+    //     if (msg.url != undefined) {
+    //         createPopupWindow(msg.url);
+    //     } else {
+    //         createPopupWindow(false);
+    //     }
+    // }
+    // if (msg.account && msg.request) {
+    //     if (!disk.lock.checkLock()) {
+    //         sendResponse({response: Account})
+    //     } else {
+    //         sendResponse({response: false})
+    //     }
+    // }
+    // if (msg.account && msg.unlock && msg.password) {
+    //     let account = decryptAccount(msg.password)
+    //     if (account) {
+    //         Account = account
+    //         sendResponse({response: true})
+    //     } else {
+    //         sendResponse({response: false})
+    //     }
+    // }
+    // if (msg.account && msg.set && msg.data) {
+    //     Account = msg.data
+    //     disk.user.addUser(Account)
+    //     encryptAccount()
+    //     sendResponse({response: Account})
+    // }
+    // if (msg.account && msg.encrypt) {
+    //     if (msg.again) {
+    //         //TODO HERE (a, b, c) => addUser(obj) ?
+    //         disk.user.addUser(Account.publicKey, Account.privateKey, Account.net)
+    //         encryptAccount()
+    //     } else {
+    //         encryptAccount()
+    //     }
+    //     sendResponse({response: true})
+    // }
+    // if (msg.account && msg.logout) {
+    //     Account = {}
+    //     disconnectPorts()
+    // }
+    // if (msg.lock) {
+    //     Account = {}
+    //     lockAccount()
+    // }
     if (msg.ports && msg.disconnect) {
         if (msg.all) {
             disconnectPorts()
@@ -91,8 +95,8 @@ async function msgHandler(msg, sender, sendResponse) {
         if (msg.name) {
             disconnectPorts(msg.name)
         }
-
     }
+    MsgHandler(msg).then(answer=>sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {
@@ -156,10 +160,9 @@ async function msgConnectHandler(msg, sender) {
 
 }
 
-let mainHeight = 600
-let mainWidth = 350
-
 function createPopupWindow(url) {
+    let mainHeight = 600
+    let mainWidth = 350
     const os_width = {
         'Win': mainWidth + 20,
         'Mac': mainWidth,
