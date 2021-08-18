@@ -1,6 +1,6 @@
 import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
 
-export function electronMsgHandler(msg) {
+export function MsgHandler(msg) {
     return new Promise((resolve, reject) => {
 
         // console.log(msg)
@@ -53,9 +53,15 @@ export function electronMsgHandler(msg) {
             }
             resolve({response: true})
         }
+        if (msg.lock) {
+            ENQWeb.Enq.User = {}
+            lockAccount()
+            resolve({response: true})
+        }
         if (msg.account && msg.logout) {
             ENQWeb.Enq.User = {}
             // disconnectPorts()
+            resolve({response: true})
         }
         if (msg.ports && msg.disconnect) {
             if (msg.all) {
@@ -64,32 +70,35 @@ export function electronMsgHandler(msg) {
             if (msg.name) {
                 // disconnectPorts(msg.name)
             }
+            resolve({response: true})
         }
     })
 }
 
-// function createPopupWindow(url) {
-//     const os_width = {
-//         'Win': 370,
-//         'Mac': 350,
-//         'Linux': 350
-//     }
-//     const os_height = {
-//         'Win': 630,
-//         'Mac': 630,
-//         'Linux': 600
-//     }
-//     const WinReg = /Win/
-//     const LinuxReg = /Linux/
-//     chrome.windows.create({
-//         url: url ? url : "index.html",
-//         width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
-//         height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
-//         type: 'popup'
-//     })
-// }
+function createPopupWindow(url) {
+    let mainHeight = 600
+    let mainWidth = 350
+    const os_width = {
+        'Win': mainWidth + 20,
+        'Mac': mainWidth,
+        'Linux': mainWidth
+    }
+    const os_height = {
+        'Win': mainHeight + 30,
+        'Mac': mainHeight + 30,
+        'Linux': mainHeight
+    }
+    const WinReg = /Win/
+    const LinuxReg = /Linux/
+    chrome.windows.create({
+        url: url ? url : "index.html",
+        width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
+        height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
+        type: 'popup'
+    })
+}
 
-async function msgPopupHandler(msg, sender) {
+export async function msgPopupHandler(msg, sender) {
     // console.log({msg, sender})
     if (msg.popup) {
         if (msg.type === 'tx') {
@@ -116,11 +125,11 @@ async function msgPopupHandler(msg, sender) {
         ENQWeb.Enq.User = {}
         lockAccount()
     } else if (msg.connectionList) {
-        ports.popup.postMessage({
-            asyncAnswer: true,
-            data: msg,
-            ports: ports
-        })
+        // ports.popup.postMessage({
+        //     asyncAnswer: true,
+        //     data: msg,
+        //     ports: ports
+        // })
     } else {
         if (msg.allow && msg.taskId) {
             // await taskHandler(msg.taskId)

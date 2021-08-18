@@ -60,7 +60,7 @@ export default function Menu(props) {
         console.log('LOCK')
         if (disk.lock.getHashPassword()) {
             props.setLock(true)
-            await asyncRequest({lock: true})
+            await disk.promise.sendPromise({lock: true})
         }
         //TODO close popup
     }
