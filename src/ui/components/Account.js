@@ -422,16 +422,6 @@ export default function Account(props) {
         }
     }
 
-    // const explorer = (hash) => {
-    //     // console.log('open explorer')
-    //     chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash})
-    // }
-    //
-    // const explorerAddress = (hash) => {
-    //     // console.log('open explorer')
-    //     chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + hash})
-    // }
-
     useEffect(() => {
         openPopup().then(result => {
             if (result === true) {
