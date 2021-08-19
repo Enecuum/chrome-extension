@@ -1,6 +1,6 @@
 import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
 
-export function MsgHandler(msg) {
+export function MsgHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
 
         // console.log(msg)
@@ -61,15 +61,6 @@ export function MsgHandler(msg) {
         if (msg.account && msg.logout) {
             ENQWeb.Enq.User = {}
             // disconnectPorts()
-            resolve({response: true})
-        }
-        if (msg.ports && msg.disconnect) {
-            if (msg.all) {
-                // disconnectPorts()
-            }
-            if (msg.name) {
-                // disconnectPorts(msg.name)
-            }
             resolve({response: true})
         }
     })
