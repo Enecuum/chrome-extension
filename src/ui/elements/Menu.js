@@ -113,15 +113,6 @@ export default function Menu(props) {
         })
     }
 
-    const openConnectLedger = () => {
-        chrome.windows.create({
-            url: 'popup.html?type=connectLedger',
-            width: 350,
-            height: 630,
-            type: 'popup'
-        })
-    }
-
     const version = chrome.runtime.getManifest().version
     // const version = 'VERSION DEBUG'
 
