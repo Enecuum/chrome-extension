@@ -85,8 +85,12 @@ export default class PublicKeyRequest extends React.Component {
                     {/*     className={styles.field}>{this.state.website}*/}
                     {/*</div>*/}
 
+                    <div onClick={this.disallow}
+                         className={styles.field + ' ' + styles.button}>Disallow
+                    </div>
+
                     <div onClick={this.allow}
-                         className={styles.field + ' ' + styles.button}>Allow
+                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Allow
                     </div>
 
                     <div className={styles.buttons_field}>
@@ -96,10 +100,6 @@ export default class PublicKeyRequest extends React.Component {
                         {/*</div>*/}
 
 
-                    </div>
-
-                    <div onClick={this.disallow}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Disallow
                     </div>
 
                     <Separator/>
