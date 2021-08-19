@@ -167,3 +167,7 @@ export async function msgPopupHandler(msg, sender) {
     }
 }
 
+export {
+    createPopupWindow
+}
+

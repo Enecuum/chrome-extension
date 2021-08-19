@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 import styles from '../css/elements.module.css'
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
+import {explorerAddress} from "../Utils";
+import {createPopupWindow} from "../../handler";
 
 TransportWebUSB.isSupported().then((result) => {
     console.log('WebUSB Supported: ' + result)
@@ -19,23 +21,18 @@ export default function Menu(props) {
     // let enablePopup = (await disk.config.getConfig).openEnablePopup
     const [openEnable, setOpenEnable] = useState(false)
     // const [openTx, setOpenTx] = useState((disk.config.getConfig).openTxPopup)
+
     const window = () => {
         disk.promise.sendPromise({window: true})
     }
 
     // console.log(enablePopup)
 
-
     useEffect(() => {
         let config = disk.config.getConfig()
         setOpenEnable(config.openEnablePopup)
         // connectLedger()
     }, []);
-
-    const explorer = () => {
-        console.log('open explorer')
-        chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + props.publickKey})
-    }
 
     const setNet = async (value) => {
 
@@ -135,15 +132,15 @@ export default function Menu(props) {
             <div className={styles.title}>My accounts</div>
             <div className={styles.button_link + ' ' + styles.button_link_active}>Account 1</div>
             {ethAddress ? <div className={styles.button_link}
-                               onClick={openConnectLedger}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div> :
-                <div className={styles.button_link} onClick={openConnectLedger}>Connect ledger</div>}
+                               onClick={() => createPopupWindow('index.html?type=connectLedger')}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div> :
+                <div className={styles.button_link} onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect ledger</div>}
 
             <div className={styles.separator}/>
 
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
-            <div className={styles.button_link} onClick={window}>Window</div>
-            <div className={styles.button_link} onClick={explorer}>Show in blockchain explorer</div>
+            {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={window}>Window</div>}
+            <div className={styles.button_link} onClick={() => explorerAddress(props.publicKey)}>Show in blockchain explorer</div>
             <div className={styles.row}>
                 {/*<div className={styles.button_link} onClick={() => setNet('pulse')}>PULSE</div>*/}
                 {/*&nbsp;/&nbsp;*/}
@@ -151,8 +148,8 @@ export default function Menu(props) {
                 {/*&nbsp;/&nbsp;*/}
                 {/*<div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>*/}
             </div>
-            <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
-                window: {openEnable ? 'ON' : 'OFF'}</div>
+            {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
+                window: {openEnable ? 'ON' : 'OFF'}</div>}
             {/*<div className={styles.button_link} onClick={() => changeOpenPopup('tx')}>Open popup on TX {openTx}</div>*/}
             <div className={styles.button_link_logout}>
                 <div className={styles.button_link} onClick={() => props.setConfirm(true)}>Logout</div>
