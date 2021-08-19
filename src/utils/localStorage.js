@@ -233,7 +233,7 @@ function sendPromise(obj) {
     return new Promise((resolve) => {
         if (chrome.runtime.getManifest().version.includes('web')) {
             // console.log('electron send promise');
-            electronBack(obj).then(answer => {
+            electronBack(obj, ENQWeb).then(answer => {
                 if (answer.response !== undefined) {
                     resolve(answer.response);
                 } else {
