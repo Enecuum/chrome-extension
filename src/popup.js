@@ -16,20 +16,22 @@ global.chrome = (typeof chrome === 'undefined') ? {} : chrome;
 console.log(navigator.userAgent)
 let electron = navigator.userAgent.toLowerCase().includes('electron')
 let mobile = navigator.userAgent.toLowerCase().includes('mobile')
+let type = electron ? ' web electron' : (mobile ? ' web mobile' : ' web')
 
+chrome.manifest = (function () {
+    let manifestObject = false;
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {if (xhr.readyState == 4) {manifestObject = JSON.parse(xhr.responseText)}}
+    xhr.open("GET", '/manifest.json', false)
+    try {xhr.send()} catch (e) {}
+    return manifestObject
+})()
+
+let alterVersion = chrome.manifest.version + type
+
+// TODO Move away from chrome runtime
+console.log(chrome.runtime)
 if (!chrome.runtime) {
-
-    chrome.manifest = (function () {
-        let manifestObject = false;
-        let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {if (xhr.readyState == 4) {manifestObject = JSON.parse(xhr.responseText)}}
-        xhr.open("GET", '/manifest.json', false)
-        try {xhr.send()} catch (e) {}
-        return manifestObject
-    })()
-
-    let alterVersion = chrome.manifest.version
-    alterVersion += electron ? ' web electron' : (mobile ? ' web mobile' : ' web')
 
     chrome.runtime = {}
     chrome.runtime.connect = () => {
@@ -46,9 +48,16 @@ if (!chrome.runtime) {
     chrome.runtime.getManifest = () => {
         return {version: alterVersion}
     }
-    console.log(chrome.runtime)
+
+    //TODO
+    chrome.runtime.web = true
+    chrome.tabs = {}
+    chrome.tabs.create = (tab) => {
+        window.open(tab.url,'_blank');
+    }
 }
 
+// Sometimes there is no getManifest function
 if (!chrome.runtime.getManifest) {
     chrome.runtime.getManifest = () => {
         return {version: alterVersion}
