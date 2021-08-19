@@ -40,54 +40,6 @@ function setupApp() {
 }
 
 async function msgHandler(msg, sender, sendResponse) {
-    // // console.log(msg)
-    // if (msg.window) {
-    //     if (msg.url != undefined) {
-    //         createPopupWindow(msg.url);
-    //     } else {
-    //         createPopupWindow(false);
-    //     }
-    // }
-    // if (msg.account && msg.request) {
-    //     if (!disk.lock.checkLock()) {
-    //         sendResponse({response: Account})
-    //     } else {
-    //         sendResponse({response: false})
-    //     }
-    // }
-    // if (msg.account && msg.unlock && msg.password) {
-    //     let account = decryptAccount(msg.password)
-    //     if (account) {
-    //         Account = account
-    //         sendResponse({response: true})
-    //     } else {
-    //         sendResponse({response: false})
-    //     }
-    // }
-    // if (msg.account && msg.set && msg.data) {
-    //     Account = msg.data
-    //     disk.user.addUser(Account)
-    //     encryptAccount()
-    //     sendResponse({response: Account})
-    // }
-    // if (msg.account && msg.encrypt) {
-    //     if (msg.again) {
-    //         //TODO HERE (a, b, c) => addUser(obj) ?
-    //         disk.user.addUser(Account.publicKey, Account.privateKey, Account.net)
-    //         encryptAccount()
-    //     } else {
-    //         encryptAccount()
-    //     }
-    //     sendResponse({response: true})
-    // }
-    // if (msg.account && msg.logout) {
-    //     Account = {}
-    //     disconnectPorts()
-    // }
-    // if (msg.lock) {
-    //     Account = {}
-    //     lockAccount()
-    // }
     if (msg.ports && msg.disconnect) {
         if (msg.all) {
             disconnectPorts()
@@ -96,7 +48,7 @@ async function msgHandler(msg, sender, sendResponse) {
             disconnectPorts(msg.name)
         }
     }
-    MsgHandler(msg).then(answer=>sendResponse(answer))
+    MsgHandler(msg, ENQWeb).then(answer=>sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {
@@ -106,7 +58,7 @@ async function msgConnectHandler(msg, sender) {
         popupOpenMethods.enable = disk.config.getConfig().openEnablePopup
         popupOpenMethods.tx = disk.config.getConfig().openTxPopup
         popupOpenMethods.sign = disk.config.getConfig().openSignPopup
-        let account = Account
+        let account = ENQWeb.Enq.User
         let lock = disk.lock.checkLock()
         if (!account.net && !lock) {
             // console.log('non auth')
@@ -313,7 +265,7 @@ global.counterTask = taskCounter
 async function taskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     console.log(task)
-    let account = Account
+    let account = ENQWeb.Enq.User
     let data = ''
     let wallet = {
         pubkey: account.publicKey,
