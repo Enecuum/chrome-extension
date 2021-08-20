@@ -53,7 +53,10 @@ export default function Address(props) {
     }
 
     const copyPublicKey = () => {
-        navigator.clipboard.writeText(props.publicKey)
+        if (navigator.clipboard)
+            navigator.clipboard.writeText(props.publicKey)
+        else
+            console.error('navigator.clipboard: ' + false)
     }
 
     return (
