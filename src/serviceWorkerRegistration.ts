@@ -23,18 +23,25 @@ console.log(isLocalhost)
 type Config = {
   onSuccess?: (registration: ServiceWorkerRegistration) => void;
   onUpdate?: (registration: ServiceWorkerRegistration) => void;
-};
+}
+
+// @ts-ignore
+// global.process = (typeof process === 'undefined') ? {} : process
+// process.env = {NODE_ENV: 'production'}
 
 export function register(config?: Config) {
 
   console.log(process.env.NODE_ENV)
   console.log('Service Worker Supported: ' + ('serviceWorker' in navigator))
 
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator) {
+
+    // console.log('serviceWorker start')
+
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
-    console.log(publicUrl.origin)
-    console.log(window.location.origin)
+    // console.log(publicUrl.origin)
+    // console.log(window.location.origin)
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
       // from what our page is served on. This might happen if a CDN is used to
@@ -43,7 +50,7 @@ export function register(config?: Config) {
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `./js/serviceWorker.js`;
+      const swUrl = `./serviceWorker.js`;
 
       // console.log(swUrl)
 
@@ -68,6 +75,7 @@ export function register(config?: Config) {
 }
 
 function registerValidSW(swUrl: string, config?: Config) {
+  console.log(config)
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {

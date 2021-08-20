@@ -17,6 +17,10 @@ module.exports = () => {
             {
                 from: LIB_FILE,
                 to: path.join(DIST_FOLDER, 'lib'),
+            },
+            {
+                from: path.join(DIST_FOLDER, 'js/serviceWorker.js'),
+                to: path.join(DIST_FOLDER, ''),
             }]
     };
 
