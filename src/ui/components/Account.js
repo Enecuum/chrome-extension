@@ -85,7 +85,10 @@ export default function Account(props) {
     }
 
     const copyPublicKey = () => {
-        navigator.clipboard.writeText(props.user.publicKey)
+        if (navigator.clipboard)
+            navigator.clipboard.writeText(props.publicKey)
+        else
+            console.error('navigator.clipboard: ' + false)
     }
 
     // const unlock = () => {
