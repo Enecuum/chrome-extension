@@ -1,7 +1,6 @@
-import {extensionApi} from './utils/extensionApi'
-
 document.addEventListener('DOMContentLoaded', function () {
-    // console.log('lock loaded. status: ', disk.lock.checkLock())
+    console.log('lock status: ', !disk.lock.checkLock())
+    console.log('hash password: ', disk.lock.checkLock())
     if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
         lockAccount()
     }
@@ -14,6 +13,8 @@ function lockAccount() {
 
 function encryptAccount() {
     let account = disk.user.loadUserNotJson()
+    //TODO HERE {}
+    // console.log(account)
     let password = disk.lock.getHashPassword()
     if (password && !disk.lock.checkLock()) {
         password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
@@ -31,22 +32,33 @@ function decryptAccount(password) {
     if (disk.lock.unlock(hash)) {
         hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
         // console.log(hash)
-        // console.log(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
-        return JSON.parse(ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash))
+        // console.log(disk.user.loadUserNotJson())
+        let accountString = ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash)
+        // console.log(accountString)
+        let account = JSON.parse(accountString)
+        // console.log(account)
+        return account
     } else {
         return false
     }
 }
 
+// global.lockAccount = function () {
+//     return lockAccount()
+// }
+//
+// global.encryptAccount = function () {
+//     return encryptAccount()
+// }
+//
+// global.decryptAccount = function (password) {
+//     return decryptAccount(password)
+// }
 
-global.lockAccount = function () {
-    return lockAccount()
+export {lockAccount, encryptAccount, decryptAccount}
+
+function say() {
+    console.log("hello")
 }
 
-global.encryptAccount = function () {
-    return encryptAccount()
-}
-
-global.decryptAccount = function (password) {
-    return decryptAccount(password)
-}
+export {say}

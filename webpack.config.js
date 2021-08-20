@@ -9,14 +9,15 @@ module.exports = () => {
     const LIB_FILE = path.resolve(__dirname + '/node_modules/enqweb3/dist/enqweb3lib.ext.min.js')
 
     const COPY = {
-        patterns: [{
-            from: path.join(SOURCE_FOLDER, 'copied'),
-            to: DIST_FOLDER
-        },
-        {
-            from: LIB_FILE,
-            to: DIST_FOLDER
-        }]
+        patterns: [
+            {
+                from: path.join(SOURCE_FOLDER, 'copied'),
+                to: DIST_FOLDER
+            },
+            {
+                from: LIB_FILE,
+                to: path.join(DIST_FOLDER, 'lib'),
+            }]
     };
 
     const plugins = [];
@@ -30,10 +31,12 @@ module.exports = () => {
             background: path.resolve(SOURCE_FOLDER, 'background.js'),
             contentScript: path.resolve(SOURCE_FOLDER, 'contentScript.js'),
             lockAccount: path.resolve(SOURCE_FOLDER, 'lockAccount.js'),
+            serviceWorker: path.resolve(SOURCE_FOLDER, 'serviceWorker.ts'),
+            serviceWorkerRegistration: path.resolve(SOURCE_FOLDER, 'serviceWorkerRegistration.ts'),
         },
         output: {
             filename: '[name].js',
-            path: DIST_FOLDER,
+            path: DIST_FOLDER + '/js',
             publicPath: './'
         },
         devtool: 'inline-source-map',
@@ -54,7 +57,13 @@ module.exports = () => {
                     test: /\.css$/i,
                     use: ["style-loader", "css-loader"],
                 },
+                {
+                    test: /\.ts?$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/,
+                },
             ],
+
         },
     };
 };

@@ -1,5 +1,9 @@
 const storage = require('./utils/localStorage')
 import {extensionApi} from './utils/extensionApi'
+import {decryptAccount, encryptAccount, lockAccount, say} from "./lockAccount"
+import {MsgHandler} from "./handler"
+
+say()
 
 let Storage = new storage('background')
 global.disk = Storage
@@ -7,15 +11,19 @@ global.disk = Storage
 let ports = {}
 let requestsMethods = {
     'tx': true,
-    'enable': true,
+    'enable': false,
     'balanceOf': false,
     'getProvider': false,
     'getVersion': false,
+    'sign': true,
+    'reconnect': false
 }
+
 
 let popupOpenMethods = {
     'enable': true,
-    'tx': true
+    'tx': true,
+    'sign': true
 }
 
 const VALID_VERSION_LIB = '0.2.3'
@@ -33,42 +41,6 @@ function setupApp() {
 }
 
 async function msgHandler(msg, sender, sendResponse) {
-    // console.log(msg)
-    if (msg.account && msg.request) {
-        if (!disk.lock.checkLock()) {
-            sendResponse({response: Account})
-        } else {
-            sendResponse({response: false})
-        }
-    }
-    if (msg.account && msg.unlock && msg.password) {
-        let account = decryptAccount(msg.password)
-        if (account) {
-            Account = account
-            sendResponse({response: true})
-        } else {
-            sendResponse({response: false})
-        }
-    }
-    if (msg.account && msg.set && msg.data) {
-        Account = msg.data
-        disk.user.addUser(msg.data.publicKey, msg.data.privateKey, msg.data.net)
-        encryptAccount()
-        sendResponse({response: Account})
-    }
-    if (msg.account && msg.encrypt) {
-        if (msg.again) {
-            disk.user.addUser(Account.publicKey, Account.privateKey, Account.net)
-            encryptAccount()
-        } else {
-            encryptAccount()
-        }
-        sendResponse({response: true})
-    }
-    if (msg.account && msg.logout) {
-        Account = {}
-        disconnectPorts()
-    }
     if (msg.ports && msg.disconnect) {
         if (msg.all) {
             disconnectPorts()
@@ -76,8 +48,8 @@ async function msgHandler(msg, sender, sendResponse) {
         if (msg.name) {
             disconnectPorts(msg.name)
         }
-
     }
+    MsgHandler(msg, ENQWeb).then(answer=>sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {
@@ -86,7 +58,8 @@ async function msgConnectHandler(msg, sender) {
     if (msg.taskId) {
         popupOpenMethods.enable = disk.config.getConfig().openEnablePopup
         popupOpenMethods.tx = disk.config.getConfig().openTxPopup
-        let account = Account
+        popupOpenMethods.sign = disk.config.getConfig().openSignPopup
+        let account = ENQWeb.Enq.User
         let lock = disk.lock.checkLock()
         if (!account.net && !lock) {
             // console.log('non auth')
@@ -105,14 +78,17 @@ async function msgConnectHandler(msg, sender) {
                         })
                         taskCounter()
                         if (popupOpenMethods.enable) {
-                            chrome.windows.create({
-                                url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
-                                width: 350,
-                                height: 630,
-                                type: 'popup'
-                            })
+                            createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
                         }
                     }
+                }
+                if(msg.type === "reconnect"){
+                    await Storage.task.setTask(msg.taskId, {
+                        data: msg.data,
+                        type: msg.type,
+                        cb: msg.cb
+                    })
+                    taskHandler(msg.taskId)
                 }
             } else {
                 if (msg.type === 'tx') {
@@ -133,14 +109,9 @@ async function msgConnectHandler(msg, sender) {
                     taskHandler(msg.taskId)
                 } else {
                     taskCounter()
-                }
-                if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
-                    chrome.windows.create({
-                        url: `popup.html?type=${msg.type}&id=${msg.taskId}`,
-                        width: 350,
-                        height: 630,
-                        type: 'popup'
-                    })
+                    if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
+                        createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
+                    }
                 }
             }
         }
@@ -148,6 +119,29 @@ async function msgConnectHandler(msg, sender) {
         // console.log(msg)
     }
 
+}
+
+function createPopupWindow(url) {
+    let mainHeight = 600
+    let mainWidth = 350
+    const os_width = {
+        'Win': mainWidth + 20,
+        'Mac': mainWidth,
+        'Linux': mainWidth
+    }
+    const os_height = {
+        'Win': mainHeight + 30,
+        'Mac': mainHeight + 30,
+        'Linux': mainHeight
+    }
+    const WinReg = /Win/
+    const LinuxReg = /Linux/
+    chrome.windows.create({
+        url: url ? url : "index.html",
+        width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
+        height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
+        type: 'popup'
+    })
 }
 
 async function msgPopupHandler(msg, sender) {
@@ -164,7 +158,8 @@ async function msgPopupHandler(msg, sender) {
             let data = {
                 from: wallet,
                 to: msg.data.to,
-                amount: Number(msg.data.amount) * 1e10
+                amount: Number(msg.data.amount) * 1e10,
+                tokenHash: user.token
             }
             console.log(ENQWeb.Net.provider)
             // console.log({data})
@@ -223,17 +218,9 @@ async function msgPopupHandler(msg, sender) {
 
 
 function listPorts() {
-    // console.log(ports)
     global.ports = ports
 }
 
-// function disconnectAllPorts() {
-//     for (let port in ports) {
-//         console.log(port)
-//     }
-// }
-//
-// global.disconnectAllPorts = disconnectAllPorts
 
 function disconnectHandler(port) {
     console.log('disconnected: ' + port.name)
@@ -242,13 +229,20 @@ function disconnectHandler(port) {
 }
 
 function connectController(port) {
-    if (ports[port.name]) {
-        ports[port.name].disconnect()
+    if(port.name === "popup"){
         ports[port.name] = port
-    } else {
-        ports[port.name] = port
+        return
+    }
+    if(ports[port.name]){
+        ports[port.name].push(port)
+    }else{
+        ports[port.name] = []
+        ports[port.name].push(port)
     }
 }
+
+
+global.ports = ports
 
 function disconnectPorts(name) {
     if (!name) {
@@ -279,7 +273,7 @@ global.counterTask = taskCounter
 async function taskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     console.log(task)
-    let account = Account
+    let account = ENQWeb.Enq.User
     let data = ''
     let wallet = {
         pubkey: account.publicKey,
@@ -287,21 +281,17 @@ async function taskHandler(taskId) {
     }
     switch (task.type) {
         case 'enable':
-            console.log('enable. returned: ', account)
             data = {
                 pubkey: account.publicKey,
                 net: account.net,
             }
-            try {
-                ports[task.cb.url].postMessage({
-                    data: JSON.stringify(data),
-                    taskId: taskId,
-                    cb: task.cb
-                })
-                ports[task.cb.url].enabled = true
-            } catch (e) {
-                console.log('connection close')
-            }
+            console.log('enable. returned: ', data)
+            broadcast(task.cb.url, {
+                data: JSON.stringify(data),
+                taskId: taskId,
+                cb: task.cb
+            }).then()
+            ports[task.cb.url].enabled = true
             Storage.task.removeTask(taskId)
             break
         case 'tx':
@@ -312,22 +302,19 @@ async function taskHandler(taskId) {
                 let buf = ENQWeb.Net.provider
                 ENQWeb.Net.provider = account.net
                 data.from = wallet
-                data.amount = Number(data.value)
+                data.amount = data.value ? Number(data.value) : Number(data.amount)
+                data.tokenHash = data.ticker ? data.ticker : data.tokenHash
                 data.value = ''
                 data = await ENQWeb.Net.post.tx_fee_off(data)
                     .catch(err => {
                         console.log(err)
                         return false
                     })
-                try {
-                    ports[task.cb.url].postMessage({
-                        data: JSON.stringify(data),
-                        taskId: taskId,
-                        cb: task.cb
-                    })
-                } catch (e) {
-                    console.log('connection close')
-                }
+                broadcast(task.cb.url, {
+                    data: JSON.stringify({hash: data.hash ? data.hash : 'Error'}),
+                    taskId: taskId,
+                    cb: task.cb
+                }).then()
                 ENQWeb.Net.provider = buf
             }
             Storage.task.removeTask(taskId)
@@ -348,16 +335,11 @@ async function taskHandler(taskId) {
                         console.log(err)
                         return false
                     })
-                try {
-                    ports[task.cb.url].postMessage({
-                        data: JSON.stringify(data),
-                        taskId: taskId,
-                        cb: task.cb
-                    })
-
-                } catch (e) {
-                    console.log('connection close')
-                }
+                broadcast(task.cb.url, {
+                    data: JSON.stringify(data),
+                    taskId: taskId,
+                    cb: task.cb
+                }).then()
                 console.log({
                     data: JSON.stringify(data),
                     taskId: taskId,
@@ -376,29 +358,45 @@ async function taskHandler(taskId) {
                     data = {net: ENQWeb.Net.currentProvider}
                 }
                 console.log(data)
-                try {
-                    ports[task.cb.url].postMessage({
-                        data: JSON.stringify(data),
-                        taskId: taskId,
-                        cb: task.cb
-                    })
-                } catch (e) {
-                    console.log('connection close')
-                }
+                broadcast(task.cb.url, {
+                    data: JSON.stringify(data),
+                    taskId: taskId,
+                    cb: task.cb
+                }).then()
             }
             Storage.task.removeTask(taskId)
             break
         case 'getVersion':
             if (ports[task.cb.url].enabled) {
                 console.log('version: ', extensionApi.app.getDetails().version)
-                ports[task.cb.url].postMessage({
+                broadcast(task.cb.url, {
                     data: JSON.stringify(extensionApi.app.getDetails().version),
                     taskId: taskId,
                     cb: task.cb
-                })
+                }).then()
             }
             Storage.task.removeTask(taskId)
             break
+        case 'sign':
+            console.log('sign work')
+            if (ports[task.cb.url].enabled) {
+                broadcast(task.cb.url, {
+                    data: JSON.stringify(task.result),
+                    taskId: taskId,
+                    cb: task.cb
+                }).then()
+            }
+            Storage.task.removeTask(taskId)
+            break
+        case 'reconnect':
+            console.log('reconnect')
+            let connected = ports[task.cb.url].enabled ? true :false
+            broadcast(task.cb.url, {
+                data: JSON.stringify({status:connected}),
+                taskId: taskId,
+                cb: task.cb
+            }).then()
+            Storage.task.removeTask(taskId)
         default:
             break
     }
@@ -409,16 +407,32 @@ function rejectTaskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     Storage.task.removeTask(taskId)
     let data = {reject: true}
-    try {
-        ports[task.cb.url].postMessage({
-            data: JSON.stringify(data),
-            taskId: taskId,
-            cb: task.cb
-        })
-    } catch (e) {
-        console.log('connection close')
-    }
+    broadcast(task.cb.url, {
+        data: JSON.stringify(data),
+        taskId: taskId,
+        cb: task.cb
+    }).then()
     return true
+}
+
+function broadcast(host, data){
+    return new Promise((resolve) => {
+        if(ports[host]){
+            for(let i in ports[host]){
+                if(i === "enable"){
+                    continue
+                }
+                try{
+                    ports[host][i].postMessage(data)
+                }catch(e){
+
+                }
+            }
+            resolve(true)
+        }else{
+            resolve( false)
+        }
+    })
 }
 
 async function connectHandler(port) {

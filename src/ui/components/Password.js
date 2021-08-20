@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../css/index.module.css";
 import TransactionSend from "./TransactionSend";
 import Separator from "../elements/Separator";
+import {toggleFullScreen} from "../Utils";
 
 export default class Password extends React.Component {
     constructor(props) {
@@ -59,7 +60,7 @@ export default class Password extends React.Component {
             <div className={styles.main}>
 
                 <div className={styles.content}>
-                    <img className={styles.login_logo} src="./images/logo_white.png"/>
+                    <img className={styles.login_logo} src="./images/logo_white.png" onClick={toggleFullScreen}/>
 
                     <div className={styles.welcome1}>Create</div>
                     <div className={styles.welcome1}>Password</div>

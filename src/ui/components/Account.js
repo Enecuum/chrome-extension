@@ -1,20 +1,16 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../css/index.module.css'
-import Transaction from './Transaction'
-import Requests from './Requests'
-import Password from './Password'
-import Network from './Network'
-import Lock from './Lock'
-import Receive from './Receive'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import {shortAddress} from '../Utils'
+import {explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
 
 const names = {
     enable: 'Share account address',
     tx: 'Send transaction',
-    history: 'Transaction'
+    iin: 'Transaction in',
+    iout: 'Transaction out',
+    sign: 'Sign message'
 }
 
 let tickers = {}
@@ -25,7 +21,7 @@ export default function Account(props) {
     const [amount, setAmount] = useState(BigInt(0))
     const [usd, setUSD] = useState(BigInt(0))
     const [ticker, setTicker] = useState('')
-
+    const [logo, setLogo] = useState('./images/enq.png')
     const [connectionsCounter, setConnectionsCounter] = useState(0)
 
     const [isLocked, setLocked] = useState(disk.lock.checkLock())
@@ -37,8 +33,12 @@ export default function Account(props) {
 
     const [assets, setAssets] = useState([])
     const [activity, setActivity] = useState(disk.list.listOfTask())
+    const [history, setHistory] = useState([])
 
     const [menu, setMenu] = useState(false)
+
+    const [allTokens, setAllTokens] = useState((disk.tokens.getTokens()).tokens ? (disk.tokens.getTokens()).tokens : {})
+
     const clickMenu = () => {
         setMenu(!menu)
     }
@@ -84,39 +84,6 @@ export default function Account(props) {
         setConnectionsCounter(counter)
     }
 
-    const getHistory = async () => {
-        let history = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, 0)
-
-        let tx = {
-            type: 'tx',
-
-        }
-
-        console.log(history.records)
-        console.log(activity)
-
-        let oldActivity = []
-        for (let id in history.records) {
-            // console.log(history.records[id])
-            oldActivity.push({
-                data: {date: history.records[id].time * 1000},
-                tx: {
-                    to: history.records[id].hash,
-                    from: {
-                        pubkey: history.records[id].hash,
-                    },
-                    value: history.records[id].amount
-                },
-                cb: {
-                    taskId: 0,
-                },
-                type: 'history'
-            })
-        }
-
-        setActivity([...activity, ...oldActivity])
-    }
-
     const copyPublicKey = () => {
         navigator.clipboard.writeText(props.user.publicKey)
     }
@@ -128,9 +95,8 @@ export default function Account(props) {
     const balance = () => {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
-        const token = ENQWeb.Enq.token[ENQWeb.Enq.provider]
-        console.log(token)
-
+        const token = props.user.token //ENQWeb.Enq.token[ENQWeb.Enq.provider]
+        // console.log(token)
         let tokens = []
 
         ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
@@ -138,6 +104,7 @@ export default function Account(props) {
                 // console.log(res.map(a => a.ticker + ': ' + a.amount))
                 let amount = 0
                 let ticker = ''
+                let image = './images/enq.png'
                 for (let i in res) {
 
                     tickers[res[i].token] = res[i].ticker
@@ -145,24 +112,29 @@ export default function Account(props) {
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
-                    } else
+                        image = res[i].token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png' : generateIcon(res[i].token)
+                    } else {
                         tokens.push({
                             amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
                             usd: 0,
-                            image: './icons/3.png'
+                            image: res[i].token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png' : generateIcon(res[i].token),
+                            tokenHash: res[i].token
                         })
+                    }
                 }
-                console.log(tickers)
+                // console.log(tickers)
                 setAmount(amount)
                 setTicker(ticker)
+                setLogo(image)
+                cacheTokens(tickers).then()
                 if (props.user.net === 'pulse') {
                     ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
                         .then((answer) => {
                             if (answer['enq-enecuum'] !== undefined) {
 
-                                const usd = BigInt(answer['enq-enecuum'].usd * 1e10)
-                                const value = usd * amount / BigInt(1e10)
+                                const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
+                                const value = usd * BigInt(amount) / BigInt(1e10)
                                 setUSD(value)
                             }
                         })
@@ -171,7 +143,8 @@ export default function Account(props) {
                     amount: amount,
                     ticker: ticker,
                     usd: usd,
-                    image: './images/enq.png'
+                    image: image,
+                    tokenHash: token
                 }, ...tokens])
                 // console.log(res.amount / 1e10)
             })
@@ -180,24 +153,45 @@ export default function Account(props) {
             })
     }
 
-    const openPopup = () => {
+    const openPopup = async () => {
         let params = getUrlVars()
         let task = disk.task.loadTask()
         if (params.type === 'enable') {
             if (task[params.id] && !isLocked) {
                 props.setPublicKeyRequest(task[params.id])
+                return false
             }
         }
         if (params.type === 'tx') {
             if (task[params.id] && !isLocked) {
                 props.setTransactionRequest(task[params.id])
+                return false
             }
         }
+        if (params.type === 'sign') {
+            if (task[params.id] && !isLocked) {
+                props.setSignRequest(task[params.id])
+                return false
+            }
+        }
+        if (params.type === 'connectLedger') {
+            if (!isLocked) {
+                // props.setTransactionRequest(task[params.id])
+                props.setConnectLedger(true)
+                return false
+            }
+        }
+
+        return true
     }
 
     const activityElements = []
 
     // &nbsp;
+
+    const findTickerInCache = async (hash) => {
+        return allTokens[hash] !== undefined ? allTokens[hash] : (await ENQWeb.Net.get.token_info(hash)).ticker
+    }
 
     for (const key in activity) {
         const item = activity[key]
@@ -207,32 +201,129 @@ export default function Account(props) {
                 key={key} onClick={() => {
                 if (item.type === 'enable') {
                     props.setPublicKeyRequest(item)
-                } else {
+                }
+                if (item.type === 'tx') {
                     props.setTransactionRequest(item)
                 }
-            }} className={`${styles.activity}`}
-            >
-                <img className={styles.icon} src={(item.type === 'enable' ? './icons/13.png' : './icons/12.png')}
+                if (item.type === 'sign') {
+                    props.setSignRequest(item)
+                }
+            }} className={`${styles.activity}`}>
+                <img className={styles.icon}
+                     src={(item.type === 'enable' ? './images/icons/13.png' : './images/icons/12.png')}
                      alt=""/>
                 <div>
                     <div>{names[item.type]}</div>
-                    <div className={styles.time}>{
-                        new Date(item.data.date).toISOString()
-                            .slice(0, 10) + ' ' +
-                        (item.tx ? 'To: ' + shortAddress(item.tx.to) : item.cb.url)}</div>
+                    <div className={styles.time}>
+                        {new Date(item.data.date).toISOString().slice(0, 10) + ' '}
+                        {(item.tx ? <div className={styles.history_link}
+                                         onClick={() => explorerAddress(item.tx.to)}>To: {shortHash(item.tx.to)}</div> : item.cb.url)}
+                    </div>
                 </div>
                 {item.tx ?
                     <div className={styles.activity_data}>
-                        <div>{'-' + (item.tx.value / 1e10) + ' ' + (ticker ? ticker : 'COIN')}</div>
+
+                        <div>{'-' + (item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
+
                     </div> : ''}
             </div>,
         )
     }
 
+    const getHistory = async () => {
+
+        let history = {}
+        history.records = []
+        for (let i = 0; i < 4; i++) {
+            let historyRecords = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, i)
+            history.records = history.records.concat(historyRecords.records)
+        }
+
+        // let history = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, 0)
+
+        // console.log(history.records)
+
+        let oldActivity = []
+        for (let id in history.records) {
+            // console.log(history.records[id])
+            if (history.records[id])
+                oldActivity.push({
+                    data: {
+                        date: history.records[id].time * 1000,
+                    },
+                    rectype: history.records[id].rectype,
+                    tx: {
+                        to: history.records[id].rectype === 'iin' ? props.user.publicKey : '00000',
+                        from: {
+                            pubkey: history.records[id].rectype !== 'iin' ? props.user.publicKey : '00000',
+                        },
+                        data: history.records[id].data,
+                        hash: history.records[id].hash,
+                        fee_value: history.records[id].fee_value,
+                        tokenHash: history.records[id].token_hash,
+                        ticker: await findTickerInCache(history.records[id].token_hash) || false,
+                        value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
+                    },
+                    cb: {
+                        taskId: 0,
+                    },
+                    type: history.records[id].rectype
+                })
+        }
+
+        setHistory(oldActivity)
+        renderHistory()
+    }
+
+    const historyElements = []
+    let renderHistory = () => {
+        // console.log(props.user.token)
+        // console.log(history)
+        for (const key in history.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
+            const item = history[key]
+            // console.log(item)
+            historyElements.push(
+                <div
+                    key={key} onClick={() => {
+                    //TODO
+                    if (item.type === 'iin') {
+                        props.setTransactionHistory(item)
+                    }
+                    if (item.type === 'iout') {
+                        props.setTransactionHistory(item)
+                    }
+                }} className={`${styles.activity}`}
+                >
+                    <img className={styles.icon}
+                         src={(item.tx.value > 0 ? './images/icons/22.png' : './images/icons/12.png')}
+                         alt=""/>
+                    <div>
+                        <div>{names[item.type]}</div>
+                        <div className={styles.time}>
+                            {new Date(item.data.date).toISOString().slice(0, 10)}
+                            <div className={styles.history_link}
+                                 onClick={() => explorerTX(item.tx.hash)}>{shortHash(item.tx.hash)}</div>
+                        </div>
+                    </div>
+                    {item.tx ?
+                        <div className={styles.activity_data}>
+
+                            <div>{(item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
+
+                        </div> : ''}
+                </div>,
+            )
+        }
+    }
+
+    //TODO
+    renderHistory()
+
     //Reject all
     let rejectAll = async () => {
         for (const key in activity) {
             const item = activity[key]
+            // global.asyncRequest({reject_all: true})
             await global.asyncRequest({
                 disallow: true,
                 taskId: item.cb.taskId
@@ -241,12 +332,53 @@ export default function Account(props) {
         }
     }
 
+    let changeToken = async (hash) => {
+        console.log(hash);
+        let user = props.user;
+        user.token = hash;
+        await disk.promise.sendPromise({
+            account: true,
+            set: true,
+            data: user
+        })
+        // window.location.reload(false)
+        await balance()
+        await renderAssets()
+        setActiveTab(props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? 0 : 1)
+        window.scrollTo(0, 0);
+    }
+
     const assetsElements = []
     let renderAssets = () => {
-        for (const key in assets) {
-            const item = assets[key]
+
+        // console.log(assets)
+        let mainToken = assets.find(element => element.tokenHash === ENQWeb.Net.ticker)
+        // console.log(mainToken)
+
+        let assetsSort = assets.sort((a, b) => Number(a.amount) - Number(b.amount))
+        assetsSort.splice(assets.indexOf(mainToken), 1)
+        // console.log(assetsSort)
+        if (mainToken)
+            assetsSort.unshift(mainToken)
+
+        // console.log(mainToken)
+        // console.log(assets[0])
+        // console.log(assetsSort.indexOf(assets[0]))
+
+        for (const key in assetsSort) {
+            const item = assetsSort[key]
+
+            // console.log(ENQWeb.Net.ticker)
+            // console.log(props.user.token)
+            // console.log(item.tokenHash)
+            // console.log(item.tokenHash === ENQWeb.Net.ticker)
+
             assetsElements.push(
-                <div key={key} className={styles.asset}>
+                <div key={key}
+                     className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}
+                     onClick={() => {
+                         changeToken(item.tokenHash).then()
+                     }}>
                     <img className={styles.icon} src={item.image}/>
                     <div>
                         <div>
@@ -272,7 +404,7 @@ export default function Account(props) {
             amount: 0,
             ticker: 'COIN',
             usd: '0.00',
-            image: './icons/3.png'
+            image: './images/icons/3.png'
         }])
     }
 
@@ -281,7 +413,7 @@ export default function Account(props) {
     const renderMenu = () => {
         if (menu) {
             return <Menu logout={props.logout}
-                         publickKey={props.user.publicKey}
+                         publicKey={props.user.publicKey}
                          setLock={props.setLock}
                          setConfirm={props.setConfirm}
                          setPassword={props.setPassword}/>
@@ -289,10 +421,16 @@ export default function Account(props) {
     }
 
     useEffect(() => {
-        getConnects().then()
-        // getHistory().then()
-        balance()
-        openPopup()
+        openPopup().then(result => {
+            if (result === true) {
+                // getConnects().then()
+                getHistory().then(() => {
+                    renderHistory()
+                })
+                balance()
+
+            }
+        })
     }, [])
 
     return (
@@ -304,6 +442,10 @@ export default function Account(props) {
 
             <Address publicKey={props.user.publicKey}
                      connectionsCounter={connectionsCounter}
+                     isMainToken={props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider]}
+                     setMainToken={() => {
+                         changeToken(ENQWeb.Enq.token[ENQWeb.Enq.provider]).then()
+                     }}
                      setConnects={(connects) => {
                          // console.log(connects)
                          let elements = []
@@ -327,7 +469,7 @@ export default function Account(props) {
 
             <div className={styles.content}>
 
-                <img className={styles.content_logo} src="./images/48.png" alt=""/>
+                <img className={styles.content_logo} src={logo} alt=""/>
                 <div className={styles.balance}>
                     {(Number(amount) / 1e10).toFixed(4)}
                     {' '}
@@ -345,14 +487,17 @@ export default function Account(props) {
             <div className={styles.center}>
 
                 <div className={styles.circle_button} onClick={copyPublicKey}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./icons/8.png"/></div>
+                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/8.png"/>
+                    </div>
                     <div>Copy</div>
                 </div>
 
-                <div className={styles.circle_button} onClick={() => props.setTransaction(true)}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./icons/12.png"/></div>
+                <div className={styles.circle_button}
+                     onClick={() => props.setTransaction({balance: amount, ticker: ticker, token: props.user.token})}>
+                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/12.png"/>
+                    </div>
                     <div>Send</div>
-                    <div>Transaction</div>
+                    {/*<div>Transaction</div>*/}
                 </div>
 
             </div>
@@ -361,13 +506,15 @@ export default function Account(props) {
 
             <div className={styles.bottom}>
 
+                {/*{console.log(props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider])}*/}
+
                 <div className={styles.bottom_tabs}>
-                    <div
+                    {(activeTab === 0 || props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider]) && <div
                         onClick={() => setActiveTab(0)}
                         className={(activeTab === 0 ? ` ${styles.bottom_tab_active}` : '')}
                     >
                         Assets
-                    </div>
+                    </div>}
                     <div
                         onClick={() => setActiveTab(1)}
                         className={(activeTab === 1 ? ` ${styles.bottom_tab_active}` : '')}
@@ -382,7 +529,7 @@ export default function Account(props) {
                     </div>}
                 </div>
 
-                <div className={styles.bottom_list + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
+                <div className={styles.bottom_assets + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
                     {assetsElements}
 
@@ -402,6 +549,10 @@ export default function Account(props) {
                                                          className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
                         Reject all
                     </div>}
+
+                    {historyElements.length > 0 && <div className={styles.history_title}>History</div>}
+
+                    {historyElements}
 
                 </div>
 

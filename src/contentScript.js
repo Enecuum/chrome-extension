@@ -9,7 +9,9 @@ let requests = {
     'balanceOf': balanceOf,
     'enable': enable,
     'getProvider': enable,
-    'getVersion': enable
+    'getVersion': enable,
+    'sign': enable,
+    'reconnect': enable
 }
 
 function setupConnection() {
@@ -108,6 +110,19 @@ function injectCb(code) {
     script.remove();
 }
 
+function autoConnect(){
+    // console.log('auto eeeee')
+    let script = `
+    ENQweb3lib ? ENQweb3lib.connect():""
+    ENQweb3lib ? ENQweb3lib.reconnect():""
+    `
+    injectCb(script)
+}
+
 // setupConnection();
 // injectScript();
 eventHandler()
+
+document.addEventListener('DOMContentLoaded', function(){
+    autoConnect()
+})

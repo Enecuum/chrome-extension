@@ -120,14 +120,11 @@ function loadUserNotJson() {
     }
 }
 
-function addUser(publicKey, privateKey, net) {
-    let user = {
-        publicKey: publicKey,
-        privateKey: privateKey,
-        net: net
-    }
-    localStorage.setItem('User', JSON.stringify(user))
-    return user
+function addUser(obj) {
+    // obj: {publicKey, privateKey, net, token}
+    // console.log(obj)
+    localStorage.setItem('User', JSON.stringify(obj))
+    return obj
 }
 
 function removeUser() {
@@ -234,20 +231,32 @@ function getHashPassword() {
 
 function sendPromise(obj) {
     return new Promise((resolve) => {
-        chrome.runtime.sendMessage(obj, answer => {
-            if (answer.response !== undefined) {
-                resolve(answer.response)
-            } else {
-                resolve(answer)
-            }
-        })
+        if (chrome.runtime.getManifest().version.includes('web')) {
+            // console.log('electron send promise');
+            electronBack(obj, ENQWeb).then(answer => {
+                if (answer.response !== undefined) {
+                    resolve(answer.response);
+                } else {
+                    resolve(answer);
+                }
+            })
+        } else {
+            chrome.runtime.sendMessage(obj, answer => {
+                if (answer.response !== undefined) {
+                    resolve(answer.response);
+                } else {
+                    resolve(answer);
+                }
+            })
+        }
     })
 }
 
 function initConfig() {
     let config = {
         openTxPopup: true,
-        openEnablePopup: true
+        openEnablePopup: true,
+        openSignPopup: true
     }
     localStorage.setItem('config', JSON.stringify(config))
     return true
@@ -275,6 +284,32 @@ function setConfig(config) {
     }
 }
 
+function resultTask(taskId, result) {
+    let task = getTask(taskId)
+    task.result = result
+    setTask(taskId, task)
+    return true
+}
+
+function getTokens() {
+    let tokens = JSON.parse(localStorage.getItem('tokens'))
+    if (!tokens) {
+        tokens = {}
+    }
+    return tokens
+}
+
+function clearTokens() {
+    localStorage.removeItem('tokens')
+    return true
+}
+
+function setTokens(obj) {
+    //obj:{net, tokens[]}
+    localStorage.setItem('tokens', JSON.stringify(obj))
+    return true
+}
+
 let storage = function Storage(name) {
     this.name = name
     this.task = {
@@ -283,7 +318,8 @@ let storage = function Storage(name) {
         setTask,
         getTask,
         removeTask,
-        clearTasks
+        clearTasks,
+        resultTask
     }
     this.user = {
         name,
@@ -317,6 +353,11 @@ let storage = function Storage(name) {
         initConfig,
         getConfig,
         setConfig
+    }
+    this.tokens = {
+        getTokens,
+        setTokens,
+        clearTokens
     }
     this.promise = {
         sendPromise

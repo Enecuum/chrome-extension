@@ -1,4 +1,6 @@
 import {initApp} from "./ui/index";
+import {MsgHandler} from "./handler"
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const Storage = require('./utils/localStorage')
 let storage = new Storage('popup')
@@ -10,8 +12,27 @@ let awaitId = []
 let dataId = []
 let time = 200
 
-// TODO electron support
+global.chrome = (typeof chrome === 'undefined') ? {} : chrome;
+
+console.log(navigator.userAgent)
+let electron = navigator.userAgent.toLowerCase().includes('electron')
+let mobile = navigator.userAgent.toLowerCase().includes('mobile')
+let type = electron ? ' web electron' : (mobile ? ' web mobile' : ' web')
+
+chrome.manifest = (function () {
+    let manifestObject = false;
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {if (xhr.readyState == 4) {manifestObject = JSON.parse(xhr.responseText)}}
+    xhr.open('GET', '/manifest.json', false)
+    try {xhr.send()} catch (e) {}
+    return manifestObject
+})()
+
+let alterVersion = chrome.manifest.version + type
+
+// TODO Move away from chrome runtime
 if (!chrome.runtime) {
+    console.log('chrome.runtime: false')
     chrome.runtime = {}
     chrome.runtime.connect = () => {
         return {
@@ -25,18 +46,41 @@ if (!chrome.runtime) {
         return {response: true}
     }
     chrome.runtime.getManifest = () => {
-        return {version: 'electron'}
+        return {version: alterVersion}
     }
 
-    console.log(chrome.runtime)
+    //TODO
+    chrome.runtime.web = true
+    chrome.tabs = {}
+    chrome.tabs.create = (tab) => {
+        window.open(tab.url,'_blank');
+    }
 }
 
+// Sometimes there is no getManifest function
+if (!chrome.runtime.getManifest) {
+    console.log('chrome.runtime.getManifest: false')
+    chrome.runtime.getManifest = () => {
+        return {version: alterVersion}
+    }
+}
+
+let version = chrome.runtime.getManifest().version
+
 async function setupUi() {
-    toBackground = chrome.runtime.connect({name: 'popup'})
-    toBackground.onMessage.addListener(mainListener)
-    global.Port = toBackground
-    global.asyncRequest = asyncRequest
-    await initApp(toBackground)
+
+    if (version.includes('web')) {
+        global.asyncRequest = asyncRequest
+        global.electronBack = MsgHandler
+        await initApp()
+        serviceWorkerRegistration.register();
+    } else { // extension
+        toBackground = chrome.runtime.connect({name: 'popup'})
+        toBackground.onMessage.addListener(mainListener)
+        global.Port = toBackground
+        global.asyncRequest = asyncRequest
+        await initApp(toBackground)
+    }
 }
 
 function msgHandler(msg, sender) {
@@ -45,7 +89,6 @@ function msgHandler(msg, sender) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // console.log('loaded 1')
     setupUi().then()
 })
 
@@ -90,6 +133,12 @@ function asyncRequest(data) {
     })
 }
 
+async function cacheTokenInfo(tokens) {
+    // let tokens = await  ENQWeb.Enq.sendAPI('get_tickers_all');
+    disk.tokens.setTokens({net: ENQWeb.Enq.provider, tokens: tokens})
+    return true
+}
+
 async function asyncMessenger(msg, sender, sendResponse) {
     if (msg.asyncAnswer && msg.data) {
         // console.log('await Messanger worked')
@@ -111,3 +160,4 @@ function getUrlVars() {
 }
 
 global.getUrlVars = getUrlVars
+global.cacheTokens = cacheTokenInfo
