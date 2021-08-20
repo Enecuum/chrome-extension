@@ -1,5 +1,6 @@
 import {initApp} from "./ui/index";
 import {MsgHandler} from "./handler"
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const Storage = require('./utils/localStorage')
 let storage = new Storage('popup')
@@ -72,6 +73,7 @@ async function setupUi() {
         global.asyncRequest = asyncRequest
         global.electronBack = MsgHandler
         await initApp()
+        serviceWorkerRegistration.register();
     } else { // extension
         toBackground = chrome.runtime.connect({name: 'popup'})
         toBackground.onMessage.addListener(mainListener)
