@@ -3,14 +3,7 @@ import styles from '../css/index.module.css'
 import Network from './Network'
 import Header from '../elements/Header'
 import Separator from '../elements/Separator'
-
-let net = localStorage.getItem('net')
-if (!net) {
-    net = 'bit'
-    localStorage.setItem('net', net)
-}
-
-ENQWeb.Net.provider = net
+import {toggleFullScreen} from "../Utils";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -41,7 +34,8 @@ export default class Login extends React.Component {
             let data = {
                 publicKey: publicKey,
                 privateKey: this.state.privateKey,
-                net: ENQWeb.Net.provider
+                net: ENQWeb.Net.provider,
+                token: ENQWeb.Enq.ticker
             }
             await global.disk.promise.sendPromise({
                 account: true,
@@ -66,7 +60,7 @@ export default class Login extends React.Component {
             <div className={styles.main}>
 
                 <div className={styles.content}>
-                    <img className={styles.login_logo} src="./images/logo_white.png"/>
+                    <img className={styles.login_logo} src="./images/logo_white.png" onClick={toggleFullScreen}/>
 
                     <div className={styles.welcome1}>Welcome</div>
                     <div className={styles.welcome1}>to Enecuum</div>

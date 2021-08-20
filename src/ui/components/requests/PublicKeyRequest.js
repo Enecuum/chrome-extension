@@ -69,11 +69,11 @@ export default class PublicKeyRequest extends React.Component {
                     <div className={styles.field + ' ' + styles.request_text_gray}>Allow this site to:</div>
 
                     <div className={styles.request_text2}>
-                        <img src={'./icons/13.png'}/>
+                        <img src={'./images/icons/13.png'}/>
                         <div>View the address of your permitted accounts (required)</div>
                     </div>
                     <div className={styles.request_text2}>
-                        <img src={'./icons/13.png'}/>
+                        <img src={'./images/icons/13.png'}/>
                         <div>View selected network</div>
                     </div>
 
@@ -85,8 +85,12 @@ export default class PublicKeyRequest extends React.Component {
                     {/*     className={styles.field}>{this.state.website}*/}
                     {/*</div>*/}
 
+                    <div onClick={this.disallow}
+                         className={styles.field + ' ' + styles.button}>Disallow
+                    </div>
+
                     <div onClick={this.allow}
-                         className={styles.field + ' ' + styles.button}>Allow
+                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Allow
                     </div>
 
                     <div className={styles.buttons_field}>
@@ -96,10 +100,6 @@ export default class PublicKeyRequest extends React.Component {
                         {/*</div>*/}
 
 
-                    </div>
-
-                    <div onClick={this.disallow}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Disallow
                     </div>
 
                     <Separator/>

@@ -2,26 +2,27 @@ import React, {useState, useEffect} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import elements from '../../css/elements.module.css'
-import {shortHash} from '../../Utils'
+import {explorerLink, explorerTX, shortHash} from '../../Utils'
 
 // let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
-export default function TransactionRequest(props) {
+export default function TransactionHistory(props) {
 
     console.log(props.request.tx)
-    ENQWeb.Enq.provider = props.user.net;
 
-    const [jsonFrom] = useState(props.request.tx.from)
+    // const [jsonFrom] = useState(props.request.tx.from)
     const [activeTab, setActiveTab] = useState(0)
     const [url, setUrl] = useState(`${ENQWeb.Net.provider}/#!/tx/` + props.txHash)
     const [data, setData] = useState(props.request.tx.data)
-    const [from, setFrom] = useState(jsonFrom.pubkey ? jsonFrom.pubkey.replaceAll('"', '') : jsonFrom.replaceAll('"', ''))
 
     //TODO
     const [ticker, setTicker] = useState('BIT')
+
     const [to, setTo] = useState(props.request.tx.to)
-    const [amount, setAmount] = useState(props.request.tx.value ? BigInt(props.request.tx.value) : BigInt(props.request.tx.amount))
+    const [from, setFrom] = useState(props.request.tx.from.pubkey)
+
+    const [amount, setAmount] = useState(BigInt(props.request.tx.value))
     const [nonce, setNonce] = useState(props.request.tx.nonce)
     const [taskId, setTaskId] = useState(props.request.cb.taskId)
     const [dataText, setDataText] = useState([])
@@ -41,24 +42,21 @@ export default function TransactionRequest(props) {
     // remove liqudity
     // swap
 
+    let typeIn = props.request.rectype === 'iin'
+
     const copyHash = () => {
         navigator.clipboard.writeText(props.txHash)
     }
 
     const initTickerAndFee = async () => {
-        let tokenHash = props.request.tx.ticker ? props.request.tx.ticker : props.request.tx.tokenHash
+        let tokenHash = props.request.tx.tokenHash
         let tokenInfo = await ENQWeb.Net.get.token_info(tokenHash)
         if (tokenInfo.length === 0) {
             console.warn('token info error...')
         } else {
             setTicker(tokenInfo[0].ticker)
-            if (props.request.data.fee_use !== false) {
-                let originAmount = amount - BigInt(props.request.data.fee_value)
-                setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, originAmount)))
-            } else {
-                setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, amount)))
-            }
         }
+        setFee(BigInt((typeIn ? 1 : -1) * props.request.tx.fee_value))
     }
 
     const parseData = () => {
@@ -111,18 +109,38 @@ export default function TransactionRequest(props) {
         closeModalWindow()
     }
 
+    const copyHashString = () => {
+        navigator.clipboard.writeText(props.request.tx.to)
+    }
+
+    const getTransaction = async () => {
+        let transaction = await ENQWeb.Net.get.tx(props.request.tx.hash)
+
+        if (typeIn)
+            setFrom(transaction.from)
+        else
+            setTo(transaction.to)
+
+        console.log(transaction)
+    }
+
     useEffect(() => {
         parseData()
+        getTransaction().then()
     }, [])
 
     // console.log(amount)
     // console.log((amount / 1e10))
     // console.log(amount - fee * 1e10)
 
+    // console.log(props.request.rectype)
+
+    // console.log(typeIn)
+
     return (
         <div className={styles.main}>
 
-            <div className={styles.transaction_history_back} onClick={() => props.setTransactionRequest(false)}>❮ Back
+            <div className={styles.transaction_history_back} onClick={() => props.setTransactionHistory(false)}>❮ Back
             </div>
 
             <div className={styles.transaction_network}>
@@ -134,14 +152,14 @@ export default function TransactionRequest(props) {
                 <div className={styles.transaction_from_to}>
 
                     <div className={styles.transaction_address_copy} onClick={() => {
-                        navigator.clipboard.writeText(from)
-                    }} title={from + copyText}>{shortHash(from)}</div>
+                        navigator.clipboard.writeText(typeIn ? to : from)
+                    }} title={from + copyText}>{shortHash(typeIn ? to : from)}</div>
 
-                    <div>❯</div>
+                    <div>{typeIn ? '❮' : '❯'}</div>
 
                     <div className={styles.transaction_address_copy} onClick={() => {
-                        navigator.clipboard.writeText(to)
-                    }} title={to + copyText}>{shortHash(to)}</div>
+                        navigator.clipboard.writeText(typeIn ? from : to)
+                    }} title={to + copyText}>{shortHash(typeIn ? from : to)}</div>
 
                 </div>
 
@@ -219,12 +237,13 @@ export default function TransactionRequest(props) {
                 {/*     className={styles.field}>{this.state.website}*/}
                 {/*</div>*/}
 
-                <div onClick={reject}
-                     className={styles.field + ' ' + styles.button}>Reject
-                </div>
+                {activeTab === 0 && <div onClick={() => {explorerTX(props.request.tx.hash)}}
+                                         className={styles.field + ' ' + styles.button + ' ' + styles.button_link}>
+                    <a href={explorerLink(props.request.tx.hash)} target="_blank">Open in explorer <img className={styles.icon} src={'./images/icons/7.png'} alt=""/></a>
+                </div>}
 
-                <div onClick={confirm}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Confirm
+                <div onClick={copyHashString}
+                     className={styles.field + ' ' + styles.button}>Copy transaction hash
                 </div>
 
                 <Separator/>
