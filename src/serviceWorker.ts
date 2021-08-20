@@ -22,7 +22,9 @@ clientsClaim();
 // Their URLs are injected into the manifest variable below.
 // This variable must be present somewhere in your service worker file,
 // even if you decide not to use precaching. See https://cra.link/PWA
-precacheAndRoute(self.__WB_MANIFEST);
+// precacheAndRoute(self.__WB_MANIFEST);
+console.log(self)
+precacheAndRoute(['index.html', 'lib/enqweb3lib.ext.min.js'])
 
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
@@ -50,7 +52,7 @@ registerRoute(
     // Return true to signal that we want to use the handler.
     return true;
   },
-  createHandlerBoundToURL('./index.html')
+  createHandlerBoundToURL('index.html')
 );
 
 // An example runtime caching route for requests that aren't handled by the

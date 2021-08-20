@@ -1,8 +1,11 @@
 {
     "name": "Enecuum",
+    "short_name": "Enecuum",
     "description": "Enecuum Wallet",
     "version": "0.3.2",
     "manifest_version": 2,
+    "display": "standalone",
+    "background_color": "#1E2033",
     "background": {
         "scripts": [
             "lib/enqweb3lib.ext.min.js",

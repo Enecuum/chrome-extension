@@ -1,18 +1,18 @@
-import {initApp} from "./ui/index";
+import {initApp} from "./ui/index"
 import {MsgHandler} from "./handler"
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 const Storage = require('./utils/localStorage')
 let storage = new Storage('popup')
 global.disk = storage
 
-let toBackground = {};
+let toBackground = {}
 let taskId = []
 let awaitId = []
 let dataId = []
 let time = 200
 
-global.chrome = (typeof chrome === 'undefined') ? {} : chrome;
+global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 
 console.log(navigator.userAgent)
 let electron = navigator.userAgent.toLowerCase().includes('electron')
