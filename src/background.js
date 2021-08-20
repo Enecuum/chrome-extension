@@ -11,11 +11,12 @@ global.disk = Storage
 let ports = {}
 let requestsMethods = {
     'tx': true,
-    'enable': true,
+    'enable': false,
     'balanceOf': false,
     'getProvider': false,
     'getVersion': false,
-    'sign': true
+    'sign': true,
+    'reconnect': false
 }
 
 
@@ -81,6 +82,14 @@ async function msgConnectHandler(msg, sender) {
                         }
                     }
                 }
+                if(msg.type === "reconnect"){
+                    await Storage.task.setTask(msg.taskId, {
+                        data: msg.data,
+                        type: msg.type,
+                        cb: msg.cb
+                    })
+                    taskHandler(msg.taskId)
+                }
             } else {
                 if (msg.type === 'tx') {
                     Storage.task.setTask(msg.taskId, {
@@ -100,9 +109,9 @@ async function msgConnectHandler(msg, sender) {
                     taskHandler(msg.taskId)
                 } else {
                     taskCounter()
-                }
-                if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
-                    createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
+                    if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
+                        createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
+                    }
                 }
             }
         }
@@ -209,17 +218,9 @@ async function msgPopupHandler(msg, sender) {
 
 
 function listPorts() {
-    // console.log(ports)
     global.ports = ports
 }
 
-// function disconnectAllPorts() {
-//     for (let port in ports) {
-//         console.log(port)
-//     }
-// }
-//
-// global.disconnectAllPorts = disconnectAllPorts
 
 function disconnectHandler(port) {
     console.log('disconnected: ' + port.name)
@@ -228,13 +229,20 @@ function disconnectHandler(port) {
 }
 
 function connectController(port) {
-    if (ports[port.name]) {
-        ports[port.name].disconnect()
+    if(port.name === "popup"){
         ports[port.name] = port
-    } else {
-        ports[port.name] = port
+        return
+    }
+    if(ports[port.name]){
+        ports[port.name].push(port)
+    }else{
+        ports[port.name] = []
+        ports[port.name].push(port)
     }
 }
+
+
+global.ports = ports
 
 function disconnectPorts(name) {
     if (!name) {
@@ -273,21 +281,17 @@ async function taskHandler(taskId) {
     }
     switch (task.type) {
         case 'enable':
-            console.log('enable. returned: ', account)
             data = {
                 pubkey: account.publicKey,
                 net: account.net,
             }
-            try {
-                ports[task.cb.url].postMessage({
-                    data: JSON.stringify(data),
-                    taskId: taskId,
-                    cb: task.cb
-                })
-                ports[task.cb.url].enabled = true
-            } catch (e) {
-                console.log('connection close')
-            }
+            console.log('enable. returned: ', data)
+            broadcast(task.cb.url, {
+                data: JSON.stringify(data),
+                taskId: taskId,
+                cb: task.cb
+            }).then()
+            ports[task.cb.url].enabled = true
             Storage.task.removeTask(taskId)
             break
         case 'tx':
@@ -306,15 +310,11 @@ async function taskHandler(taskId) {
                         console.log(err)
                         return false
                     })
-                try {
-                    ports[task.cb.url].postMessage({
-                        data: JSON.stringify({hash: data.hash ? data.hash : 'Error'}),
-                        taskId: taskId,
-                        cb: task.cb
-                    })
-                } catch (e) {
-                    console.log('connection close')
-                }
+                broadcast(task.cb.url, {
+                    data: JSON.stringify({hash: data.hash ? data.hash : 'Error'}),
+                    taskId: taskId,
+                    cb: task.cb
+                }).then()
                 ENQWeb.Net.provider = buf
             }
             Storage.task.removeTask(taskId)
@@ -335,16 +335,11 @@ async function taskHandler(taskId) {
                         console.log(err)
                         return false
                     })
-                try {
-                    ports[task.cb.url].postMessage({
-                        data: JSON.stringify(data),
-                        taskId: taskId,
-                        cb: task.cb
-                    })
-
-                } catch (e) {
-                    console.log('connection close')
-                }
+                broadcast(task.cb.url, {
+                    data: JSON.stringify(data),
+                    taskId: taskId,
+                    cb: task.cb
+                }).then()
                 console.log({
                     data: JSON.stringify(data),
                     taskId: taskId,
@@ -363,44 +358,45 @@ async function taskHandler(taskId) {
                     data = {net: ENQWeb.Net.currentProvider}
                 }
                 console.log(data)
-                try {
-                    ports[task.cb.url].postMessage({
-                        data: JSON.stringify(data),
-                        taskId: taskId,
-                        cb: task.cb
-                    })
-                } catch (e) {
-                    console.log('connection close')
-                }
+                broadcast(task.cb.url, {
+                    data: JSON.stringify(data),
+                    taskId: taskId,
+                    cb: task.cb
+                }).then()
             }
             Storage.task.removeTask(taskId)
             break
         case 'getVersion':
             if (ports[task.cb.url].enabled) {
                 console.log('version: ', extensionApi.app.getDetails().version)
-                ports[task.cb.url].postMessage({
+                broadcast(task.cb.url, {
                     data: JSON.stringify(extensionApi.app.getDetails().version),
                     taskId: taskId,
                     cb: task.cb
-                })
+                }).then()
             }
             Storage.task.removeTask(taskId)
             break
         case 'sign':
             console.log('sign work')
             if (ports[task.cb.url].enabled) {
-                try {
-                    ports[task.cb.url].postMessage({
-                        data: JSON.stringify(task.result),
-                        taskId: taskId,
-                        cb: task.cb
-                    })
-                } catch (e) {
-                    console.log('connection close')
-                }
+                broadcast(task.cb.url, {
+                    data: JSON.stringify(task.result),
+                    taskId: taskId,
+                    cb: task.cb
+                }).then()
             }
             Storage.task.removeTask(taskId)
             break
+        case 'reconnect':
+            console.log('reconnect')
+            let connected = ports[task.cb.url].enabled ? true :false
+            broadcast(task.cb.url, {
+                data: JSON.stringify({status:connected}),
+                taskId: taskId,
+                cb: task.cb
+            }).then()
+            Storage.task.removeTask(taskId)
         default:
             break
     }
@@ -411,16 +407,32 @@ function rejectTaskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     Storage.task.removeTask(taskId)
     let data = {reject: true}
-    try {
-        ports[task.cb.url].postMessage({
-            data: JSON.stringify(data),
-            taskId: taskId,
-            cb: task.cb
-        })
-    } catch (e) {
-        console.log('connection close')
-    }
+    broadcast(task.cb.url, {
+        data: JSON.stringify(data),
+        taskId: taskId,
+        cb: task.cb
+    }).then()
     return true
+}
+
+function broadcast(host, data){
+    return new Promise((resolve) => {
+        if(ports[host]){
+            for(let i in ports[host]){
+                if(i === "enable"){
+                    continue
+                }
+                try{
+                    ports[host][i].postMessage(data)
+                }catch(e){
+
+                }
+            }
+            resolve(true)
+        }else{
+            resolve( false)
+        }
+    })
 }
 
 async function connectHandler(port) {
