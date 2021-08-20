@@ -1,15 +1,9 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../css/index.module.css'
-import Transaction from './Transaction'
-import Requests from './Requests'
-import Password from './Password'
-import Network from './Network'
-import Lock from './Lock'
-import Receive from './Receive'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import {shortHash, explorerTX, explorerAddress, generateIcon} from '../Utils'
+import {explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
 
 const names = {
     enable: 'Share account address',
@@ -110,7 +104,7 @@ export default function Account(props) {
                 // console.log(res.map(a => a.ticker + ': ' + a.amount))
                 let amount = 0
                 let ticker = ''
-                let image = ''
+                let image = './images/enq.png'
                 for (let i in res) {
 
                     tickers[res[i].token] = res[i].ticker
@@ -214,16 +208,16 @@ export default function Account(props) {
                 if (item.type === 'sign') {
                     props.setSignRequest(item)
                 }
-            }} className={`${styles.activity}`}
-            >
-                <img className={styles.icon} src={(item.type === 'enable' ? './images/icons/13.png' : './images/icons/12.png')}
+            }} className={`${styles.activity}`}>
+                <img className={styles.icon}
+                     src={(item.type === 'enable' ? './images/icons/13.png' : './images/icons/12.png')}
                      alt=""/>
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>
                         {new Date(item.data.date).toISOString().slice(0, 10) + ' '}
                         {(item.tx ? <div className={styles.history_link}
-                                                  onClick={() => explorerAddress(item.tx.to)}>To: {shortHash(item.tx.to)}</div> : item.cb.url)}
+                                         onClick={() => explorerAddress(item.tx.to)}>To: {shortHash(item.tx.to)}</div> : item.cb.url)}
                     </div>
                 </div>
                 {item.tx ?
@@ -252,28 +246,29 @@ export default function Account(props) {
         let oldActivity = []
         for (let id in history.records) {
             // console.log(history.records[id])
-            oldActivity.push({
-                data: {
-                    date: history.records[id].time * 1000,
-                },
-                rectype: history.records[id].rectype,
-                tx: {
-                    to: history.records[id].rectype === 'iin' ? props.user.publicKey : '00000',
-                    from: {
-                        pubkey: history.records[id].rectype !== 'iin' ? props.user.publicKey : '00000',
+            if (history.records[id])
+                oldActivity.push({
+                    data: {
+                        date: history.records[id].time * 1000,
                     },
-                    data: history.records[id].data,
-                    hash: history.records[id].hash,
-                    fee_value: history.records[id].fee_value,
-                    tokenHash: history.records[id].token_hash,
-                    ticker: await findTickerInCache(history.records[id].token_hash) || false,
-                    value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
-                },
-                cb: {
-                    taskId: 0,
-                },
-                type: history.records[id].rectype
-            })
+                    rectype: history.records[id].rectype,
+                    tx: {
+                        to: history.records[id].rectype === 'iin' ? props.user.publicKey : '00000',
+                        from: {
+                            pubkey: history.records[id].rectype !== 'iin' ? props.user.publicKey : '00000',
+                        },
+                        data: history.records[id].data,
+                        hash: history.records[id].hash,
+                        fee_value: history.records[id].fee_value,
+                        tokenHash: history.records[id].token_hash,
+                        ticker: await findTickerInCache(history.records[id].token_hash) || false,
+                        value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
+                    },
+                    cb: {
+                        taskId: 0,
+                    },
+                    type: history.records[id].rectype
+                })
         }
 
         setHistory(oldActivity)
@@ -299,7 +294,8 @@ export default function Account(props) {
                     }
                 }} className={`${styles.activity}`}
                 >
-                    <img className={styles.icon} src={(item.tx.value > 0 ? './images/icons/22.png' : './images/icons/12.png')}
+                    <img className={styles.icon}
+                         src={(item.tx.value > 0 ? './images/icons/22.png' : './images/icons/12.png')}
                          alt=""/>
                     <div>
                         <div>{names[item.type]}</div>
@@ -359,7 +355,7 @@ export default function Account(props) {
         let mainToken = assets.find(element => element.tokenHash === ENQWeb.Net.ticker)
         // console.log(mainToken)
 
-        let assetsSort = assets.sort((a, b) =>  Number(a.amount) - Number(b.amount))
+        let assetsSort = assets.sort((a, b) => Number(a.amount) - Number(b.amount))
         assetsSort.splice(assets.indexOf(mainToken), 1)
         // console.log(assetsSort)
         if (mainToken)
@@ -378,9 +374,11 @@ export default function Account(props) {
             // console.log(item.tokenHash === ENQWeb.Net.ticker)
 
             assetsElements.push(
-                <div key={key} className={styles.asset + ' ' + (props.user.token === item.tokenHash ?  styles.asset_select : '')} onClick={() => {
-                    changeToken(item.tokenHash).then()
-                }}>
+                <div key={key}
+                     className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}
+                     onClick={() => {
+                         changeToken(item.tokenHash).then()
+                     }}>
                     <img className={styles.icon} src={item.image}/>
                     <div>
                         <div>
@@ -489,13 +487,15 @@ export default function Account(props) {
             <div className={styles.center}>
 
                 <div className={styles.circle_button} onClick={copyPublicKey}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/8.png"/></div>
+                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/8.png"/>
+                    </div>
                     <div>Copy</div>
                 </div>
 
                 <div className={styles.circle_button}
                      onClick={() => props.setTransaction({balance: amount, ticker: ticker, token: props.user.token})}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/12.png"/></div>
+                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/12.png"/>
+                    </div>
                     <div>Send</div>
                     {/*<div>Transaction</div>*/}
                 </div>
