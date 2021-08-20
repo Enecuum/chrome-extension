@@ -3,7 +3,7 @@ import styles from '../css/index.module.css'
 import Network from './Network'
 import Header from '../elements/Header'
 import Separator from '../elements/Separator'
-import {toggleFullScreen} from "../Utils";
+import {regexAddress, toggleFullScreen} from "../Utils";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -28,6 +28,12 @@ export default class Login extends React.Component {
     }
 
     async submit() {
+
+        if (this.state.privateKey.length !== 64 && !regexAddress.test(this.state.privateKey)) {
+            console.error('incorrect private key')
+            return
+        }
+
         const publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.privateKey, true)
         if (publicKey) {
             // console.log(publicKey)
