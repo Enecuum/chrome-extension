@@ -31,6 +31,8 @@ module.exports = () => {
             background: path.resolve(SOURCE_FOLDER, 'background.js'),
             contentScript: path.resolve(SOURCE_FOLDER, 'contentScript.js'),
             lockAccount: path.resolve(SOURCE_FOLDER, 'lockAccount.js'),
+            serviceWorker: path.resolve(SOURCE_FOLDER, 'serviceWorker.ts'),
+            serviceWorkerRegistration: path.resolve(SOURCE_FOLDER, 'serviceWorkerRegistration.ts'),
         },
         output: {
             filename: '[name].js',
@@ -55,7 +57,13 @@ module.exports = () => {
                     test: /\.css$/i,
                     use: ["style-loader", "css-loader"],
                 },
+                {
+                    test: /\.ts?$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/,
+                },
             ],
+
         },
     };
 };
