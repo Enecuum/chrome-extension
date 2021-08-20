@@ -22,7 +22,7 @@ chrome.manifest = (function () {
     let manifestObject = false;
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {if (xhr.readyState == 4) {manifestObject = JSON.parse(xhr.responseText)}}
-    xhr.open("GET", '/manifest.json', false)
+    xhr.open('GET', '/manifest.json', false)
     try {xhr.send()} catch (e) {}
     return manifestObject
 })()
@@ -30,9 +30,8 @@ chrome.manifest = (function () {
 let alterVersion = chrome.manifest.version + type
 
 // TODO Move away from chrome runtime
-console.log(chrome.runtime)
 if (!chrome.runtime) {
-
+    console.log('chrome.runtime: false')
     chrome.runtime = {}
     chrome.runtime.connect = () => {
         return {
@@ -59,6 +58,7 @@ if (!chrome.runtime) {
 
 // Sometimes there is no getManifest function
 if (!chrome.runtime.getManifest) {
+    console.log('chrome.runtime.getManifest: false')
     chrome.runtime.getManifest = () => {
         return {version: alterVersion}
     }

@@ -69,11 +69,11 @@ export default class PublicKeyRequest extends React.Component {
                     <div className={styles.field + ' ' + styles.request_text_gray}>Allow this site to:</div>
 
                     <div className={styles.request_text2}>
-                        <img src={'./icons/13.png'}/>
+                        <img src={'./images/icons/13.png'}/>
                         <div>View the address of your permitted accounts (required)</div>
                     </div>
                     <div className={styles.request_text2}>
-                        <img src={'./icons/13.png'}/>
+                        <img src={'./images/icons/13.png'}/>
                         <div>View selected network</div>
                     </div>
 
