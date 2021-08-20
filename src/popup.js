@@ -32,7 +32,7 @@ let alterVersion = chrome.manifest.version + type
 
 // TODO Move away from chrome runtime
 if (!chrome.runtime) {
-    console.log('chrome.runtime: false')
+    console.log('chrome.runtime: ' + !!chrome.runtime)
     chrome.runtime = {}
     chrome.runtime.connect = () => {
         return {
