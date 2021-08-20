@@ -19,7 +19,7 @@ export default function Header(props) {
                 Network: {net.toUpperCase()}
             </div>
 
-            <div className={styles.menu_icon_div} onClick={props.clickMenu}><img src='./icons/5.png'/></div>
+            <div className={styles.menu_icon_div} onClick={props.clickMenu}><img src='./images/icons/5.png'/></div>
 
         </div>
     )

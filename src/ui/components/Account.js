@@ -216,7 +216,7 @@ export default function Account(props) {
                 }
             }} className={`${styles.activity}`}
             >
-                <img className={styles.icon} src={(item.type === 'enable' ? './icons/13.png' : './icons/12.png')}
+                <img className={styles.icon} src={(item.type === 'enable' ? './images/icons/13.png' : './images/icons/12.png')}
                      alt=""/>
                 <div>
                     <div>{names[item.type]}</div>
@@ -299,7 +299,7 @@ export default function Account(props) {
                     }
                 }} className={`${styles.activity}`}
                 >
-                    <img className={styles.icon} src={(item.tx.value > 0 ? './icons/22.png' : './icons/12.png')}
+                    <img className={styles.icon} src={(item.tx.value > 0 ? './images/icons/22.png' : './images/icons/12.png')}
                          alt=""/>
                     <div>
                         <div>{names[item.type]}</div>
@@ -406,7 +406,7 @@ export default function Account(props) {
             amount: 0,
             ticker: 'COIN',
             usd: '0.00',
-            image: './icons/3.png'
+            image: './images/icons/3.png'
         }])
     }
 
@@ -489,13 +489,13 @@ export default function Account(props) {
             <div className={styles.center}>
 
                 <div className={styles.circle_button} onClick={copyPublicKey}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./icons/8.png"/></div>
+                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/8.png"/></div>
                     <div>Copy</div>
                 </div>
 
                 <div className={styles.circle_button}
                      onClick={() => props.setTransaction({balance: amount, ticker: ticker, token: props.user.token})}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./icons/12.png"/></div>
+                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/12.png"/></div>
                     <div>Send</div>
                     {/*<div>Transaction</div>*/}
                 </div>

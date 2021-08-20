@@ -30,9 +30,9 @@ const generateIcon = (token) => {
     canvas.width = 20
     canvas.height = 20
     let ctx = canvas.getContext('2d')
-    generateSegment(ctx, hashStringToColor(token.substring(token.length*2/3, token.length)), 20)
-    generateSegment(ctx, hashStringToColor(token.substring(token.length/3, token.length*2/3)), 10)
-    generateSegment(ctx, hashStringToColor(token.substring(0, token.length/3)), 5)
+    generateSegment(ctx, hashStringToColor(token.substring(token.length * 2 / 3, token.length)), 20)
+    generateSegment(ctx, hashStringToColor(token.substring(token.length / 3, token.length * 2 / 3)), 10)
+    generateSegment(ctx, hashStringToColor(token.substring(0, token.length / 3)), 5)
     let url = canvas.toDataURL()
     icons[token] = url
     return url;
@@ -65,14 +65,15 @@ function hashStringToColor(token) {
 function toggleFullScreen() {
     console.log('toggleFullScreen')
     if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().then();
+        // document.documentElement.requestFullscreen().then()
+        document.documentElement.requestFullscreen({navigationUI: "hide"}).then()
+        // document.getElementById('app').requestFullscreen({navigationUI: "hide"}).then()
     } else {
         if (document.exitFullscreen) {
             document.exitFullscreen().then();
         }
     }
 }
-
 
 
 module.exports = {

@@ -239,7 +239,7 @@ export default function TransactionHistory(props) {
 
                 {activeTab === 0 && <div onClick={() => {explorerTX(props.request.tx.hash)}}
                                          className={styles.field + ' ' + styles.button + ' ' + styles.button_link}>
-                    <a href={explorerLink(props.request.tx.hash)} target="_blank">Open in explorer <img className={styles.icon} src={'./icons/7.png'} alt=""/></a>
+                    <a href={explorerLink(props.request.tx.hash)} target="_blank">Open in explorer <img className={styles.icon} src={'./images/icons/7.png'} alt=""/></a>
                 </div>}
 
                 <div onClick={copyHashString}
