@@ -10,7 +10,7 @@
 
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
+import { precacheAndRoute, createHandlerBoundToURL, PrecacheController } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
 
@@ -25,6 +25,23 @@ clientsClaim();
 // precacheAndRoute(self.__WB_MANIFEST);
 console.log(self)
 precacheAndRoute(['index.html', 'lib/enqweb3lib.ext.min.js'])
+
+const precacheController = new PrecacheController();
+precacheController.addToCacheList([{
+    url: '/index.html',
+    revision: '',
+}, {
+    url: '/lib/enqweb3lib.ext.min.js',
+    revision: '',
+}]);
+self.addEventListener('install', (event) => {
+    // Passing in event is required in Workbox v6+
+    event.waitUntil(precacheController.install(event));
+});
+self.addEventListener('activate', event => {
+    console.log('Service Worker activating.');
+});
+
 
 // Set up App Shell-style routing, so that all navigation requests
 // are fulfilled with your index.html shell. Learn more at
