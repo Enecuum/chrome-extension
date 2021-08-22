@@ -1,5 +1,5 @@
 import {initApp} from "./ui/index"
-import {MsgHandler} from "./handler"
+import {MsgHandler, MsgPopupHandler} from "./handler"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 const Storage = require('./utils/localStorage')
@@ -118,19 +118,22 @@ function asyncRequest(data) {
     data.async = true
     awaitId[data] = false
     let answer = '';
-    return new Promise(async (resolve, reject) => {
-        toBackground.postMessage(data)
-        toBackground.onMessage.addListener(asyncMessenger)
-        await awaitAsync(data)
-            .then(() => {
-                // console.log('await work')
-                delete awaitId[data]
-                answer = dataId[data]
-                delete dataId[data]
-                toBackground.onMessage.removeListener(asyncMessenger)
-                resolve(answer)
-            })
-    })
+    if (version.includes('web')){
+        return MsgPopupHandler(data)
+    }else
+        return new Promise(async (resolve, reject) => {
+            toBackground.postMessage(data)
+            toBackground.onMessage.addListener(asyncMessenger)
+            await awaitAsync(data)
+                .then(() => {
+                    // console.log('await work')
+                    delete awaitId[data]
+                    answer = dataId[data]
+                    delete dataId[data]
+                    toBackground.onMessage.removeListener(asyncMessenger)
+                    resolve(answer)
+                })
+        })
 }
 
 async function cacheTokenInfo(tokens) {

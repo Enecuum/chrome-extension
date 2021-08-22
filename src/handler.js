@@ -3,8 +3,6 @@ import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
 export function MsgHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
 
-        // console.log(msg)
-
         if (msg.window) {
             if (msg.url != undefined) {
                 createPopupWindow(msg.url);
@@ -89,72 +87,10 @@ function createPopupWindow(url) {
     })
 }
 
-export async function msgPopupHandler(msg, sender) {
-    // console.log({msg, sender})
+export async function MsgPopupHandler(msg) {
     if (msg.popup) {
-        if (msg.type === 'tx') {
-            let user = ENQWeb.Enq.User
-            let buf = ENQWeb.Net.provider
-            ENQWeb.Net.provider = user.net
-            let wallet = {
-                pubkey: user.publicKey,
-                prvkey: user.privateKey
-            }
-            let data = {
-                from: wallet,
-                to: msg.data.to,
-                amount: Number(msg.data.amount) * 1e10,
-                tokenHash: user.token
-            }
-            console.log(ENQWeb.Net.provider)
-            // console.log({data})
-            let answer = await ENQWeb.Net.post.tx_fee_off(data)
-            // console.log(answer)
-            ENQWeb.Net.provider = buf
-        }
-    } else if (msg.lock) {
-        ENQWeb.Enq.User = {}
-        lockAccount()
-    } else if (msg.connectionList) {
-        // ports.popup.postMessage({
-        //     asyncAnswer: true,
-        //     data: msg,
-        //     ports: ports
-        // })
-    } else {
-        if (msg.allow && msg.taskId) {
-            // await taskHandler(msg.taskId)
-            // taskCounter()
-            // if (msg.async) {
-            //     ports.popup.postMessage({
-            //         asyncAnswer: true,
-            //         data: msg
-            //     })
-            // }
-        } else if (msg.disallow && msg.taskId) {
-            // await rejectTaskHandler(msg.taskId)
-            // taskCounter()
-            // if (msg.async) {
-            //     ports.popup.postMessage({
-            //         asyncAnswer: true,
-            //         data: msg
-            //     })
-            // }
-        } else if (msg.reject_all) {
-            // let list = Storage.list.loadList()
-            // for (let i in list) {
-            //     await rejectTaskHandler(list[i])
-            // }
-            // console.log('all request rejected');
-            // if (msg.async) {
-            //     ports.popup.postMessage({
-            //         asyncAnswer: true,
-            //         data: msg
-            //     })
-            // }
-        } else {
-            // console.log(msg)
-        }
+    }  else if (msg.connectionList) {
+      return 0
     }
 }
 
