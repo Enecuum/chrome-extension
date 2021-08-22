@@ -25,7 +25,6 @@ function setupConnection() {
             delete taskId[msg.taskId]
             return
         }
-        console.log(msg)
     })
 }
 

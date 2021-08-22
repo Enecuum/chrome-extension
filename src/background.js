@@ -223,6 +223,25 @@ function connectController(port) {
     }
 }
 
+function checkConnection(){
+    // console.log("check live")
+    if(Object.keys(ports).length > 0){
+        for(let i in ports){
+            if(i === "popup")
+                continue;
+            for(let j in ports[i]){
+                if(j === "enabled")
+                    continue
+                try {
+                    ports[i][j].postMessage({check:"are u live?"})
+                }catch (e){
+                    // console.log("deleted")
+                    delete ports[i][j]
+                }
+            }
+        }
+    }
+}
 
 global.ports = ports
 
@@ -435,5 +454,5 @@ async function connectHandler(port) {
 
 document.addEventListener('DOMContentLoaded', () => {
     setupApp()
-    setTimeout(taskCounter, 1000 * 15)
+    setInterval(checkConnection, 1000*5)
 })
