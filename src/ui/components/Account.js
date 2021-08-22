@@ -68,20 +68,7 @@ export default function Account(props) {
 
     const getConnects = async () => {
         let connects = await asyncRequest({connectionList: true})
-        let counter = 0
-        for (let key in connects.ports) {
-            if (connects.ports[key].enabled) {
-                counter++
-
-                //TODO add element
-                // connectsElements.push(connects.ports[key])
-                // addConnect(connects.ports[key], 'now')
-            }
-        }
-
-        // console.log(counter)
-
-        setConnectionsCounter(counter)
+        setConnectionsCounter(Object.keys(connects.ports).length)
     }
 
     const copyPublicKey = () => {
@@ -426,7 +413,7 @@ export default function Account(props) {
     useEffect(() => {
         openPopup().then(result => {
             if (result === true) {
-                // getConnects().then()
+                getConnects().then()
                 getHistory().then(() => {
                     renderHistory()
                 })
@@ -453,16 +440,14 @@ export default function Account(props) {
                          // console.log(connects)
                          let elements = []
                          for (const key in connects) {
-                             if (connects[key].enabled) {
-                                 elements.push(<div key={key} onClick={() => {
-                                 }} className={`${styles.connect}`}>
-                                     <div>
-                                         <div>{key}</div>
-                                         {/*<div className={styles.time}>{date}</div>*/}
-                                         <div></div>
-                                     </div>
-                                 </div>)
-                             }
+                             elements.push(<div key={key} onClick={() => {
+                             }} className={`${styles.connect}`}>
+                                 <div>
+                                     <div>{key}</div>
+                                     {/*<div className={styles.time}>{date}</div>*/}
+                                     <div></div>
+                                 </div>
+                             </div>)
                          }
                          setConnectsElements(elements)
                          setConnects(true)

@@ -145,10 +145,9 @@ function createPopupWindow(url) {
 }
 
 async function msgPopupHandler(msg, sender) {
-    // console.log({msg, sender})
     if (msg.popup) {
         if (msg.type === 'tx') {
-            let user = Account
+            let user = ENQWeb.Net.User
             let buf = ENQWeb.Net.provider
             ENQWeb.Net.provider = user.net
             let wallet = {
@@ -162,19 +161,14 @@ async function msgPopupHandler(msg, sender) {
                 tokenHash: user.token
             }
             console.log(ENQWeb.Net.provider)
-            // console.log({data})
             let answer = await ENQWeb.Net.post.tx_fee_off(data)
-            // console.log(answer)
             ENQWeb.Net.provider = buf
         }
-    } else if (msg.lock) {
-        Account = {}
-        lockAccount()
-    } else if (msg.connectionList) {
+    }  else if (msg.connectionList) {
         ports.popup.postMessage({
             asyncAnswer: true,
             data: msg,
-            ports: ports
+            ports: enabledPorts()
         })
     } else {
         if (msg.allow && msg.taskId) {
@@ -187,9 +181,7 @@ async function msgPopupHandler(msg, sender) {
                 })
             }
         } else if (msg.disallow && msg.taskId) {
-            // Storage.task.removeTask(msg.taskId)
             await rejectTaskHandler(msg.taskId)
-            // console.log('removed')
             taskCounter()
             if (msg.async) {
                 ports.popup.postMessage({
@@ -202,7 +194,6 @@ async function msgPopupHandler(msg, sender) {
             for (let i in list) {
                 await rejectTaskHandler(list[i])
             }
-            // console.log('all request rejected');
             taskCounter()
             if (msg.async) {
                 ports.popup.postMessage({
@@ -216,6 +207,15 @@ async function msgPopupHandler(msg, sender) {
     }
 }
 
+function enabledPorts(){
+    let list = {}
+    for(let i in ports){
+        if(ports[i].enabled){
+            list[i]=ports[i]
+        }
+    }
+    return list
+}
 
 function listPorts() {
     global.ports = ports

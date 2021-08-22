@@ -20,18 +20,26 @@
         "default_popup": "index.html",
         "default_icon":  "images/enq.png"
     },
-    "icons": [
+    "icons": {
+        "16": "images/16.png",
+        "32": "images/32.png",
+        "48": "images/48.png",
+        "128": "images/128.png",
+        "192": "images/192.png",
+        "512": "images/512.png"
+    },
+    /*"icons": [
         {
-            "src": "/images/192.png",
+            "src": "images/192.png",
             "type": "image/png",
             "sizes": "192x192"
         },
         {
-            "src": "/images/512.png",
+            "src": "images/512.png",
             "type": "image/png",
             "sizes": "512x512"
         }
-    ],
+    ],*/
     "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
     "content_scripts": [
         {
