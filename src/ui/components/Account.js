@@ -68,7 +68,10 @@ export default function Account(props) {
 
     const getConnects = async () => {
         let connects = await asyncRequest({connectionList: true})
-        setConnectionsCounter(Object.keys(connects.ports).length)
+        if(typeof connects === "object")
+            setConnectionsCounter(Object.keys(connects.ports).length)
+        if(typeof connects === "number")
+            setConnectionsCounter(connects)
     }
 
     const copyPublicKey = () => {

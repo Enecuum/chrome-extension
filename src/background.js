@@ -146,24 +146,6 @@ function createPopupWindow(url) {
 
 async function msgPopupHandler(msg, sender) {
     if (msg.popup) {
-        if (msg.type === 'tx') {
-            let user = ENQWeb.Net.User
-            let buf = ENQWeb.Net.provider
-            ENQWeb.Net.provider = user.net
-            let wallet = {
-                pubkey: user.publicKey,
-                prvkey: user.privateKey
-            }
-            let data = {
-                from: wallet,
-                to: msg.data.to,
-                amount: Number(msg.data.amount) * 1e10,
-                tokenHash: user.token
-            }
-            console.log(ENQWeb.Net.provider)
-            let answer = await ENQWeb.Net.post.tx_fee_off(data)
-            ENQWeb.Net.provider = buf
-        }
     }  else if (msg.connectionList) {
         ports.popup.postMessage({
             asyncAnswer: true,
