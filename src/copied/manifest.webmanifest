@@ -1,32 +1,25 @@
 {
-    "name": "Enecuum",
+    "name": "Enecuum Wallet",
     "short_name": "Enecuum",
     "description": "Enecuum Wallet",
-    "version": "0.3.2",
     "manifest_version": 2,
     "start_url": "/?source=pwa",
     "scope": "/",
-    "display": "standalone",
+    "display": "fullscreen",
     "background_color": "#1E2033",
     "theme_color": "#1E2033",
-    "background": {
-        "scripts": [
-            "lib/enqweb3lib.ext.min.js",
-            "js/background.js",
-            "js/lockAccount.js"
-        ]
-    },
-    "browser_action": {
-        "default_title": "Enecuum Wallet",
-        "default_popup": "index.html",
-        "default_icon":  "images/enq.png"
-    },
-    "icons": {
-        "16": "images/16.png",
-        "32": "images/32.png",
-        "48": "images/48.png",
-        "128": "images/128.png"
-    },
+    "icons": [
+        {
+            "src": "images/192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "images/512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
     "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
     "content_scripts": [
         {
@@ -40,6 +33,5 @@
             "run_at": "document_start",
             "all_frames": true
         }
-    ],
-    "permissions": []
+    ]
 }

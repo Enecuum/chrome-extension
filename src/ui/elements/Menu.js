@@ -22,6 +22,8 @@ export default function Menu(props) {
     const [openEnable, setOpenEnable] = useState(false)
     // const [openTx, setOpenTx] = useState((disk.config.getConfig).openTxPopup)
 
+    const [clickIterator, setClickIterator] = useState(0)
+
     const window = () => {
         disk.promise.sendPromise({window: true})
     }
@@ -116,6 +118,10 @@ export default function Menu(props) {
     const version = chrome.runtime.getManifest().version
     // const version = 'VERSION DEBUG'
 
+    let clickVersion = () => {
+        setClickIterator(clickIterator + 1)
+    }
+
     return (
         <div className={styles.menu}>
 
@@ -133,18 +139,18 @@ export default function Menu(props) {
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={window}>Window</div>}
             <div className={styles.button_link} onClick={() => explorerAddress(props.publicKey)}>Show in blockchain explorer</div>
             <div className={styles.row}>
-                {/*<div className={styles.button_link} onClick={() => setNet('pulse')}>PULSE</div>*/}
-                {/*&nbsp;/&nbsp;*/}
                 <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>
-                {/*&nbsp;/&nbsp;*/}
-                {/*<div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>*/}
+                {clickIterator > 20 && <div className={styles.row + ' ' + styles.button_hide}>
+                    <div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>
+                    <div className={styles.button_link} onClick={() => setNet('pulse')}>PULSE</div>
+                </div>}
             </div>
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>}
             {/*<div className={styles.button_link} onClick={() => changeOpenPopup('tx')}>Open popup on TX {openTx}</div>*/}
             <div className={styles.button_link_logout}>
                 <div className={styles.button_link} onClick={() => props.setConfirm(true)}>Logout</div>
-                <div className={styles.version}>{version}</div>
+                <div className={styles.version} onClick={clickVersion}>{version}</div>
             </div>
 
         </div>

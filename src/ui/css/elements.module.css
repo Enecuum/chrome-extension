@@ -165,6 +165,26 @@
     justify-content: space-between;
 }
 
+.button_hide {
+    width: 10px;
+    height: 22px;
+    overflow: hidden;
+    opacity: 0.0001;
+    position: absolute;
+    right: 20px;
+    /*background: red;*/
+}
+
+.button_hide div:first-child {
+    padding-right: 10px;
+}
+
+.button_hide:hover {
+    width: auto;
+    opacity: 0.1;
+    /*background: red;*/
+}
+
 .version {
     opacity: 0.1;
 }
