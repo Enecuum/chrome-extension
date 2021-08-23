@@ -67,7 +67,7 @@
         "@ledgerhq/hw-transport-webusb": "^6.2.0",
         "crypto": "^1.0.1",
         "crypto-js": "^3.1.9-1",
-        "enqweb3": "git+ssh://github.com/Enecuum/web3-enq.git#0.2.7",
+        "enq-web3": "0.2.8",
         "ethereumjs-tx": "^2.1.2",
         "express": "^4.17.1",
         "jsrsasign": "^10.3.0",
