@@ -8,6 +8,8 @@
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
 
+console.log('Service Worker version: 1')
+
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL, PrecacheController } from 'workbox-precaching';
@@ -23,12 +25,15 @@ clientsClaim();
 // This variable must be present somewhere in your service worker file,
 // even if you decide not to use precaching. See https://cra.link/PWA
 // precacheAndRoute(self.__WB_MANIFEST);
-console.log(self)
-precacheAndRoute(['index.html', 'lib/enqweb3lib.ext.min.js'])
+// console.log(self)
+precacheAndRoute(['index.html', 'js/popup.js', 'lib/enqweb3lib.ext.min.js'])
 
 const precacheController = new PrecacheController();
 precacheController.addToCacheList([{
     url: '/index.html',
+    revision: '',
+}, {
+    url: 'js/popup.js',
     revision: '',
 }, {
     url: '/lib/enqweb3lib.ext.min.js',
