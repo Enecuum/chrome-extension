@@ -28,6 +28,13 @@ chrome.manifest = (function () {
     return manifestObject
 })()
 
+// fetch('/manifest.json')
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log(data)
+//         chrome.manifest = data
+//     })
+
 let alterVersion = chrome.manifest.version + type
 
 // TODO Move away from chrome runtime
