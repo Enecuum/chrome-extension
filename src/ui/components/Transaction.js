@@ -5,13 +5,12 @@ import Separator from "../elements/Separator";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
 
-const rsasign = require('jsrsasign');
-const crypto = require('crypto')
-import {Transaction as tx} from 'ethereumjs-tx'
+// const rsasign = require('jsrsasign');
+// const crypto = require('crypto')
 import TransactionHistory from "./requests/TransactionHistory";
 
-const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/c6ffc7b60a174cf6817cd3b56e6019e2'));
+// const Web3 = require('web3');
+// const web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/c6ffc7b60a174cf6817cd3b56e6019e2'));
 
 //TODO decimals to tokens
 
@@ -35,8 +34,8 @@ export default class Transaction extends React.Component {
         this.setTransactionSend = this.setTransactionSend.bind(this)
         this.submit = this.submit.bind(this)
 
-        this.hash_tx_fields = this.hash_tx_fields.bind(this)
-        this.ecdsa_sign = this.ecdsa_sign.bind(this)
+        // this.hash_tx_fields = this.hash_tx_fields.bind(this)
+        // this.ecdsa_sign = this.ecdsa_sign.bind(this)
         this.signWithLedger = this.signWithLedger.bind(this)
         this.feeCount = this.feeCount.bind(this)
         this.decimalsSearch = this.decimalsSearch.bind(this)
@@ -108,25 +107,25 @@ export default class Transaction extends React.Component {
         this.setTransactionSend(true)
     }
 
-    async hash_tx_fields(tx) {
-        if (!tx)
-            return undefined;
-        let model = ['amount', 'data', 'from', 'nonce', 'ticker', 'to'];
-        let str;
-        try {
-            str = model.map(v =>
-                crypto.createHash('sha256')
-                    .update(tx[v].toString().toLowerCase())
-                    .digest('hex')
-            ).join('');
-        } catch (e) {
-            if (e instanceof TypeError) {
-                console.warn('Old tx format, skip new fields...');
-                return undefined;
-            }
-        }
-        return crypto.createHash('sha256').update(str).digest('hex');
-    }
+    // async hash_tx_fields(tx) {
+    //     if (!tx)
+    //         return undefined;
+    //     let model = ['amount', 'data', 'from', 'nonce', 'ticker', 'to'];
+    //     let str;
+    //     try {
+    //         str = model.map(v =>
+    //             crypto.createHash('sha256')
+    //                 .update(tx[v].toString().toLowerCase())
+    //                 .digest('hex')
+    //         ).join('');
+    //     } catch (e) {
+    //         if (e instanceof TypeError) {
+    //             console.warn('Old tx format, skip new fields...');
+    //             return undefined;
+    //         }
+    //     }
+    //     return crypto.createHash('sha256').update(str).digest('hex');
+    // }
 
     raw_tx_hex(tx) {
 
@@ -152,17 +151,17 @@ export default class Transaction extends React.Component {
         return str;
     }
 
-    ecdsa_sign(skey, msg) {
-        let sig = new rsasign.Signature({'alg': 'SHA256withECDSA'});
-        try {
-            sig.init({d: skey, curve: 'secp256k1'});
-            sig.updateString(msg);
-            return sig.sign();
-        } catch (err) {
-            console.error('Signing error: ', err);
-            return null;
-        }
-    }
+    // ecdsa_sign(skey, msg) {
+    //     let sig = new rsasign.Signature({'alg': 'SHA256withECDSA'});
+    //     try {
+    //         sig.init({d: skey, curve: 'secp256k1'});
+    //         sig.updateString(msg);
+    //         return sig.sign();
+    //     } catch (err) {
+    //         console.error('Signing error: ', err);
+    //         return null;
+    //     }
+    // }
 
     feeCount() {
         ENQweb3lib.fee_counter(this.props.isTransaction.token, this.state.amount).then(fee => {
@@ -211,7 +210,7 @@ export default class Transaction extends React.Component {
             console.log(enqTX)
             console.log(hex)
 
-            enqTX.hash = await this.hash_tx_fields(tx)
+            // enqTX.hash = await this.hash_tx_fields(tx)
             console.log(enqTX)
 
             // enqTX.sign = await this.ecdsa_sign(user.privateKey, enqTX.hash)
