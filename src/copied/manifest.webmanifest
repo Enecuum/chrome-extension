@@ -1,11 +1,11 @@
 {
-    "name": "Enecuum Wallet",
+    "name": "Enecuum Wallet App",
     "short_name": "Enecuum",
     "description": "Enecuum Wallet",
     "manifest_version": 2,
     "start_url": "/?source=pwa",
     "scope": "/",
-    "display": "fullscreen",
+    "display": "standalone",
     "background_color": "#1E2033",
     "theme_color": "#1E2033",
     "icons": [

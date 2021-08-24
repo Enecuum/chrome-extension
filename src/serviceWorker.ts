@@ -8,7 +8,6 @@
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
 
-console.log('Service Worker version: 2')
 
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
@@ -26,20 +25,24 @@ clientsClaim();
 // even if you decide not to use precaching. See https://cra.link/PWA
 // precacheAndRoute(self.__WB_MANIFEST);
 // console.log(self)
+
 precacheAndRoute(['index.html', 'js/popup.js', 'lib/enqweb3lib.ext.min.js'])
 
-let revisionNumber = 2
+let revisionNumber = '' + 5
+console.log('Service Worker version: ' + revisionNumber)
+
 const precacheController = new PrecacheController();
 precacheController.addToCacheList([{
     url: '/index.html',
-    revision: '2',
+    revision: revisionNumber,
 }, {
     url: 'js/popup.js',
-    revision: '2',
+    revision: revisionNumber,
 }, {
     url: '/lib/enqweb3lib.ext.min.js',
-    revision: '2',
+    revision: revisionNumber,
 }]);
+
 self.addEventListener('install', (event) => {
     // Passing in event is required in Workbox v6+
     event.waitUntil(precacheController.install(event));
@@ -47,6 +50,22 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', event => {
     console.log('Service Worker activating.');
 });
+
+// self.addEventListener('activate', function(event) {
+//     event.waitUntil(
+//         caches.keys().then(function(cacheNames) {
+//             return Promise.all(
+//                 cacheNames.filter(function(cacheName) {
+//                     // Return true if you want to remove this cache,
+//                     // but remember that caches are shared across
+//                     // the whole origin
+//                 }).map(function(cacheName) {
+//                     return caches.delete(cacheName);
+//                 })
+//             );
+//         })
+//     );
+// });
 
 
 // Set up App Shell-style routing, so that all navigation requests
