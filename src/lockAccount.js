@@ -1,14 +1,9 @@
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('lock status: ', !disk.lock.checkLock())
-    console.log('hash password: ', disk.lock.checkLock())
-    if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
-        lockAccount()
-    }
-})
-
 function lockAccount() {
     disk.lock.setLock(true)
-    // console.log('account locked')
+    if(disk.name === "background"){
+        ENQWeb.Enq.User = {}
+    }
+    console.log('account locked')
 }
 
 function encryptAccount() {
@@ -43,22 +38,10 @@ function decryptAccount(password) {
     }
 }
 
-// global.lockAccount = function () {
-//     return lockAccount()
-// }
-//
-// global.encryptAccount = function () {
-//     return encryptAccount()
-// }
-//
-// global.decryptAccount = function (password) {
-//     return decryptAccount(password)
-// }
-
 export {lockAccount, encryptAccount, decryptAccount}
 
 function say() {
-    console.log("hello")
+    console.log("lock account loaded! background started")
 }
 
 export {say}

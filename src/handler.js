@@ -2,7 +2,10 @@ import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
 
 export function MsgHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
-
+        if(msg.initial){
+            lockTimer()
+            resolve({response: true})
+        }
         if (msg.window) {
             if (msg.url != undefined) {
                 createPopupWindow(msg.url);
@@ -36,6 +39,7 @@ export function MsgHandler(msg, ENQWeb) {
             // ENQWeb.Enq.User = msg.data
             //TODO HERE ENQWeb.Enq.User = ''
             disk.user.addUser(msg.data)
+            ENQWeb.Enq.User = msg.data
             encryptAccount()
             // console.log(ENQWeb.Enq.User)
             resolve({response: ENQWeb.Enq.User})
@@ -52,7 +56,6 @@ export function MsgHandler(msg, ENQWeb) {
             resolve({response: true})
         }
         if (msg.lock) {
-            ENQWeb.Enq.User = {}
             lockAccount()
             resolve({response: true})
         }
@@ -61,6 +64,7 @@ export function MsgHandler(msg, ENQWeb) {
             // disconnectPorts()
             resolve({response: true})
         }
+        resolve({response: false})
     })
 }
 
@@ -85,6 +89,25 @@ function createPopupWindow(url) {
         height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
         type: 'popup'
     })
+}
+
+let Time = 10*60*1000
+let timer
+
+export function Timer(ms){
+    Time = ms
+    return true
+}
+
+export function lockTimer(){
+    if(timer !== undefined){
+        clearTimeout(timer)
+    }
+    if(disk.name === "background"){
+        timer = setTimeout(()=>lockAccount(), Time)
+    }else {
+        timer = setTimeout(()=>disk.promise.sendPromise({lock:true}), Time)
+    }
 }
 
 export async function MsgPopupHandler(msg) {

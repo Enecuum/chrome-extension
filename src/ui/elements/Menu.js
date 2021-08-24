@@ -4,6 +4,7 @@ import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
 import {explorerAddress} from "../Utils";
 import {createPopupWindow} from "../../handler";
+import {logger} from "workbox-core/_private";
 
 TransportWebUSB.isSupported().then((result) => {
     console.log('WebUSB Supported: ' + result)
@@ -37,7 +38,6 @@ export default function Menu(props) {
     }, []);
 
     const setNet = async (value) => {
-
         localStorage.setItem('net', value)
         ENQWeb.Net.provider = value
         await disk.user.loadUser()
@@ -120,6 +120,9 @@ export default function Menu(props) {
 
     let clickVersion = () => {
         setClickIterator(clickIterator + 1)
+        if(clickIterator === 20){
+            console.log("DEV mode")
+        }
     }
 
     return (
