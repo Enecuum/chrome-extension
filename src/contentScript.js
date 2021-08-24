@@ -110,10 +110,11 @@ function injectCb(code) {
 }
 
 function autoConnect(){
-    // console.log('auto eeeee')
     let script = `
-    ENQweb3lib ? ENQweb3lib.connect():""
-    ENQweb3lib ? ENQweb3lib.reconnect():""
+    if(ENQweb3lib !== undefined){
+        ENQweb3lib.connect() !== undefined ? ENQweb3lib.connect():""
+        ENQweb3lib.reconnect() !== undefined ? ENQweb3lib.reconnect():""
+    }
     `
     injectCb(script)
 }

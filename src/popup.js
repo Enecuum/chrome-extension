@@ -1,5 +1,5 @@
 import {initApp} from "./ui/index"
-import {MsgHandler, MsgPopupHandler} from "./handler"
+import {MsgHandler, MsgPopupHandler, lockTimer, Timer} from "./handler"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 const Storage = require('./utils/localStorage')
@@ -87,6 +87,7 @@ async function setupUi() {
         global.Port = toBackground
         global.asyncRequest = asyncRequest
         await initApp(toBackground)
+        disk.promise.sendPromise({initial:true})
     }
 }
 

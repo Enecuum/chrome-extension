@@ -7,8 +7,7 @@
     "background": {
         "scripts": [
             "lib/enqweb3lib.ext.min.js",
-            "js/background.js",
-            "js/lockAccount.js"
+            "js/background.js"
         ]
     },
     "browser_action": {

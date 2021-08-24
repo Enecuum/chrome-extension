@@ -3,7 +3,15 @@ import {extensionApi} from './utils/extensionApi'
 import {decryptAccount, encryptAccount, lockAccount, say} from "./lockAccount"
 import {MsgHandler} from "./handler"
 
+document.addEventListener('DOMContentLoaded', function () {
+    if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
+        lockAccount()
+    }
+    console.log('lock status: ', disk.lock.checkLock())
+    console.log('hash password: ', disk.lock.getHashPassword() ? true:false)
+})
 say()
+
 
 let Storage = new storage('background')
 global.disk = Storage
