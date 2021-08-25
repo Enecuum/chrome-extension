@@ -61,11 +61,9 @@ export function register(config?: Config) {
         // Add some additional logging to localhost, pointing developers to the
         // service worker/PWA documentation.
         navigator.serviceWorker.ready.then(() => {
-          console.log(
-            'This web app is being served cache-first by a service ' +
-              'worker. To learn more, visit https://cra.link/PWA'
-          );
+          console.log('Service Worker ready.');
         });
+
       } else {
         // Is not localhost. Just register service worker
         registerValidSW(swUrl, config);

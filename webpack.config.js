@@ -17,11 +17,8 @@ module.exports = () => {
             {
                 from: LIB_FILE,
                 to: path.join(DIST_FOLDER, 'lib'),
-            },
-            {
-                from: path.join(DIST_FOLDER, 'js/serviceWorker.js'),
-                to: path.join(DIST_FOLDER, ''),
-            }]
+            }
+            ]
     };
 
     const plugins = [];
@@ -35,12 +32,12 @@ module.exports = () => {
             background: path.resolve(SOURCE_FOLDER, 'background.js'),
             contentScript: path.resolve(SOURCE_FOLDER, 'contentScript.js'),
             lockAccount: path.resolve(SOURCE_FOLDER, 'lockAccount.js'),
-            serviceWorker: path.resolve(SOURCE_FOLDER, 'serviceWorker.ts'),
+            '../serviceWorker': path.resolve(SOURCE_FOLDER, 'serviceWorker.ts'),
             serviceWorkerRegistration: path.resolve(SOURCE_FOLDER, 'serviceWorkerRegistration.ts'),
         },
         output: {
-            filename: '[name].js',
-            path: DIST_FOLDER + '/js',
+            filename: 'js/[name].js',
+            path: DIST_FOLDER,
             publicPath: './'
         },
         devtool: 'inline-source-map',

@@ -26,22 +26,20 @@ clientsClaim();
 // precacheAndRoute(self.__WB_MANIFEST);
 // console.log(self)
 
-precacheAndRoute(['index.html', 'js/popup.js', 'lib/enqweb3lib.ext.min.js'])
+let revisionNumber = '7'
 
-let revisionNumber = '' + 5
+let array = ['/index.html', '/js/popup.js', '/lib/enqweb3lib.ext.min.js']
+
+let list = Array.from(array, link => {
+    return {url: link, revision: revisionNumber}
+});
+
+precacheAndRoute(list)
+
 console.log('Service Worker version: ' + revisionNumber)
 
 const precacheController = new PrecacheController();
-precacheController.addToCacheList([{
-    url: '/index.html',
-    revision: revisionNumber,
-}, {
-    url: 'js/popup.js',
-    revision: revisionNumber,
-}, {
-    url: '/lib/enqweb3lib.ext.min.js',
-    revision: revisionNumber,
-}]);
+precacheController.addToCacheList(list);
 
 self.addEventListener('install', (event) => {
     // Passing in event is required in Workbox v6+
