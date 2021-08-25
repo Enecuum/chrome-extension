@@ -121,7 +121,7 @@ export default function Menu(props) {
     let clickVersion = () => {
         setClickIterator(clickIterator + 1)
         if (clickIterator === 20) {
-            console.log("DEV mode")
+            console.log("development mode")
         }
     }
 
