@@ -22,9 +22,16 @@ let type = electron ? ' web electron' : (mobile ? ' web mobile' : ' web')
 chrome.manifest = (function () {
     let manifestObject = false;
     let xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {if (xhr.readyState == 4) {manifestObject = JSON.parse(xhr.responseText)}}
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            manifestObject = JSON.parse(xhr.responseText)
+        }
+    }
     xhr.open('GET', '/manifest.json', false)
-    try {xhr.send()} catch (e) {}
+    try {
+        xhr.send()
+    } catch (e) {
+    }
     return manifestObject
 })()
 
@@ -60,7 +67,7 @@ if (!chrome.runtime) {
     chrome.runtime.web = true
     chrome.tabs = {}
     chrome.tabs.create = (tab) => {
-        window.open(tab.url,'_blank');
+        window.open(tab.url, '_blank');
     }
 }
 
@@ -87,6 +94,7 @@ async function setupUi() {
         global.Port = toBackground
         global.asyncRequest = asyncRequest
         await initApp(toBackground)
+        disk.promise.sendPromise({initial: true})
     }
 }
 
@@ -125,9 +133,9 @@ function asyncRequest(data) {
     data.async = true
     awaitId[data] = false
     let answer = '';
-    if (version.includes('web')){
+    if (version.includes('web')) {
         return MsgPopupHandler(data)
-    }else
+    } else
         return new Promise(async (resolve, reject) => {
             toBackground.postMessage(data)
             toBackground.onMessage.addListener(asyncMessenger)
