@@ -22,16 +22,9 @@ let type = electron ? ' web electron' : (mobile ? ' web mobile' : ' web')
 chrome.manifest = (function () {
     let manifestObject = false;
     let xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4) {
-            manifestObject = JSON.parse(xhr.responseText)
-        }
-    }
+    xhr.onreadystatechange = function () {if (xhr.readyState == 4) {manifestObject = JSON.parse(xhr.responseText)}}
     xhr.open('GET', '/manifest.json', false)
-    try {
-        xhr.send()
-    } catch (e) {
-    }
+    try {xhr.send()} catch (e) {}
     return manifestObject
 })()
 

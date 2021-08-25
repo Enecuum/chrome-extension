@@ -17,8 +17,7 @@ module.exports = () => {
             {
                 from: LIB_FILE,
                 to: path.join(DIST_FOLDER, 'lib'),
-            }
-            ]
+            }]
     };
 
     const plugins = [];
