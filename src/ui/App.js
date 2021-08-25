@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Login from './components/Login'
 import Lock from './components/Lock'
-import Requests from './components/Requests'
 import Transaction from './components/Transaction'
 import Password from './components/Password'
 import Network from './components/Network'

@@ -1,6 +1,6 @@
 const storage = require('./utils/localStorage')
 import {extensionApi} from './utils/extensionApi'
-import {decryptAccount, encryptAccount, lockAccount, say} from "./lockAccount"
+import {lockAccount, say} from "./lockAccount"
 import {MsgHandler} from "./handler"
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -8,10 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
         lockAccount()
     }
     console.log('lock status: ', disk.lock.checkLock())
-    console.log('hash password: ', disk.lock.getHashPassword() ? true:false)
+    console.log('hash password: ', disk.lock.getHashPassword() ? true : false)
 })
 say()
-
 
 let Storage = new storage('background')
 global.disk = Storage
@@ -57,7 +56,7 @@ async function msgHandler(msg, sender, sendResponse) {
             disconnectPorts(msg.name)
         }
     }
-    MsgHandler(msg, ENQWeb).then(answer=>sendResponse(answer))
+    MsgHandler(msg, ENQWeb).then(answer => sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {
@@ -90,7 +89,7 @@ async function msgConnectHandler(msg, sender) {
                         }
                     }
                 }
-                if(msg.type === "reconnect"){
+                if (msg.type === "reconnect") {
                     await Storage.task.setTask(msg.taskId, {
                         data: msg.data,
                         type: msg.type,
@@ -154,7 +153,7 @@ function createPopupWindow(url) {
 
 async function msgPopupHandler(msg, sender) {
     if (msg.popup) {
-    }  else if (msg.connectionList) {
+    } else if (msg.connectionList) {
         ports.popup.postMessage({
             asyncAnswer: true,
             data: msg,
@@ -197,11 +196,11 @@ async function msgPopupHandler(msg, sender) {
     }
 }
 
-function enabledPorts(){
+function enabledPorts() {
     let list = {}
-    for(let i in ports){
-        if(ports[i].enabled){
-            list[i]=ports[i]
+    for (let i in ports) {
+        if (ports[i].enabled) {
+            list[i] = ports[i]
         }
     }
     return list
@@ -219,30 +218,30 @@ function disconnectHandler(port) {
 }
 
 function connectController(port) {
-    if(port.name === "popup"){
+    if (port.name === "popup") {
         ports[port.name] = port
         return
     }
-    if(ports[port.name]){
+    if (ports[port.name]) {
         ports[port.name].push(port)
-    }else{
+    } else {
         ports[port.name] = []
         ports[port.name].push(port)
     }
 }
 
-function checkConnection(){
+function checkConnection() {
     // console.log("check live")
-    if(Object.keys(ports).length > 0){
-        for(let i in ports){
-            if(i === "popup")
+    if (Object.keys(ports).length > 0) {
+        for (let i in ports) {
+            if (i === "popup")
                 continue;
-            for(let j in ports[i]){
-                if(j === "enabled")
+            for (let j in ports[i]) {
+                if (j === "enabled")
                     continue
                 try {
-                    ports[i][j].postMessage({check:"are u live?"})
-                }catch (e){
+                    ports[i][j].postMessage({check: "are u live?"})
+                } catch (e) {
                     // console.log("deleted")
                     delete ports[i][j]
                 }
@@ -399,9 +398,9 @@ async function taskHandler(taskId) {
             break
         case 'reconnect':
             console.log('reconnect')
-            let connected = ports[task.cb.url].enabled ? true :false
+            let connected = ports[task.cb.url].enabled ? true : false
             broadcast(task.cb.url, {
-                data: JSON.stringify({status:connected}),
+                data: JSON.stringify({status: connected}),
                 taskId: taskId,
                 cb: task.cb
             }).then()
@@ -424,22 +423,22 @@ function rejectTaskHandler(taskId) {
     return true
 }
 
-function broadcast(host, data){
+function broadcast(host, data) {
     return new Promise((resolve) => {
-        if(ports[host]){
-            for(let i in ports[host]){
-                if(i === "enable"){
+        if (ports[host]) {
+            for (let i in ports[host]) {
+                if (i === "enable") {
                     continue
                 }
-                try{
+                try {
                     ports[host][i].postMessage(data)
-                }catch(e){
+                } catch (e) {
 
                 }
             }
             resolve(true)
-        }else{
-            resolve( false)
+        } else {
+            resolve(false)
         }
     })
 }
@@ -462,5 +461,5 @@ async function connectHandler(port) {
 
 document.addEventListener('DOMContentLoaded', () => {
     setupApp()
-    setInterval(checkConnection, 1000*5)
+    setInterval(checkConnection, 1000 * 5)
 })

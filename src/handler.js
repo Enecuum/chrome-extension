@@ -2,7 +2,7 @@ import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
 
 export function MsgHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
-        if(msg.initial){
+        if (msg.initial) {
             lockTimer()
             resolve({response: true})
         }
@@ -91,29 +91,29 @@ function createPopupWindow(url) {
     })
 }
 
-let Time = 10*60*1000
+let lockTime = 10 * 60 * 1000
 let timer
 
-export function Timer(ms){
-    Time = ms
+export function Timer(ms) {
+    lockTime = ms
     return true
 }
 
-export function lockTimer(){
-    if(timer !== undefined){
+export function lockTimer() {
+    if (timer !== undefined) {
         clearTimeout(timer)
     }
-    if(disk.name === "background"){
-        timer = setTimeout(()=>lockAccount(), Time)
-    }else {
-        timer = setTimeout(()=>disk.promise.sendPromise({lock:true}), Time)
+    if (disk.name === "background") {
+        timer = setTimeout(() => lockAccount(), lockTime)
+    } else {
+        timer = setTimeout(() => disk.promise.sendPromise({lock: true}), lockTime)
     }
 }
 
 export async function MsgPopupHandler(msg) {
     if (msg.popup) {
-    }  else if (msg.connectionList) {
-      return 0
+    } else if (msg.connectionList) {
+        return 0
     }
 }
 

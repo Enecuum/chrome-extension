@@ -4,7 +4,6 @@ import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
 import {explorerAddress} from "../Utils";
 import {createPopupWindow} from "../../handler";
-import {logger} from "workbox-core/_private";
 
 TransportWebUSB.isSupported().then((result) => {
     console.log('WebUSB Supported: ' + result)
@@ -38,6 +37,7 @@ export default function Menu(props) {
     }, []);
 
     const setNet = async (value) => {
+
         localStorage.setItem('net', value)
         ENQWeb.Net.provider = value
         await disk.user.loadUser()
@@ -120,7 +120,7 @@ export default function Menu(props) {
 
     let clickVersion = () => {
         setClickIterator(clickIterator + 1)
-        if(clickIterator === 20){
+        if (clickIterator === 20) {
             console.log("DEV mode")
         }
     }
@@ -133,14 +133,17 @@ export default function Menu(props) {
             <div className={styles.button_link + ' ' + styles.button_link_active}>Account 1</div>
             {ethAddress ? <div className={styles.button_link}
                                onClick={() => createPopupWindow('index.html?type=connectLedger')}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div> :
-                <div className={styles.button_link} onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect ledger</div>}
+                <div className={styles.button_link}
+                     onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect ledger</div>}
 
             <div className={styles.separator}/>
 
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={window}>Window</div>}
-            <div className={styles.button_link} onClick={() => explorerAddress(props.publicKey)}>Show in blockchain explorer</div>
+            <div className={styles.button_link} onClick={() => explorerAddress(props.publicKey)}>Show in blockchain
+                explorer
+            </div>
             <div className={styles.row}>
                 <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>
                 {clickIterator > 20 && <div className={styles.row + ' ' + styles.button_hide}>
