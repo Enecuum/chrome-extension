@@ -12,9 +12,11 @@ let awaitId = []
 let dataId = []
 let time = 200
 
+console.log('Popup version: ' + 1)
+
 global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 
-console.log(navigator.userAgent)
+// console.log(navigator.userAgent)
 let electron = navigator.userAgent.toLowerCase().includes('electron')
 let mobile = navigator.userAgent.toLowerCase().includes('mobile')
 let type = electron ? ' web electron' : (mobile ? ' web mobile' : ' web')
@@ -24,7 +26,7 @@ chrome.manifest = (function () {
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {if (xhr.readyState == 4) {manifestObject = JSON.parse(xhr.responseText)}}
     xhr.open('GET', '/manifest.json', false)
-    try {xhr.send()} catch (e) {}
+    try {xhr.send()} catch (e) {console.error('OFFLINE')}
     return manifestObject
 })()
 
