@@ -112,8 +112,8 @@ function injectCb(code) {
 function autoConnect(){
     let script = `
     if(ENQweb3lib !== undefined){
-        ENQweb3lib.connect() !== undefined ? ENQweb3lib.connect():""
-        ENQweb3lib.reconnect() !== undefined ? ENQweb3lib.reconnect():""
+        ENQweb3lib.connect().then()
+        ENQweb3lib.reconnect().then()
     }
     `
     injectCb(script)
