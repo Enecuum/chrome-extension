@@ -1,6 +1,6 @@
 function lockAccount() {
     disk.lock.setLock(true)
-    if(disk.name === "background"){
+    if (disk.name === 'background') {
         ENQWeb.Enq.User = {}
     }
     console.log('account locked')
