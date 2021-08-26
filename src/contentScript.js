@@ -123,6 +123,6 @@ function autoConnect(){
 // injectScript();
 eventHandler()
 
-document.addEventListener('DOMContentLoaded', function(){
-    autoConnect()
-})
+// document.addEventListener('DOMContentLoaded', function(){
+//     autoConnect()
+// })
