@@ -26,6 +26,10 @@ let requestsMethods = {
     'reconnect': false
 }
 
+let lockedMethods = {
+    'enable': true,
+    'reconnect': true
+}
 
 let popupOpenMethods = {
     'enable': true,
@@ -66,59 +70,63 @@ async function msgConnectHandler(msg, sender) {
         popupOpenMethods.enable = disk.config.getConfig().openEnablePopup
         popupOpenMethods.tx = disk.config.getConfig().openTxPopup
         popupOpenMethods.sign = disk.config.getConfig().openSignPopup
-        let account = ENQWeb.Enq.User
         let lock = disk.lock.checkLock()
-        if (!account.net && !lock) {
-            // console.log('non auth')
-            rejectTaskHandler(msg.taskId)
-        } else {
-            // console.log('auth ok',{acc,lock})
-            if (!ports[msg.cb.url].enabled) {
-                if (msg.type === 'enable') {
-                    if (typeof msg.data !== 'object' || msg.data.version < VALID_VERSION_LIB) {
-                        console.log('old version of ENQWeb lib')
-                    } else {
-                        await Storage.task.setTask(msg.taskId, {
-                            data: msg.data,
-                            type: msg.type,
-                            cb: msg.cb
-                        })
-                        taskCounter()
-                        if (popupOpenMethods.enable) {
-                            createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
-                        }
-                    }
-                }
-                if (msg.type === "reconnect") {
+        if(lock){
+            if(!lockedMethods[msg.type]){
+                await Storage.task.setTask(msg.taskId, {
+                    data: msg.data,
+                    type: msg.type,
+                    cb: msg.cb
+                })
+                rejectTaskHandler(msg.taskId, "extension is locked")
+                return
+            }
+        }
+        if (!ports[msg.cb.url].enabled) {
+            if (msg.type === 'enable') {
+                if (typeof msg.data !== 'object' || msg.data.version < VALID_VERSION_LIB) {
+                    console.log('old version of ENQWeb lib')
+                } else {
                     await Storage.task.setTask(msg.taskId, {
                         data: msg.data,
                         type: msg.type,
                         cb: msg.cb
                     })
-                    taskHandler(msg.taskId)
-                }
-            } else {
-                if (msg.type === 'tx') {
-                    Storage.task.setTask(msg.taskId, {
-                        tx: msg.tx,
-                        type: msg.type,
-                        cb: msg.cb,
-                        data: msg.data,
-                    })
-                } else {
-                    Storage.task.setTask(msg.taskId, {
-                        data: msg.data,
-                        type: msg.type,
-                        cb: msg.cb
-                    })
-                }
-                if (!requestsMethods[msg.type]) {
-                    taskHandler(msg.taskId)
-                } else {
                     taskCounter()
-                    if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
+                    if (popupOpenMethods.enable) {
                         createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
                     }
+                }
+            }
+            if (msg.type === "reconnect") {
+                await Storage.task.setTask(msg.taskId, {
+                    data: msg.data,
+                    type: msg.type,
+                    cb: msg.cb
+                })
+                taskHandler(msg.taskId)
+            }
+        } else {
+            if (msg.type === 'tx') {
+                Storage.task.setTask(msg.taskId, {
+                    tx: msg.tx,
+                    type: msg.type,
+                    cb: msg.cb,
+                    data: msg.data,
+                })
+            } else {
+                Storage.task.setTask(msg.taskId, {
+                    data: msg.data,
+                    type: msg.type,
+                    cb: msg.cb
+                })
+            }
+            if (!requestsMethods[msg.type]) {
+                taskHandler(msg.taskId)
+            } else {
+                taskCounter()
+                if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
+                    createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
                 }
             }
         }
@@ -411,14 +419,14 @@ async function taskHandler(taskId) {
     return true
 }
 
-function rejectTaskHandler(taskId) {
+function rejectTaskHandler(taskId, reason = "rejected") {
     let task = Storage.task.getTask(taskId)
     Storage.task.removeTask(taskId)
-    let data = {reject: true}
+    let data = {reject: true, data:reason}
     broadcast(task.cb.url, {
         data: JSON.stringify(data),
         taskId: taskId,
-        cb: task.cb
+        cb: task.cb || ''
     }).then()
     return true
 }
