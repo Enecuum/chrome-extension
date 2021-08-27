@@ -148,7 +148,6 @@ export default function Menu(props) {
                 <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>
                 {clickIterator > 20 && <div className={styles.row + ' ' + styles.button_hide}>
                     <div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>
-                    <div className={styles.button_link} onClick={() => setNet('pulse')}>PULSE</div>
                 </div>}
             </div>
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup

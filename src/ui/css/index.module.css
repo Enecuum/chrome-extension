@@ -198,6 +198,7 @@ a:hover {
     width: 100%;
     margin-right: 60px;
     margin-top: -32px;
+    margin-bottom: 10px;
     text-align: right;
     pointer-events: none;
 }
@@ -352,6 +353,16 @@ input.field.password {
 
 input.field.password::placeholder {
     letter-spacing: normal;
+}
+
+input:invalid+span:after {
+    content: '✖';
+    padding-left: 5px;
+}
+
+input:valid+span:after {
+    content: '✓';
+    padding-left: 5px;
 }
 
 /*FORM*/

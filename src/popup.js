@@ -12,7 +12,7 @@ let awaitId = []
 let dataId = []
 let time = 200
 
-console.log('Popup version: ' + 1)
+console.log('Popup version: ' + 2)
 
 global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 
