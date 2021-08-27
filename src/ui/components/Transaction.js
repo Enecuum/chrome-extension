@@ -91,7 +91,7 @@ export default class Transaction extends React.Component {
     }
 
     feeCount() {
-        ENQweb3lib.fee_counter(this.props.isTransaction.token, BigInt(Number(this.state.amount * 1e10))).then(fee => {
+        ENQweb3lib.fee_counter(this.props.isTransaction.token, BigInt(Math.floor(this.state.amount * 1e10))).then(fee => {
             console.log(typeof fee)
             console.log(fee)
             let currentFee = Number(fee) / this.state.decimals
