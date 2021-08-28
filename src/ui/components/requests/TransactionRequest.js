@@ -62,18 +62,23 @@ export default function TransactionRequest(props) {
         }
     }
 
-    const dataParse = (field)=>{
+    const dataParse = (field) => {
         return new Promise((resolve, reject) => {
-            let dataParser = new Worker("./js/workerDataParse.js", )
+            let dataParser = new Worker("./js/workerDataParse.js",)
             let timer
-            dataParser.onmessage = (msg)=>{
+            dataParser.onmessage = (msg) => {
                 resolve(msg)
                 clearTimeout(timer)
                 dataParser.terminate()
             }
-            dataParser.onerror  = err=>{console.warn(err);}
+            dataParser.onerror = err => {
+                console.warn(err);
+            }
             dataParser.postMessage(field)
-            timer = setTimeout(()=>{dataParser.terminate();reject("timeout")}, 2000)
+            timer = setTimeout(() => {
+                dataParser.terminate();
+                reject("timeout")
+            }, 2000)
         })
     }
 
@@ -85,9 +90,9 @@ export default function TransactionRequest(props) {
         let field = data
         if (ENQWeb.Utils.ofd.isContract(field)) {
             dataParse(field)
-                .then(data=>{
+                .then(data => {
                     data = JSON.parse(data)
-                    if(data.parsed){
+                    if (data.parsed) {
                         field = ENQWeb.Utils.ofd.parse(field)
 
                         if (field.type) {
@@ -102,8 +107,8 @@ export default function TransactionRequest(props) {
                         }
                     }
                 })
-                .catch(()=>{
-
+                .catch(() => {
+                    setType("undefined".toUpperCase())
                 })
 
         } else {
