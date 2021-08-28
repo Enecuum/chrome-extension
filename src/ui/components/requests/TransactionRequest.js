@@ -26,6 +26,7 @@ export default function TransactionRequest(props) {
     const [taskId, setTaskId] = useState(props.request.cb.taskId)
     const [dataText, setDataText] = useState([])
     const [fee, setFee] = useState(BigInt(0.1 * 1e10))
+    const [Type, setType] = useState('')
 
     // token transfer (data не парсится)
     // create token
@@ -61,23 +62,50 @@ export default function TransactionRequest(props) {
         }
     }
 
+    const dataParse = (field)=>{
+        return new Promise((resolve, reject) => {
+            let dataParser = new Worker("./js/workerDataParse.js", )
+            let timer
+            dataParser.onmessage = (msg)=>{
+                resolve(msg)
+                clearTimeout(timer)
+                dataParser.terminate()
+            }
+            dataParser.onerror  = err=>{console.warn(err);}
+            dataParser.postMessage(field)
+            timer = setTimeout(()=>{dataParser.terminate();reject("timeout")}, 2000)
+        })
+    }
+
+    global.testing = dataParse
+
     const parseData = () => {
         initTickerAndFee().then()
         let dataTextArray = []
         let field = data
         if (ENQWeb.Utils.ofd.isContract(field)) {
+            dataParse(field)
+                .then(data=>{
+                    data = JSON.parse(data)
+                    if(data.parsed){
+                        field = ENQWeb.Utils.ofd.parse(field)
 
-            field = ENQWeb.Utils.ofd.parse(field)
+                        if (field.type) {
+                            dataTextArray.push(<div key={'type'}>{field.type}</div>)
+                            setType(field.type)
+                        }
+                        if (field.parameters) {
+                            for (let key in field.parameters) {
+                                // console.log(key, field.parameters[key]);
+                                dataTextArray.push(<div key={key}>{key}: {field.parameters[key].toString()}</div>)
+                            }
+                        }
+                    }
+                })
+                .catch(()=>{
 
-            if (field.type) {
-                dataTextArray.push(<div key={'type'}>{field.type}</div>)
-            }
-            if (field.parameters) {
-                for (let key in field.parameters) {
-                    // console.log(key, field.parameters[key]);
-                    dataTextArray.push(<div key={key}>{key}: {field.parameters[key].toString()}</div>)
-                }
-            }
+                })
+
         } else {
             dataTextArray.push(field)
         }
@@ -150,7 +178,7 @@ export default function TransactionRequest(props) {
                 <div
                     className={styles.transaction_type}>{
                     ENQWeb.Utils.ofd.isContract(data) ?
-                        (ENQWeb.Utils.ofd.parse(data)).type.toUpperCase().replaceAll('_', ' ') :
+                        Type.toUpperCase().replaceAll('_', ' ') :
                         'TOKEN TRANSFER'
                 }</div>
 
