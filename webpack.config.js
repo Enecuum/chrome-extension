@@ -33,6 +33,7 @@ module.exports = () => {
             lockAccount: path.resolve(SOURCE_FOLDER, 'lockAccount.js'),
             '../serviceWorker': path.resolve(SOURCE_FOLDER, 'serviceWorker.ts'),
             serviceWorkerRegistration: path.resolve(SOURCE_FOLDER, 'serviceWorkerRegistration.ts'),
+            workerDataParse:path.resolve(SOURCE_FOLDER, './utils/workerDataParse.js')
         },
         output: {
             filename: 'js/[name].js',

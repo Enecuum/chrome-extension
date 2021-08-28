@@ -71,8 +71,8 @@ async function msgConnectHandler(msg, sender) {
         popupOpenMethods.tx = disk.config.getConfig().openTxPopup
         popupOpenMethods.sign = disk.config.getConfig().openSignPopup
         let lock = disk.lock.checkLock()
-        if(lock){
-            if(!lockedMethods[msg.type]){
+        if (lock) {
+            if (!lockedMethods[msg.type]) {
                 await Storage.task.setTask(msg.taskId, {
                     data: msg.data,
                     type: msg.type,
@@ -422,7 +422,7 @@ async function taskHandler(taskId) {
 function rejectTaskHandler(taskId, reason = "rejected") {
     let task = Storage.task.getTask(taskId)
     Storage.task.removeTask(taskId)
-    let data = {reject: true, data:reason}
+    let data = {reject: true, data: reason}
     broadcast(task.cb.url, {
         data: JSON.stringify(data),
         taskId: taskId,
