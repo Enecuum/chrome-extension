@@ -17,6 +17,7 @@ import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
 import SignRequest from "./components/requests/SignRequest";
 import TransactionHistory from "./components/requests/TransactionHistory";
+import AccountPage from "./components/AccountPage"
 
 let net = localStorage.getItem('net')
 if (!net) {
@@ -46,6 +47,7 @@ export default function App(props) {
 
     const [isConnectLedger, setConnectLedger] = useState(false)
     const [ledgerTransport, setLedgerTransport] = useState()
+    const [isAccountPage, setAccountPage] = useState(false)
 
 
     const checkLock = () => {
@@ -202,6 +204,12 @@ export default function App(props) {
 
     if (isLogin) return <Login login={login2}/>
 
+    if (isAccountPage){
+        return <AccountPage user={user}
+                            setAccountPage={setAccountPage}/>
+    }
+
+
     return <Account user={user}
                     logout={logout}
                     setLock={setLock}
@@ -214,5 +222,6 @@ export default function App(props) {
                     setTransactionRequest={setTransactionRequest}
                     setTransactionHistory={setTransactionHistory}
                     setConnectLedger={setConnectLedger}
-                    setSignRequest={setSignRequest}/>
+                    setSignRequest={setSignRequest}
+                    setAccountPage={setAccountPage}/>
 }

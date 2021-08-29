@@ -409,7 +409,8 @@ export default function Account(props) {
                          publicKey={props.user.publicKey}
                          setLock={props.setLock}
                          setConfirm={props.setConfirm}
-                         setPassword={props.setPassword}/>
+                         setPassword={props.setPassword}
+                         setAccountPage={props.setAccountPage}/>
         }
     }
 
