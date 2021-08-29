@@ -133,14 +133,14 @@ export default function TransactionRequest(props) {
     }
 
     const confirm = async () => {
-        if(!isBlock){
+        if (!isBlock) {
             await global.asyncRequest({
                 allow: true,
                 taskId: taskId
             })
             props.setTransactionRequest(false)
             closeModalWindow()
-        }else{
+        } else {
             console.warn("bad data")
         }
     }
@@ -267,7 +267,7 @@ export default function TransactionRequest(props) {
                 </div>
 
                 <div onClick={confirm}
-                     className={styles.field + ' ' + styles.button + ' '  + (isBlock ? styles.button_disabled : styles.button_blue)}>Confirm
+                     className={styles.field + ' ' + styles.button + ' ' + (isBlock ? styles.button_disabled : styles.button_blue)}>Confirm
                 </div>
 
                 <Separator/>
