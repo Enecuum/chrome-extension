@@ -26,7 +26,9 @@ export default function TransactionRequest(props) {
     const [taskId, setTaskId] = useState(props.request.cb.taskId)
     const [dataText, setDataText] = useState([])
     const [fee, setFee] = useState(BigInt(0.1 * 1e10))
-    const [Type, setType] = useState('')
+    const [Type, setType] = useState("undefined".toUpperCase())
+    const [isBlock, setBlock] = useState(true)
+
 
     // token transfer (data не парсится)
     // create token
@@ -67,12 +69,13 @@ export default function TransactionRequest(props) {
             let dataParser = new Worker("./js/workerDataParse.js",)
             let timer
             dataParser.onmessage = (msg) => {
-                resolve(msg)
                 clearTimeout(timer)
                 dataParser.terminate()
+                resolve(msg)
             }
             dataParser.onerror = err => {
                 console.warn(err);
+                reject(err)
             }
             dataParser.postMessage(field)
             timer = setTimeout(() => {
@@ -91,8 +94,9 @@ export default function TransactionRequest(props) {
         if (ENQWeb.Utils.ofd.isContract(field)) {
             dataParse(field)
                 .then(data => {
-                    data = JSON.parse(data)
+                    data = JSON.parse(data.data)
                     if (data.parsed) {
+                        setBlock(false)
                         field = ENQWeb.Utils.ofd.parse(field)
 
                         if (field.type) {
@@ -107,11 +111,13 @@ export default function TransactionRequest(props) {
                         }
                     }
                 })
-                .catch(() => {
-                    setType("undefined".toUpperCase())
+                .catch(err => {
+                    console.warn(err)
+                    setType("invalid data field".toUpperCase())
                 })
 
         } else {
+            setBlock(false)
             dataTextArray.push(field)
         }
 
@@ -127,12 +133,16 @@ export default function TransactionRequest(props) {
     }
 
     const confirm = async () => {
-        await global.asyncRequest({
-            allow: true,
-            taskId: taskId
-        })
-        props.setTransactionRequest(false)
-        closeModalWindow()
+        if(!isBlock){
+            await global.asyncRequest({
+                allow: true,
+                taskId: taskId
+            })
+            props.setTransactionRequest(false)
+            closeModalWindow()
+        }else{
+            console.warn("bad data")
+        }
     }
 
     const reject = async () => {
@@ -257,7 +267,7 @@ export default function TransactionRequest(props) {
                 </div>
 
                 <div onClick={confirm}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Confirm
+                     className={styles.field + ' ' + styles.button + ' '  + (isBlock ? styles.button_disabled : styles.button_blue)}>Confirm
                 </div>
 
                 <Separator/>
