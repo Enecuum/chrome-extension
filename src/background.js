@@ -71,17 +71,17 @@ async function msgConnectHandler(msg, sender) {
         popupOpenMethods.tx = disk.config.getConfig().openTxPopup
         popupOpenMethods.sign = disk.config.getConfig().openSignPopup
         let lock = disk.lock.checkLock()
-        if (lock) {
-            if (!lockedMethods[msg.type]) {
-                await Storage.task.setTask(msg.taskId, {
-                    data: msg.data,
-                    type: msg.type,
-                    cb: msg.cb
-                })
-                rejectTaskHandler(msg.taskId, "extension is locked")
-                return
-            }
-        }
+        // if (lock) {
+        //     if (!lockedMethods[msg.type]) {
+        //         await Storage.task.setTask(msg.taskId, {
+        //             data: msg.data,
+        //             type: msg.type,
+        //             cb: msg.cb
+        //         })
+        //         rejectTaskHandler(msg.taskId, "extension is locked")
+        //         return
+        //     }
+        // }
         if (!ports[msg.cb.url].enabled) {
             if (msg.type === 'enable') {
                 if (typeof msg.data !== 'object' || msg.data.version < VALID_VERSION_LIB) {
