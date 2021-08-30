@@ -84,14 +84,16 @@ async function msgConnectHandler(msg, sender) {
         // }
         if (!ports[msg.cb.url].enabled) {
             if (msg.type === 'enable') {
+                await Storage.task.setTask(msg.taskId, {
+                    data: msg.data,
+                    type: msg.type,
+                    cb: msg.cb
+                })
                 if (typeof msg.data !== 'object' || msg.data.version < VALID_VERSION_LIB) {
                     console.log('old version of ENQWeb lib')
+                    rejectTaskHandler(msg.taskId, "old version")
+                    return
                 } else {
-                    await Storage.task.setTask(msg.taskId, {
-                        data: msg.data,
-                        type: msg.type,
-                        cb: msg.cb
-                    })
                     taskCounter()
                     if (popupOpenMethods.enable) {
                         createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
