@@ -355,14 +355,32 @@ input.field.password::placeholder {
     letter-spacing: normal;
 }
 
-input:invalid+span:after {
-    content: '✖';
-    padding-left: 5px;
+/*input:invalid+span:after {*/
+/*    content: '✖';*/
+/*    padding-left: 5px;*/
+/*}*/
+
+/*input:valid+span:after {*/
+/*    content: '✓';*/
+/*    padding-left: 5px;*/
+/*}*/
+
+input.field_correct {
+    border-bottom: 2px solid var(--color-blue-ligth);
+    margin-bottom: -1px;
 }
 
-input:valid+span:after {
-    content: '✓';
-    padding-left: 5px;
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+    overflow-x: hidden;
 }
 
 /*FORM*/

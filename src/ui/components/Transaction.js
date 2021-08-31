@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../css/index.module.css";
 import TransactionSend from "./TransactionSend";
 import Separator from "../elements/Separator";
+import {regexAddress} from "../Utils";
 
 //TODO decimals to tokens
 
@@ -41,9 +42,19 @@ export default class Transaction extends React.Component {
     }
 
     handleChangeAmount(e) {
-        // console.log(e.target.value)
-        // console.log(typeof e.target.value)
+        console.log(e.target.value)
+        console.log(typeof e.target.value)
+
+        if (e.target.value === '00') {
+            //TODO
+            return
+        }
+
         let amount = Number(e.target.value)
+        if (amount < 0 || amount * this.state.decimals > this.props.isTransaction.balance) {
+            return
+        }
+
         if (amount.countDecimals() > 9)
             amount = amount.toFixed(10)
 
@@ -92,10 +103,10 @@ export default class Transaction extends React.Component {
 
     feeCount() {
         ENQweb3lib.fee_counter(this.props.isTransaction.token, BigInt(Math.floor(this.state.amount * 1e10))).then(fee => {
-            console.log(typeof fee)
-            console.log(fee)
+            // console.log(typeof fee)
+            // console.log(fee)
             let currentFee = Number(fee) / this.state.decimals
-            console.log(currentFee)
+            // console.log(currentFee)
             this.setState({fee: currentFee})
         })
     }
@@ -144,7 +155,7 @@ export default class Transaction extends React.Component {
                                spellCheck={false}
                                onChange={this.handleChangeAddress}
                                value={this.state.address}
-                               className={styles.field}
+                               className={styles.field + ' ' + (regexAddress.test(this.state.address) ? styles.field_correct : '')}
                                placeholder={'Address'}
                         />
 
@@ -187,7 +198,7 @@ export default class Transaction extends React.Component {
                     <div className={styles.form}>
 
                         <div onClick={this.submit}
-                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Send
+                             className={styles.field + ' ' + styles.button + ' ' + (regexAddress.test(this.state.address) ? styles.button_blue : '')}>Send
                         </div>
 
                         <div onClick={() => this.props.setTransaction(false)}
