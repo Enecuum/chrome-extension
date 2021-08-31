@@ -84,6 +84,13 @@
     cursor: pointer;
 }
 
+.copied {
+    /*color: var(--color-blue)*/
+    /*font-weight: 600;*/
+    /*text-decoration: underline;*/
+    color: var(--color-gray-ligth)
+}
+
 .address_row > div {
     width: 30%;
     /*background: red;*/

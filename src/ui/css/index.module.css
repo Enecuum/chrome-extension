@@ -366,8 +366,7 @@ input.field.password::placeholder {
 /*}*/
 
 input.field_correct {
-    border-bottom: 2px solid var(--color-blue-ligth);
-    margin-bottom: -1px;
+    border-bottom: 1px solid var(--color-blue);
 }
 
 /* Chrome, Safari, Edge, Opera */
