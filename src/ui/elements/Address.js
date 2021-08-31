@@ -53,9 +53,10 @@ export default function Address(props) {
     }
 
     const copyPublicKey = () => {
-        if (navigator.clipboard)
+        if (navigator.clipboard) {
             navigator.clipboard.writeText(props.publicKey)
-        else
+            props.setCopied(true)
+        } else
             console.error('navigator.clipboard: ' + false)
     }
 
@@ -68,7 +69,7 @@ export default function Address(props) {
 
             <div>
                 <div className={elements.account_name}>Account 1</div>
-                <div className={elements.address_string} onClick={copyPublicKey}
+                <div className={elements.address_string + ' ' + (props.isCopied ? elements.copied : '')} onClick={copyPublicKey}
                      title={props.publicKey + copyText}>{shortHash(props.publicKey)}</div>
             </div>
 

@@ -39,6 +39,8 @@ export default function Account(props) {
 
     const [allTokens, setAllTokens] = useState((disk.tokens.getTokens()).tokens ? (disk.tokens.getTokens()).tokens : {})
 
+    const [isCopied, setCopied] = useState(false)
+
     const clickMenu = () => {
         setMenu(!menu)
     }
@@ -75,9 +77,10 @@ export default function Account(props) {
     }
 
     const copyPublicKey = () => {
-        if (navigator.clipboard)
+        if (navigator.clipboard) {
             navigator.clipboard.writeText(props.publicKey)
-        else
+            setCopied(true)
+        } else
             console.error('navigator.clipboard: ' + false)
     }
 
@@ -435,6 +438,8 @@ export default function Account(props) {
 
             <Address publicKey={props.user.publicKey}
                      connectionsCounter={connectionsCounter}
+                     isCopied={isCopied}
+                     setCopied={setCopied}
                      isMainToken={props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider]}
                      setMainToken={() => {
                          changeToken(ENQWeb.Enq.token[ENQWeb.Enq.provider]).then()
