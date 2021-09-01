@@ -118,10 +118,12 @@ export default function Menu(props) {
     const version = chrome.runtime.getManifest().version
     // const version = 'VERSION DEBUG'
 
+    let clickIteratorLimit = 7
+
     let clickVersion = () => {
         setClickIterator(clickIterator + 1)
-        if (clickIterator === 20) {
-            console.log("development mode")
+        if (clickIterator === clickIteratorLimit) {
+            console.log('Development mode')
         }
     }
 
@@ -146,16 +148,16 @@ export default function Menu(props) {
             </div>
             <div className={styles.row}>
                 <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>
-                {clickIterator > 20 && <div className={styles.row + ' ' + styles.button_hide}>
+                {clickIterator >= clickIteratorLimit && <div className={styles.row + ' ' + styles.button_hide}>
                     <div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>
+                    <div className={styles.button_link} onClick={() => props.setNetwork(true)}>CUSTOM</div>
                 </div>}
             </div>
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>}
-            {/*<div className={styles.button_link} onClick={() => changeOpenPopup('tx')}>Open popup on TX {openTx}</div>*/}
             <div className={styles.button_link_logout}>
                 <div className={styles.button_link} onClick={() => props.setConfirm(true)}>Logout</div>
-                <div className={styles.version} onClick={clickVersion}>{version}</div>
+                <div className={styles.version + ' ' + (clickIterator >= clickIteratorLimit ? styles.blue : '')} onClick={clickVersion}>{version}</div>
             </div>
 
         </div>

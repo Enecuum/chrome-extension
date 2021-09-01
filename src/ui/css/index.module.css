@@ -380,6 +380,7 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
     overflow-x: hidden;
+    padding-right: 100px;
 }
 
 /*FORM*/

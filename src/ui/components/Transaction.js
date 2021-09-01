@@ -13,7 +13,7 @@ export default class Transaction extends React.Component {
             isTransactionSend: false,
             decimals: 1e10,
             address: '',
-            amount: 0.0,
+            amount: '',
             txHash: '',
             data: '',
             unlock: false,
@@ -47,6 +47,7 @@ export default class Transaction extends React.Component {
 
         if (e.target.value === '00') {
             //TODO
+            this.setState({amount: '0'});
             return
         }
 
@@ -68,6 +69,9 @@ export default class Transaction extends React.Component {
     }
 
     async submit() {
+
+        if (!regexAddress.test(this.state.address) && this.state.amount < 0)
+            return
 
         //TODO
         let user = await disk.user.loadUser()
@@ -170,6 +174,7 @@ export default class Transaction extends React.Component {
                             className={styles.field_ticker}>{this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}</div>
 
                         <input type="text"
+                               spellCheck={false}
                                onChange={this.handleChangeData}
                                value={this.state.data}
                                className={styles.field}
