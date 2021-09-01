@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from '../css/index.module.css'
-import Network from './Network'
+import Network from './requests/Network'
 import Header from '../elements/Header'
 import Separator from '../elements/Separator'
 import {regexAddress, toggleFullScreen} from "../Utils";
@@ -30,7 +30,7 @@ export default class Login extends React.Component {
     async submit() {
 
         if (this.state.privateKey.length !== 64 && !regexAddress.test(this.state.privateKey)) {
-            console.error('incorrect private key')
+            console.error('Incorrect private key')
             return
         }
 

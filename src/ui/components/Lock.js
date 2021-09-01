@@ -1,9 +1,7 @@
 import React from "react";
 import styles from "../css/index.module.css";
-import Network from "./Network"
 import Separator from "../elements/Separator";
 import {toggleFullScreen} from "../Utils";
-import App from "../App";
 
 export default class Lock extends React.Component {
     constructor(props) {
