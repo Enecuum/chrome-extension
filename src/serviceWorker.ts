@@ -26,7 +26,7 @@ clientsClaim();
 // precacheAndRoute(self.__WB_MANIFEST);
 // console.log(self)
 
-let revisionNumber = '9'
+let revisionNumber = '10'
 
 let array = ['/index.html', '/js/popup.js', '/js/lockAccount.js', '/js/contentScript.js', '/lib/enqweb3lib.ext.min.js']
 
@@ -49,6 +49,9 @@ self.addEventListener('install', event => {
     // Passing in event is required in Workbox v6+
     event.waitUntil(precacheController.install(event));
     console.log('Service Worker install.');
+});
+self.addEventListener('installed', event => {
+    console.log('Service Worker installed.');
 });
 self.addEventListener('activate', event => {
     console.log('Service Worker activate.');

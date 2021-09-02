@@ -302,8 +302,8 @@ a:hover {
 
 
 .button.button_link:hover {
-    background-color: var(--color-blue-dark);
-    color: red;
+    /*background-color: var(--color-blue-dark);*/
+    /*color: var(--color-blue);*/
 }
 
 .button.button_link img {
@@ -910,12 +910,12 @@ input[type=number] {
 }
 
 .transaction_data_data {
-    width: 340px;
+    width: 350px;
     padding: 20px;
     user-select: text;
     /*background: red;*/
     word-wrap: break-word;
 
-    max-height: 190px;
+    /*max-height: 190px;*/
     overflow: scroll;
 }
