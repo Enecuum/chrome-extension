@@ -231,16 +231,16 @@ export default function TransactionHistory(props) {
 
             </div>
 
-            <div className={styles.form}>
+            {activeTab === 0 && <div className={styles.form}>
 
                 {/*<div onClick={this.allow}*/}
                 {/*     className={styles.field}>{this.state.website}*/}
                 {/*</div>*/}
 
-                {activeTab === 0 && <div onClick={() => {explorerTX(props.request.tx.hash)}}
+                <div onClick={() => {explorerTX(props.request.tx.hash)}}
                                          className={styles.field + ' ' + styles.button + ' ' + styles.button_link}>
-                    <a href={explorerLink(props.request.tx.hash)} target="_blank">Open in explorer <img className={styles.icon} src={'./images/icons/7.png'} alt=""/></a>
-                </div>}
+                    Open in explorer
+                </div>
 
                 <div onClick={copyHashString}
                      className={styles.field + ' ' + styles.button}>Copy transaction hash
@@ -248,7 +248,7 @@ export default function TransactionHistory(props) {
 
                 <Separator/>
 
-            </div>
+            </div>}
         </div>
     )
 }

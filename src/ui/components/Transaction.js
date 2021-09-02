@@ -148,7 +148,7 @@ export default class Transaction extends React.Component {
 
                 : "0.0"
 
-            balanceAfter += this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"
+            balanceAfter += ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN")
 
             return (
                 <div className={styles.main}>

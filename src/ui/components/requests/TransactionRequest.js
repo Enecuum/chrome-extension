@@ -256,7 +256,7 @@ export default function TransactionRequest(props) {
 
             </div>
 
-            <div className={styles.form}>
+            {activeTab === 0 && <div className={styles.form}>
 
                 {/*<div onClick={this.allow}*/}
                 {/*     className={styles.field}>{this.state.website}*/}
@@ -272,7 +272,7 @@ export default function TransactionRequest(props) {
 
                 <Separator/>
 
-            </div>
+            </div>}
         </div>
     )
 }
