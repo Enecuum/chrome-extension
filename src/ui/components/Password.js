@@ -47,7 +47,6 @@ export default class Password extends React.Component {
             }
 
             this.props.setPassword(false)
-            this.props.login()
         } else {
 
         }
