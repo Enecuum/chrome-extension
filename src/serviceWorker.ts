@@ -26,7 +26,7 @@ clientsClaim();
 // precacheAndRoute(self.__WB_MANIFEST);
 // console.log(self)
 
-let revisionNumber = '10'
+let revisionNumber = '22'
 
 let array = ['/index.html', '/js/popup.js', '/js/lockAccount.js', '/js/contentScript.js', '/lib/enqweb3lib.ext.min.js']
 

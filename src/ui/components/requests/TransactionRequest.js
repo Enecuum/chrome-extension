@@ -172,7 +172,7 @@ export default function TransactionRequest(props) {
                 Network: {ENQWeb.Net.currentProvider.toUpperCase()}
             </div>
 
-            <div className={styles.data}>
+            <div className={styles.card}>
 
                 <div className={styles.transaction_from_to}>
 
