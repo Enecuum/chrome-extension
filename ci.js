@@ -2,15 +2,20 @@ const http = require('http');
 const crypto = require('crypto');
 const execSync = require('child_process').execSync;
 const url = require('url');
+const fs = require('fs')
 
 require('dotenv').config()
 
 http.createServer(function (req, res) {
 
+    let VERSION = fs.readFileSync('./dist/VERSION', 'utf8')
+    let LASTCOMMITDATETIME = fs.readFileSync('./dist/LASTCOMMITDATETIME', 'utf8')
+    let COMMITHASH = fs.readFileSync('./dist/COMMITHASH', 'utf8')
+
     const parsedUrl = url.parse(req.url, true)
     if (parsedUrl.pathname === '/update') {
         res.writeHead(200, {'Content-type': 'text/plain'})
-        res.write('OK')
+        res.write(JSON.stringify({VERSION, LASTCOMMITDATETIME, COMMITHASH}))
         res.end()
     }
 
