@@ -19,6 +19,8 @@ const isLocalhost = Boolean(
 );
 
 console.log(isLocalhost)
+declare var VERSION: string;
+console.log(VERSION)
 
 type Config = {
   onSuccess?: (registration: ServiceWorkerRegistration) => void;

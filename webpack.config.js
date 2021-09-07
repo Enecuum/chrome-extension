@@ -2,6 +2,7 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const execSync = require('child_process').execSync
 const CreateFileWebpack = require('create-file-webpack')
+const webpack = new require('webpack')
 
 module.exports = () => {
 
@@ -9,7 +10,8 @@ module.exports = () => {
     const SOURCE_FOLDER = path.resolve(__dirname, 'src')
     const DIST_FOLDER = path.resolve(__dirname, 'dist')
     const LIB_FILE = path.resolve(__dirname + '/node_modules/enq-web3/dist/enqweb3lib.ext.min.js')
-    let HEAD = execSync('git rev-parse --short HEAD').toString().replace('\n', '')
+    const VERSION = execSync('git rev-parse --short HEAD').toString().trim()
+    // console.log(VERSION)
 
     const COPY = {
         patterns: [
@@ -27,10 +29,12 @@ module.exports = () => {
 
     plugins.push(new CopyWebpackPlugin(COPY))
     plugins.push(new CreateFileWebpack({
-        path: './dist/js/',
-        fileName: 'version.js',
-        content: 'module.exports = {HEAD: "' + HEAD + '"}'
+        path: './dist/',
+        fileName: 'VERSION',
+        content: VERSION
     }))
+    // plugins.push(new webpack.EnvironmentPlugin(['VERSION']))
+    plugins.push(new webpack.DefinePlugin({VERSION: JSON.stringify(VERSION)}))
 
     return {
         mode,

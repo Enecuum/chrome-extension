@@ -8,7 +8,7 @@ require('dotenv').config()
 
 http.createServer(function (req, res) {
 
-    let HEAD = execSync('git rev-parse --short HEAD').toString().replace('\n', '')
+    let HEAD = execSync('git rev-parse --short HEAD').toString().trim()
     let DATE = fs.statSync('./dist/serviceWorker.js').birthtime
 
     const parsedUrl = url.parse(req.url, true)
