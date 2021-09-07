@@ -6,3 +6,5 @@
 - npm run prod - run simple node server on ./dist
 - npm run stop - stop node server
 - npm run ci - run ci webhook inside pm2
+
+CI test build

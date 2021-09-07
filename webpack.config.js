@@ -1,11 +1,12 @@
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const { GitRevisionPlugin } = require('git-revision-webpack-plugin')
 
 module.exports = () => {
 
-    const mode = process.env.NODE_ENV || 'development';
-    const SOURCE_FOLDER = path.resolve(__dirname, 'src');
-    const DIST_FOLDER = path.resolve(__dirname, 'dist');
+    const mode = process.env.NODE_ENV || 'development'
+    const SOURCE_FOLDER = path.resolve(__dirname, 'src')
+    const DIST_FOLDER = path.resolve(__dirname, 'dist')
     const LIB_FILE = path.resolve(__dirname + '/node_modules/enq-web3/dist/enqweb3lib.ext.min.js')
 
     const COPY = {
@@ -18,11 +19,12 @@ module.exports = () => {
                 from: LIB_FILE,
                 to: path.join(DIST_FOLDER, 'lib'),
             }]
-    };
+    }
 
     const plugins = [];
 
-    plugins.push(new CopyWebpackPlugin(COPY));
+    plugins.push(new CopyWebpackPlugin(COPY))
+    // plugins.push(new GitRevisionPlugin())
 
     return {
         mode,
@@ -66,5 +68,5 @@ module.exports = () => {
             ],
 
         },
-    };
-};
+    }
+}
