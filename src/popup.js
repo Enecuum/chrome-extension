@@ -1,7 +1,6 @@
 import {initApp} from "./ui/index"
 import {MsgHandler, MsgPopupHandler} from "./handler"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-import {HEAD} from "./version";
 
 const Storage = require('./utils/localStorage')
 let storage = new Storage('popup')
@@ -15,8 +14,8 @@ let awaitId = []
 let dataId = []
 let time = 200
 
-console.log('Popup version: ' + 3)
-console.log('HEAD: ' + HEAD)
+console.log('Popup version: ' + 4)
+console.log('HEAD: ' + VERSION)
 
 global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 

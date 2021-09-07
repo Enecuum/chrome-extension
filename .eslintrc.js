@@ -21,4 +21,8 @@ module.exports = {
         'no-plusplus': 0,
         'no-multiple-empty-lines': ['warn', {max: 2}],
     },
+
+    "globals": {
+        "VERSION": "readonly",
+    },
 }

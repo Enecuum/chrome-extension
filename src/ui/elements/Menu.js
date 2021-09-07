@@ -4,7 +4,6 @@ import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
 import {explorerAddress} from "../Utils";
 import {createPopupWindow} from "../../handler";
-import {HEAD} from "../../version";
 
 TransportWebUSB.isSupported().then((result) => {
     console.log('WebUSB Supported: ' + result)
@@ -158,7 +157,7 @@ export default function Menu(props) {
                 window: {openEnable ? 'ON' : 'OFF'}</div>}
             <div className={styles.button_link_logout}>
                 <div className={styles.button_link} onClick={() => props.setConfirm(true)}>Logout</div>
-                <div className={styles.version + ' ' + (clickIterator >= clickIteratorLimit ? styles.blue : '')} onClick={clickVersion}>{version + ' ' + (clickIterator >= 2 ? HEAD : '')}</div>
+                <div className={styles.version + ' ' + (clickIterator >= clickIteratorLimit ? styles.blue : '')} onClick={clickVersion}>{version + ' ' + (clickIterator >= 2 ? VERSION : '')}</div>
             </div>
 
         </div>
