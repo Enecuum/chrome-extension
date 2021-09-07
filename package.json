@@ -13,7 +13,7 @@
         "pack": "electron-builder --win --mac -c.mac.identity=null",
         "prod": "pm2 start ./ecosystem.config.js --only prod",
         "stop": "pm2 stop prod",
-        "ci": "pm2 start ./ci.config.js --only ci"
+        "ci": "pm2 start ./ecosystem.config.js --only ci"
     },
     "build": {
         "appId": "app.enecuum.com",

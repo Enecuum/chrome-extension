@@ -3,8 +3,8 @@ const crypto = require('crypto');
 const exec = require('child_process').exec;
 
 http.createServer(function (req, res) {
-    req.on('data', function(chunk) {
-        let sig = "sha1=" + crypto.createHmac('sha1', process.env.GITHUB).update(chunk.toString()).digest('hex');
+    req.on('data', function (chunk) {
+        let sig = 'sha1=' + crypto.createHmac('sha1', process.env.GITHUB).update(chunk.toString()).digest('hex');
         if (req.headers['x-hub-signature'] == sig) {
             exec('npm run stop');
             exec('git pull');
@@ -14,4 +14,4 @@ http.createServer(function (req, res) {
         }
     });
     res.end();
-}).listen(5454);
+}).listen(process.env.PORT);
