@@ -7,3 +7,4 @@
 - npm run stop - stop node server
 - npm run ci - run ci webhook inside pm2
 
+Update
