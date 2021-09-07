@@ -24,7 +24,7 @@ module.exports = () => {
     const plugins = [];
 
     plugins.push(new CopyWebpackPlugin(COPY))
-    // plugins.push(new GitRevisionPlugin())
+    plugins.push(new GitRevisionPlugin())
 
     return {
         mode,

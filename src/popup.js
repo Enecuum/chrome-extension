@@ -13,6 +13,7 @@ let dataId = []
 let time = 200
 
 console.log('Popup version: ' + 3)
+console.log('VERSION: ' + VERSION)
 
 global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 
