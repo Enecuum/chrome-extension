@@ -25,6 +25,7 @@ http.createServer(function (req, res) {
             execSync('npm run stop')
             execSync('git fetch --all')
             execSync('git reset --hard origin/master')
+            execSync('git pull')
             execSync('npm i --force')
             execSync('npm run make')
             execSync('npm run prod')
