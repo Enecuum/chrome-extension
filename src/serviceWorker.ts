@@ -24,9 +24,9 @@ clientsClaim();
 // This variable must be present somewhere in your service worker file,
 // even if you decide not to use precaching. See https://cra.link/PWA
 // precacheAndRoute(self.__WB_MANIFEST);
-// console.log(self)
 
-let revisionNumber = '23'
+//TODO
+let revisionNumber = '24'
 
 let array = ['/index.html', '/js/popup.js', '/js/lockAccount.js', '/js/contentScript.js', '/lib/enqweb3lib.ext.min.js']
 
