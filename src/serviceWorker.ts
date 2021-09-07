@@ -15,6 +15,8 @@ import {createHandlerBoundToURL, precacheAndRoute, PrecacheController} from 'wor
 import {registerRoute} from 'workbox-routing';
 import {StaleWhileRevalidate} from 'workbox-strategies';
 
+import {HEAD} from './version'
+
 declare const self: ServiceWorkerGlobalScope;
 
 clientsClaim();
@@ -26,7 +28,7 @@ clientsClaim();
 // precacheAndRoute(self.__WB_MANIFEST);
 
 //TODO
-let revisionNumber = '24'
+let revisionNumber = HEAD
 
 let array = ['/index.html', '/js/popup.js', '/js/lockAccount.js', '/js/contentScript.js', '/lib/enqweb3lib.ext.min.js']
 
