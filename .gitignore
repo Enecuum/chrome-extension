@@ -6,3 +6,5 @@ package-lock.json
 desktop
 logs
 /.env
+/src/copied/localhost.pem
+/src/copied/localhost-key.pem
