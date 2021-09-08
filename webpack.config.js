@@ -11,7 +11,6 @@ module.exports = () => {
     const DIST_FOLDER = path.resolve(__dirname, 'dist')
     const LIB_FILE = path.resolve(__dirname + '/node_modules/enq-web3/dist/enqweb3lib.ext.min.js')
     const VERSION = execSync('git rev-parse --short HEAD').toString().trim()
-    // console.log(VERSION)
 
     const COPY = {
         patterns: [
