@@ -9,13 +9,14 @@ let STATE = 'INIT'
 
 http.createServer(function (req, res) {
 
+    let DIST = fs.readFileSync('./dist/VERSION', 'utf8')
     let HEAD = execSync('git rev-parse --short HEAD').toString().trim()
-    let DATE = fs.statSync('./dist/VERSION').mtime
+    let DATE = new Date(fs.statSync('./dist/VERSION').mtime).addHours(3)
 
     const parsedUrl = url.parse(req.url, true)
     if (parsedUrl.pathname === '/update') {
         res.writeHead(200, {'Content-type': 'text/plain'})
-        res.write(JSON.stringify({HEAD, DATE, STATE}))
+        res.write(JSON.stringify({DIST, HEAD, DATE, STATE}))
         res.end()
         return
     }
@@ -50,3 +51,8 @@ let restartServer = async () => {
 }
 
 STATE = 'ON'
+
+Date.prototype.addHours = function (h) {
+    this.setTime(this.getTime() + (h * 60 * 60 * 1000));
+    return this;
+}
