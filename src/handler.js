@@ -16,7 +16,9 @@ export function MsgHandler(msg, ENQWeb) {
         }
         if (msg.account && msg.request) {
             if (!disk.lock.checkLock()) {
-                resolve({response: ENQWeb.Enq.User})
+                let userSession = Object.keys(ENQWeb.Enq.User).length > 0 ? ENQWeb.Enq.User : JSON.parse(sessionStorage.getItem('User'))
+                console.log(userSession)
+                resolve({response: userSession})
             } else {
                 resolve({response: false})
             }
@@ -26,6 +28,7 @@ export function MsgHandler(msg, ENQWeb) {
             let account = decryptAccount(msg.password)
             if (account) {
                 ENQWeb.Enq.User = account
+                sessionStorage.setItem('User', JSON.stringify(account))
                 // console.log(account)
                 // console.log(ENQWeb.Enq.User)
                 disk.user.addUser(account)
@@ -57,6 +60,7 @@ export function MsgHandler(msg, ENQWeb) {
         }
         if (msg.account && msg.logout) {
             ENQWeb.Enq.User = {}
+            sessionStorage.setItem('User', JSON.stringify({}))
             // disconnectPorts()
             resolve({response: true})
         }
