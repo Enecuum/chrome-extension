@@ -70,7 +70,7 @@ export default class Transaction extends React.Component {
 
     async submit() {
 
-        if (!regexAddress.test(this.state.address) && this.state.amount < 0)
+        if (!regexAddress.test(this.state.address) || this.state.amount < 0)
             return
 
         //TODO
