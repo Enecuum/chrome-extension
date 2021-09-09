@@ -56,7 +56,7 @@ export default function App(props) {
         }
     }
 
-    const [isLock, setLock] = useState(checkLock)
+    const [isLock, setLock] = useState(true)
 
     const getUser = async () => {
         let account = await global.disk.user.loadUser()
@@ -67,12 +67,9 @@ export default function App(props) {
 
     useEffect(() => {
         const version = chrome.runtime.getManifest().version
-        const prod = false
         console.log('App: ' + version)
-        // console.log('Prod: ' + prod)
         console.log('Lib: ' + ENQWeb.version)
-        getUser()
-            .then()
+        getUser().then()
     }, [])
 
 

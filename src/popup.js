@@ -83,7 +83,7 @@ async function setupUi() {
 
     if (version.includes('web')) {
         global.asyncRequest = asyncRequest
-        global.electronBack = MsgHandler
+        global.webBack = MsgHandler
         await initApp()
         serviceWorkerRegistration.register();
     } else { // extension
