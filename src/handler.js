@@ -16,8 +16,8 @@ export function MsgHandler(msg, ENQWeb) {
         }
         if (msg.account && msg.request) {
             if (!disk.lock.checkLock()) {
-                let userSession = Object.keys(ENQWeb.Enq.User).length > 0 ? ENQWeb.Enq.User : JSON.parse(sessionStorage.getItem('User'))
-                console.log(userSession)
+                let userSession = Object.keys(ENQWeb.Enq.User).length > 0 ? ENQWeb.Enq.User : (JSON.parse(sessionStorage.getItem('User')) ? JSON.parse(sessionStorage.getItem('User')) : false)
+                // console.log(userSession)
                 resolve({response: userSession})
             } else {
                 resolve({response: false})
