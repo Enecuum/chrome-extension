@@ -16,6 +16,7 @@ let time = 200
 
 console.log('Popup version: ' + 4)
 console.log('HEAD: ' + VERSION)
+console.log('Web workers: ' + (typeof window.Worker === 'function'))
 
 global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 
