@@ -1,7 +1,7 @@
 function lockAccount() {
     disk.lock.setLock(true)
     if (disk.name === 'background') {
-        ENQWeb.Enq.User = {publicKey:ENQWeb.Enq.User.publicKey, net:ENQWeb.Enq.User.net}
+        ENQWeb.Enq.User = {publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net}
     }
     console.log('account locked')
 }
