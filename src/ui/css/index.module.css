@@ -883,11 +883,11 @@ input[type=number] {
     /*background: red;*/
     flex-shrink: 0;
     margin-right: 0;
-    cursor: pointer;
 }
 
 .cards .card.card_select {
     background: var(--color-blue);
+    /*cursor: pointer;*/
 }
 
 .cards .card:last-child {
@@ -915,8 +915,25 @@ input[type=number] {
 
 .card_field_select {
     position: absolute;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.card_field_select:hover {
+    color: var(--color-blue-dark)
+}
+
+.card_field_delete {
+    position: absolute;
     top: 20px;
     right: 20px;
+    /*font-size: var(--font-size-big);*/
+    cursor: pointer;
+}
+
+.card_field_delete:hover {
+    color: var(--color-blue-dark)
 }
 
 .data_bottom_tabs > div {
