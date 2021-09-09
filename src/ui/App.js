@@ -63,6 +63,7 @@ export default function App(props) {
         setUser(account)
         // console.log(account)
         setLogin(account.privateKey ? false : true)
+        setLock(account.privateKey ? false : true)
     }
 
     useEffect(() => {
@@ -189,12 +190,12 @@ export default function App(props) {
                             getLedgerTransport={getLedgerTransport}/>
     }
 
-    if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
-        return <Password setPassword={setPassword} login={login} publicKey={user.publicKey}/>
-    }
-
     if (isLock) {
         return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
+    }
+
+    if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
+        return <Password setPassword={setPassword} login={login} publicKey={user.publicKey}/>
     }
 
     if (isLogin) return <Login login={login2}/>
