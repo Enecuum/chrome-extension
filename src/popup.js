@@ -81,19 +81,21 @@ let version = chrome.runtime.getManifest().version
 
 async function setupUi() {
 
-    if (version.includes('web')) {
+    if (version.includes('web')) { // web
         global.asyncRequest = asyncRequest
         global.webBack = MsgHandler
         await initApp()
         serviceWorkerRegistration.register();
+
     } else { // extension
         toBackground = chrome.runtime.connect({name: 'popup'})
         toBackground.onMessage.addListener(mainListener)
         global.Port = toBackground
         global.asyncRequest = asyncRequest
         await initApp(toBackground)
-        disk.promise.sendPromise({initial: true})
     }
+
+    disk.promise.sendPromise({initial: true})
 }
 
 function msgHandler(msg, sender) {
