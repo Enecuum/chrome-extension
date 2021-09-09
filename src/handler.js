@@ -41,6 +41,7 @@ export function MsgHandler(msg, ENQWeb) {
         if (msg.account && msg.set && msg.data) {
             disk.user.addUser(msg.data)
             ENQWeb.Enq.User = msg.data
+            sessionStorage.setItem('User', JSON.stringify(msg.data))
             encryptAccount()
             // console.log(ENQWeb.Enq.User)
             resolve({response: ENQWeb.Enq.User})
