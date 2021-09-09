@@ -63,7 +63,6 @@ export default function App(props) {
         setUser(account)
         // console.log(account)
         setLogin(account.privateKey ? false : true)
-        setLock(account.privateKey ? false : true)
     }
 
     useEffect(() => {
