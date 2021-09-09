@@ -56,7 +56,7 @@ export default function App(props) {
         }
     }
 
-    const [isLock, setLock] = useState(true)
+    const [isLock, setLock] = useState(checkLock)
 
     const getUser = async () => {
         let account = await global.disk.user.loadUser()
@@ -189,12 +189,12 @@ export default function App(props) {
                             getLedgerTransport={getLedgerTransport}/>
     }
 
-    if (isLock) {
-        return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
-    }
-
     if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
         return <Password setPassword={setPassword} login={login} publicKey={user.publicKey}/>
+    }
+
+    if (isLock) {
+        return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
     }
 
     if (isLogin) return <Login login={login2}/>

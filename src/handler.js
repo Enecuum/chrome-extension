@@ -36,8 +36,6 @@ export function MsgHandler(msg, ENQWeb) {
             }
         }
         if (msg.account && msg.set && msg.data) {
-            // ENQWeb.Enq.User = msg.data
-            //TODO HERE ENQWeb.Enq.User = ''
             disk.user.addUser(msg.data)
             ENQWeb.Enq.User = msg.data
             encryptAccount()
@@ -46,8 +44,6 @@ export function MsgHandler(msg, ENQWeb) {
         }
         if (msg.account && msg.encrypt) {
             if (msg.again) {
-                //TODO HERE (a, b, c) => addUser(obj) ?
-                // disk.user.addUser(ENQWeb.Enq.User.publicKey, ENQWeb.Enq.User.privateKey, ENQWeb.Enq.User.net)
                 disk.user.addUser(msg.data)
                 encryptAccount()
             } else {
