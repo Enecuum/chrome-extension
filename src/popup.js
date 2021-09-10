@@ -14,9 +14,17 @@ let awaitId = []
 let dataId = []
 let time = 200
 
+// if (navigator.storage && navigator.storage.estimate) {
+//     navigator.storage.estimate().then(quota => {
+//         const remaining = quota.quota - quota.usage;
+//         console.log(`You can write up to ${(remaining / Math.pow(1024, 3)).toFixed(3)} more gb.`);
+//     })
+// }
+
 console.log('Popup version: ' + 4)
 console.log('HEAD: ' + VERSION)
-console.log('Web workers: ' + (typeof window.Worker === 'function'))
+console.log('Cache available: ' + ('caches' in self))
+console.log('Web workers available: ' + (typeof window.Worker === 'function'))
 
 global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 
@@ -66,7 +74,7 @@ if (!chrome.runtime) {
     chrome.runtime.web = true
     chrome.tabs = {}
     chrome.tabs.create = (tab) => {
-        window.open(tab.url, '_blank');
+        window.open(tab.url, '_blank')
     }
 }
 
@@ -86,7 +94,7 @@ async function setupUi() {
         global.asyncRequest = asyncRequest
         global.webBack = MsgHandler
         await initApp()
-        serviceWorkerRegistration.register();
+        serviceWorkerRegistration.register()
 
     } else { // extension
         toBackground = chrome.runtime.connect({name: 'popup'})
@@ -133,7 +141,7 @@ function awaitAsync(data) {
 function asyncRequest(data) {
     data.async = true
     awaitId[data] = false
-    let answer = '';
+    let answer = ''
     if (version.includes('web')) {
         return MsgPopupHandler(data)
     } else
@@ -153,7 +161,7 @@ function asyncRequest(data) {
 }
 
 async function cacheTokenInfo(tokens) {
-    // let tokens = await  ENQWeb.Enq.sendAPI('get_tickers_all');
+    // let tokens = await  ENQWeb.Enq.sendAPI('get_tickers_all')
     disk.tokens.setTokens({net: ENQWeb.Enq.provider, tokens: tokens})
     return true
 }
@@ -169,7 +177,7 @@ async function asyncMessenger(msg, sender, sendResponse) {
 function getUrlVars() {
     let params = []
     let str
-    let url = window.location.search.substr(1);
+    let url = window.location.search.substr(1)
     url = url.split('&')
     for (let i in url) {
         str = url[i].split('=')
