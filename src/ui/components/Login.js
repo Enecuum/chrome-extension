@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from '../css/index.module.css'
-import Network from './requests/Network'
+
 import Header from '../elements/Header'
 import Separator from '../elements/Separator'
 import {regexAddress, toggleFullScreen} from "../Utils";
@@ -58,10 +58,6 @@ export default class Login extends React.Component {
     }
 
     render() {
-        if (this.state.isNetwork) {
-            return <Network setNetwork={this.setNetwork}/>
-        }
-
         return (
             <div className={styles.main}>
 

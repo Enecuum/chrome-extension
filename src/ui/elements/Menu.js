@@ -146,13 +146,14 @@ export default function Menu(props) {
             <div className={styles.button_link} onClick={() => explorerAddress(props.publicKey)}>Show in blockchain
                 explorer
             </div>
-            <div className={styles.row}>
-                <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>
-                {clickIterator >= clickIteratorLimit && <div className={styles.row + ' ' + styles.button_hide}>
-                    <div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>
-                    <div className={styles.button_link} onClick={() => props.setNetwork(true)}>CUSTOM</div>
-                </div>}
-            </div>
+            <div className={styles.button_link} onClick={props.setNetwork}>Networks</div>
+            {/*<div className={styles.row}>*/}
+            {/*    <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>*/}
+            {/*    {clickIterator >= clickIteratorLimit && <div className={styles.row + ' ' + styles.button_hide}>*/}
+            {/*        <div className={styles.button_link} onClick={() => setNet('bit-dev')}>BIT-DEV</div>*/}
+            {/*        <div className={styles.button_link} onClick={() => props.setNetwork(true)}>CUSTOM</div>*/}
+            {/*    </div>}*/}
+            {/*</div>*/}
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>}
             <div className={styles.button_link_logout}>

@@ -88,7 +88,7 @@ if (!chrome.runtime.getManifest) {
 
 let version = chrome.runtime.getManifest().version
 
-async function setupUi() {
+async function setupUI() {
 
     if (version.includes('web')) { // web
         global.asyncRequest = asyncRequest
@@ -113,7 +113,7 @@ function msgHandler(msg, sender) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    setupUi().then()
+    setupUI().then()
 })
 
 
