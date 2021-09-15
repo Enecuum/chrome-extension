@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
-import styles from "../../css/index.module.css";
-import Separator from "../../elements/Separator";
-import {regexToken, shortHash} from "../../Utils";
+import styles from "../css/index.module.css";
+import Separator from "../elements/Separator";
+import {regexToken, shortHash} from "../Utils";
 
 export default function Network(props) {
 
@@ -32,7 +32,7 @@ export default function Network(props) {
                 .then(response => response.json())
                 .then(data => {
                     if (data.hash && data.hash.length > 0) {
-                        setName(data.caption)
+                        setName('')
                         setToken(data.hash)
                         setHostCorrect(true)
                         setTokenCorrect(true)
