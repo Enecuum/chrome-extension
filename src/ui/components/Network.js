@@ -15,6 +15,8 @@ export default function Network(props) {
     let [libNetworks, setLibNetworks] = useState([...Object.entries(ENQWeb.Enq.urls)])
     let [localNetworks, setLocalNetworks] = useState(JSON.parse(localStorage.getItem('networks')) || [])
 
+    let [showAdd, setShowAdd] = useState(false)
+
     let checkHost = (host) => {
 
         setHostCorrect(false)
@@ -32,7 +34,6 @@ export default function Network(props) {
                 .then(response => response.json())
                 .then(data => {
                     if (data.hash && data.hash.length > 0) {
-                        setName('')
                         setToken(data.hash)
                         setHostCorrect(true)
                         setTokenCorrect(true)
@@ -57,6 +58,11 @@ export default function Network(props) {
 
     let addNet = async () => {
 
+        if (!showAdd) {
+            setShowAdd(true)
+            return
+        }
+
         if (hostCorrect && name.length > 0 && tokenCorrect) {
         } else {
             return
@@ -66,6 +72,8 @@ export default function Network(props) {
         localStorage.setItem('networks', JSON.stringify(localNetworks))
         setLocalNetworks(localNetworks)
         renderCards()
+
+        setShowAdd(false)
 
         setName('')
         setHost('')
@@ -136,7 +144,7 @@ export default function Network(props) {
 
         for (let i = 0; i < localNetworks.length; i++) {
 
-            let current = ENQWeb.Enq.provider === localNetworks[i][1]
+            let current = ENQWeb.Enq.provider === localNetworks[i].host
 
             cards.push(
                 <div key={i + 'local'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
@@ -159,7 +167,17 @@ export default function Network(props) {
     return (
         <div className={styles.main}>
 
-            <div className={styles.content}>
+            <div className={styles.field} onClick={() => {
+
+                if (showAdd) {
+                    setShowAdd(false)
+                    return
+                }
+                props.setNetwork(false)
+
+            }}>❮ Back</div>
+
+            {showAdd && <div className={styles.content}>
 
                 <input type="text"
                        spellCheck={false}
@@ -172,8 +190,8 @@ export default function Network(props) {
                 <input type="text"
                        spellCheck={false}
                        onChange={async (e) => {
-                           setHost(e.target.value.replace(/\/$/, ""))
-                           await checkHost(e.target.value.replace(/\/$/, ""))
+                           setHost(e.target.value)
+                           await checkHost(e.target.value)
                        }}
                        value={host}
                        className={styles.field + ' ' + (hostCorrect ? styles.field_correct : '')}
@@ -192,29 +210,19 @@ export default function Network(props) {
                        placeholder={'Token, something like 00000...'}
                 />
 
-            </div>
+            </div>}
 
-            <div className={styles.cards_container}>
-                <div className={styles.cards} id={'network_cards'}>
+            {!showAdd && <div className={styles.cards_container}>
+                <div className={styles.cards}>
                     {networks}
                 </div>
+            </div>}
+
+            <div onClick={addNet}
+                 className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add
             </div>
 
-            <div className={styles.form}>
-
-                <div onClick={addNet}
-                     className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add
-                </div>
-
-                <div onClick={() => {
-                    props.setNetwork(false)
-                }}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Back
-                </div>
-
-                <Separator/>
-
-            </div>
+            <Separator/>
 
         </div>
     )
