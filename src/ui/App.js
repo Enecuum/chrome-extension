@@ -17,6 +17,7 @@ import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
 import SignRequest from "./components/requests/SignRequest";
 import TransactionHistory from "./components/requests/TransactionHistory";
+import Keys from "./components/Keys";
 
 let net = localStorage.getItem('net')
 if (!net) {
@@ -47,6 +48,7 @@ export default function App(props) {
     const [isConnectLedger, setConnectLedger] = useState(false)
     const [ledgerTransport, setLedgerTransport] = useState()
 
+    const [isKeys, setKeys] = useState(false)
 
     const checkLock = () => {
         if (disk.lock.checkLock() && disk.lock.getHashPassword()) {
@@ -141,6 +143,10 @@ export default function App(props) {
         setLogin(false)
     }
 
+    if (isKeys) {
+        return <Keys setKeys={setKeys} user={user}/>
+    }
+
     if (isConfirm) {
         return <Confirm setConfirm={setConfirm} logout={logout}/>
     }
@@ -211,5 +217,6 @@ export default function App(props) {
                     setTransactionRequest={setTransactionRequest}
                     setTransactionHistory={setTransactionHistory}
                     setConnectLedger={setConnectLedger}
+                    setKeys={setKeys}
                     setSignRequest={setSignRequest}/>
 }

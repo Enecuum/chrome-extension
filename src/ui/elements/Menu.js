@@ -132,7 +132,12 @@ export default function Menu(props) {
 
             <div className={styles.lock} onClick={locked}><img src="./images/lock.png"/></div>
             <div className={styles.title}>My accounts</div>
-            <div className={styles.button_link + ' ' + styles.button_link_active}>Account 1</div>
+
+            <div className={styles.row}>
+                <div className={styles.button_link + ' ' + styles.button_link_active}>Account 1</div>
+                <div className={styles.button_link} onClick={() => props.setKeys(true)} >❯</div>
+            </div>
+
             {ethAddress ? <div className={styles.button_link}
                                onClick={() => createPopupWindow('index.html?type=connectLedger')}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div> :
                 <div className={styles.button_link}
