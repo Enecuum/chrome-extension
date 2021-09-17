@@ -413,6 +413,7 @@ export default function Account(props) {
                          setLock={props.setLock}
                          setConfirm={props.setConfirm}
                          setNetwork={props.setNetwork}
+                         setKeys={props.setKeys}
                          setPassword={props.setPassword}/>
         }
     }
