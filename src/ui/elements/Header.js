@@ -16,7 +16,7 @@ export default function Header(props) {
             {/*</div>*/}
 
             <div className={styles.network_status} onClick={props.clickMenu}>
-                Network: {net.toUpperCase()}
+                Network: <div className={styles.network_name}>{net.replace('https://', '').replace('http://', '').toUpperCase()}</div>
             </div>
 
             <div className={styles.menu_icon_div} onClick={props.clickMenu}><img src='./images/icons/5.png'/></div>

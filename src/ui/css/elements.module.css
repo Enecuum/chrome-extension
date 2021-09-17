@@ -16,9 +16,19 @@
     /*filter: brightness(100%);*/
 }
 
+.network_name {
+    margin-left: 5px;
+    width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .network_status {
     height: 70px;
     line-height: 70px;
+    display: flex;
+    flex-direction: row;
     /*background-color: red;*/
 
     cursor: pointer;
