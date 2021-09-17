@@ -434,7 +434,7 @@ export default function Account(props) {
     return (
         <div className={styles.main}>
 
-            <Header clickMenu={clickMenu}/>
+            <Header clickMenu={clickMenu} user={props.user}/>
 
             {renderMenu()}
 
