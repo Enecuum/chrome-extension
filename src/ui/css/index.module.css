@@ -229,6 +229,10 @@ a:hover {
     /*border: 1px solid transparent;*/
 }
 
+.info .field {
+    margin-top: 0;
+}
+
 .field_text {
     /*width: 280px;*/
     padding: 10px;

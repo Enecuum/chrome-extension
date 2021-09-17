@@ -197,9 +197,9 @@ export default class Transaction extends React.Component {
                     </div>
 
 
-                    <div>
+                    <div className={styles.info}>
 
-                        <div className={styles.field + ' ' + elements.network_status}>
+                        <div className={styles.field + ' ' + elements.rowLine}>
                             Network: <div className={elements.network_name}>{this.state.network}</div>
                         </div>
 
