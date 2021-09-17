@@ -62,10 +62,10 @@ export default function App(props) {
 
     const getUser = async () => {
         let account = await global.disk.user.loadUser()
-        if(account.lock){
+        if (account.lock) {
             setLock(true)
         }
-        if(account.login){
+        if (account.login) {
             setLogin(true)
         }
         setUser(account)

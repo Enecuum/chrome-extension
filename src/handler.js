@@ -19,10 +19,10 @@ export function MsgHandler(msg, ENQWeb) {
                 let userSession = JSON.parse(sessionStorage.getItem('User')) ? JSON.parse(sessionStorage.getItem('User')) : false
                 if (!userSession.publicKey) {
                     console.log('sessionStorage expired')
-                    if((disk.user.loadUserNotJson()).length > 0){
-                        resolve({response: {lock:true}})
-                    }else {
-                        resolve({response: {login:true}})
+                    if ((disk.user.loadUserNotJson()).length > 0) {
+                        resolve({response: {lock: true}})
+                    } else {
+                        resolve({response: {login: true}})
                     }
                     lockAccount()
                     // window.location.reload(false)
