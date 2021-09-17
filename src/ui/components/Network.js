@@ -68,12 +68,12 @@ export default function Network(props) {
             return
         }
 
+        setShowAdd(false)
+
         localNetworks.push({name, host, token})
         localStorage.setItem('networks', JSON.stringify(localNetworks))
         setLocalNetworks(localNetworks)
         renderCards()
-
-        setShowAdd(false)
 
         setName('')
         setHost('')
