@@ -291,7 +291,7 @@ global.counterTask = taskCounter
 async function taskHandler(taskId) {
     let task = Storage.task.getTask(taskId)
     console.log(task)
-    let account = ENQWeb.Enq.User
+    let account = JSON.parse(sessionStorage.getItem('User')) ? JSON.parse(sessionStorage.getItem('User')) : {}
     let data = ''
     let wallet = {
         pubkey: account.publicKey,

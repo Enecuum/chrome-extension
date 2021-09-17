@@ -16,13 +16,16 @@ export function MsgHandler(msg, ENQWeb) {
         }
         if (msg.account && msg.request) {
             if (!disk.lock.checkLock()) {
-
-                let userSession = Object.keys(ENQWeb.Enq.User).length > 0 ? ENQWeb.Enq.User : (JSON.parse(sessionStorage.getItem('User')) ? JSON.parse(sessionStorage.getItem('User')) : false)
+                let userSession = JSON.parse(sessionStorage.getItem('User')) ? JSON.parse(sessionStorage.getItem('User')) : false
                 if (!userSession.publicKey) {
                     console.log('sessionStorage expired')
-                    resolve({response: {}})
+                    if((disk.user.loadUserNotJson()).length > 0){
+                        resolve({response: {lock:true}})
+                    }else {
+                        resolve({response: {login:true}})
+                    }
                     lockAccount()
-                    window.location.reload(false)
+                    // window.location.reload(false)
                 } else
                     resolve({response: userSession})
 
@@ -34,7 +37,7 @@ export function MsgHandler(msg, ENQWeb) {
         if (msg.account && msg.unlock && msg.password) {
             let account = decryptAccount(msg.password)
             if (account) {
-                ENQWeb.Enq.User = account
+                // ENQWeb.Enq.User = account
                 sessionStorage.setItem('User', JSON.stringify(account))
                 // console.log(account)
                 // console.log(ENQWeb.Enq.User)
@@ -47,7 +50,7 @@ export function MsgHandler(msg, ENQWeb) {
         }
         if (msg.account && msg.set && msg.data) {
             disk.user.addUser(msg.data)
-            ENQWeb.Enq.User = msg.data
+            // ENQWeb.Enq.User = msg.data
             sessionStorage.setItem('User', JSON.stringify(msg.data))
             encryptAccount()
             // console.log(ENQWeb.Enq.User)

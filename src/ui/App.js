@@ -62,6 +62,12 @@ export default function App(props) {
 
     const getUser = async () => {
         let account = await global.disk.user.loadUser()
+        if(account.lock){
+            setLock(true)
+        }
+        if(account.login){
+            setLogin(true)
+        }
         setUser(account)
         // console.log(account)
         setLogin(account.privateKey ? false : true)
@@ -98,6 +104,7 @@ export default function App(props) {
         setLock(false)
         window.location.reload(false)
         localStorage.removeItem('net')
+        localStorage.removeItem('networks')
     }
 
     const createLedgerTransport = async () => {
