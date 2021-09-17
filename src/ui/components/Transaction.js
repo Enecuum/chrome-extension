@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from "../css/index.module.css";
+import elements from "../css/elements.module.css";
 import TransactionSend from "./TransactionSend";
 import Separator from "../elements/Separator";
 import {regexAddress} from "../Utils";
@@ -18,7 +19,9 @@ export default class Transaction extends React.Component {
             data: '',
             unlock: false,
             getLedgerTransport: this.props.getLedgerTransport,
-            fee: Number(0.0)
+            fee: Number(0.0),
+            localNetworks: JSON.parse(localStorage.getItem('networks')) || [],
+            network: ENQWeb.Net.currentProvider.replace('https://', '').replace('http://', '').toUpperCase()
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
@@ -31,6 +34,17 @@ export default class Transaction extends React.Component {
 
         this.feeCount()
         this.decimalsSearch()
+
+        this.setNetwork = this.setNetwork.bind(this)
+
+        // this.setNetwork()
+    }
+
+    setNetwork() {
+        this.setState({network: this.state.localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
+            this.state.localNetworks.find(element => element.host === ENQWeb.Net.currentProvider).name : this.state.network
+
+        })
     }
 
     setTransactionSend(value) {
@@ -128,7 +142,6 @@ export default class Transaction extends React.Component {
 
     render() {
 
-
         if (this.state.isTransactionSend) {
 
             return <TransactionSend setTransaction={this.props.setTransaction} txHash={this.state.txHash}/>
@@ -186,8 +199,8 @@ export default class Transaction extends React.Component {
 
                     <div>
 
-                        <div className={styles.field}>
-                            Network: {ENQWeb.Net.currentProvider.toUpperCase()}
+                        <div className={styles.field + ' ' + elements.network_status}>
+                            Network: <div className={elements.network_name}>{this.state.network}</div>
                         </div>
 
                         <div className={styles.field}>

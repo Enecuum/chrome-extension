@@ -102,7 +102,6 @@ export default function Network(props) {
         localStorage.setItem('net', value)
         ENQWeb.Net.provider = value
 
-
         await disk.user.loadUser()
             .then(async account => {
                 account.net = value
@@ -137,7 +136,8 @@ export default function Network(props) {
                         className={styles.card_title}>{libNetworks[i][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
                     <div className={styles.card_field}>{libNetworks[i][1]}</div>
                     <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[i][1]])}</div>
-                    <div className={styles.card_field_select} onClick={(current ? () => {} : () => setNet(libNetworks[i][1]))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                    <div className={styles.card_field_select} onClick={(current ? () => {
+                    } : () => setNet(libNetworks[i][1]))}>{current ? 'CURRENT' : 'SELECT'}</div>
                 </div>
             )
         }
@@ -151,8 +151,10 @@ export default function Network(props) {
                     <div className={styles.card_title}>{localNetworks[i].name}</div>
                     <div className={styles.card_field}>{localNetworks[i].host}</div>
                     <div className={styles.card_field}>{shortHash(localNetworks[i].token)}</div>
-                    <div className={styles.card_field_select} onClick={(current ? () => {} : () => setNet(localNetworks[i].host))}>{current ? 'CURRENT' : 'SELECT'}</div>
-                    <div className={styles.card_field_delete} onClick={() => removeNet(localNetworks[i].name)}>&#x2715;</div>
+                    <div className={styles.card_field_select} onClick={(current ? () => {
+                    } : () => setNet(localNetworks[i].host))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                    <div className={styles.card_field_delete}
+                         onClick={() => removeNet(localNetworks[i].name)}>&#x2715;</div>
                 </div>
             )
         }
@@ -175,7 +177,8 @@ export default function Network(props) {
                 }
                 props.setNetwork(false)
 
-            }}>❮ Back</div>
+            }}>❮ Back
+            </div>
 
             {showAdd && <div className={styles.content}>
 
