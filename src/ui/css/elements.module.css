@@ -19,7 +19,7 @@
 .network_name {
     margin-left: 5px;
     width: 140px;
-    height: 22px;
+    /*height: 22px;*/
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
