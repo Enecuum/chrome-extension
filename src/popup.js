@@ -69,9 +69,9 @@ if (!chrome.runtime) {
     chrome.runtime.getManifest = () => {
         return {version: alterVersion}
     }
+}
 
-    //TODO
-    chrome.runtime.web = true
+if (!chrome.tabs) {
     chrome.tabs = {}
     chrome.tabs.create = (tab) => {
         window.open(tab.url, '_blank')
@@ -81,6 +81,7 @@ if (!chrome.runtime) {
 // Sometimes there is no getManifest function
 if (!chrome.runtime.getManifest) {
     console.log('chrome.runtime.getManifest: false')
+    chrome.runtime.web = true
     chrome.runtime.getManifest = () => {
         return {version: alterVersion}
     }
