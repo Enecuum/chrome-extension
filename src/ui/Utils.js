@@ -11,17 +11,18 @@ const shortHashLong = (address) => {
 }
 
 const explorerTX = (hash) => {
-    // console.log('open explorer')
-    chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash})
+    openTab('tx', hash)
 }
 
 const explorerAddress = (hash) => {
-    // console.log('open explorer')
-    chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/account/' + hash})
+    openTab('account', hash)
 }
-const explorerLink = (hash) => {
-    // console.log('open explorer')
-    return 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/tx/' + hash
+
+const openTab = (path, hash) => {
+    if (ENQWeb.Net.currentProvider.includes('http'))
+        chrome.tabs.create({url: ENQWeb.Net.currentProvider + '/#!/' + path + '/' + hash})
+    else
+        chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/' + path + '/' + hash})
 }
 
 //TODO
@@ -86,7 +87,6 @@ module.exports = {
     explorerTX,
     explorerAddress,
     toggleFullScreen,
-    explorerLink,
     generateIcon,
     regexData,
     regexAddress,

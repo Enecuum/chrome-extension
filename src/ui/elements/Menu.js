@@ -148,9 +148,6 @@ export default function Menu(props) {
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={window}>Window</div>}
-            <div className={styles.button_link} onClick={() => explorerAddress(props.publicKey)}>Show in blockchain
-                explorer
-            </div>
             <div className={styles.button_link} onClick={props.setNetwork}>Networks</div>
             {/*<div className={styles.row}>*/}
             {/*    <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>*/}

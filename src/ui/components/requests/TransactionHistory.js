@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import elements from '../../css/elements.module.css'
-import {explorerLink, explorerTX, shortHash} from '../../Utils'
+import {explorerTX, shortHash} from '../../Utils'
 
 // let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()

@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
-import {shortHash, shortHashLong} from '../Utils'
+import {explorerAddress, shortHash, shortHashLong} from '../Utils'
 
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -31,6 +31,12 @@ export default function Keys(props) {
                 }}>Copy private key</div>
 
                 {/*<div className={styles.field}>{props.user.net}</div>*/}
+
+                <div className={styles.field}>Open new tab</div>
+
+                <div className={styles.field + ' ' + styles.button} onClick={() => explorerAddress(props.user.publicKey)}>
+                    Show in blockchain explorer
+                </div>
 
             </div>
 
