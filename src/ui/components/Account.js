@@ -18,6 +18,8 @@ let tickers = {}
 export default function Account(props) {
     ENQWeb.Enq.provider = props.user.net
 
+    let [localNetworks, setLocalNetworks] = useState(JSON.parse(localStorage.getItem('networks')) || [])
+
     const [amount, setAmount] = useState(BigInt(0))
     const [usd, setUSD] = useState(BigInt(0))
     const [ticker, setTicker] = useState('')
@@ -70,9 +72,9 @@ export default function Account(props) {
 
     const getConnects = async () => {
         let connects = await asyncRequest({connectionList: true})
-        if(typeof connects === "object")
+        if (typeof connects === 'object')
             setConnectionsCounter(Object.keys(connects.ports).length)
-        if(typeof connects === "number")
+        if (typeof connects === 'number')
             setConnectionsCounter(connects)
     }
 
@@ -91,8 +93,11 @@ export default function Account(props) {
     const balance = () => {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
-        const token = props.user.token //ENQWeb.Enq.token[ENQWeb.Enq.provider]
-        // console.log(token)
+        const mainToken = ENQWeb.Enq.token[ENQWeb.Enq.provider] ? ENQWeb.Enq.token[ENQWeb.Enq.provider] : (localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
+            localNetworks.find(element => element.host === ENQWeb.Net.currentProvider).token : '')
+        const token = props.user.token ? props.user.token : mainToken
+
+        console.log(token)
         let tokens = []
 
         ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
@@ -108,23 +113,25 @@ export default function Account(props) {
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
-                        image = res[i].token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png' : generateIcon(res[i].token)
+                        image = res[i].token === mainToken ? './images/enq.png' : generateIcon(res[i].token)
                     } else {
                         tokens.push({
                             amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
                             usd: 0,
-                            image: res[i].token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? './images/enq.png' : generateIcon(res[i].token),
+                            image: res[i].token === mainToken ? './images/enq.png' : generateIcon(res[i].token),
                             tokenHash: res[i].token
                         })
                     }
                 }
-                // console.log(tickers)
+
+                console.log(ticker)
                 setAmount(amount)
                 setTicker(ticker)
                 setLogo(image)
                 cacheTokens(tickers).then()
-                if (props.user.net === 'pulse') {
+
+                if (props.user.net === 'https://pulse.enecuum.com') {
                     ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
                         .then((answer) => {
                             if (answer['enq-enecuum'] !== undefined) {
@@ -140,7 +147,8 @@ export default function Account(props) {
                     ticker: ticker,
                     usd: usd,
                     image: image,
-                    tokenHash: token
+                    tokenHash: token,
+                    main: true
                 }, ...tokens])
                 // console.log(res.amount / 1e10)
             })
@@ -348,7 +356,7 @@ export default function Account(props) {
     let renderAssets = () => {
 
         // console.log(assets)
-        let mainToken = assets.find(element => element.tokenHash === ENQWeb.Net.ticker)
+        let mainToken = assets.find(element => element.main === true)
         // console.log(mainToken)
 
         let assetsSort = assets.sort((a, b) => Number(a.amount) - Number(b.amount))
