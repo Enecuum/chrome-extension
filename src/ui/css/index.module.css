@@ -885,6 +885,7 @@ input[type=number] {
 .cards .card {
     width: calc(100% - 40px);
     height: 180px;
+    overflow: hidden;
     /*background: red;*/
     flex-shrink: 0;
     margin-bottom: 0;
@@ -911,6 +912,10 @@ input[type=number] {
 
 .card_title {
     font-size: var(--font-size-big);
+    width: calc(100% - 20px);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .card_field {
