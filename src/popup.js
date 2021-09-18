@@ -69,6 +69,7 @@ if (!chrome.runtime) {
     chrome.runtime.getManifest = () => {
         return {version: alterVersion}
     }
+    chrome.runtime.web = true
 }
 
 if (!chrome.tabs) {

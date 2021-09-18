@@ -25,6 +25,12 @@ const openTab = (path, hash) => {
         chrome.tabs.create({url: 'https://' + ENQWeb.Net.currentProvider + '.enecuum.com/#!/' + path + '/' + hash})
 }
 
+let test = () => {
+    // localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
+    //     localNetworks.find(element => element.host === ENQWeb.Net.currentProvider).name :
+    //     net.replace('https://', '').replace('http://', '').toUpperCase()
+}
+
 //TODO
 let icons = {}
 const generateIcon = (token) => {

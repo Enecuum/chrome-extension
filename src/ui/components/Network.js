@@ -105,7 +105,7 @@ export default function Network(props) {
         await disk.user.loadUser()
             .then(async account => {
                 account.net = value
-                account.token = ENQWeb.Enq.ticker
+                account.token = token
                 await disk.promise.sendPromise({
                     account: true,
                     set: true,
