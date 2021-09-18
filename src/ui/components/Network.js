@@ -17,35 +17,74 @@ export default function Network(props) {
 
     let [showAdd, setShowAdd] = useState(false)
 
-    let checkHost = (host) => {
+    let checkHost = (url) => {
+
+        url = url[url.length - 1] === '/' ? url.substr(0, url.length - 1) : url;
 
         setHostCorrect(false)
         setTokenCorrect(false)
 
-        let url
+        let urlObject
         try {
-            url = new URL(host);
+            urlObject = new URL(url);
         } catch (_) {
             return false;
         }
 
+        // let xhr = new XMLHttpRequest()
+        // xhr.open('GET', url + '/api/v1/native_token', true)
+        // xhr.onload = () => {
+        //     if (xhr.readyState === 4) {
+        //         if (xhr.status === 200) {
+        //             let data = JSON.parse(xhr.responseText)
+        //             if (data.hash && data.hash.length > 0) {
+        //                 setHostCorrect(true)
+        //                 setHost(url)
+        //                 setTokenCorrect(true)
+        //                 setToken(data.hash)
+        //             }
+        //         } else {
+        //             let xhr2 = new XMLHttpRequest()
+        //             xhr2.open('GET', url + '/api/v1/stats', true)
+        //             xhr2.onload = () => {
+        //                 if (xhr2.readyState === 4) {
+        //                     if (xhr2.status === 200) {
+        //                         let data = JSON.parse(xhr2.responseText)
+        //                         if (data.network_hashrate) {
+        //                             setHostCorrect(true)
+        //                             setHost(url)
+        //                             if (regexToken.test(token))
+        //                                 setTokenCorrect(true)
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //             xhr2.send(null)
+        //         }
+        //     }
+        // }
+        // xhr.onerror = () => {}
+        // xhr.send(null)
+
         try {
-            fetch(host + '/api/v1/native_token')
+            fetch(url + '/api/v1/native_token')
                 .then(response => response.json())
                 .then(data => {
                     if (data.hash && data.hash.length > 0) {
-                        setToken(data.hash)
                         setHostCorrect(true)
+                        setHost(url)
                         setTokenCorrect(true)
+                        setToken(data.hash)
                     }
                 })
                 .catch(e => {
                     setHostCorrect(false)
-                    fetch(host + '/api/v1/stats')
+                    fetch(url + '/api/v1/stats')
                         .then(response => response.json())
                         .then(data => {
                             if (data.network_hashrate) {
                                 setHostCorrect(true)
+                                setHost(url)
 
                                 if (regexToken.test(token))
                                     setTokenCorrect(true)
@@ -60,6 +99,7 @@ export default function Network(props) {
 
         if (!showAdd) {
             setShowAdd(true)
+            console.warn('Console settings > Hide network messages')
             return
         }
 

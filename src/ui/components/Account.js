@@ -97,7 +97,7 @@ export default function Account(props) {
             localNetworks.find(element => element.host === ENQWeb.Net.currentProvider).token : '')
         const token = props.user.token ? props.user.token : mainToken
 
-        console.log(token)
+        // console.log(token)
         let tokens = []
 
         ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
