@@ -30,7 +30,7 @@ export default function Keys(props) {
                     navigator.clipboard.writeText(props.user.privateKey)
                 }}>Copy private key</div>
 
-                {/*<div className={styles.field}>{props.user.net}</div>*/}
+                <Separator/>
 
                 <div className={styles.field}>Open new tab</div>
 
