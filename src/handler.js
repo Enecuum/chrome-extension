@@ -1,6 +1,10 @@
 import {decryptAccount, encryptAccount, lockAccount} from './lockAccount'
 
-export function MsgHandler(msg) {
+export function MsgHandler(msg, ENQWeb) {
+
+    console.log(msg)
+    console.log(ENQWeb)
+
     return new Promise((resolve, reject) => {
         if (msg.initial) {
             lockTimer()

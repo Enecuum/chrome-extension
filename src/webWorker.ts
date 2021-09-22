@@ -1,13 +1,14 @@
-import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
-import {createPopupWindow, lockTimer} from './handler'
+declare var ENQWeb: any;
+require('./lib/enqweb3lib.ext.min.js')
 
 import {MsgHandler} from './handler'
 
 self.addEventListener('message', msgHandler, false);
 
-async function msgHandler(msg: any) {
+console.log('Web worker')
 
-    MsgHandler(msg).then(answer => {
+async function msgHandler(msg: any) {
+    MsgHandler(msg, ENQWeb).then(answer => {
         self.postMessage(answer);
     })
 }
