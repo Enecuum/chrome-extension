@@ -94,7 +94,8 @@ async function setupUI() {
 
     if (version.includes('web')) { // web
         global.asyncRequest = asyncRequest
-        global.webBack = MsgHandler
+        // global.webBack = MsgHandler
+        global.webWorker = new Worker('webWorker.js', {})
         await initApp()
         serviceWorkerRegistration.register()
 

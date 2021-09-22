@@ -232,14 +232,27 @@ function getHashPassword() {
 function sendPromise(obj) {
     return new Promise((resolve) => {
         if (chrome.runtime.getManifest().version.includes('web')) {
+
             // console.log('web send promise');
-            webBack(obj, ENQWeb).then(answer => {
+            // webBack(obj, ENQWeb).then(answer => {
+            //     if (answer.response !== undefined) {
+            //         resolve(answer.response);
+            //     } else {
+            //         resolve(answer);
+            //     }
+            // })
+
+            // TODO move addEventListener somewhere else
+            webWorker.addEventListener('message', function(e) {
+                let answer = e.data
                 if (answer.response !== undefined) {
                     resolve(answer.response);
                 } else {
                     resolve(answer);
                 }
-            })
+            }, false)
+            webWorker.postMessage(obj)
+
         } else {
             chrome.runtime.sendMessage(obj, answer => {
                 if (answer.response !== undefined) {

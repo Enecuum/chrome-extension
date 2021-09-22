@@ -1,6 +1,6 @@
-import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
+import {decryptAccount, encryptAccount, lockAccount} from './lockAccount'
 
-export function MsgHandler(msg, ENQWeb) {
+export function MsgHandler(msg) {
     return new Promise((resolve, reject) => {
         if (msg.initial) {
             lockTimer()
@@ -111,7 +111,7 @@ export function lockTimer() {
     if (timer !== undefined) {
         clearTimeout(timer)
     }
-    if (disk.name === "background") {
+    if (disk.name === 'background') {
         timer = setTimeout(() => lockAccount(), lockTime)
     } else {
         timer = setTimeout(() => disk.promise.sendPromise({lock: true}), lockTime)

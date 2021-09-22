@@ -21,10 +21,18 @@ http.createServer(function (req, res) {
         return
     }
 
+    if (parsedUrl.pathname === '/restart') {
+        res.end()
+        restartServer().then()
+        return
+    }
+
     req.on('data', function (chunk) {
         let sig = 'sha1=' + crypto.createHmac('sha1', process.env.GITHUB).update(chunk.toString()).digest('hex')
-        if (req.headers['x-hub-signature'] == sig) {
+        if (req.headers['x-hub-signature'] === sig) {
+            res.end()
             restartServer().then()
+            return
         }
     })
 
@@ -38,7 +46,7 @@ let restartServer = async () => {
     STATE = 'GIT FETCH'
     console.log(execSync('git fetch --all'))
     STATE = 'GIT RESET'
-    console.log(execSync('git reset --hard origin/master'))
+    // console.log(execSync('git reset --hard origin/master'))
     STATE = 'GIT PULL'
     console.log(execSync('git pull'))
     STATE = 'NPM I'

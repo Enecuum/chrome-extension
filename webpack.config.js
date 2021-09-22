@@ -43,6 +43,7 @@ module.exports = () => {
             contentScript: path.resolve(SOURCE_FOLDER, 'contentScript.js'),
             lockAccount: path.resolve(SOURCE_FOLDER, 'lockAccount.js'),
             '../serviceWorker': path.resolve(SOURCE_FOLDER, 'serviceWorker.ts'),
+            '../webWorker': path.resolve(SOURCE_FOLDER, 'webWorker.ts'),
             serviceWorkerRegistration: path.resolve(SOURCE_FOLDER, 'serviceWorkerRegistration.ts'),
             workerDataParse: path.resolve(SOURCE_FOLDER, './utils/workerDataParse.js'),
         },
