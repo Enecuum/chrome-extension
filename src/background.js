@@ -1,7 +1,7 @@
-const storage = require('./utils/localStorage')
+const Storage = require('./utils/localStorage')
 import {extensionApi} from './utils/extensionApi'
 import {lockAccount, say} from "./lockAccount"
-import {MsgHandler} from "./handler"
+import {MessageHandler} from "./handler"
 
 document.addEventListener('DOMContentLoaded', function () {
     if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 say()
 
-let Storage = new storage('background')
-global.disk = Storage
+let storage = new Storage('background')
+global.disk = storage
 
 let ports = {}
 let requestsMethods = {
@@ -46,8 +46,8 @@ function setupApp() {
     extensionApi.runtime.onMessage.addListener(msgHandler)
     extensionApi.runtime.onConnect.addListener(connectHandler)
     taskCounter()
-    if (!Storage.config.getConfig()) {
-        Storage.config.initConfig()
+    if (!storage.config.getConfig()) {
+        storage.config.initConfig()
     }
 }
 
@@ -60,7 +60,7 @@ async function msgHandler(msg, sender, sendResponse) {
             disconnectPorts(msg.name)
         }
     }
-    MsgHandler(msg, ENQWeb).then(answer => sendResponse(answer))
+    MessageHandler(msg, ENQWeb).then(answer => sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {
@@ -73,7 +73,7 @@ async function msgConnectHandler(msg, sender) {
         let lock = disk.lock.checkLock()
         // if (lock) {
         //     if (!lockedMethods[msg.type]) {
-        //         await Storage.task.setTask(msg.taskId, {
+        //         await storage.task.setTask(msg.taskId, {
         //             data: msg.data,
         //             type: msg.type,
         //             cb: msg.cb
@@ -84,7 +84,7 @@ async function msgConnectHandler(msg, sender) {
         // }
         if (!ports[msg.cb.url].enabled) {
             if (msg.type === 'enable') {
-                await Storage.task.setTask(msg.taskId, {
+                await storage.task.setTask(msg.taskId, {
                     data: msg.data,
                     type: msg.type,
                     cb: msg.cb
@@ -101,7 +101,7 @@ async function msgConnectHandler(msg, sender) {
                 }
             }
             if (msg.type === "reconnect") {
-                await Storage.task.setTask(msg.taskId, {
+                await storage.task.setTask(msg.taskId, {
                     data: msg.data,
                     type: msg.type,
                     cb: msg.cb
@@ -110,14 +110,14 @@ async function msgConnectHandler(msg, sender) {
             }
         } else {
             if (msg.type === 'tx') {
-                Storage.task.setTask(msg.taskId, {
+                storage.task.setTask(msg.taskId, {
                     tx: msg.tx,
                     type: msg.type,
                     cb: msg.cb,
                     data: msg.data,
                 })
             } else {
-                Storage.task.setTask(msg.taskId, {
+                storage.task.setTask(msg.taskId, {
                     data: msg.data,
                     type: msg.type,
                     cb: msg.cb
@@ -189,7 +189,7 @@ async function msgPopupHandler(msg, sender) {
                 })
             }
         } else if (msg.reject_all) {
-            let list = Storage.list.loadList()
+            let list = storage.list.loadList()
             for (let i in list) {
                 await rejectTaskHandler(list[i])
             }
@@ -281,7 +281,7 @@ function disconnectPorts(name) {
 global.disconnectPorts = disconnectPorts
 
 function taskCounter() {
-    let tasks = Storage.task.loadTask()
+    let tasks = storage.task.loadTask()
     let ids = Object.keys(tasks)
     extensionApi.browserAction.setBadgeText({text: `${ids.length === 0 ? '' : ids.length}`})
 }
@@ -289,7 +289,7 @@ function taskCounter() {
 global.counterTask = taskCounter
 
 async function taskHandler(taskId) {
-    let task = Storage.task.getTask(taskId)
+    let task = storage.task.getTask(taskId)
     console.log(task)
     let account = ENQWeb.Enq.User
     let data = ''
@@ -310,7 +310,7 @@ async function taskHandler(taskId) {
                 cb: task.cb
             }).then()
             ports[task.cb.url].enabled = true
-            Storage.task.removeTask(taskId)
+            storage.task.removeTask(taskId)
             break
         case 'tx':
             if (ports[task.cb.url].enabled) {
@@ -335,7 +335,7 @@ async function taskHandler(taskId) {
                 }).then()
                 ENQWeb.Net.provider = buf
             }
-            Storage.task.removeTask(taskId)
+            storage.task.removeTask(taskId)
             break
         case 'balanceOf':
             console.log('balanceOf handler work!')
@@ -365,7 +365,7 @@ async function taskHandler(taskId) {
                 })
                 ENQWeb.Net.provider = buf
             }
-            Storage.task.removeTask(taskId)
+            storage.task.removeTask(taskId)
             break
         case 'getProvider':
             if (ports[task.cb.url].enabled) {
@@ -382,7 +382,7 @@ async function taskHandler(taskId) {
                     cb: task.cb
                 }).then()
             }
-            Storage.task.removeTask(taskId)
+            storage.task.removeTask(taskId)
             break
         case 'getVersion':
             if (ports[task.cb.url].enabled) {
@@ -393,7 +393,7 @@ async function taskHandler(taskId) {
                     cb: task.cb
                 }).then()
             }
-            Storage.task.removeTask(taskId)
+            storage.task.removeTask(taskId)
             break
         case 'sign':
             console.log('sign work')
@@ -404,7 +404,7 @@ async function taskHandler(taskId) {
                     cb: task.cb
                 }).then()
             }
-            Storage.task.removeTask(taskId)
+            storage.task.removeTask(taskId)
             break
         case 'reconnect':
             console.log('reconnect')
@@ -414,7 +414,7 @@ async function taskHandler(taskId) {
                 taskId: taskId,
                 cb: task.cb
             }).then()
-            Storage.task.removeTask(taskId)
+            storage.task.removeTask(taskId)
         default:
             break
     }
@@ -422,8 +422,8 @@ async function taskHandler(taskId) {
 }
 
 function rejectTaskHandler(taskId, reason = "rejected") {
-    let task = Storage.task.getTask(taskId)
-    Storage.task.removeTask(taskId)
+    let task = storage.task.getTask(taskId)
+    storage.task.removeTask(taskId)
     let data = {reject: true, data: reason}
     broadcast(task.cb.url, {
         data: JSON.stringify(data),

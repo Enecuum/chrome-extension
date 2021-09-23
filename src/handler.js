@@ -1,76 +1,77 @@
 import {decryptAccount, encryptAccount, lockAccount} from './lockAccount'
 
-export function MsgHandler(msg, ENQWeb) {
+export function MessageHandler(message, ENQWeb, disk) {
 
-    console.log(msg)
+    console.log(message)
     console.log(ENQWeb)
+    console.log(disk)
 
     return new Promise((resolve, reject) => {
-        if (msg.initial) {
-            lockTimer()
+        if (message.initial) {
+            lockTimer(disk)
             resolve({response: true})
         }
-        if (msg.window) {
-            if (msg.url != undefined) {
-                createPopupWindow(msg.url);
+        if (message.window) {
+            if (message.url != undefined) {
+                createPopupWindow(message.url);
             } else {
                 createPopupWindow(false);
             }
             resolve();
         }
-        if (msg.account && msg.request) {
+        if (message.account && message.request) {
             if (!disk.lock.checkLock()) {
 
-                let userSession = Object.keys(ENQWeb.Enq.User).length > 0 ? ENQWeb.Enq.User : (JSON.parse(sessionStorage.getItem('User')) ? JSON.parse(sessionStorage.getItem('User')) : false)
-                if (!userSession.publicKey) {
-                    console.log('sessionStorage expired')
-                    resolve({response: {}})
-                    lockAccount()
-                    window.location.reload(false)
-                } else
-                    resolve({response: userSession})
+                // let userSession = Object.keys(ENQWeb.Enq.User).length > 0 ? ENQWeb.Enq.User : (JSON.parse(sessionStorage.getItem('User')) ? JSON.parse(sessionStorage.getItem('User')) : false)
+                // if (!userSession.publicKey) {
+                //     console.log('sessionStorage expired')
+                //     resolve({response: {}})
+                //     lockAccount()
+                //     window.location.reload(false)
+                // } else
+                //     resolve({response: userSession})
 
             } else {
                 resolve({response: false})
             }
 
         }
-        if (msg.account && msg.unlock && msg.password) {
-            let account = decryptAccount(msg.password)
+        if (message.account && message.unlock && message.password) {
+            let account = decryptAccount(message.password, disk)
             if (account) {
                 ENQWeb.Enq.User = account
                 sessionStorage.setItem('User', JSON.stringify(account))
-                // console.log(account)
-                // console.log(ENQWeb.Enq.User)
+                console.log(account)
+                console.log(ENQWeb.Enq.User)
                 disk.user.addUser(account)
-                encryptAccount()
+                encryptAccount(disk)
                 resolve({response: account})
             } else {
                 resolve({response: false})
             }
         }
-        if (msg.account && msg.set && msg.data) {
-            disk.user.addUser(msg.data)
-            ENQWeb.Enq.User = msg.data
-            sessionStorage.setItem('User', JSON.stringify(msg.data))
+        if (message.account && message.set && message.data) {
+            disk.user.addUser(message.data)
+            ENQWeb.Enq.User = message.data
+            sessionStorage.setItem('User', JSON.stringify(message.data))
             encryptAccount()
             // console.log(ENQWeb.Enq.User)
             resolve({response: ENQWeb.Enq.User})
         }
-        if (msg.account && msg.encrypt) {
-            if (msg.again) {
-                disk.user.addUser(msg.data)
-                encryptAccount()
+        if (message.account && message.encrypt) {
+            if (message.again) {
+                disk.user.addUser(message.data)
+                encryptAccount(disk)
             } else {
-                encryptAccount()
+                encryptAccount(disk)
             }
             resolve({response: true})
         }
-        if (msg.lock) {
+        if (message.lock) {
             lockAccount()
             resolve({response: true})
         }
-        if (msg.account && msg.logout) {
+        if (message.account && message.logout) {
             ENQWeb.Enq.User = {}
             sessionStorage.setItem('User', JSON.stringify({}))
             // disconnectPorts()
@@ -111,7 +112,7 @@ export function Timer(ms) {
     return true
 }
 
-export function lockTimer() {
+export function lockTimer(disk) {
     if (timer !== undefined) {
         clearTimeout(timer)
     }

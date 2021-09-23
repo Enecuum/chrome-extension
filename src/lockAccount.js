@@ -6,7 +6,8 @@ function lockAccount() {
     console.log('account locked')
 }
 
-function encryptAccount() {
+function encryptAccount(disk) {
+    console.log('encryptAccount')
     let account = disk.user.loadUserNotJson()
     //TODO HERE {}
     // console.log(account)
@@ -22,7 +23,8 @@ function encryptAccount() {
     }
 }
 
-function decryptAccount(password) {
+function decryptAccount(password, disk) {
+    console.log('decryptAccount')
     let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
     if (disk.lock.unlock(hash)) {
         hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)

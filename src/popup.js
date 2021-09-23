@@ -1,5 +1,5 @@
 import {initApp} from "./ui/index"
-import {MsgHandler, MsgPopupHandler} from "./handler"
+import {MessageHandler, MsgPopupHandler} from "./handler"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 const Storage = require('./utils/localStorage')

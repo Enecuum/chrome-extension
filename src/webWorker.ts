@@ -1,14 +1,22 @@
 declare var ENQWeb: any;
 require('./lib/enqweb3lib.ext.min.js')
 
-import {MsgHandler} from './handler'
+import {MessageHandler} from './handler'
 
-self.addEventListener('message', msgHandler, false);
+const Storage = require('./utils/localStorage')
+let storage = new Storage('worker')
+let disk = storage
+console.log(disk)
+
+self.addEventListener('message', messageHandler, false);
 
 console.log('Web worker')
 
-async function msgHandler(msg: any) {
-    MsgHandler(msg, ENQWeb).then(answer => {
+async function messageHandler(msg: any) {
+    MessageHandler(msg.data, ENQWeb, disk).then(answer => {
         self.postMessage(answer);
     })
 }
+
+// console.log(JSON.parse(localStorage.getItem('User')))
+// console.log(JSON.parse(localStorage.getItem('lock')))
