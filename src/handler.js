@@ -35,7 +35,9 @@ export function MsgHandler(msg, ENQWeb) {
             let account = decryptAccount(msg.password)
             if (account) {
                 ENQWeb.Enq.User = account
-                sessionStorage.setItem('User', JSON.stringify(account))
+                const webAccount = JSON.parse(JSON.stringify(account))
+                webAccount.privateKey = ''
+                sessionStorage.setItem('User', JSON.stringify(webAccount))
                 // console.log(account)
                 // console.log(ENQWeb.Enq.User)
                 disk.user.addUser(account)
@@ -46,12 +48,14 @@ export function MsgHandler(msg, ENQWeb) {
             }
         }
         if (msg.account && msg.set && msg.data) {
-            disk.user.addUser(msg.data)
-            ENQWeb.Enq.User = msg.data
-            sessionStorage.setItem('User', JSON.stringify(msg.data))
+            let account = msg.data
+            disk.user.addUser(account)
+            const webAccount = JSON.parse(JSON.stringify(account))
+            webAccount.privateKey = ''
+            sessionStorage.setItem('User', JSON.stringify(webAccount))
             encryptAccount()
             // console.log(ENQWeb.Enq.User)
-            resolve({response: ENQWeb.Enq.User})
+            resolve({response: account})
         }
         if (msg.account && msg.encrypt) {
             if (msg.again) {
