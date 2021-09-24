@@ -64,7 +64,7 @@ export default function App(props) {
         let account = await global.disk.user.loadUser()
         setUser(account)
         // console.log(account)
-        setLogin(account.privateKey ? false : true)
+        setLogin(account.publicKey ? false : true)
     }
 
     useEffect(() => {
