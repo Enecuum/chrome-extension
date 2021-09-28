@@ -33,15 +33,17 @@ export async function initApp(background) {
             starDiv.style.top = top + 'px'
             starDiv.style.width = starWidth + 'px'
             starDiv.style.height =  starWidth + 'px'
+            starDiv.style.opacity = 0.5
             spaceDiv.append(starDiv)
         }
 
         setInterval(() => {
             let starDiv = spaceDiv.children[Math.floor(Math.random() * spaceSize)]
             let starWidth = Math.floor(Math.random() * 3 + 1)
+            starDiv.style.opacity = 1
             starDiv.style.width = starWidth + 'px'
             starDiv.style.height =  starWidth + 'px'
-        }, 1000);
+        }, 5000);
     }
 
     render(
