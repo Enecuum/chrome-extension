@@ -1,0 +1,9 @@
+#space {
+    z-index: 0;
+}
+
+.star {
+    background: ghostwhite;
+    position: absolute;
+}
+
