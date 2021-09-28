@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import styles from "../css/index.module.css";
 import Separator from "../elements/Separator";
 import {regexToken, shortHash} from "../Utils";
+import Input from "../elements/Input";
 
 export default function Network(props) {
 
@@ -224,7 +225,7 @@ export default function Network(props) {
 
             {showAdd && <div className={styles.content}>
 
-                <input type="text"
+                <Input type="text"
                        spellCheck={false}
                        onChange={(e) => setName(e.target.value)}
                        value={name}
@@ -232,7 +233,7 @@ export default function Network(props) {
                        placeholder={'Network short name'}
                 />
 
-                <input type="text"
+                <Input type="text"
                        spellCheck={false}
                        onChange={async (e) => {
                            setHost(e.target.value)
@@ -243,7 +244,7 @@ export default function Network(props) {
                        placeholder={'Host name, start with https://'}
                 />
 
-                <input type="text"
+                <Input type="text"
                        spellCheck={false}
                        onChange={(e) => {
                            setToken((e.target.value))

@@ -70,7 +70,8 @@ main {
     /*padding-bottom: 20px;*/
     /*margin-bottom: 20px;*/
 
-    /*background: lightblue;*/
+    background: var(--color-blue-background);
+    z-index: 1;
 }
 
 .showWideScreen {
@@ -378,9 +379,14 @@ input.field {
     color: white;
 
     /*border: 1px solid var(--color-blue-super-ligth);*/
-    border: none;
-    border-bottom: 1px solid white;
-    /*border-radius: 3px;*/
+    /*border: none;*/
+    /*border-top: 1px solid white;*/
+    border: 1px solid #9b9b9b;
+    border-radius: 3px;
+}
+
+input.field:focus {
+    border: 1px solid white;
 }
 
 input.field:hover {
@@ -393,7 +399,7 @@ input.field:focus {
 }
 
 input.field::placeholder {
-    color: white;
+    color: gray;
 }
 
 input.field.password {
@@ -416,7 +422,7 @@ input.field.password::placeholder {
 /*}*/
 
 input.field_correct {
-    border-bottom: 1px solid var(--color-blue);
+    border-color: var(--color-blue);
 }
 
 /* Chrome, Safari, Edge, Opera */

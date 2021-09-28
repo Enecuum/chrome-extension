@@ -2,6 +2,7 @@ import React from "react";
 import styles from "../css/index.module.css";
 import Separator from "../elements/Separator";
 import {toggleFullScreen} from "../Utils";
+import Input from "../elements/Input";
 
 export default class Lock extends React.Component {
     constructor(props) {
@@ -59,7 +60,7 @@ export default class Lock extends React.Component {
 
                 <div className={styles.form}>
 
-                    <input type="password"
+                    <Input type="password"
                            spellCheck={false}
                            onChange={this.handleChangePassword}
                            value={this.state.password}

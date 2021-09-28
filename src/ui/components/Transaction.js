@@ -4,6 +4,7 @@ import elements from "../css/elements.module.css";
 import TransactionSend from "./TransactionSend";
 import Separator from "../elements/Separator";
 import {regexAddress} from "../Utils";
+import Input from "../elements/Input";
 
 //TODO decimals to tokens
 
@@ -168,7 +169,7 @@ export default class Transaction extends React.Component {
 
                     <div className={styles.content}>
 
-                        <input type="text"
+                        <Input type="text"
                                spellCheck={false}
                                onChange={this.handleChangeAddress}
                                value={this.state.address}
@@ -176,7 +177,7 @@ export default class Transaction extends React.Component {
                                placeholder={'Address'}
                         />
 
-                        <input type="number"
+                        <Input type="number"
                                onChange={this.handleChangeAmount}
                                value={this.state.amount}
                                className={styles.field}
@@ -186,7 +187,7 @@ export default class Transaction extends React.Component {
                         <div
                             className={styles.field_ticker}>{this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}</div>
 
-                        <input type="text"
+                        <Input type="text"
                                spellCheck={false}
                                onChange={this.handleChangeData}
                                value={this.state.data}
