@@ -389,6 +389,10 @@ input.field:focus {
     border: 1px solid white;
 }
 
+input.field_correct:focus {
+    border-color: var(--color-blue);
+}
+
 input.field:hover {
     /*border: 1px solid var(--color-blue-ligth)*/
 }
