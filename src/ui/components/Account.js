@@ -60,9 +60,9 @@ export default function Account(props) {
         console.log('addConnect')
         let elements = [...connectsElements]
         elements.push()
-        console.log(elements)
+        // console.log(elements)
         setConnectsElements(elements)
-        console.log(connectsElements)
+        // console.log(connectsElements)
     }
 
 
@@ -125,7 +125,7 @@ export default function Account(props) {
                     }
                 }
 
-                console.log(ticker)
+                // console.log(ticker)
                 setAmount(amount)
                 setTicker(ticker)
                 setLogo(image)
@@ -337,7 +337,7 @@ export default function Account(props) {
     }
 
     let changeToken = async (hash) => {
-        console.log(hash);
+        // console.log(hash);
         let user = props.user;
         user.token = hash;
         await disk.promise.sendPromise({

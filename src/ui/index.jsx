@@ -38,11 +38,18 @@ export async function initApp(background) {
         }
 
         setInterval(() => {
-            let starDiv = spaceDiv.children[Math.floor(Math.random() * spaceSize)]
-            let starWidth = Math.floor(Math.random() * 3 + 1)
-            starDiv.style.opacity = 1
-            starDiv.style.width = starWidth + 'px'
-            starDiv.style.height =  starWidth + 'px'
+            if (document.hasFocus()) {
+                let starDiv = spaceDiv.children[Math.floor(Math.random() * spaceSize)]
+                let starWidth = Math.floor(Math.random() * 3 + 1)
+                starDiv.style.opacity = 1
+                starDiv.style.width = starWidth + 'px'
+                starDiv.style.height =  starWidth + 'px'
+
+                let left = Math.floor(Math.random() * windowWidth)
+                let top = Math.floor(Math.random() * windowHeight)
+                starDiv.style.left = left + 'px'
+                starDiv.style.top = top + 'px'
+            }
         }, 5000);
     }
 
