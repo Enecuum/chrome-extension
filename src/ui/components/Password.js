@@ -3,6 +3,7 @@ import styles from "../css/index.module.css";
 import TransactionSend from "./TransactionSend";
 import Separator from "../elements/Separator";
 import {toggleFullScreen} from "../Utils";
+import Input from "../elements/Input";
 
 export default class Password extends React.Component {
     constructor(props) {
@@ -68,15 +69,16 @@ export default class Password extends React.Component {
 
                 <div className={styles.form}>
 
-                    <input type="password"
+                    <Input type="password"
                            spellCheck={false}
                            onChange={this.handleChangePassword1}
                            value={this.state.password1}
                            className={styles.field + ' ' + styles.password}
-                           placeholder={'New password'} // (min 8 chars)
+                           placeholder={'New password'}
+                           autoFocus={true}
                     />
 
-                    <input type="password"
+                    <Input type="password"
                            spellCheck={false}
                            onChange={this.handleChangePassword2}
                            value={this.state.password2}

@@ -4,6 +4,7 @@ import styles from '../css/index.module.css'
 import Header from '../elements/Header'
 import Separator from '../elements/Separator'
 import {regexAddress, toggleFullScreen} from "../Utils";
+import Input from "../elements/Input";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -73,7 +74,7 @@ export default class Login extends React.Component {
 
                 <div className={styles.form}>
 
-                    <input
+                    <Input
                         type="text"
                         spellCheck={false}
                         onChange={this.handleChangePrivateKey}
