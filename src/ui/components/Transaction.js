@@ -57,8 +57,8 @@ export default class Transaction extends React.Component {
     }
 
     handleChangeAmount(e) {
-        console.log(e.target.value)
-        console.log(typeof e.target.value)
+        // console.log(e.target.value)
+        // console.log(typeof e.target.value)
 
         if (e.target.value === '00') {
             //TODO

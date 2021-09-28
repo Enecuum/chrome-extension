@@ -6,5 +6,6 @@
     background: ghostwhite;
     position: absolute;
     border-radius: 50%;
+    transition: left 1s, top 1s;
 }
 

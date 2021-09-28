@@ -94,14 +94,14 @@ export default function Menu(props) {
 
     const connectLedger = () => {
 
-        console.log(global.transportWebUSB)
+        // console.log(global.transportWebUSB)
 
         TransportWebUSB.create().then(transport => {
 
-            console.log(transport)
+            // console.log(transport)
 
             const eth = new Eth(transport)
-            console.log(eth)
+            // console.log(eth)
 
             eth.getAddress("44'/60'/0'/0/0").then(o => {
 
@@ -109,7 +109,7 @@ export default function Menu(props) {
                 setEthAddress(o.address)
 
                 global.transportWebUSB = transport
-                console.log(o.address)
+                // console.log(o.address)
             })
 
         })

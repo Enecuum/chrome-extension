@@ -138,7 +138,7 @@ export default function Network(props) {
 
     let setNet = async (value) => {
 
-        console.log(value)
+        // console.log(value)
 
         localStorage.setItem('net', value)
         ENQWeb.Net.provider = value

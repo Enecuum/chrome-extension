@@ -12,7 +12,7 @@ export default class PublicKeyRequest extends React.Component {
         }
         this.allow = this.allow.bind(this)
         this.disallow = this.disallow.bind(this)
-        console.log(this)
+        // console.log(this)
 
 
         this.syncRequest()
