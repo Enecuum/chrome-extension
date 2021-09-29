@@ -1069,7 +1069,7 @@ input[type=number] {
 
 .mnemonicGrid > div {
     position: relative;
-    width: 30%;
+    width: calc((100% - 40px - 8px) / 3);
     background: var(--color-blue-super-dark);
     margin: 2px;
     border-radius: 3px;
