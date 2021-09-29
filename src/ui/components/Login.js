@@ -3,7 +3,7 @@ import styles from '../css/index.module.css'
 
 import Header from '../elements/Header'
 import Separator from '../elements/Separator'
-import {regexAddress, toggleFullScreen} from "../Utils";
+import {regexAddress, regexToken, toggleFullScreen} from "../Utils";
 import Input from "../elements/Input";
 
 export default class Login extends React.Component {
@@ -79,20 +79,20 @@ export default class Login extends React.Component {
                         spellCheck={false}
                         onChange={this.handleChangePrivateKey}
                         value={this.state.privateKey}
-                        className={styles.field}
+                        className={styles.field + ' ' + (regexToken.test(this.state.privateKey) ? styles.field_correct : '')}
                         placeholder="Private Key"
                     />
 
                     <div
                         onClick={this.submit}
-                        className={`${styles.field} ${styles.button}`}
+                        className={`${styles.field} ${styles.button} ${(regexToken.test(this.state.privateKey) ? styles.button_blue : '')}`}
                     >
                         Login
                     </div>
 
                     <div
                         onClick={this.generate}
-                        className={`${styles.field} ${styles.button} ${styles.button_blue}`}
+                        className={`${styles.field} ${styles.button} ${(!regexToken.test(this.state.privateKey) ? styles.button_blue : '')}`}
                     >
                         Generate
                     </div>
