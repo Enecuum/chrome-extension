@@ -143,6 +143,10 @@ a:hover {
     font-size: var(--font-size-small);
 }
 
+.text_big {
+    font-size: var(--font-size-big);
+}
+
 
 .content {
     position: relative;
@@ -1052,4 +1056,38 @@ input[type=number] {
 
     /*max-height: 190px;*/
     overflow: scroll;
+}
+
+.mnemonicGrid {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-top: 20px;
+}
+
+.mnemonicGrid > div {
+    position: relative;
+    width: 30%;
+    background: var(--color-blue-super-dark);
+    margin: 2px;
+    border-radius: 3px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.mnemonicGrid > div:hover {
+    background: var(--color-blue-dark);
+}
+
+.mnemonicGrid .mnemonicIndex {
+    font-size: var(--font-size-small);
+    position: absolute;
+    line-height: normal;
+    left: 8px;
+    top: 5px;
+    color: var(--color-gray-ligth)
 }
