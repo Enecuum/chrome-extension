@@ -9,3 +9,23 @@
     transition: left 1s, top 1s;
 }
 
+#leftLinks {
+    padding: 20px;
+    color: white;
+    width: 400px;
+    /*height: 350px;*/
+    border-radius: 3px;
+    background: var(--color-blue-background);
+    position: absolute;
+    top: calc(50% - 175px);
+    left: calc(50% + 175px + 20px);
+}
+
+#leftLinksTitle {
+    padding-bottom: 10px;
+    font-size: var(--font-size-big);
+}
+
+#leftLinksText {
+    padding-bottom: 10px;
+}
