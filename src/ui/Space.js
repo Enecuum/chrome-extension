@@ -50,11 +50,11 @@ const createLinks = () => {
     linksDiv.innerHTML = ''
     linksDiv.innerHTML += '<div id="leftLinksTitle">DISCLAIMER</div>'
     linksDiv.innerHTML += '<div id="leftLinksText">This is a test web wallet and is NOT intended for production usage. Please do not use mainnet private info (keys, seed phrases) with this version. Transaction signature is disabled for security reasons. Please, use the following apps.</div>'
-    linksDiv.innerHTML += '<div>1. <a href="https://chrome.google.com/webstore/detail/enecuum/oendodccclbjedifljnlkapjejklgekf?hl=en" target="_blank">Chrome Extension</div>'
-    linksDiv.innerHTML += '<div>2. <a href="/electron" target="_blank">Electron Application for desktop</div>'
-    linksDiv.innerHTML += '<div>3. <a href="/android" target="_blank">Android Application</a></div>'
-    linksDiv.innerHTML += '<div>4. <a href="/pwa" target="_blank">Progressive Web Application Mobile</a></div>'
-    linksDiv.innerHTML += '<div>5. <a href="/pwa" target="_blank">Progressive Web Application Desktop</a></div>'
+    linksDiv.innerHTML += '<div><a href="https://chrome.google.com/webstore/detail/enecuum/oendodccclbjedifljnlkapjejklgekf?hl=en" target="_blank">Chrome Extension</div>'
+    linksDiv.innerHTML += '<div><a href="/electron" target="_blank">Electron Desktop Application</div>'
+    linksDiv.innerHTML += '<div><a href="/android" target="_blank">Android Application</a></div>'
+    linksDiv.innerHTML += '<div><a href="/pwa" target="_blank">Progressive Web Mobile Application</a></div>'
+    linksDiv.innerHTML += '<div><a href="/pwa" target="_blank">Progressive Web Desktop Application</a></div>'
     linksDiv.onclick = () => {
         linksDiv.style.opacity = 0.3
     }

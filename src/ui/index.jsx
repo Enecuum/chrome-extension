@@ -4,7 +4,7 @@ import App from "./App";
 import Analytics from "./elements/Analytics";
 
 import styles from './css/stars.css'
-import {createLinks, createSpace} from "./Space";
+import {createLinks, createResizeWatcher, createSpace} from "./Space";
 
 export async function initApp(background) {
 
