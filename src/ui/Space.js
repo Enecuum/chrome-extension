@@ -49,7 +49,7 @@ const createLinks = () => {
     linksDiv.id = 'leftLinks'
     linksDiv.innerHTML = ''
     linksDiv.innerHTML += '<div id="leftLinksTitle">DISCLAIMER</div>'
-    linksDiv.innerHTML += '<div id="leftLinksText">This is a test web wallet and is NOT intended for productions useage. Please do not use mainnet private info (keys, seed phrases) with this verstion. Transaction signature is disabled for security reasons. Please, use the following apps.</div>'
+    linksDiv.innerHTML += '<div id="leftLinksText">This is a test web wallet and is NOT intended for production usage. Please do not use mainnet private info (keys, seed phrases) with this version. Transaction signature is disabled for security reasons. Please, use the following apps.</div>'
     linksDiv.innerHTML += '<div>1. <a href="https://chrome.google.com/webstore/detail/enecuum/oendodccclbjedifljnlkapjejklgekf?hl=en" target="_blank">Chrome Extension</div>'
     linksDiv.innerHTML += '<div>2. <a href="/electron" target="_blank">Electron Application for desktop</div>'
     linksDiv.innerHTML += '<div>3. <a href="/android" target="_blank">Android Application</a></div>'
