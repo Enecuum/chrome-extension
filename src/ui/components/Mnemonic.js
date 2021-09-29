@@ -73,6 +73,17 @@ export default function Mnemonic(props) {
                      className={styles.field + ' ' + styles.button}>Next
                 </div>
 
+                <div onClick={() => {
+                    if (state === 0)
+                        props.setMnemonic(false)
+                    if (state === 1)
+                        setState(0)
+                    if (state === 2)
+                        setState(1)
+                }}
+                     className={styles.field + ' ' + styles.button}>Back
+                </div>
+
                 <Separator/>
 
             </div>
