@@ -146,6 +146,7 @@ export default function Menu(props) {
             <div className={styles.separator}/>
 
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
+            <div className={styles.button_link} onClick={props.setMnemonic}>Mnemonic</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={window}>Window</div>}
             <div className={styles.button_link} onClick={props.setNetwork}>Networks</div>
