@@ -1069,12 +1069,12 @@ input[type=number] {
 
 .mnemonicGrid > div {
     position: relative;
-    width: calc((100% - 40px - 8px) / 3);
+    width: calc((100% - 40px - 4px) / 3);
     background: var(--color-blue-super-dark);
-    margin: 2px;
+    margin: 1px;
     border-radius: 3px;
-    height: 72px;
-    line-height: 72px;
+    height: 74px;
+    line-height: 74px;
     text-align: center;
     cursor: pointer;
 }
