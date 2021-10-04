@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react'
 import styles from '../css/elements.module.css'
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
-import {explorerAddress} from "../Utils";
 import {createPopupWindow} from "../../handler";
+import * as bip32 from 'bip32';
 
 TransportWebUSB.isSupported().then((result) => {
     console.log('WebUSB Supported: ' + result)
@@ -13,7 +13,10 @@ TransportWebUSB.isSupported().then((result) => {
 // global.transportWebUSB = {}
 
 export default function Menu(props) {
-    const [amount, setAmount] = useState(0)
+
+    const [activeAccount, setActiveAccount] = useState(1)
+
+    const [seed, setSeed] = useState(false)
 
     const [ledger, setLedger] = useState()
     const [ethAddress, setEthAddress] = useState()
@@ -34,7 +37,56 @@ export default function Menu(props) {
         let config = disk.config.getConfig()
         setOpenEnable(config.openEnablePopup)
         // connectLedger()
+
+        disk.user.loadUser().then(async account => {
+            if (account.seed) {
+                setSeed(true)
+                let node = bip32.fromSeed(Buffer.from(account.seed), null)
+                let child = node.derivePath("m/44'/2045'/0'/0")
+                let privateKey0 = child.derive(0).privateKey.toString('hex')
+                const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
+                if (account.publicKey === publicKey0)
+                    setActiveAccount(2)
+            }
+        })
+
     }, []);
+
+    const loginAccount2 = () => {
+        disk.user.loadUser().then(async account => {
+            let node = bip32.fromSeed(Buffer.from(account.seed), null)
+            let child = node.derivePath("m/44'/2045'/0'/0")
+            let privateKey0 = child.derive(0).privateKey.toString('hex')
+            loginAccount(privateKey0, account.seed, account)
+        })
+    }
+
+    const loginAccount1 = () => {
+        disk.user.loadUser().then(async account => {
+            loginAccount(account.main, account.seed, {})
+        })
+    }
+
+    const loginAccount = (privateKey0, seed, mainAccount) => {
+        const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
+        if (publicKey0) {
+            let data = {
+                publicKey: publicKey0,
+                privateKey: privateKey0,
+                net: ENQWeb.Net.provider,
+                token: ENQWeb.Enq.ticker,
+                seed: seed,
+                main: mainAccount.privateKey
+            }
+            global.disk.promise.sendPromise({
+                account: true,
+                set: true,
+                data: data
+            }).then(r => {
+                location.reload()
+            })
+        }
+    }
 
     const setNet = async (value) => {
 
@@ -134,9 +186,14 @@ export default function Menu(props) {
             <div className={styles.title}>My accounts</div>
 
             <div className={styles.row}>
-                <div className={styles.button_link + ' ' + styles.button_link_active}>Account 1</div>
-                <div className={styles.button_link} onClick={() => props.setKeys(true)} >❯</div>
+                <div className={styles.button_link + (activeAccount === 1 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 2 ? loginAccount1 : null)}>Account 1</div>
+                <div className={styles.button_link} onClick={() => props.setKeys(true)}>❯</div>
             </div>
+
+            {seed && <div className={styles.row}>
+                <div className={styles.button_link + (activeAccount === 2 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 1 ? loginAccount2 : null)}>Account 2</div>
+                <div className={styles.button_link} onClick={() => {}}>＋</div>
+            </div>}
 
             {ethAddress ? <div className={styles.button_link}
                                onClick={() => createPopupWindow('index.html?type=connectLedger')}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div> :
@@ -161,7 +218,8 @@ export default function Menu(props) {
                 window: {openEnable ? 'ON' : 'OFF'}</div>}
             <div className={styles.button_link_logout}>
                 <div className={styles.button_link} onClick={() => props.setConfirm(true)}>Logout</div>
-                <div className={styles.version + ' ' + (clickIterator >= clickIteratorLimit ? styles.blue : '')} onClick={clickVersion}>{version + ' ' + (clickIterator >= 2 ? VERSION : '')}</div>
+                <div className={styles.version + ' ' + (clickIterator >= clickIteratorLimit ? styles.blue : '')}
+                     onClick={clickVersion}>{version + ' ' + (clickIterator >= 2 ? VERSION : '')}</div>
             </div>
 
         </div>

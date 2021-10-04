@@ -3,19 +3,24 @@ import styles from '../css/index.module.css'
 
 import Header from '../elements/Header'
 import Separator from '../elements/Separator'
-import {regexAddress, regexToken, toggleFullScreen} from "../Utils";
+import {regexAddress, regexSeed, regexToken, toggleFullScreen} from "../Utils";
 import Input from "../elements/Input";
+import * as bip32 from "bip32";
+import * as bip39 from "bip39";
 
 export default class Login extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             privateKey: '',
+            seed: '',
             isNetwork: false,
         }
         this.handleChangePrivateKey = this.handleChangePrivateKey.bind(this)
+        this.handleChangeSeed = this.handleChangeSeed.bind(this)
 
         this.submit = this.submit.bind(this)
+        this.loginSeed = this.loginSeed.bind(this)
         this.generate = this.generate.bind(this)
         this.setNetwork = this.setNetwork.bind(this)
     }
@@ -24,11 +29,45 @@ export default class Login extends React.Component {
         this.setState({privateKey: e.target.value})
     }
 
+    handleChangeSeed(e) {
+        this.setState({seed: e.target.value})
+    }
+
     setNetwork(value) {
         this.setState({isNetwork: value})
     }
 
+    async loginSeed() {
+        let hex = bip39.mnemonicToSeedSync(this.state.seed)
+        let node = bip32.fromSeed(hex, null)
+        let child = node.derivePath("m/44'/2045'/0'/0")
+        let privateKey0 = child.derive(0).privateKey.toString('hex')
+        // loginAccount(privateKey0, account.seed, account)
+        const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
+        if (publicKey0) {
+            let data = {
+                publicKey: publicKey0,
+                privateKey: privateKey0,
+                net: ENQWeb.Net.provider,
+                token: ENQWeb.Enq.ticker,
+                seed: hex,
+            }
+            global.disk.promise.sendPromise({
+                account: true,
+                set: true,
+                data: data
+            }).then(r => {
+                this.props.login(data)
+            })
+        }
+    }
+
     async submit() {
+
+        if (this.state.seed.length > 0 && !regexSeed.test(this.state.seed)) {
+            await this.loginSeed()
+            return
+        }
 
         if (this.state.privateKey.length !== 64 && !regexAddress.test(this.state.privateKey)) {
             console.error('Incorrect private key')
@@ -77,8 +116,8 @@ export default class Login extends React.Component {
                     <Input
                         type="text"
                         spellCheck={false}
-                        onChange={() => {}}
-                        value={''}
+                        onChange={this.handleChangeSeed}
+                        value={this.state.seed}
                         className={styles.field}
                         placeholder="Seed phrase"
                     />

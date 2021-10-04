@@ -4,8 +4,6 @@ import Separator from '../elements/Separator'
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
 
-import KeyEncoder from 'key-encoder'
-let keyEncoder = new KeyEncoder('secp256k1')
 let seedLength = 12
 
 export default function Mnemonic(props) {
@@ -24,15 +22,15 @@ export default function Mnemonic(props) {
         let child = node.derivePath("m/44'/2045'/0'/0");
 
         // console.log(child.derive(0).privateKey.toString('hex'))
-        console.log(convertKey(child.derive(0).privateKey.toString('hex')))
-        console.log(convertKey(child.derive(1).privateKey.toString('hex')))
-        console.log(convertKey(child.derive(2).privateKey.toString('hex')))
-        console.log(convertKey(child.derive(3).privateKey.toString('hex')))
-        console.log(convertKey(child.derive(4).privateKey.toString('hex')))
-    }
 
-    let convertKey = (key) => {
-        return keyEncoder.encodePrivate(key, 'raw', 'raw')
+        disk.user.loadUser().then(async account => {
+            account.seed = hex
+            await disk.promise.sendPromise({
+                account: true,
+                set: true,
+                data: account
+            })
+        })
     }
 
     const renderMnemonic = () => {
