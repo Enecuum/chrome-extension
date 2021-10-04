@@ -213,6 +213,7 @@ export default function App(props) {
     if (isLogin) return <Login login={login2}/>
 
     return <Account user={user}
+                    login={login2}
                     logout={logout}
                     setLock={setLock}
                     setPassword={setPassword}

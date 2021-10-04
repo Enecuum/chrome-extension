@@ -1,6 +1,8 @@
 let regexData = /^[0-9a-zA-Z _\-/.]{0,512}$/
 let regexAddress = /^(02|03)[0-9a-fA-F]{64}$/
 let regexToken = /^[0-9a-fA-F]{64}$/
+// TODO
+let regexSeed = /^[a-f, ]+$/
 
 const shortHash = (address) => {
     return address.substring(0, 5) + '...' + address.substring(address.length - 3, address.length)
@@ -96,5 +98,6 @@ module.exports = {
     generateIcon,
     regexData,
     regexAddress,
-    regexToken
+    regexToken,
+    regexSeed
 }

@@ -51,7 +51,8 @@ export function MsgHandler(msg, ENQWeb) {
             let account = msg.data
             disk.user.addUser(account)
             const webAccount = JSON.parse(JSON.stringify(account))
-            webAccount.privateKey = ''
+            // TODO
+            // webAccount.privateKey = ''
             sessionStorage.setItem('User', JSON.stringify(webAccount))
             encryptAccount()
             // console.log(ENQWeb.Enq.User)

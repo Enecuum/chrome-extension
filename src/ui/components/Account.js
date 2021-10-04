@@ -416,7 +416,8 @@ export default function Account(props) {
 
     const renderMenu = () => {
         if (menu) {
-            return <Menu logout={props.logout}
+            return <Menu login={props.login}
+                         logout={props.logout}
                          publicKey={props.user.publicKey}
                          setLock={props.setLock}
                          setConfirm={props.setConfirm}
