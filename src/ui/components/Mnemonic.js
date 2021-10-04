@@ -1,7 +1,9 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
-import * as bip39 from "bip39";
+import * as bip39 from 'bip39';
+import * as bip32 from 'bip32';
+import { BIP32Interface } from 'bip32';
 
 export default function Mnemonic(props) {
 
@@ -9,7 +11,22 @@ export default function Mnemonic(props) {
     const [state, setState] = useState(0)
     const [number, setNumber] = useState(0)
 
-    console.log(mnemonicString)
+
+
+    useEffect(() => {
+        console.log(mnemonicString)
+    })
+
+    const showKeys = () => {
+        let hex = bip39.mnemonicToSeedSync(mnemonicString)
+        let node = bip32.fromSeed(hex, null)
+        let child = node.derivePath("m/44'/2045'/0'/0");
+        console.log(child.derive(0).privateKey.toString('hex'))
+        console.log(child.derive(1).privateKey.toString('hex'))
+        console.log(child.derive(2).privateKey.toString('hex'))
+        console.log(child.derive(3).privateKey.toString('hex'))
+        console.log(child.derive(4).privateKey.toString('hex'))
+    }
 
     const renderMnemonic = () => {
 
@@ -41,7 +58,10 @@ export default function Mnemonic(props) {
             wordsList.push(words[number - 1])
             wordsList.sort(() => .5 - Math.random())
             for (let i = 0; i < wordsList.length; i++) {
-                wordsArray.push(renderWord('', wordsList[i], wordsList[i] === words[number - 1] ? () => props.setMnemonic(false) : () => setState(0)))
+                wordsArray.push(renderWord('', wordsList[i], wordsList[i] === words[number - 1] ? () => {
+                    showKeys()
+                    props.setMnemonic(false)
+                } : () => setState(0)))
             }
         }
 
