@@ -68,6 +68,7 @@
     "dependencies": {
         "@ledgerhq/hw-app-eth": "^6.6.0",
         "@ledgerhq/hw-transport-webusb": "^6.6.0",
+        "bip39": "^3.0.4",
         "dotenv": "^10.0.0",
         "enq-web3": "0.3.6",
         "express": "^4.17.1",
