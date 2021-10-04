@@ -77,6 +77,15 @@ export default class Login extends React.Component {
                     <Input
                         type="text"
                         spellCheck={false}
+                        onChange={() => {}}
+                        value={''}
+                        className={styles.field}
+                        placeholder="Seed phrase"
+                    />
+
+                    <Input
+                        type="text"
+                        spellCheck={false}
                         onChange={this.handleChangePrivateKey}
                         value={this.state.privateKey}
                         className={styles.field + ' ' + (regexToken.test(this.state.privateKey) ? styles.field_correct : '')}
