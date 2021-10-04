@@ -3,15 +3,16 @@ import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
-import { BIP32Interface } from 'bip32';
+
+import KeyEncoder from 'key-encoder'
+let keyEncoder = new KeyEncoder('secp256k1')
+let seedLength = 12
 
 export default function Mnemonic(props) {
 
     const [mnemonicString, setMnemonicString] = useState(bip39.generateMnemonic())
     const [state, setState] = useState(0)
     const [number, setNumber] = useState(0)
-
-
 
     useEffect(() => {
         console.log(mnemonicString)
@@ -21,11 +22,17 @@ export default function Mnemonic(props) {
         let hex = bip39.mnemonicToSeedSync(mnemonicString)
         let node = bip32.fromSeed(hex, null)
         let child = node.derivePath("m/44'/2045'/0'/0");
-        console.log(child.derive(0).privateKey.toString('hex'))
-        console.log(child.derive(1).privateKey.toString('hex'))
-        console.log(child.derive(2).privateKey.toString('hex'))
-        console.log(child.derive(3).privateKey.toString('hex'))
-        console.log(child.derive(4).privateKey.toString('hex'))
+
+        // console.log(child.derive(0).privateKey.toString('hex'))
+        console.log(convertKey(child.derive(0).privateKey.toString('hex')))
+        console.log(convertKey(child.derive(1).privateKey.toString('hex')))
+        console.log(convertKey(child.derive(2).privateKey.toString('hex')))
+        console.log(convertKey(child.derive(3).privateKey.toString('hex')))
+        console.log(convertKey(child.derive(4).privateKey.toString('hex')))
+    }
+
+    let convertKey = (key) => {
+        return keyEncoder.encodePrivate(key, 'raw', 'raw')
     }
 
     const renderMnemonic = () => {
@@ -46,7 +53,8 @@ export default function Mnemonic(props) {
             for (let i = 0; i < wordsList.length; i++) {
                 wordsArray.push(renderWord('', wordsList[i], wordsList[i] === words[number - 1] ? () => {
                     // wordsList[i] === words[number - 1] ? '!' :
-                    setNumber(Math.floor(Math.random() * 12) + 1)
+                    let generatedNumber = Math.floor(Math.random() * seedLength) + 1
+                    setNumber(generatedNumber === number ? seedLength - number : generatedNumber)
                     setState(2)
                 } : () => setState(0)))
             }
@@ -116,7 +124,8 @@ export default function Mnemonic(props) {
 
                 {state === 0 && <div onClick={() => {
                     if (state === 0) {
-                        setNumber(Math.floor(Math.random() * 12) + 1)
+                        // TODO seedLength
+                        setNumber(Math.floor(Math.random() * seedLength) + 1)
                         setState(1)
                     }
                     if (state === 1) {
