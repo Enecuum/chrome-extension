@@ -148,7 +148,6 @@ export default function Menu(props) {
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
             <div className={styles.button_link} onClick={props.setMnemonic}>Mnemonic</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
-            {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={window}>Window</div>}
             <div className={styles.button_link} onClick={props.setNetwork}>Networks</div>
             {/*<div className={styles.row}>*/}
             {/*    <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>*/}
@@ -157,6 +156,7 @@ export default function Menu(props) {
             {/*        <div className={styles.button_link} onClick={() => props.setNetwork(true)}>CUSTOM</div>*/}
             {/*    </div>}*/}
             {/*</div>*/}
+            {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={window}>Window</div>}
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>}
             <div className={styles.button_link_logout}>
