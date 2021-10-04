@@ -36,7 +36,10 @@ export default function Mnemonic(props) {
         }
         if (state === 2) {
             let wordsList = mnemonicString.split(' ')
-            wordsList.sort(() => .5 - Math.random()).splice(0, words.length / 2)
+            wordsList.splice(number - 1, 1)
+            wordsList.splice(0, words.length / 2)
+            wordsList.push(words[number - 1])
+            wordsList.sort(() => .5 - Math.random())
             for (let i = 0; i < wordsList.length; i++) {
                 wordsArray.push(renderWord('', wordsList[i], wordsList[i] === words[number - 1] ? () => props.setMnemonic(false) : () => setState(0)))
             }
