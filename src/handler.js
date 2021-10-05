@@ -36,6 +36,7 @@ export function MsgHandler(msg, ENQWeb) {
             if (account) {
                 ENQWeb.Enq.User = account
                 const webAccount = JSON.parse(JSON.stringify(account))
+                // TODO
                 webAccount.privateKey = ''
                 sessionStorage.setItem('User', JSON.stringify(webAccount))
                 // console.log(account)
@@ -52,7 +53,7 @@ export function MsgHandler(msg, ENQWeb) {
             disk.user.addUser(account)
             const webAccount = JSON.parse(JSON.stringify(account))
             // TODO
-            // webAccount.privateKey = ''
+            webAccount.privateKey = ''
             sessionStorage.setItem('User', JSON.stringify(webAccount))
             encryptAccount()
             // console.log(ENQWeb.Enq.User)

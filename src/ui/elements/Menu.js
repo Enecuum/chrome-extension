@@ -27,6 +27,10 @@ export default function Menu(props) {
 
     const [clickIterator, setClickIterator] = useState(0)
 
+    const [privateDataLoaded, setPrivateDataLoaded] = useState(false)
+
+    const [account2Amount, setAccount2Amount] = useState(BigInt(0))
+
     const window = () => {
         disk.promise.sendPromise({window: true})
     }
@@ -47,6 +51,20 @@ export default function Menu(props) {
                 const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
                 if (account.publicKey === publicKey0)
                     setActiveAccount(2)
+                else {
+                    ENQWeb.Net.get.getBalanceAll(publicKey0)
+                        .then((res) => {
+                            for (let i in res) {}
+                            let amount = BigInt(res[0].amount)
+                            setAccount2Amount(amount)
+                        })
+
+                }
+            }
+            if (account.privateKey) {
+                setPrivateDataLoaded(true)
+            } else {
+                setPrivateDataLoaded(false)
             }
         })
 
@@ -182,17 +200,17 @@ export default function Menu(props) {
     return (
         <div className={styles.menu}>
 
-            <div className={styles.lock} onClick={locked}><img src="./images/lock.png"/></div>
+            <div className={styles.lock} onClick={locked}><img src='./images/lock.png' className={(!privateDataLoaded ? styles.loaded : '')}/></div>
             <div className={styles.title}>My accounts</div>
 
             <div className={styles.row}>
-                <div className={styles.button_link + (activeAccount === 1 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 2 ? loginAccount1 : null)}>Account 1</div>
+                <div className={styles.button_link + (activeAccount === 1 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 2 ? loginAccount1 : null)}>Account 1 </div>
                 <div className={styles.button_link} onClick={() => props.setKeys(true)}>❯</div>
             </div>
 
             {seed && <div className={styles.row}>
-                <div className={styles.button_link + (activeAccount === 2 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 1 ? loginAccount2 : null)}>Account 2</div>
-                <div className={styles.button_link} onClick={() => {}}>＋</div>
+                <div className={styles.button_link + (activeAccount === 2 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 1 ? loginAccount2 : null)}>Account 2{account2Amount > 0 ? ': ' + (Number(account2Amount) / 1e10).toFixed(4) : ''}</div>
+                <div className={styles.button_link} onClick={props.setMnemonic}>Seed</div>
             </div>}
 
             {ethAddress ? <div className={styles.button_link}

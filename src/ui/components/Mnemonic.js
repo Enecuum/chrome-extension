@@ -4,6 +4,7 @@ import Separator from '../elements/Separator'
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
 import Input from "../elements/Input";
+import {regexSeed} from "../Utils";
 
 let seedLength = 12
 
@@ -14,7 +15,7 @@ export default function Mnemonic(props) {
     const [number, setNumber] = useState(0)
 
     useEffect(() => {
-        console.log(mnemonicString)
+        // console.log(mnemonicString)
     })
 
     const addSeed = (mnemonicString) => {
@@ -94,7 +95,17 @@ export default function Mnemonic(props) {
 
             <div className={styles.content}>
 
-                <Separator/>
+                {state === -1 && <Input
+                    type="text"
+                    spellCheck={false}
+                    onChange={async (e) => {
+                        setMnemonicString(e.target.value)
+                        // loginSeed(e.target.value)
+                    }}
+                    value={mnemonicString}
+                    className={styles.field + ' ' + styles.inputSeed + ' ' + (regexSeed.test(mnemonicString) ? styles.field_correct : '')}
+                    placeholder="Seed Phrase"
+                />}
 
                 {state === 0 && <div className={styles.field}>
                     <div>Please backup your mnemonic</div>
@@ -122,22 +133,10 @@ export default function Mnemonic(props) {
                                      className={styles.field + ' ' + styles.button}>Copy
                 </div>}
 
-                {state === -1 && <Input
-                    type="text"
-                    spellCheck={false}
-                    onChange={async (e) => {
-                        setMnemonicString(e.target.value)
-                        // loginSeed(e.target.value)
-                    }}
-                    value={mnemonicString}
-                    className={styles.field}
-                    placeholder="Seed Phrase"
-                />}
-
                 {state === -1 && <div onClick={() => {
                     addSeed(mnemonicString)
                     props.setMnemonic(false)
-                }} className={styles.field + ' ' + styles.button}>Import mnemonic
+                }} className={styles.field + ' ' + styles.button + ' ' + (regexSeed.test(mnemonicString) ? styles.button_blue : '')}>Import mnemonic
                 </div>}
 
                 {/*{state === -1 && <div onClick={() => {*/}
@@ -150,8 +149,10 @@ export default function Mnemonic(props) {
                     <div onClick={() => {
                         if (state === -1)
                             props.setMnemonic(false)
-                        if (state === 0)
+                        if (state === 0) {
                             setState(-1)
+                            setMnemonicString('')
+                        }
                         if (state === 1)
                             setState(0)
                         if (state === 2)
@@ -164,6 +165,8 @@ export default function Mnemonic(props) {
                         setState(0)
                     }} className={styles.field + ' ' + styles.button}>Generate
                     </div>}
+
+                    {(state === 1 || state === 2) && <div onClick={() => {}} className={styles.field + ' ' + styles.button + ' ' + styles.button_disabled}>&nbsp;</div>}
 
                     {state === 0 && <div onClick={() => {
                         if (state === 0) {

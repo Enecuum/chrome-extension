@@ -171,7 +171,11 @@
     /*margin: 20px;*/
 }
 
-.menu .lock img:hover {
+.menu .lock img.loaded {
+    filter: invert(50%);
+}
+
+.menu .lock img:hover, .menu .lock img.loaded:hover {
     filter: invert(100%);
 }
 

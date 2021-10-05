@@ -314,6 +314,7 @@ a:hover {
 }
 
 .button_disabled {
+    cursor: not-allowed;
     opacity: 0.1;
 }
 
@@ -387,6 +388,11 @@ input.field {
     /*border-top: 1px solid white;*/
     border: 1px solid #9b9b9b;
     border-radius: 3px;
+}
+
+.inputSeed {
+    /*height: 100px;*/
+    /*word-break: break-word;*/
 }
 
 input.field:focus {
