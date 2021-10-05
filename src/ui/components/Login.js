@@ -1,7 +1,5 @@
 import React from 'react'
 import styles from '../css/index.module.css'
-
-import Header from '../elements/Header'
 import Separator from '../elements/Separator'
 import {regexAddress, regexSeed, regexToken, toggleFullScreen} from "../Utils";
 import Input from "../elements/Input";
@@ -15,6 +13,7 @@ export default class Login extends React.Component {
             privateKey: '',
             seed: '',
             isNetwork: false,
+            state: 0,
         }
         this.handleChangePrivateKey = this.handleChangePrivateKey.bind(this)
         this.handleChangeSeed = this.handleChangeSeed.bind(this)
@@ -113,23 +112,23 @@ export default class Login extends React.Component {
 
                 <div className={styles.form}>
 
-                    <Input
+                    {this.state.state === 1 && <Input
                         type="text"
                         spellCheck={false}
                         onChange={this.handleChangeSeed}
                         value={this.state.seed}
                         className={styles.field}
-                        placeholder="Seed phrase"
-                    />
+                        placeholder="Seed Phrase"
+                    />}
 
-                    <Input
+                    {this.state.state === 0 && <Input
                         type="text"
                         spellCheck={false}
                         onChange={this.handleChangePrivateKey}
                         value={this.state.privateKey}
                         className={styles.field + ' ' + (regexToken.test(this.state.privateKey) ? styles.field_correct : '')}
                         placeholder="Private Key"
-                    />
+                    />}
 
                     <div
                         onClick={this.submit}
@@ -138,12 +137,28 @@ export default class Login extends React.Component {
                         Login
                     </div>
 
-                    <div
-                        onClick={this.generate}
-                        className={`${styles.field} ${styles.button} ${(!regexToken.test(this.state.privateKey) ? styles.button_blue : '')}`}
-                    >
-                        Generate
+                    <div className={`${styles.buttons_field}`}>
+
+                        {this.state.state === 0 && <div
+                            onClick={this.generate}
+                            className={`${styles.field} ${styles.button} ${(!regexToken.test(this.state.privateKey) ? styles.button_blue : '')}`}
+                        >
+                            Generate
+                        </div>}
+
+                        {this.state.state === 0 && <div
+                            onClick={() => this.setState({state: 1})}
+                            className={`${styles.field} ${styles.button}`}>
+                            Mnemonic
+                        </div>}
+
                     </div>
+
+                    {this.state.state === 1 && <div
+                        onClick={() => this.setState({state: 0})}
+                        className={`${styles.field} ${styles.button}`}>
+                        Private Key
+                    </div>}
 
                     {/* <div onClick={() => this.setNetwork(true)} */}
                     {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Network: {ENQWeb.Net.currentProvider.toUpperCase()} */}
