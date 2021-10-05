@@ -72,6 +72,13 @@ if (!chrome.runtime) {
     chrome.runtime.web = true
 }
 
+if (!chrome.windows) {
+    chrome.windows = {}
+    chrome.windows.create = (tab) => {
+        window.open(tab.url, '_blank')
+    }
+}
+
 if (!chrome.tabs) {
     chrome.tabs = {}
     chrome.tabs.create = (tab) => {
