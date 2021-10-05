@@ -198,12 +198,13 @@ export default function Menu(props) {
             {ethAddress ? <div className={styles.button_link}
                                onClick={() => createPopupWindow('index.html?type=connectLedger')}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div> :
                 <div className={styles.button_link}
-                     onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect ledger</div>}
+                     onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect Ledger</div>}
+
+            {!seed && <div className={styles.button_link} onClick={props.setMnemonic}>Connect Mnemonic</div>}
 
             <div className={styles.separator}/>
 
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
-            <div className={styles.button_link} onClick={props.setMnemonic}>Mnemonic</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
             <div className={styles.button_link} onClick={props.setNetwork}>Networks</div>
             {/*<div className={styles.row}>*/}
