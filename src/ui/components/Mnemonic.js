@@ -135,6 +135,8 @@ export default function Mnemonic(props) {
 
                 {state === -1 && <div onClick={() => {
                     if (regexSeed.test(mnemonicString)) {
+                        console.log(regexSeed.test(mnemonicString))
+                        console.log(mnemonicString)
                         addSeed(mnemonicString)
                         props.setMnemonic(false)
                     }
