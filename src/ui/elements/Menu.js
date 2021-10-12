@@ -45,20 +45,21 @@ export default function Menu(props) {
         disk.user.loadUser().then(async account => {
             if (account.seed) {
                 setSeed(true)
-                let node = bip32.fromSeed(Buffer.from(account.seed), null)
-                let child = node.derivePath("m/44'/2045'/0'/0")
-                let privateKey0 = child.derive(0).privateKey.toString('hex')
-                const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
-                if (account.publicKey === publicKey0)
-                    setActiveAccount(2)
-                else {
-                    ENQWeb.Net.get.getBalanceAll(publicKey0)
-                        .then((res) => {
-                            for (let i in res) {}
-                            let amount = BigInt(res[0].amount)
-                            setAccount2Amount(amount)
-                        })
+                setActiveAccount(2)
 
+                if (account.seed.data) {
+                    let node = bip32.fromSeed(Buffer.from(account.seed), null)
+                    let child = node.derivePath("m/44'/2045'/0'/0")
+                    let privateKey0 = child.derive(0).privateKey.toString('hex')
+                    const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
+
+                    if (account.publicKey !== publicKey0)
+                        ENQWeb.Net.get.getBalanceAll(publicKey0)
+                            .then((res) => {
+                                for (let i in res) {}
+                                let amount = BigInt(res[0].amount)
+                                setAccount2Amount(amount)
+                            })
                 }
             }
             if (account.privateKey) {
@@ -81,7 +82,7 @@ export default function Menu(props) {
 
     const loginAccount1 = () => {
         disk.user.loadUser().then(async account => {
-            loginAccount(account.main, account.seed, {})
+            loginAccount(account.account1, account.seed, {})
         })
     }
 
@@ -94,7 +95,7 @@ export default function Menu(props) {
                 net: ENQWeb.Net.provider,
                 token: ENQWeb.Enq.ticker,
                 seed: seed,
-                main: mainAccount.privateKey
+                account1: mainAccount.privateKey
             }
             global.disk.promise.sendPromise({
                 account: true,

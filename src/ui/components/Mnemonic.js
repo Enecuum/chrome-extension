@@ -134,8 +134,10 @@ export default function Mnemonic(props) {
                 </div>}
 
                 {state === -1 && <div onClick={() => {
-                    addSeed(mnemonicString)
-                    props.setMnemonic(false)
+                    if (regexSeed.test(mnemonicString)) {
+                        addSeed(mnemonicString)
+                        props.setMnemonic(false)
+                    }
                 }} className={styles.field + ' ' + styles.button + ' ' + (regexSeed.test(mnemonicString) ? styles.button_blue : '')}>Import mnemonic
                 </div>}
 

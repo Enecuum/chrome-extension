@@ -1,5 +1,5 @@
 import {initApp} from "./ui/index"
-import {MsgHandler, MsgPopupHandler} from "./handler"
+import {MessageHandler, MsgPopupHandler} from "./handler"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 
 const Storage = require('./utils/localStorage')
@@ -101,7 +101,7 @@ async function setupUI() {
 
     if (version.includes('web')) { // web
         global.asyncRequest = asyncRequest
-        global.webBack = MsgHandler
+        global.webBack = MessageHandler
         await initApp()
         serviceWorkerRegistration.register()
 

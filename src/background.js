@@ -1,7 +1,7 @@
 const storage = require('./utils/localStorage')
 import {extensionApi} from './utils/extensionApi'
 import {lockAccount, say} from "./lockAccount"
-import {MsgHandler} from "./handler"
+import {MessageHandler} from "./handler"
 
 document.addEventListener('DOMContentLoaded', function () {
     if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
@@ -60,7 +60,7 @@ async function msgHandler(msg, sender, sendResponse) {
             disconnectPorts(msg.name)
         }
     }
-    MsgHandler(msg, ENQWeb).then(answer => sendResponse(answer))
+    MessageHandler(msg, ENQWeb).then(answer => sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {
