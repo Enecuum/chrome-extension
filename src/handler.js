@@ -1,6 +1,6 @@
 import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
 
-export function MsgHandler(msg, ENQWeb) {
+export function MessageHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
         if (msg.initial) {
             lockTimer()
@@ -34,14 +34,14 @@ export function MsgHandler(msg, ENQWeb) {
         if (msg.account && msg.unlock && msg.password) {
             let account = decryptAccount(msg.password)
             if (account) {
+
+                // Unlock user to memory user
                 ENQWeb.Enq.User = account
-                const webAccount = JSON.parse(JSON.stringify(account))
-                // TODO
-                webAccount.privateKey = ''
-                sessionStorage.setItem('User', JSON.stringify(webAccount))
-                // console.log(account)
-                // console.log(ENQWeb.Enq.User)
                 disk.user.addUser(account)
+
+                // TODO
+                createWebSession(account)
+
                 encryptAccount()
                 resolve({response: account})
             } else {
@@ -49,14 +49,15 @@ export function MsgHandler(msg, ENQWeb) {
             }
         }
         if (msg.account && msg.set && msg.data) {
+
+            // Edit user
             let account = msg.data
             disk.user.addUser(account)
-            const webAccount = JSON.parse(JSON.stringify(account))
+
             // TODO
-            webAccount.privateKey = ''
-            sessionStorage.setItem('User', JSON.stringify(webAccount))
+            createWebSession(account)
+
             encryptAccount()
-            // console.log(ENQWeb.Enq.User)
             resolve({response: account})
         }
         if (msg.account && msg.encrypt) {
@@ -80,6 +81,17 @@ export function MsgHandler(msg, ENQWeb) {
         }
         resolve({response: false})
     })
+}
+
+let createWebSession = (account) => {
+
+    // TODO
+    const webAccount = JSON.parse(JSON.stringify(account))
+    webAccount.privateKey = ''
+    webAccount.seed = account.seed ? true : ''
+    webAccount.account1 = account.seed ? true : ''
+    webAccount.main = undefined
+    sessionStorage.setItem('User', JSON.stringify(webAccount))
 }
 
 function createPopupWindow(url) {
