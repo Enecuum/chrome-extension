@@ -27,7 +27,7 @@ export default function Menu(props) {
 
     const [clickIterator, setClickIterator] = useState(0)
 
-    const [privateDataLoaded, setPrivateDataLoaded] = useState(false)
+    const [privateDataLoaded, setPrivateDataLoaded] = useState(true)
 
     const [account2Amount, setAccount2Amount] = useState(BigInt(0))
 
