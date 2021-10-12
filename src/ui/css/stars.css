@@ -20,6 +20,7 @@
     position: absolute;
     top: calc(50% - 175px);
     left: calc(50% + 175px + 20px);
+    display: none;
 }
 
 #leftLinksTitle {
@@ -33,4 +34,10 @@
 
 #leftLinksTextBottom {
     padding-top: 10px;
+}
+
+@media screen and (min-width: 1000px) {
+    #leftLinks {
+        display: block;
+    }
 }

@@ -40,28 +40,8 @@ export default function Menu(props) {
     useEffect(() => {
         let config = disk.config.getConfig()
         setOpenEnable(config.openEnablePopup)
-        // connectLedger()
 
         // disk.user.loadUser().then(async account => {
-        //     if (account.seed) {
-        //         setSeed(true)
-        //         setActiveAccount(2)
-        //
-        //         if (account.seed.data) {
-        //             let node = bip32.fromSeed(Buffer.from(account.seed), null)
-        //             let child = node.derivePath("m/44'/2045'/0'/0")
-        //             let privateKey0 = child.derive(0).privateKey.toString('hex')
-        //             const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
-        //
-        //             if (account.publicKey !== publicKey0)
-        //                 ENQWeb.Net.get.getBalanceAll(publicKey0)
-        //                     .then((res) => {
-        //                         for (let i in res) {}
-        //                         let amount = BigInt(res[0].amount)
-        //                         setAccount2Amount(amount)
-        //                     })
-        //         }
-        //     }
         //     if (account.privateKey) {
         //         setPrivateDataLoaded(true)
         //     } else {
