@@ -223,7 +223,7 @@ export default function Network(props) {
             }}>❮ Back
             </div>
 
-            {showAdd && <div className={styles.content}>
+            {showAdd && <div>
 
                 <Input type="text"
                        spellCheck={false}
