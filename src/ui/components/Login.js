@@ -147,8 +147,8 @@ export default class Login extends React.Component {
                         </div>}
 
                         {this.state.state === 0 && <div
-                            onClick={() => this.setState({state: 1})}
-                            className={`${styles.field} ${styles.button}`}>
+                            onClick={() => {}}
+                            className={`${styles.field} ${styles.button} ${styles.button_disabled}`}>
                             Mnemonic
                         </div>}
 

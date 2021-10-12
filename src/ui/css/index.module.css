@@ -33,6 +33,7 @@ body {
     --color-green-ligth: rgba(50, 255, 10, .5);
     --color-green-super-ligth: rgba(50, 255, 10, .2);
 
+    --color-gray: rgba(93, 93, 93, 0.8);
     --color-gray-ligth: rgba(233, 233, 233, 0.5);
 
     --font-size-small: 12px;
@@ -386,7 +387,7 @@ input.field {
     /*border: 1px solid var(--color-blue-super-ligth);*/
     /*border: none;*/
     /*border-top: 1px solid white;*/
-    border: 1px solid #9b9b9b;
+    border: 1px solid var(--color-gray);
     border-radius: 3px;
 }
 
@@ -413,7 +414,7 @@ input.field:focus {
 }
 
 input.field::placeholder {
-    color: gray;
+    color: var(--color-gray);
 }
 
 input.field.password {

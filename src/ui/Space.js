@@ -49,12 +49,14 @@ const createLinks = () => {
     linksDiv.id = 'leftLinks'
     linksDiv.innerHTML = ''
     linksDiv.innerHTML += '<div id="leftLinksTitle">DISCLAIMER</div>'
-    linksDiv.innerHTML += '<div id="leftLinksText">This is a test web wallet and is NOT intended for production usage. Please do not use mainnet private info (keys, seed phrases) with this version. Transaction signature is disabled for security reasons. Please, use the following apps.</div>'
+    linksDiv.innerHTML += '<div id="leftLinksText">This is a test web wallet and is NOT intended for production usage. Please do not use mainnet private info (keys, seed phrases) with this version. Please, use the following app.</div>'
     linksDiv.innerHTML += '<div><a href="https://chrome.google.com/webstore/detail/enecuum/oendodccclbjedifljnlkapjejklgekf?hl=en" target="_blank">Chrome Extension</div>'
-    linksDiv.innerHTML += '<div><a href="/electron" target="_blank">Electron Desktop Application</div>'
-    linksDiv.innerHTML += '<div><a href="/android" target="_blank">Android Application</a></div>'
-    linksDiv.innerHTML += '<div><a href="/pwa" target="_blank">Progressive Web Mobile Application</a></div>'
-    linksDiv.innerHTML += '<div><a href="/pwa" target="_blank">Progressive Web Desktop Application</a></div>'
+    linksDiv.innerHTML += '<div id="leftLinksTextBottom">This web application may be installed via Chrome (right side of the address bar)</div>'
+    linksDiv.innerHTML += '<div id="leftLinksTextBottom">And on Android phone</div>'
+    // linksDiv.innerHTML += '<div><a href="/electron" target="_blank">Electron Desktop Application</div>'
+    // linksDiv.innerHTML += '<div><a href="/android" target="_blank">Android Application</a></div>'
+    // linksDiv.innerHTML += '<div><a href="/pwa" target="_blank">Progressive Web Mobile Application</a></div>'
+    // linksDiv.innerHTML += '<div><a href="/pwa" target="_blank">Progressive Web Desktop Application</a></div>'
     linksDiv.onclick = () => {
         linksDiv.style.opacity = 0.3
     }

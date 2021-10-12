@@ -219,7 +219,7 @@ export default function Menu(props) {
                 <div className={styles.button_link}
                      onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect Ledger</div>}
 
-            {!seed && <div className={styles.button_link} onClick={props.setMnemonic}>Connect Mnemonic</div>}
+            {/*{!seed && <div className={styles.button_link} onClick={props.setMnemonic}>Connect Mnemonic</div>}*/}
 
             <div className={styles.separator}/>
 
