@@ -17,7 +17,8 @@ export function MessageHandler(msg, ENQWeb) {
         if (msg.account && msg.request) {
             if (!disk.lock.checkLock()) {
 
-                let userSession = Object.keys(ENQWeb.Enq.User).length > 0 ? ENQWeb.Enq.User : (JSON.parse(sessionStorage.getItem('User')) ? JSON.parse(sessionStorage.getItem('User')) : false)
+                let webSession = JSON.parse(sessionStorage.getItem('User'))
+                let userSession = Object.keys(ENQWeb.Enq.User).length > 0 ? ENQWeb.Enq.User : (webSession ? webSession : false)
                 if (!userSession.publicKey) {
                     console.log('sessionStorage expired')
                     resolve({response: {}})
@@ -32,6 +33,7 @@ export function MessageHandler(msg, ENQWeb) {
 
         }
         if (msg.account && msg.unlock && msg.password) {
+
             let account = decryptAccount(msg.password)
             if (account) {
 
@@ -90,7 +92,6 @@ let createWebSession = (account) => {
     webAccount.privateKey = ''
     webAccount.seed = account.seed ? true : ''
     webAccount.account1 = account.seed ? true : ''
-    webAccount.main = undefined
     sessionStorage.setItem('User', JSON.stringify(webAccount))
 }
 

@@ -80,7 +80,7 @@ export default function Account(props) {
 
     const copyPublicKey = () => {
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(props.publicKey)
+            navigator.clipboard.writeText(props.user.publicKey)
             setCopied(true)
         } else
             console.error('navigator.clipboard: ' + false)

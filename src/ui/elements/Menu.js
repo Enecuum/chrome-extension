@@ -27,7 +27,7 @@ export default function Menu(props) {
 
     const [clickIterator, setClickIterator] = useState(0)
 
-    const [privateDataLoaded, setPrivateDataLoaded] = useState(true)
+    const [privateDataLoaded, setPrivateDataLoaded] = useState(Object.keys(ENQWeb.Enq.User).length > 0)
 
     const [account2Amount, setAccount2Amount] = useState(BigInt(0))
 

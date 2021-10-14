@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../css/index.module.css";
 import Separator from "../elements/Separator";
+import {explorerTX} from "../Utils";
 
 export default class TransactionSend extends React.Component {
     constructor(props) {
@@ -38,17 +39,16 @@ export default class TransactionSend extends React.Component {
 
                 <div className={styles.form}>
 
-                    <div className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}
-                         onClick={() => this.copyHash()}><a href={this.state.url} target="_blank">Open transaction
-                        page</a>
+                    <div className={styles.field + ' ' + styles.button}
+                         onClick={() => explorerTX(this.props.txHash)}>Open transaction page
                     </div>
 
-                    <div className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}
+                    <div className={styles.field + ' ' + styles.button}
                          onClick={() => this.copyHash()}>Copy transaction hash
                     </div>
 
                     <div onClick={() => this.props.setTransaction(false)}
-                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Back
+                         className={styles.field + ' ' + styles.button}>Back
                     </div>
 
                     <Separator/>
