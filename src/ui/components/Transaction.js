@@ -18,6 +18,7 @@ export default class Transaction extends React.Component {
             amount: '',
             txHash: '',
             data: '',
+            needPassword: Object.keys(ENQWeb.Enq.User).length === 0,
             unlock: false,
             getLedgerTransport: this.props.getLedgerTransport,
             fee: Number(0.0),
@@ -90,7 +91,12 @@ export default class Transaction extends React.Component {
 
         //TODO
         let user = await disk.user.loadUser()
-        // console.log(user)
+        if (!user.privateKey) {
+            user = await disk.promise.sendPromise({account: true, unlock: true, password: this.state.password})
+            console.log(user)
+            return
+        }
+
         let wallet = {pubkey: user.publicKey, prvkey: user.privateKey}
         ENQWeb.Net.provider = user.net
 
@@ -195,6 +201,14 @@ export default class Transaction extends React.Component {
                                placeholder={'Data'}
                         />
 
+                        {this.state.needPassword && <Input type="password"
+                                                spellCheck={false}
+                                                onChange={(e) => this.setState({password: e.target.value})}
+                                                value={this.state.password}
+                                                className={styles.field}
+                                                placeholder={'Password'}
+                        />}
+
                     </div>
 
 
@@ -211,6 +225,10 @@ export default class Transaction extends React.Component {
                         <div className={styles.field}>
                             Balance after: {balanceAfter}
                         </div>
+
+                        {this.state.needPassword && <div className={styles.field}>
+                            You have to unlock account
+                        </div>}
 
                     </div>
 
