@@ -23,7 +23,7 @@ export function MessageHandler(msg, ENQWeb) {
                     console.log('sessionStorage expired')
                     resolve({response: {}})
                     lockAccount()
-                    window.location.reload(false)
+                    window.location.reload()
                 } else
                     resolve({response: userSession})
 
@@ -89,6 +89,7 @@ let createWebSession = (account) => {
 
     // TODO
     const webAccount = JSON.parse(JSON.stringify(account))
+    webAccount.web = true
     webAccount.privateKey = ''
     webAccount.seed = account.seed ? true : ''
     webAccount.account1 = account.seed ? true : ''
