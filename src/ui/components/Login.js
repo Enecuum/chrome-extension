@@ -63,10 +63,10 @@ export default class Login extends React.Component {
 
     async submit() {
 
-        if (this.state.seed.length > 0 && !regexSeed.test(this.state.seed)) {
-            await this.loginSeed()
-            return
-        }
+        // if (this.state.seed.length > 0 && !regexSeed.test(this.state.seed)) {
+        //     await this.loginSeed()
+        //     return
+        // }
 
         if (this.state.privateKey.length !== 64 && !regexAddress.test(this.state.privateKey)) {
             console.error('Incorrect private key')
