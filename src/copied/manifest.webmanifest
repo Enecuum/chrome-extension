@@ -5,7 +5,7 @@
     "manifest_version": 2,
     "start_url": "/?source=pwa",
     "scope": "/",
-    "display": "standalone",
+    "display": "fullscreen",
     "background_color": "#1E2033",
     "theme_color": "#1E2033",
     "icons": [
@@ -21,17 +21,6 @@
         }
     ],
     "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-    "content_scripts": [
-        {
-            "matches": [
-                "http://*/*",
-                "https://*/*"
-            ],
-            "js": [
-                "js/contentScript.js"
-            ],
-            "run_at": "document_start",
-            "all_frames": true
-        }
-    ]
+    "related_applications": [],
+    "capture_links": "none"
 }
