@@ -7,3 +7,5 @@
 - npm run stop - stop node server
 - npm run ci - run ci webhook inside pm2
 - npm run "ci stop" - stop ci webhook
+
+npx @bubblewrap/cli init --manifest=https://pwa.enecuum.com/manifest.webmanifest
