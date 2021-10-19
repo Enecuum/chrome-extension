@@ -18,7 +18,7 @@ export default class Transaction extends React.Component {
             amount: '',
             txHash: '',
             data: '',
-            needPassword: Object.keys(ENQWeb.Enq.User).length === 0,
+            needPassword: false,
             unlock: false,
             getLedgerTransport: this.props.getLedgerTransport,
             fee: Number(0.0),
