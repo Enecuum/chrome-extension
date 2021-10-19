@@ -164,7 +164,7 @@ export default class Transaction extends React.Component {
                         - BigInt(Math.floor(this.state.fee * this.state.decimals))
                     )
                     / this.state.decimals
-                ).toFixed(4)
+                )
 
                 : "0.0"
 
@@ -201,13 +201,13 @@ export default class Transaction extends React.Component {
                                placeholder={'Data'}
                         />
 
-                        {this.state.needPassword && <Input type="password"
-                                                spellCheck={false}
-                                                onChange={(e) => this.setState({password: e.target.value})}
-                                                value={this.state.password}
-                                                className={styles.field}
-                                                placeholder={'Password'}
-                        />}
+                        {/*{this.state.needPassword && <Input type="password"*/}
+                        {/*                        spellCheck={false}*/}
+                        {/*                        onChange={(e) => this.setState({password: e.target.value})}*/}
+                        {/*                        value={this.state.password}*/}
+                        {/*                        className={styles.field}*/}
+                        {/*                        placeholder={'Password'}*/}
+                        {/*/>}*/}
 
                     </div>
 
@@ -226,9 +226,9 @@ export default class Transaction extends React.Component {
                             Balance after: {balanceAfter}
                         </div>
 
-                        {this.state.needPassword && <div className={styles.field}>
-                            You have to unlock account
-                        </div>}
+                        {/*{this.state.needPassword && <div className={styles.field}>*/}
+                        {/*    You have to unlock account*/}
+                        {/*</div>}*/}
 
                     </div>
 
