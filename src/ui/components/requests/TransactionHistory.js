@@ -110,7 +110,7 @@ export default function TransactionHistory(props) {
     }
 
     const copyHashString = () => {
-        navigator.clipboard.writeText(props.request.tx.to)
+        navigator.clipboard.writeText(props.request.tx.hash)
     }
 
     const getTransaction = async () => {
