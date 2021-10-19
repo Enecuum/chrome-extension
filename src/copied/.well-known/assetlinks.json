@@ -1,0 +1,5 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target" : { "namespace": "android_app", "package_name": "com.enecuum.twa",
+        "sha256_cert_fingerprints": ["E9:4A:7D:C2:A0:76:48:CC:06:F4:F7:5B:C3:C5:A0:94:9E:54:78:05:5F:77:C8:0D:5D:3C:00:93:AA:C2:A3:A2"] }
+}]
