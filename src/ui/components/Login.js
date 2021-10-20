@@ -14,6 +14,7 @@ export default class Login extends React.Component {
             seed: '',
             isNetwork: false,
             state: 0,
+            setMnemonic: props.setMnemonic
         }
         this.handleChangePrivateKey = this.handleChangePrivateKey.bind(this)
         this.handleChangeSeed = this.handleChangeSeed.bind(this)
@@ -21,6 +22,7 @@ export default class Login extends React.Component {
         this.submit = this.submit.bind(this)
         this.loginSeed = this.loginSeed.bind(this)
         this.generate = this.generate.bind(this)
+        this.generateMnemonic = this.generateMnemonic.bind(this)
         this.setNetwork = this.setNetwork.bind(this)
     }
 
@@ -63,10 +65,10 @@ export default class Login extends React.Component {
 
     async submit() {
 
-        // if (this.state.seed.length > 0 && !regexSeed.test(this.state.seed)) {
-        //     await this.loginSeed()
-        //     return
-        // }
+        if (this.state.state === 1 && this.state.seed.length > 0 && regexSeed.test(this.state.seed)) {
+            await this.loginSeed()
+            return
+        }
 
         if (this.state.privateKey.length !== 64 && !regexAddress.test(this.state.privateKey)) {
             console.error('Incorrect private key')
@@ -96,6 +98,10 @@ export default class Login extends React.Component {
         this.setState({privateKey: privateKey})
     }
 
+    generateMnemonic() {
+        this.props.setMnemonic(true)
+    }
+
     render() {
         return (
             <div className={styles.main}>
@@ -117,8 +123,9 @@ export default class Login extends React.Component {
                         spellCheck={false}
                         onChange={this.handleChangeSeed}
                         value={this.state.seed}
-                        className={styles.field}
-                        placeholder="Seed Phrase"
+                        className={styles.field + ' ' + (regexSeed.test(this.state.seed) ? styles.field_correct : '')}
+                        label={'Seed Phrase'}
+                        placeholder={'12 words'}
                     />}
 
                     {this.state.state === 0 && <Input
@@ -132,8 +139,7 @@ export default class Login extends React.Component {
 
                     <div
                         onClick={this.submit}
-                        className={`${styles.field} ${styles.button} ${(regexToken.test(this.state.privateKey) ? styles.button_blue : '')}`}
-                    >
+                        className={`${styles.field} ${styles.button} ${((this.state.state === 0 && regexToken.test(this.state.privateKey)) || (this.state.state === 1 && regexSeed.test(this.state.seed)) ? styles.button_blue : '')}`}>
                         Login
                     </div>
 
@@ -141,24 +147,33 @@ export default class Login extends React.Component {
 
                         {this.state.state === 0 && <div
                             onClick={this.generate}
-                            className={`${styles.field} ${styles.button} ${(!regexToken.test(this.state.privateKey) ? styles.button_blue : '')}`}
-                        >
+                            className={`${styles.field} ${styles.button} ${(!regexToken.test(this.state.privateKey) ? styles.button_blue : '')}`}>
                             Generate
                         </div>}
 
                         {this.state.state === 0 && <div
-                            onClick={() => {}}
-                            className={`${styles.field} ${styles.button} ${styles.button_disabled}`}>
+                            onClick={() => this.setState({state: 1})}
+                            className={`${styles.field} ${styles.button}`}>
                             Mnemonic
                         </div>}
 
                     </div>
 
-                    {this.state.state === 1 && <div
-                        onClick={() => this.setState({state: 0})}
-                        className={`${styles.field} ${styles.button}`}>
-                        Private Key
-                    </div>}
+                    <div className={`${styles.buttons_field}`}>
+
+                        {this.state.state === 1 && <div
+                            onClick={this.generateMnemonic}
+                            className={`${styles.field} ${styles.button}`}>
+                            Generate
+                        </div>}
+
+                        {this.state.state === 1 && <div
+                            onClick={() => this.setState({state: 0})}
+                            className={`${styles.field} ${styles.button}`}>
+                            Private Key
+                        </div>}
+
+                    </div>
 
                     {/* <div onClick={() => this.setNetwork(true)} */}
                     {/*     className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Network: {ENQWeb.Net.currentProvider.toUpperCase()} */}
