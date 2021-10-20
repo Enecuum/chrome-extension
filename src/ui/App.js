@@ -210,7 +210,7 @@ export default function App(props) {
         return <Password setPassword={setPassword} login={login} publicKey={user.publicKey}/>
     }
 
-    if (isLogin) return <Login login={login2}/>
+    if (isLogin) return <Login login={login2} setMnemonic={setMnemonic}/>
 
     return <Account user={user}
                     login={login2}

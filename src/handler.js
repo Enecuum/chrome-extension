@@ -17,8 +17,16 @@ export function MessageHandler(msg, ENQWeb) {
         if (msg.account && msg.request) {
             if (!disk.lock.checkLock()) {
 
-                let webSession = JSON.parse(sessionStorage.getItem('User'))
-                let userSession = Object.keys(ENQWeb.Enq.User).length > 0 ? ENQWeb.Enq.User : (webSession ? webSession : false)
+                let userSession
+                if (Object.keys(ENQWeb.Enq.User).length > 0) {
+                    console.log('Memory session')
+                    userSession = ENQWeb.Enq.User
+                } else {
+                    let webSession = JSON.parse(sessionStorage.getItem('User'))
+                    userSession = webSession ? webSession : false
+                    console.warn('Session storage: ' + !!userSession)
+                }
+
                 if (!userSession.publicKey) {
                     console.log('sessionStorage expired')
                     resolve({response: {}})
@@ -53,7 +61,9 @@ export function MessageHandler(msg, ENQWeb) {
         if (msg.account && msg.set && msg.data) {
 
             // Edit user
+            console.log(msg.data)
             let account = msg.data
+            ENQWeb.Enq.User = account
             disk.user.addUser(account)
 
             // TODO
@@ -64,6 +74,7 @@ export function MessageHandler(msg, ENQWeb) {
         }
         if (msg.account && msg.encrypt) {
             if (msg.again) {
+                console.log(msg.data)
                 disk.user.addUser(msg.data)
                 encryptAccount()
             } else {
