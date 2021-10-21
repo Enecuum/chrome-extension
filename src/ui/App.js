@@ -147,7 +147,7 @@ export default function App(props) {
     }
 
     if (isMnemonic) {
-        return <Mnemonic setMnemonic={setMnemonic} user={user}/>
+        return <Mnemonic login={login2} setMnemonic={setMnemonic} user={user}/>
     }
 
     if (isKeys) {
