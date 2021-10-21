@@ -10,8 +10,8 @@ let seedLength = 12
 
 export default function Mnemonic(props) {
 
-    const [mnemonicString, setMnemonicString] = useState('')
-    const [state, setState] = useState(-1)
+    const [mnemonicString, setMnemonicString] = useState(bip39.generateMnemonic())
+    const [state, setState] = useState(0)
     const [number, setNumber] = useState(0)
 
     useEffect(() => {
@@ -34,6 +34,31 @@ export default function Mnemonic(props) {
                 data: account
             })
         })
+    }
+
+    const loginSeed = (mnemonicString) => {
+        let hex = bip39.mnemonicToSeedSync(mnemonicString)
+        let node = bip32.fromSeed(hex, null)
+        let child = node.derivePath("m/44'/2045'/0'/0")
+        let privateKey0 = child.derive(0).privateKey.toString('hex')
+        // loginAccount(privateKey0, account.seed, account)
+        const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
+        if (publicKey0) {
+            let data = {
+                publicKey: publicKey0,
+                privateKey: privateKey0,
+                net: ENQWeb.Net.provider,
+                token: ENQWeb.Enq.ticker,
+                seed: hex,
+            }
+            global.disk.promise.sendPromise({
+                account: true,
+                set: true,
+                data: data
+            }).then(r => {
+                props.login(data)
+            })
+        }
     }
 
     const renderMnemonic = () => {
@@ -68,7 +93,7 @@ export default function Mnemonic(props) {
             wordsList.sort(() => .5 - Math.random())
             for (let i = 0; i < wordsList.length; i++) {
                 wordsArray.push(renderWord('', wordsList[i], wordsList[i] === words[number - 1] ? () => {
-                    addSeed(mnemonicString)
+                    loginSeed(mnemonicString)
                     props.setMnemonic(false)
                 } : () => setState(0)))
             }
@@ -151,11 +176,12 @@ export default function Mnemonic(props) {
                 <div className={`${styles.buttons_field}`}>
 
                     <div onClick={() => {
-                        if (state === -1)
-                            props.setMnemonic(false)
+                        // if (state === -1)
+
                         if (state === 0) {
-                            setState(-1)
-                            setMnemonicString('')
+                            // setState(-1)
+                            // setMnemonicString('')
+                            props.setMnemonic(false)
                         }
                         if (state === 1)
                             setState(0)
