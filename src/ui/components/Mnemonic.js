@@ -134,7 +134,7 @@ export default function Mnemonic(props) {
 
                 {state === 0 && <div className={styles.field}>
                     <div>Please backup your mnemonic</div>
-                    <div>before start using wallet</div>
+                    <div>before using the wallet</div>
                 </div>}
 
                 {state > 0 && <div className={styles.field}>
