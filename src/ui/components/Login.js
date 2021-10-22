@@ -125,7 +125,7 @@ export default class Login extends React.Component {
                         value={this.state.seed}
                         className={styles.field + ' ' + (regexSeed.test(this.state.seed) ? styles.field_correct : '')}
                         label={'Seed Phrase'}
-                        placeholder={'12 words'}
+                        placeholder={'12+ words'}
                     />}
 
                     {this.state.state === 0 && <Input
