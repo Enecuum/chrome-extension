@@ -16,7 +16,6 @@ export default function Input(props) {
         <div className={styles.inputContainer}>
             <label htmlFor={props.label}>{props.label ? props.label : props.placeholder}</label>
             <input
-                id={props.label}
                 autoFocus={!!props.autoFocus}
                 type={props.type}
                 spellCheck={false}

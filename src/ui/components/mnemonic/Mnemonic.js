@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import styles from '../css/index.module.css'
-import Separator from '../elements/Separator'
+import styles from '../../css/index.module.css'
+import Separator from '../../elements/Separator'
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
-import Input from "../elements/Input";
-import {regexSeed} from "../Utils";
+import Input from "../../elements/Input";
+import {getMnemonicFirstPrivateKey, mnemonicPath, regexSeed} from "../../Utils";
 
 let seedLength = 12
 
@@ -18,29 +18,26 @@ export default function Mnemonic(props) {
         // console.log(mnemonicString)
     })
 
-    const addSeed = (mnemonicString) => {
-        let hex = bip39.mnemonicToSeedSync(mnemonicString)
-        let node = bip32.fromSeed(hex, null)
-        let child = node.derivePath("m/44'/2045'/0'/0");
-
-        // console.log(child.derive(0).privateKey.toString('hex'))
-
-        disk.user.loadUser().then(async account => {
-            account.seed = hex
-            console.log(account)
-            await disk.promise.sendPromise({
-                account: true,
-                set: true,
-                data: account
-            })
-        })
-    }
+    // const addSeed = (mnemonicString) => {
+    //     let hex = bip39.mnemonicToSeedSync(mnemonicString)
+    //     let node = bip32.fromSeed(hex, null)
+    //     let child = node.derivePath("m/44'/2045'/0'/0");
+    //
+    //     // console.log(child.derive(0).privateKey.toString('hex'))
+    //
+    //     disk.user.loadUser().then(async account => {
+    //         account.seed = hex
+    //         console.log(account)
+    //         await disk.promise.sendPromise({
+    //             account: true,
+    //             set: true,
+    //             data: account
+    //         })
+    //     })
+    // }
 
     const loginSeed = (mnemonicString) => {
-        let hex = bip39.mnemonicToSeedSync(mnemonicString)
-        let node = bip32.fromSeed(hex, null)
-        let child = node.derivePath("m/44'/2045'/0'/0")
-        let privateKey0 = child.derive(0).privateKey.toString('hex')
+        let privateKey0 = getMnemonicFirstPrivateKey(mnemonicString)
         // loginAccount(privateKey0, account.seed, account)
         const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
         if (publicKey0) {
@@ -190,11 +187,11 @@ export default function Mnemonic(props) {
                     }} className={styles.field + ' ' + styles.button}>Back
                     </div>
 
-                    {state === -1 && <div onClick={() => {
-                        setMnemonicString(bip39.generateMnemonic())
-                        setState(0)
-                    }} className={styles.field + ' ' + styles.button}>Generate
-                    </div>}
+                    {/*{state === -1 && <div onClick={() => {*/}
+                    {/*    setMnemonicString(bip39.generateMnemonic())*/}
+                    {/*    setState(0)*/}
+                    {/*}} className={styles.field + ' ' + styles.button}>Generate*/}
+                    {/*</div>}*/}
 
                     {(state === 1 || state === 2) && <div onClick={() => {}} className={styles.field + ' ' + styles.button + ' ' + styles.button_disabled}>&nbsp;</div>}
 

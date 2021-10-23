@@ -1,9 +1,24 @@
+const bip39 = require("bip39");
+const bip32 = require("bip32");
 let regexData = /^[0-9a-zA-Z _\-/.]{0,512}$/
 let regexAddress = /^(02|03)[0-9a-fA-F]{64}$/
 let regexToken = /^[0-9a-fA-F]{64}$/
 // TODO
 // let regexSeed = /^[a-f, ]+$/
 let regexSeed = /^(\w+\s){11,}\w+$/
+
+let mnemonicPath = "m/44'/2045'/0'/0"
+
+let getMnemonicFirstPrivateKey = (mnemonicString) => {
+    let hex = bip39.mnemonicToSeedSync(mnemonicString)
+    let node = bip32.fromSeed(hex, null)
+    let child = node.derivePath(mnemonicPath)
+    return child.derive(0).privateKey.toString('hex')
+}
+
+let getMnemonicHex = (mnemonicString) => {
+    return bip39.mnemonicToSeedSync(mnemonicString)
+}
 
 const shortHash = (address) => {
     return address.substring(0, 5) + '...' + address.substring(address.length - 3, address.length)
@@ -100,5 +115,8 @@ module.exports = {
     regexData,
     regexAddress,
     regexToken,
-    regexSeed
+    regexSeed,
+    mnemonicPath,
+    getMnemonicFirstPrivateKey,
+    getMnemonicHex
 }

@@ -264,4 +264,5 @@ label {
     left: 20px;
     top: 10px;
     font-size: var(--font-size-small);
+    border-radius: 2px;
 }

@@ -425,6 +425,7 @@ export default function Account(props) {
                          setKeys={props.setKeys}
                          setPassword={props.setPassword}
                          setMnemonic={props.setMnemonic}
+                         setImportMnemonic={props.setImportMnemonic}
             />
         }
     }
