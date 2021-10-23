@@ -18,7 +18,8 @@ import Eth from "@ledgerhq/hw-app-eth";
 import SignRequest from "./components/requests/SignRequest";
 import TransactionHistory from "./components/requests/TransactionHistory";
 import Keys from "./components/Keys";
-import Mnemonic from "./components/Mnemonic";
+import Mnemonic from "./components/mnemonic/Mnemonic";
+import Import from "./components/mnemonic/Imoprt";
 
 let net = localStorage.getItem('net')
 if (!net) {
@@ -46,6 +47,7 @@ export default function App(props) {
 
     const [isSignRequest, setSignRequest] = useState(false)
 
+    const [isImportMnemonic, setImportMnemonic] = useState(false)
     const [isMnemonic, setMnemonic] = useState(false)
 
     const [isConnectLedger, setConnectLedger] = useState(false)
@@ -146,6 +148,10 @@ export default function App(props) {
         setLogin(false)
     }
 
+    if (isImportMnemonic) {
+        return <Import login={login2} setImportMnemonic={setImportMnemonic}/>
+    }
+
     if (isMnemonic) {
         return <Mnemonic login={login2} setMnemonic={setMnemonic} user={user}/>
     }
@@ -228,5 +234,6 @@ export default function App(props) {
                     setKeys={setKeys}
                     setSignRequest={setSignRequest}
                     setMnemonic={setMnemonic}
+                    setImportMnemonic={setImportMnemonic}
     />
 }

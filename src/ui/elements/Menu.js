@@ -189,10 +189,12 @@ export default function Menu(props) {
                 <div className={styles.button_link} onClick={() => props.setKeys(true)}>❯</div>
             </div>
 
-            {seed && <div className={styles.row}>
-                <div className={styles.button_link + (activeAccount === 2 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 1 ? loginAccount2 : null)}>Account 2{account2Amount > 0 ? ': ' + (Number(account2Amount) / 1e10).toFixed(4) : ''}</div>
-                <div className={styles.button_link} onClick={props.setMnemonic}>Seed</div>
-            </div>}
+            {!seed && <div className={styles.button_link} onClick={props.setImportMnemonic}>Import Mnemonic</div>}
+
+            {/*{seed && <div className={styles.row}>*/}
+            {/*    <div className={styles.button_link + (activeAccount === 2 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 1 ? loginAccount2 : null)}>Account 2{account2Amount > 0 ? ': ' + (Number(account2Amount) / 1e10).toFixed(4) : ''}</div>*/}
+            {/*    <div className={styles.button_link} onClick={props.setMnemonic}>Seed</div>*/}
+            {/*</div>}*/}
 
             {ethAddress ? <div className={styles.button_link}
                                onClick={() => createPopupWindow('index.html?type=connectLedger')}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div> :
@@ -200,8 +202,6 @@ export default function Menu(props) {
                      onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect Ledger</div>}
 
             <div className={styles.separator}/>
-
-            {!seed && <div className={styles.button_link} onClick={props.setMnemonic}>Mnemonic</div>}
 
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
