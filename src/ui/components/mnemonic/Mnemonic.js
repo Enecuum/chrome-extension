@@ -4,7 +4,7 @@ import Separator from '../../elements/Separator'
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
 import Input from "../../elements/Input";
-import {getMnemonicFirstPrivateKey, mnemonicPath, regexSeed} from "../../Utils";
+import {getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../Utils";
 
 let seedLength = 12
 
@@ -46,7 +46,7 @@ export default function Mnemonic(props) {
                 privateKey: privateKey0,
                 net: ENQWeb.Net.provider,
                 token: ENQWeb.Enq.ticker,
-                seed: hex,
+                seed: getMnemonicHex(mnemonicString),
             }
             global.disk.promise.sendPromise({
                 account: true,
@@ -79,7 +79,7 @@ export default function Mnemonic(props) {
                     let generatedNumber = Math.floor(Math.random() * seedLength) + 1
                     setNumber(generatedNumber === number ? seedLength - number : generatedNumber)
                     setState(2)
-                } : () => setState(0)))
+                } : () => setState(0), i))
             }
         }
         if (state === 2) {
@@ -92,7 +92,7 @@ export default function Mnemonic(props) {
                 wordsArray.push(renderWord('', wordsList[i], wordsList[i] === words[number - 1] ? () => {
                     loginSeed(mnemonicString)
                     props.setMnemonic(false)
-                } : () => setState(0)))
+                } : () => setState(0), i))
             }
         }
 
@@ -100,8 +100,8 @@ export default function Mnemonic(props) {
         return wordsArray
     }
 
-    const renderWord = (i, word, onClick) => {
-        return (<div key={word} onClick={onClick}>
+    const renderWord = (i, word, onClick, key = i) => {
+        return (<div key={key} onClick={onClick}>
             <div className={styles.mnemonicIndex}>
                 {i}
             </div>
@@ -116,18 +116,6 @@ export default function Mnemonic(props) {
         <div className={styles.main}>
 
             <div className={styles.content}>
-
-                {state === -1 && <Input
-                    type="text"
-                    spellCheck={false}
-                    onChange={async (e) => {
-                        setMnemonicString(e.target.value)
-                        // loginSeed(e.target.value)
-                    }}
-                    value={mnemonicString}
-                    className={styles.field + ' ' + styles.inputSeed + ' ' + (regexSeed.test(mnemonicString) ? styles.field_correct : '')}
-                    placeholder="Seed Phrase"
-                />}
 
                 {state === 0 && <div className={styles.field}>
                     <div>Please backup your mnemonic</div>
@@ -154,21 +142,6 @@ export default function Mnemonic(props) {
                 }}
                                      className={styles.field + ' ' + styles.button}>Copy
                 </div>}
-
-                {state === -1 && <div onClick={() => {
-                    if (regexSeed.test(mnemonicString)) {
-                        console.log(regexSeed.test(mnemonicString))
-                        console.log(mnemonicString)
-                        addSeed(mnemonicString)
-                        props.setMnemonic(false)
-                    }
-                }} className={styles.field + ' ' + styles.button + ' ' + (regexSeed.test(mnemonicString) ? styles.button_blue : '')}>Import mnemonic
-                </div>}
-
-                {/*{state === -1 && <div onClick={() => {*/}
-                {/*    if (state === -1) {}*/}
-                {/*}} className={styles.field + ' ' + styles.button}>Show my mnemonic*/}
-                {/*</div>}*/}
 
                 <div className={`${styles.buttons_field}`}>
 
