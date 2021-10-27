@@ -53,7 +53,7 @@ const createLinks = () => {
     linksDiv.innerHTML += '<div><a href="https://chrome.google.com/webstore/detail/enecuum/oendodccclbjedifljnlkapjejklgekf?hl=en" target="_blank">Chrome Extension</div>'
     linksDiv.innerHTML += '<div id="leftLinksTextBottom">This web application may be installed via Chrome (right side of the address bar)</div>'
     linksDiv.innerHTML += '<div id="leftLinksTextBottom">And on Android phone</div>'
-    linksDiv.innerHTML += '<div id="leftLinksTextBottom">' + VERSION + '</div>'
+    linksDiv.innerHTML += '<div id="leftLinksTextBottom">' + chrome.runtime.getManifest().version + ' ' + VERSION + '</div>'
     // linksDiv.innerHTML += '<div><a href="/electron" target="_blank">Electron Desktop Application</div>'
     // linksDiv.innerHTML += '<div><a href="/android" target="_blank">Android Application</a></div>'
     // linksDiv.innerHTML += '<div><a href="/pwa" target="_blank">Progressive Web Mobile Application</a></div>'
