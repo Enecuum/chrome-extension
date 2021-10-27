@@ -26,7 +26,7 @@ export default function TransactionRequest(props) {
     const [taskId, setTaskId] = useState(props.request.cb.taskId)
     const [dataText, setDataText] = useState([])
     const [fee, setFee] = useState(BigInt(0.1 * 1e10))
-    const [Type, setType] = useState("undefined".toUpperCase())
+    const [type, setType] = useState('undefined'.toUpperCase())
     const [isBlock, setBlock] = useState(true)
 
 
@@ -193,7 +193,7 @@ export default function TransactionRequest(props) {
                 <div
                     className={styles.transaction_type}>{
                     ENQWeb.Utils.ofd.isContract(data) ?
-                        Type.toUpperCase().replaceAll('_', ' ') :
+                        type.toUpperCase().replaceAll('_', ' ') :
                         'TOKEN TRANSFER'
                 }</div>
 
