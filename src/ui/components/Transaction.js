@@ -63,7 +63,7 @@ export default class Transaction extends React.Component {
                 },
                 data: this.state.data,
                 hash: hash,
-                fee_value: this.state.fee,
+                fee_value: this.state.fee * 1e10,
                 tokenHash: '',
                 // ticker: await findTickerInCache(history.records[id].token_hash) || false,
                 ticker: '',
