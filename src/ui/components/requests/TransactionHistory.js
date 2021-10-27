@@ -9,7 +9,7 @@ const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
 export default function TransactionHistory(props) {
 
-    // console.log(props.request.tx)
+    console.log(props.request.tx)
 
     // const [jsonFrom] = useState(props.request.tx.from)
     const [activeTab, setActiveTab] = useState(0)
@@ -52,7 +52,7 @@ export default function TransactionHistory(props) {
         let tokenHash = props.request.tx.tokenHash
         let tokenInfo = await ENQWeb.Net.get.token_info(tokenHash)
         if (tokenInfo.length === 0) {
-            console.warn('token info error...')
+            console.warn('Token info error')
         } else {
             setTicker(tokenInfo[0].ticker)
         }

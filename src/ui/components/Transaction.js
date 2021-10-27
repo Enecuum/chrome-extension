@@ -43,14 +43,37 @@ export default class Transaction extends React.Component {
     }
 
     setNetwork() {
-        this.setState({network: this.state.localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
-            this.state.localNetworks.find(element => element.host === ENQWeb.Net.currentProvider).name : this.state.network
+        this.setState({
+            network: this.state.localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
+                this.state.localNetworks.find(element => element.host === ENQWeb.Net.currentProvider).name : this.state.network
 
         })
     }
 
-    setTransactionSend(value) {
-        this.setState({isTransactionSend: value})
+    setTransactionSend(user, hash) {
+        return {
+            data: {
+                date: new Date().getTime(),
+            },
+            rectype: 'iout',
+            tx: {
+                to: this.state.address,
+                from: {
+                    pubkey: user.publicKey
+                },
+                data: this.state.data,
+                hash: hash,
+                fee_value: this.state.fee,
+                tokenHash: '',
+                // ticker: await findTickerInCache(history.records[id].token_hash) || false,
+                ticker: '',
+                value: this.state.amount * -1 * 1e10
+            },
+            cb: {
+                taskId: 0,
+            },
+            type: 'iout'
+        }
     }
 
     handleChangeAddress(e) {
@@ -123,7 +146,8 @@ export default class Transaction extends React.Component {
             })
         }
 
-        this.setTransactionSend(true)
+        this.props.setTransactionHistory(this.setTransactionSend(user, response.hash))
+        this.props.setTransaction(false)
     }
 
     feeCount() {
@@ -146,6 +170,20 @@ export default class Transaction extends React.Component {
             }
         })
     }
+
+    // pending() {
+    //
+    //     for (const key in history.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
+    //         const item = history[key]
+    //     }
+    //
+    //     if (item.type === 'iin') {
+    //         props.setTransactionHistory(item)
+    //     }
+    //     if (item.type === 'iout') {
+    //         props.setTransactionHistory(item)
+    //     }
+    // }
 
     render() {
 
