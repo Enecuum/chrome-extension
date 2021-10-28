@@ -142,7 +142,7 @@ export function runLockTimer() {
         clearTimeout(lockTimer)
     }
     if (disk.name === "background") {
-        lockTimer = setTimeout(() => lockAccount(), lockTime)
+        lockTimer = setTimeout(() => lockAccount(true), lockTime)
     } else {
         lockTimer = setTimeout(() => disk.promise.sendPromise({lock: true}), lockTime)
     }

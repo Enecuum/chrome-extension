@@ -1,12 +1,13 @@
 let lockTime = 10 * 60 * 1000
 // let lockTime = 10 * 1000
 
-function lockAccount() {
+function lockAccount(timer = false) {
     disk.lock.setLock(true)
     if (disk.name === 'background') {
         ENQWeb.Enq.User = {publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net}
     }
-    location.reload()
+    if (timer)
+        location.reload()
     console.log('account locked')
 }
 

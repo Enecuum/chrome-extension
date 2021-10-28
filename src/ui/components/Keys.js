@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
 import {explorerAddress, getMnemonicPrivateKeyHex, shortHash, shortHashLong} from '../Utils'
@@ -8,15 +8,27 @@ const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
 export default function Keys(props) {
 
-    let [publicKey, setPublicKey] = useState(props.user.publicKey)
+    let [publicKey, setPublicKey] = useState('')
+    let [privateKey, setPrivateKey] = useState('')
 
-    let [privateKey, setPrivateKey] = useState(props.user.privateKey)
-
-    disk.user.loadUser().then(async account => {
-        let hex = account.seed
-        let account2 = getMnemonicPrivateKeyHex(hex, 1)
-        // setPrivateKey(account2)
+    useEffect(() => {
+        loadUser()
     })
+
+    let loadUser = () => {
+        disk.user.loadUser().then(async account => {
+            console.log(account)
+            setPublicKey(account.publicKey)
+            setPrivateKey(account.privateKey)
+
+            let hex = account.seed
+            if (hex) {
+                let account2 = getMnemonicPrivateKeyHex(hex, 1)
+                const publicKey2 = ENQWeb.Utils.Sign.getPublicKey(account2, true)
+                // console.log(account2)
+            }
+        })
+    }
 
     return (
 

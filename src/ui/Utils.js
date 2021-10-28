@@ -11,11 +11,13 @@ let mnemonicPath = "m/44'/2045'/0'/0"
 
 let getMnemonicFirstPrivateKey = (mnemonicString, i = 0) => {
     let hex = bip39.mnemonicToSeedSync(mnemonicString)
-    getMnemonicPrivateKeyHex(i)
+    let node = bip32.fromSeed(hex, null)
+    let child = node.derivePath(mnemonicPath)
+    return child.derive(i).privateKey.toString('hex')
 }
 
-let getMnemonicPrivateKeyHex = (hex, i) => {
-    let node = bip32.fromSeed(hex, null)
+let getMnemonicPrivateKeyHex = (seed, i) => {
+    let node = bip32.fromSeed(Buffer.from(seed), null)
     let child = node.derivePath(mnemonicPath)
     return child.derive(i).privateKey.toString('hex')
 }

@@ -157,7 +157,7 @@ export default function App(props) {
     }
 
     if (isKeys) {
-        return <Keys setKeys={setKeys} user={user}/>
+        return <Keys setKeys={setKeys}/>
     }
 
     if (isConfirm) {
