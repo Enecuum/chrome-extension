@@ -3,7 +3,7 @@ import {decryptAccount, encryptAccount, lockAccount, lockTime} from "./lockAccou
 export function MessageHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
         if (msg.initial) {
-            lockTimer()
+            runLockTimer()
             resolve({response: true})
         }
         if (msg.window) {
@@ -137,7 +137,7 @@ export function Timer(ms) {
     return true
 }
 
-export function lockTimer() {
+export function runLockTimer() {
     if (lockTimer !== undefined) {
         clearTimeout(lockTimer)
     }
