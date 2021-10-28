@@ -181,7 +181,7 @@ export default function Menu(props) {
     return (
         <div className={styles.menu}>
 
-            <div className={styles.lock} onClick={locked}><img src='./images/lock.png' className={(!privateDataLoaded ? styles.loaded : '')}/></div>
+            <div className={styles.lock} onClick={locked}><img src='./images/lock.png' className={(!privateDataLoaded ? styles.loaded : '')} title={'Lock application'} alt={'Lock'}/></div>
             <div className={styles.title}>My accounts</div>
 
             <div className={styles.row}>
