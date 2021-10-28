@@ -1,12 +1,22 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
-import {explorerAddress, shortHash, shortHashLong} from '../Utils'
+import {explorerAddress, getMnemonicPrivateKeyHex, shortHash, shortHashLong} from '../Utils'
 
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
 export default function Keys(props) {
+
+    let [publicKey, setPublicKey] = useState(props.user.publicKey)
+
+    let [privateKey, setPrivateKey] = useState(props.user.privateKey)
+
+    disk.user.loadUser().then(async account => {
+        let hex = account.seed
+        let account2 = getMnemonicPrivateKeyHex(hex, 1)
+        // setPrivateKey(account2)
+    })
 
     return (
 
@@ -16,25 +26,25 @@ export default function Keys(props) {
 
                 <Separator/>
 
-                <div className={styles.field}>{shortHashLong(props.user.publicKey)}</div>
+                <div className={styles.field}>{shortHashLong(publicKey)}</div>
 
                 <div className={styles.field + ' ' + styles.button} onClick={() => {
-                    navigator.clipboard.writeText(props.user.publicKey)
-                }}>Copy public key</div>
+                    navigator.clipboard.writeText(publicKey)}}>Copy public key</div>
 
                 <Separator/>
 
-                <div className={styles.field}>{shortHashLong(props.user.privateKey)}</div>
+                <div className={styles.field}>{shortHashLong(privateKey)}</div>
 
                 <div className={styles.field + ' ' + styles.button} onClick={() => {
-                    navigator.clipboard.writeText(props.user.privateKey)
-                }}>Copy private key</div>
+                    navigator.clipboard.writeText(privateKey)}}>Copy private key
+                </div>
 
                 <Separator/>
 
                 <div className={styles.field}>Open new tab</div>
 
-                <div className={styles.field + ' ' + styles.button} onClick={() => explorerAddress(props.user.publicKey)}>
+                <div className={styles.field + ' ' + styles.button}
+                     onClick={() => explorerAddress(publicKey)}>
                     Show in blockchain explorer
                 </div>
 

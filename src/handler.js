@@ -1,4 +1,4 @@
-import {decryptAccount, encryptAccount, lockAccount} from "./lockAccount"
+import {decryptAccount, encryptAccount, lockAccount, lockTime} from "./lockAccount"
 
 export function MessageHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
@@ -61,7 +61,7 @@ export function MessageHandler(msg, ENQWeb) {
         if (msg.account && msg.set && msg.data) {
 
             // Edit user
-            console.log(msg.data)
+            // console.log(msg.data)
             let account = msg.data
             ENQWeb.Enq.User = account
             disk.user.addUser(account)
@@ -130,8 +130,7 @@ function createPopupWindow(url) {
     })
 }
 
-let lockTime = 10 * 60 * 1000
-let timer
+let lockTimer
 
 export function Timer(ms) {
     lockTime = ms
@@ -139,13 +138,13 @@ export function Timer(ms) {
 }
 
 export function lockTimer() {
-    if (timer !== undefined) {
-        clearTimeout(timer)
+    if (lockTimer !== undefined) {
+        clearTimeout(lockTimer)
     }
     if (disk.name === "background") {
-        timer = setTimeout(() => lockAccount(), lockTime)
+        lockTimer = setTimeout(() => lockAccount(), lockTime)
     } else {
-        timer = setTimeout(() => disk.promise.sendPromise({lock: true}), lockTime)
+        lockTimer = setTimeout(() => disk.promise.sendPromise({lock: true}), lockTime)
     }
 }
 
