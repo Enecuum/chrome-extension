@@ -1,8 +1,12 @@
+let lockTime = 10 * 60 * 1000
+// let lockTime = 10 * 1000
+
 function lockAccount() {
     disk.lock.setLock(true)
     if (disk.name === 'background') {
         ENQWeb.Enq.User = {publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net}
     }
+    location.reload()
     console.log('account locked')
 }
 
@@ -38,7 +42,7 @@ function decryptAccount(password) {
     }
 }
 
-export {lockAccount, encryptAccount, decryptAccount}
+export {lockAccount, encryptAccount, decryptAccount, lockTime}
 
 function say() {
     console.log("lock account loaded! background started")

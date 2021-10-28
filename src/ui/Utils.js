@@ -9,11 +9,15 @@ let regexSeed = /^(\w+\s){11,}\w+$/
 
 let mnemonicPath = "m/44'/2045'/0'/0"
 
-let getMnemonicFirstPrivateKey = (mnemonicString) => {
+let getMnemonicFirstPrivateKey = (mnemonicString, i = 0) => {
     let hex = bip39.mnemonicToSeedSync(mnemonicString)
+    getMnemonicPrivateKeyHex(i)
+}
+
+let getMnemonicPrivateKeyHex = (hex, i) => {
     let node = bip32.fromSeed(hex, null)
     let child = node.derivePath(mnemonicPath)
-    return child.derive(0).privateKey.toString('hex')
+    return child.derive(i).privateKey.toString('hex')
 }
 
 let getMnemonicHex = (mnemonicString) => {
@@ -118,5 +122,6 @@ module.exports = {
     regexSeed,
     mnemonicPath,
     getMnemonicFirstPrivateKey,
+    getMnemonicPrivateKeyHex,
     getMnemonicHex
 }
