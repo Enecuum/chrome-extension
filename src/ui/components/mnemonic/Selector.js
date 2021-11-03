@@ -31,12 +31,13 @@ export default function Selector(props) {
                 let accounts = []
                 for (let i = 0; i < 10; i++) {
                     let privateKey = getMnemonicPrivateKeyHex(hex, i)
+                    let current = account.privateKey === privateKey
                     const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
                     await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
-                        accounts.push({i: i, privateKey, publicKey, amount: res[0] ? res[0].amount : 0})
+                        accounts.push({i: i, privateKey, publicKey, amount: res[0] ? res[0].amount : 0, current})
                     })
                 }
-                renderCards(accounts)
+                renderCards(accounts, hex)
             }
         })
     }
@@ -66,18 +67,34 @@ export default function Selector(props) {
     //     }
     // }
 
-    let renderCards = (accounts) => {
+    let renderCards = (accounts, hex) => {
 
         let cards = []
-        let current = false
 
         for (let i = 0; i < accounts.length; i++) {
+
+            let current = accounts[i].current
             cards.push(
                 <div key={i} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
                     <div className={styles.card_title}>Account {i + 1}</div>
                     <div className={styles.card_field}>{shortHash(accounts[i].privateKey)}</div>
                     <div className={styles.card_field}>{accounts[i].amount > 0 ? accounts[i].amount / 1e10 : '0.0'}</div>
-                    <div className={styles.card_field_select} onClick={(current ? () => {} : () => {})}>{current ? 'CURRENT' : 'SELECT'}</div>
+                    <div className={styles.card_field_select} onClick={(current ? () => {} : () => {
+                        let data = {
+                            publicKey: accounts[i].publicKey,
+                            privateKey: accounts[i].privateKey,
+                            net: ENQWeb.Net.provider,
+                            token: ENQWeb.Enq.ticker,
+                            seed: hex,
+                        }
+                        global.disk.promise.sendPromise({
+                            account: true,
+                            set: true,
+                            data: data
+                        }).then(r => {
+                            props.login(data)
+                        })
+                    })}>{current ? 'CURRENT' : 'SELECT'}</div>
                 </div>
             )
         }
