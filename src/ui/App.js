@@ -49,6 +49,8 @@ export default function App(props) {
 
     const [isImportMnemonic, setImportMnemonic] = useState(false)
     const [isMnemonic, setMnemonic] = useState(false)
+    const [isAccountSelector, setAccountSelector] = useState(false)
+
 
     const [isConnectLedger, setConnectLedger] = useState(false)
     const [ledgerTransport, setLedgerTransport] = useState()
@@ -156,6 +158,10 @@ export default function App(props) {
         return <Mnemonic login={login2} setMnemonic={setMnemonic} user={user}/>
     }
 
+    if (isAccountSelector) {
+        return <Selector login={login2} setMnemonic={setMnemonic} user={user}/>
+    }
+
     if (isKeys) {
         return <Keys setKeys={setKeys}/>
     }
@@ -236,6 +242,7 @@ export default function App(props) {
                     setKeys={setKeys}
                     setSignRequest={setSignRequest}
                     setMnemonic={setMnemonic}
+                    setAccountSelector={setAccountSelector}
                     setImportMnemonic={setImportMnemonic}
     />
 }

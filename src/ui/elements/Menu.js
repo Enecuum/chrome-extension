@@ -16,6 +16,9 @@ export default function Menu(props) {
 
     const [activeAccount, setActiveAccount] = useState(1)
 
+    // TODO
+    const [accountName, setAccountName] = useState('Account 1 ')
+
     const [seed, setSeed] = useState(false)
 
     const [ledger, setLedger] = useState()
@@ -185,8 +188,9 @@ export default function Menu(props) {
             <div className={styles.title}>My accounts</div>
 
             <div className={styles.row}>
-                <div className={styles.button_link + (activeAccount === 1 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 2 ? loginAccount1 : null)}>Account 1 </div>
-                <div className={styles.button_link} onClick={() => props.setKeys(true)}>❯</div>
+                <div className={styles.button_link + (activeAccount === 1 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 2 ? loginAccount1 : null)}>{accountName}</div>
+                <div className={styles.button_link + ' ' + styles.keys_arrow} onClick={() => props.setAccountSelector(true)}>+</div>
+                {/*<div className={styles.button_link + ' ' + styles.keys_arrow} onClick={() => props.setKeys(true)}>❯</div>*/}
             </div>
 
             {!seed && <div className={styles.button_link} onClick={props.setImportMnemonic}>Import Mnemonic</div>}

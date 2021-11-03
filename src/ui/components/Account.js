@@ -425,6 +425,7 @@ export default function Account(props) {
                          setKeys={props.setKeys}
                          setPassword={props.setPassword}
                          setMnemonic={props.setMnemonic}
+                         setAccountSelector={props.setAccountSelector}
                          setImportMnemonic={props.setImportMnemonic}
             />
         }
@@ -438,7 +439,6 @@ export default function Account(props) {
                     renderHistory()
                 })
                 balance()
-
             }
         })
     }, [])
@@ -467,7 +467,7 @@ export default function Account(props) {
                                  <div>
                                      <div>{key}</div>
                                      {/*<div className={styles.time}>{date}</div>*/}
-                                     <div></div>
+                                     {/*<div></div>*/}
                                  </div>
                              </div>)
                          }
