@@ -160,7 +160,7 @@ export default function App(props) {
     }
 
     if (isAccountSelector) {
-        return <Selector login={login2} setMnemonic={setMnemonic} user={user}/>
+        return <Selector login={login2} setAccountSelector={setAccountSelector} user={user}/>
     }
 
     if (isKeys) {
