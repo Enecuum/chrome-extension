@@ -43,7 +43,7 @@ const createSpace = () => {
     }, timeout);
 }
 
-const createLinks = () => {
+const createDisclaimer = () => {
 
     const linksDiv = document.createElement('div')
     linksDiv.id = 'leftLinks'
@@ -75,6 +75,6 @@ const createResizeWatcher = () => {
 
 module.exports = {
     createSpace,
-    createLinks,
+    createDisclaimer,
     createResizeWatcher
 }
