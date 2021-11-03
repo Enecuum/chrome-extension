@@ -4,7 +4,7 @@ import App from "./App";
 import Analytics from "./elements/Analytics";
 
 import styles from './css/stars.css'
-import {createLinks, createResizeWatcher, createSpace} from "./Space";
+import {createDisclaimer, createResizeWatcher, createSpace} from "./Space";
 
 export async function initApp(background) {
 
@@ -19,7 +19,7 @@ export async function initApp(background) {
     // Web desktop init
     if (chrome.runtime.getManifest().version.endsWith('web')) {
         createSpace()
-        createLinks()
+        createDisclaimer()
         createResizeWatcher()
     }
 }
