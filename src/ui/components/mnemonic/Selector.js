@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from "react";
 import styles from "../../css/index.module.css";
 import Separator from "../../elements/Separator";
-import {regexToken, shortHash} from "../../Utils";
+import {getMnemonicPrivateKeyHex, regexToken, shortHash} from "../../Utils";
 import Input from "../../elements/Input";
+import * as bip39 from "bip39";
+import * as bip32 from "bip32";
 
 export default function Selector(props) {
 
@@ -12,30 +14,76 @@ export default function Selector(props) {
     let [token, setToken] = useState('')
     let [tokenCorrect, setTokenCorrect] = useState(false)
 
+    let [keys, setKeys] = useState()
     let [cards, setCards] = useState()
 
     let [showAdd, setShowAdd] = useState(false)
 
-    let renderCards = () => {
+    useEffect(() => {
+        loadUser()
+    })
 
-        let cards = [1, 2]
+    let loadUser = () => {
+        disk.user.loadUser().then(async account => {
+            let hex = account.seed
+            if (hex) {
+
+                let accounts = []
+                for (let i = 0; i < 10; i++) {
+                    let privateKey = getMnemonicPrivateKeyHex(hex, i)
+                    const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
+                    ENQWeb.Net.get.getBalanceAll(props.user.publicKey).then((res) => {
+                        accounts.push({i: i, privateKey, publicKey, amount: res[0].amount})
+                    })
+                }
+                renderCards(accounts)
+            }
+        })
+    }
+
+    // let loginSeed = (i) => {
+    //     let hex = bip39.mnemonicToSeedSync(this.state.seed)
+    //     let node = bip32.fromSeed(hex, null)
+    //     let child = node.derivePath("m/44'/2045'/0'/0")
+    //     let privateKey0 = child.derive(i).privateKey.toString('hex')
+    //     // loginAccount(privateKey0, account.seed, account)
+    //     const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
+    //     if (publicKey0) {
+    //         let data = {
+    //             publicKey: publicKey0,
+    //             privateKey: privateKey0,
+    //             net: ENQWeb.Net.provider,
+    //             token: ENQWeb.Enq.ticker,
+    //             seed: hex,
+    //         }
+    //         global.disk.promise.sendPromise({
+    //             account: true,
+    //             set: true,
+    //             data: data
+    //         }).then(r => {
+    //             this.props.login(data)
+    //         })
+    //     }
+    // }
+
+    let renderCards = (accounts) => {
+
+        let cards = []
         let current = false
 
-        cards.push(
-            <div className={styles.card + ' ' + (current ? '' : styles.card_select)}>
-                <div className={styles.card_title}>Account 1</div>
-                <div className={styles.card_field}>T1</div>
-                <div className={styles.card_field}>T2</div>
-                <div className={styles.card_field_select} onClick={(current ? () => {} : () => {})}>{current ? 'CURRENT' : 'SELECT'}</div>
-            </div>
-        )
+        for (let i = 0; i < accounts.length; i++) {
+            cards.push(
+                <div className={styles.card + ' ' + (current ? '' : styles.card_select)}>
+                    <div className={styles.card_title}>Account {i + 1}</div>
+                    <div className={styles.card_field}>{shortHash(accounts[i].privateKey)}</div>
+                    {/*<div className={styles.card_field}>{shortHash(accounts[i].amount)}</div>*/}
+                    <div className={styles.card_field_select} onClick={(current ? () => {} : () => {})}>{current ? 'CURRENT' : 'SELECT'}</div>
+                </div>
+            )
+        }
 
         setCards(cards)
     }
-
-    useEffect(() => {
-        renderCards()
-    }, [])
 
     return (
         <div className={styles.main}>
