@@ -134,6 +134,7 @@
     right: 0;
     left: 40px;
     background: var(--color-blue-dark);
+    border-radius: 3px 0 0 3px;
     padding-bottom: 20px;
 
     overflow: hidden;
@@ -207,6 +208,14 @@
     width: auto;
     opacity: 0.1;
     /*background: red;*/
+}
+
+.keys_arrow {
+    width: 22px;
+    border-radius: 50%;
+    text-align: center;
+    color: var(--color-blue-button);
+    background: var(--color-blue-background);
 }
 
 .version {
