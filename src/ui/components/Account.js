@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../css/index.module.css'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import { explorerAddress, explorerTX, generateIcon, shortHash } from '../Utils'
+import {explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
 
 const names = {
     enable: 'Share account address',
@@ -71,7 +71,7 @@ export default function Account(props) {
     // addConnect('google.com', '26.07.2022')
 
     const getConnects = async () => {
-        let connects = await asyncRequest({ connectionList: true })
+        let connects = await asyncRequest({connectionList: true})
         if (typeof connects === 'object') {
             setConnectionsCounter(Object.keys(connects.ports).length)
         }
@@ -467,22 +467,17 @@ export default function Account(props) {
                          // console.log(connects)
                          let elements = []
                          for (const key in connects) {
-                             elements.push(<div key={key} onClick={() => {
-                                 disk.promise.sendPromise({
-                                     ports: true,
-                                     disconnect: true,
-                                     name: key
-                                 })
-                                     .then(() => {
-                                         console.log(`${key} is disconnected`)
-                                     })
-                             }} className={`${styles.connect}`}>
-                                 <div>
-                                     <div>{key}</div>
-                                     {/*<div className={styles.time}>{date}</div>*/}
-                                     {/*<div></div>*/}
-                                 </div>
-                             </div>)
+                             elements.push(
+                                 <div key={key} onClick={() => {}} className={`${styles.connect}`}>
+                                     <div>{key.replaceAll('https://', '')}</div>
+                                     <div onClick={
+                                         disk.promise.sendPromise({
+                                             ports: true,
+                                             disconnect: true,
+                                             name: key
+                                         }).then(() => console.log(`${key} is disconnected`))
+                                     }>✕</div>
+                                 </div>)
                          }
                          setConnectsElements(elements)
                          setConnects(true)
