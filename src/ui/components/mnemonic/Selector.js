@@ -32,8 +32,8 @@ export default function Selector(props) {
                 for (let i = 0; i < 10; i++) {
                     let privateKey = getMnemonicPrivateKeyHex(hex, i)
                     const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
-                    ENQWeb.Net.get.getBalanceAll(props.user.publicKey).then((res) => {
-                        accounts.push({i: i, privateKey, publicKey, amount: res[0].amount})
+                    await ENQWeb.Net.get.getBalanceAll(props.user.publicKey).then((res) => {
+                        accounts.push({i: i, privateKey, publicKey, amount: res[i].amount})
                     })
                 }
                 renderCards(accounts)
@@ -76,7 +76,7 @@ export default function Selector(props) {
                 <div className={styles.card + ' ' + (current ? '' : styles.card_select)}>
                     <div className={styles.card_title}>Account {i + 1}</div>
                     <div className={styles.card_field}>{shortHash(accounts[i].privateKey)}</div>
-                    {/*<div className={styles.card_field}>{shortHash(accounts[i].amount)}</div>*/}
+                    <div className={styles.card_field}>{accounts[i].amount / 1e10}</div>
                     <div className={styles.card_field_select} onClick={(current ? () => {} : () => {})}>{current ? 'CURRENT' : 'SELECT'}</div>
                 </div>
             )
@@ -88,7 +88,7 @@ export default function Selector(props) {
     return (
         <div className={styles.main}>
 
-            <div className={styles.field} onClick={() => {}}>❮ Back</div>
+            <div className={styles.field} onClick={() => {props.setAccountSelector(false)}}>❮ Back</div>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
