@@ -211,7 +211,10 @@
 }
 
 .keys_arrow {
+    margin-left: 10px;
+    font-size: var(--font-size-small);
     width: 22px;
+    line-height: 22px;
     border-radius: 50%;
     text-align: center;
     color: var(--color-blue-button);
