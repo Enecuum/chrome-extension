@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../css/index.module.css'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import {explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
+import { explorerAddress, explorerTX, generateIcon, shortHash } from '../Utils'
 
 const names = {
     enable: 'Share account address',
@@ -71,19 +71,22 @@ export default function Account(props) {
     // addConnect('google.com', '26.07.2022')
 
     const getConnects = async () => {
-        let connects = await asyncRequest({connectionList: true})
-        if (typeof connects === 'object')
+        let connects = await asyncRequest({ connectionList: true })
+        if (typeof connects === 'object') {
             setConnectionsCounter(Object.keys(connects.ports).length)
-        if (typeof connects === 'number')
+        }
+        if (typeof connects === 'number') {
             setConnectionsCounter(connects)
+        }
     }
 
     const copyPublicKey = () => {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(props.user.publicKey)
             setCopied(true)
-        } else
+        } else {
             console.error('navigator.clipboard: ' + false)
+        }
     }
 
     // const unlock = () => {
@@ -250,7 +253,7 @@ export default function Account(props) {
         let oldActivity = []
         for (let id in history.records) {
             // console.log(history.records[id])
-            if (history.records[id])
+            if (history.records[id]) {
                 oldActivity.push({
                     data: {
                         date: history.records[id].time * 1000,
@@ -273,6 +276,7 @@ export default function Account(props) {
                     },
                     type: history.records[id].rectype
                 })
+            }
         }
 
         setHistory(oldActivity)
@@ -338,8 +342,8 @@ export default function Account(props) {
 
     let changeToken = async (hash) => {
         // console.log(hash);
-        let user = props.user;
-        user.token = hash;
+        let user = props.user
+        user.token = hash
         await disk.promise.sendPromise({
             account: true,
             set: true,
@@ -349,7 +353,7 @@ export default function Account(props) {
         await balance()
         await renderAssets()
         setActiveTab(props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? 0 : 1)
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0)
     }
 
     const assetsElements = []
@@ -362,8 +366,9 @@ export default function Account(props) {
         let assetsSort = assets.sort((a, b) => Number(a.amount) - Number(b.amount))
         assetsSort.splice(assets.indexOf(mainToken), 1)
         // console.log(assetsSort)
-        if (mainToken)
+        if (mainToken) {
             assetsSort.unshift(mainToken)
+        }
 
         // console.log(mainToken)
         // console.log(assets[0])
@@ -463,6 +468,14 @@ export default function Account(props) {
                          let elements = []
                          for (const key in connects) {
                              elements.push(<div key={key} onClick={() => {
+                                 disk.promise.sendPromise({
+                                     ports: true,
+                                     disconnect: true,
+                                     name: key
+                                 })
+                                     .then(() => {
+                                         console.log(`${key} is disconnected`)
+                                     })
                              }} className={`${styles.connect}`}>
                                  <div>
                                      <div>{key}</div>
@@ -503,7 +516,11 @@ export default function Account(props) {
                 </div>
 
                 <div className={styles.circle_button}
-                     onClick={() => props.setTransaction({balance: amount, ticker: ticker, token: props.user.token})}>
+                     onClick={() => props.setTransaction({
+                         balance: amount,
+                         ticker: ticker,
+                         token: props.user.token
+                     })}>
                     <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/12.png"/>
                     </div>
                     <div>Send</div>
