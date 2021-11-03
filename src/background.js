@@ -267,13 +267,11 @@ function disconnectPorts(name) {
         for (let key in ports) {
             // console.log(key,ports[key]);
             if (ports[key].name !== 'popup') {
-                ports[key].disconnect()
-                delete ports[key]
+                ports[key].enabled = false;
             }
         }
     } else {
-        ports[name].disconnect()
-        delete ports[name]
+        ports[name].enabled = false;
     }
     return true
 }
