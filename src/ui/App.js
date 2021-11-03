@@ -20,6 +20,7 @@ import TransactionHistory from "./components/requests/TransactionHistory";
 import Keys from "./components/Keys";
 import Mnemonic from "./components/mnemonic/Mnemonic";
 import Import from "./components/mnemonic/Imoprt";
+import Selector from "./components/mnemonic/Selector";
 
 let net = localStorage.getItem('net')
 if (!net) {
