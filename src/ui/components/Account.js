@@ -463,6 +463,7 @@ export default function Account(props) {
                          let elements = []
                          for (const key in connects) {
                              elements.push(<div key={key} onClick={() => {
+                                 disk.promise.sendPromise({ports:true, disconnect:true, name:key}).then(()=>{console.log(`${key} is disconnected`)})
                              }} className={`${styles.connect}`}>
                                  <div>
                                      <div>{key}</div>
