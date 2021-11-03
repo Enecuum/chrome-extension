@@ -54,60 +54,60 @@ export default function Menu(props) {
 
     }, []);
 
-    const loginAccount2 = () => {
-        disk.user.loadUser().then(async account => {
-            let node = bip32.fromSeed(Buffer.from(account.seed), null)
-            let child = node.derivePath("m/44'/2045'/0'/0")
-            let privateKey0 = child.derive(0).privateKey.toString('hex')
-            loginAccount(privateKey0, account.seed, account)
-        })
-    }
+    // const loginAccount2 = () => {
+    //     disk.user.loadUser().then(async account => {
+    //         let node = bip32.fromSeed(Buffer.from(account.seed), null)
+    //         let child = node.derivePath("m/44'/2045'/0'/0")
+    //         let privateKey0 = child.derive(0).privateKey.toString('hex')
+    //         loginAccount(privateKey0, account.seed, account)
+    //     })
+    // }
 
-    const loginAccount1 = () => {
-        disk.user.loadUser().then(async account => {
-            loginAccount(account.account1, account.seed, {})
-        })
-    }
+    // const loginAccount1 = () => {
+    //     disk.user.loadUser().then(async account => {
+    //         loginAccount(account.account1, account.seed, {})
+    //     })
+    // }
 
-    const loginAccount = (privateKey0, seed, mainAccount) => {
-        const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
-        if (publicKey0) {
-            let data = {
-                publicKey: publicKey0,
-                privateKey: privateKey0,
-                net: ENQWeb.Net.provider,
-                token: ENQWeb.Enq.ticker,
-                seed: seed,
-                account1: mainAccount.privateKey
-            }
-            global.disk.promise.sendPromise({
-                account: true,
-                set: true,
-                data: data
-            }).then(r => {
-                location.reload()
-            })
-        }
-    }
+    // const loginAccount = (privateKey0, seed, mainAccount) => {
+    //     const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
+    //     if (publicKey0) {
+    //         let data = {
+    //             publicKey: publicKey0,
+    //             privateKey: privateKey0,
+    //             net: ENQWeb.Net.provider,
+    //             token: ENQWeb.Enq.ticker,
+    //             seed: seed,
+    //             account1: mainAccount.privateKey
+    //         }
+    //         global.disk.promise.sendPromise({
+    //             account: true,
+    //             set: true,
+    //             data: data
+    //         }).then(r => {
+    //             location.reload()
+    //         })
+    //     }
+    // }
 
-    const setNet = async (value) => {
-
-        localStorage.setItem('net', value)
-        ENQWeb.Net.provider = value
-        await disk.user.loadUser()
-            .then(async account => {
-                account.net = value
-                account.token = ENQWeb.Enq.ticker
-                await disk.promise.sendPromise({
-                    account: true,
-                    set: true,
-                    data: account
-                })
-            })
-        cacheTokens().then(() => {
-            location.reload(false)
-        })
-    }
+    // const setNet = async (value) => {
+    //
+    //     localStorage.setItem('net', value)
+    //     ENQWeb.Net.provider = value
+    //     await disk.user.loadUser()
+    //         .then(async account => {
+    //             account.net = value
+    //             account.token = ENQWeb.Enq.ticker
+    //             await disk.promise.sendPromise({
+    //                 account: true,
+    //                 set: true,
+    //                 data: account
+    //             })
+    //         })
+    //     cacheTokens().then(() => {
+    //         location.reload(false)
+    //     })
+    // }
 
     const locked = async () => {
         console.log('LOCK')
@@ -184,13 +184,19 @@ export default function Menu(props) {
     return (
         <div className={styles.menu}>
 
-            <div className={styles.lock} onClick={locked}><img src='./images/lock.png' className={(!privateDataLoaded ? styles.loaded : '')} title={'Lock application'} alt={'Lock'}/></div>
+            <div className={styles.lock} onClick={locked}><img src='./images/lock.png'
+                                                               className={(!privateDataLoaded ? styles.loaded : '')}
+                                                               title={'Lock application'} alt={'Lock'}/></div>
             <div className={styles.title}>My accounts</div>
 
             <div className={styles.row}>
-                <div className={styles.button_link + (activeAccount === 1 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 2 ? loginAccount1 : null)}>{accountName}</div>
-                <div className={styles.button_link + ' ' + styles.keys_arrow} onClick={() => props.setAccountSelector(true)}>+</div>
-                {/*<div className={styles.button_link + ' ' + styles.keys_arrow} onClick={() => props.setKeys(true)}>❯</div>*/}
+
+                <div className={styles.row}>
+                    <div className={styles.button_link + (activeAccount === 1 ? ' ' + styles.button_link_active : '')} onClick={() => {}}>{accountName}</div>
+                    <div className={styles.button_link + ' ' + styles.keys_arrow} onClick={() => props.setAccountSelector(true)}>+</div>
+                </div>
+
+                <div className={styles.button_link + ' ' + styles.keys_arrow} onClick={() => props.setKeys(true)}>❯</div>
             </div>
 
             {!seed && <div className={styles.button_link} onClick={props.setImportMnemonic}>Import Mnemonic</div>}
