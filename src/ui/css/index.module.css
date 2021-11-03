@@ -804,23 +804,22 @@ input[type=number] {
 
 .connect {
     height: 70px;
-}
-
-.connect > div {
-    height: 70px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-top: 10px;
     padding-left: 20px;
-}
+    padding-right: 30px;
+    line-height: 70px;
 
-.connect > div > div:last-child {
-    padding-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .connect:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--color-blue-button);
+}
+
+.connect > div:last-child:hover {
+    color: var(--color-red);
+    cursor: pointer;
 }
 
 
