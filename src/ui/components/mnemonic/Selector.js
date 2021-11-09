@@ -22,7 +22,7 @@ export default function Selector(props) {
 
     useEffect(() => {
         loadUser()
-    })
+    }, [])
 
     let loadUser = () => {
         disk.user.loadUser().then(async account => {
