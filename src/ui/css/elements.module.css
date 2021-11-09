@@ -147,9 +147,9 @@
 }
 
 .menu .title {
-    font-size: var(--font-size-big);
-    border-bottom: 1px solid var(--color-blue);
-    padding-bottom: 10px;
+    font-size: var(--font-size-larger);
+    /*border-bottom: 1px solid var(--color-blue);*/
+    /*padding-bottom: 10px;*/
 
     letter-spacing: 1px;
 }
@@ -212,7 +212,7 @@
 
 .keys_arrow {
     margin-left: 10px;
-    font-size: var(--font-size-small);
+    font-size: 20px;
     width: 22px;
     height: 22px;
     line-height: 22px;

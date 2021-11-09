@@ -29,7 +29,7 @@ export default function Selector(props) {
             if (hex) {
 
                 let accounts = []
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 1; i++) {
                     let privateKey = getMnemonicPrivateKeyHex(hex, i)
                     let current = account.privateKey === privateKey
                     const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
@@ -111,6 +111,10 @@ export default function Selector(props) {
                 <div className={styles.cards}>
                     {cards}
                 </div>
+            </div>
+
+            <div onClick={() => {}}
+                 className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add
             </div>
 
             <Separator/>
