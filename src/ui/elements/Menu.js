@@ -19,7 +19,7 @@ export default function Menu(props) {
     // TODO
     const [accountName, setAccountName] = useState('Account 1 ')
 
-    const [seed, setSeed] = useState(false)
+    const [seed, setSeed] = useState(true)
 
     const [ledger, setLedger] = useState()
     const [ethAddress, setEthAddress] = useState()
@@ -187,35 +187,39 @@ export default function Menu(props) {
             <div className={styles.lock} onClick={locked}><img src='./images/lock.png'
                                                                className={(!privateDataLoaded ? styles.loaded : '')}
                                                                title={'Lock application'} alt={'Lock'}/></div>
-            <div className={styles.title}>My accounts</div>
 
-            <div className={styles.row}>
-
-                <div className={styles.row}>
-                    <div className={styles.button_link + (activeAccount === 1 ? ' ' + styles.button_link_active : '')} onClick={() => {}}>{accountName}</div>
-                    <div className={styles.button_link + ' ' + styles.keys_arrow} onClick={() => props.setAccountSelector(true)}>+</div>
-                </div>
-
-                <div className={styles.button_link + ' ' + styles.keys_arrow} onClick={() => props.setKeys(true)}>❯</div>
+            <div className={styles.title}>
+                <div className={styles.button_link} onClick={() => props.setAccountSelector(true)}>Accounts</div>
             </div>
 
+            {/*<div className={styles.row}>*/}
+
+                {/*<div className={styles.row}>*/}
+                {/*    <div className={styles.button_link + (activeAccount === 1 ? ' ' + styles.button_link_active : '')} onClick={() => {}}>{accountName}</div>*/}
+                {/*</div>*/}
+
+                {/*<div className={styles.button_link + ' ' + styles.keys_arrow} onClick={() => props.setKeys(true)}>+</div>*/}
+            {/*</div>*/}
+
+
+
             {!seed && <div className={styles.button_link} onClick={props.setImportMnemonic}>Import Mnemonic</div>}
+
+            <div className={styles.separator}/>
 
             {/*{seed && <div className={styles.row}>*/}
             {/*    <div className={styles.button_link + (activeAccount === 2 ? ' ' + styles.button_link_active : '')} onClick={(activeAccount === 1 ? loginAccount2 : null)}>Account 2{account2Amount > 0 ? ': ' + (Number(account2Amount) / 1e10).toFixed(4) : ''}</div>*/}
             {/*    <div className={styles.button_link} onClick={props.setMnemonic}>Seed</div>*/}
             {/*</div>}*/}
 
-            {ethAddress ? <div className={styles.button_link}
-                               onClick={() => createPopupWindow('index.html?type=connectLedger')}>Ledger {ledger ? '(connected)' : '(unlock your device)'}</div> :
-                <div className={styles.button_link}
-                     onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect Ledger</div>}
+            <div className={styles.title}>
+                <div className={styles.button_link} onClick={props.setNetwork}>Networks</div>
+            </div>
 
             <div className={styles.separator}/>
 
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
-            <div className={styles.button_link} onClick={props.setNetwork}>Networks</div>
             {/*<div className={styles.row}>*/}
             {/*    <div className={styles.button_link} onClick={() => setNet('bit')}>BIT</div>*/}
             {/*    {clickIterator >= clickIteratorLimit && <div className={styles.row + ' ' + styles.button_hide}>*/}
