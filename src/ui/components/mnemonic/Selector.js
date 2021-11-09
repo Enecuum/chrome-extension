@@ -7,7 +7,7 @@ import * as bip39 from "bip39";
 import * as bip32 from "bip32";
 import {createPopupWindow} from "../../../handler";
 
-export default function Selector(props) {
+export default function userSelector(props) {
 
     let [name, setName] = useState('')
     let [host, setHost] = useState('')
@@ -19,6 +19,8 @@ export default function Selector(props) {
     let [cards, setCards] = useState()
 
     let [showAdd, setShowAdd] = useState(false)
+
+    let [seed, setSeed] = useState(false)
 
     useEffect(() => {
         loadUser()
@@ -114,9 +116,13 @@ export default function Selector(props) {
                 </div>
             </div>
 
-            <div onClick={() => {}}
-                 className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add account
-            </div>
+            {!seed && <div className={styles.field + ' ' + styles.button} onClick={props.setMnemonic}>Generate Mnemonic</div>}
+
+            {!seed && <div className={styles.field + ' ' + styles.button} onClick={props.setImportMnemonic}>Import Mnemonic</div>}
+
+            {seed && <div onClick={() => {}}
+                 className={styles.field + ' ' + styles.button}>Add account
+            </div>}
 
             <div className={styles.field + ' ' + styles.button}
                  onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect Ledger</div>

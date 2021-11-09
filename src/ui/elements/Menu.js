@@ -202,9 +202,6 @@ export default function Menu(props) {
             {/*</div>*/}
 
 
-
-            {!seed && <div className={styles.button_link} onClick={props.setImportMnemonic}>Import Mnemonic</div>}
-
             <div className={styles.separator}/>
 
             {/*{seed && <div className={styles.row}>*/}
