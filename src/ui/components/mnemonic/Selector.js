@@ -5,6 +5,7 @@ import {getMnemonicPrivateKeyHex, regexToken, shortHash} from "../../Utils";
 import Input from "../../elements/Input";
 import * as bip39 from "bip39";
 import * as bip32 from "bip32";
+import {createPopupWindow} from "../../../handler";
 
 export default function Selector(props) {
 
@@ -114,8 +115,11 @@ export default function Selector(props) {
             </div>
 
             <div onClick={() => {}}
-                 className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add
+                 className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add account
             </div>
+
+            <div className={styles.field + ' ' + styles.button}
+                 onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect Ledger</div>
 
             <Separator/>
 
