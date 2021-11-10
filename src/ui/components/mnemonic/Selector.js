@@ -31,6 +31,8 @@ export default function userSelector(props) {
             let hex = account.seed
             if (hex) {
 
+                setSeed(true)
+
                 let accounts = []
                 for (let i = 0; i < 1; i++) {
                     let privateKey = getMnemonicPrivateKeyHex(hex, i)
