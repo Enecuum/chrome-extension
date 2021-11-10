@@ -1101,3 +1101,9 @@ input[type=number] {
     top: 5px;
     color: var(--color-gray-ligth)
 }
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

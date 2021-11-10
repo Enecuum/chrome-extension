@@ -45,7 +45,7 @@ export default function userSelector(props) {
                 renderCards(accounts, hex)
             } else {
                 accounts.push({i: 0, privateKey: '', publicKey: account.publicKey, amount: account.amount, current: true})
-                renderCards(accounts, null)
+                renderCards(accounts, null, true)
             }
         })
     }
@@ -75,7 +75,7 @@ export default function userSelector(props) {
     //     }
     // }
 
-    let renderCards = (accounts, hex) => {
+    let renderCards = (accounts, hex, old = false) => {
 
         let cards = []
 
@@ -84,7 +84,12 @@ export default function userSelector(props) {
             let current = accounts[i].current
             cards.push(
                 <div key={i} className={styles.card + (current ? '' : ' ' + styles.card_select) + ' ' + styles.small}>
-                    <div className={styles.card_title}>Account {i + 1}</div>
+
+                    <div className={styles.row}>
+                        <div>Account {i + 1}</div>
+                        <div>{old ? 'OLD TYPE' : ''}</div>
+                    </div>
+
                     <div className={styles.card_field}>{shortHash(accounts[i].publicKey)}</div>
                     <div className={styles.card_field}>{accounts[i].amount > 0 ? accounts[i].amount / 1e10 : '0.0'}</div>
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')} onClick={(current ? () => {} : () => {
