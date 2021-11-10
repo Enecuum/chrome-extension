@@ -9,6 +9,8 @@ import {createPopupWindow} from "../../../handler";
 
 export default function userSelector(props) {
 
+    let [accountsList, setAccountsList] = useState()
+
     let [name, setName] = useState('')
     let [host, setHost] = useState('')
     let [hostCorrect, setHostCorrect] = useState(false)
@@ -29,12 +31,10 @@ export default function userSelector(props) {
     let loadUser = () => {
         disk.user.loadUser().then(async account => {
             let hex = account.seed
+            let accounts = []
             if (hex) {
-
                 setSeed(true)
-
-                let accounts = []
-                for (let i = 0; i < 1; i++) {
+                for (let i = 0; i < 2; i++) {
                     let privateKey = getMnemonicPrivateKeyHex(hex, i)
                     let current = account.privateKey === privateKey
                     const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
@@ -43,6 +43,9 @@ export default function userSelector(props) {
                     })
                 }
                 renderCards(accounts, hex)
+            } else {
+                accounts.push({i: 0, privateKey: '', publicKey: account.publicKey, amount: account.amount, current: true})
+                renderCards(accounts, null)
             }
         })
     }
@@ -80,11 +83,11 @@ export default function userSelector(props) {
 
             let current = accounts[i].current
             cards.push(
-                <div key={i} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
+                <div key={i} className={styles.card + (current ? '' : ' ' + styles.card_select) + ' ' + styles.small}>
                     <div className={styles.card_title}>Account {i + 1}</div>
-                    <div className={styles.card_field}>{shortHash(accounts[i].privateKey)}</div>
+                    <div className={styles.card_field}>{shortHash(accounts[i].publicKey)}</div>
                     <div className={styles.card_field}>{accounts[i].amount > 0 ? accounts[i].amount / 1e10 : '0.0'}</div>
-                    <div className={styles.card_field_select} onClick={(current ? () => {} : () => {
+                    <div className={styles.card_field_select + ' ' + (current ? '' : 'select')} onClick={(current ? () => {} : () => {
                         let data = {
                             publicKey: accounts[i].publicKey,
                             privateKey: accounts[i].privateKey,

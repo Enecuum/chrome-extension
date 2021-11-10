@@ -911,6 +911,10 @@ input[type=number] {
     margin-bottom: 0;
 }
 
+.cards .card.small {
+    height: auto;
+}
+
 .cards .card.card_select {
     background: var(--color-blue);
     /*cursor: pointer;*/
@@ -950,7 +954,7 @@ input[type=number] {
     cursor: pointer;
 }
 
-.card_field_select:hover {
+.card_field_select.select:hover {
     color: var(--color-blue-dark)
 }
 
