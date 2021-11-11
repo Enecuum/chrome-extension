@@ -470,13 +470,13 @@ export default function Account(props) {
                              elements.push(
                                  <div key={key} onClick={() => {}} className={`${styles.connect}`}>
                                      <div>{key.replaceAll('https://', '')}</div>
-                                     <div onClick={
+                                     <div onClick={() => {
                                          disk.promise.sendPromise({
                                              ports: true,
                                              disconnect: true,
                                              name: key
                                          }).then(() => console.log(`${key} is disconnected`))
-                                     }>✕</div>
+                                     }}>✕</div>
                                  </div>)
                          }
                          setConnectsElements(elements)
