@@ -1,7 +1,19 @@
 import {decryptAccount, encryptAccount, lockAccount, lockTime} from "./lockAccount"
 
+// const cacheStore = require('./indexDB') // es6
+import cacheStore from './indexDB' // commonjs
+// var cacheStore = window.cacheStore // compiled javascript
+
 export function MessageHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
+
+        cacheStore.set('user', {seed: 'SEED'})
+            .then(function () {
+                return cacheStore.get('user')
+            }).then(function (user) {
+            console.log('user', user)
+        })
+
         if (msg.initial) {
             runLockTimer()
             resolve({response: true})
@@ -100,10 +112,8 @@ let createWebSession = (account) => {
 
     // TODO
     const webAccount = JSON.parse(JSON.stringify(account))
-    webAccount.web = true
-    webAccount.privateKey = ''
+    webAccount.privateKey = true
     webAccount.seed = account.seed ? true : ''
-    webAccount.account1 = account.seed ? true : ''
     sessionStorage.setItem('User', JSON.stringify(webAccount))
 }
 
