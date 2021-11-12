@@ -225,7 +225,7 @@ export default function App(props) {
     }
 
     if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
-        return <Password setPassword={setPassword} login={login} publicKey={user.publicKey}/>
+        return <Password user={user} setPassword={setPassword} login={login} publicKey={user.publicKey}/>
     }
 
     if (isLogin) return <Login login={login2} setMnemonic={setMnemonic}/>

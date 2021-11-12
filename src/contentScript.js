@@ -109,12 +109,11 @@ function injectCb(code) {
     script.remove();
 }
 
-function autoConnect(){
+function autoConnect() {
     let script = `
-    if(ENQweb3lib !== undefined){
-        ENQweb3lib.connect().then()
-        ENQweb3lib.reconnect().then()
-    }
+    try{
+        ENQWeb.Enq.ready["extConnect"] = true
+    } catch(e){}
     `
     injectCb(script)
 }
@@ -123,6 +122,6 @@ function autoConnect(){
 // injectScript();
 eventHandler()
 
-// document.addEventListener('DOMContentLoaded', function(){
-//     autoConnect()
-// })
+document.addEventListener('DOMContentLoaded', function () {
+    autoConnect()
+})
