@@ -1,4 +1,5 @@
 let lockTime = 10 * 60 * 1000
+
 // let lockTime = 10 * 1000
 
 function lockAccount(timer = false) {
@@ -52,7 +53,7 @@ function decryptAccount(password) {
     }
 }
 
-export {lockAccount, encryptAccount, decryptAccount,encryptAccountWithPass, lockTime}
+export {lockAccount, encryptAccount, decryptAccount, encryptAccountWithPass, lockTime}
 
 function say() {
     console.log("lock account loaded! background started")
