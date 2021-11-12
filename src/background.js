@@ -60,7 +60,7 @@ async function msgHandler(msg, sender, sendResponse) {
             disconnectPorts(msg.name)
         }
     }
-    if (msg.account && msg.logout){
+    if (msg.account && msg.logout) {
         ports = {};
     }
     MessageHandler(msg, ENQWeb).then(answer => sendResponse(answer))
@@ -119,8 +119,8 @@ async function msgConnectHandler(msg, sender) {
                     cb: msg.cb,
                     data: msg.data,
                 })
-                if(msg.data.net.length > 0){
-                    if(msg.data.net !== JSON.parse(localStorage.tokens).net){
+                if (msg.data.net.length > 0) {
+                    if (msg.data.net !== JSON.parse(localStorage.tokens).net) {
                         console.log("bad net work")
                         rejectTaskHandler(msg.taskId, `Network mismatch. Set ${msg.data.net}`)
                         return false;

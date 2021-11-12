@@ -109,7 +109,7 @@ function injectCb(code) {
     script.remove();
 }
 
-function autoConnect(){
+function autoConnect() {
     let script = `
     try{
         ENQWeb.Enq.ready["extConnect"] = true
@@ -122,6 +122,6 @@ function autoConnect(){
 // injectScript();
 eventHandler()
 
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function () {
     autoConnect()
 })
