@@ -60,6 +60,9 @@ async function msgHandler(msg, sender, sendResponse) {
             disconnectPorts(msg.name)
         }
     }
+    if (msg.account && msg.logout) {
+        ports = {};
+    }
     MessageHandler(msg, ENQWeb).then(answer => sendResponse(answer))
 }
 
@@ -116,6 +119,13 @@ async function msgConnectHandler(msg, sender) {
                     cb: msg.cb,
                     data: msg.data,
                 })
+                if (msg.data.net.length > 0) {
+                    if (msg.data.net !== JSON.parse(localStorage.tokens).net) {
+                        console.log("bad net work")
+                        rejectTaskHandler(msg.taskId, `Network mismatch. Set ${msg.data.net}`)
+                        return false;
+                    }
+                }
             } else {
                 Storage.task.setTask(msg.taskId, {
                     data: msg.data,
@@ -291,6 +301,7 @@ async function taskHandler(taskId) {
     console.log(task)
     let account = ENQWeb.Enq.User
     let data = ''
+
     let wallet = {
         pubkey: account.publicKey,
         prvkey: account.privateKey
