@@ -126,13 +126,13 @@ export default function userSelector(props) {
                 </div>
             </div>
 
+            {seed && <div onClick={() => {}} className={styles.field + ' ' + styles.button}>Add mnemonic account</div>}
+
+            <div onClick={() => {}} className={styles.field + ' ' + styles.button}>Import account</div>
+
             {!seed && <div className={styles.field + ' ' + styles.button} onClick={props.setMnemonic}>Generate Mnemonic</div>}
 
             {!seed && <div className={styles.field + ' ' + styles.button} onClick={props.setImportMnemonic}>Import Mnemonic</div>}
-
-            {seed && <div onClick={() => {}}
-                 className={styles.field + ' ' + styles.button}>Add account
-            </div>}
 
             <div className={styles.field + ' ' + styles.button}
                  onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect Ledger</div>

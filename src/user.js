@@ -3,12 +3,11 @@ let account = {
     net: '',
     token: '',
 
-    // Old type, may be null
-    privateKey: '',
-    publicKey: '',
+    privateKeys: [], // keys
 
     mainPrivateKey: '',
     mainPublicKey: '',
+    type: 0, // 0 - private, 1 - seed, 2 - ledger
     accountIndex: 0,
 
     // Always encrypted
@@ -18,7 +17,7 @@ let account = {
 
     // Ledger ID
     ledger: '',
-    ledgerAccountsArray: [],
+    ledgerAccountsArray: [], // index
 }
 
 let getSeedAccounts = (password) => {
