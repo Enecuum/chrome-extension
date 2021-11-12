@@ -24,7 +24,9 @@ let getSeedAccounts = (password) => {
 
 }
 
-let changeAccount = (index) => {
-    account.mainPrivateKey = [index]
+let changeAccount = (type, index) => {
+    let array = []
+    account.mainPrivateKey = array[index]
     account.accountIndex = index
+    account.type = type
 }
