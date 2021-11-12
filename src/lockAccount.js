@@ -27,6 +27,15 @@ function encryptAccount() {
     }
 }
 
+function encryptAccountWithPass(account, password) {
+    if (password && !disk.lock.checkLock()) {
+        password = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
+        account = ENQWeb.Utils.crypto.encrypt(account, password)
+        disk.user.changeUser(account)
+        // console.log('account encrypted')
+    }
+}
+
 function decryptAccount(password) {
     let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
     if (disk.lock.unlock(hash)) {
@@ -43,7 +52,7 @@ function decryptAccount(password) {
     }
 }
 
-export {lockAccount, encryptAccount, decryptAccount, lockTime}
+export {lockAccount, encryptAccount, decryptAccount,encryptAccountWithPass, lockTime}
 
 function say() {
     console.log("lock account loaded! background started")
