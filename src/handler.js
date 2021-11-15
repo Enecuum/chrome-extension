@@ -7,19 +7,12 @@ import {logger} from "workbox-core/_private"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
 export function MessageHandler(msg) {
-    return new Promise((resolve, reject) => {
-
-        // indexDB.set('user', {seed: 'SEED'})
-        //     .then(function () {
-        //         return indexDB.get('user')
-        //     }).then(function (user) {
-        //     console.log('user', user)
-        // })
+    return new Promise(async (resolve, reject) => {
 
         if (msg.initial) {
-            indexDB.get('user').then(user=>{
-                if(user === undefined){
-                    indexDB.set('user',account).then()
+            indexDB.get('user').then((user) => {
+                if (user === undefined) {
+                    indexDB.set('user', account).then()
                 }
             })
             runLockTimer()
@@ -37,34 +30,24 @@ export function MessageHandler(msg) {
             if (!disk.lock.checkLock()) {
 
                 let userSession
-                // if (Object.keys(ENQWeb.Enq.User).length > 0) {
-                //     console.log('Memory session')
-                //     userSession = ENQWeb.Enq.User
-                // } else {
-                //     let webSession = JSON.parse(sessionStorage.getItem('User'))
-                //     userSession = webSession ? webSession : false
-                //     console.warn('Session storage: ' + !!userSession)
-                // }
-                indexDB.get('user').then(account=>{
+                resolve({
+                    promise: indexDB.get('user').then(account => {
 
-                    if(account !== undefined){
-                        console.log(1)
-                        userSession = account
-                    }
-                    if (!userSession.mainPublicKey) {
-                        console.log(2)
-                        console.log('sessionStorage expired')
-                        resolve({response: {}})
-                        lockAccount()
-                        window.location.reload()
-                    } else{
-                        console.log(3)
-                        console.log(userSession)
-                        resolve({response: userSession})
-                    }
+                        if (account !== undefined) {
+                            userSession = account
+                        }
+                        if (!userSession.mainPublicKey) {
+                            console.log('sessionStorage expired')
+                            // resolve({response: {}})
+                            lockAccount()
+                            window.location.reload()
+                        } else {
+                            // resolve({response: userSession})
+                            return {response: userSession}
+                        }
+                    })
                 })
             } else {
-                console.log(4)
                 console.log(!disk.lock.checkLock())
                 resolve({response: false})
             }
@@ -73,34 +56,38 @@ export function MessageHandler(msg) {
         if (msg.account && msg.unlock && msg.password) {
 
             decryptAccount(msg.password)
-            indexDB.get('user').then(account=>{
-                if (account !== undefined) {
-                    // TODO
-                    createWebSession(account)
-                    resolve({response: account})
-                } else {
-                    resolve({response: false})
-                }
+            resolve({
+                promise: indexDB.get('user').then(account => {
+                    if (account !== undefined) {
+                        // TODO
+                        createWebSession(account)
+                        // resolve({response: account})
+                        return {response: account}
+                    } else {
+                        // resolve({response: false})
+                        return {response: false}
+                    }
+                })
             })
+
 
         }
         if (msg.account && msg.set && msg.data) {
 
             // Edit user
-            if(msg.add)
+            if (msg.add)
                 addAccountOldFormat(msg.data)
-            if(msg.update)
+            if (msg.update)
                 updateAccount(msg.data)
 
-            indexDB.get('user').then(account=>{
-                createWebSession(account)
-                resolve({response: account})
+            resolve({
+                promise: indexDB.get('user').then(account => {
+                    createWebSession(account)
+                    // resolve({response: account})
+                    return {response: account}
+                })
             })
-            // console.log(msg.data)
-            // let account = msg.data
-            // ENQWeb.Enq.User = account
-            // disk.user.addUser(account)
-            // encryptAccount()
+
 
         }
         if (msg.account && msg.encrypt) {

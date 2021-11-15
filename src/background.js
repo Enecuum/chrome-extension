@@ -61,7 +61,15 @@ async function msgHandler(msg, sender, sendResponse) {
             disconnectPorts(msg.name)
         }
     }
-    MessageHandler(msg).then(answer => sendResponse(answer))
+    MessageHandler(msg).then(async answer => {
+        if (answer.promise) {
+            let data = await answer.promise
+            console.log(data)
+            sendResponse(data)
+        }
+        if (answer.response)
+            sendResponse(answer)
+    })
     if (msg.account && msg.logout) {
         ports = {};
     }
