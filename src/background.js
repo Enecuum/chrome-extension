@@ -63,7 +63,7 @@ async function msgHandler(msg, sender, sendResponse) {
     if (msg.account && msg.logout) {
         ports = {};
     }
-    MessageHandler(msg, ENQWeb).then(answer => sendResponse(answer))
+    MessageHandler(msg).then(answer => sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {

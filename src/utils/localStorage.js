@@ -233,7 +233,7 @@ function sendPromise(obj) {
     return new Promise((resolve) => {
         if (chrome.runtime.getManifest().version.includes('web')) {
             // console.log('web send promise');
-            webBack(obj, ENQWeb).then(answer => {
+            webBack(obj).then(answer => {
                 if (answer.response !== undefined) {
                     resolve(answer.response);
                 } else {

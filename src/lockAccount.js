@@ -5,7 +5,7 @@ let lockTime = 10 * 60 * 1000
 function lockAccount(timer = false) {
     disk.lock.setLock(true)
     if (disk.name === 'background') {
-        ENQWeb.Enq.User = {publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net}
+        // ENQWeb.Enq.User = {publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net}
     }
     if (timer)
         location.reload()
@@ -40,14 +40,14 @@ function encryptAccountWithPass(account, password) {
 function decryptAccount(password) {
     let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
     if (disk.lock.unlock(hash)) {
-        hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
+        // hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
         // console.log(hash)
         // console.log(disk.user.loadUserNotJson())
-        let accountString = ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash)
+        // let accountString = ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash)
         // console.log(accountString)
-        let account = JSON.parse(accountString)
+        // let account = JSON.parse(accountString)
         // console.log(account)
-        return account
+        // return account
     } else {
         return false
     }
