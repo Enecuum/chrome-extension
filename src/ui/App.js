@@ -21,6 +21,7 @@ import Keys from "./components/Keys";
 import Mnemonic from "./components/mnemonic/Mnemonic";
 import Import from "./components/mnemonic/Imoprt";
 import Selector from "./components/mnemonic/Selector";
+import indexDB from "../indexDB";
 
 let net = localStorage.getItem('net')
 if (!net) {
@@ -69,10 +70,10 @@ export default function App(props) {
     const [isLock, setLock] = useState(checkLock)
 
     const getUser = async () => {
-        let account = await global.disk.user.loadUser()
+        let account = await indexDB.get('user')
         setUser(account)
         // console.log(account)
-        setLogin(account.publicKey ? false : true)
+        setLogin(account.mainPublicKey ? false : true)
     }
 
     useEffect(() => {
@@ -97,11 +98,11 @@ export default function App(props) {
     const logout = () => {
         global.disk.user.removeUser()
         disk.lock.removeLock()
+        global.asyncRequest({reject_all: true})
         disk.promise.sendPromise({
             account: true,
             logout: true
         })
-        global.asyncRequest({reject_all: true})
         setLogin(true)
         setLock(false)
         window.location.reload(false)
@@ -179,7 +180,7 @@ export default function App(props) {
             <Transaction
                 setTransaction={setTransaction}
                 isTransaction={isTransaction}
-                publicKey={user.publicKey}
+                publicKey={user.mainPublicKey}
                 token={user.token}
                 getLedgerTransport={getLedgerTransport}
                 setTransactionRequest={setTransactionRequest}
@@ -224,8 +225,8 @@ export default function App(props) {
         return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
     }
 
-    if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
-        return <Password user={user} setPassword={setPassword} login={login} publicKey={user.publicKey}/>
+    if (isPassword || (!user.mainPublicKey && !disk.lock.getHashPassword())) {
+        return <Password user={user} setPassword={setPassword} login={login} publicKey={user.mainPublicKey}/>
     }
 
     if (isLogin) return <Login login={login2} setMnemonic={setMnemonic}/>

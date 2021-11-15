@@ -52,6 +52,7 @@ function setupApp() {
 }
 
 async function msgHandler(msg, sender, sendResponse) {
+    console.log(msg)
     if (msg.ports && msg.disconnect) {
         if (msg.all) {
             disconnectPorts()
@@ -60,10 +61,10 @@ async function msgHandler(msg, sender, sendResponse) {
             disconnectPorts(msg.name)
         }
     }
+    MessageHandler(msg).then(answer => sendResponse(answer))
     if (msg.account && msg.logout) {
         ports = {};
     }
-    MessageHandler(msg).then(answer => sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {
@@ -172,6 +173,7 @@ function createPopupWindow(url) {
 }
 
 async function msgPopupHandler(msg, sender) {
+    console.log(msg)
     if (msg.popup) {
     } else if (msg.connectionList) {
         ports.popup.postMessage({

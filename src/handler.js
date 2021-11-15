@@ -1,5 +1,5 @@
 import {decryptAccount, encryptAccount, lockAccount, lockTime} from "./lockAccount"
-import {account, getSeedAccounts, changeAccount} from "./user"
+import {account, getSeedAccounts, changeAccount, addAccountOldFormat, updateAccount} from "./user"
 
 // const cacheStore = require('./indexDB') // es6
 import indexDB from './indexDB'
@@ -18,7 +18,7 @@ export function MessageHandler(msg) {
 
         if (msg.initial) {
             indexDB.get('user').then(user=>{
-                if(Object.keys(user).length === 0){
+                if(user === undefined){
                     indexDB.set('user',account).then()
                 }
             })
@@ -46,18 +46,26 @@ export function MessageHandler(msg) {
                 //     console.warn('Session storage: ' + !!userSession)
                 // }
                 indexDB.get('user').then(account=>{
-                    if(account.mainPublicKey.length > 0){
+
+                    if(account !== undefined){
+                        console.log(1)
                         userSession = account
                     }
                     if (!userSession.mainPublicKey) {
+                        console.log(2)
                         console.log('sessionStorage expired')
                         resolve({response: {}})
                         lockAccount()
                         window.location.reload()
-                    } else
+                    } else{
+                        console.log(3)
+                        console.log(userSession)
                         resolve({response: userSession})
+                    }
                 })
             } else {
+                console.log(4)
+                console.log(!disk.lock.checkLock())
                 resolve({response: false})
             }
 
@@ -66,12 +74,9 @@ export function MessageHandler(msg) {
 
             decryptAccount(msg.password)
             indexDB.get('user').then(account=>{
-                console.log(account)
-                if (Object.keys(account).length > 0) {
-
+                if (account !== undefined) {
                     // TODO
                     createWebSession(account)
-
                     resolve({response: account})
                 } else {
                     resolve({response: false})
@@ -82,13 +87,15 @@ export function MessageHandler(msg) {
         if (msg.account && msg.set && msg.data) {
 
             // Edit user
+            if(msg.add)
+                addAccountOldFormat(msg.data)
+            if(msg.update)
+                updateAccount(msg.data)
 
-            indexDB.set('user', msg.data).then(()=>{
-                // TODO
-                createWebSession(msg.data)
-                resolve({response: msg.data})
+            indexDB.get('user').then(account=>{
+                createWebSession(account)
+                resolve({response: account})
             })
-
             // console.log(msg.data)
             // let account = msg.data
             // ENQWeb.Enq.User = account
@@ -113,6 +120,7 @@ export function MessageHandler(msg) {
         if (msg.account && msg.logout) {
             // ENQWeb.Enq.User = {}
             sessionStorage.setItem('User', JSON.stringify({}))
+            indexDB.set('user', account).then()
             // disconnectPorts()
             resolve({response: true})
         }

@@ -78,6 +78,7 @@ export default class Login extends React.Component {
         const publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.privateKey, true)
         if (publicKey) {
             // console.log(publicKey)
+
             let data = {
                 publicKey: publicKey,
                 privateKey: this.state.privateKey,
@@ -87,9 +88,15 @@ export default class Login extends React.Component {
             await global.disk.promise.sendPromise({
                 account: true,
                 set: true,
+                add:true,
                 data: data
             })
-            this.props.login(data)
+            let account = await global.disk.promise.sendPromise({
+                account:true,
+                request:true
+            })
+            console.log(account)
+            this.props.login(account)
         }
     }
 

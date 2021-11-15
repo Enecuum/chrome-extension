@@ -82,7 +82,7 @@ export default function Account(props) {
 
     const copyPublicKey = () => {
         if (navigator.clipboard) {
-            navigator.clipboard.writeText(props.user.publicKey)
+            navigator.clipboard.writeText(props.user.mainPublicKey)
             setCopied(true)
         } else {
             console.error('navigator.clipboard: ' + false)
@@ -103,7 +103,7 @@ export default function Account(props) {
         // console.log(token)
         let tokens = []
 
-        ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
+        ENQWeb.Net.get.getBalanceAll(props.user.mainPublicKey)
             .then((res) => {
                 // console.log(res.map(a => a.ticker + ': ' + a.amount))
                 let amount = 0
@@ -242,7 +242,7 @@ export default function Account(props) {
         let history = {}
         history.records = []
         for (let i = 0; i < 4; i++) {
-            let historyRecords = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, i)
+            let historyRecords = await ENQWeb.Net.get.accountTransactions(props.user.mainPublicKey, i)
             history.records = history.records.concat(historyRecords.records)
         }
 
@@ -260,9 +260,9 @@ export default function Account(props) {
                     },
                     rectype: history.records[id].rectype,
                     tx: {
-                        to: history.records[id].rectype === 'iin' ? props.user.publicKey : '00000',
+                        to: history.records[id].rectype === 'iin' ? props.user.mainPublicKey : '00000',
                         from: {
-                            pubkey: history.records[id].rectype !== 'iin' ? props.user.publicKey : '00000',
+                            pubkey: history.records[id].rectype !== 'iin' ? props.user.mainPublicKey : '00000',
                         },
                         data: history.records[id].data,
                         hash: history.records[id].hash,
@@ -347,6 +347,7 @@ export default function Account(props) {
         await disk.promise.sendPromise({
             account: true,
             set: true,
+            update:true,
             data: user
         })
         // window.location.reload(false)
@@ -423,7 +424,7 @@ export default function Account(props) {
         if (menu) {
             return <Menu login={props.login}
                          logout={props.logout}
-                         publicKey={props.user.publicKey}
+                         publicKey={props.user.mainPublicKey}
                          setLock={props.setLock}
                          setConfirm={props.setConfirm}
                          setNetwork={props.setNetwork}
@@ -455,7 +456,7 @@ export default function Account(props) {
 
             {renderMenu()}
 
-            <Address publicKey={props.user.publicKey}
+            <Address publicKey={props.user.mainPublicKey}
                      connectionsCounter={connectionsCounter}
                      isCopied={isCopied}
                      setCopied={setCopied}

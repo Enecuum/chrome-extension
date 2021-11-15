@@ -143,16 +143,16 @@ export default function Network(props) {
         localStorage.setItem('net', value)
         ENQWeb.Net.provider = value
 
-        await disk.user.loadUser()
-            .then(async account => {
-                account.net = value
-                account.token = token
-                await disk.promise.sendPromise({
-                    account: true,
-                    set: true,
-                    data: account
-                })
-            })
+        console.log(token)
+        await disk.promise.sendPromise({
+            account: true,
+            set: true,
+            update:true,
+            data: {
+                net:value,
+                token:token
+            }
+        })
 
         cacheTokens().then(() => {
             location.reload(false)

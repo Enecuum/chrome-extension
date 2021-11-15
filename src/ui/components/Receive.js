@@ -5,7 +5,7 @@ import TransactionSend from "./TransactionSend";
 export default function Receive(props) {
 
     let copyPublicKey = () => {
-        navigator.clipboard.writeText(props.user.publicKey)
+        navigator.clipboard.writeText(props.user.mainPublicKey)
     }
 
     return (
@@ -16,13 +16,13 @@ export default function Receive(props) {
 
                 <div className={styles.field}>Public key</div>
 
-                <div className={styles.field + ' ' + styles.address}>{props.user.publicKey}</div>
+                <div className={styles.field + ' ' + styles.address}>{props.user.mainPublicKey}</div>
 
                 <div className={styles.field + ' ' + styles.copy} onClick={() => copyPublicKey()}>COPY</div>
 
                 <div className={styles.field}>Private key</div>
 
-                <div className={styles.field + ' ' + styles.private}>{props.user.privateKey}</div>
+                <div className={styles.field + ' ' + styles.private}>{props.user.mainPrivateKey}</div>
 
             </div>
 

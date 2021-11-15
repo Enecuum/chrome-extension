@@ -14,6 +14,7 @@ TransportWebUSB.isSupported().then((result) => {
 
 export default function Menu(props) {
 
+
     const [activeAccount, setActiveAccount] = useState(1)
 
     // TODO
@@ -30,7 +31,9 @@ export default function Menu(props) {
 
     const [clickIterator, setClickIterator] = useState(0)
 
-    const [privateDataLoaded, setPrivateDataLoaded] = useState(Object.keys(ENQWeb.Enq.User).length > 0)
+
+    //TODO what is private ? check this
+    const [privateDataLoaded, setPrivateDataLoaded] = useState(props.publicKey.length > 0)
 
     const [account2Amount, setAccount2Amount] = useState(BigInt(0))
 

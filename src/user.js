@@ -1,3 +1,5 @@
+import indexDB from "./indexDB";
+
 let account = {
 
     net: '',
@@ -40,4 +42,23 @@ let changeAccount = (type, index) => {
     account.type = type
 }
 
-export {account, changeAccount, getSeedAccounts}
+let addAccountOldFormat = (data)=>{
+    indexDB.get('user').then(account=>{
+        account.mainPublicKey = data.publicKey
+        account.mainPrivateKey = data.privateKey
+        account.token = data.token
+        account.net = data.net
+        account.type = 0
+        account.privateKeys.push(data.privateKey)
+        indexDB.set('user', account).then()
+    })
+}
+let updateAccount = (data)=>{
+    indexDB.get('user').then(account=>{
+        account.net = data.net
+        account.token = data.token
+        indexDB.set('user', account).then()
+    })
+}
+
+export {account, changeAccount, getSeedAccounts, addAccountOldFormat, updateAccount}
