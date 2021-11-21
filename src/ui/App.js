@@ -193,9 +193,9 @@ export default function App(props) {
         return <Network setNetwork={setNetwork}/>
     }
 
-    if (isReceive) {
-        return <Receive setReceive={setReceive} user={user}/>
-    }
+    // if (isReceive) {
+    //     return <Receive setReceive={setReceive} user={user}/>
+    // }
 
     if (isPublicKeyRequest) {
         return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} request={isPublicKeyRequest}/>
