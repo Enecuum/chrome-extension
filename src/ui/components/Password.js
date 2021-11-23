@@ -1,9 +1,9 @@
-import React from "react";
-import styles from "../css/index.module.css";
-import TransactionSend from "./TransactionSend";
-import Separator from "../elements/Separator";
-import {toggleFullScreen} from "../Utils";
-import Input from "../elements/Input";
+import React from 'react'
+import styles from '../css/index.module.css'
+import TransactionSend from './TransactionSend'
+import Separator from '../elements/Separator'
+import { toggleFullScreen } from '../Utils'
+import Input from '../elements/Input'
 
 export default class Password extends React.Component {
     constructor(props) {
@@ -11,44 +11,72 @@ export default class Password extends React.Component {
         this.state = {
             password1: '',
             password2: '',
-            allow: false
+            allow: false,
+            oldPassword: '',
+            incorrectOld: false,
+            incorrectNew: false
         }
         this.handleChangePassword1 = this.handleChangePassword1.bind(this)
         this.handleChangePassword2 = this.handleChangePassword2.bind(this)
+        this.handleChangeOldPassword = this.handleChangeOldPassword.bind(this)
         this.setAllow = this.setAllow.bind(this)
         this.save = this.save.bind(this)
     }
 
     handleChangePassword1(e) {
-        this.setState({password1: e.target.value}, this.setAllow);
+        this.setState({ password1: e.target.value }, this.setAllow)
     }
 
     handleChangePassword2(e) {
-        this.setState({password2: e.target.value}, this.setAllow);
+        this.setState({ password2: e.target.value }, this.setAllow)
+    }
+
+    handleChangeOldPassword(e) {
+        this.setState({ oldPassword: e.target.value })
     }
 
     setAllow() {
         if (this.state.password1 === this.state.password2) {
-            this.setState({allow: true})
+            this.setState({ allow: true })
         } else {
-            this.setState({allow: false})
+            this.setState({ allow: false })
         }
     }
 
     save() {
         if (this.state.password1 === this.state.password2) {
-            let checkPass = disk.lock.getHashPassword()
-            disk.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
-            disk.lock.setLock(false)
-            if (checkPass) {
-                disk.promise.sendPromise({account: true, encrypt: true, again: true, data:this.props.user})
+            if (this.props.publicKey) {
+                if (this.state.oldPassword.length === 0) {
+                    this.setState({ oldPassword: true })
+                    return
+                }
+                disk.promise.sendPromise({
+                    account: true,
+                    unlock: true,
+                    password: this.state.oldPassword
+                })
+                    .then(data => {
+                        if (data) {
+                            disk.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
+                            disk.lock.setLock(false)
+                            disk.promise.sendPromise({
+                                account: true,
+                                encrypt: true,
+                                again: true,
+                                data: this.props.user
+                            })
+                            this.props.setPassword(false)
+                        } else {
+                            this.setState({ incorrectOld: true })
+                        }
+                    })
             } else {
-                // disk.promise.sendPromise({account: true, encrypt: true})
+                disk.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
+                disk.lock.setLock(false)
+                this.props.setPassword(false)
             }
-
-            this.props.setPassword(false)
         } else {
-
+            this.setState({ incorrectNew: true })
         }
     }
 
@@ -61,12 +89,25 @@ export default class Password extends React.Component {
                 <div className={styles.content}>
                     <img className={styles.login_logo} src="./images/logo_white.png" onClick={toggleFullScreen}/>
 
+                    {!this.props.publicKey &&
                     <div className={styles.welcome1}>Create</div>
+                    }
+                    {!this.props.publicKey &&
                     <div className={styles.welcome1}>Password</div>
+                    }
 
                 </div>
 
                 <div className={styles.form}>
+
+                    {this.props.publicKey && <Input type="password"
+                                                    spellCheck={false}
+                                                    onChange={this.handleChangeOldPassword}
+                                                    value={this.state.oldPassword}
+                                                    className={styles.field + ' ' + styles.password + ' ' + (this.state.incorrectOld ? styles.field_incorrect : '')}
+                                                    placeholder={'Old password'}
+                                                    autoFocus={true}
+                    />}
 
                     <Input type="password"
                            spellCheck={false}
@@ -81,7 +122,7 @@ export default class Password extends React.Component {
                            spellCheck={false}
                            onChange={this.handleChangePassword2}
                            value={this.state.password2}
-                           className={styles.field + ' ' + styles.password}
+                           className={styles.field + ' ' + styles.password + ' ' + (this.state.incorrectNew ? styles.field_incorrect : '')}
                            placeholder={'Confirm password'}
                     />
 
