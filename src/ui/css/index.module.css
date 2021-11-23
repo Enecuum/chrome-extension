@@ -413,6 +413,10 @@ input.field:focus {
     outline: none;
 }
 
+input.field_incorrect {
+    border-color: var(--color-red);
+}
+
 input.field::placeholder {
     color: var(--color-gray);
 }
