@@ -5,6 +5,8 @@ import {shortHashLong} from '../../Utils'
 
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
+import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
+import TransportWebHID from '@ledgerhq/hw-transport-webhid';
 
 // TransportWebUSB.isSupported().then((result) => {
 //     console.log('WebUSB Supported: ' + result)
@@ -54,41 +56,47 @@ export default function ConnectLedger(props) {
 
     const connectLedger = async () => {
 
-        let transport = await props.getLedgerTransport()
+        const Transport = await TransportWebHID.create()
+        let ver = await getVersion(Transport)
+        let publickey = await getPublicKey(0, Transport)
+        let sign = await  signHash("afafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafaf", Transport)
+        console.log({ver, publickey, sign})
 
-        console.log(transport)
-
-        const eth = new Eth(transport)
-        console.log(eth)
-
-        eth.getAddress("44'/60'/0'/0/0").then(o => {
-
-            setLedger(transport)
-            setEthAddress(o.address)
-            console.log(o.address)
-
-            eth.getAddress("44'/60'/0'/0/1").then(o => {
-                setEth2Address(o.address)
-                console.log(o.address)
-
-                eth.getAddress("44'/60'/0'/0/2").then(o => {
-                    setEth3Address(o.address)
-                    console.log(o.address)
-
-                    eth.getAddress("44'/60'/0'/0/3").then(o => {
-                        setEth4Address(o.address)
-                        console.log(o.address)
-
-                        eth.getAddress("44'/60'/0'/0/4").then(o => {
-                            setEth5Address(o.address)
-                            console.log(o.address)
-
-                            global.transportWebUSB = transport
-                        })
-                    })
-                })
-            })
-        })
+        // let transport = await props.getLedgerTransport()
+        //
+        // console.log(transport)
+        //
+        // const eth = new Eth(transport)
+        // console.log(eth)
+        //
+        // eth.getAddress("44'/60'/0'/0/0").then(o => {
+        //
+        //     setLedger(transport)
+        //     setEthAddress(o.address)
+        //     console.log(o.address)
+        //
+        //     eth.getAddress("44'/60'/0'/0/1").then(o => {
+        //         setEth2Address(o.address)
+        //         console.log(o.address)
+        //
+        //         eth.getAddress("44'/60'/0'/0/2").then(o => {
+        //             setEth3Address(o.address)
+        //             console.log(o.address)
+        //
+        //             eth.getAddress("44'/60'/0'/0/3").then(o => {
+        //                 setEth4Address(o.address)
+        //                 console.log(o.address)
+        //
+        //                 eth.getAddress("44'/60'/0'/0/4").then(o => {
+        //                     setEth5Address(o.address)
+        //                     console.log(o.address)
+        //
+        //                     global.transportWebUSB = transport
+        //                 })
+        //             })
+        //         })
+        //     })
+        // })
     }
 
 
