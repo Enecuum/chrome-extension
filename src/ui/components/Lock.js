@@ -8,12 +8,12 @@ export default class Lock extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            password: ''
+            password: '',
+            incorrect: false
         }
         this.handleChangePassword = this.handleChangePassword.bind(this)
         this.submit = this.submit.bind(this)
         this.logout = this.logout.bind(this)
-
         // this.setConfirm = props.setConfirm
         window.scrollTo(0, 0);
     }
@@ -37,11 +37,12 @@ export default class Lock extends React.Component {
         //     this.props.unlock()
         //     window.location.reload(false);
         // }
-
         let user = await disk.promise.sendPromise({account: true, unlock: true, password: this.state.password})
         // console.log(user)
         if (user)
             this.props.unlock(user)
+        else
+            this.setState({incorrect:true});
     }
 
     render() {
@@ -64,7 +65,7 @@ export default class Lock extends React.Component {
                            spellCheck={false}
                            onChange={this.handleChangePassword}
                            value={this.state.password}
-                           className={styles.field + ' ' + styles.password}
+                           className={styles.field + ' ' + styles.password + ' ' + (this.state.incorrect ? styles.field_incorrect : '')}
                            placeholder={'Password'}
                     />
 
