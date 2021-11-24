@@ -56,11 +56,12 @@ export default function ConnectLedger(props) {
 
     const connectLedger = async () => {
 
-        const Transport = await TransportWebHID.create()
-        let ver = await getVersion(Transport)
-        let publickey = await getPublicKey(1, Transport)
-        let sign = await  signHash("afafafafafafafafafafafafafafafafafafafafafafafafafafafafafafafaf",1, Transport)
-        console.log({ver, publickey, sign:sign.substr(0,140)})
+        const transport = await TransportWebHID.create()
+        let ver = await getVersion(transport)
+        let publicKey = await getPublicKey(1, transport)
+        let hash = 'message'
+        let sign = await signHash(hash, 1, transport)
+        console.log({ver, publicKey: publicKey, sign: sign.substr(0, 140)})
 
         // let transport = await props.getLedgerTransport()
         //
