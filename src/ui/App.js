@@ -192,9 +192,9 @@ export default function App(props) {
         return <Network setNetwork={setNetwork}/>
     }
 
-    if (isReceive) {
-        return <Receive setReceive={setReceive} user={user}/>
-    }
+    // if (isReceive) {
+    //     return <Receive setReceive={setReceive} user={user}/>
+    // }
 
     if (isPublicKeyRequest) {
         return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} request={isPublicKeyRequest}/>
@@ -212,7 +212,7 @@ export default function App(props) {
     }
 
     if (isConnectLedger) {
-        return <ConnectLedger getLedgerTransport={getLedgerTransport}/>
+        return <ConnectLedger getLedgerTransport={getLedgerTransport} login={login2}/>
     }
 
     if (isSignRequest) {

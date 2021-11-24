@@ -46,6 +46,7 @@ const signHash = async (hash, index, transport) => {
     console.log(buffer.toString('hex'))
 
     let manual = await transport.send(0xe0, 0x04, 0x00, 0x01, buffer)
+
     return manual.toString('hex')
 }
 
