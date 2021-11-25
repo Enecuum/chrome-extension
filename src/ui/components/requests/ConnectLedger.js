@@ -6,6 +6,7 @@ import {shortHashLong} from '../../Utils'
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid';
+import eventBus from "../../../utils/eventBus";
 
 export default function ConnectLedger(props) {
 
@@ -62,7 +63,7 @@ export default function ConnectLedger(props) {
         // TODO This is our old user model, but for now it's ok to use it
         let data = {
             // publicKey: publicKey,
-            // TODO this is fake publick key because i still not install app in my ledger
+            // TODO This is fake public key because i still not install app on my ledger
             publicKey: '02c3143abeb50e4153da372868490277c14b2877f05b477e4671722152b0112473',
             privateKey: true,
             net: ENQWeb.Net.provider,
@@ -80,7 +81,7 @@ export default function ConnectLedger(props) {
             set: true,
             data: data
         }).then(r => {
-            props.login(data)
+            // eventBus.dispatch('ledger', {})
             window.close()
         })
 
