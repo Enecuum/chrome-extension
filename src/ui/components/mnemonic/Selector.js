@@ -18,11 +18,12 @@ export default function userSelector(props) {
     let [tokenCorrect, setTokenCorrect] = useState(false)
 
     let [keys, setKeys] = useState()
-    let [cards, setCards] = useState()
+    let [cards, setCards] = useState([])
 
     let [showAdd, setShowAdd] = useState(false)
 
     let [seed, setSeed] = useState(false)
+    let [ledger, setLedger] = useState(false)
 
     useEffect(() => {
         loadUser()
@@ -134,8 +135,20 @@ export default function userSelector(props) {
 
             {!seed && <div className={styles.field + ' ' + styles.button} onClick={props.setImportMnemonic}>Import Mnemonic</div>}
 
-            <div className={styles.field + ' ' + styles.button}
-                 onClick={() => createPopupWindow('index.html?type=connectLedger')}>Connect Ledger</div>
+            {!ledger && <div className={styles.field + ' ' + styles.button}
+                 onClick={() => {
+                     // createPopupWindow('index.html?type=connectLedger')
+                     setLedger(true)
+                 }}>Connect Ledger</div>}
+
+            {ledger && <div className={styles.field + ' ' + styles.button}
+                            onClick={() => {
+                                // createPopupWindow('index.html?type=connectLedger')
+                                let _cards = JSON.parse(JSON.stringify(cards))
+                                _cards.push({i: -1, privateKey: '', publicKey: 'KEY', amount: 0, current: false})
+                                setCards(_cards)
+
+                            }}>Add Ledger account</div>}
 
             <Separator/>
 
