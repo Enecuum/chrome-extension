@@ -6,6 +6,7 @@ import Input from "../../elements/Input";
 import * as bip39 from "bip39";
 import * as bip32 from "bip32";
 import {createPopupWindow} from "../../../handler";
+// import eventBus from "../../../utils/eventBus";
 
 export default function userSelector(props) {
 
@@ -14,6 +15,7 @@ export default function userSelector(props) {
     let [name, setName] = useState('')
     let [host, setHost] = useState('')
     let [hostCorrect, setHostCorrect] = useState(false)
+
     let [token, setToken] = useState('')
     let [tokenCorrect, setTokenCorrect] = useState(false)
 
@@ -31,21 +33,31 @@ export default function userSelector(props) {
 
     let loadUser = () => {
         disk.user.loadUser().then(async account => {
+            console.log(account)
             let hex = account.seed
             let accounts = []
             if (hex) {
                 setSeed(true)
-                for (let i = 0; i < 2; i++) {
+                // TODO 10 not here, we will show this on other window
+                for (let i = 0; i < 10; i++) {
                     let privateKey = getMnemonicPrivateKeyHex(hex, i)
                     let current = account.privateKey === privateKey
                     const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
                     await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
-                        accounts.push({i: i, privateKey, publicKey, amount: res[0] ? res[0].amount : 0, current})
+                        accounts.push({i: i, privateKey, publicKey, amount: res[0] ? res[0].amount : 0, current, type: 1})
                     })
                 }
+                if (account.ledger) {
+                    let current = account.publicKey === account.ledgerAccountsArray[0]
+                    accounts.push({i: 10, privateKey: '', publicKey: account.ledgerAccountsArray[0], amount: 0, current, type: 2})
+                }
+
                 renderCards(accounts, hex)
             } else {
-                accounts.push({i: 0, privateKey: '', publicKey: account.publicKey, amount: account.amount, current: true})
+                accounts.push({i: 0, privateKey: '', publicKey: account.publicKey, amount: account.amount, current: true, type: 0})
+                if (account.ledger) {
+                    accounts.push({i: 10, privateKey: '', publicKey: account.ledgerAccountsArray[0], amount: 0, current: false, type: 2})
+                }
                 renderCards(accounts, null, true)
             }
         })
@@ -88,7 +100,9 @@ export default function userSelector(props) {
 
                     <div className={styles.row}>
                         <div>Account {i + 1}</div>
-                        <div>{old ? 'OLD TYPE' : ''}</div>
+                        {accounts[i].type === 0 && <div>SIMPLE</div>}
+                        {accounts[i].type === 1 && <div>MNEMONIC</div>}
+                        {accounts[i].type === 2 && <div>LEDGER</div>}
                     </div>
 
                     <div className={styles.card_field}>{shortHash(accounts[i].publicKey)}</div>
@@ -100,6 +114,7 @@ export default function userSelector(props) {
                             net: ENQWeb.Net.provider,
                             token: ENQWeb.Enq.ticker,
                             seed: hex,
+                            ledger: accounts[i].type === 2
                         }
                         global.disk.promise.sendPromise({
                             account: true,
@@ -107,6 +122,7 @@ export default function userSelector(props) {
                             data: data
                         }).then(r => {
                             props.login(data)
+                            location.reload()
                         })
                     })}>{current ? 'CURRENT' : 'SELECT'}</div>
                 </div>
@@ -138,15 +154,31 @@ export default function userSelector(props) {
             {!ledger && <div className={styles.field + ' ' + styles.button}
                  onClick={() => {
                      // createPopupWindow('index.html?type=connectLedger')
+                     disk.user.loadUser().then(async account => {
+
+                         // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
+                         account.ledger = true
+                         // TODO This one is test
+                         account.ledgerAccountsArray = ['0392446ff07139c7f72f1706ecdccdf0e1e950a91a196152b954ef9061f6a5af12']
+
+                         global.disk.promise.sendPromise({
+                             account: true,
+                             set: true,
+                             data: account
+                         }).then(r => {})
+                     })
                      setLedger(true)
                  }}>Connect Ledger</div>}
 
             {ledger && <div className={styles.field + ' ' + styles.button}
                             onClick={() => {
+
+                                loadUser()
+
                                 // createPopupWindow('index.html?type=connectLedger')
-                                let _cards = JSON.parse(JSON.stringify(cards))
-                                _cards.push({i: -1, privateKey: '', publicKey: 'KEY', amount: 0, current: false})
-                                setCards(_cards)
+                                // let _cards = JSON.parse(JSON.stringify(cards))
+                                // _cards.push({i: 1, privateKey: '', publicKey: 'KEY', amount: 0, current: false})
+                                // setCards(_cards)
 
                             }}>Add Ledger account</div>}
 
