@@ -7,6 +7,8 @@ import * as bip39 from "bip39";
 import * as bip32 from "bip32";
 import {createPopupWindow} from "../../../handler";
 // import eventBus from "../../../utils/eventBus";
+import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
+import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 
 export default function userSelector(props) {
 
@@ -156,16 +158,25 @@ export default function userSelector(props) {
                      // createPopupWindow('index.html?type=connectLedger')
                      disk.user.loadUser().then(async account => {
 
-                         // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
-                         account.ledger = true
-                         // TODO This one is test
-                         account.ledgerAccountsArray = ['0392446ff07139c7f72f1706ecdccdf0e1e950a91a196152b954ef9061f6a5af12']
+                         let Transport = await TransportWebHID.create() // TODO global transport object. may be in app.js. need do save new model. 
+                         await getPublicKey(0, Transport).then(async data=>{
+                             account.ledger = true
+                             // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
 
-                         global.disk.promise.sendPromise({
-                             account: true,
-                             set: true,
-                             data: account
-                         }).then(r => {})
+                             // TODO This one is test
+
+                             account.ledgerAccountsArray = [data.substr(0, 64)]
+
+                             global.disk.promise.sendPromise({
+                                 account: true,
+                                 set: true,
+                                 data: account
+                             }).then(r => {})
+                             console.log("ledger worked")
+                         }).catch(msg=>{
+                             console.error("ledger error!\n"+msg)
+                         })
+
                      })
                      setLedger(true)
                  }}>Connect Ledger</div>}
