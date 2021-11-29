@@ -14,7 +14,6 @@ const getPublicKey = async (index, Transport) => {
 
     if (Transport === undefined)
         Transport = await TransportWebHID.create()
-
     let manual = await Transport.send(0xe0, 0x02, 0x00, 0x01, uint32ToBuffer(index))
     return manual.toString('hex')
 
@@ -29,11 +28,13 @@ let uint32ToBuffer = (number) => {
     return buf;
 }
 
-const signHash = async (hash, index, transport) => {
+const signHash = async (hash, index, Transport) => {
 
-    if (transport === undefined)
-        transport = await TransportWebHID.create()
+    if (Transport === undefined)
+        Transport = await TransportWebHID.create()
 
+
+    console.log({hash, index})
     let buffer = Buffer.alloc(36)
     buffer.writeUInt32LE(index, 0)
 
@@ -45,8 +46,7 @@ const signHash = async (hash, index, transport) => {
 
     console.log(buffer.toString('hex'))
 
-    let manual = await transport.send(0xe0, 0x04, 0x00, 0x01, buffer)
-
+    let manual = await Transport.send(0xe0, 0x04, 0x00, 0x01, buffer)
     return manual.toString('hex')
 }
 
