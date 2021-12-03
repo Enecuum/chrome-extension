@@ -1,10 +1,11 @@
-import React, {useState} from "react";
-import styles from "../css/index.module.css";
-import elements from "../css/elements.module.css";
-import TransactionSend from "./TransactionSend";
-import Separator from "../elements/Separator";
-import {regexAddress} from "../Utils";
-import Input from "../elements/Input";
+import React, { useState } from 'react'
+import styles from '../css/index.module.css'
+import elements from '../css/elements.module.css'
+import TransactionSend from './TransactionSend'
+import Separator from '../elements/Separator'
+import { regexAddress } from '../Utils'
+import Input from '../elements/Input'
+import { signHash } from '../../utils/ledgerShell'
 
 //TODO decimals to tokens
 
@@ -23,7 +24,9 @@ export default class Transaction extends React.Component {
             getLedgerTransport: this.props.getLedgerTransport,
             fee: Number(0.0),
             localNetworks: JSON.parse(localStorage.getItem('networks')) || [],
-            network: ENQWeb.Net.currentProvider.replace('https://', '').replace('http://', '').toUpperCase()
+            network: ENQWeb.Net.currentProvider.replace('https://', '')
+                .replace('http://', '')
+                .toUpperCase()
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
@@ -77,7 +80,7 @@ export default class Transaction extends React.Component {
     }
 
     handleChangeAddress(e) {
-        this.setState({address: e.target.value});
+        this.setState({ address: e.target.value })
     }
 
     handleChangeAmount(e) {
@@ -86,7 +89,7 @@ export default class Transaction extends React.Component {
 
         if (e.target.value === '00') {
             //TODO
-            this.setState({amount: '0'});
+            this.setState({ amount: '0' })
             return
         }
 
@@ -95,36 +98,45 @@ export default class Transaction extends React.Component {
             return
         }
 
-        if (amount.countDecimals() > 9)
+        if (amount.countDecimals() > 9) {
             amount = amount.toFixed(10)
+        }
 
-        this.setState({amount: amount});
+        this.setState({ amount: amount })
         this.feeCount()
     }
 
     handleChangeData(e) {
         let data = e.target.value
-        this.setState({data: data});
+        this.setState({ data: data })
     }
 
     async submit() {
 
-        if (!regexAddress.test(this.state.address) || this.state.amount < 0)
+        if (!regexAddress.test(this.state.address) || this.state.amount < 0) {
             return
+        }
 
         //TODO
         let user = await disk.user.loadUser()
-        if (!user.privateKey) {
-            user = await disk.promise.sendPromise({account: true, unlock: true, password: this.state.password})
+        if (!user.privateKey && !user.ledger) {
+            user = await disk.promise.sendPromise({
+                account: true,
+                unlock: true,
+                password: this.state.password
+            })
             console.log(user)
             return
         }
 
-        let wallet = {pubkey: user.publicKey, prvkey: user.privateKey}
+        let wallet = {
+            pubkey: user.publicKey,
+            prvkey: user.privateKey
+        }
         ENQWeb.Net.provider = user.net
 
         let data = {
-            from: wallet,
+            from: user.ledger ? wallet.pubkey : wallet,
             amount: Number(this.state.amount) * 1e10,
             to: this.state.address,
             data: '',
@@ -132,10 +144,30 @@ export default class Transaction extends React.Component {
         }
 
         // console.log(data)
+        // console.log(user)
 
         let response
         try {
-            response = await ENQWeb.Net.post.tx_fee_off(data)
+            if (!user.ledger) {
+                response = await ENQWeb.Net.post.tx_fee_off(data)
+            } else {
+                data.nonce = data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
+                data.ticker = data.tokenHash
+                // console.log(data)
+                data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)
+                data.sign = await signHash(data.hash, 0)
+                console.log({ sign: data.sign })
+                response = await ENQWeb.Enq.sendTx(data)
+                    .then(data => {
+                        if (data.hash) {
+                            return data
+                        }
+                        console.warn(data)
+                    })
+                    .catch(er => {
+                        console.error(er)
+                    })
+            }
         } catch (e) {
 
         }
@@ -151,24 +183,26 @@ export default class Transaction extends React.Component {
     }
 
     feeCount() {
-        ENQweb3lib.fee_counter(this.props.isTransaction.token, BigInt(Math.floor(this.state.amount * 1e10))).then(fee => {
-            // console.log(typeof fee)
-            // console.log(fee)
-            let currentFee = Number(fee) / this.state.decimals
-            // console.log(currentFee)
-            this.setState({fee: currentFee})
-        })
+        ENQweb3lib.fee_counter(this.props.isTransaction.token, BigInt(Math.floor(this.state.amount * 1e10)))
+            .then(fee => {
+                // console.log(typeof fee)
+                // console.log(fee)
+                let currentFee = Number(fee) / this.state.decimals
+                // console.log(currentFee)
+                this.setState({ fee: currentFee })
+            })
     }
 
     decimalsSearch() {
-        ENQWeb.Net.get.token_info(this.props.isTransaction.token).then(info => {
-            if (info.length === 0) {
-                console.warn('Token not found.')
-            } else {
-                let decimals = 10 ** info[0].decimals
-                this.setState({decimals: decimals})
-            }
-        })
+        ENQWeb.Net.get.token_info(this.props.isTransaction.token)
+            .then(info => {
+                if (info.length === 0) {
+                    console.warn('Token not found.')
+                } else {
+                    let decimals = 10 ** info[0].decimals
+                    this.setState({ decimals: decimals })
+                }
+            })
     }
 
     // pending() {
@@ -204,9 +238,9 @@ export default class Transaction extends React.Component {
                     / this.state.decimals
                 )
 
-                : "0.0"
+                : '0.0'
 
-            balanceAfter += ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN")
+            balanceAfter += ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : 'COIN')
 
             return (
                 <div className={styles.main}>
@@ -229,7 +263,7 @@ export default class Transaction extends React.Component {
                         />
 
                         <div
-                            className={styles.field_ticker}>{this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN"}</div>
+                            className={styles.field_ticker}>{this.props.isTransaction.ticker ? this.props.isTransaction.ticker : 'COIN'}</div>
 
                         <Input type="text"
                                spellCheck={false}
@@ -257,7 +291,7 @@ export default class Transaction extends React.Component {
                         </div>
 
                         <div className={styles.field}>
-                            Fee: {this.state.fee + ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : "COIN")}
+                            Fee: {this.state.fee + ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : 'COIN')}
                         </div>
 
                         <div className={styles.field}>
@@ -290,16 +324,19 @@ export default class Transaction extends React.Component {
 }
 
 String.prototype.hexEncode = function () {
-    let hex, i;
-    let result = "";
+    let hex,
+        i
+    let result = ''
     for (i = 0; i < this.length; i++) {
-        hex = this.charCodeAt(i).toString(16);
-        result += ("000" + hex).slice(-4);
+        hex = this.charCodeAt(i)
+            .toString(16)
+        result += ('000' + hex).slice(-4)
     }
     return result
 }
 
 Number.prototype.countDecimals = function () {
     if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
-    return this.toString().split(".")[1].length || 0;
+    return this.toString()
+        .split(".")[1].length || 0;
 }
