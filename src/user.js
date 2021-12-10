@@ -1,4 +1,4 @@
-import indexDB from "./indexDB";
+import indexDB from "./utils/indexDB";
 
 let account = {
 
