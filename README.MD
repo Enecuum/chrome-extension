@@ -8,4 +8,17 @@
 - npm run ci - run ci webhook inside pm2
 - npm run "ci stop" - stop ci webhook
 
-npx @bubblewrap/cli init --manifest=https://pwa.enecuum.com/manifest.webmanifest
+There is two manifests files for some reasons
+
+- server - simple server for ./dist folder 
+- popup - index.html only one js file
+- background - extension (manifest v2) background file
+- handler - messages handler for web app
+- contentScript - 
+
+
+- disk - storage implementation
+
+
+- src.ui - react app
+- src.copied - static files

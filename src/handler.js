@@ -6,6 +6,7 @@ import {account} from "./user"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
 export function MessageHandler(msg, ENQWeb) {
+
     return new Promise((resolve, reject) => {
 
         indexDB.set('user', account)
