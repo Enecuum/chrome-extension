@@ -100,7 +100,7 @@ function loadUser() {
         return {}
     }
     if (!checkLock()) {
-        if (this.storageName === 'popup') {
+        if (this.name === 'popup') {
             return sendPromise({
                 account: true,
                 request: true
@@ -236,6 +236,7 @@ function sendPromise(obj) {
     return new Promise((resolve) => {
 
         if (chrome.runtime.getManifest().version.includes('web')) {
+
             // console.log('web send promise');
             webBack(obj, ENQWeb).then(answer => {
                 if (answer.response !== undefined) {
@@ -245,6 +246,7 @@ function sendPromise(obj) {
                 }
             })
         } else {
+
             chrome.runtime.sendMessage(obj, answer => {
                 if (answer.response !== undefined) {
                     resolve(answer.response);
@@ -315,7 +317,7 @@ function setTokens(obj) {
 }
 
 let storage = function Storage(name) {
-    this.storageName = name
+    this.name = name
     this.task = {
         name,
         loadTask,

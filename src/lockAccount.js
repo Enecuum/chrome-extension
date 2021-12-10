@@ -6,7 +6,7 @@ let SALT = 'salt*/-+^'
 
 function lockAccount(timer = false) {
     disk.lock.setLock(true)
-    if (disk.storageName === 'background') {
+    if (disk.name === 'background') {
 
         ENQWeb.Enq.User = {publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net}
     }

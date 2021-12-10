@@ -1,5 +1,5 @@
 import {initApp} from "./ui/index"
-import {MessageHandler, MsgPopupHandler} from "./handler"
+import {MessageHandler, MessagePopupHandler} from "./handler"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import {versions} from "./utils/names";
 
@@ -107,7 +107,6 @@ async function setupUI() {
 
         // Simple message provider
         global.webBack = MessageHandler
-
         // Service worker start
         serviceWorkerRegistration.register()
 
@@ -118,7 +117,7 @@ async function setupUI() {
 
         toBackground = chrome.runtime.connect({name: 'popup'})
         toBackground.onMessage.addListener(mainListener)
-        global.Port = toBackground
+        // global.Port = toBackground
 
         global.asyncRequest = asyncRequest
         await initApp(toBackground)
@@ -163,7 +162,7 @@ function asyncRequest(data) {
     awaitId[data] = false
     let answer = ''
     if (version.includes('web')) {
-        return MsgPopupHandler(data)
+        return MessagePopupHandler(data)
     } else
         return new Promise(async (resolve, reject) => {
             toBackground.postMessage(data)

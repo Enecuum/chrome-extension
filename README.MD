@@ -41,9 +41,9 @@
 - contentScript - 
 - user - default user model
 - 
-- src.ui - react app
-- src.ui.Space - background for web version
-- src.copied - static files
+- src/ui - react app
+- src/ui/Space - background for web version
+- src/copied - static files
 
 
 ### Account options
