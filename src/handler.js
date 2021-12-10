@@ -16,6 +16,7 @@ export function MessageHandler(msg, ENQWeb) {
             console.log('user', user)
         })
 
+        // TODO Description
         if (msg.initial) {
             runLockTimer()
             resolve({response: true})
@@ -30,6 +31,7 @@ export function MessageHandler(msg, ENQWeb) {
             resolve();
         }
 
+        // TODO Description
         if (msg.account && msg.request) {
             if (!disk.lock.checkLock()) {
 
@@ -56,6 +58,7 @@ export function MessageHandler(msg, ENQWeb) {
             }
         }
 
+        // TODO Description
         if (msg.account && msg.unlock && msg.password) {
 
             let account = decryptAccount(msg.password)
@@ -75,6 +78,7 @@ export function MessageHandler(msg, ENQWeb) {
             }
         }
 
+        // TODO Description
         if (msg.account && msg.set && msg.data) {
 
             // Edit user
@@ -101,11 +105,13 @@ export function MessageHandler(msg, ENQWeb) {
             resolve({response: true})
         }
 
+        // TODO Description
         if (msg.lock) {
             lockAccount()
             resolve({response: true})
         }
 
+        // TODO Description
         if (msg.account && msg.logout) {
             ENQWeb.Enq.User = {}
             sessionStorage.setItem('User', JSON.stringify({}))
@@ -116,9 +122,8 @@ export function MessageHandler(msg, ENQWeb) {
     })
 }
 
+// TODO TEMP
 let createWebSession = (account) => {
-
-    // TODO
     const webAccount = JSON.parse(JSON.stringify(account))
     webAccount.privateKey = true
     webAccount.seed = account.seed ? true : ''
@@ -160,14 +165,14 @@ export function runLockTimer() {
     if (lockTimer !== undefined) {
         clearTimeout(lockTimer)
     }
-    if (disk.storageName === "background") {
+    if (disk.name === "background") {
         lockTimer = setTimeout(() => lockAccount(true), lockTime)
     } else {
         lockTimer = setTimeout(() => disk.promise.sendPromise({lock: true}), lockTime)
     }
 }
 
-export async function MsgPopupHandler(msg) {
+export async function MessagePopupHandler(msg) {
     if (msg.popup) {
     } else if (msg.connectionList) {
         return 0
