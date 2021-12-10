@@ -48,7 +48,7 @@
 
 ### Account options
 - Simple private keys with option to import more old ones
-- Mnemonic fraze
+- Mnemonic phrase
 - Ledger
 
 ### Memory
