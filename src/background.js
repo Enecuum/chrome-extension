@@ -54,6 +54,7 @@ function setupApp() {
 }
 
 async function msgHandler(msg, sender, sendResponse) {
+
     if (msg.ports && msg.disconnect) {
         if (msg.all) {
             disconnectPorts()
@@ -62,9 +63,11 @@ async function msgHandler(msg, sender, sendResponse) {
             disconnectPorts(msg.name)
         }
     }
+
     if (msg.account && msg.logout) {
         ports = {}
     }
+
     MessageHandler(msg, ENQWeb)
         .then(answer => sendResponse(answer))
 }
