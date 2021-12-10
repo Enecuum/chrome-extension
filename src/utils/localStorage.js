@@ -98,7 +98,7 @@ function loadUser() {
         return {}
     }
     if (!checkLock()) {
-        if (this.name === 'popup') {
+        if (this.storageName === 'popup') {
             return sendPromise({
                 account: true,
                 request: true
@@ -311,7 +311,7 @@ function setTokens(obj) {
 }
 
 let storage = function Storage(name) {
-    this.name = name
+    this.storageName = name
     this.task = {
         name,
         loadTask,
