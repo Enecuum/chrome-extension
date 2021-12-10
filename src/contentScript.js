@@ -1,7 +1,7 @@
 import {extensionApi} from "./utils/extensionApi";
 
 
-let backgroundPort = {}
+let toBackground = {}
 let pageToBack = {}
 let taskId = []
 let requests = {
@@ -17,8 +17,8 @@ let requests = {
 function setupConnection() {
     console.log('content ready')
     // chrome.runtime.sendMessage({greeting: "Content ready"}, function(response) {});
-    backgroundPort = extensionApi.runtime.connect({name: window.origin})
-    backgroundPort.onMessage.addListener((msg, sender, sendResponse) => {
+    toBackground = extensionApi.runtime.connect({name: window.origin})
+    toBackground.onMessage.addListener((msg, sender, sendResponse) => {
         let cb = taskId[msg.taskId]
         if (cb) {
             cb(msg)
@@ -47,7 +47,7 @@ function eventContent(e) {
     let address = e.detail.cb.taskId
     taskId[address] = requests[e.detail.type]
     if (e.detail.type === 'tx')
-        backgroundPort.postMessage({
+        toBackground.postMessage({
             type: e.detail.type,
             tx: e.detail.tx,
             taskId: address,
@@ -55,7 +55,7 @@ function eventContent(e) {
             data: e.detail.data
         })
     else
-        backgroundPort.postMessage({type: e.detail.type, data: e.detail.data, taskId: address, cb: e.detail.cb})
+        toBackground.postMessage({type: e.detail.type, data: e.detail.data, taskId: address, cb: e.detail.cb})
     document.addEventListener('ENQContent', (e) => {
         eventContent(e)
     }, {once: true})
@@ -63,9 +63,9 @@ function eventContent(e) {
 
 
 function eventConnect() {
-    if (typeof backgroundPort.disconnect === typeof (Function)) {
-        console.log(backgroundPort)
-        backgroundPort.disconnect()
+    if (typeof toBackground.disconnect === typeof (Function)) {
+        console.log(toBackground)
+        toBackground.disconnect()
     }
     setupConnection()
     document.addEventListener('ENQContent', (e) => {
@@ -111,7 +111,7 @@ function injectCb(code) {
 
 function autoConnect() {
     let script = `
-    try{
+    try {
         ENQWeb.Enq.ready["extConnect"] = true
     } catch(e){}
     `
@@ -120,7 +120,7 @@ function autoConnect() {
 
 // setupConnection();
 // injectScript();
-eventHandler()
+eventHandler().then(r => {})
 
 document.addEventListener('DOMContentLoaded', function () {
     autoConnect()

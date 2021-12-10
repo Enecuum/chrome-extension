@@ -5,7 +5,7 @@ import indexDB from './utils/indexDB'
 import {account} from "./user"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
-export function MessageHandler(msg, ENQWeb) {
+export function globalMessageHandler(msg, ENQWeb) {
 
     return new Promise((resolve, reject) => {
 
@@ -147,7 +147,7 @@ function createPopupWindow(url) {
     const WinReg = /Win/
     const LinuxReg = /Linux/
     chrome.windows.create({
-        url: url ? url : "index.html",
+        url: url ? url : 'index.html',
         width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
         height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
         type: 'popup'
@@ -172,7 +172,7 @@ export function runLockTimer() {
     }
 }
 
-export async function MessagePopupHandler(msg) {
+export async function messagePopupHandler(msg) {
     if (msg.popup) {
     } else if (msg.connectionList) {
         return 0

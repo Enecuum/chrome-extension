@@ -3,7 +3,7 @@ import { signHash } from './utils/ledgerShell'
 const storage = require('./utils/localStorage')
 import { extensionApi } from './utils/extensionApi'
 import { lockAccount, say } from './lockAccount'
-import { MessageHandler } from './handler'
+import {createPopupWindow, globalMessageHandler} from './handler'
 
 document.addEventListener('DOMContentLoaded', function () {
     if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
@@ -47,7 +47,7 @@ let Account = {}
 
 function setupApp() {
     // console.log('background ready')
-    extensionApi.runtime.onMessage.addListener(msgHandler)
+    extensionApi.runtime.onMessage.addListener(messageHandler)
     extensionApi.runtime.onConnect.addListener(connectHandler)
     taskCounter()
     if (!Storage.config.getConfig()) {
@@ -55,7 +55,7 @@ function setupApp() {
     }
 }
 
-async function msgHandler(msg, sender, sendResponse) {
+async function messageHandler(msg, sender, sendResponse) {
 
     if (msg.ports && msg.disconnect) {
         if (msg.all) {
@@ -70,7 +70,7 @@ async function msgHandler(msg, sender, sendResponse) {
         ports = {}
     }
 
-    MessageHandler(msg, ENQWeb).then(answer => sendResponse(answer))
+    globalMessageHandler(msg, ENQWeb).then(answer => sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {
@@ -141,7 +141,7 @@ async function msgConnectHandler(msg, sender) {
                 })
             }
             if (!requestsMethods[msg.type]) {
-                taskHandler(msg.taskId)
+                taskHandler(msg.taskId).then(r => {})
             } else {
                 taskCounter()
                 if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
@@ -155,29 +155,29 @@ async function msgConnectHandler(msg, sender) {
 
 }
 
-//TODO
-function createPopupWindow(url) {
-    let mainHeight = 600
-    let mainWidth = 350
-    const os_width = {
-        'Win': mainWidth + 20,
-        'Mac': mainWidth,
-        'Linux': mainWidth
-    }
-    const os_height = {
-        'Win': mainHeight + 30,
-        'Mac': mainHeight + 30,
-        'Linux': mainHeight
-    }
-    const WinReg = /Win/
-    const LinuxReg = /Linux/
-    chrome.windows.create({
-        url: url ? url : 'index.html',
-        width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
-        height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
-        type: 'popup'
-    })
-}
+// //TODO
+// function createPopupWindow(url) {
+//     let mainHeight = 600
+//     let mainWidth = 350
+//     const os_width = {
+//         'Win': mainWidth + 20,
+//         'Mac': mainWidth,
+//         'Linux': mainWidth
+//     }
+//     const os_height = {
+//         'Win': mainHeight + 30,
+//         'Mac': mainHeight + 30,
+//         'Linux': mainHeight
+//     }
+//     const WinReg = /Win/
+//     const LinuxReg = /Linux/
+//     chrome.windows.create({
+//         url: url ? url : 'index.html',
+//         width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
+//         height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
+//         type: 'popup'
+//     })
+// }
 
 async function msgPopupHandler(msg, sender) {
     if (msg.popup) {
@@ -307,8 +307,10 @@ function taskCounter() {
 global.counterTask = taskCounter
 
 async function taskHandler(taskId) {
+
     let task = Storage.task.getTask(taskId)
     console.log(task)
+
     let account = ENQWeb.Enq.User
     let data = ''
 

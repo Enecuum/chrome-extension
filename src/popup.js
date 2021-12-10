@@ -1,5 +1,5 @@
 import {initApp} from "./ui/index"
-import {MessageHandler, MessagePopupHandler} from "./handler"
+import {globalMessageHandler, messagePopupHandler} from "./handler"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import {versions} from "./utils/names";
 
@@ -110,7 +110,7 @@ async function setupUI() {
     if (version.includes('web')) { // If this is our WEB version with service worker
 
         // Simple message provider
-        global.webBackgroundPort = MessageHandler
+        global.webBackgroundPort = globalMessageHandler
         // Service worker start
         serviceWorkerRegistration.register()
 
@@ -169,7 +169,7 @@ function asyncRequest(data) {
     awaitId[data] = false
     let answer = ''
     if (version.includes('web')) {
-        return MessagePopupHandler(data)
+        return messagePopupHandler(data)
     } else
         return new Promise(async (resolve, reject) => {
             backgroundPort.postMessage(data)
