@@ -1,13 +1,14 @@
 import {decryptAccount, encryptAccount, lockAccount, lockTime} from "./lockAccount"
 
 // const cacheStore = require('./indexDB') // es6
-import indexDB from './indexDB' // commonjs
+import indexDB from './indexDB'
+import {account} from "./user"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
 export function MessageHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
 
-        indexDB.set('user', {seed: 'SEED'})
+        indexDB.set('user', account)
             .then(function () {
                 return indexDB.get('user')
             }).then(function (user) {
@@ -151,7 +152,7 @@ export function runLockTimer() {
     if (lockTimer !== undefined) {
         clearTimeout(lockTimer)
     }
-    if (disk.name === "background") {
+    if (disk.storageName === "background") {
         lockTimer = setTimeout(() => lockAccount(true), lockTime)
     } else {
         lockTimer = setTimeout(() => disk.promise.sendPromise({lock: true}), lockTime)

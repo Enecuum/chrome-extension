@@ -151,6 +151,7 @@ async function msgConnectHandler(msg, sender) {
 
 }
 
+//TODO
 function createPopupWindow(url) {
     let mainHeight = 600
     let mainWidth = 350
