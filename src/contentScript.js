@@ -1,6 +1,6 @@
 import {extensionApi} from "./utils/extensionApi";
 
-
+// TODO Rename > backgroundPort
 let toBackground = {}
 let pageToBack = {}
 let taskId = []
@@ -28,7 +28,7 @@ function setupConnection() {
     })
 }
 
-// TODO
+// TODO Delete
 function injectScript() {
     try {
         // inject in-page script
@@ -102,6 +102,7 @@ function injectCodeGeneration(msg) {
     return code
 }
 
+// TODO Description
 function injectCb(code) {
     let script = document.createElement('script');
     script.textContent = code;
