@@ -1,13 +1,17 @@
 import {initApp} from "./ui/index"
 import {MessageHandler, MsgPopupHandler} from "./handler"
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import {versions} from "./utils/names";
 
+// Init storage
 const Storage = require('./utils/localStorage')
 let storage = new Storage('popup')
 global.disk = storage
 
+// TODO
 global.Buffer = global.Buffer || require('buffer').Buffer
 
+// TODO
 let toBackground = {}
 let taskId = []
 let awaitId = []
@@ -21,7 +25,7 @@ let time = 200
 //     })
 // }
 
-console.log('Popup version: ' + 4)
+// console.log('Popup version: ' + 4)
 console.log('HEAD: ' + VERSION)
 console.log('Cache available: ' + ('caches' in self))
 console.log('Web workers available: ' + (typeof window.Worker === 'function'))
@@ -31,7 +35,7 @@ global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 // console.log(navigator.userAgent)
 let electron = navigator.userAgent.toLowerCase().includes('electron')
 let mobile = navigator.userAgent.toLowerCase().includes('mobile')
-let type = electron ? ' web electron' : (mobile ? ' web mobile' : ' web')
+let type = electron ? versions.ELECTRON : (mobile ? versions.MOBILE : versions.WEB)
 
 chrome.manifest = (function () {
     let manifestObject = false;
@@ -86,7 +90,7 @@ if (!chrome.tabs) {
     }
 }
 
-// Sometimes there is no getManifest function
+// Sometimes there is no getManifest function within chrome.runtime
 if (!chrome.runtime.getManifest) {
     console.log('chrome.runtime.getManifest: false')
     chrome.runtime.web = true
@@ -99,21 +103,28 @@ let version = chrome.runtime.getManifest().version
 
 async function setupUI() {
 
-    if (version.includes('web')) { // web
-        global.asyncRequest = asyncRequest
+    if (version.includes('web')) { // If this is our WEB version with service worker
+
+        // Simple message provider
         global.webBack = MessageHandler
-        await initApp()
+
+        // Service worker start
         serviceWorkerRegistration.register()
 
-    } else { // extension
+        global.asyncRequest = asyncRequest
+        await initApp()
+
+    } else { // Extension version
+
         toBackground = chrome.runtime.connect({name: 'popup'})
         toBackground.onMessage.addListener(mainListener)
         global.Port = toBackground
+
         global.asyncRequest = asyncRequest
         await initApp(toBackground)
     }
 
-    disk.promise.sendPromise({initial: true})
+    disk.promise.sendPromise({initial: true}).then(r => {})
 }
 
 function msgHandler(msg, sender) {
