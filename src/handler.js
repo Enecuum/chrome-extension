@@ -19,6 +19,7 @@ export function MessageHandler(msg, ENQWeb) {
             runLockTimer()
             resolve({response: true})
         }
+
         if (msg.window) {
             if (msg.url != undefined) {
                 createPopupWindow(msg.url);
@@ -27,6 +28,7 @@ export function MessageHandler(msg, ENQWeb) {
             }
             resolve();
         }
+
         if (msg.account && msg.request) {
             if (!disk.lock.checkLock()) {
 
@@ -51,8 +53,8 @@ export function MessageHandler(msg, ENQWeb) {
             } else {
                 resolve({response: false})
             }
-
         }
+
         if (msg.account && msg.unlock && msg.password) {
 
             let account = decryptAccount(msg.password)
@@ -71,6 +73,7 @@ export function MessageHandler(msg, ENQWeb) {
                 resolve({response: false})
             }
         }
+
         if (msg.account && msg.set && msg.data) {
 
             // Edit user
@@ -85,6 +88,7 @@ export function MessageHandler(msg, ENQWeb) {
             encryptAccount()
             resolve({response: account})
         }
+
         if (msg.account && msg.encrypt) {
             if (msg.again) {
                 console.log(msg.data)
@@ -95,10 +99,12 @@ export function MessageHandler(msg, ENQWeb) {
             }
             resolve({response: true})
         }
+
         if (msg.lock) {
             lockAccount()
             resolve({response: true})
         }
+
         if (msg.account && msg.logout) {
             ENQWeb.Enq.User = {}
             sessionStorage.setItem('User', JSON.stringify({}))
@@ -118,6 +124,7 @@ let createWebSession = (account) => {
     sessionStorage.setItem('User', JSON.stringify(webAccount))
 }
 
+//TODO
 function createPopupWindow(url) {
     let mainHeight = 600
     let mainWidth = 350
