@@ -35,6 +35,8 @@ export function globalMessageHandler(msg, ENQWeb) {
         if (msg.account && msg.request) {
             if (!disk.lock.checkLock()) {
 
+                // TODO UNDER CONSTRUCTION
+
                 let userSession
                 if (Object.keys(ENQWeb.Enq.User).length > 0) {
                     console.log('Memory session')
@@ -130,30 +132,6 @@ let createWebSession = (account) => {
     sessionStorage.setItem('User', JSON.stringify(webAccount))
 }
 
-//TODO
-function createPopupWindow(url) {
-    let mainHeight = 600
-    let mainWidth = 350
-    const os_width = {
-        'Win': mainWidth + 20,
-        'Mac': mainWidth,
-        'Linux': mainWidth
-    }
-    const os_height = {
-        'Win': mainHeight + 30,
-        'Mac': mainHeight + 30,
-        'Linux': mainHeight
-    }
-    const WinReg = /Win/
-    const LinuxReg = /Linux/
-    chrome.windows.create({
-        url: url ? url : 'index.html',
-        width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
-        height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
-        type: 'popup'
-    })
-}
-
 let lockTimer
 
 export function Timer(ms) {
@@ -179,7 +157,30 @@ export async function messagePopupHandler(msg) {
     }
 }
 
+//TODO
+function createPopupWindow(url) {
+    let mainHeight = 600
+    let mainWidth = 350
+    const os_width = {
+        'Win': mainWidth + 20,
+        'Mac': mainWidth,
+        'Linux': mainWidth
+    }
+    const os_height = {
+        'Win': mainHeight + 30,
+        'Mac': mainHeight + 30,
+        'Linux': mainHeight
+    }
+    const WinReg = /Win/
+    const LinuxReg = /Linux/
+    chrome.windows.create({
+        url: url ? url : 'index.html',
+        width: WinReg.test(navigator.platform) ? os_width.Win : os_width.Mac,
+        height: LinuxReg.test(navigator.platform) ? os_height.Linux : os_height.Mac,
+        type: 'popup'
+    })
+}
+
 export {
     createPopupWindow
 }
-

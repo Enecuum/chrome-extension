@@ -46,6 +46,7 @@ function injectScript() {
 function eventContent(e) {
     let address = e.detail.cb.taskId
     taskId[address] = requests[e.detail.type]
+
     if (e.detail.type === 'tx')
         toBackground.postMessage({
             type: e.detail.type,
@@ -56,6 +57,7 @@ function eventContent(e) {
         })
     else
         toBackground.postMessage({type: e.detail.type, data: e.detail.data, taskId: address, cb: e.detail.cb})
+
     document.addEventListener('ENQContent', (e) => {
         eventContent(e)
     }, {once: true})
