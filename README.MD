@@ -31,15 +31,25 @@
 - server - simple server for ./dist folder 
 - popup - index.html only one js file
 - background - extension background file
+- background.taskHandler - 
 - handler - message handler for app
 
-Handler launched from popup for web version and from background for extension. 
+#### Handler will be launched from popup for web version and from background for extension. 
 
+- lockAccount - 
+- indexDB - indexed DB key value implementation
 - contentScript - 
--
+- user - default user model
+- 
 - src.ui - react app
+- src.ui.Space - background for web version
 - src.copied - static files
 
+
+### Account options
+- Simple private keys with option to import more old ones
+- Mnemonic fraze
+- Ledger
 
 ### Memory
 - global.disk - storage implementation
