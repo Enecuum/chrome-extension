@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log('lock status: ', disk.lock.checkLock())
     console.log('hash password: ', disk.lock.getHashPassword() ? true : false)
 })
+
+// TODO Hmm
 say()
 
 let Storage = new storage('background')
@@ -68,8 +70,7 @@ async function msgHandler(msg, sender, sendResponse) {
         ports = {}
     }
 
-    MessageHandler(msg, ENQWeb)
-        .then(answer => sendResponse(answer))
+    MessageHandler(msg, ENQWeb).then(answer => sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {
@@ -316,6 +317,7 @@ async function taskHandler(taskId) {
         prvkey: account.privateKey
     }
     switch (task.type) {
+    // TODO Description
     case 'enable':
         data = {
             pubkey: account.publicKey,
@@ -331,6 +333,7 @@ async function taskHandler(taskId) {
         ports[task.cb.url].enabled = true
         Storage.task.removeTask(taskId)
         break
+    // TODO Description
     case 'tx':
         if (ports[task.cb.url].enabled) {
             console.log('tx handler work!')
@@ -378,6 +381,7 @@ async function taskHandler(taskId) {
         }
         Storage.task.removeTask(taskId)
         break
+    // TODO Description
     case 'balanceOf':
         console.log('balanceOf handler work!')
         if (ports[task.cb.url].enabled) {
@@ -409,6 +413,7 @@ async function taskHandler(taskId) {
         }
         Storage.task.removeTask(taskId)
         break
+    // TODO Description
     case 'getProvider':
         if (ports[task.cb.url].enabled) {
             ENQWeb.Net.provider = account.net
@@ -427,6 +432,7 @@ async function taskHandler(taskId) {
         }
         Storage.task.removeTask(taskId)
         break
+    // TODO Description
     case 'getVersion':
         if (ports[task.cb.url].enabled) {
             console.log('version: ', extensionApi.app.getDetails().version)
@@ -439,6 +445,7 @@ async function taskHandler(taskId) {
         }
         Storage.task.removeTask(taskId)
         break
+    // TODO Description
     case 'sign':
         console.log('sign work')
         if (ports[task.cb.url].enabled) {
@@ -451,6 +458,7 @@ async function taskHandler(taskId) {
         }
         Storage.task.removeTask(taskId)
         break
+    // TODO Description
     case 'reconnect':
         console.log('reconnect')
         let connected = ports[task.cb.url].enabled ? true : false
@@ -506,9 +514,11 @@ function broadcast(host, data) {
 async function connectHandler(port) {
     await connectController(port)
     switch (port.name) {
+    // TODO Description
     case 'content':
         port.onMessage.addListener(msgConnectHandler)
         break
+    // TODO Description
     case 'popup':
         port.onMessage.addListener(msgPopupHandler)
         break

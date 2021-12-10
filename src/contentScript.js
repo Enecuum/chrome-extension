@@ -1,7 +1,7 @@
 import {extensionApi} from "./utils/extensionApi";
 
 
-let toBackground = {}
+let backgroundPort = {}
 let pageToBack = {}
 let taskId = []
 let requests = {
@@ -17,8 +17,8 @@ let requests = {
 function setupConnection() {
     console.log('content ready')
     // chrome.runtime.sendMessage({greeting: "Content ready"}, function(response) {});
-    toBackground = extensionApi.runtime.connect({name: window.origin})
-    toBackground.onMessage.addListener((msg, sender, sendResponse) => {
+    backgroundPort = extensionApi.runtime.connect({name: window.origin})
+    backgroundPort.onMessage.addListener((msg, sender, sendResponse) => {
         let cb = taskId[msg.taskId]
         if (cb) {
             cb(msg)
@@ -28,7 +28,7 @@ function setupConnection() {
     })
 }
 
-
+// TODO
 function injectScript() {
     try {
         // inject in-page script
@@ -47,7 +47,7 @@ function eventContent(e) {
     let address = e.detail.cb.taskId
     taskId[address] = requests[e.detail.type]
     if (e.detail.type === 'tx')
-        toBackground.postMessage({
+        backgroundPort.postMessage({
             type: e.detail.type,
             tx: e.detail.tx,
             taskId: address,
@@ -55,7 +55,7 @@ function eventContent(e) {
             data: e.detail.data
         })
     else
-        toBackground.postMessage({type: e.detail.type, data: e.detail.data, taskId: address, cb: e.detail.cb})
+        backgroundPort.postMessage({type: e.detail.type, data: e.detail.data, taskId: address, cb: e.detail.cb})
     document.addEventListener('ENQContent', (e) => {
         eventContent(e)
     }, {once: true})
@@ -63,9 +63,9 @@ function eventContent(e) {
 
 
 function eventConnect() {
-    if (typeof toBackground.disconnect === typeof (Function)) {
-        console.log(toBackground)
-        toBackground.disconnect()
+    if (typeof backgroundPort.disconnect === typeof (Function)) {
+        console.log(backgroundPort)
+        backgroundPort.disconnect()
     }
     setupConnection()
     document.addEventListener('ENQContent', (e) => {
