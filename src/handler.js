@@ -1,7 +1,7 @@
 import {decryptAccount, encryptAccount, lockAccount, lockTime} from "./lockAccount"
 
 // const cacheStore = require('./indexDB') // es6
-import indexDB from './indexDB'
+import indexDB from './utils/indexDB'
 import {account} from "./user"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
