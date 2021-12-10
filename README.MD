@@ -33,7 +33,7 @@
 - background - extension background file
 - handler - message handler for app
 
-Handler launched from popup version for web version and from background for extension 
+Handler launched from popup for web version and from background for extension. 
 
 - contentScript - 
 -
