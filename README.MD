@@ -1,15 +1,13 @@
 ### Versions
 - Chrome extension (default)
 - Browsers extension
-
-
+---
 - Web version for browsers
 - Mobile web version for browsers
 - PWA on desktop (mostly like web version)
 - PWA on Android
 - PWA on iOS
-
-
+---
 - Electron (Win, Mac)
 
 ### NPM Commands
