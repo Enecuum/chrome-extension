@@ -79,6 +79,7 @@ export default function App(props) {
         const version = chrome.runtime.getManifest().version
         console.log('App: ' + version)
         console.log('Lib: ' + ENQWeb.version)
+        console.log('OS: ' + window.navigator.platform)
         getUser().then()
     }, [])
 
