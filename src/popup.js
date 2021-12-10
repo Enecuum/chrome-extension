@@ -11,11 +11,15 @@ global.disk = storage
 // TODO
 global.Buffer = global.Buffer || require('buffer').Buffer
 
-// TODO
-let toBackground = {}
+// TODO Description
+let backgroundPort = {}
+// TODO Description
 let taskId = []
+// TODO Description
 let awaitId = []
+// TODO Description
 let dataId = []
+// TODO Description
 let time = 200
 
 // if (navigator.storage && navigator.storage.estimate) {
@@ -106,7 +110,7 @@ async function setupUI() {
     if (version.includes('web')) { // If this is our WEB version with service worker
 
         // Simple message provider
-        global.webBack = MessageHandler
+        global.webBackgroundPort = MessageHandler
         // Service worker start
         serviceWorkerRegistration.register()
 
@@ -115,12 +119,15 @@ async function setupUI() {
 
     } else { // Extension version
 
-        toBackground = chrome.runtime.connect({name: 'popup'})
-        toBackground.onMessage.addListener(mainListener)
-        // global.Port = toBackground
+        // Connect to background
+        backgroundPort = chrome.runtime.connect({name: 'popup'})
+        backgroundPort.onMessage.addListener(mainListener)
+
+        // TODO
+        // global.Port = backgroundPort
 
         global.asyncRequest = asyncRequest
-        await initApp(toBackground)
+        await initApp(backgroundPort)
     }
 
     disk.promise.sendPromise({initial: true}).then(r => {})
@@ -165,15 +172,15 @@ function asyncRequest(data) {
         return MessagePopupHandler(data)
     } else
         return new Promise(async (resolve, reject) => {
-            toBackground.postMessage(data)
-            toBackground.onMessage.addListener(asyncMessenger)
+            backgroundPort.postMessage(data)
+            backgroundPort.onMessage.addListener(asyncMessenger)
             await awaitAsync(data)
                 .then(() => {
                     // console.log('await work')
                     delete awaitId[data]
                     answer = dataId[data]
                     delete dataId[data]
-                    toBackground.onMessage.removeListener(asyncMessenger)
+                    backgroundPort.onMessage.removeListener(asyncMessenger)
                     resolve(answer)
                 })
         })
