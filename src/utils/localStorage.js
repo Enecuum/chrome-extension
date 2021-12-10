@@ -1,3 +1,5 @@
+// This is storage object,
+
 function loadTask() {
     let task = localStorage.getItem('Task')
     if (!task) {
@@ -230,7 +232,9 @@ function getHashPassword() {
 }
 
 function sendPromise(obj) {
+
     return new Promise((resolve) => {
+
         if (chrome.runtime.getManifest().version.includes('web')) {
             // console.log('web send promise');
             webBack(obj, ENQWeb).then(answer => {
