@@ -4,7 +4,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import {versions} from "./utils/names";
 
 // Init storage
-const Storage = require('./utils/localStorage')
+import Storage from './utils/localStorage'
 global.userStorage = new Storage('popup')
 
 // TODO

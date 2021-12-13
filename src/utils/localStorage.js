@@ -1,7 +1,9 @@
 // This is storage object,
 
 const {LIST, TASK, USER, LOCK, CONFIG, TOKENS} = require("./names");
-import indexDB from './indexDB'
+const indexDB = require('./indexDB')
+// import indexDB from './indexDB'
+// import {LIST, TASK, USER, LOCK, CONFIG, TOKENS} from "./names";
 
 function loadTask() {
     let task = localStorage.getItem(TASK)
@@ -330,7 +332,8 @@ function setTokens(obj) {
     return true
 }
 
-let storage = function Storage(name) {
+// TODO constructor
+function Storage(name) {
 
     // let loadUser = await loadUser
 
@@ -387,4 +390,4 @@ let storage = function Storage(name) {
     }
 }
 
-module.exports = storage
+module.exports = Storage

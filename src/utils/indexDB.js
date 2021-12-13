@@ -95,4 +95,6 @@ const indexedDBStorage = (name) => {
     }
 }
 
-export default indexedDBStorage(CACHE_STORE)
+// export default indexedDBStorage(CACHE_STORE)
+
+module.exports = indexedDBStorage(CACHE_STORE)
