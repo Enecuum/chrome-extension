@@ -5,8 +5,7 @@ import {versions} from "./utils/names";
 
 // Init storage
 const Storage = require('./utils/localStorage')
-let storage = new Storage('popup')
-global.disk = storage
+global.disk = new Storage('popup')
 
 // TODO
 global.Buffer = global.Buffer || require('buffer').Buffer
