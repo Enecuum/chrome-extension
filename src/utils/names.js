@@ -1,25 +1,25 @@
 // TODO Description
-let TASK = 'task'
+const TASK = 'task'
 // TODO Description
-let LIST = 'list'
+const LIST = 'list'
 // TODO Description
-let TOKENS = 'tokens'
+const TOKENS = 'tokens'
 // TODO Description
-let LOCK = 'lock'
-// TODO >:(
-let USER = 'User'
+const LOCK = 'lock'
+// TODO User model (account only) object
+const USER = 'user'
 // TODO Description
-let CONFIG = 'config'
+const CONFIG = 'config'
 // TODO Description
-let NETWORKS = 'networks'
-// TODO Description
-let NET = 'net'
+const NETWORKS = 'networks'
+// TODO Current network string
+const NET = 'net'
 
-let STORAGE_NAME_POPUP = ''
-let STORAGE_NAME_BACKGROUND = ''
-let STORAGE_NAME_WORKER = ''
+const STORAGE_NAME_POPUP = 'popup'
+const STORAGE_NAME_BACKGROUND = 'background'
+const STORAGE_NAME_WORKER = 'worker'
 
-let versions = {
+const versions = {
     EXTENSION: '', // Default, not used
     ELECTRON: ' web electron',
     // TODO We have to separate (mobile / PWA), (iOS / Android)
@@ -28,12 +28,15 @@ let versions = {
     WEB: ' web ',
 }
 
-let ENQ_CONTENT = 'ENQContent'
+const ENQ_CONTENT = 'ENQContent'
 
 
-let lockString = 'Lock account loaded. Background started'
-let configErrorString = 'Error in setting config'
-let strings = {}
+const lockString = 'Lock account loaded. Background started'
+const configErrorString = 'Error in setting config'
+const accountLockedString = 'Account locked'
+const accountEncryptedString = 'Account encrypted'
+const passwordString = 'Password not set'
+const strings = {}
 
 module.exports = {
     TASK,

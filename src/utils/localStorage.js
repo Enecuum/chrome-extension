@@ -1,6 +1,7 @@
 // This is storage object,
 
 const {LIST, TASK, USER, LOCK, CONFIG, TOKENS} = require("./names");
+import indexDB from './indexDB'
 
 function loadTask() {
     let task = localStorage.getItem(TASK)
@@ -99,6 +100,12 @@ function setTask(key, value) {
 //
 function loadUser() {
     let user = localStorage.getItem(USER)
+
+    indexDB.get(USER).then(user => {
+
+        console.log('USER')
+        console.log(user)
+    })
 
     if (!user) {
         return {}
@@ -324,6 +331,9 @@ function setTokens(obj) {
 }
 
 let storage = function Storage(name) {
+
+    // let loadUser = await loadUser
+
     this.name = name
     this.task = {
         name,

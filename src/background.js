@@ -1,6 +1,5 @@
 import { signHash } from './utils/ledgerShell'
 
-const Storage = require('./utils/localstorage')
 import { extensionApi } from './utils/extensionApi'
 import { lockAccount, say } from './lockAccount'
 import {createPopupWindow, globalMessageHandler} from './handler'
@@ -16,7 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
 // TODO Hmm
 say()
 
-global.userStorage = new Storage('popup')
+const Storage = require('./utils/localstorage')
+global.userStorage = new Storage('background')
 
 let ports = {}
 let requestsMethods = {

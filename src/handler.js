@@ -10,10 +10,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
     return new Promise((resolve, reject) => {
 
-        indexDB.set(USER, account)
-            .then(function () {
-                return indexDB.get(USER)
-            }).then(function (user) {
+        indexDB.get(USER).then(function (user) {
             console.log(user)
         })
 
