@@ -8,6 +8,8 @@ let TOKENS = 'tokens'
 let LOCK = 'lock'
 // TODO Description
 let USER = 'user'
+// TODO Description
+let CONFIG = 'config'
 
 let STORAGE_NAME_POPUP = ''
 let STORAGE_NAME_BACKGROUND = ''
@@ -30,6 +32,7 @@ module.exports = {
     TOKENS,
     LOCK,
     USER,
+    CONFIG,
     versions,
     ENQ_CONTENT
 }
