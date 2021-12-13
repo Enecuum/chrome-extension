@@ -2,18 +2,19 @@ import {decryptAccount, encryptAccount, lockAccount, lockTime} from "./lockAccou
 
 // const cacheStore = require('./indexDB') // es6
 import indexDB from './utils/indexDB'
-import {account} from "./user"; // commonjs
+import {account} from "./user";
+import {USER} from "./utils/names"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
 export function globalMessageHandler(msg, ENQWeb) {
 
     return new Promise((resolve, reject) => {
 
-        indexDB.set('user', account)
+        indexDB.set(USER, account)
             .then(function () {
-                return indexDB.get('user')
+                return indexDB.get(USER)
             }).then(function (user) {
-            console.log('user', user)
+            console.log(user)
         })
 
         // TODO Description

@@ -3,6 +3,7 @@ import styles from "../css/index.module.css";
 import Separator from "../elements/Separator";
 import {regexToken, shortHash} from "../Utils";
 import Input from "../elements/Input";
+import {NET, NETWORKS} from "../../utils/names";
 
 export default function Network(props) {
 
@@ -112,7 +113,7 @@ export default function Network(props) {
         setShowAdd(false)
 
         localNetworks.push({name, host, token})
-        localStorage.setItem('networks', JSON.stringify(localNetworks))
+        localStorage.setItem(NETWORKS, JSON.stringify(localNetworks))
         setLocalNetworks(localNetworks)
         renderCards()
 
@@ -132,7 +133,7 @@ export default function Network(props) {
         let index = localNetworks.findIndex(element => element.name === name)
         localNetworks.splice(index, 1)
         setLocalNetworks(localNetworks)
-        localStorage.setItem('networks', JSON.stringify(localNetworks))
+        localStorage.setItem(NETWORKS, JSON.stringify(localNetworks))
         renderCards()
     }
 
@@ -140,7 +141,7 @@ export default function Network(props) {
 
         // console.log(value)
 
-        localStorage.setItem('net', value)
+        localStorage.setItem(NET, value)
         ENQWeb.Net.provider = value
 
         await userStorage.user.loadUser()

@@ -10,6 +10,10 @@ let LOCK = 'lock'
 let USER = 'User'
 // TODO Description
 let CONFIG = 'config'
+// TODO Description
+let NETWORKS = 'networks'
+// TODO Description
+let NET = 'net'
 
 let STORAGE_NAME_POPUP = ''
 let STORAGE_NAME_BACKGROUND = ''
@@ -26,6 +30,11 @@ let versions = {
 
 let ENQ_CONTENT = 'ENQContent'
 
+
+let lockString = 'Lock account loaded. Background started'
+let configErrorString = 'Error in setting config'
+let strings = {}
+
 module.exports = {
     TASK,
     LIST,
@@ -33,6 +42,9 @@ module.exports = {
     LOCK,
     USER,
     CONFIG,
+    NETWORKS,
+    NET,
     versions,
-    ENQ_CONTENT
+    ENQ_CONTENT,
+    strings
 }
