@@ -8,28 +8,41 @@ function lockAccount(timer = false) {
     disk.lock.setLock(true)
     if (disk.name === 'background') {
 
-        ENQWeb.Enq.User = {publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net}
+        // Only publicKey and net left
+        ENQWeb.Enq.User = { publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net }
     }
 
     if (timer)
         location.reload()
 
-    console.log('account locked')
+    const accountLockedString = 'Account locked'
+    console.log(accountLockedString)
 }
 
 function encryptAccount() {
+
     let account = disk.user.loadUserNotJson()
-    //TODO HERE {}
+
+    // TODO HERE {}
     // console.log(account)
+
     let password = disk.lock.getHashPassword()
     if (password && !disk.lock.checkLock()) {
+
         password = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
         account = ENQWeb.Utils.crypto.encrypt(account, password)
         disk.user.changeUser(account)
-        // console.log('account encrypted')
+
+        const encryptedString = 'Account encrypted'
+        console.log(encryptedString)
+
     } else {
-        if (!disk.lock.getHashPassword())
-            console.log('password not set')
+
+        if (!disk.lock.getHashPassword()) {
+
+            const passwordString = 'Password not set'
+            console.log(passwordString)
+        }
     }
 }
 
@@ -43,9 +56,9 @@ function encryptAccountWithPass(account, password) {
 }
 
 function decryptAccount(password) {
-    let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + password)
+    let hash = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
     if (disk.lock.unlock(hash)) {
-        hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
+        hash = ENQWeb.Utils.crypto.strengthenPassword(SALT + hash)
         // console.log(hash)
         // console.log(disk.user.loadUserNotJson())
         let accountString = ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash)
@@ -61,7 +74,8 @@ function decryptAccount(password) {
 export {lockAccount, encryptAccount, decryptAccount, encryptAccountWithPass, lockTime}
 
 function say() {
-    console.log("lock account loaded! background started")
+    let lockString = 'Lock account loaded! background started'
+    console.log(lockString)
 }
 
 export {say}
