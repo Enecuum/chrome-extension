@@ -133,16 +133,12 @@ async function setupUI() {
     disk.promise.sendPromise({initial: true}).then(r => {})
 }
 
-function msgHandler(msg, sender) {
-    // console.log(msg)
-    // console.log(sender)
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     setupUI().then()
 })
 
 
+// TODO Rename CB
 function mainListener(msg, sender, sendResponse) {
     let cb = taskId[msg.taskId]
     if (cb) {
@@ -150,8 +146,14 @@ function mainListener(msg, sender, sendResponse) {
         delete taskId[msg.taskId]
         return
     }
-    msgHandler(msg, sender)
+    // msgHandler(msg, sender)
 }
+
+function msgHandler(msg, sender) {
+    // console.log(msg)
+    // console.log(sender)
+}
+
 
 function awaitAsync(data) {
     return new Promise((resolve, reject) => {
@@ -186,12 +188,6 @@ function asyncRequest(data) {
         })
 }
 
-async function cacheTokenInfo(tokens) {
-    // let tokens = await  ENQWeb.Enq.sendAPI('get_tickers_all')
-    disk.tokens.setTokens({net: ENQWeb.Enq.provider, tokens: tokens})
-    return true
-}
-
 async function asyncMessenger(msg, sender, sendResponse) {
     if (msg.asyncAnswer && msg.data) {
         // console.log('await Messanger worked')
@@ -200,6 +196,14 @@ async function asyncMessenger(msg, sender, sendResponse) {
     }
 }
 
+// TODO Description
+async function cacheTokenInfo(tokens) {
+    // let tokens = await  ENQWeb.Enq.sendAPI('get_tickers_all')
+    disk.tokens.setTokens({net: ENQWeb.Enq.provider, tokens: tokens})
+    return true
+}
+
+// TODO Description
 function getUrlVars() {
     let params = []
     let str

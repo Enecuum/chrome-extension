@@ -60,7 +60,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             }
         }
 
-        // TODO Description
+        // TODO Unlock user object to memory
         if (msg.account && msg.unlock && msg.password) {
 
             let account = decryptAccount(msg.password)
