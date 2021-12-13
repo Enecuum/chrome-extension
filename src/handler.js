@@ -33,7 +33,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         // TODO Description
         if (msg.account && msg.request) {
-            if (!disk.lock.checkLock()) {
+            if (!userStorage.lock.checkLock()) {
 
                 // TODO UNDER CONSTRUCTION
 
@@ -68,7 +68,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
                 // Unlock user to memory user
                 ENQWeb.Enq.User = account
-                disk.user.addUser(account)
+                userStorage.user.addUser(account)
 
                 // TODO
                 createWebSession(account)
@@ -87,7 +87,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             // console.log(msg.data)
             let account = msg.data
             ENQWeb.Enq.User = account
-            disk.user.addUser(account)
+            userStorage.user.addUser(account)
 
             // TODO
             createWebSession(account)
@@ -99,7 +99,7 @@ export function globalMessageHandler(msg, ENQWeb) {
         if (msg.account && msg.encrypt) {
             if (msg.again) {
                 console.log(msg.data)
-                disk.user.addUser(msg.data)
+                userStorage.user.addUser(msg.data)
                 encryptAccount()
             } else {
                 encryptAccount()
@@ -143,10 +143,10 @@ export function runLockTimer() {
     if (lockTimer !== undefined) {
         clearTimeout(lockTimer)
     }
-    if (disk.name === "background") {
+    if (userStorage.name === "background") {
         lockTimer = setTimeout(() => lockAccount(true), lockTime)
     } else {
-        lockTimer = setTimeout(() => disk.promise.sendPromise({lock: true}), lockTime)
+        lockTimer = setTimeout(() => userStorage.promise.sendPromise({lock: true}), lockTime)
     }
 }
 

@@ -25,10 +25,10 @@ export default function Mnemonic(props) {
     //
     //     // console.log(child.derive(0).privateKey.toString('hex'))
     //
-    //     disk.user.loadUser().then(async account => {
+    //     userStorage.user.loadUser().then(async account => {
     //         account.seed = hex
     //         console.log(account)
-    //         await disk.promise.sendPromise({
+    //         await userStorage.promise.sendPromise({
     //             account: true,
     //             set: true,
     //             data: account
@@ -48,7 +48,7 @@ export default function Mnemonic(props) {
                 token: ENQWeb.Enq.ticker,
                 seed: getMnemonicHex(mnemonicString),
             }
-            disk.promise.sendPromise({
+            userStorage.promise.sendPromise({
                 account: true,
                 set: true,
                 data: data

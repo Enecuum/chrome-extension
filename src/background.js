@@ -6,17 +6,17 @@ import { lockAccount, say } from './lockAccount'
 import {createPopupWindow, globalMessageHandler} from './handler'
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (!disk.lock.checkLock() && disk.lock.getHashPassword()) {
+    if (!userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {
         lockAccount()
     }
-    console.log('lock status: ', disk.lock.checkLock())
-    console.log('hash password: ', disk.lock.getHashPassword() ? true : false)
+    console.log('lock status: ', userStorage.lock.checkLock())
+    console.log('hash password: ', userStorage.lock.getHashPassword() ? true : false)
 })
 
 // TODO Hmm
 say()
 
-global.disk = new Storage('popup')
+global.userStorage = new Storage('popup')
 
 let ports = {}
 let requestsMethods = {
@@ -49,8 +49,8 @@ function setupApp() {
     extensionApi.runtime.onMessage.addListener(messageHandler)
     extensionApi.runtime.onConnect.addListener(connectHandler)
     taskCounter()
-    if (!disk.config.getConfig()) {
-        disk.config.initConfig()
+    if (!userStorage.config.getConfig()) {
+        userStorage.config.initConfig()
     }
 }
 
@@ -76,13 +76,13 @@ async function msgConnectHandler(msg, sender) {
     // console.log(msg)
     let answer = ''
     if (msg.taskId) {
-        popupOpenMethods.enable = disk.config.getConfig().openEnablePopup
-        popupOpenMethods.tx = disk.config.getConfig().openTxPopup
-        popupOpenMethods.sign = disk.config.getConfig().openSignPopup
-        let lock = disk.lock.checkLock()
+        popupOpenMethods.enable = userStorage.config.getConfig().openEnablePopup
+        popupOpenMethods.tx = userStorage.config.getConfig().openTxPopup
+        popupOpenMethods.sign = userStorage.config.getConfig().openSignPopup
+        let lock = userStorage.lock.checkLock()
         // if (lock) {
         //     if (!lockedMethods[msg.type]) {
-        //         await disk.task.setTask(msg.taskId, {
+        //         await userStorage.task.setTask(msg.taskId, {
         //             data: msg.data,
         //             type: msg.type,
         //             cb: msg.cb
@@ -93,7 +93,7 @@ async function msgConnectHandler(msg, sender) {
         // }
         if (!ports[msg.cb.url].enabled) {
             if (msg.type === 'enable') {
-                await disk.task.setTask(msg.taskId, {
+                await userStorage.task.setTask(msg.taskId, {
                     data: msg.data,
                     type: msg.type,
                     cb: msg.cb
@@ -110,7 +110,7 @@ async function msgConnectHandler(msg, sender) {
                 }
             }
             if (msg.type === 'reconnect') {
-                await disk.task.setTask(msg.taskId, {
+                await userStorage.task.setTask(msg.taskId, {
                     data: msg.data,
                     type: msg.type,
                     cb: msg.cb
@@ -119,21 +119,21 @@ async function msgConnectHandler(msg, sender) {
             }
         } else {
             if (msg.type === 'tx') {
-                disk.task.setTask(msg.taskId, {
+                userStorage.task.setTask(msg.taskId, {
                     tx: msg.tx,
                     type: msg.type,
                     cb: msg.cb,
                     data: msg.data,
                 })
                 if (msg.data.net.length > 0) {
-                    if (msg.data.net !== JSON.parse(localdisk.tokens).net) {
+                    if (msg.data.net !== JSON.parse(localuserStorage.tokens).net) {
                         console.log('bad net work')
                         rejectTaskHandler(msg.taskId, `Network mismatch. Set ${msg.data.net}`)
                         return false
                     }
                 }
             } else {
-                disk.task.setTask(msg.taskId, {
+                userStorage.task.setTask(msg.taskId, {
                     data: msg.data,
                     type: msg.type,
                     cb: msg.cb
@@ -206,7 +206,7 @@ async function msgPopupHandler(msg, sender) {
                 })
             }
         } else if (msg.reject_all) {
-            let list = disk.list.loadList()
+            let list = userStorage.list.loadList()
             for (let i in list) {
                 await rejectTaskHandler(list[i])
             }
@@ -298,7 +298,7 @@ function disconnectPorts(name) {
 global.disconnectPorts = disconnectPorts
 
 function taskCounter() {
-    let tasks = disk.task.loadTask()
+    let tasks = userStorage.task.loadTask()
     let ids = Object.keys(tasks)
     extensionApi.browserAction.setBadgeText({ text: `${ids.length === 0 ? '' : ids.length}` })
 }
@@ -307,7 +307,7 @@ global.counterTask = taskCounter
 
 async function taskHandler(taskId) {
 
-    let task = disk.task.getTask(taskId)
+    let task = userStorage.task.getTask(taskId)
     console.log(task)
 
     let account = ENQWeb.Enq.User
@@ -332,7 +332,7 @@ async function taskHandler(taskId) {
         })
             .then()
         ports[task.cb.url].enabled = true
-        disk.task.removeTask(taskId)
+        userStorage.task.removeTask(taskId)
         break
     // TODO Description
     case 'tx':
@@ -380,7 +380,7 @@ async function taskHandler(taskId) {
                 .then()
             ENQWeb.Net.provider = buf
         }
-        disk.task.removeTask(taskId)
+        userStorage.task.removeTask(taskId)
         break
     // TODO Description
     case 'balanceOf':
@@ -412,7 +412,7 @@ async function taskHandler(taskId) {
             })
             ENQWeb.Net.provider = buf
         }
-        disk.task.removeTask(taskId)
+        userStorage.task.removeTask(taskId)
         break
     // TODO Description
     case 'getProvider':
@@ -431,7 +431,7 @@ async function taskHandler(taskId) {
             })
                 .then()
         }
-        disk.task.removeTask(taskId)
+        userStorage.task.removeTask(taskId)
         break
     // TODO Description
     case 'getVersion':
@@ -444,7 +444,7 @@ async function taskHandler(taskId) {
             })
                 .then()
         }
-        disk.task.removeTask(taskId)
+        userStorage.task.removeTask(taskId)
         break
     // TODO Description
     case 'sign':
@@ -457,7 +457,7 @@ async function taskHandler(taskId) {
             })
                 .then()
         }
-        disk.task.removeTask(taskId)
+        userStorage.task.removeTask(taskId)
         break
     // TODO Description
     case 'reconnect':
@@ -469,7 +469,7 @@ async function taskHandler(taskId) {
             cb: task.cb
         })
             .then()
-        disk.task.removeTask(taskId)
+        userStorage.task.removeTask(taskId)
     default:
         break
     }
@@ -477,8 +477,8 @@ async function taskHandler(taskId) {
 }
 
 function rejectTaskHandler(taskId, reason = 'rejected') {
-    let task = disk.task.getTask(taskId)
-    disk.task.removeTask(taskId)
+    let task = userStorage.task.getTask(taskId)
+    userStorage.task.removeTask(taskId)
     let data = {
         reject: true,
         data: reason

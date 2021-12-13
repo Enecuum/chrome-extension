@@ -5,7 +5,7 @@ import {versions} from "./utils/names";
 
 // Init storage
 const Storage = require('./utils/localStorage')
-global.disk = new Storage('popup')
+global.userStorage = new Storage('popup')
 
 // TODO
 global.Buffer = global.Buffer || require('buffer').Buffer
@@ -129,7 +129,7 @@ async function setupUI() {
         await initApp(backgroundPort)
     }
 
-    disk.promise.sendPromise({initial: true}).then(r => {})
+    userStorage.promise.sendPromise({initial: true}).then(r => {})
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -198,7 +198,7 @@ async function asyncMessenger(msg, sender, sendResponse) {
 // TODO Description
 async function cacheTokenInfo(tokens) {
     // let tokens = await  ENQWeb.Enq.sendAPI('get_tickers_all')
-    disk.tokens.setTokens({net: ENQWeb.Enq.provider, tokens: tokens})
+    userStorage.tokens.setTokens({net: ENQWeb.Enq.provider, tokens: tokens})
     return true
 }
 

@@ -143,11 +143,11 @@ export default function Network(props) {
         localStorage.setItem('net', value)
         ENQWeb.Net.provider = value
 
-        await disk.user.loadUser()
+        await userStorage.user.loadUser()
             .then(async account => {
                 account.net = value
                 account.token = token
-                await disk.promise.sendPromise({
+                await userStorage.promise.sendPromise({
                     account: true,
                     set: true,
                     data: account

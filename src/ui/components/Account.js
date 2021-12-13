@@ -26,7 +26,7 @@ export default function Account(props) {
     const [logo, setLogo] = useState('./images/enq.png')
     const [connectionsCounter, setConnectionsCounter] = useState(0)
 
-    const [isLocked, setLocked] = useState(disk.lock.checkLock())
+    const [isLocked, setLocked] = useState(userStorage.lock.checkLock())
 
     const [net, setNet] = useState(String(ENQWeb.Net.currentProvider))
 
@@ -34,12 +34,12 @@ export default function Account(props) {
     const [connectsElements, setConnectsElements] = useState([])
 
     const [assets, setAssets] = useState([])
-    const [activity, setActivity] = useState(disk.list.listOfTask())
+    const [activity, setActivity] = useState(userStorage.list.listOfTask())
     const [history, setHistory] = useState([])
 
     const [menu, setMenu] = useState(false)
 
-    const [allTokens, setAllTokens] = useState((disk.tokens.getTokens()).tokens ? (disk.tokens.getTokens()).tokens : {})
+    const [allTokens, setAllTokens] = useState((userStorage.tokens.getTokens()).tokens ? (userStorage.tokens.getTokens()).tokens : {})
 
     const [isCopied, setCopied] = useState(false)
 
@@ -162,7 +162,7 @@ export default function Account(props) {
 
     const openPopup = async () => {
         let params = getUrlVars()
-        let task = disk.task.loadTask()
+        let task = userStorage.task.loadTask()
         if (params.type === 'enable') {
             if (task[params.id] && !isLocked) {
                 props.setPublicKeyRequest(task[params.id])
@@ -344,7 +344,7 @@ export default function Account(props) {
         // console.log(hash);
         let user = props.user
         user.token = hash
-        await disk.promise.sendPromise({
+        await userStorage.promise.sendPromise({
             account: true,
             set: true,
             data: user
@@ -471,7 +471,7 @@ export default function Account(props) {
                                  <div key={key} onClick={() => {}} className={`${styles.connect}`}>
                                      <div>{key.replaceAll('https://', '')}</div>
                                      <div onClick={() => {
-                                         disk.promise.sendPromise({
+                                         userStorage.promise.sendPromise({
                                              ports: true,
                                              disconnect: true,
                                              name: key

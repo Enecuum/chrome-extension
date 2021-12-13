@@ -13,8 +13,8 @@ export default class Requests extends React.Component {
         super(props)
 
         this.state = {
-            requests: disk.list.listOfTask(), // массив самих объектов
-            ids: disk.list.loadList(), // массив очереди идентификаторов
+            requests: userStorage.list.listOfTask(), // массив самих объектов
+            ids: userStorage.list.loadList(), // массив очереди идентификаторов
             publicKeyRequest: null,
             transactionRequest: null,
             taskId: null,
@@ -69,8 +69,8 @@ export default class Requests extends React.Component {
 
     back() {
         this.setState({
-            requests: disk.list.listOfTask(),
-            ids: disk.list.loadList(),
+            requests: userStorage.list.listOfTask(),
+            ids: userStorage.list.loadList(),
             publicKeyRequest: null,
             transactionRequest: null,
             taskId: null,

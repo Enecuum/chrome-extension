@@ -19,7 +19,7 @@ export default class PublicKeyRequest extends React.Component {
     }
 
     syncRequest() {
-        let task = disk.task.loadTask()
+        let task = userStorage.task.loadTask()
         let ids = Object.keys(task)
         if (ids.length > 0) {
             this.state.url = this.props.request.cb.url

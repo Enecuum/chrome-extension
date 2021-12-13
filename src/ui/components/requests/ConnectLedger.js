@@ -76,7 +76,7 @@ export default function ConnectLedger(props) {
         // You want to write some code?
         // Will i be at better spot
 
-        disk.promise.sendPromise({
+        userStorage.promise.sendPromise({
             account: true,
             set: true,
             data: data

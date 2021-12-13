@@ -31,7 +31,7 @@ if (!net) {
 ENQWeb.Net.provider = net
 
 export default function App(props) {
-    const [isPassword, setPassword] = useState(!disk.lock.getHashPassword())
+    const [isPassword, setPassword] = useState(!userStorage.lock.getHashPassword())
     const [isLogin, setLogin] = useState(true)
 
     const [isConfirm, setConfirm] = useState(false)
@@ -59,7 +59,7 @@ export default function App(props) {
     const [isKeys, setKeys] = useState(false)
 
     const checkLock = () => {
-        if (disk.lock.checkLock() && disk.lock.getHashPassword()) {
+        if (userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {
             return true
         } else {
             return false
@@ -69,7 +69,7 @@ export default function App(props) {
     const [isLock, setLock] = useState(checkLock)
 
     const getUser = async () => {
-        let account = await disk.user.loadUser()
+        let account = await userStorage.user.loadUser()
         setUser(account)
         // console.log(account)
         setLogin(account.publicKey ? false : true)
@@ -97,8 +97,8 @@ export default function App(props) {
 
     const logout = () => {
         isk.user.removeUser()
-        disk.lock.removeLock()
-        disk.promise.sendPromise({
+        userStorage.lock.removeLock()
+        userStorage.promise.sendPromise({
             account: true,
             logout: true
         })
@@ -225,7 +225,7 @@ export default function App(props) {
         return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
     }
 
-    if (isPassword || (!user.publicKey && !disk.lock.getHashPassword())) {
+    if (isPassword || (!user.publicKey && !userStorage.lock.getHashPassword())) {
         return <Password user={user} setPassword={setPassword} login={login} publicKey={user.publicKey}/>
     }
 
