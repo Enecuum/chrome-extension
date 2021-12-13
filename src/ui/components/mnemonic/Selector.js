@@ -110,7 +110,7 @@ export default function userSelector(props) {
     //             token: ENQWeb.Enq.ticker,
     //             seed: hex,
     //         }
-    //         global.disk.promise.sendPromise({
+    //         disk.promise.sendPromise({
     //             account: true,
     //             set: true,
     //             data: data
@@ -151,7 +151,7 @@ export default function userSelector(props) {
                                  seed: hex,
                                  ledger: accounts[i].type === 2
                              }
-                             global.disk.promise.sendPromise({
+                             disk.promise.sendPromise({
                                  account: true,
                                  set: true,
                                  data: data
@@ -211,7 +211,7 @@ export default function userSelector(props) {
 
                                                  account.ledgerAccountsArray = [data.substr(0, 66)]
 
-                                                 global.disk.promise.sendPromise({
+                                                 disk.promise.sendPromise({
                                                      account: true,
                                                      set: true,
                                                      data: account

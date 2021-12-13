@@ -80,7 +80,7 @@ export default function Menu(props) {
     //             seed: seed,
     //             account1: mainAccount.privateKey
     //         }
-    //         global.disk.promise.sendPromise({
+    //         disk.promise.sendPromise({
     //             account: true,
     //             set: true,
     //             data: data
