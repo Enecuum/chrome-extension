@@ -215,10 +215,10 @@ export default function userSelector(props) {
                                                      account: true,
                                                      set: true,
                                                      data: account
-                                                 })
-                                                     .then(r => {
-                                                     })
+                                                 }).then(r => {})
+
                                                  console.log('ledger worked')
+
                                              })
                                              .catch(msg => {
                                                  console.error('ledger error!\n' + msg)

@@ -6,8 +6,8 @@ let LIST = 'list'
 let TOKENS = 'tokens'
 // TODO Description
 let LOCK = 'lock'
-// TODO Description
-let USER = 'user'
+// TODO >:(
+let USER = 'User'
 // TODO Description
 let CONFIG = 'config'
 

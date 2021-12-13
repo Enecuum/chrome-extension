@@ -167,9 +167,9 @@ export default function App(props) {
                          setImportMnemonic={setImportMnemonic}/>
     }
 
-    if (isKeys) {
-        return <Keys setKeys={setKeys}/>
-    }
+    // if (isKeys) {
+    //     return <Keys setKeys={setKeys}/>
+    // }
 
     if (isConfirm) {
         return <Confirm setConfirm={setConfirm} logout={logout}/>
