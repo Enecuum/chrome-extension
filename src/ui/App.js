@@ -69,7 +69,7 @@ export default function App(props) {
     const [isLock, setLock] = useState(checkLock)
 
     const getUser = async () => {
-        let account = await global.disk.user.loadUser()
+        let account = await disk.user.loadUser()
         setUser(account)
         // console.log(account)
         setLogin(account.publicKey ? false : true)
@@ -96,7 +96,7 @@ export default function App(props) {
     }
 
     const logout = () => {
-        global.disk.user.removeUser()
+        isk.user.removeUser()
         disk.lock.removeLock()
         disk.promise.sendPromise({
             account: true,
