@@ -5,7 +5,9 @@ let lockTime = 10 * 60 * 1000
 let SALT = 'salt*/-+^'
 
 function lockAccount(timer = false) {
+
     userStorage.lock.setLock(true)
+
     if (userStorage.name === 'background') {
 
         // Only publicKey and net left
@@ -19,6 +21,7 @@ function lockAccount(timer = false) {
     console.log(accountLockedString)
 }
 
+//
 function encryptAccount() {
 
     let account = userStorage.user.loadUserNotJson()
@@ -74,7 +77,7 @@ function decryptAccount(password) {
 export {lockAccount, encryptAccount, decryptAccount, encryptAccountWithPass, lockTime}
 
 function say() {
-    let lockString = 'Lock account loaded! background started'
+    let lockString = 'Lock account loaded. Background started'
     console.log(lockString)
 }
 

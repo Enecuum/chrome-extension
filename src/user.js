@@ -1,5 +1,9 @@
 import indexDB from "./utils/indexDB";
 
+// let user = {
+//     accounts: []
+// }
+
 let account = {
 
     net: '',
@@ -7,7 +11,7 @@ let account = {
 
     // Imported private keys
     publicKeys: [], // In case we have to show them on the list
-    // Always encrypted
+    // TODO Always encrypted
     privateKeys: [],
 
     // This key is selected now
@@ -17,7 +21,7 @@ let account = {
     type: 0, // 0 - private, 1 - seed, 2 - ledger
     accountIndex: 0, //
 
-    // Always encrypted
+    // TODO Always encrypted
     seed: '',
     seedAccountsArray: [0],
 

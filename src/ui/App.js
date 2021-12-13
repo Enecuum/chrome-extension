@@ -21,11 +21,12 @@ import Keys from "./components/Keys";
 import Mnemonic from "./components/mnemonic/Mnemonic";
 import Import from "./components/mnemonic/Imoprt";
 import Selector from "./components/mnemonic/Selector";
+import {NET} from "../utils/names";
 
-let net = localStorage.getItem('net')
+let net = localStorage.getItem(NET)
 if (!net) {
     net = 'bit'
-    localStorage.setItem('net', net)
+    localStorage.setItem(NET, net)
 }
 
 ENQWeb.Net.provider = net

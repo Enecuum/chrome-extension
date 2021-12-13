@@ -96,8 +96,10 @@ function setTask(key, value) {
     return tasks
 }
 
+//
 function loadUser() {
     let user = localStorage.getItem(USER)
+
     if (!user) {
         return {}
     }
@@ -282,7 +284,8 @@ function getConfig() {
 
 function setConfig(config) {
     if (!config) {
-        console.log('error in setting config')
+        let configErrorString = 'Error in setting config'
+        console.log(configErrorString)
         return false
     } else {
         if (config.openTxPopup === undefined || config.openEnablePopup === undefined) {

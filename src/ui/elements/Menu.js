@@ -92,7 +92,7 @@ export default function Menu(props) {
 
     // const setNet = async (value) => {
     //
-    //     localStorage.setItem('net', value)
+    //     localStorage.setItem(NET', value)
     //     ENQWeb.Net.provider = value
     //     await userStorage.user.loadUser()
     //         .then(async account => {
