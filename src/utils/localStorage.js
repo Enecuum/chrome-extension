@@ -1,7 +1,9 @@
 // This is storage object,
 
+const {LIST, TASK, USER, LOCK, CONFIG, TOKENS} = require("./names");
+
 function loadTask() {
-    let task = localStorage.getItem('Task')
+    let task = localStorage.getItem(TASK)
     if (!task) {
         return {}
     }
@@ -10,13 +12,13 @@ function loadTask() {
 }
 
 function clearTasks() {
-    localStorage.removeItem('Task')
-    localStorage.removeItem('list')
+    localStorage.removeItem(TASK)
+    localStorage.removeItem(LIST)
     return true
 }
 
 function listOfTask() {
-    let tasks = JSON.parse(localStorage.getItem('list'))
+    let tasks = JSON.parse(localStorage.getItem(LIST))
     let list = []
     if (tasks && tasks.length > 0) {
         for (let id in tasks) {
@@ -27,7 +29,7 @@ function listOfTask() {
 }
 
 function loadList() {
-    let list = JSON.parse(localStorage.getItem('list'))
+    let list = JSON.parse(localStorage.getItem(LIST))
     if (list) {
         return list
     } else {
@@ -41,7 +43,7 @@ function addToList(taskId) {
         list = []
     }
     list.push(taskId)
-    localStorage.setItem('list', JSON.stringify(list))
+    localStorage.setItem(LIST, JSON.stringify(list))
     return true
 }
 
@@ -59,9 +61,9 @@ function updateList() {
                 }
             }
         }
-        localStorage.setItem('list', JSON.stringify(ptr))
+        localStorage.setItem(LIST, JSON.stringify(ptr))
     } else {
-        localStorage.setItem('list', '[]')
+        localStorage.setItem(LIST, '[]')
     }
 }
 
@@ -74,7 +76,7 @@ function removeTask(key) {
     let task = loadTask()
     delete task[key]
     task = JSON.stringify(task)
-    localStorage.setItem('Task', task)
+    localStorage.setItem(TASK, task)
     updateList()
     return task
 }
@@ -84,18 +86,18 @@ function setTask(key, value) {
     if (tasks[key]) {
         tasks[key] = value
         tasks = JSON.stringify(tasks)
-        localStorage.setItem('Task', tasks)
+        localStorage.setItem(TASK, tasks)
     } else {
         tasks[key] = value
         tasks = JSON.stringify(tasks)
-        localStorage.setItem('Task', tasks)
+        localStorage.setItem(TASK, tasks)
         addToList(key)
     }
     return tasks
 }
 
 function loadUser() {
-    let user = localStorage.getItem('User')
+    let user = localStorage.getItem(USER)
     if (!user) {
         return {}
     }
@@ -114,7 +116,7 @@ function loadUser() {
 }
 
 function loadUserNotJson() {
-    let user = localStorage.getItem('User')
+    let user = localStorage.getItem(USER)
     if (!user) {
         return {}
     } else {
@@ -125,12 +127,12 @@ function loadUserNotJson() {
 function addUser(obj) {
     // obj: {publicKey, privateKey, net, token}
     // console.log(obj)
-    localStorage.setItem('User', JSON.stringify(obj))
+    localStorage.setItem(USER, JSON.stringify(obj))
     return obj
 }
 
 function removeUser() {
-    localStorage.setItem('User', '')
+    localStorage.setItem(USER, '')
 }
 
 function getUser(name) {
@@ -140,27 +142,27 @@ function getUser(name) {
 
 function changeUser(account, json = false) {
     if (json) {
-        localStorage.setItem('User', JSON.stringify(account))
+        localStorage.setItem(USER, JSON.stringify(account))
         return true
     } else {
-        localStorage.setItem('User', account)
+        localStorage.setItem(USER, account)
         return true
     }
 }
 
 function clearUsers() {
-    localStorage.removeItem('User')
+    localStorage.removeItem(USER)
 }
 
 function setNet(net) {
     let acc = loadUser()
     acc.net = net
-    localStorage.setItem('User', JSON.stringify(acc))
+    localStorage.setItem(USER, JSON.stringify(acc))
     return acc
 }
 
 function checkLock() {
-    let state = JSON.parse(localStorage.getItem('lock'))
+    let state = JSON.parse(localStorage.getItem(LOCK))
     if (state) {
         if (state.lock) {
             return true
@@ -173,27 +175,27 @@ function checkLock() {
 }
 
 function setLock(value) {
-    let state = JSON.parse(localStorage.getItem('lock'))
+    let state = JSON.parse(localStorage.getItem(LOCK))
     if (!state) {
         state = {}
     }
     state.lock = value
-    localStorage.setItem('lock', JSON.stringify(state))
+    localStorage.setItem(LOCK, JSON.stringify(state))
     return true
 }
 
 function setPassword(password) {
-    let state = JSON.parse(localStorage.getItem('lock'))
+    let state = JSON.parse(localStorage.getItem(LOCK))
     if (!state) {
         state = {}
     }
     state.pass = password.toString()
-    localStorage.setItem('lock', JSON.stringify(state))
+    localStorage.setItem(LOCK, JSON.stringify(state))
     return true
 }
 
 function unlock(password) {
-    let state = JSON.parse(localStorage.getItem('lock'))
+    let state = JSON.parse(localStorage.getItem(LOCK))
     if (!state) {
         return false
     }
@@ -206,7 +208,7 @@ function unlock(password) {
 }
 
 function lock() {
-    let state = JSON.parse(localStorage.getItem('lock'))
+    let state = JSON.parse(localStorage.getItem(LOCK))
     if (!state) {
         return false
     }
@@ -214,13 +216,13 @@ function lock() {
 }
 
 function removeLock() {
-    localStorage.removeItem('lock')
+    localStorage.removeItem(LOCK)
     return true
 }
 
 
 function getHashPassword() {
-    let state = JSON.parse(localStorage.getItem('lock'))
+    let state = JSON.parse(localStorage.getItem(LOCK))
     if (!state) {
         return false
     }
@@ -266,12 +268,12 @@ function initConfig() {
         openEnablePopup: true,
         openSignPopup: true
     }
-    localStorage.setItem('config', JSON.stringify(config))
+    localStorage.setItem(CONFIG, JSON.stringify(config))
     return true
 }
 
 function getConfig() {
-    let config = JSON.parse(localStorage.getItem('config'))
+    let config = JSON.parse(localStorage.getItem(CONFIG))
     if (!config) {
         return false
     }
@@ -286,7 +288,7 @@ function setConfig(config) {
         if (config.openTxPopup === undefined || config.openEnablePopup === undefined) {
             return false
         } else {
-            localStorage.setItem('config', JSON.stringify(config))
+            localStorage.setItem(CONFIG, JSON.stringify(config))
             return true
         }
     }
@@ -300,7 +302,7 @@ function resultTask(taskId, result) {
 }
 
 function getTokens() {
-    let tokens = JSON.parse(localStorage.getItem('tokens'))
+    let tokens = JSON.parse(localStorage.getItem(TOKENS))
     if (!tokens) {
         tokens = {}
     }
@@ -308,13 +310,13 @@ function getTokens() {
 }
 
 function clearTokens() {
-    localStorage.removeItem('tokens')
+    localStorage.removeItem(TOKENS)
     return true
 }
 
 function setTokens(obj) {
     //obj:{net, tokens[]}
-    localStorage.setItem('tokens', JSON.stringify(obj))
+    localStorage.setItem(TOKENS, JSON.stringify(obj))
     return true
 }
 

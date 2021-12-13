@@ -5,24 +5,32 @@ let account = {
     net: '',
     token: '',
 
-    privateKeys: [], // keys
+    // Imported private keys
+    publicKeys: [], // In case we have to show them on the list
+    // Always encrypted
+    privateKeys: [],
 
-    privateKey: '',
+    // This key is selected now
     publicKey: '',
+    // Session decrypted, have not to be on popup memory
+    privateKey: '',
     type: 0, // 0 - private, 1 - seed, 2 - ledger
-    accountIndex: 0,
+    accountIndex: 0, //
 
     // Always encrypted
     seed: '',
     seedAccountsArray: [0],
-    // Do we have to remember selected private keys from seed?
 
     // Ledger ID
     ledger: '',
     ledgerAccountsArray: [], // index
 }
 
-let getSeedAccounts = (password) => {
+let getSeedAccounts = () => {
+
+    // We have to export our public key from seed here
+    let seedArray = []
+    // And select only this keys > seedAccountsArray
     return account.seedAccountsArray;
 }
 
@@ -31,33 +39,17 @@ let changeAccount = (type, index) => {
     if (type === 0)
         array = account.privateKeys[index]
     if (type === 1)
-        array = account.seedAccountsArray[index]
+        // array = account.seedAccountsArray[index]
     if (type === 2) {
-        //TODO set public key
-        // array = account.ledgerAccountsArray[index]
+
     }
-    account.mainPrivateKey = array[index];
-    account.accountIndex = index
-    account.type = type
 }
 
 let addAccountOldFormat = (data)=>{
-    indexDB.get('user').then(account=>{
-        account.mainPublicKey = data.publicKey
-        account.mainPrivateKey = data.privateKey
-        account.token = data.token
-        account.net = data.net
-        account.type = 0
-        account.privateKeys.push(data.privateKey)
-        indexDB.set('user', account).then()
-    })
+
 }
-let updateAccount = (data)=>{
-    indexDB.get('user').then(account=>{
-        account.net = data.net
-        account.token = data.token
-        indexDB.set('user', account).then()
-    })
+let updateAccount = (data) => {
+
 }
 
-export {account, changeAccount, getSeedAccounts, addAccountOldFormat, updateAccount}
+export {account, changeAccount, getSeedAccounts}
