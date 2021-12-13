@@ -53,7 +53,7 @@ export default class Login extends React.Component {
                 token: ENQWeb.Enq.ticker,
                 seed: hex,
             }
-            disk.promise.sendPromise({
+            userStorage.promise.sendPromise({
                 account: true,
                 set: true,
                 data: data
@@ -84,7 +84,7 @@ export default class Login extends React.Component {
                 net: ENQWeb.Net.provider,
                 token: ENQWeb.Enq.ticker
             }
-            await disk.promise.sendPromise({
+            await userStorage.promise.sendPromise({
                 account: true,
                 set: true,
                 data: data

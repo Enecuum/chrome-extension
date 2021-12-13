@@ -30,7 +30,7 @@ export default function Import(props) {
                 token: ENQWeb.Enq.ticker,
                 seed: getMnemonicHex(mnemonicString),
             }
-            disk.promise.sendPromise({
+            userStorage.promise.sendPromise({
                 account: true,
                 set: true,
                 data: data

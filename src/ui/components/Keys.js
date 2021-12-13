@@ -16,7 +16,7 @@ export default function Keys(props) {
     })
 
     // let loadUser = () => {
-    //     disk.user.loadUser().then(async account => {
+    //     userStorage.user.loadUser().then(async account => {
     //         // console.log(account)
     //         setPublicKey(account.publicKey)
     //         setPrivateKey(account.privateKey)

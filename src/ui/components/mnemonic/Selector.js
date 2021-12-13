@@ -34,7 +34,7 @@ export default function userSelector(props) {
     }, [])
 
     let loadUser = () => {
-        disk.user.loadUser()
+        userStorage.user.loadUser()
             .then(async account => {
                 console.log(account)
                 let hex = account.seed
@@ -110,7 +110,7 @@ export default function userSelector(props) {
     //             token: ENQWeb.Enq.ticker,
     //             seed: hex,
     //         }
-    //         disk.promise.sendPromise({
+    //         userStorage.promise.sendPromise({
     //             account: true,
     //             set: true,
     //             data: data
@@ -151,7 +151,7 @@ export default function userSelector(props) {
                                  seed: hex,
                                  ledger: accounts[i].type === 2
                              }
-                             disk.promise.sendPromise({
+                             userStorage.promise.sendPromise({
                                  account: true,
                                  set: true,
                                  data: data
@@ -198,7 +198,7 @@ export default function userSelector(props) {
             {!ledger && <div className={styles.field + ' ' + styles.button}
                              onClick={() => {
                                  // createPopupWindow('index.html?type=connectLedger')
-                                 disk.user.loadUser()
+                                 userStorage.user.loadUser()
                                      .then(async account => {
 
                                          let Transport = await TransportWebHID.create() // TODO global transport object. may be in app.js. need do save new model.
@@ -211,7 +211,7 @@ export default function userSelector(props) {
 
                                                  account.ledgerAccountsArray = [data.substr(0, 66)]
 
-                                                 disk.promise.sendPromise({
+                                                 userStorage.promise.sendPromise({
                                                      account: true,
                                                      set: true,
                                                      data: account

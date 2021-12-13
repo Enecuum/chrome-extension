@@ -118,9 +118,9 @@ export default class Transaction extends React.Component {
         }
 
         //TODO
-        let user = await disk.user.loadUser()
+        let user = await userStorage.user.loadUser()
         if (!user.privateKey && !user.ledger) {
-            user = await disk.promise.sendPromise({
+            user = await userStorage.promise.sendPromise({
                 account: true,
                 unlock: true,
                 password: this.state.password

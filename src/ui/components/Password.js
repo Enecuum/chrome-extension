@@ -50,16 +50,16 @@ export default class Password extends React.Component {
                     this.setState({ oldPassword: true })
                     return
                 }
-                disk.promise.sendPromise({
+                userStorage.promise.sendPromise({
                     account: true,
                     unlock: true,
                     password: this.state.oldPassword
                 })
                     .then(data => {
                         if (data) {
-                            disk.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
-                            disk.lock.setLock(false)
-                            disk.promise.sendPromise({
+                            userStorage.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
+                            userStorage.lock.setLock(false)
+                            userStorage.promise.sendPromise({
                                 account: true,
                                 encrypt: true,
                                 again: true,
@@ -71,8 +71,8 @@ export default class Password extends React.Component {
                         }
                     })
             } else {
-                disk.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
-                disk.lock.setLock(false)
+                userStorage.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
+                userStorage.lock.setLock(false)
                 this.props.setPassword(false)
             }
         } else {

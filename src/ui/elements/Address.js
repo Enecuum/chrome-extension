@@ -11,7 +11,7 @@ export default function Address(props) {
 
     async function checkConnect(count) {
         // console.log(count)
-        let tasks = disk.list.listOfTask()
+        let tasks = userStorage.list.listOfTask()
         let found = false
         tasks.forEach(key => {
             if (key.type === 'enable') {
@@ -33,7 +33,7 @@ export default function Address(props) {
 
         if (status === 'Await connect') {
 
-            let tasks = await disk.list.listOfTask()
+            let tasks = await userStorage.list.listOfTask()
 
             //TODO rename enable please, allow website access or something
             tasks.forEach((task, request) => {

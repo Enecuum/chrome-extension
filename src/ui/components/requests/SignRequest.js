@@ -44,7 +44,7 @@ export default function SignRequest(props) {
         signedMsg.msg = msg;
         signedMsg.hash = hash;
         console.log(signedMsg)
-        disk.task.resultTask(taskId, signedMsg)
+        userStorage.task.resultTask(taskId, signedMsg)
         props.setSignRequest(false);
         await global.asyncRequest({allow: true, taskId: taskId})
         closeModalWindow();

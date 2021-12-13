@@ -5,8 +5,8 @@ let lockTime = 10 * 60 * 1000
 let SALT = 'salt*/-+^'
 
 function lockAccount(timer = false) {
-    disk.lock.setLock(true)
-    if (disk.name === 'background') {
+    userStorage.lock.setLock(true)
+    if (userStorage.name === 'background') {
 
         // Only publicKey and net left
         ENQWeb.Enq.User = { publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net }
@@ -21,24 +21,24 @@ function lockAccount(timer = false) {
 
 function encryptAccount() {
 
-    let account = disk.user.loadUserNotJson()
+    let account = userStorage.user.loadUserNotJson()
 
     // TODO HERE {}
     // console.log(account)
 
-    let password = disk.lock.getHashPassword()
-    if (password && !disk.lock.checkLock()) {
+    let password = userStorage.lock.getHashPassword()
+    if (password && !userStorage.lock.checkLock()) {
 
         password = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
         account = ENQWeb.Utils.crypto.encrypt(account, password)
-        disk.user.changeUser(account)
+        userStorage.user.changeUser(account)
 
         const encryptedString = 'Account encrypted'
         console.log(encryptedString)
 
     } else {
 
-        if (!disk.lock.getHashPassword()) {
+        if (!userStorage.lock.getHashPassword()) {
 
             const passwordString = 'Password not set'
             console.log(passwordString)
@@ -47,21 +47,21 @@ function encryptAccount() {
 }
 
 function encryptAccountWithPass(account, password) {
-    if (password && !disk.lock.checkLock()) {
+    if (password && !userStorage.lock.checkLock()) {
         password = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
         account = ENQWeb.Utils.crypto.encrypt(account, password)
-        disk.user.changeUser(account)
+        userStorage.user.changeUser(account)
         // console.log('account encrypted')
     }
 }
 
 function decryptAccount(password) {
     let hash = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
-    if (disk.lock.unlock(hash)) {
+    if (userStorage.lock.unlock(hash)) {
         hash = ENQWeb.Utils.crypto.strengthenPassword(SALT + hash)
         // console.log(hash)
-        // console.log(disk.user.loadUserNotJson())
-        let accountString = ENQWeb.Utils.crypto.decrypt(disk.user.loadUserNotJson(), hash)
+        // console.log(userStorage.user.loadUserNotJson())
+        let accountString = ENQWeb.Utils.crypto.decrypt(userStorage.user.loadUserNotJson(), hash)
         // console.log(accountString)
         let account = JSON.parse(accountString)
         // console.log(account)

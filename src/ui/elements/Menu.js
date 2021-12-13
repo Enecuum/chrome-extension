@@ -24,9 +24,9 @@ export default function Menu(props) {
     const [ledger, setLedger] = useState()
     const [ethAddress, setEthAddress] = useState()
 
-    // let enablePopup = (await disk.config.getConfig).openEnablePopup
+    // let enablePopup = (await userStorage.config.getConfig).openEnablePopup
     const [openEnable, setOpenEnable] = useState(false)
-    // const [openTx, setOpenTx] = useState((disk.config.getConfig).openTxPopup)
+    // const [openTx, setOpenTx] = useState((userStorage.config.getConfig).openTxPopup)
 
     const [clickIterator, setClickIterator] = useState(0)
 
@@ -35,16 +35,16 @@ export default function Menu(props) {
     const [account2Amount, setAccount2Amount] = useState(BigInt(0))
 
     const window = () => {
-        disk.promise.sendPromise({window: true})
+        userStorage.promise.sendPromise({window: true})
     }
 
     // console.log(enablePopup)
 
     useEffect(() => {
-        let config = disk.config.getConfig()
+        let config = userStorage.config.getConfig()
         setOpenEnable(config.openEnablePopup)
 
-        // disk.user.loadUser().then(async account => {
+        // userStorage.user.loadUser().then(async account => {
         //     if (account.privateKey) {
         //         setPrivateDataLoaded(true)
         //     } else {
@@ -55,7 +55,7 @@ export default function Menu(props) {
     }, []);
 
     // const loginAccount2 = () => {
-    //     disk.user.loadUser().then(async account => {
+    //     userStorage.user.loadUser().then(async account => {
     //         let node = bip32.fromSeed(Buffer.from(account.seed), null)
     //         let child = node.derivePath("m/44'/2045'/0'/0")
     //         let privateKey0 = child.derive(0).privateKey.toString('hex')
@@ -64,7 +64,7 @@ export default function Menu(props) {
     // }
 
     // const loginAccount1 = () => {
-    //     disk.user.loadUser().then(async account => {
+    //     userStorage.user.loadUser().then(async account => {
     //         loginAccount(account.account1, account.seed, {})
     //     })
     // }
@@ -80,7 +80,7 @@ export default function Menu(props) {
     //             seed: seed,
     //             account1: mainAccount.privateKey
     //         }
-    //         disk.promise.sendPromise({
+    //         userStorage.promise.sendPromise({
     //             account: true,
     //             set: true,
     //             data: data
@@ -94,11 +94,11 @@ export default function Menu(props) {
     //
     //     localStorage.setItem('net', value)
     //     ENQWeb.Net.provider = value
-    //     await disk.user.loadUser()
+    //     await userStorage.user.loadUser()
     //         .then(async account => {
     //             account.net = value
     //             account.token = ENQWeb.Enq.ticker
-    //             await disk.promise.sendPromise({
+    //             await userStorage.promise.sendPromise({
     //                 account: true,
     //                 set: true,
     //                 data: account
@@ -111,16 +111,16 @@ export default function Menu(props) {
 
     const locked = async () => {
         console.log('LOCK')
-        if (disk.lock.getHashPassword()) {
+        if (userStorage.lock.getHashPassword()) {
             props.setLock(true)
-            await disk.promise.sendPromise({lock: true})
+            await userStorage.promise.sendPromise({lock: true})
         }
         //TODO close popup
     }
 
     const changeOpenPopup = async () => {
 
-        let config = await disk.config.getConfig()
+        let config = await userStorage.config.getConfig()
 
         // console.log(config)
 
@@ -132,7 +132,7 @@ export default function Menu(props) {
 
         setOpenEnable(openPopup)
 
-        await disk.config.setConfig(config)
+        await diuserStoragesk.config.setConfig(config)
     }
 
     // const checkConnectLedger = () => {
