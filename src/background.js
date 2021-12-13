@@ -1,6 +1,6 @@
 import { signHash } from './utils/ledgerShell'
 
-const storage = require('./utils/localStorage')
+const Storage = require('./utils/localstorage')
 import { extensionApi } from './utils/extensionApi'
 import { lockAccount, say } from './lockAccount'
 import {createPopupWindow, globalMessageHandler} from './handler'
@@ -16,8 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // TODO Hmm
 say()
 
-let Storage = new storage('background')
-global.disk = Storage
+global.disk = new Storage('popup')
 
 let ports = {}
 let requestsMethods = {
@@ -50,8 +49,8 @@ function setupApp() {
     extensionApi.runtime.onMessage.addListener(messageHandler)
     extensionApi.runtime.onConnect.addListener(connectHandler)
     taskCounter()
-    if (!Storage.config.getConfig()) {
-        Storage.config.initConfig()
+    if (!disk.config.getConfig()) {
+        disk.config.initConfig()
     }
 }
 
@@ -83,7 +82,7 @@ async function msgConnectHandler(msg, sender) {
         let lock = disk.lock.checkLock()
         // if (lock) {
         //     if (!lockedMethods[msg.type]) {
-        //         await Storage.task.setTask(msg.taskId, {
+        //         await disk.task.setTask(msg.taskId, {
         //             data: msg.data,
         //             type: msg.type,
         //             cb: msg.cb
@@ -94,7 +93,7 @@ async function msgConnectHandler(msg, sender) {
         // }
         if (!ports[msg.cb.url].enabled) {
             if (msg.type === 'enable') {
-                await Storage.task.setTask(msg.taskId, {
+                await disk.task.setTask(msg.taskId, {
                     data: msg.data,
                     type: msg.type,
                     cb: msg.cb
@@ -111,7 +110,7 @@ async function msgConnectHandler(msg, sender) {
                 }
             }
             if (msg.type === 'reconnect') {
-                await Storage.task.setTask(msg.taskId, {
+                await disk.task.setTask(msg.taskId, {
                     data: msg.data,
                     type: msg.type,
                     cb: msg.cb
@@ -120,21 +119,21 @@ async function msgConnectHandler(msg, sender) {
             }
         } else {
             if (msg.type === 'tx') {
-                Storage.task.setTask(msg.taskId, {
+                disk.task.setTask(msg.taskId, {
                     tx: msg.tx,
                     type: msg.type,
                     cb: msg.cb,
                     data: msg.data,
                 })
                 if (msg.data.net.length > 0) {
-                    if (msg.data.net !== JSON.parse(localStorage.tokens).net) {
+                    if (msg.data.net !== JSON.parse(localdisk.tokens).net) {
                         console.log('bad net work')
                         rejectTaskHandler(msg.taskId, `Network mismatch. Set ${msg.data.net}`)
                         return false
                     }
                 }
             } else {
-                Storage.task.setTask(msg.taskId, {
+                disk.task.setTask(msg.taskId, {
                     data: msg.data,
                     type: msg.type,
                     cb: msg.cb
@@ -207,7 +206,7 @@ async function msgPopupHandler(msg, sender) {
                 })
             }
         } else if (msg.reject_all) {
-            let list = Storage.list.loadList()
+            let list = disk.list.loadList()
             for (let i in list) {
                 await rejectTaskHandler(list[i])
             }
@@ -299,7 +298,7 @@ function disconnectPorts(name) {
 global.disconnectPorts = disconnectPorts
 
 function taskCounter() {
-    let tasks = Storage.task.loadTask()
+    let tasks = disk.task.loadTask()
     let ids = Object.keys(tasks)
     extensionApi.browserAction.setBadgeText({ text: `${ids.length === 0 ? '' : ids.length}` })
 }
@@ -308,7 +307,7 @@ global.counterTask = taskCounter
 
 async function taskHandler(taskId) {
 
-    let task = Storage.task.getTask(taskId)
+    let task = disk.task.getTask(taskId)
     console.log(task)
 
     let account = ENQWeb.Enq.User
@@ -333,7 +332,7 @@ async function taskHandler(taskId) {
         })
             .then()
         ports[task.cb.url].enabled = true
-        Storage.task.removeTask(taskId)
+        disk.task.removeTask(taskId)
         break
     // TODO Description
     case 'tx':
@@ -381,7 +380,7 @@ async function taskHandler(taskId) {
                 .then()
             ENQWeb.Net.provider = buf
         }
-        Storage.task.removeTask(taskId)
+        disk.task.removeTask(taskId)
         break
     // TODO Description
     case 'balanceOf':
@@ -413,7 +412,7 @@ async function taskHandler(taskId) {
             })
             ENQWeb.Net.provider = buf
         }
-        Storage.task.removeTask(taskId)
+        disk.task.removeTask(taskId)
         break
     // TODO Description
     case 'getProvider':
@@ -432,7 +431,7 @@ async function taskHandler(taskId) {
             })
                 .then()
         }
-        Storage.task.removeTask(taskId)
+        disk.task.removeTask(taskId)
         break
     // TODO Description
     case 'getVersion':
@@ -445,7 +444,7 @@ async function taskHandler(taskId) {
             })
                 .then()
         }
-        Storage.task.removeTask(taskId)
+        disk.task.removeTask(taskId)
         break
     // TODO Description
     case 'sign':
@@ -458,7 +457,7 @@ async function taskHandler(taskId) {
             })
                 .then()
         }
-        Storage.task.removeTask(taskId)
+        disk.task.removeTask(taskId)
         break
     // TODO Description
     case 'reconnect':
@@ -470,7 +469,7 @@ async function taskHandler(taskId) {
             cb: task.cb
         })
             .then()
-        Storage.task.removeTask(taskId)
+        disk.task.removeTask(taskId)
     default:
         break
     }
@@ -478,8 +477,8 @@ async function taskHandler(taskId) {
 }
 
 function rejectTaskHandler(taskId, reason = 'rejected') {
-    let task = Storage.task.getTask(taskId)
-    Storage.task.removeTask(taskId)
+    let task = disk.task.getTask(taskId)
+    disk.task.removeTask(taskId)
     let data = {
         reject: true,
         data: reason
