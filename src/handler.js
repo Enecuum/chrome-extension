@@ -11,7 +11,7 @@ export function globalMessageHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
 
         indexDB.get(USER).then(function (user) {
-            console.log(user)
+            console.log(JSON.parse(user))
         })
 
         // TODO Description

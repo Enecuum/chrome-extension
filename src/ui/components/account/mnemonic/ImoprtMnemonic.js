@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react'
-import styles from '../../css/index.module.css'
-import Separator from '../../elements/Separator'
+import styles from '../../../css/index.module.css'
+import Separator from '../../../elements/Separator'
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
-import Input from "../../elements/Input";
-import {getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../Utils";
+import Input from "../../../elements/Input";
+import {getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../../Utils";
+import {account as userAccount} from "../../../../user";
 
 let seedLength = 12
 
-export default function Import(props) {
+export default function ImportMnemonic(props) {
 
     const [mnemonicString, setMnemonicString] = useState('')
     const [state, setState] = useState(0)
@@ -21,9 +22,15 @@ export default function Import(props) {
     const loginSeed = (mnemonicString) => {
         let privateKey0 = getMnemonicFirstPrivateKey(mnemonicString)
         // loginAccount(privateKey0, account.seed, account)
+        let account = userStorage.user.loadUser()
+        console.log(account)
+        if (!account.publickKey)
+            account = userAccount
+
         const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
         if (publicKey0) {
             let data = {
+                ...account,
                 publicKey: publicKey0,
                 privateKey: privateKey0,
                 net: ENQWeb.Net.provider,
@@ -35,7 +42,7 @@ export default function Import(props) {
                 set: true,
                 data: data
             }).then(r => {
-                props.login(data)
+                // props.login(data)
             })
         }
     }
@@ -69,7 +76,7 @@ export default function Import(props) {
                         console.log(regexSeed.test(mnemonicString))
                         console.log(mnemonicString)
                         loginSeed(mnemonicString)
-                        props.setImportMnemonic(false)
+                        // props.setImportMnemonic(false)
                     }
                 }} className={styles.field + ' ' + styles.button + ' ' + (regexSeed.test(mnemonicString) ? styles.button_blue : '')}>Import mnemonic
                 </div>

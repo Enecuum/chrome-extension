@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react'
-import styles from '../../css/index.module.css'
-import Separator from '../../elements/Separator'
+import styles from '../../../css/index.module.css'
+import Separator from '../../../elements/Separator'
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
-import Input from "../../elements/Input";
-import {getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../Utils";
+import Input from "../../../elements/Input";
+import {getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../../Utils";
+import {account as userAccount} from "../../../../user";
 
 let seedLength = 12
 
@@ -39,9 +40,15 @@ export default function Mnemonic(props) {
     const loginSeed = (mnemonicString) => {
         let privateKey0 = getMnemonicFirstPrivateKey(mnemonicString)
         // loginAccount(privateKey0, account.seed, account)
+        let account = userStorage.user.loadUser()
+        // console.log(account)
+        if (!account.publickKey)
+            account = userAccount
+
         const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
         if (publicKey0) {
             let data = {
+                ...account,
                 publicKey: publicKey0,
                 privateKey: privateKey0,
                 net: ENQWeb.Net.provider,
@@ -53,6 +60,7 @@ export default function Mnemonic(props) {
                 set: true,
                 data: data
             }).then(r => {
+                // console.log(data)
                 props.login(data)
             })
         }

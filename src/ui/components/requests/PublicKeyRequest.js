@@ -29,14 +29,14 @@ export default class PublicKeyRequest extends React.Component {
     }
 
     async allow() {
-        await global.asyncRequest({allow: true, taskId: this.state.taskId})
+        await asyncRequest({allow: true, taskId: this.state.taskId})
         this.props.setPublicKeyRequest(false)
         await this.closeModalWindow()
         console.log('TODO bug')
     }
 
     async disallow() {
-        await global.asyncRequest({disallow: true, taskId: this.state.taskId})
+        await asyncRequest({disallow: true, taskId: this.state.taskId})
         this.props.setPublicKeyRequest(false)
         await this.closeModalWindow()
     }

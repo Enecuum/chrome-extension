@@ -331,8 +331,8 @@ export default function Account(props) {
     let rejectAll = async () => {
         for (const key in activity) {
             const item = activity[key]
-            // global.asyncRequest({reject_all: true})
-            await global.asyncRequest({
+            // asyncRequest({reject_all: true})
+            await asyncRequest({
                 disallow: true,
                 taskId: item.cb.taskId
             })

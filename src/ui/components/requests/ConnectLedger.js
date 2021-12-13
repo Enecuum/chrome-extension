@@ -59,11 +59,12 @@ export default function ConnectLedger(props) {
 
         // TODO We will give to choose one of keys in selector later, now only 1 key
         // let publicKey = await getPublicKey(1, transport)
-
+        let account = userStorage.user.loadUser()
         // TODO This is our old user model, but for now it's ok to use it
         let data = {
             // publicKey: publicKey,
             // TODO This is fake public key because i still not install app on my ledger
+            ...account,
             publicKey: '02c3143abeb50e4153da372868490277c14b2877f05b477e4671722152b0112473',
             privateKey: true,
             net: ENQWeb.Net.provider,

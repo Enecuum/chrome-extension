@@ -5,6 +5,7 @@ import {regexAddress, regexSeed, regexToken, toggleFullScreen} from "../Utils";
 import Input from "../elements/Input";
 import * as bip32 from "bip32";
 import * as bip39 from "bip39";
+import {account} from "../../user";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -47,6 +48,7 @@ export default class Login extends React.Component {
         const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
         if (publicKey0) {
             let data = {
+                ...account,
                 publicKey: publicKey0,
                 privateKey: privateKey0,
                 net: ENQWeb.Net.provider,
@@ -79,11 +81,13 @@ export default class Login extends React.Component {
         if (publicKey) {
             // console.log(publicKey)
             let data = {
+                ...account,
                 publicKey: publicKey,
                 privateKey: this.state.privateKey,
                 net: ENQWeb.Net.provider,
                 token: ENQWeb.Enq.ticker
             }
+            data.privateKeys.push(this.state.privateKey)
             await userStorage.promise.sendPromise({
                 account: true,
                 set: true,

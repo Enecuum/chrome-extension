@@ -134,7 +134,7 @@ export default function TransactionRequest(props) {
 
     const confirm = async () => {
         if (!isBlock) {
-            await global.asyncRequest({
+            await asyncRequest({
                 allow: true,
                 taskId: taskId
             })
@@ -146,7 +146,7 @@ export default function TransactionRequest(props) {
     }
 
     const reject = async () => {
-        await global.asyncRequest({
+        await asyncRequest({
             disallow: true,
             taskId: taskId
         })

@@ -101,29 +101,34 @@ function setTask(key, value) {
 
 //
 function loadUser() {
-    let user = localStorage.getItem(USER)
+    // let user = localStorage.getItem(USER)
 
-    indexDB.get(USER).then(user => {
+    return indexDB.get(USER).then(user => {
 
         console.log('USER')
-        console.log(user)
-    })
+        if (user)
+            console.log(JSON.parse(user))
 
-    if (!user) {
-        return {}
-    }
-    if (!checkLock()) {
+        // If there is no saved user
+        if (!user) {
+            return {}
+        }
+
+        // If locked
+        if (checkLock()) {
+            return {}
+        }
+
         if (this.name === 'popup') {
             return sendPromise({
                 account: true,
                 request: true
             })
         }
+
         user = JSON.parse(user)
         return user
-    } else {
-        return {}
-    }
+    })
 }
 
 function loadUserNotJson() {
@@ -138,12 +143,15 @@ function loadUserNotJson() {
 function addUser(obj) {
     // obj: {publicKey, privateKey, net, token}
     // console.log(obj)
-    localStorage.setItem(USER, JSON.stringify(obj))
-    return obj
+    // localStorage.setItem(USER, JSON.stringify(obj))
+    return indexDB.set(USER, JSON.stringify(obj)).then(user => {
+        return user
+    })
 }
 
 function removeUser() {
-    localStorage.setItem(USER, '')
+    // localStorage.setItem(USER, '')
+    indexDB.set(USER, '').then()
 }
 
 function getUser(name) {
@@ -172,6 +180,7 @@ function setNet(net) {
     return acc
 }
 
+// Object of lock state, true if locked
 function checkLock() {
     let state = JSON.parse(localStorage.getItem(LOCK))
     if (state) {
