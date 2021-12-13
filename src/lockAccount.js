@@ -36,8 +36,8 @@ function encryptAccount() {
         account = ENQWeb.Utils.crypto.encrypt(account, password)
         userStorage.user.changeUser(account)
 
-        const encryptedString = 'Account encrypted'
-        console.log(encryptedString)
+        const accountEncryptedString = 'Account encrypted'
+        console.log(accountEncryptedString)
 
     } else {
 
