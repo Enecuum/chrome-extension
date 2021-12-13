@@ -30,7 +30,7 @@ export default function Menu(props) {
 
     const [clickIterator, setClickIterator] = useState(0)
 
-    const [privateDataLoaded, setPrivateDataLoaded] = useState(Object.keys(ENQWeb.Enq.User).length > 0)
+    const [userDataLoaded, setPrivateDataLoaded] = useState(Object.keys(ENQWeb.Enq.User).length > 0)
 
     const [account2Amount, setAccount2Amount] = useState(BigInt(0))
 
@@ -185,7 +185,7 @@ export default function Menu(props) {
         <div className={styles.menu}>
 
             <div className={styles.lock} onClick={locked}><img src='./images/lock.png'
-                                                               className={(!privateDataLoaded ? styles.loaded : '')}
+                                                               className={(!userDataLoaded ? styles.loaded : '')}
                                                                title={'Lock application'} alt={'Lock'}/></div>
 
             <div className={styles.title}>

@@ -245,8 +245,10 @@ function sendPromise(obj) {
                     resolve(answer);
                 }
             })
+
         } else {
 
+            //
             chrome.runtime.sendMessage(obj, answer => {
                 if (answer.response !== undefined) {
                     resolve(answer.response);
