@@ -75,8 +75,9 @@ export default function App(props) {
     const getUser = async () => {
         let account = await userStorage.user.loadUser()
         setUser(account)
-        // console.log(account)
-        setLogin(account.publicKey ? false : true)
+        console.log(account)
+        // setLogin(account.publicKey.length > 0 ? false : true)
+        setLogin(true)
     }
 
     useEffect(() => {

@@ -107,7 +107,7 @@ function loadUser() {
 
         console.log('USER')
         if (user)
-            console.log(JSON.parse(user))
+            console.log(user)
 
         // If there is no saved user
         if (!user) {
@@ -126,18 +126,23 @@ function loadUser() {
             })
         }
 
-        user = JSON.parse(user)
+        // user = JSON.parse(user)
         return user
     })
 }
 
+function loadSecuredUser() {
+
+}
+
 function loadUserNotJson() {
-    let user = localStorage.getItem(USER)
-    if (!user) {
-        return {}
-    } else {
-        return user
-    }
+    return indexDB.get(USER).then(user => {
+        if (!user) {
+            return {}
+        } else {
+            return user
+        }
+    })
 }
 
 function addUser(obj) {
@@ -174,10 +179,10 @@ function clearUsers() {
 }
 
 function setNet(net) {
-    let acc = loadUser()
-    acc.net = net
-    localStorage.setItem(USER, JSON.stringify(acc))
-    return acc
+    // let acc = loadUser()
+    // acc.net = net
+    // localStorage.setItem(USER, JSON.stringify(acc))
+    // return acc
 }
 
 // Object of lock state, true if locked
@@ -343,9 +348,6 @@ function setTokens(obj) {
 
 // TODO constructor
 function Storage(name) {
-
-    // let loadUser = await loadUser
-
     this.name = name
     this.task = {
         name,

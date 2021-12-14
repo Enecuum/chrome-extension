@@ -11,7 +11,7 @@ export function globalMessageHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
 
         indexDB.get(USER).then(function (user) {
-            console.log(JSON.parse(user))
+            console.log(user)
         })
 
         // TODO Description
@@ -58,7 +58,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             }
         }
 
-        // TODO Unlock user object to memory
+        // TODO Unlock user.account object to memory
         if (msg.account && msg.unlock && msg.password) {
 
             let account = decryptAccount(msg.password)
@@ -66,10 +66,10 @@ export function globalMessageHandler(msg, ENQWeb) {
 
                 // Unlock user to memory user
                 ENQWeb.Enq.User = account
-                userStorage.user.addUser(account)
+                // userStorage.user.addUser(account)
 
                 // TODO
-                createWebSession(account)
+                // createWebSession(account)
 
                 encryptAccount()
                 resolve({response: account})
@@ -78,7 +78,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             }
         }
 
-        // TODO Description
+        // TODO Edit user.account object in memory
         if (msg.account && msg.set && msg.data) {
 
             // Edit user
@@ -88,7 +88,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             userStorage.user.addUser(account)
 
             // TODO
-            createWebSession(account)
+            // createWebSession(account)
 
             encryptAccount()
             resolve({response: account})
@@ -111,13 +111,16 @@ export function globalMessageHandler(msg, ENQWeb) {
             resolve({response: true})
         }
 
-        // TODO Description
+        // TODO Delete all data from user
         if (msg.account && msg.logout) {
             ENQWeb.Enq.User = {}
-            sessionStorage.setItem('User', JSON.stringify({}))
-            // disconnectPorts()
-            resolve({response: true})
+            // sessionStorage.setItem('User', JSON.stringify({}))
+            return indexDB.set(USER, '').then(r => {
+                resolve({response: true})
+            })
+            // TODO Delete other data
         }
+
         resolve({response: false})
     })
 }

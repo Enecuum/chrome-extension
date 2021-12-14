@@ -5,7 +5,7 @@ import {regexAddress, regexSeed, regexToken, toggleFullScreen} from "../Utils";
 import Input from "../elements/Input";
 import * as bip32 from "bip32";
 import * as bip39 from "bip39";
-import {account} from "../../user";
+import {account, loginAccount} from "../../user";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -40,29 +40,38 @@ export default class Login extends React.Component {
     }
 
     async loginSeed() {
+
         let hex = bip39.mnemonicToSeedSync(this.state.seed)
         let node = bip32.fromSeed(hex, null)
         let child = node.derivePath("m/44'/2045'/0'/0")
-        let privateKey0 = child.derive(0).privateKey.toString('hex')
+        let privateKey = child.derive(0).privateKey.toString('hex')
+
+        let account = JSON.parse(JSON.stringify(account))
+        account.seed = hex
+        account.seedAccountsArray = [0]
+
         // loginAccount(privateKey0, account.seed, account)
-        const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
-        if (publicKey0) {
-            let data = {
-                ...account,
-                publicKey: publicKey0,
-                privateKey: privateKey0,
-                net: ENQWeb.Net.provider,
-                token: ENQWeb.Enq.ticker,
-                seed: hex,
-            }
-            userStorage.promise.sendPromise({
-                account: true,
-                set: true,
-                data: data
-            }).then(r => {
-                this.props.login(data)
-            })
-        }
+        // const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
+        // if (publicKey0) {
+        //     let data = {
+        //         ...account,
+        //         publicKey: publicKey0,
+        //         privateKey: privateKey0,
+        //         net: ENQWeb.Net.provider,
+        //         token: ENQWeb.Enq.ticker,
+        //         seed: hex,
+        //     }
+        //     userStorage.promise.sendPromise({
+        //         account: true,
+        //         set: true,
+        //         data: data
+        //     }).then(r => {
+        //         this.props.login(data)
+        //     })
+        // }
+
+        let data = await loginAccount(privateKey, account)
+        this.props.login(data)
     }
 
     async submit() {
@@ -77,6 +86,7 @@ export default class Login extends React.Component {
             return
         }
 
+        console.log(account)
         const publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.privateKey, true)
         if (publicKey) {
             // console.log(publicKey)

@@ -30,6 +30,26 @@ let account = {
     ledgerAccountsArray: [], // index
 }
 
+let loginAccount = async (privateKey, account = account) => {
+
+    const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
+    let data = {
+        ...account,
+        publicKey: publicKey,
+        privateKey: privateKey,
+        net: ENQWeb.Net.provider,
+        token: ENQWeb.Enq.ticker,
+    }
+
+    await userStorage.promise.sendPromise({
+        account: true,
+        set: true,
+        data: data
+    })
+
+    return data
+}
+
 let getSeedAccounts = () => {
 
     // We have to export our public key from seed here
@@ -56,4 +76,4 @@ let updateAccount = (data) => {
 
 }
 
-export {account, changeAccount, getSeedAccounts}
+export {account, changeAccount, getSeedAccounts, loginAccount}
