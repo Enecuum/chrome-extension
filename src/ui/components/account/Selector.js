@@ -9,6 +9,7 @@ import {createPopupWindow} from '../../../handler'
 // import eventBus from "../../../utils/eventBus";
 import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
+import {generateAccountData} from "../../../user";
 
 export default function userSelector(props) {
 
@@ -42,10 +43,11 @@ export default function userSelector(props) {
             for (let i = 0; i < account.privateKeys.length; i++) {
                 const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
                 accounts.push({
-                    privateKey: '',
+                    privateKey: account.privateKeys[i],
                     publicKey: publicKey,
                     amount: 0,
                     current: account.privateKey === account.privateKeys[i],
+                    groupIndex: i,
                     type: 0
                 })
             }
@@ -59,14 +61,15 @@ export default function userSelector(props) {
                     let current = account.privateKey === privateKey
                     const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
                     await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
-                            accounts.push({
-                                privateKey: '',
-                                publicKey,
-                                amount: res[0] ? res[0].amount : 0,
-                                current,
-                                type: 1
-                            })
+                        accounts.push({
+                            privateKey,
+                            publicKey,
+                            amount: res[0] ? res[0].amount : 0,
+                            current,
+                            groupIndex: i,
+                            type: 1
                         })
+                    })
                 }
             }
 
@@ -77,6 +80,7 @@ export default function userSelector(props) {
                     publicKey: account.ledgerAccountsArray[0],
                     amount: 0,
                     current: false,
+                    groupIndex: 0,
                     type: 2
                 })
             }
@@ -110,45 +114,67 @@ export default function userSelector(props) {
     //     }
     // }
 
+    let selectAccount = async (selected) => {
+
+        let account = (await userStorage.user.loadUser())
+        let data = generateAccountData(selected.privateKey, account.seed)
+        data.privateKeys = account.privateKeys
+
+        await userStorage.promise.sendPromise({
+            account: true,
+            set: true,
+            data: data
+        })
+
+        props.login(data)
+    }
+
+    let addMnemonicAccount = async () => {
+        let account = (await userStorage.user.loadUser())
+        let data = generateAccountData(account.privateKey, account.seed)
+        data.privateKeys = account.privateKeys
+        data.seedAccountsArray.push(data.seedAccountsArray.length)
+
+        await userStorage.promise.sendPromise({
+            account: true,
+            set: true,
+            data: data
+        })
+    }
+
+    let getType = (type) => {
+        if (type === 0)
+            return 'SIMPLE'
+        if (type === 1)
+            return 'MNEMONIC'
+        if (type === 2)
+            return 'LEDGER'
+    }
+
     let renderCards = (accounts, hex) => {
 
         let cards = []
 
         for (let i = 0; i < accounts.length; i++) {
 
-            let current = accounts[i].current
+            let account = accounts[i]
+            let current = account.current
+            let name = getType(account.type).charAt(0).replace('S', '') + (account.groupIndex + 1)
             cards.push(
                 <div key={i} className={styles.card + (current ? '' : ' ' + styles.card_select) + ' ' + styles.small}>
 
                     <div className={styles.row}>
-                        <div>Account {i + 1}</div>
-                        {accounts[i].type === 0 && <div>SIMPLE</div>}
-                        {accounts[i].type === 1 && <div>MNEMONIC</div>}
-                        {accounts[i].type === 2 && <div>LEDGER</div>}
+                        <div>Account {name}</div>
+                        <div>{getType(account.type)}</div>
                     </div>
 
-                    <div className={styles.card_field}>{shortHash(accounts[i].publicKey)}</div>
+                    <div className={styles.card_field}>{shortHash(account.publicKey)}</div>
 
-                    <div className={styles.card_field}>{accounts[i].amount > 0 ? accounts[i].amount / 1e10 : '0.0'}</div>
+                    <div className={styles.card_field}>{account.amount > 0 ? account.amount / 1e10 : '0.0'}</div>
 
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
                          onClick={(current ? () => {
-                         } : () => {
-                             let data = {
-                                 publicKey: accounts[i].publicKey,
-                                 privateKey: accounts[i].privateKey,
-                                 net: ENQWeb.Net.provider,
-                                 token: ENQWeb.Enq.ticker,
-                                 seed: hex,
-                                 ledger: accounts[i].type === 2
-                             }
-                             userStorage.promise.sendPromise({
-                                 account: true,
-                                 set: true,
-                                 data: data
-                             }).then(r => {props.login(data)})
-
-                         })}>{current ? 'CURRENT' : 'SELECT'}</div>
+                         } : () => selectAccount(account))}>{current ? 'CURRENT' : 'SELECT'}</div>
                 </div>
             )
         }
@@ -170,8 +196,7 @@ export default function userSelector(props) {
                 </div>
             </div>
 
-            {seed && <div onClick={() => {
-            }} className={styles.field + ' ' + styles.button}>Add Mnemonic Account</div>}
+            {seed && <div onClick={addMnemonicAccount} className={styles.field + ' ' + styles.button}>Add Mnemonic Account</div>}
 
             <div onClick={props.setImportKey} className={styles.field + ' ' + styles.button}>Import Key</div>
 

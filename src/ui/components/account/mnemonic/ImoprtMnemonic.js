@@ -20,6 +20,7 @@ export default function ImportMnemonic(props) {
     })
 
     const loginSeed = async (mnemonicString) => {
+
         let privateKey = getMnemonicFirstPrivateKey(mnemonicString)
         let hex = bip39.mnemonicToSeedSync(mnemonicString)
 
@@ -30,11 +31,18 @@ export default function ImportMnemonic(props) {
 
             let data = generateAccountData(privateKey, hex)
 
+            let keys = (await userStorage.user.loadUser()).privateKeys
+            data.privateKeys = keys
+            data.seedAccountsArray = [0]
+            console.log(data)
+
             await userStorage.promise.sendPromise({
                 account: true,
                 set: true,
                 data: data
             })
+
+            // console.log(data)
 
             props.login(data)
         }
@@ -71,7 +79,7 @@ export default function ImportMnemonic(props) {
                         loginSeed(mnemonicString).then(r => {})
                         props.setImportMnemonic(false)
                     }
-                }} className={styles.field + ' ' + styles.button + ' ' + (regexSeed.test(mnemonicString) ? styles.button_blue : '')}>Import mnemonic
+                }} className={styles.field + ' ' + styles.button + ' ' + (regexSeed.test(mnemonicString) ? styles.button_blue : '')}>Import Mnemonic
                 </div>
 
                 <div onClick={() => {props.setImportMnemonic(false)}} className={styles.field + ' ' + styles.button}>Back</div>
