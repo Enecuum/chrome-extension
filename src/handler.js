@@ -58,7 +58,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             }
         }
 
-        // TODO Unlock user object to memory
+        // TODO Unlock user.account object to memory
         if (msg.account && msg.unlock && msg.password) {
 
             let account = decryptAccount(msg.password)
@@ -66,13 +66,16 @@ export function globalMessageHandler(msg, ENQWeb) {
 
                 // Unlock user to memory user
                 ENQWeb.Enq.User = account
+
+                // Set user to storage memory (localStorage or IndexedDB)
                 userStorage.user.addUser(account)
 
-                // TODO
+                // Set user to sessionStorage for web
                 createWebSession(account)
 
                 encryptAccount()
                 resolve({response: account})
+
             } else {
                 resolve({response: false})
             }

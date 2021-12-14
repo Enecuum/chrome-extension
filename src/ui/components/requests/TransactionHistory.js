@@ -92,7 +92,7 @@ export default function TransactionHistory(props) {
     }
 
     const confirm = async () => {
-        await global.asyncRequest({
+        await asyncRequest({
             allow: true,
             taskId: taskId
         })
@@ -101,7 +101,7 @@ export default function TransactionHistory(props) {
     }
 
     const reject = async () => {
-        await global.asyncRequest({
+        await asyncRequest({
             disallow: true,
             taskId: taskId
         })

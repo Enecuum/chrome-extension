@@ -79,7 +79,7 @@ export default class Requests extends React.Component {
     }
 
     async rejectAll() {
-        await global.asyncRequest({reject_all: true})
+        await asyncRequest({reject_all: true})
         this.setState({
             requests: [],
             ids: [],

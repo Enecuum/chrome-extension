@@ -185,8 +185,7 @@ export default function userSelector(props) {
             {seed && <div onClick={() => {
             }} className={styles.field + ' ' + styles.button}>Add mnemonic account</div>}
 
-            <div onClick={() => {
-            }} className={styles.field + ' ' + styles.button}>Import account
+            <div onClick={props.setImportKey} className={styles.field + ' ' + styles.button}>Import account
             </div>
 
             {!seed &&
@@ -215,7 +214,8 @@ export default function userSelector(props) {
                                                      account: true,
                                                      set: true,
                                                      data: account
-                                                 }).then(r => {})
+                                                 }).then(r => {
+                                                 })
 
                                                  console.log('ledger worked')
 

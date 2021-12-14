@@ -46,12 +46,12 @@ export default function SignRequest(props) {
         console.log(signedMsg)
         userStorage.task.resultTask(taskId, signedMsg)
         props.setSignRequest(false);
-        await global.asyncRequest({allow: true, taskId: taskId})
+        await asyncRequest({allow: true, taskId: taskId})
         closeModalWindow();
     }
 
     const disallow = async () => {
-        await global.asyncRequest({
+        await asyncRequest({
             disallow: true,
             taskId: taskId
         })
