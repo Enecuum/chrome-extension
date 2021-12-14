@@ -38,7 +38,7 @@ export default function App(props) {
 
     const [isConfirm, setConfirm] = useState(false)
 
-    // const [user, setUser] = useState({})
+    const [user, setUser] = useState({})
 
     const [isNetwork, setNetwork] = useState(false)
     const [isReceive, setReceive] = useState(false)
@@ -102,13 +102,17 @@ export default function App(props) {
     }
 
     const logout = () => {
+
         userStorage.user.removeUser()
         userStorage.lock.removeLock()
+
         userStorage.promise.sendPromise({
             account: true,
             logout: true
-        })
+        }).then()
+
         asyncRequest({reject_all: true})
+
         setLogin(true)
         setLock(false)
 
@@ -188,6 +192,7 @@ export default function App(props) {
         return <Confirm setConfirm={setConfirm} logout={logout}/>
     }
 
+    // TODO user
     if (isTransaction) {
         return (
             <Transaction
@@ -214,11 +219,13 @@ export default function App(props) {
         return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} request={isPublicKeyRequest}/>
     }
 
+    // TODO user
     if (isTransactionRequest) {
         return <TransactionRequest setTransactionRequest={setTransactionRequest} request={isTransactionRequest}
                                    user={user}/>
     }
 
+    // TODO user
     if (isTransactionHistory) {
         return <TransactionHistory setTransactionHistory={setTransactionHistory}
                                    request={isTransactionHistory}
@@ -238,12 +245,14 @@ export default function App(props) {
         return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
     }
 
+    // TODO user
     if (isPassword || (!user.publicKey && !userStorage.lock.getHashPassword())) {
         return <Password user={user} setPassword={setPassword} login={login} publicKey={user.publicKey}/>
     }
 
     if (isLogin) return <Login login={login2} setMnemonic={setMnemonic}/>
 
+    // TODO user
     return <Account user={user}
                     login={login2}
                     logout={logout}
