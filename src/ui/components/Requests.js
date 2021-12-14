@@ -86,7 +86,7 @@ export default class Requests extends React.Component {
             publicKeyRequest: null,
             transactionRequest: null
         })
-        window.location.reload(false);
+        location.reload()
     }
 
     selectPublicKeyRequest(request, taskId) {

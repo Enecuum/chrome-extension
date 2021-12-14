@@ -158,7 +158,7 @@ export default function userSelector(props) {
                              })
                                  .then(r => {
                                      props.login(data)
-                                     location.reload()
+                                     // location.reload()
                                  })
                          })}>{current ? 'CURRENT' : 'SELECT'}</div>
                 </div>
