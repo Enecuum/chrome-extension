@@ -80,7 +80,7 @@ export default function App(props) {
     const getUser = async () => {
         let account = await userStorage.user.loadUser()
         setUser(account)
-        console.warn('App get user model')
+        console.warn('App get user object')
         console.log(account)
         setLogin(!account.publicKey || account.publicKey.length <= 0)
         // setLogin(true)
@@ -114,16 +114,18 @@ export default function App(props) {
         userStorage.promise.sendPromise({
             account: true,
             logout: true
-        }).then()
+        }).then(() => {
 
-        asyncRequest({reject_all: true})
+            asyncRequest({reject_all: true})
 
-        setLogin(true)
-        setLock(false)
+            setLogin(true)
+            setLock(false)
+            // setPassword(true)
 
-        localStorage.removeItem('net')
+            localStorage.removeItem('net')
 
-        location.reload()
+            window.location.reload(true)
+        })
     }
 
     const createLedgerTransport = async () => {

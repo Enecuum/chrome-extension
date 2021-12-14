@@ -13,8 +13,8 @@ export function globalMessageHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
 
         indexDB.get(USER).then(function (user) {
-            console.warn('IndexDB USER')
-            console.log(user)
+            // console.warn('IndexDB USER')
+            // console.log(user)
         })
 
         // TODO Description
@@ -33,43 +33,33 @@ export function globalMessageHandler(msg, ENQWeb) {
             resolve()
         }
 
-        // TODO Description
+        // TODO Popup window request user object
         if (msg.account && msg.request) {
 
-            if (!userStorage.lock.checkLock()) {
+            // If user locked
+            if (userStorage.lock.checkLock()) {
+                resolve({response: false})
+            }
 
-                // TODO UNDER CONSTRUCTION
+            // If user on background or worker memory
+            if (Object.keys(ENQWeb.Enq.User).length > 0) {
 
-                let userSession
-                if (Object.keys(ENQWeb.Enq.User).length > 0) {
+                console.log('Memory session')
+                resolve({response: ENQWeb.Enq.User})
 
-                    console.log('Memory session')
-                    userSession = ENQWeb.Enq.User
-
-                } else {
-
-                    // We lost session
-                    console.error('Lost session')
-
-                    // let webSession = JSON.parse(sessionStorage.getItem('User'))
-                    // userSession = webSession ? webSession : false
-                    // console.warn('Session storage: ' + !!userSession)
-
-                    lockAccount()
-
-                    eventBus.dispatch('lock', { message: true })
-                    resolve({response: true})
-                }
-
-                if (!userSession.publicKey) {
-                    console.log('sessionStorage expired')
-                    resolve({response: {}})
-                    lockAccount()
-                    location.reload()
-                } else
-                    resolve({response: userSession})
-
+            // User unlocked but not on memory, old web version
             } else {
+
+                // We lost session
+                console.warn('LOST SESSION')
+
+                // let webSession = JSON.parse(sessionStorage.getItem('User'))
+                // userSession = webSession ? webSession : false
+                // console.warn('Session storage: ' + !!userSession)
+
+                lockAccount()
+
+                eventBus.dispatch('lock', {message: true})
                 resolve({response: false})
             }
         }
