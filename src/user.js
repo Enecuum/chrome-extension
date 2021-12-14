@@ -4,7 +4,7 @@ import indexDB from "./utils/indexDB";
 //     accounts: []
 // }
 
-let account = {
+const account = {
 
     net: '',
     token: '',
@@ -28,6 +28,8 @@ let account = {
     // Ledger ID
     ledger: '',
     ledgerAccountsArray: [], // index
+
+    names: {}, // The list of names taken by public keys
 }
 
 let getSeedAccounts = () => {

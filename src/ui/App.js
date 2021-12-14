@@ -38,7 +38,7 @@ export default function App(props) {
 
     const [isConfirm, setConfirm] = useState(false)
 
-    const [user, setUser] = useState({})
+    // const [user, setUser] = useState({})
 
     const [isNetwork, setNetwork] = useState(false)
     const [isReceive, setReceive] = useState(false)
@@ -75,6 +75,7 @@ export default function App(props) {
     const getUser = async () => {
         let account = await userStorage.user.loadUser()
         setUser(account)
+        console.warn('App get user model')
         console.log(account)
         // setLogin(account.publicKey.length > 0 ? false : true)
         setLogin(true)
@@ -96,7 +97,7 @@ export default function App(props) {
 
     const login2 = (_user) => {
         // console.log('login2')
-        setUser(_user)
+        // setUser(_user)
         setLogin(false)
     }
 
@@ -110,8 +111,10 @@ export default function App(props) {
         asyncRequest({reject_all: true})
         setLogin(true)
         setLock(false)
-        window.location.reload(false)
+
         localStorage.removeItem('net')
+
+        location.reload()
     }
 
     const createLedgerTransport = async () => {
