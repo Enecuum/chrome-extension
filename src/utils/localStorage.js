@@ -104,9 +104,7 @@ function loadUser() {
     let user = localStorage.getItem(USER)
 
     indexDB.get(USER).then(user => {
-
-        console.log('USER')
-        console.log(user)
+        console.dir('indexDB USER: ' + !!user)
     })
 
     if (!user) {
@@ -143,7 +141,7 @@ function addUser(obj) {
 }
 
 function removeUser() {
-    localStorage.setItem(USER, '')
+    localStorage.setItem(USER, JSON.stringify({}))
 }
 
 function getUser(name) {

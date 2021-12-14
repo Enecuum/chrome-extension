@@ -6,19 +6,23 @@ let SALT = 'salt*/-+^'
 
 function lockAccount(timer = false) {
 
+    // LOCK > {lock: true}
     userStorage.lock.setLock(true)
 
-    if (userStorage.name === 'background') {
+    // if (userStorage.name === 'background') {
+    //
+    //     // Only publicKey and net left
+    //     ENQWeb.Enq.User = { publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net }
+    // }
 
-        // Only publicKey and net left
-        ENQWeb.Enq.User = { publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net }
-    }
-
-    if (timer)
-        location.reload()
+    // {publicKey, net}
+    ENQWeb.Enq.User = { publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net }
 
     const accountLockedString = 'Account locked'
     console.log(accountLockedString)
+
+    if (timer)
+        location.reload()
 }
 
 //

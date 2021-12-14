@@ -5,6 +5,7 @@ import {regexAddress, regexSeed, regexToken, toggleFullScreen} from "../Utils";
 import Input from "../elements/Input";
 import * as bip32 from "bip32";
 import * as bip39 from "bip39";
+import {generateAccountData} from "../../user";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -39,27 +40,23 @@ export default class Login extends React.Component {
     }
 
     async loginSeed() {
+
         let hex = bip39.mnemonicToSeedSync(this.state.seed)
         let node = bip32.fromSeed(hex, null)
         let child = node.derivePath("m/44'/2045'/0'/0")
-        let privateKey0 = child.derive(0).privateKey.toString('hex')
-        // loginAccount(privateKey0, account.seed, account)
-        const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
-        if (publicKey0) {
-            let data = {
-                publicKey: publicKey0,
-                privateKey: privateKey0,
-                net: ENQWeb.Net.provider,
-                token: ENQWeb.Enq.ticker,
-                seed: hex,
-            }
-            userStorage.promise.sendPromise({
+
+        let privateKey = child.derive(0).privateKey.toString('hex')
+        if (privateKey) {
+
+            let data = generateAccountData(privateKey, hex)
+
+            await userStorage.promise.sendPromise({
                 account: true,
                 set: true,
                 data: data
-            }).then(r => {
-                this.props.login(data)
             })
+
+            this.props.login(data)
         }
     }
 
@@ -75,22 +72,15 @@ export default class Login extends React.Component {
             return
         }
 
-        const publicKey = ENQWeb.Utils.Sign.getPublicKey(this.state.privateKey, true)
-        if (publicKey) {
-            // console.log(publicKey)
-            let data = {
-                publicKey: publicKey,
-                privateKey: this.state.privateKey,
-                net: ENQWeb.Net.provider,
-                token: ENQWeb.Enq.ticker
-            }
-            await userStorage.promise.sendPromise({
-                account: true,
-                set: true,
-                data: data
-            })
-            this.props.login(data)
-        }
+        let data = generateAccountData(this.state.privateKey, '')
+
+        await userStorage.promise.sendPromise({
+            account: true,
+            set: true,
+            data: data
+        })
+
+        this.props.login(data)
     }
 
     generate() {
