@@ -32,6 +32,18 @@ const account = {
     names: {}, // The list of names taken by public keys
 }
 
+let generateAccountData = (privateKey, hex) => {
+    let data = {
+        ...account,
+        publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
+        privateKey: privateKey,
+        net: ENQWeb.Net.provider,
+        token: ENQWeb.Enq.ticker,
+        seed: hex
+    }
+    return data
+}
+
 let getSeedAccounts = () => {
 
     // We have to export our public key from seed here
@@ -58,4 +70,4 @@ let updateAccount = (data) => {
 
 }
 
-export {account, changeAccount, getSeedAccounts}
+export {account, generateAccountData}

@@ -3,7 +3,9 @@ import {decryptAccount, encryptAccount, lockAccount, lockTime} from "./lockAccou
 // const cacheStore = require('./indexDB') // es6
 import indexDB from './utils/indexDB'
 import {account} from "./user";
-import {USER} from "./utils/names"; // commonjs
+import {USER} from "./utils/names";
+import * as events from "events";
+import eventBus from "./utils/eventBus"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
 export function globalMessageHandler(msg, ENQWeb) {
@@ -11,6 +13,7 @@ export function globalMessageHandler(msg, ENQWeb) {
     return new Promise((resolve, reject) => {
 
         indexDB.get(USER).then(function (user) {
+            console.warn('IndexDB USER')
             console.log(user)
         })
 
@@ -37,19 +40,27 @@ export function globalMessageHandler(msg, ENQWeb) {
 
                 let userSession
                 if (Object.keys(ENQWeb.Enq.User).length > 0) {
+
                     console.log('Memory session')
                     userSession = ENQWeb.Enq.User
+
                 } else {
-                    let webSession = JSON.parse(sessionStorage.getItem('User'))
-                    userSession = webSession ? webSession : false
-                    console.warn('Session storage: ' + !!userSession)
+
+                    // let webSession = JSON.parse(sessionStorage.getItem('User'))
+                    // userSession = webSession ? webSession : false
+                    // console.warn('Session storage: ' + !!userSession)
+
+                    lockAccount()
+
+                    eventBus.dispatch('lock', { message: true })
+                    resolve({response: true})
                 }
 
                 if (!userSession.publicKey) {
                     console.log('sessionStorage expired')
                     resolve({response: {}})
                     lockAccount()
-                    window.location.reload()
+                    location.reload()
                 } else
                     resolve({response: userSession})
 
@@ -58,7 +69,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             }
         }
 
-        // TODO Unlock user.account object to memory
+        // Unlock user.account object to memory
         if (msg.account && msg.unlock && msg.password) {
 
             let account = decryptAccount(msg.password)
@@ -71,7 +82,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                 userStorage.user.addUser(account)
 
                 // Set user to sessionStorage for web
-                createWebSession(account)
+                // createWebSession(account)
 
                 encryptAccount()
                 resolve({response: account})
@@ -81,46 +92,51 @@ export function globalMessageHandler(msg, ENQWeb) {
             }
         }
 
-        // TODO Description
+        // Login by seed and simple login, set user data to app
         if (msg.account && msg.set && msg.data) {
 
-            // Edit user
-            // console.log(msg.data)
             let account = msg.data
-            ENQWeb.Enq.User = account
-            userStorage.user.addUser(account)
 
-            // TODO
-            createWebSession(account)
+            // Unlock user to memory user
+            ENQWeb.Enq.User = account
+
+            // Set user to storage memory (localStorage or IndexedDB)
+            userStorage.user.addUser(account)
 
             encryptAccount()
             resolve({response: account})
         }
 
+        // TODO
         if (msg.account && msg.encrypt) {
+
+            // TODO Password
             if (msg.again) {
-                console.log(msg.data)
+                // console.log(msg.data)
                 userStorage.user.addUser(msg.data)
-                encryptAccount()
-            } else {
-                encryptAccount()
             }
+
+            encryptAccount()
             resolve({response: true})
         }
 
-        // TODO Description
+        // Lock user model
         if (msg.lock) {
             lockAccount()
             resolve({response: true})
         }
 
-        // TODO Description
+        // TODO Logout
         if (msg.account && msg.logout) {
+
+
             ENQWeb.Enq.User = {}
-            sessionStorage.setItem('User', JSON.stringify({}))
+            userStorage.user.removeUser()
+
             // disconnectPorts()
             resolve({response: true})
         }
+
         resolve({response: false})
     })
 }

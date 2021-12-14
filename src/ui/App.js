@@ -23,6 +23,7 @@ import ImportMnemonic from "./components/account/mnemonic/ImoprtMnemonic";
 import Selector from "./components/account/Selector";
 import {NET} from "../utils/names";
 import ImportKey from "./components/account/ImportKey";
+import eventBus from "../utils/eventBus";
 
 let net = localStorage.getItem(NET)
 if (!net) {
@@ -62,6 +63,10 @@ export default function App(props) {
 
     const [isKeys, setKeys] = useState(false)
 
+    eventBus.on('lock', (data) => {
+        setLock(true)
+    })
+
     const checkLock = () => {
         if (userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {
             return true
@@ -77,8 +82,8 @@ export default function App(props) {
         setUser(account)
         console.warn('App get user model')
         console.log(account)
-        // setLogin(account.publicKey.length > 0 ? false : true)
-        setLogin(true)
+        setLogin(account.publicKey && account.publicKey.length <= 0)
+        // setLogin(true)
     }
 
     useEffect(() => {
@@ -90,14 +95,14 @@ export default function App(props) {
     }, [])
 
 
-    const login = () => {
+    const loginState = () => {
         setPassword(false)
         setLogin(true)
     }
 
     const login2 = (_user) => {
         // console.log('login2')
-        // setUser(_user)
+        setUser(_user)
         setLogin(false)
     }
 
@@ -247,7 +252,7 @@ export default function App(props) {
 
     // TODO user
     if (isPassword || (!user.publicKey && !userStorage.lock.getHashPassword())) {
-        return <Password user={user} setPassword={setPassword} login={login} publicKey={user.publicKey}/>
+        return <Password user={user} setPassword={setPassword} login={loginState} publicKey={user.publicKey}/>
     }
 
     if (isLogin) return <Login login={login2} setMnemonic={setMnemonic}/>
