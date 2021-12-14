@@ -82,7 +82,7 @@ export default function App(props) {
         setUser(account)
         console.warn('App get user model')
         console.log(account)
-        setLogin(account.publicKey && account.publicKey.length <= 0)
+        setLogin(!account.publicKey || account.publicKey.length <= 0)
         // setLogin(true)
     }
 

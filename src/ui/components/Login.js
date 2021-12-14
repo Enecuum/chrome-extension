@@ -49,6 +49,7 @@ export default class Login extends React.Component {
         if (privateKey) {
 
             let data = generateAccountData(privateKey, hex)
+            data.seedAccountsArray.push(0)
 
             await userStorage.promise.sendPromise({
                 account: true,
@@ -73,6 +74,7 @@ export default class Login extends React.Component {
         }
 
         let data = generateAccountData(this.state.privateKey, '')
+        data.privateKeys.push(this.state.privateKey)
 
         await userStorage.promise.sendPromise({
             account: true,
