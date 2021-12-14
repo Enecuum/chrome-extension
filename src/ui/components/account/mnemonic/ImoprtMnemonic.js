@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react'
-import styles from '../../css/index.module.css'
-import Separator from '../../elements/Separator'
+import styles from '../../../css/index.module.css'
+import Separator from '../../../elements/Separator'
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
-import Input from "../../elements/Input";
-import {getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../Utils";
+import Input from "../../../elements/Input";
+import {getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../../Utils";
 
 let seedLength = 12
 
-export default function Import(props) {
+export default function ImportMnemonic(props) {
 
     const [mnemonicString, setMnemonicString] = useState('')
     const [state, setState] = useState(0)

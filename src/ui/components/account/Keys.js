@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
-import styles from '../css/index.module.css'
-import Separator from '../elements/Separator'
-import {explorerAddress, getMnemonicPrivateKeyHex, shortHash, shortHashLong} from '../Utils'
+import styles from '../../css/index.module.css'
+import Separator from '../../elements/Separator'
+import {explorerAddress, getMnemonicPrivateKeyHex, shortHash, shortHashLong} from '../../Utils'
 
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()

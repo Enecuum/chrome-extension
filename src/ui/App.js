@@ -17,11 +17,12 @@ import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
 import SignRequest from "./components/requests/SignRequest";
 import TransactionHistory from "./components/requests/TransactionHistory";
-import Keys from "./components/Keys";
-import Mnemonic from "./components/mnemonic/Mnemonic";
-import Import from "./components/mnemonic/Imoprt";
-import Selector from "./components/mnemonic/Selector";
+import Keys from "./components/account/Keys";
+import Mnemonic from "./components/account/mnemonic/Mnemonic";
+import ImportMnemonic from "./components/account/mnemonic/ImoprtMnemonic";
+import Selector from "./components/account/Selector";
 import {NET} from "../utils/names";
+import ImportKey from "./components/account/ImportKey";
 
 let net = localStorage.getItem(NET)
 if (!net) {
@@ -52,6 +53,8 @@ export default function App(props) {
     const [isImportMnemonic, setImportMnemonic] = useState(false)
     const [isMnemonic, setMnemonic] = useState(false)
     const [isAccountSelector, setAccountSelector] = useState(false)
+    const [isImportKey, setImportKey] = useState(false)
+
 
 
     const [isConnectLedger, setConnectLedger] = useState(false)
@@ -72,8 +75,9 @@ export default function App(props) {
     const getUser = async () => {
         let account = await userStorage.user.loadUser()
         setUser(account)
-        // console.log(account)
-        setLogin(account.publicKey ? false : true)
+        console.log(account)
+        // setLogin(account.publicKey.length > 0 ? false : true)
+        setLogin(true)
     }
 
     useEffect(() => {
@@ -97,13 +101,13 @@ export default function App(props) {
     }
 
     const logout = () => {
-        isk.user.removeUser()
+        userStorage.user.removeUser()
         userStorage.lock.removeLock()
         userStorage.promise.sendPromise({
             account: true,
             logout: true
         })
-        global.asyncRequest({reject_all: true})
+        asyncRequest({reject_all: true})
         setLogin(true)
         setLock(false)
         window.location.reload(false)
@@ -154,7 +158,11 @@ export default function App(props) {
     }
 
     if (isImportMnemonic) {
-        return <Import login={login2} setImportMnemonic={setImportMnemonic}/>
+        return <ImportMnemonic login={login2} setImportMnemonic={setImportMnemonic}/>
+    }
+
+    if (isImportKey) {
+        return <ImportKey login={login2} setImportKey={setImportKey}/>
     }
 
     if (isMnemonic) {
@@ -165,7 +173,8 @@ export default function App(props) {
         return <Selector login={login2}
                          setAccountSelector={setAccountSelector}
                          setMnemonic={setMnemonic}
-                         setImportMnemonic={setImportMnemonic}/>
+                         setImportMnemonic={setImportMnemonic}
+                         setImportKey={setImportKey}/>
     }
 
     // if (isKeys) {
