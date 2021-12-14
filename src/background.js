@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // TODO Hmm
 say()
 
-const Storage = require('./utils/localstorage')
+const Storage = require('./utils/localStorage')
 global.userStorage = new Storage('background')
 
 let ports = {}
