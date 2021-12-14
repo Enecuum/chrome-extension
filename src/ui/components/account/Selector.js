@@ -182,11 +182,9 @@ export default function userSelector(props) {
                 </div>
             </div>
 
-            {seed && <div onClick={() => {
-            }} className={styles.field + ' ' + styles.button}>Add mnemonic account</div>}
+            {seed && <div onClick={() => {}} className={styles.field + ' ' + styles.button}>Add Mnemonic Account</div>}
 
-            <div onClick={props.setImportKey} className={styles.field + ' ' + styles.button}>Import account
-            </div>
+            <div onClick={props.setImportKey} className={styles.field + ' ' + styles.button}>Import Key</div>
 
             {!seed &&
             <div className={styles.field + ' ' + styles.button} onClick={props.setMnemonic}>Generate Mnemonic</div>}
