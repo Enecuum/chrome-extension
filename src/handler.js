@@ -3,7 +3,7 @@ import {decryptAccount, encryptAccount, lockAccount, lockTime} from "./lockAccou
 // const cacheStore = require('./indexDB') // es6
 import indexDB from './utils/indexDB'
 import {account} from "./user";
-import {USER} from "./utils/names";
+import {LOCK, USER} from "./utils/names";
 import * as events from "events";
 import eventBus from "./utils/eventBus"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
@@ -23,17 +23,19 @@ export function globalMessageHandler(msg, ENQWeb) {
             resolve({response: true})
         }
 
+        // TODO Open new window from background or worker
         if (msg.window) {
             if (msg.url != undefined) {
-                createPopupWindow(msg.url);
+                createPopupWindow(msg.url)
             } else {
-                createPopupWindow(false);
+                createPopupWindow(false)
             }
-            resolve();
+            resolve()
         }
 
         // TODO Description
         if (msg.account && msg.request) {
+
             if (!userStorage.lock.checkLock()) {
 
                 // TODO UNDER CONSTRUCTION
@@ -45,6 +47,9 @@ export function globalMessageHandler(msg, ENQWeb) {
                     userSession = ENQWeb.Enq.User
 
                 } else {
+
+                    // We lost session
+                    console.error('Lost session')
 
                     // let webSession = JSON.parse(sessionStorage.getItem('User'))
                     // userSession = webSession ? webSession : false
@@ -96,6 +101,8 @@ export function globalMessageHandler(msg, ENQWeb) {
         if (msg.account && msg.set && msg.data) {
 
             let account = msg.data
+
+            console.log(account)
 
             // Unlock user to memory user
             ENQWeb.Enq.User = account

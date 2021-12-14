@@ -920,7 +920,7 @@ input[type=number] {
 }
 
 .cards .card.card_select {
-    background: var(--color-blue);
+    background: var(--color-blue-super-dark);
     /*cursor: pointer;*/
 }
 

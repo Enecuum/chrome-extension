@@ -3,35 +3,31 @@ import styles from '../../css/index.module.css'
 import {getMnemonicHex, regexToken} from "../../Utils";
 import Input from "../../elements/Input";
 import Separator from "../../elements/Separator";
-import {account} from "../../../user";
+import {account, generateAccountData} from "../../../user";
 
 export default function ImportKey(props) {
 
     const [keyString, setKeyString] = useState('')
 
-    useEffect(() => {
-    })
+    useEffect(() => {})
 
     let loginKey = async () => {
+
         let account = await userStorage.user.loadUser()
 
         if (!account.privateKeys.includes(keyString)) {
             account.privateKeys.push(keyString)
         }
 
-        let data = {
-            ...account,
-            publicKey: ENQWeb.Utils.Sign.getPublicKey(keyString, true),
-            privateKey: keyString,
-            accountIndex: 1,
-        }
-        userStorage.promise.sendPromise({
+        // let data = generateAccountData()
+
+        await userStorage.promise.sendPromise({
             account: true,
             set: true,
-            data: data
-        }).then(r => {
-            // props.login(data)
+            data: account
         })
+
+        props.setImportKey(false)
     }
 
 

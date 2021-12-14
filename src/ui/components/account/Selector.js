@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import { getMnemonicPrivateKeyHex, regexToken, shortHash } from '../../Utils'
+import {getMnemonicPrivateKeyHex, regexToken, shortHash} from '../../Utils'
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
-import { createPopupWindow } from '../../../handler'
+import {createPopupWindow} from '../../../handler'
 // import eventBus from "../../../utils/eventBus";
-import { signHash, getVersion, getPublicKey } from '../../../utils/ledgerShell'
+import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 
 export default function userSelector(props) {
@@ -34,65 +34,55 @@ export default function userSelector(props) {
     }, [])
 
     let loadUser = () => {
-        userStorage.user.loadUser()
-            .then(async account => {
-                console.log(account)
-                let hex = account.seed
-                let accounts = []
-                if (hex) {
-                    setSeed(true)
-                    // TODO 10 not here, we will show this on other window
-                    for (let i = 0; i < 10; i++) {
-                        let privateKey = getMnemonicPrivateKeyHex(hex, i)
-                        let current = account.privateKey === privateKey
-                        const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
-                        await ENQWeb.Net.get.getBalanceAll(publicKey)
-                            .then((res) => {
-                                accounts.push({
-                                    i: i,
-                                    privateKey,
-                                    publicKey,
-                                    amount: res[0] ? res[0].amount : 0,
-                                    current,
-                                    type: 1
-                                })
-                            })
-                    }
-                    if (account.ledger) {
-                        let current = account.publicKey === account.ledgerAccountsArray[0]
-                        accounts.push({
-                            i: 10,
-                            privateKey: '',
-                            publicKey: account.ledgerAccountsArray[0],
-                            amount: 0,
-                            current,
-                            type: 2
-                        })
-                    }
+        userStorage.user.loadUser().then(async account => {
 
-                    renderCards(accounts, hex)
-                } else {
-                    accounts.push({
-                        i: 0,
-                        privateKey: '',
-                        publicKey: account.publicKey,
-                        amount: account.amount,
-                        current: true,
-                        type: 0
-                    })
-                    if (account.ledger) {
-                        accounts.push({
-                            i: 10,
-                            privateKey: '',
-                            publicKey: account.ledgerAccountsArray[0],
-                            amount: 0,
-                            current: false,
-                            type: 2
+            console.log(account)
+            let accounts = []
+
+            for (let i = 0; i < account.privateKeys.length; i++) {
+                const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
+                accounts.push({
+                    privateKey: '',
+                    publicKey: publicKey,
+                    amount: 0,
+                    current: account.privateKey === account.privateKeys[i],
+                    type: 0
+                })
+            }
+
+            let hex = account.seed
+
+            if (hex) {
+                setSeed(true)
+                for (let i = 0; i < account.seedAccountsArray.length; i++) {
+                    let privateKey = getMnemonicPrivateKeyHex(hex, account.seedAccountsArray[i])
+                    let current = account.privateKey === privateKey
+                    const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
+                    await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
+                            accounts.push({
+                                privateKey: '',
+                                publicKey,
+                                amount: res[0] ? res[0].amount : 0,
+                                current,
+                                type: 1
+                            })
                         })
-                    }
-                    renderCards(accounts, null, true)
                 }
-            })
+            }
+
+
+            if (account.ledger) {
+                accounts.push({
+                    privateKey: '',
+                    publicKey: account.ledgerAccountsArray[0],
+                    amount: 0,
+                    current: false,
+                    type: 2
+                })
+            }
+
+            renderCards(accounts, null)
+        })
     }
 
     // let loginSeed = (i) => {
@@ -120,7 +110,7 @@ export default function userSelector(props) {
     //     }
     // }
 
-    let renderCards = (accounts, hex, old = false) => {
+    let renderCards = (accounts, hex) => {
 
         let cards = []
 
@@ -138,8 +128,9 @@ export default function userSelector(props) {
                     </div>
 
                     <div className={styles.card_field}>{shortHash(accounts[i].publicKey)}</div>
-                    <div
-                        className={styles.card_field}>{accounts[i].amount > 0 ? accounts[i].amount / 1e10 : '0.0'}</div>
+
+                    <div className={styles.card_field}>{accounts[i].amount > 0 ? accounts[i].amount / 1e10 : '0.0'}</div>
+
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
                          onClick={(current ? () => {
                          } : () => {
@@ -155,11 +146,8 @@ export default function userSelector(props) {
                                  account: true,
                                  set: true,
                                  data: data
-                             })
-                                 .then(r => {
-                                     props.login(data)
-                                     // location.reload()
-                                 })
+                             }).then(r => {props.login(data)})
+
                          })}>{current ? 'CURRENT' : 'SELECT'}</div>
                 </div>
             )
@@ -182,7 +170,8 @@ export default function userSelector(props) {
                 </div>
             </div>
 
-            {seed && <div onClick={() => {}} className={styles.field + ' ' + styles.button}>Add Mnemonic Account</div>}
+            {seed && <div onClick={() => {
+            }} className={styles.field + ' ' + styles.button}>Add Mnemonic Account</div>}
 
             <div onClick={props.setImportKey} className={styles.field + ' ' + styles.button}>Import Key</div>
 
@@ -236,7 +225,7 @@ export default function userSelector(props) {
                                 // _cards.push({i: 1, privateKey: '', publicKey: 'KEY', amount: 0, current: false})
                                 // setCards(_cards)
 
-                            }}>Add Ledger account</div>}
+                            }}>Add Ledger Account</div>}
 
             <Separator/>
 

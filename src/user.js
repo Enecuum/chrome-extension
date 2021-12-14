@@ -23,7 +23,7 @@ const account = {
 
     // TODO Always encrypted
     seed: '',
-    seedAccountsArray: [0],
+    seedAccountsArray: [],
 
     // Ledger ID
     ledger: '',
