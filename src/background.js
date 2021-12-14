@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {
         lockAccount()
     }
-    console.log('lock status: ', userStorage.lock.checkLock())
-    console.log('hash password: ', userStorage.lock.getHashPassword() ? true : false)
+    console.log('Lock status: ', userStorage.lock.checkLock())
+    console.log('Hash password: ', userStorage.lock.getHashPassword() ? true : false)
 })
 
 // TODO Hmm

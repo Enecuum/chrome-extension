@@ -1,14 +1,13 @@
 import { Buffer } from 'buffer'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
-import Sia from '@siacentral/ledgerjs-sia'
 
 const getVersion = async (Transport) => {
     if (Transport === undefined) {
         Transport = await TransportWebHID.create()
     }
-    const sia = new Sia(Transport)
-    let version = await sia.getVersion() // from sia lib (possible manual)
-    return version
+    // const sia = new Sia(Transport)
+    // let version = await sia.getVersion() // from sia lib (possible manual)
+    return ''
 }
 
 const getPublicKey = async (index, Transport) => {
