@@ -93,7 +93,7 @@ export default function Account(props) {
     //     setLocked(false)
     // }
 
-    const balance = () => {
+    const getBalance = () => {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
         const mainToken = ENQWeb.Enq.token[ENQWeb.Enq.provider] ? ENQWeb.Enq.token[ENQWeb.Enq.provider] : (localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
@@ -325,7 +325,7 @@ export default function Account(props) {
     }
 
     //TODO
-    renderHistory()
+    // renderHistory()
 
     //Reject all
     let rejectAll = async () => {
@@ -350,7 +350,7 @@ export default function Account(props) {
             data: user
         })
         // window.location.reload(false)
-        await balance()
+        await getBalance()
         await renderAssets()
         setActiveTab(props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? 0 : 1)
         window.scrollTo(0, 0)
@@ -417,8 +417,6 @@ export default function Account(props) {
         }])
     }
 
-    renderAssets()
-
     const renderMenu = () => {
         if (menu) {
             return <Menu login={props.login}
@@ -436,17 +434,23 @@ export default function Account(props) {
         }
     }
 
+
     useEffect(() => {
+
         openPopup().then(result => {
             if (result === true) {
                 getConnects().then()
                 getHistory().then(() => {
                     renderHistory()
                 })
-                balance()
+                getBalance()
             }
         })
     }, [])
+
+    // TODO What's going on here
+    renderHistory()
+    renderAssets()
 
     return (
         <div className={styles.main}>
