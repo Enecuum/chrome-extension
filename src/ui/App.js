@@ -57,13 +57,13 @@ export default function App(props) {
     const [isImportKey, setImportKey] = useState(false)
 
 
-
     const [isConnectLedger, setConnectLedger] = useState(false)
     const [ledgerTransport, setLedgerTransport] = useState()
 
     const [isKeys, setKeys] = useState(false)
 
     eventBus.on('lock', (data) => {
+
         setLock(true)
     })
 
@@ -114,18 +114,22 @@ export default function App(props) {
         userStorage.promise.sendPromise({
             account: true,
             logout: true
-        }).then(() => {
-
-            asyncRequest({reject_all: true})
-
-            setLogin(true)
-            setLock(false)
-            // setPassword(true)
-
-            localStorage.removeItem('net')
-
-            window.location.reload(true)
         })
+            .then(() => {
+
+                location.reload()
+
+                asyncRequest({reject_all: true})
+
+                setLogin(true)
+                setLock(false)
+                setPassword(true)
+                // setPassword(true)
+
+                localStorage.removeItem(NET)
+
+                // location.reload()
+            })
     }
 
     const createLedgerTransport = async () => {
@@ -163,7 +167,7 @@ export default function App(props) {
 
     // global.disconnectAllPorts()
 
-
+    // TODO user
     const unlock = (_user) => {
         // console.log(_user)
         setUser(_user)
@@ -248,13 +252,14 @@ export default function App(props) {
                             getLedgerTransport={getLedgerTransport}/>
     }
 
-    if (isLock) {
-        return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
-    }
 
     // TODO user
     if (isPassword || (!user.publicKey && !userStorage.lock.getHashPassword())) {
         return <Password user={user} setPassword={setPassword} login={loginState} publicKey={user.publicKey}/>
+    }
+
+    if (isLock) {
+        return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
     }
 
     if (isLogin) return <Login login={login2} setMnemonic={setMnemonic}/>

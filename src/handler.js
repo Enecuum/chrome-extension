@@ -67,6 +67,8 @@ export function globalMessageHandler(msg, ENQWeb) {
         // Unlock user.account object to memory
         if (msg.account && msg.unlock && msg.password) {
 
+            runLockTimer()
+
             let account = decryptAccount(msg.password)
             if (account) {
 
@@ -154,13 +156,17 @@ export function Timer(ms) {
 }
 
 export function runLockTimer() {
+    console.log('Run lock timer')
     if (lockTimer !== undefined) {
         clearTimeout(lockTimer)
     }
     if (userStorage.name === "background") {
         lockTimer = setTimeout(() => lockAccount(true), lockTime)
     } else {
-        lockTimer = setTimeout(() => userStorage.promise.sendPromise({lock: true}), lockTime)
+        lockTimer = setTimeout(() => {
+            eventBus.dispatch('lock', {message: true})
+            userStorage.promise.sendPromise({lock: true})
+        }, lockTime)
     }
 }
 

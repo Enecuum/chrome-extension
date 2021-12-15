@@ -144,10 +144,11 @@ export default function Network(props) {
         localStorage.setItem(NET, value)
         ENQWeb.Net.provider = value
 
-        await userStorage.user.loadUser()
-            .then(async account => {
+        await userStorage.user.loadUser().then(async account => {
+
                 account.net = value
                 account.token = token
+
                 await userStorage.promise.sendPromise({
                     account: true,
                     set: true,
@@ -238,7 +239,7 @@ export default function Network(props) {
                        spellCheck={false}
                        onChange={async (e) => {
                            setHost(e.target.value)
-                           await checkHost(e.target.value)
+                           checkHost(e.target.value)
                        }}
                        value={host}
                        className={styles.field + ' ' + (hostCorrect ? styles.field_correct : '')}

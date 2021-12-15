@@ -15,11 +15,11 @@ export default class Lock extends React.Component {
         this.submit = this.submit.bind(this)
         this.logout = this.logout.bind(this)
         // this.setConfirm = props.setConfirm
-        window.scrollTo(0, 0);
+        window.scrollTo(0, 0)
     }
 
     handleChangePassword(e) {
-        this.setState({password: e.target.value});
+        this.setState({password: e.target.value})
     }
 
     async logout() {
@@ -28,6 +28,7 @@ export default class Lock extends React.Component {
     }
 
     async submit() {
+
         // let hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password)
         // if (userStorage.lock.unlock(hash)) {
         //     hash = ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + hash)
@@ -37,12 +38,17 @@ export default class Lock extends React.Component {
         //     this.props.unlock()
         //     window.location.reload(false);
         // }
+
         let user = await userStorage.promise.sendPromise({account: true, unlock: true, password: this.state.password})
-        // console.log(user)
-        if (user)
+
+        if (user) {
             this.props.unlock(user)
-        else
-            this.setState({incorrect:true});
+        } else {
+            this.setState({incorrect: true})
+            setTimeout(() => {
+                this.setState({incorrect: false})
+            }, 1000)
+        }
     }
 
     render() {
