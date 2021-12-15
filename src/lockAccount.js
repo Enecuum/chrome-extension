@@ -1,4 +1,12 @@
+// TODO We have to renew timer every event
+// TODO
+
 let lockTime = 10 * 60 * 1000
+import eventBus from "./utils/eventBus";
+
+// let lockTime = 60 * 1000 // 10 sec
+
+console.log('Lock time: ' + (lockTime / 1000) + ' sec.')
 
 // let lockTime = 10 * 1000
 
@@ -14,6 +22,8 @@ function lockAccount(timer = false) {
     //     // Only publicKey and net left
     //     ENQWeb.Enq.User = { publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net }
     // }
+
+    eventBus.dispatch('lock', {message: true})
 
     // {publicKey, net}
     ENQWeb.Enq.User = { publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net }

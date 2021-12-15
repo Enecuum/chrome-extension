@@ -23,6 +23,7 @@ export default function userSelector(props) {
     let [tokenCorrect, setTokenCorrect] = useState(false)
 
     let [keys, setKeys] = useState()
+    let [accounts, setAccounts] = useState([])
     let [cards, setCards] = useState([])
 
     let [showAdd, setShowAdd] = useState(false)
@@ -34,57 +35,62 @@ export default function userSelector(props) {
         loadUser()
     }, [])
 
+    let buildAccountsArray = async (account) => {
+
+        let accounts = []
+
+        for (let i = 0; i < account.privateKeys.length; i++) {
+            const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
+            accounts.push({
+                privateKey: account.privateKeys[i],
+                publicKey: publicKey,
+                amount: 0,
+                current: account.privateKey === account.privateKeys[i],
+                groupIndex: i,
+                type: 0
+            })
+        }
+
+        let hex = account.seed
+
+        if (hex) {
+            setSeed(true)
+            for (let i = 0; i < account.seedAccountsArray.length; i++) {
+                let privateKey = getMnemonicPrivateKeyHex(hex, account.seedAccountsArray[i])
+                let current = account.privateKey === privateKey
+                const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
+                await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
+                    accounts.push({
+                        privateKey,
+                        publicKey,
+                        amount: res[0] ? res[0].amount : 0,
+                        current,
+                        groupIndex: i,
+                        type: 1
+                    })
+                })
+            }
+        }
+
+        if (account.ledger) {
+            accounts.push({
+                privateKey: '',
+                publicKey: account.ledgerAccountsArray[0],
+                amount: 0,
+                current: false,
+                groupIndex: 0,
+                type: 2
+            })
+        }
+
+        setAccounts(accounts)
+
+        return account
+    }
+
     let loadUser = () => {
         userStorage.user.loadUser().then(async account => {
-
-            console.log(account)
-            let accounts = []
-
-            for (let i = 0; i < account.privateKeys.length; i++) {
-                const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
-                accounts.push({
-                    privateKey: account.privateKeys[i],
-                    publicKey: publicKey,
-                    amount: 0,
-                    current: account.privateKey === account.privateKeys[i],
-                    groupIndex: i,
-                    type: 0
-                })
-            }
-
-            let hex = account.seed
-
-            if (hex) {
-                setSeed(true)
-                for (let i = 0; i < account.seedAccountsArray.length; i++) {
-                    let privateKey = getMnemonicPrivateKeyHex(hex, account.seedAccountsArray[i])
-                    let current = account.privateKey === privateKey
-                    const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
-                    await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
-                        accounts.push({
-                            privateKey,
-                            publicKey,
-                            amount: res[0] ? res[0].amount : 0,
-                            current,
-                            groupIndex: i,
-                            type: 1
-                        })
-                    })
-                }
-            }
-
-
-            if (account.ledger) {
-                accounts.push({
-                    privateKey: '',
-                    publicKey: account.ledgerAccountsArray[0],
-                    amount: 0,
-                    current: false,
-                    groupIndex: 0,
-                    type: 2
-                })
-            }
-
+            let accounts = await buildAccountsArray(account)
             renderCards(accounts, null)
         })
     }
@@ -140,6 +146,8 @@ export default function userSelector(props) {
             set: true,
             data: data
         })
+
+        loadUser()
     }
 
     let getType = (type) => {
