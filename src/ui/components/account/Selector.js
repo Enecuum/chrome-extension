@@ -191,6 +191,40 @@ export default function userSelector(props) {
         setCards(cards)
     }
 
+    let connectLedger = () => {
+
+        // createPopupWindow('index.html?type=connectLedger')
+
+        userStorage.user.loadUser().then(async account => {
+
+                let Transport = await TransportWebHID.create() // TODO global transport object. may be in app.js. need do save new model.
+                await getPublicKey(0, Transport)
+                    .then(async data => {
+                        account.ledger = true
+
+                        // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
+                        // TODO This one is test
+
+                        account.ledgerAccountsArray = [data.substr(0, 66)]
+
+                        await userStorage.promise.sendPromise({
+                            account: true,
+                            set: true,
+                            data: account
+                        })
+
+                        console.log('Ledger worked')
+
+                    })
+                    .catch(msg => {
+                        console.error('Ledger error')
+                        console.log(msg)
+                    })
+
+            })
+        setLedger(true)
+    }
+
     return (
         <div className={styles.main}>
 
@@ -216,38 +250,7 @@ export default function userSelector(props) {
             <div className={styles.field + ' ' + styles.button} onClick={props.setImportMnemonic}>Import Mnemonic</div>}
 
             {!ledger && <div className={styles.field + ' ' + styles.button}
-                             onClick={() => {
-                                 // createPopupWindow('index.html?type=connectLedger')
-                                 userStorage.user.loadUser()
-                                     .then(async account => {
-
-                                         let Transport = await TransportWebHID.create() // TODO global transport object. may be in app.js. need do save new model.
-                                         await getPublicKey(0, Transport)
-                                             .then(async data => {
-                                                 account.ledger = true
-
-                                                 // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
-                                                 // TODO This one is test
-
-                                                 account.ledgerAccountsArray = [data.substr(0, 66)]
-
-                                                 userStorage.promise.sendPromise({
-                                                     account: true,
-                                                     set: true,
-                                                     data: account
-                                                 }).then(r => {
-                                                 })
-
-                                                 console.log('ledger worked')
-
-                                             })
-                                             .catch(msg => {
-                                                 console.error('ledger error!\n' + msg)
-                                             })
-
-                                     })
-                                 setLedger(true)
-                             }}>Connect Ledger</div>}
+                             onClick={connectLedger}>Connect Ledger</div>}
 
             {ledger && <div className={styles.field + ' ' + styles.button}
                             onClick={() => {
