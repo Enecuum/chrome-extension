@@ -72,24 +72,25 @@ export default function userSelector(props) {
             }
         }
 
-        if (account.ledger) {
-            accounts.push({
-                privateKey: '',
-                publicKey: account.ledgerAccountsArray[0],
-                amount: 0,
-                current: false,
-                groupIndex: 0,
-                type: 2
-            })
-        }
+        // if (account.ledger) {
+        //     accounts.push({
+        //         privateKey: '',
+        //         publicKey: account.ledgerAccountsArray[0],
+        //         amount: 0,
+        //         current: false,
+        //         groupIndex: 0,
+        //         type: 2
+        //     })
+        // }
 
         setAccounts(accounts)
 
-        return account
+        return accounts
     }
 
     let loadUser = () => {
         userStorage.user.loadUser().then(async account => {
+            console.log(account)
             let accounts = await buildAccountsArray(account)
             renderCards(accounts, null)
         })
