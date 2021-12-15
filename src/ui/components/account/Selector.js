@@ -126,6 +126,7 @@ export default function userSelector(props) {
         let account = (await userStorage.user.loadUser())
         let data = generateAccountData(selected.privateKey, account.seed)
         data.privateKeys = account.privateKeys
+        data.seedAccountsArray = account.seedAccountsArray
 
         await userStorage.promise.sendPromise({
             account: true,
@@ -142,7 +143,8 @@ export default function userSelector(props) {
         let account = (await userStorage.user.loadUser())
         let data = generateAccountData(account.privateKey, account.seed)
         data.privateKeys = account.privateKeys
-        data.seedAccountsArray.push(data.seedAccountsArray.length)
+        data.seedAccountsArray = account.seedAccountsArray
+        data.seedAccountsArray.push(account.seedAccountsArray.length)
 
         await userStorage.promise.sendPromise({
             account: true,

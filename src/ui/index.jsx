@@ -5,6 +5,7 @@ import Analytics from "./elements/Analytics";
 
 import styles from './css/stars.css'
 import {createDisclaimer, createResizeWatcher, createSpace} from "./Space";
+import {versions} from "../utils/names";
 
 export async function initApp(background) {
 
@@ -17,7 +18,7 @@ export async function initApp(background) {
     );
 
     // Web desktop init
-    if (chrome.runtime.getManifest().version.endsWith('web')) {
+    if (chrome.runtime.getManifest().version.endsWith(versions.WEB)) {
         createSpace()
         createDisclaimer()
         createResizeWatcher()
