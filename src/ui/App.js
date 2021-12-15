@@ -117,8 +117,6 @@ export default function App(props) {
         })
             .then(() => {
 
-                location.reload()
-
                 asyncRequest({reject_all: true})
 
                 setLogin(true)
@@ -128,7 +126,7 @@ export default function App(props) {
 
                 localStorage.removeItem(NET)
 
-                // location.reload()
+                location.reload()
             })
     }
 

@@ -134,6 +134,8 @@ export default function userSelector(props) {
         })
 
         props.login(data)
+
+        loadUser()
     }
 
     let addMnemonicAccount = async () => {
@@ -222,6 +224,7 @@ export default function userSelector(props) {
                     })
 
             })
+
         setLedger(true)
     }
 
@@ -239,30 +242,23 @@ export default function userSelector(props) {
                 </div>
             </div>
 
-            {seed && <div onClick={addMnemonicAccount} className={styles.field + ' ' + styles.button}>Add Mnemonic Account</div>}
+            {seed && <div className={styles.field + ' ' + styles.button}
+                           onClick={addMnemonicAccount}>Add Mnemonic Account</div>}
 
-            <div onClick={props.setImportKey} className={styles.field + ' ' + styles.button}>Import Key</div>
+            <div className={styles.field + ' ' + styles.button}
+                           onClick={props.setImportKey}>Import Key</div>
 
-            {!seed &&
-            <div className={styles.field + ' ' + styles.button} onClick={props.setMnemonic}>Generate Mnemonic</div>}
+            {!seed && <div className={styles.field + ' ' + styles.button}
+                           onClick={props.setMnemonic}>Generate Mnemonic</div>}
 
-            {!seed &&
-            <div className={styles.field + ' ' + styles.button} onClick={props.setImportMnemonic}>Import Mnemonic</div>}
+            {!seed && <div className={styles.field + ' ' + styles.button}
+                           onClick={props.setImportMnemonic}>Import Mnemonic</div>}
 
             {!ledger && <div className={styles.field + ' ' + styles.button}
-                             onClick={connectLedger}>Connect Ledger</div>}
+                           onClick={connectLedger}>Connect Ledger</div>}
 
             {ledger && <div className={styles.field + ' ' + styles.button}
-                            onClick={() => {
-
-                                loadUser()
-
-                                // createPopupWindow('index.html?type=connectLedger')
-                                // let _cards = JSON.parse(JSON.stringify(cards))
-                                // _cards.push({i: 1, privateKey: '', publicKey: 'KEY', amount: 0, current: false})
-                                // setCards(_cards)
-
-                            }}>Add Ledger Account</div>}
+                           onClick={loadUser}>Add Ledger Account</div>}
 
             <Separator/>
 
