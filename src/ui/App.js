@@ -63,14 +63,17 @@ export default function App(props) {
     const [isKeys, setKeys] = useState(false)
 
     eventBus.on('lock', (data) => {
-
-        setLock(true)
+        console.warn('EVENT: ' + 'lock' + ' ' + data.message)
+        setLock(data.message)
     })
 
     const checkLock = () => {
+
         if (userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {
+            console.log('LOCKED')
             return true
         } else {
+            console.log('OPEN')
             return false
         }
     }
@@ -119,8 +122,8 @@ export default function App(props) {
 
                 asyncRequest({reject_all: true})
 
-                setLogin(true)
                 setLock(false)
+                setLogin(true)
                 setPassword(true)
                 // setPassword(true)
 

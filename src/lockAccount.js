@@ -78,7 +78,10 @@ function decryptAccount(password) {
         hash = ENQWeb.Utils.crypto.strengthenPassword(SALT + hash)
         // console.log(hash)
         // console.log(userStorage.user.loadUserNotJson())
-        let accountString = ENQWeb.Utils.crypto.decrypt(userStorage.user.loadUserNotJson(), hash)
+        let userData = userStorage.user.loadUserNotJson()
+        if (!userData)
+            return false
+        let accountString = ENQWeb.Utils.crypto.decrypt(userData, hash)
         // console.log(accountString)
         let account = JSON.parse(accountString)
         // console.log(account)

@@ -7,6 +7,7 @@ const TOKENS = 'tokens'
 // TODO Description
 const LOCK = 'lock'
 // TODO User model (account only) object
+// const USER = 'User'
 const USER = 'user'
 // TODO Description
 const CONFIG = 'config'

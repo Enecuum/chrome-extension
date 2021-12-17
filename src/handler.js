@@ -53,14 +53,16 @@ export function globalMessageHandler(msg, ENQWeb) {
                 // We lost session
                 console.warn('LOST SESSION')
 
+                if (userStorage.user.userExist()) {
+
+                    lockAccount()
+                    eventBus.dispatch('lock', {message: true})
+                    resolve({response: false})
+                }
+
                 // let webSession = JSON.parse(sessionStorage.getItem('User'))
                 // userSession = webSession ? webSession : false
                 // console.warn('Session storage: ' + !!userSession)
-
-                lockAccount()
-
-                eventBus.dispatch('lock', {message: true})
-                resolve({response: false})
             }
         }
 
@@ -69,7 +71,13 @@ export function globalMessageHandler(msg, ENQWeb) {
 
             runLockTimer()
 
-            let account = decryptAccount(msg.password)
+            let account
+            try {
+                account = decryptAccount(msg.password)
+            } catch (e) {
+                eventBus.dispatch('lock', {message: false})
+            }
+
             if (account) {
 
                 // Unlock user to memory user
