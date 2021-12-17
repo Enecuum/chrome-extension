@@ -5,6 +5,7 @@ import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
 import Input from "../../../elements/Input";
 import {getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../../Utils";
+import {generateAccountData} from "../../../../user";
 
 let seedLength = 12
 
@@ -36,26 +37,23 @@ export default function Mnemonic(props) {
     //     })
     // }
 
-    const loginSeed = (mnemonicString) => {
-        let privateKey0 = getMnemonicFirstPrivateKey(mnemonicString)
-        // loginAccount(privateKey0, account.seed, account)
-        const publicKey0 = ENQWeb.Utils.Sign.getPublicKey(privateKey0, true)
-        if (publicKey0) {
-            let data = {
-                publicKey: publicKey0,
-                privateKey: privateKey0,
-                net: ENQWeb.Net.provider,
-                token: ENQWeb.Enq.ticker,
-                seed: getMnemonicHex(mnemonicString),
-            }
-            userStorage.promise.sendPromise({
-                account: true,
-                set: true,
-                data: data
-            }).then(r => {
-                props.login(data)
-            })
-        }
+    const loginSeed = async (mnemonicString) => {
+
+        let privateKey = getMnemonicFirstPrivateKey(mnemonicString)
+        let account = (await userStorage.user.loadUser())
+        let data = generateAccountData(privateKey, getMnemonicHex(mnemonicString))
+
+        data.privateKeys = account.privateKeys
+        // if (!data.privateKeys.includes(keyString))
+        //     data.privateKeys.push(keyString)
+
+        await userStorage.promise.sendPromise({
+            account: true,
+            set: true,
+            data: data
+        })
+
+        props.login(data)
     }
 
     const renderMnemonic = () => {
@@ -89,8 +87,8 @@ export default function Mnemonic(props) {
             wordsList.push(words[number - 1])
             wordsList.sort(() => .5 - Math.random())
             for (let i = 0; i < wordsList.length; i++) {
-                wordsArray.push(renderWord('', wordsList[i], wordsList[i] === words[number - 1] ? () => {
-                    loginSeed(mnemonicString)
+                wordsArray.push(renderWord('', wordsList[i], wordsList[i] === words[number - 1] ? async () => {
+                    await loginSeed(mnemonicString)
                     props.setMnemonic(false)
                 } : () => setState(0), i))
             }
@@ -166,7 +164,8 @@ export default function Mnemonic(props) {
                     {/*}} className={styles.field + ' ' + styles.button}>Generate*/}
                     {/*</div>}*/}
 
-                    {(state === 1 || state === 2) && <div onClick={() => {}} className={styles.field + ' ' + styles.button + ' ' + styles.button_disabled}>&nbsp;</div>}
+                    {(state === 1 || state === 2) && <div onClick={() => {
+                    }} className={styles.field + ' ' + styles.button + ' ' + styles.button_disabled}>&nbsp;</div>}
 
                     {state === 0 && <div onClick={() => {
                         if (state === 0) {
