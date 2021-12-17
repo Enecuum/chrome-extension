@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import {getMnemonicPrivateKeyHex, regexToken, shortHash} from '../../Utils'
+import {explorerAddress, getMnemonicPrivateKeyHex, regexToken, shortHash} from '../../Utils'
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
@@ -181,13 +181,12 @@ export default function userSelector(props) {
                         <div>{getType(account.type)}</div>
                     </div>
 
-                    <div className={styles.card_field}>{shortHash(account.publicKey)}</div>
+                    <div className={styles.card_field + ' ' + styles.buttonLink} onClick={() => explorerAddress(account.publicKey)}>{shortHash(account.publicKey)}</div>
 
                     <div className={styles.card_field}>{account.amount > 0 ? account.amount / 1e10 : '0.0'}</div>
 
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
-                         onClick={(current ? () => {
-                         } : () => selectAccount(account))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                         onClick={(current ? () => {} : () => selectAccount(account))}>{current ? 'CURRENT' : 'SELECT'}</div>
                 </div>
             )
         }
@@ -238,6 +237,9 @@ export default function userSelector(props) {
             }}>❮ Back
             </div>
 
+            <div className={styles.field + ' ' + styles.button}
+                 onClick={props.setImportKey}>Import Key</div>
+
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
                     {cards}
@@ -246,9 +248,6 @@ export default function userSelector(props) {
 
             {seed && <div className={styles.field + ' ' + styles.button}
                            onClick={addMnemonicAccount}>Add Mnemonic Account</div>}
-
-            <div className={styles.field + ' ' + styles.button}
-                           onClick={props.setImportKey}>Import Key</div>
 
             {!seed && <div className={styles.field + ' ' + styles.button}
                            onClick={props.setMnemonic}>Generate Mnemonic</div>}
