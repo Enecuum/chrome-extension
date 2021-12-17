@@ -100,6 +100,11 @@ function setTask(key, value) {
 }
 
 //
+function userExist() {
+    return localStorage.getItem(USER).length > 0
+}
+
+//
 function loadUser() {
     let user = localStorage.getItem(USER)
 
@@ -225,7 +230,7 @@ function lock() {
 }
 
 function removeLock() {
-    localStorage.removeItem(LOCK)
+    localStorage.setItem(LOCK, JSON.stringify(false))
     return true
 }
 
@@ -348,6 +353,7 @@ function Storage(name) {
     this.user = {
         name,
         loadUser,
+        userExist,
         addUser,
         getUser,
         removeUser,
