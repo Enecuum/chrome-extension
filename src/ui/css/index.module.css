@@ -130,6 +130,15 @@ a {
     color: var(--color-white);
 }
 
+.buttonLink {
+    cursor: pointer;
+
+}
+
+.buttonLink:hover {
+    color: var(--color-blue);
+}
+
 a:hover {
     color: var(--color-blue-ligth);
     text-decoration: none;
@@ -959,7 +968,7 @@ input[type=number] {
 }
 
 .card_field_select:hover {
-    color: var(--color-blue)
+    color: var(--color-blue);
 }
 
 .card_field_delete {
