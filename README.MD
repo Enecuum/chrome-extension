@@ -52,7 +52,10 @@
 - Ledger
 
 ### Memory
-- global.disk - storage implementation
+- global.userStorage - storage implementation
+- global.asyncRequest - 
+- global.chrome
+- 
 - ENQWeb - 
 - ENQWeb.Enq -
 - ENQWeb.Enq.User -
