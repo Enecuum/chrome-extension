@@ -14,11 +14,8 @@ export default function ImportKey(props) {
     let loginKey = async () => {
 
         let account = (await userStorage.user.loadUser())
-        let data = generateAccountData(keyString, account.seed)
-
-        data.privateKeys = account.privateKeys
-        if (!data.privateKeys.includes(keyString))
-            data.privateKeys.push(keyString)
+        let data = generateAccountData(keyString, account.seed, account)
+        data.privateKeys.push(keyString)
 
         await userStorage.promise.sendPromise({
             account: true,
