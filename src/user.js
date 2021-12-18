@@ -27,19 +27,27 @@ const account = {
 
     // Ledger ID
     ledger: '',
-    ledgerAccountsArray: [], // index
+    ledgerAccountsArray: [], // keys
 
     names: {}, // The list of names taken by public keys
 }
 
-let generateAccountData = (privateKey, hex) => {
+let generateAccountData = (privateKey, hex, accountData) => {
     let data = {
         ...account,
+
         publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
         privateKey: privateKey,
         net: ENQWeb.Net.provider,
         token: ENQWeb.Enq.ticker,
-        seed: hex
+
+        privateKeys: accountData.privateKeys,
+
+        seed: hex,
+        seedAccountsArray: accountData.seedAccountsArray,
+
+        ledger: accountData.ledger,
+        ledgerAccountsArray: accountData.ledgerAccountsArray,
     }
     return data
 }

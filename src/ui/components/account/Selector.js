@@ -10,6 +10,8 @@ import {createPopupWindow} from '../../../handler'
 import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import {generateAccountData} from "../../../user";
+import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
+import Eth from "@ledgerhq/hw-app-eth";
 
 export default function userSelector(props) {
 
@@ -41,13 +43,15 @@ export default function userSelector(props) {
 
         for (let i = 0; i < account.privateKeys.length; i++) {
             const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
-            accounts.push({
-                privateKey: account.privateKeys[i],
-                publicKey: publicKey,
-                amount: 0,
-                current: account.privateKey === account.privateKeys[i],
-                groupIndex: i,
-                type: 0
+            await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
+                accounts.push({
+                    privateKey: account.privateKeys[i],
+                    publicKey: publicKey,
+                    amount: res[0] ? res[0].amount : 0,
+                    current: account.privateKey === account.privateKeys[i],
+                    groupIndex: i,
+                    type: 0
+                })
             })
         }
 
@@ -72,16 +76,22 @@ export default function userSelector(props) {
             }
         }
 
-        // if (account.ledger) {
-        //     accounts.push({
-        //         privateKey: '',
-        //         publicKey: account.ledgerAccountsArray[0],
-        //         amount: 0,
-        //         current: false,
-        //         groupIndex: 0,
-        //         type: 2
-        //     })
-        // }
+        if (account.ledger) {
+            for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
+                let current = account.publicKey === account.ledgerAccountsArray[i]
+                await ENQWeb.Net.get.getBalanceAll(account.ledgerAccountsArray[i]).then((res) => {
+                    accounts.push({
+                        privateKey: '',
+                        publicKey: account.ledgerAccountsArray[i],
+                        amount: res[0] ? res[0].amount : 0,
+                        current,
+                        groupIndex: i,
+                        type: 2
+                    })
+                })
+            }
+
+        }
 
         setAccounts(accounts)
 
@@ -124,9 +134,7 @@ export default function userSelector(props) {
     let selectAccount = async (selected) => {
 
         let account = (await userStorage.user.loadUser())
-        let data = generateAccountData(selected.privateKey, account.seed)
-        data.privateKeys = account.privateKeys
-        data.seedAccountsArray = account.seedAccountsArray
+        let data = generateAccountData(selected.privateKey, account.seed, account)
 
         await userStorage.promise.sendPromise({
             account: true,
@@ -140,11 +148,26 @@ export default function userSelector(props) {
     }
 
     let addMnemonicAccount = async () => {
+
         let account = (await userStorage.user.loadUser())
-        let data = generateAccountData(account.privateKey, account.seed)
-        data.privateKeys = account.privateKeys
-        data.seedAccountsArray = account.seedAccountsArray
+        let data = generateAccountData(account.privateKey, account.seed, account)
         data.seedAccountsArray.push(account.seedAccountsArray.length)
+
+        await userStorage.promise.sendPromise({
+            account: true,
+            set: true,
+            data: data
+        })
+
+        loadUser()
+    }
+
+    let addLedgerAccount = async (ledgerPublicKey) => {
+
+        let account = (await userStorage.user.loadUser())
+        let data = generateAccountData(account.privateKey, account.seed, account)
+        data.ledgerAccountsArray.push(ledgerPublicKey)
+        data.ledger = true
 
         await userStorage.promise.sendPromise({
             account: true,
@@ -181,17 +204,51 @@ export default function userSelector(props) {
                         <div>{getType(account.type)}</div>
                     </div>
 
-                    <div className={styles.card_field + ' ' + styles.buttonLink} onClick={() => explorerAddress(account.publicKey)}>{shortHash(account.publicKey)}</div>
+                    <div className={styles.card_field + ' ' + styles.buttonLink}
+                         onClick={() => explorerAddress(account.publicKey)}>{shortHash(account.publicKey)}</div>
 
                     <div className={styles.card_field}>{account.amount > 0 ? account.amount / 1e10 : '0.0'}</div>
 
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
-                         onClick={(current ? () => {} : () => selectAccount(account))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                         onClick={(current ? () => {
+                         } : () => selectAccount(account))}>{current ? 'CURRENT' : 'SELECT'}</div>
                 </div>
             )
         }
 
         setCards(cards)
+    }
+
+    let connectLedgerEth = async () => {
+
+        // TransportWebUSB.list().then(devices => {
+        //     console.log(devices)
+        //     let output = devices.length > 0 && devices.find(device => device.manufacturerName === 'Ledger')
+        //     console.log(!!output)
+        //     setUsbDevice(!!output)
+        // })
+
+        return await TransportWebUSB.create().then(async transport => {
+
+            const eth = new Eth(transport)
+
+            console.log(eth)
+
+            let account = (await userStorage.user.loadUser())
+
+            eth.getAddress("44'/60'/0'/0/" + account.ledgerAccountsArray.length).then(o => {
+
+                if (!ledger) {
+                    setLedger(true)
+                } else {
+                    addLedgerAccount(o.address)
+                }
+                console.log(o.address)
+
+            }).catch(e => {
+                setLedger(false)
+            })
+        })
     }
 
     let connectLedger = () => {
@@ -200,33 +257,35 @@ export default function userSelector(props) {
 
         userStorage.user.loadUser().then(async account => {
 
-                let Transport = await TransportWebHID.create() // TODO global transport object. may be in app.js. need do save new model.
-                await getPublicKey(0, Transport)
-                    .then(async data => {
-                        account.ledger = true
+            // TODO global transport object. may be in app.js. need do save new model.
+            let Transport = await TransportWebHID.create()
+            await getPublicKey(0, Transport).then(async data => {
 
-                        // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
-                        // TODO This one is test
+                console.log(data)
+                account.ledger = true
+                console.log(ledger)
 
-                        account.ledgerAccountsArray = [data.substr(0, 66)]
+                // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
+                // TODO This one is test
 
-                        await userStorage.promise.sendPromise({
-                            account: true,
-                            set: true,
-                            data: account
-                        })
+                // account.ledgerAccountsArray = [data.substr(0, 66)]
 
-                        console.log('Ledger worked')
+                // await userStorage.promise.sendPromise({
+                //     account: true,
+                //     set: true,
+                //     data: account
+                // })
 
-                    })
-                    .catch(msg => {
-                        console.error('Ledger error')
-                        console.log(msg)
-                    })
-
+                console.log('Ledger worked')
+                setLedger(true)
             })
+                .catch(msg => {
+                    console.error('Ledger error')
+                    console.log(msg)
+                    setLedger(false)
+                })
 
-        setLedger(true)
+        })
     }
 
     return (
@@ -238,7 +297,8 @@ export default function userSelector(props) {
             </div>
 
             <div className={styles.field + ' ' + styles.button}
-                 onClick={props.setImportKey}>Import Key</div>
+                 onClick={props.setImportKey}>Import Key
+            </div>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
@@ -247,7 +307,7 @@ export default function userSelector(props) {
             </div>
 
             {seed && <div className={styles.field + ' ' + styles.button}
-                           onClick={addMnemonicAccount}>Add Mnemonic Account</div>}
+                          onClick={addMnemonicAccount}>Add Mnemonic Account</div>}
 
             {!seed && <div className={styles.field + ' ' + styles.button}
                            onClick={props.setMnemonic}>Generate Mnemonic</div>}
@@ -256,10 +316,10 @@ export default function userSelector(props) {
                            onClick={props.setImportMnemonic}>Import Mnemonic</div>}
 
             {!ledger && <div className={styles.field + ' ' + styles.button}
-                           onClick={connectLedger}>Connect Ledger</div>}
+                             onClick={connectLedgerEth}>Connect Ledger</div>}
 
             {ledger && <div className={styles.field + ' ' + styles.button}
-                           onClick={loadUser}>Add Ledger Account</div>}
+                            onClick={connectLedgerEth}>Add Ledger Account</div>}
 
             <Separator/>
 
