@@ -102,7 +102,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
             let account = msg.data
 
-            console.log(account)
+            // console.log(account)
 
             // Unlock user to memory user
             ENQWeb.Enq.User = account
