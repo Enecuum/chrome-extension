@@ -100,7 +100,7 @@ export default function userSelector(props) {
 
     let loadUser = () => {
         userStorage.user.loadUser().then(async account => {
-            console.log(account)
+            // console.log(account)
             let accounts = await buildAccountsArray(account)
             renderCards(accounts, null)
         })
