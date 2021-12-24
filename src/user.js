@@ -32,7 +32,7 @@ const account = {
     names: {}, // The list of names taken by public keys
 }
 
-let generateAccountData = (privateKey, hex, accountData) => {
+let generateAccountData = (privateKey, hex, accountData = account) => {
     let data = {
         ...account,
 
