@@ -41,9 +41,9 @@ export default function Mnemonic(props) {
 
         let privateKey = getMnemonicFirstPrivateKey(mnemonicString)
         let account = (await userStorage.user.loadUser())
-        let data = generateAccountData(privateKey, getMnemonicHex(mnemonicString))
+        let data = generateAccountData(privateKey, getMnemonicHex(mnemonicString), account)
 
-        data.privateKeys = account.privateKeys
+        // data.privateKeys = account.privateKeys
         // if (!data.privateKeys.includes(keyString))
         //     data.privateKeys.push(keyString)
 
