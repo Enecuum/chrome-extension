@@ -7,6 +7,8 @@ import indexDB from "./utils/indexDB";
 const account = {
 
     net: '',
+
+    // Native token
     token: '',
 
     // Imported private keys

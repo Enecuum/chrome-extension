@@ -188,17 +188,18 @@ export default function App(props) {
         return <Mnemonic login={login2} setMnemonic={setMnemonic} user={user}/>
     }
 
+    if (isKeys) {
+        return <Keys setKeys={setKeys}/>
+    }
+
     if (isAccountSelector) {
         return <Selector login={login2}
+                         setKeys={setKeys}
                          setAccountSelector={setAccountSelector}
                          setMnemonic={setMnemonic}
                          setImportMnemonic={setImportMnemonic}
                          setImportKey={setImportKey}/>
     }
-
-    // if (isKeys) {
-    //     return <Keys setKeys={setKeys}/>
-    // }
 
     if (isConfirm) {
         return <Confirm setConfirm={setConfirm} logout={logout}/>
