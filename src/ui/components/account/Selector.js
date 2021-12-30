@@ -12,6 +12,8 @@ import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import {generateAccountData} from "../../../user";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import Eth from "@ledgerhq/hw-app-eth";
+import elements from "../../css/elements.module.css";
+import {copyText} from "../../../utils/names";
 
 export default function userSelector(props) {
 
@@ -32,6 +34,8 @@ export default function userSelector(props) {
 
     let [seed, setSeed] = useState(false)
     let [ledger, setLedger] = useState(false)
+
+    let [isCopied, setCopied] = useState(false)
 
     useEffect(() => {
         loadUser()
@@ -204,19 +208,29 @@ export default function userSelector(props) {
                         <div>{getType(account.type)}</div>
                     </div>
 
-                    <div className={styles.card_field + ' ' + styles.buttonLink}
-                         onClick={() => explorerAddress(account.publicKey)}>{shortHash(account.publicKey)}</div>
+                    {/*<div className={styles.card_field + ' ' + styles.buttonLink}*/}
+                    {/*     onClick={() => explorerAddress(account.publicKey)}>{shortHash(account.publicKey)}</div>*/}
+
+                    <div className={styles.card_field + ' ' + (isCopied ? elements.copied : '')} onClick={() => copyPublicKey(account.publicKey)}
+                         title={account.publicKey + copyText}>{shortHash(account.publicKey)}</div>
 
                     <div className={styles.card_field}>{account.amount > 0 ? account.amount / 1e10 : '0.0'}</div>
 
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
-                         onClick={(current ? () => {
-                         } : () => selectAccount(account))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                         onClick={(current ? () => {props.setKeys(true)} : () => selectAccount(account))}>{current ? 'KEYS' : 'SELECT'}</div>
                 </div>
             )
         }
 
         setCards(cards)
+    }
+
+    const copyPublicKey = (publicKey) => {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(publicKey)
+            setCopied(true)
+        } else
+            console.error('navigator.clipboard: ' + false)
     }
 
     let connectLedgerEth = async () => {

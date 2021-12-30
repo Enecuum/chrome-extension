@@ -29,6 +29,8 @@ const versions = {
     WEB: ' web ',
 }
 
+const copyText = ('\n\nCopy address to clipboard').toUpperCase()
+
 const ENQ_CONTENT = 'ENQContent'
 
 
@@ -50,5 +52,6 @@ module.exports = {
     NET,
     versions,
     ENQ_CONTENT,
-    strings
+    strings,
+    copyText
 }

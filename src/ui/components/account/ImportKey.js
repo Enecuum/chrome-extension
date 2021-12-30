@@ -53,8 +53,8 @@ export default function ImportKey(props) {
 
                 <div onClick={() => {
                     if (regexToken.test(keyString)) {
-                        console.log(regexToken.test(keyString))
-                        console.log(keyString)
+                        // console.log(regexToken.test(keyString))
+                        // console.log(keyString)
                         loginKey(keyString).then()
                         // props.setImportKey(false)
                     }

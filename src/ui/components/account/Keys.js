@@ -15,20 +15,20 @@ export default function Keys(props) {
         loadUser()
     })
 
-    // let loadUser = () => {
-    //     userStorage.user.loadUser().then(async account => {
-    //         // console.log(account)
-    //         setPublicKey(account.publicKey)
-    //         setPrivateKey(account.privateKey)
-    //
-    //         let hex = account.seed
-    //         if (hex) {
-    //             let account2 = getMnemonicPrivateKeyHex(hex, 1)
-    //             const publicKey2 = ENQWeb.Utils.Sign.getPublicKey(account2, true)
-    //             // console.log(account2)
-    //         }
-    //     })
-    // }
+    let loadUser = () => {
+        userStorage.user.loadUser().then(async account => {
+            // console.log(account)
+            setPublicKey(account.publicKey)
+            setPrivateKey(account.privateKey)
+
+            // let hex = account.seed
+            // if (hex) {
+            //     let account2 = getMnemonicPrivateKeyHex(hex, 1)
+            //     const publicKey2 = ENQWeb.Utils.Sign.getPublicKey(account2, true)
+            //     // console.log(account2)
+            // }
+        })
+    }
 
     return (
 
