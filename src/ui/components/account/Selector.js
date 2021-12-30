@@ -15,7 +15,7 @@ import Eth from "@ledgerhq/hw-app-eth";
 import elements from "../../css/elements.module.css";
 import {copyText} from "../../../utils/names";
 
-export default function userSelector(props) {
+export default function Selector(props) {
 
     let [accountsList, setAccountsList] = useState()
 
@@ -35,11 +35,11 @@ export default function userSelector(props) {
     let [seed, setSeed] = useState(false)
     let [ledger, setLedger] = useState(false)
 
-    let [isCopied, setCopied] = useState(false)
+    let [copied, setCopied] = useState()
 
     useEffect(() => {
         loadUser()
-    }, [])
+    }, [copied])
 
     let buildAccountsArray = async (account) => {
 
@@ -211,7 +211,8 @@ export default function userSelector(props) {
                     {/*<div className={styles.card_field + ' ' + styles.buttonLink}*/}
                     {/*     onClick={() => explorerAddress(account.publicKey)}>{shortHash(account.publicKey)}</div>*/}
 
-                    <div className={styles.card_field + ' ' + (isCopied ? elements.copied : '')} onClick={() => copyPublicKey(account.publicKey)}
+                    <div className={styles.card_field + ' ' + (copied ? styles.card_field_copied : styles.card_field_not_copied)}
+                         onClick={() => copyPublicKey(account.publicKey)}
                          title={account.publicKey + copyText}>{shortHash(account.publicKey)}</div>
 
                     <div className={styles.card_field}>{account.amount > 0 ? account.amount / 1e10 : '0.0'}</div>
@@ -229,6 +230,8 @@ export default function userSelector(props) {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(publicKey)
             setCopied(true)
+            {console.log(copied)}
+            // loadUser()
         } else
             console.error('navigator.clipboard: ' + false)
     }

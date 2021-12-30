@@ -963,6 +963,15 @@ input[type=number] {
     /*font-weight: 300;*/
 }
 
+.card_field_not_copied {
+    cursor: pointer;
+    width: auto;
+}
+
+.card_field_copied {
+    color: var(--color-gray-ligth)
+}
+
 .card_field_select {
     position: absolute;
     bottom: 20px;

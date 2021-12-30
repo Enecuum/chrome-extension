@@ -279,3 +279,14 @@ label {
     font-size: var(--font-size-small);
     border-radius: 2px;
 }
+
+.red {
+    cursor: pointer;
+    /*background: red;*/
+    font-size: 1000px;
+}
+
+.blue {
+    cursor: pointer;
+    /*background: blue;*/
+}
