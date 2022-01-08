@@ -2,7 +2,8 @@ import { signHash } from './utils/ledgerShell'
 
 import { extensionApi } from './utils/extensionApi'
 import { lockAccount, say } from './lockAccount'
-import {createPopupWindow, globalMessageHandler} from './handler'
+import { createPopupWindow, globalMessageHandler } from './handler'
+import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 
 document.addEventListener('DOMContentLoaded', function () {
     if (!userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {
@@ -40,6 +41,7 @@ let popupOpenMethods = {
     'sign': true
 }
 
+let ledgerTransport = false
 const VALID_VERSION_LIB = '0.2.3'
 
 let Account = {}
@@ -69,7 +71,8 @@ async function messageHandler(msg, sender, sendResponse) {
         ports = {}
     }
 
-    globalMessageHandler(msg, ENQWeb).then(answer => sendResponse(answer))
+    globalMessageHandler(msg, ENQWeb)
+        .then(answer => sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {
@@ -140,7 +143,9 @@ async function msgConnectHandler(msg, sender) {
                 })
             }
             if (!requestsMethods[msg.type]) {
-                taskHandler(msg.taskId).then(r => {})
+                taskHandler(msg.taskId)
+                    .then(r => {
+                    })
             } else {
                 taskCounter()
                 if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
@@ -318,7 +323,7 @@ async function taskHandler(taskId) {
         prvkey: account.privateKey
     }
     switch (task.type) {
-    // TODO Description
+        // TODO Description
     case 'enable':
         data = {
             pubkey: account.publicKey,
@@ -334,7 +339,7 @@ async function taskHandler(taskId) {
         ports[task.cb.url].enabled = true
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'tx':
         if (ports[task.cb.url].enabled) {
             console.log('tx handler work!')
@@ -349,7 +354,11 @@ async function taskHandler(taskId) {
                 data.value = ''
                 data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
                 data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)
-                data.sign = await signHash(data.hash, 0)
+                let Transport = ledgerTransport ? ledgerTransport : await TransportWebHID.create()
+                if (!ledgerTransport) {
+                    ledgerTransport = Transport
+                }
+                data.sign = await signHash(data.hash, wallet.prvkey, Transport)
                 console.log({ sign: data.sign })
                 data = await ENQWeb.Enq.sendTx(data)
                     .then(data => {
@@ -382,7 +391,7 @@ async function taskHandler(taskId) {
         }
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'balanceOf':
         console.log('balanceOf handler work!')
         if (ports[task.cb.url].enabled) {
@@ -414,7 +423,7 @@ async function taskHandler(taskId) {
         }
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'getProvider':
         if (ports[task.cb.url].enabled) {
             ENQWeb.Net.provider = account.net
@@ -433,7 +442,7 @@ async function taskHandler(taskId) {
         }
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'getVersion':
         if (ports[task.cb.url].enabled) {
             console.log('version: ', extensionApi.app.getDetails().version)
@@ -446,7 +455,7 @@ async function taskHandler(taskId) {
         }
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'sign':
         console.log('sign work')
         if (ports[task.cb.url].enabled) {
@@ -459,7 +468,7 @@ async function taskHandler(taskId) {
         }
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'reconnect':
         console.log('reconnect')
         let connected = ports[task.cb.url].enabled ? true : false
@@ -515,11 +524,11 @@ function broadcast(host, data) {
 async function connectHandler(port) {
     await connectController(port)
     switch (port.name) {
-    // TODO Description
+        // TODO Description
     case 'content':
         port.onMessage.addListener(msgConnectHandler)
         break
-    // TODO Description
+        // TODO Description
     case 'popup':
         port.onMessage.addListener(msgPopupHandler)
         break

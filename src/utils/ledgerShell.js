@@ -1,26 +1,22 @@
 import { Buffer } from 'buffer'
-import TransportWebHID from '@ledgerhq/hw-transport-webhid'
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
+
 
 const getVersion = async (Transport) => {
     if (Transport === undefined) {
-        Transport = await TransportWebHID.create()
+        Transport = await TransportWebUSB.create()
     }
-    // const sia = new Sia(Transport)
-    // let version = await sia.getVersion() // from sia lib (possible manual)
-    return ''
+    let manual = await Transport.send(0xe0, 0x01, 0x00, 0x00)
+    return (manual.toString('hex')).substr(0, 6)
 }
 
 const getPublicKey = async (index, Transport) => {
 
     if (Transport === undefined) {
-        Transport = await TransportWebHID.create()
+        Transport = await TransportWebUSB.create()
     }
     let manual = await Transport.send(0xe0, 0x02, 0x00, 0x01, uint32ToBuffer(index))
-    return manual.toString('hex')
-
-    // const sia = new Sia(Transport)
-    // let version = await  sia.verifyPublicKey(0); // from sia lib (possible manual)
-    // return version
+    return (manual.toString('hex')).substr(0, 66)
 }
 
 let uint32ToBuffer = (number) => {
@@ -30,12 +26,9 @@ let uint32ToBuffer = (number) => {
 }
 
 const signHash = async (hash, index, Transport) => {
-
     if (Transport === undefined) {
-        Transport = await TransportWebHID.create()
+        Transport = await TransportWebUSB.create()
     }
-
-
     console.log({
         hash,
         index
@@ -58,4 +51,4 @@ const signHash = async (hash, index, Transport) => {
     return manual.substr(0, size)
 }
 
-export { signHash, getPublicKey, getVersion }
+export { signHash, getPublicKey, getVersion}

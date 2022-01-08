@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import {explorerAddress, getMnemonicPrivateKeyHex, shortHash, shortHashLong} from '../../Utils'
+import { explorerAddress, getMnemonicPrivateKeyHex, shortHash, shortHashLong } from '../../Utils'
 
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -10,24 +10,25 @@ export default function Keys(props) {
 
     let [publicKey, setPublicKey] = useState('')
     let [privateKey, setPrivateKey] = useState('')
-
+    let [type, setType] = useState('')
     useEffect(() => {
         loadUser()
     })
 
     let loadUser = () => {
-        userStorage.user.loadUser().then(async account => {
-            // console.log(account)
-            setPublicKey(account.publicKey)
-            setPrivateKey(account.privateKey)
-
-            // let hex = account.seed
-            // if (hex) {
-            //     let account2 = getMnemonicPrivateKeyHex(hex, 1)
-            //     const publicKey2 = ENQWeb.Utils.Sign.getPublicKey(account2, true)
-            //     // console.log(account2)
-            // }
-        })
+        userStorage.user.loadUser()
+            .then(async account => {
+                // console.log(account)
+                setPublicKey(account.publicKey)
+                setPrivateKey(account.privateKey)
+                setType(account.type)
+                // let hex = account.seed
+                // if (hex) {
+                //     let account2 = getMnemonicPrivateKeyHex(hex, 1)
+                //     const publicKey2 = ENQWeb.Utils.Sign.getPublicKey(account2, true)
+                //     // console.log(account2)
+                // }
+            })
     }
 
     return (
@@ -41,14 +42,17 @@ export default function Keys(props) {
                 <div className={styles.field}>{shortHashLong(publicKey)}</div>
 
                 <div className={styles.field + ' ' + styles.button} onClick={() => {
-                    navigator.clipboard.writeText(publicKey)}}>Copy public key</div>
+                    navigator.clipboard.writeText(publicKey)
+                }}>Copy public key
+                </div>
 
                 <Separator/>
 
-                <div className={styles.field}>{shortHashLong(privateKey)}</div>
+                <div className={styles.field}>{type === 0 ? shortHashLong(privateKey) : privateKey}</div>
 
                 <div className={styles.field + ' ' + styles.button} onClick={() => {
-                    navigator.clipboard.writeText(privateKey)}}>Copy private key
+                    navigator.clipboard.writeText(privateKey)
+                }}>Copy private key
                 </div>
 
                 <Separator/>
