@@ -155,7 +155,7 @@ export default class Transaction extends React.Component {
                 data.ticker = data.tokenHash
                 // console.log(data)
                 data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)
-                data.sign = await signHash(data.hash, 0)
+                data.sign = await signHash(data.hash, user.privateKey)
                 console.log({ sign: data.sign })
                 response = await ENQWeb.Enq.sendTx(data)
                     .then(data => {

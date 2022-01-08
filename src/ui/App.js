@@ -58,7 +58,7 @@ export default function App(props) {
 
 
     const [isConnectLedger, setConnectLedger] = useState(false)
-    const [ledgerTransport, setLedgerTransport] = useState()
+    const [ledgerTransport, setLedgerTransport] = useState( false)
 
     const [isKeys, setKeys] = useState(false)
 
@@ -198,7 +198,9 @@ export default function App(props) {
                          setAccountSelector={setAccountSelector}
                          setMnemonic={setMnemonic}
                          setImportMnemonic={setImportMnemonic}
-                         setImportKey={setImportKey}/>
+                         setImportKey={setImportKey}
+                         setTransport={setLedgerTransport}
+                         ledgerTransport={ledgerTransport}/>
     }
 
     if (isConfirm) {
