@@ -136,7 +136,7 @@ export default class Transaction extends React.Component {
         ENQWeb.Net.provider = user.net
 
         let data = {
-            from: user.ledger ? wallet.pubkey : wallet,
+            from: user.type === 2 ? wallet.pubkey : wallet,
             amount: Number(this.state.amount) * 1e10,
             to: this.state.address,
             data: '',
@@ -149,6 +149,7 @@ export default class Transaction extends React.Component {
         let response
         try {
             if (user.type !== 2) {
+                console.log(data)
                 response = await ENQWeb.Net.post.tx_fee_off(data)
             } else {
                 data.nonce = data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
