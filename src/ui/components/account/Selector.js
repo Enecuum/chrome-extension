@@ -17,6 +17,9 @@ import { copyText } from '../../../utils/names'
 
 export default function Selector(props) {
 
+    // const [, updateState] = React.useState()
+    // const forceUpdate = React.useCallback(() => updateState({}), [])
+
     let [accountsList, setAccountsList] = useState()
 
     let [name, setName] = useState('')
@@ -35,11 +38,27 @@ export default function Selector(props) {
     let [seed, setSeed] = useState(false)
     let [ledger, setLedger] = useState(false)
 
+    let [balance, setBalance] = useState({})
+    // let balance = {}
+
     let [copied, setCopied] = useState()
 
     useEffect(() => {
         loadUser()
-    }, [copied])
+    }, [])
+
+    let requestBalance = (publicKey) => {
+        if (!balance[publicKey])
+            ENQWeb.Net.get.getBalanceAll(publicKey)
+                .then((res) => {
+                    balance[publicKey] = res[0] ? res[0].amount : 0
+                    // console.log(balance[publicKey])
+                    setBalance(balance)
+                    // console.log(balance)
+                    // forceUpdate()
+                    // renderCards(accounts)
+                })
+    }
 
     let buildAccountsArray = async (account) => {
 
@@ -47,18 +66,18 @@ export default function Selector(props) {
 
         for (let i = 0; i < account.privateKeys.length; i++) {
             const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
-            await ENQWeb.Net.get.getBalanceAll(publicKey)
-                .then((res) => {
-                    accounts.push({
-                        privateKey: account.privateKeys[i],
-                        publicKey: publicKey,
-                        amount: res[0] ? res[0].amount : 0,
-                        current: account.privateKey === account.privateKeys[i],
-                        groupIndex: i,
-                        type: 0
-                    })
-                })
+            accounts.push({
+                privateKey: account.privateKeys[i],
+                publicKey: publicKey,
+                amount: 0,
+                current: account.privateKey === account.privateKeys[i],
+                groupIndex: i,
+                type: 0
+            })
+            requestBalance(publicKey)
         }
+
+        // setAccounts(accounts)
 
         let hex = account.seed
 
@@ -68,39 +87,36 @@ export default function Selector(props) {
                 let privateKey = getMnemonicPrivateKeyHex(hex, account.seedAccountsArray[i])
                 let current = account.privateKey === privateKey
                 const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
-                await ENQWeb.Net.get.getBalanceAll(publicKey)
-                    .then((res) => {
-                        accounts.push({
-                            privateKey,
-                            publicKey,
-                            amount: res[0] ? res[0].amount : 0,
-                            current,
-                            groupIndex: i,
-                            type: 1
-                        })
-                    })
+                accounts.push({
+                    privateKey,
+                    publicKey,
+                    amount: 0,
+                    current,
+                    groupIndex: i,
+                    type: 1
+                })
+                requestBalance(publicKey)
             }
         }
 
-        if (account.ledger) {
+        // setAccounts(accounts)
+
+        if (account.ledgerAccountsArray.length > 0) {
             for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
                 let current = account.publicKey === account.ledgerAccountsArray[i]
-                await ENQWeb.Net.get.getBalanceAll(account.ledgerAccountsArray[i])
-                    .then((res) => {
-                        accounts.push({
-                            privateKey: i,
-                            publicKey: account.ledgerAccountsArray[i],
-                            amount: res[0] ? res[0].amount : 0,
-                            current,
-                            groupIndex: i,
-                            type: 2
-                        })
-                    })
+                accounts.push({
+                    privateKey: i,
+                    publicKey: account.ledgerAccountsArray[i],
+                    amount: 0,
+                    current,
+                    groupIndex: i,
+                    type: 2
+                })
+                requestBalance(account.ledgerAccountsArray[i])
             }
-
         }
 
-        setAccounts(accounts)
+        // setAccounts(accounts)
 
         return accounts
     }
@@ -110,7 +126,8 @@ export default function Selector(props) {
             .then(async account => {
                 // console.log(account)
                 let accounts = await buildAccountsArray(account)
-                renderCards(accounts, null)
+                setAccounts(accounts)
+                renderCards(accounts)
             })
     }
 
@@ -142,15 +159,8 @@ export default function Selector(props) {
     let selectAccount = async (selected) => {
         console.log(selected)
         let account = (await userStorage.user.loadUser())
-        let data
-        if (selected.type === 0) {
-            account.ledger = false
-            data = generateAccountData(selected.privateKey, account.seed, account)
-        }
-        if (selected.type === 2) {
-            account.ledger = true
-            data = generateLedgerAccountData(selected.privateKey, account.seed, account)
-        }
+        let data = generateAccountData(selected.privateKey, account.seed, account)
+
         await userStorage.promise.sendPromise({
             account: true,
             set: true,
@@ -213,7 +223,7 @@ export default function Selector(props) {
         }
     }
 
-    let renderCards = (accounts, hex) => {
+    let renderCards = (accounts) => {
 
         let cards = []
 
@@ -221,9 +231,10 @@ export default function Selector(props) {
 
             let account = accounts[i]
             let current = account.current
-            let name = getType(account.type)
-                .charAt(0)
-                .replace('S', '') + (account.groupIndex + 1)
+
+            account.amount = balance[account.publicKey] ? balance[account.publicKey] : 0
+
+            let name = getType(account.type).charAt(0).replace('S', '') + (account.groupIndex + 1)
             cards.push(
                 <div key={i} className={styles.card + (current ? '' : ' ' + styles.card_select) + ' ' + styles.small}>
 
@@ -240,12 +251,12 @@ export default function Selector(props) {
                         onClick={() => copyPublicKey(account.publicKey)}
                         title={account.publicKey + copyText}>{shortHash(account.publicKey)}</div>
 
-                    <div className={styles.card_field}>{account.amount > 0 ? account.amount / 1e10 : '0.0'}</div>
+                    <div className={styles.card_field}>{(account.amount > 0 ? account.amount / 1e10 : '0.0') + ' BIT'}</div>
 
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
                          onClick={(current ? () => {
                              props.setKeys(true)
-                         } : () => selectAccount(account))}>{current ? 'KEYS' : 'SELECT'}</div>
+                         } : () => selectAccount(account))}>{current ? 'SHOW KEYS' : 'SELECT'}</div>
                 </div>
             )
         }
@@ -257,10 +268,6 @@ export default function Selector(props) {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(publicKey)
             setCopied(true)
-            {
-                console.log(copied)
-            }
-            // loadUser()
         } else {
             console.error('navigator.clipboard: ' + false)
         }
