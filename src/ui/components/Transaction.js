@@ -144,11 +144,11 @@ export default class Transaction extends React.Component {
         }
 
         // console.log(data)
-        // console.log(user)
+        console.log(user)
 
         let response
         try {
-            if (!user.ledger) {
+            if (user.type !== 2) {
                 response = await ENQWeb.Net.post.tx_fee_off(data)
             } else {
                 data.nonce = data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
@@ -177,6 +177,8 @@ export default class Transaction extends React.Component {
                 txHash: response.hash
             })
         }
+
+        console.log(response)
 
         this.props.setTransactionHistory(this.setTransactionSend(user, response.hash))
         this.props.setTransaction(false)
