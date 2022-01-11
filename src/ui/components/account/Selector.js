@@ -250,7 +250,7 @@ export default function Selector(props) {
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
                          onClick={(current ? () => {
                              props.setKeys(true)
-                         } : () => selectAccount(account))}>{current ? 'KEYS' : 'SELECT'}</div>
+                         } : () => selectAccount(account))}>{current ? 'SHOW KEYS' : 'SELECT'}</div>
                 </div>
             )
         }
