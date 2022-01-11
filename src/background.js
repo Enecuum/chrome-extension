@@ -347,7 +347,7 @@ async function taskHandler(taskId) {
             console.log(data)
             let buf = ENQWeb.Net.provider
             ENQWeb.Net.provider = account.net
-            if (account.ledger !== undefined && account.ledger) {
+            if (account.ledger !== undefined && account.type === 2) {
                 data.from = wallet.pubkey
                 data.amount = data.value ? Number(data.value) : Number(data.amount)
                 data.tokenHash = data.ticker ? data.ticker : data.tokenHash
