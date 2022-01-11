@@ -35,10 +35,19 @@ const account = {
 }
 
 let generateAccountData = (privateKey, hex, accountData = account) => {
+
+    let publicKey = ''
+
+    // If privateKey is index
+    if (Number.isInteger(privateKey)) {
+        publicKey = accountData.ledgerAccountsArray[privateKey]
+    } else {
+        publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
+    }
+
     let data = {
         ...account,
-
-        publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
+        publicKey: publicKey,
         privateKey: privateKey,
         net: ENQWeb.Net.provider,
         token: ENQWeb.Enq.ticker,

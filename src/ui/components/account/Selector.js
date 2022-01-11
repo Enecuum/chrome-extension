@@ -245,7 +245,7 @@ export default function Selector(props) {
                         onClick={() => copyPublicKey(account.publicKey)}
                         title={account.publicKey + copyText}>{shortHash(account.publicKey)}</div>
 
-                    <div className={styles.card_field}>{account.amount > 0 ? account.amount / 1e10 : '0.0'}</div>
+                    <div className={styles.card_field}>{(account.amount > 0 ? account.amount / 1e10 : '0.0') + ' BIT'}</div>
 
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
                          onClick={(current ? () => {
