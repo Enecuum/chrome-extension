@@ -41,7 +41,7 @@ export default function Selector(props) {
 
     useEffect(() => {
         loadUser()
-    }, [])
+    }, [balance])
 
     let requestBalance = (publicKey) => {
         if (!balance[publicKey])

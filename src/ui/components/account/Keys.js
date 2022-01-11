@@ -20,7 +20,7 @@ export default function Keys(props) {
             .then(async account => {
                 // console.log(account)
                 setPublicKey(account.publicKey)
-                setPrivateKey(account.privateKey)
+                setPrivateKey(Number.isInteger(account.privateKey) ? '' : account.privateKey)
                 setType(account.type)
                 // let hex = account.seed
                 // if (hex) {
