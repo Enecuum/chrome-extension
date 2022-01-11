@@ -17,9 +17,6 @@ import { copyText } from '../../../utils/names'
 
 export default function Selector(props) {
 
-    // const [, updateState] = React.useState()
-    // const forceUpdate = React.useCallback(() => updateState({}), [])
-
     let [accountsList, setAccountsList] = useState()
 
     let [name, setName] = useState('')
@@ -37,9 +34,6 @@ export default function Selector(props) {
 
     let [seed, setSeed] = useState(false)
     let [ledger, setLedger] = useState(false)
-
-    let [balance, setBalance] = useState({})
-    // let balance = {}
 
     let [copied, setCopied] = useState()
 
@@ -76,8 +70,6 @@ export default function Selector(props) {
             })
             requestBalance(publicKey)
         }
-
-        // setAccounts(accounts)
 
         let hex = account.seed
 
@@ -251,12 +243,12 @@ export default function Selector(props) {
                         onClick={() => copyPublicKey(account.publicKey)}
                         title={account.publicKey + copyText}>{shortHash(account.publicKey)}</div>
 
-                    <div className={styles.card_field}>{(account.amount > 0 ? account.amount / 1e10 : '0.0') + ' BIT'}</div>
+                    <div className={styles.card_field}>{account.amount > 0 ? account.amount / 1e10 : '0.0'}</div>
 
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
                          onClick={(current ? () => {
                              props.setKeys(true)
-                         } : () => selectAccount(account))}>{current ? 'SHOW KEYS' : 'SELECT'}</div>
+                         } : () => selectAccount(account))}>{current ? 'KEYS' : 'SELECT'}</div>
                 </div>
             )
         }
