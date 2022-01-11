@@ -144,9 +144,11 @@ export default function Selector(props) {
         let account = (await userStorage.user.loadUser())
         let data
         if (selected.type === 0) {
+            account.ledger = false
             data = generateAccountData(selected.privateKey, account.seed, account)
         }
         if (selected.type === 2) {
+            account.ledger = true
             data = generateLedgerAccountData(selected.privateKey, account.seed, account)
         }
         await userStorage.promise.sendPromise({
