@@ -37,6 +37,8 @@ export default function Selector(props) {
 
     let [copied, setCopied] = useState()
 
+    let [balance, setBalance] = useState({})
+
     useEffect(() => {
         loadUser()
     }, [])
