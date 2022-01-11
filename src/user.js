@@ -60,27 +60,6 @@ let generateLedgerAccountData = (index, hex, accountData = account) => {
     return ledgerAccountData
 }
 
-// let generateLedgerAccountData = (index, hex, accountData = account) => {
-//     let data = {
-//         ...account,
-//
-//         type:2,
-//         publicKey: accountData.ledgerAccountsArray[index],
-//         privateKey: index,
-//         net: ENQWeb.Net.provider,
-//         token: ENQWeb.Enq.ticker,
-//
-//         privateKeys: accountData.privateKeys,
-//
-//         seed: hex,
-//         seedAccountsArray: accountData.seedAccountsArray,
-//
-//         ledger: accountData.ledger,
-//         ledgerAccountsArray: accountData.ledgerAccountsArray,
-//     }
-//     return data
-// }
-
 let getSeedAccounts = () => {
 
     // We have to export our public key from seed here

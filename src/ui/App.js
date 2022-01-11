@@ -58,7 +58,7 @@ export default function App(props) {
 
 
     const [isConnectLedger, setConnectLedger] = useState(false)
-    const [ledgerTransport, setLedgerTransport] = useState( false)
+    const [ledgerTransport, setLedgerTransport] = useState(false)
 
     const [isKeys, setKeys] = useState(false)
 

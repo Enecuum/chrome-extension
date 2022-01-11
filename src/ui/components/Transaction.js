@@ -144,7 +144,7 @@ export default class Transaction extends React.Component {
         }
 
         // console.log(data)
-        console.log(user)
+        // console.log(user)
 
         let response
         try {
