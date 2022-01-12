@@ -358,7 +358,7 @@ async function taskHandler(taskId) {
                 if (!ledgerTransport) {
                     ledgerTransport = Transport
                 }
-                data.sign = await signHash(data.hash, wallet.prvkey, Transport)
+                data.sign = await signHash(ENQWeb.Utils.crypto.sha256(data.hash), wallet.prvkey, Transport)
                 console.log({ sign: data.sign })
                 data = await ENQWeb.Enq.sendTx(data)
                     .then(data => {
