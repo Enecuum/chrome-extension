@@ -218,6 +218,8 @@ export default function App(props) {
                 getLedgerTransport={getLedgerTransport}
                 setTransactionRequest={setTransactionRequest}
                 setTransactionHistory={setTransactionHistory}
+                setTransport={setLedgerTransport}
+                ledgerTransport={ledgerTransport}
             />
         )
     }
