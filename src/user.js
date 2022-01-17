@@ -34,65 +34,67 @@ const account = {
     names: {}, // The list of names taken by public keys
 }
 
-let generateAccountData = (privateKey, hex, accountData = account) => {
-
-    let publicKey = ''
-
-    // If privateKey is index
-    if (Number.isInteger(privateKey)) {
-        publicKey = accountData.ledgerAccountsArray[privateKey]
-    } else {
-        publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
-    }
-
+let generateAccountData = (privateKey, accountData = account) => {
     let data = {
         ...account,
-        publicKey: publicKey,
+
+        publicKey: privateKey ? ENQWeb.Utils.Sign.getPublicKey(privateKey, true) : '',
         privateKey: privateKey,
+
         net: ENQWeb.Net.provider,
         token: ENQWeb.Enq.ticker,
 
         privateKeys: accountData.privateKeys,
 
-        seed: hex,
+        seed: accountData.seed,
         seedAccountsArray: accountData.seedAccountsArray,
 
+        // Ledger ID
         ledger: accountData.ledger,
         ledgerAccountsArray: accountData.ledgerAccountsArray,
     }
     return data
 }
 
-let generateLedgerAccountData = (index, hex, accountData = account) => {
-    let ledgerAccountData = generateAccountData(accountData.ledgerAccountsArray[index], hex, accountData)
-    ledgerAccountData.type = 2
-    return ledgerAccountData
+let generateMnemonicAccountData = (privateKey, accountData = account, hex) => {
+    let data = generateAccountData(privateKey, accountData)
+    data.type = 1
+    data.seed = hex
+    return data
 }
 
-let getSeedAccounts = () => {
-
-    // We have to export our public key from seed here
-    let seedArray = []
-    // And select only this keys > seedAccountsArray
-    return account.seedAccountsArray;
+let generateLedgerAccountData = (index, accountData = account) => {
+    let data = generateAccountData('', accountData)
+    data.type = 2
+    data.publicKey = accountData.ledgerAccountsArray[index]
+    data.privateKey = index
+    return data
 }
 
-let changeAccount = (type, index) => {
-    let array;
-    if (type === 0)
-        array = account.privateKeys[index]
-    if (type === 1)
-        // array = account.seedAccountsArray[index]
-    if (type === 2) {
+// let getSeedAccounts = () => {
+//
+//     // We have to export our public key from seed here
+//     let seedArray = []
+//     // And select only this keys > seedAccountsArray
+//     return account.seedAccountsArray;
+// }
+//
+// let changeAccount = (type, index) => {
+//     let array;
+//     if (type === 0)
+//         array = account.privateKeys[index]
+//     if (type === 1)
+//         // array = account.seedAccountsArray[index]
+//     if (type === 2) {
+//
+//     }
+// }
+//
+// let addAccountOldFormat = (data)=>{
+//
+// }
+// let updateAccount = (data) => {
+//
+// }
 
-    }
-}
-
-let addAccountOldFormat = (data)=>{
-
-}
-let updateAccount = (data) => {
-
-}
-
-export {account, generateAccountData, generateLedgerAccountData}
+export {account, generateAccountData, generateMnemonicAccountData, generateLedgerAccountData}

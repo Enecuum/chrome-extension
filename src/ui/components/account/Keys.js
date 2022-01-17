@@ -20,14 +20,20 @@ export default function Keys(props) {
             .then(async account => {
                 // console.log(account)
                 setPublicKey(account.publicKey)
-                setPrivateKey(Number.isInteger(account.privateKey) ? '' : account.privateKey)
+                setPrivateKey(account.type === 2 ? '...' : account.privateKey)
                 setType(account.type)
+
                 // let hex = account.seed
                 // if (hex) {
                 //     let account2 = getMnemonicPrivateKeyHex(hex, 1)
                 //     const publicKey2 = ENQWeb.Utils.Sign.getPublicKey(account2, true)
                 //     // console.log(account2)
                 // }
+
+                // if (account.type === 2) {
+                //     setPrivateKey('')
+                // }
+
             })
     }
 
@@ -48,7 +54,7 @@ export default function Keys(props) {
 
                 <Separator/>
 
-                <div className={styles.field}>{type === 0 ? shortHashLong(privateKey) : privateKey}</div>
+                <div className={styles.field}>{type === 0 ||  type === 1 ? shortHashLong(privateKey) : privateKey}</div>
 
                 <div className={styles.field + ' ' + styles.button} onClick={() => {
                     navigator.clipboard.writeText(privateKey)

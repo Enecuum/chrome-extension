@@ -5,7 +5,7 @@ import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
 import Input from "../../../elements/Input";
 import {getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../../Utils";
-import {generateAccountData} from "../../../../user";
+import {generateAccountData, generateMnemonicAccountData} from "../../../../user";
 
 let seedLength = 12
 
@@ -29,7 +29,7 @@ export default function ImportMnemonic(props) {
 
         if (privateKey) {
 
-            let data = generateAccountData(privateKey, hex, (await userStorage.user.loadUser()))
+            let data = generateMnemonicAccountData(privateKey, (await userStorage.user.loadUser()), hex)
             console.log(data)
 
             await userStorage.promise.sendPromise({
