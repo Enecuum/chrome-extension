@@ -38,7 +38,7 @@ let generateAccountData = (privateKey, accountData = account) => {
     let data = {
         ...account,
 
-        publicKey: privateKey ? ENQWeb.Utils.Sign.getPublicKey(privateKey, true) : '',
+        publicKey: privateKey.length ? ENQWeb.Utils.Sign.getPublicKey(privateKey, true) : '',
         privateKey: privateKey,
 
         net: ENQWeb.Net.provider,

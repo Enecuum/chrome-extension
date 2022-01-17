@@ -30,6 +30,7 @@ export default function ImportMnemonic(props) {
         if (privateKey) {
 
             let data = generateMnemonicAccountData(privateKey, (await userStorage.user.loadUser()), hex)
+            data.seedAccountsArray = [0]
             console.log(data)
 
             await userStorage.promise.sendPromise({
