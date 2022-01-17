@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from '../css/index.module.css'
-import TransactionSend from './TransactionSend'
 import Separator from '../elements/Separator'
 import { toggleFullScreen } from '../Utils'
 import Input from '../elements/Input'
