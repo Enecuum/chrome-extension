@@ -5,10 +5,6 @@ import Eth from "@ledgerhq/hw-app-eth";
 import {createPopupWindow} from "../../handler";
 import * as bip32 from 'bip32';
 
-TransportWebUSB.isSupported().then((result) => {
-    console.log('WebUSB Supported: ' + result)
-})
-
 // global.WebUSB = TransportWebUSB
 // global.transportWebUSB = {}
 

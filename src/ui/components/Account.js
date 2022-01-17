@@ -279,16 +279,17 @@ export default function Account(props) {
             }
         }
 
-        setHistory(oldActivity)
-        renderHistory()
+        return oldActivity
+
+        // setHistory(oldActivity)
+        // renderHistory()
     }
 
-    const historyElements = []
-    let renderHistory = () => {
-        // console.log(props.user.token)
-        // console.log(history)
-        for (const key in history.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
-            const item = history[key]
+    let renderHistory = (historyArray) => {
+
+        const historyElements = []
+        for (const key in historyArray.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
+            const item = historyArray[key]
             // console.log(item)
             historyElements.push(
                 <div
@@ -322,6 +323,8 @@ export default function Account(props) {
                 </div>,
             )
         }
+
+        setHistory(historyElements)
     }
 
     //TODO
@@ -438,11 +441,13 @@ export default function Account(props) {
     useEffect(() => {
 
         openPopup().then(result => {
-            if (result === true && isMounted) {
+            if (result === true) {
                 getConnects().then()
-                getHistory().then(() => {
+                getHistory().then((history) => {
+
+                    // console.log(history)
                     if (isMounted)
-                        renderHistory()
+                        renderHistory(history)
                 })
                 getBalance()
             }
@@ -454,7 +459,8 @@ export default function Account(props) {
     }, [])
 
     // TODO What's going on here
-    renderHistory()
+    // renderHistory()
+
     renderAssets()
 
     return (
@@ -497,7 +503,7 @@ export default function Account(props) {
             <div className={styles.content}>
 
                 <img className={styles.content_logo} src={logo} alt=""/>
-                <div className={styles.balance}>
+                <div className={styles.balance} title={(Number(amount) / 1e10)}>
                     {(Number(amount) / 1e10).toFixed(4)}
                     {' '}
                     {ticker}
@@ -581,9 +587,9 @@ export default function Account(props) {
                         Reject all
                     </div>}
 
-                    {historyElements.length > 0 && <div className={styles.history_title}>History</div>}
+                    {history.length > 0 && <div className={styles.history_title}>History</div>}
 
-                    {historyElements}
+                    {history}
 
                 </div>
 

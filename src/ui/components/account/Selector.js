@@ -15,7 +15,7 @@ import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
 import { copyText } from '../../../utils/names'
 
-let balance = {}
+// let balance = {}
 
 export default function Selector(props) {
 
@@ -37,22 +37,29 @@ export default function Selector(props) {
     let [seed, setSeed] = useState(false)
     let [ledger, setLedger] = useState(false)
 
+    let [balance, setBalance] = useState({})
+
     let [copied, setCopied] = useState()
 
     useEffect(() => {
         loadUser()
-    }, [copied])
+    }, [balance, copied])
 
     let requestBalance = async (publicKey) => {
-        if (!balance[publicKey])
+        if (!balance[publicKey] && balance[publicKey] !== 0)
             await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
                 balance[publicKey] = res[0] ? res[0].amount : 0
+                setBalance(balance)
+                // console.log(balance)
+
+                if (balance[publicKey] > 0)
+                    loadUser()
             })
     }
 
     let buildAccountsArray = async (account) => {
 
-        console.log(account)
+        // console.log(account)
 
         const mainPublicKey = account.type === 2 || account.privateKey < 3 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true)
 
@@ -111,8 +118,8 @@ export default function Selector(props) {
     }
 
     let loadUser = () => {
-        userStorage.user.loadUser()
-            .then(async account => {
+        userStorage.user.loadUser().then(async account => {
+
                 // console.log(account)
                 let accounts = await buildAccountsArray(account)
                 renderCards(accounts, null)
@@ -145,7 +152,7 @@ export default function Selector(props) {
     // }
 
     let selectAccount = async (selected) => {
-        console.log(selected)
+        // console.log(selected)
         let account = (await userStorage.user.loadUser())
         let data
         if (selected.type === 2) {
@@ -238,16 +245,23 @@ export default function Selector(props) {
                     {/*     onClick={() => explorerAddress(account.publicKey)}>{shortHash(account.publicKey)}</div>*/}
 
                     <div
-                        className={styles.card_field + ' ' + (copied ? styles.card_field_copied : styles.card_field_not_copied)}
+                        className={styles.card_field + ' ' + (copied && account.publicKey === copied ? styles.card_field_copied : styles.card_field_not_copied)}
                         onClick={() => copyPublicKey(account.publicKey)}
                         title={account.publicKey + copyText}>{shortHash(account.publicKey)}</div>
 
-                    <div className={styles.card_field}>{account.amount > 0 ? account.amount / 1e10 : '0.0'}</div>
+                    <div className={styles.card_field} title={Number(account.amount) / 1e10}>
+                        {(account.amount > 0 ?
+                            (Number(account.amount) / 1e10).toFixed(4)
+                            :
+                            '0.0')
+
+                        + ' BIT'}
+                    </div>
 
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
                          onClick={(current ? () => {
                              props.setKeys(true)
-                         } : () => selectAccount(account))}>{current ? 'SHOW KEYS' : 'SELECT'}</div>
+                         } : () => selectAccount(account))}>{current ? 'SHOW KEYS ❯' : 'SELECT'}</div>
                 </div>
             )
         }
@@ -258,7 +272,7 @@ export default function Selector(props) {
     const copyPublicKey = (publicKey) => {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(publicKey)
-            setCopied(true)
+            setCopied(publicKey)
             {
                 console.log(copied)
             }

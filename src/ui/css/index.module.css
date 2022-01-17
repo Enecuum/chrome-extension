@@ -936,6 +936,11 @@ input[type=number] {
     /*cursor: pointer;*/
 }
 
+.cards .card.card_select:hover {
+    /*cursor: pointer;*/
+    /*background: var(--color-blue);*/
+}
+
 .cards .card:last-child {
     margin-right: 20px;
 }
