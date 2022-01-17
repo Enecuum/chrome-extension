@@ -5,6 +5,7 @@ import {versions} from "./utils/names";
 
 // Init storage
 import Storage from './utils/localStorage'
+import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 global.userStorage = new Storage('popup')
 
 // TODO
@@ -32,6 +33,10 @@ let time = 200
 console.log('HEAD: ' + VERSION)
 console.log('Cache available: ' + ('caches' in self))
 console.log('Web workers available: ' + (typeof window.Worker === 'function'))
+
+TransportWebUSB.isSupported().then((result) => {
+    console.log('WebUSB supported: ' + result)
+})
 
 global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 

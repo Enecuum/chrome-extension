@@ -109,7 +109,7 @@ function loadUser() {
     let user = localStorage.getItem(USER)
 
     indexDB.get(USER).then(user => {
-        console.dir('indexDB USER: ' + !!user)
+        // console.dir('IndexDB user exist: ' + !!user)
     })
 
     if (!user) {

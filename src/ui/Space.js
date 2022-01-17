@@ -3,7 +3,7 @@ let spaceSize = 100
 
 const createSpace = () => {
 
-    console.log('Create space')
+    console.log('Create space background')
     let windowWidth = window.innerWidth
     let windowHeight = window.innerHeight
     const spaceDiv = document.getElementById('space') ? document.getElementById('space') : document.createElement('div')
