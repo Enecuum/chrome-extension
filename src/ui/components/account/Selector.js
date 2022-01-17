@@ -149,9 +149,9 @@ export default function Selector(props) {
         let account = (await userStorage.user.loadUser())
         let data
         if (selected.type === 2) {
-            data = generateLedgerAccountData(selected.privateKey, account.seed, account)
+            data = generateLedgerAccountData(selected.privateKey, account)
         } else {
-            data = generateAccountData(selected.privateKey, account.seed, account)
+            data = generateAccountData(selected.privateKey, account)
         }
         await userStorage.promise.sendPromise({
             account: true,
@@ -167,7 +167,7 @@ export default function Selector(props) {
     let addMnemonicAccount = async () => {
 
         let account = (await userStorage.user.loadUser())
-        let data = generateAccountData(account.privateKey, account.seed, account)
+        let data = generateAccountData(account.privateKey, account)
         data.seedAccountsArray.push(account.seedAccountsArray.length)
 
         await userStorage.promise.sendPromise({
@@ -183,7 +183,7 @@ export default function Selector(props) {
 
         let account = (await userStorage.user.loadUser())
         // console.log(account)
-        let data = account.type === 2 ? generateLedgerAccountData(account.privateKey, account.seed, account) : generateAccountData(account.privateKey, account.seed, account)
+        let data = generateLedgerAccountData(0, account)
         // if(account.type === 0)
         //     data = generateAccountData(account.privateKey, account.seed, account)
         // if(account.type === 2)
@@ -192,7 +192,7 @@ export default function Selector(props) {
         // data = generateAccountData(account.privateKey, account.seed, account)
         console.log(data)
         data.ledgerAccountsArray.push(ledgerPublicKey)
-        data.ledger = true
+        // data.ledger = true
 
         await userStorage.promise.sendPromise({
             account: true,
@@ -247,7 +247,7 @@ export default function Selector(props) {
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
                          onClick={(current ? () => {
                              props.setKeys(true)
-                         } : () => selectAccount(account))}>{current ? 'KEYS' : 'SELECT'}</div>
+                         } : () => selectAccount(account))}>{current ? 'SHOW KEYS' : 'SELECT'}</div>
                 </div>
             )
         }
@@ -268,47 +268,46 @@ export default function Selector(props) {
         }
     }
 
-    let connectLedgerEth = async () => {
-
-        // TransportWebUSB.list().then(devices => {
-        //     console.log(devices)
-        //     let output = devices.length > 0 && devices.find(device => device.manufacturerName === 'Ledger')
-        //     console.log(!!output)
-        //     setUsbDevice(!!output)
-        // })
-
-        return await TransportWebUSB.create()
-            .then(async transport => {
-
-                const eth = new Eth(transport)
-
-                console.log(eth)
-
-                let account = (await userStorage.user.loadUser())
-
-                eth.getAddress(ledgerPath + account.ledgerAccountsArray.length)
-                    .then(o => {
-
-                        if (!ledger) {
-                            setLedger(true)
-                        } else {
-                            addLedgerAccount(o.address)
-                        }
-                        console.log(o.address)
-
-                    })
-                    .catch(e => {
-                        setLedger(false)
-                    })
-            })
-    }
+    // let connectLedgerEth = async () => {
+    //
+    //     // TransportWebUSB.list().then(devices => {
+    //     //     console.log(devices)
+    //     //     let output = devices.length > 0 && devices.find(device => device.manufacturerName === 'Ledger')
+    //     //     console.log(!!output)
+    //     //     setUsbDevice(!!output)
+    //     // })
+    //
+    //     return await TransportWebUSB.create()
+    //         .then(async transport => {
+    //
+    //             const eth = new Eth(transport)
+    //
+    //             console.log(eth)
+    //
+    //             let account = (await userStorage.user.loadUser())
+    //
+    //             eth.getAddress(ledgerPath + account.ledgerAccountsArray.length)
+    //                 .then(o => {
+    //
+    //                     if (!ledger) {
+    //                         setLedger(true)
+    //                     } else {
+    //                         addLedgerAccount(o.address)
+    //                     }
+    //                     console.log(o.address)
+    //
+    //                 })
+    //                 .catch(e => {
+    //                     setLedger(false)
+    //                 })
+    //         })
+    // }
 
     let connectLedger = () => {
 
         // createPopupWindow('index.html?type=connectLedger')
 
-        userStorage.user.loadUser()
-            .then(async account => {
+        userStorage.user.loadUser().then(async account => {
 
                 // TODO global transport object. may be in app.js. need do save new model.
                 let Transport = !props.ledgerTransport ? await TransportWebHID.create() : props.ledgerTransport

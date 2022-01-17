@@ -1,11 +1,11 @@
 import React from 'react'
 import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
-import {regexAddress, regexSeed, regexToken, toggleFullScreen} from "../Utils";
+import {mnemonicPath, regexAddress, regexSeed, regexToken, toggleFullScreen} from "../Utils";
 import Input from "../elements/Input";
 import * as bip32 from "bip32";
 import * as bip39 from "bip39";
-import {generateAccountData} from "../../user";
+import {account, generateAccountData, generateMnemonicAccountData} from "../../user";
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -43,12 +43,12 @@ export default class Login extends React.Component {
 
         let hex = bip39.mnemonicToSeedSync(this.state.seed)
         let node = bip32.fromSeed(hex, null)
-        let child = node.derivePath("m/44'/2045'/0'/0")
+        let child = node.derivePath(mnemonicPath)
 
         let privateKey = child.derive(0).privateKey.toString('hex')
         if (privateKey) {
 
-            let data = generateAccountData(privateKey, hex)
+            let data = generateMnemonicAccountData(privateKey, account, hex)
             data.seedAccountsArray.push(0)
 
             await userStorage.promise.sendPromise({
@@ -73,7 +73,7 @@ export default class Login extends React.Component {
             return
         }
 
-        let data = generateAccountData(this.state.privateKey, '')
+        let data = generateAccountData(this.state.privateKey, account)
         data.privateKeys.push(this.state.privateKey)
 
         await userStorage.promise.sendPromise({
