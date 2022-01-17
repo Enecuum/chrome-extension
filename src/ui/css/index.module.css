@@ -36,6 +36,7 @@ body {
     --color-green-super-ligth: rgba(50, 255, 10, .2);
 
     --color-gray: rgba(93, 93, 93, 0.8);
+    --color-gray-hover: rgba(93, 93, 93, 0.7);
     --color-gray-ligth: rgba(233, 233, 233, 0.5);
 
     --font-size-small: 12px;
@@ -951,8 +952,13 @@ input[type=number] {
     margin: 20px;
     padding: 20px;
     height: 200px;
+    /*pointer-events: none;*/
 
     border-radius: 3px;
+}
+
+.card > div:first-child {
+    padding-top: 0;
 }
 
 .card_title {
@@ -969,8 +975,13 @@ input[type=number] {
 }
 
 .card_field_not_copied {
+    pointer-events: auto;
     cursor: pointer;
-    width: auto;
+    width: max-content;
+}
+
+.card_field_not_copied:hover {
+    /*color: var(--color-gray-hover)*/
 }
 
 .card_field_copied {
@@ -978,15 +989,21 @@ input[type=number] {
 }
 
 .card_field_select {
+    pointer-events: auto;
     position: absolute;
     bottom: 20px;
     right: 20px;
     cursor: pointer;
 }
 
-.card_field_select:hover {
-    color: var(--color-blue);
+.card:hover .card_field_select {
+
+    /*background: var(--color-blue);*/
 }
+
+/*.card:hover .card_field_select:hover {*/
+/*    background: var(--color-blue);*/
+/*}*/
 
 .card_field_delete {
     position: absolute;

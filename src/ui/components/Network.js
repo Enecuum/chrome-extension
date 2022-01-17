@@ -178,11 +178,11 @@ export default function Network(props) {
             cards.push(
                 <div key={'bit' + 'card'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
                     <div
-                        className={styles.card_title}>{libNetworks[0][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
+                        className={styles.card_field}>{libNetworks[0][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
                     <div className={styles.card_field}>{libNetworks[0][1]}</div>
                     <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[0][1]])}</div>
                     <div className={styles.card_field_select} onClick={(current ? () => {
-                    } : () => setNet(libNetworks[0][1]))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                    } : () => setNet(libNetworks[0][1]))}>{current ? 'CONNECTED' : 'SELECT'}</div>
                 </div>
             )
         // }
