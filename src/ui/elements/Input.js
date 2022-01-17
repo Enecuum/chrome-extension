@@ -21,6 +21,11 @@ export default function Input(props) {
                 spellCheck={false}
                 onChange={props.onChange}
                 onFocus={onFocus}
+                onKeyUp={(e) => {
+                    if ((e.key === 'Enter' || e.keyCode === 13) && props.enter) {
+                        props.enter()
+                    }
+                }}
                 value={props.value}
                 className={props.className}
                 placeholder={placeholder}
