@@ -438,14 +438,19 @@ export default function Account(props) {
     useEffect(() => {
 
         openPopup().then(result => {
-            if (result === true) {
+            if (result === true && isMounted) {
                 getConnects().then()
                 getHistory().then(() => {
-                    renderHistory()
+                    if (isMounted)
+                        renderHistory()
                 })
                 getBalance()
             }
         })
+
+        let isMounted = true
+        return () => { isMounted = false }
+
     }, [])
 
     // TODO What's going on here
