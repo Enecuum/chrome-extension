@@ -163,7 +163,7 @@ export default function Selector(props) {
         await userStorage.promise.sendPromise({
             account: true,
             set: true,
-            data: data
+            data
         })
 
         props.login(data)
@@ -180,7 +180,7 @@ export default function Selector(props) {
         await userStorage.promise.sendPromise({
             account: true,
             set: true,
-            data: data
+            data
         })
 
         loadUser()
@@ -190,7 +190,7 @@ export default function Selector(props) {
 
         let account = (await userStorage.user.loadUser())
         // console.log(account)
-        let data = generateLedgerAccountData(0, account)
+        let data = generateLedgerAccountData(account.ledgerAccountsArray.length, account)
         // if(account.type === 0)
         //     data = generateAccountData(account.privateKey, account.seed, account)
         // if(account.type === 2)
