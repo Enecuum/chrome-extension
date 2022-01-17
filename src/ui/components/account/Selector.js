@@ -249,7 +249,7 @@ export default function Selector(props) {
                         onClick={() => copyPublicKey(account.publicKey)}
                         title={account.publicKey + copyText}>{shortHash(account.publicKey)}</div>
 
-                    <div className={styles.card_field} title={Number(account.amount) / 1e10}>
+                    <div className={styles.card_field} title={Number(account.amount) / 1e10 + ''}>
                         {(account.amount > 0 ?
                             (Number(account.amount) / 1e10).toFixed(4)
                             :
