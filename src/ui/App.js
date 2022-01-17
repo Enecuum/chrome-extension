@@ -176,6 +176,10 @@ export default function App(props) {
         setLogin(false)
     }
 
+    if (isConfirm) {
+        return <Confirm setConfirm={setConfirm} logout={logout}/>
+    }
+
     if (isLock) {
         return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
     }
@@ -205,10 +209,6 @@ export default function App(props) {
                          setImportKey={setImportKey}
                          setTransport={setLedgerTransport}
                          ledgerTransport={ledgerTransport}/>
-    }
-
-    if (isConfirm) {
-        return <Confirm setConfirm={setConfirm} logout={logout}/>
     }
 
     // TODO user
