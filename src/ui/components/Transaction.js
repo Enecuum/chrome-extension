@@ -6,6 +6,7 @@ import Separator from '../elements/Separator'
 import { regexAddress } from '../Utils'
 import Input from '../elements/Input'
 import { signHash } from '../../utils/ledgerShell'
+import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 
 //TODO decimals to tokens
 
@@ -112,7 +113,6 @@ export default class Transaction extends React.Component {
     }
 
     async submit() {
-
         if (!regexAddress.test(this.state.address) || this.state.amount < 0) {
             return
         }
@@ -134,7 +134,7 @@ export default class Transaction extends React.Component {
             prvkey: user.privateKey
         }
         ENQWeb.Net.provider = user.net
-
+        console.log(user)
         let data = {
             from: user.type === 2 ? wallet.pubkey : wallet,
             amount: Number(this.state.amount) * 1e10,
@@ -149,14 +149,17 @@ export default class Transaction extends React.Component {
         let response
         try {
             if (user.type !== 2) {
-                console.log(data)
                 response = await ENQWeb.Net.post.tx_fee_off(data)
             } else {
+                let Transport = !this.props.ledgerTransport ? await TransportWebHID.create() : this.props.ledgerTransport
+                if (!this.props.ledgerTransport) {
+                    this.props.setTransport(Transport)
+                }
+
                 data.nonce = data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
                 data.ticker = data.tokenHash
-                // console.log(data)
                 data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)
-                data.sign = await signHash(data.hash, user.privateKey)
+                data.sign = await signHash(ENQWeb.Utils.crypto.sha256(data.hash), user.privateKey, Transport)
                 console.log({ sign: data.sign })
                 response = await ENQWeb.Enq.sendTx(data)
                     .then(data => {
@@ -178,8 +181,6 @@ export default class Transaction extends React.Component {
                 txHash: response.hash
             })
         }
-
-        console.log(response)
 
         this.props.setTransactionHistory(this.setTransactionSend(user, response.hash))
         this.props.setTransaction(false)

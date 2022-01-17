@@ -70,6 +70,8 @@ export default class Lock extends React.Component {
                     <Input type="password"
                            spellCheck={false}
                            onChange={this.handleChangePassword}
+                           autoFocus={true}
+                           enter={this.submit}
                            value={this.state.password}
                            className={styles.field + ' ' + styles.password + ' ' + (this.state.incorrect ? styles.field_incorrect : '')}
                            placeholder={'Password'}

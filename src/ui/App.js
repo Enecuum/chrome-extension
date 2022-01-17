@@ -176,6 +176,10 @@ export default function App(props) {
         setLogin(false)
     }
 
+    if (isLock) {
+        return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
+    }
+
     if (isImportMnemonic) {
         return <ImportMnemonic login={login2} setImportMnemonic={setImportMnemonic}/>
     }
@@ -218,6 +222,8 @@ export default function App(props) {
                 getLedgerTransport={getLedgerTransport}
                 setTransactionRequest={setTransactionRequest}
                 setTransactionHistory={setTransactionHistory}
+                setTransport={setLedgerTransport}
+                ledgerTransport={ledgerTransport}
             />
         )
     }
@@ -260,10 +266,6 @@ export default function App(props) {
     // TODO user
     if (isPassword || (!user.publicKey && !userStorage.lock.getHashPassword())) {
         return <Password user={user} setPassword={setPassword} login={loginState} publicKey={user.publicKey}/>
-    }
-
-    if (isLock) {
-        return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
     }
 
     if (isLogin) return <Login login={login2} setMnemonic={setMnemonic}/>
