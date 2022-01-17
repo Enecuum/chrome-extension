@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import { explorerAddress, getMnemonicPrivateKeyHex, regexToken, shortHash } from '../../Utils'
+import {explorerAddress, getMnemonicPrivateKeyHex, ledgerPath, regexToken, shortHash} from '../../Utils'
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
@@ -14,6 +14,8 @@ import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
 import { copyText } from '../../../utils/names'
+
+let balance = {}
 
 export default function Selector(props) {
 
@@ -41,63 +43,66 @@ export default function Selector(props) {
         loadUser()
     }, [copied])
 
+    let requestBalance = async (publicKey) => {
+        if (!balance[publicKey])
+            await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
+                balance[publicKey] = res[0] ? res[0].amount : 0
+            })
+    }
+
     let buildAccountsArray = async (account) => {
+
+        console.log(account)
+
+        const mainPublicKey = account.type === 2 || account.privateKey < 3 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true)
 
         let accounts = []
 
         for (let i = 0; i < account.privateKeys.length; i++) {
             const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
-            await ENQWeb.Net.get.getBalanceAll(publicKey)
-                .then((res) => {
-                    accounts.push({
-                        privateKey: account.privateKeys[i],
-                        publicKey: publicKey,
-                        amount: res[0] ? res[0].amount : 0,
-                        current: account.privateKey === account.privateKeys[i],
-                        groupIndex: i,
-                        type: 0
-                    })
-                })
+            let current = mainPublicKey === publicKey
+            accounts.push({
+                privateKey: account.privateKeys[i],
+                publicKey,
+                amount: balance[publicKey],
+                current,
+                groupIndex: i,
+                type: 0
+            })
+            requestBalance(publicKey).then(r => {})
         }
 
-        let hex = account.seed
-
-        if (hex) {
+        if (account.seed) {
             setSeed(true)
-            for (let i = 0; i < account.seedAccountsArray.length; i++) {
-                let privateKey = getMnemonicPrivateKeyHex(hex, account.seedAccountsArray[i])
-                let current = account.privateKey === privateKey
-                const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
-                await ENQWeb.Net.get.getBalanceAll(publicKey)
-                    .then((res) => {
-                        accounts.push({
-                            privateKey,
-                            publicKey,
-                            amount: res[0] ? res[0].amount : 0,
-                            current,
-                            groupIndex: i,
-                            type: 1
-                        })
-                    })
-            }
         }
 
-        if (account.ledger) {
-            for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
-                let current = account.publicKey === account.ledgerAccountsArray[i]
-                await ENQWeb.Net.get.getBalanceAll(account.ledgerAccountsArray[i])
-                    .then((res) => {
-                        accounts.push({
-                            privateKey: i,
-                            publicKey: account.ledgerAccountsArray[i],
-                            amount: res[0] ? res[0].amount : 0,
-                            current,
-                            groupIndex: i,
-                            type: 2
-                        })
-                    })
-            }
+        for (let i = 0; i < account.seedAccountsArray.length; i++) {
+            let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
+            const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
+            let current = mainPublicKey === publicKey
+            accounts.push({
+                privateKey,
+                publicKey,
+                amount: balance[publicKey],
+                current,
+                groupIndex: i,
+                type: 1
+            })
+            requestBalance(publicKey).then(r => {})
+        }
 
+        for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
+            let publicKey = account.ledgerAccountsArray[i]
+            let current = account.publicKey === publicKey
+            accounts.push({
+                privateKey: i,
+                publicKey: publicKey,
+                amount: balance[publicKey],
+                current,
+                groupIndex: i,
+                type: 2
+            })
+            requestBalance(publicKey).then(r => {})
         }
 
         setAccounts(accounts)
@@ -143,11 +148,10 @@ export default function Selector(props) {
         console.log(selected)
         let account = (await userStorage.user.loadUser())
         let data
-        if (selected.type === 0) {
-            data = generateAccountData(selected.privateKey, account.seed, account)
-        }
         if (selected.type === 2) {
             data = generateLedgerAccountData(selected.privateKey, account.seed, account)
+        } else {
+            data = generateAccountData(selected.privateKey, account.seed, account)
         }
         await userStorage.promise.sendPromise({
             account: true,
@@ -282,7 +286,7 @@ export default function Selector(props) {
 
                 let account = (await userStorage.user.loadUser())
 
-                eth.getAddress('44\'/60\'/0\'/0/' + account.ledgerAccountsArray.length)
+                eth.getAddress(ledgerPath + account.ledgerAccountsArray.length)
                     .then(o => {
 
                         if (!ledger) {
