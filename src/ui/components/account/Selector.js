@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import {explorerAddress, getMnemonicPrivateKeyHex, ledgerPath, regexToken, shortHash} from '../../Utils'
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
-import { createPopupWindow } from '../../../handler'
+import {createPopupWindow} from '../../../handler'
 // import eventBus from "../../../utils/eventBus";
-import { signHash, getVersion, getPublicKey } from '../../../utils/ledgerShell'
+import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
-import { generateAccountData, generateLedgerAccountData } from '../../../user'
+import {generateAccountData, generateLedgerAccountData} from '../../../user'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
-import { copyText } from '../../../utils/names'
+import {copyText} from '../../../utils/names'
 
 // let balance = {}
 
@@ -30,7 +30,9 @@ export default function Selector(props) {
 
     let [keys, setKeys] = useState()
     let [accounts, setAccounts] = useState([])
-    let [cards, setCards] = useState([])
+    let [cards1, setCards1] = useState([])
+    let [cards2, setCards2] = useState([])
+    let [cards3, setCards3] = useState([])
 
     let [showAdd, setShowAdd] = useState(false)
 
@@ -76,7 +78,8 @@ export default function Selector(props) {
                 groupIndex: i,
                 type: 0
             })
-            requestBalance(publicKey).then(r => {})
+            requestBalance(publicKey).then(r => {
+            })
         }
 
         if (account.seed) {
@@ -95,7 +98,8 @@ export default function Selector(props) {
                 groupIndex: i,
                 type: 1
             })
-            requestBalance(publicKey).then(r => {})
+            requestBalance(publicKey).then(r => {
+            })
         }
 
         for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
@@ -109,7 +113,8 @@ export default function Selector(props) {
                 groupIndex: i,
                 type: 2
             })
-            requestBalance(publicKey).then(r => {})
+            requestBalance(publicKey).then(r => {
+            })
         }
 
         setAccounts(accounts)
@@ -119,11 +124,10 @@ export default function Selector(props) {
 
     let loadUser = () => {
         userStorage.user.loadUser().then(async account => {
-
-                // console.log(account)
-                let accounts = await buildAccountsArray(account)
-                renderCards(accounts, null)
-            })
+            // console.log(account)
+            let accounts = await buildAccountsArray(account)
+            renderCards(accounts, null)
+        })
     }
 
     // let loginSeed = (i) => {
@@ -189,17 +193,11 @@ export default function Selector(props) {
     let addLedgerAccount = async (ledgerPublicKey) => {
 
         let account = (await userStorage.user.loadUser())
-        // console.log(account)
         let data = generateLedgerAccountData(account.ledgerAccountsArray.length, account)
-        // if(account.type === 0)
-        //     data = generateAccountData(account.privateKey, account.seed, account)
-        // if(account.type === 2)
-        //     data = generateLedgerAccountData(account.privateKey, account.seed, account)
 
-        // data = generateAccountData(account.privateKey, account.seed, account)
-        console.log(data)
+        data.publicKey = ledgerPublicKey
         data.ledgerAccountsArray.push(ledgerPublicKey)
-        // data.ledger = true
+        data.ledger = ''
 
         await userStorage.promise.sendPromise({
             account: true,
@@ -224,17 +222,30 @@ export default function Selector(props) {
 
     let renderCards = (accounts, hex) => {
 
+        let accounts1 = accounts.filter(item => item.type === 0)
+        let accounts2 = accounts.filter(item => item.type === 1)
+        let accounts3 = accounts.filter(item => item.type === 2)
+
+        setCards1(generateCards(accounts1))
+        setCards2(generateCards(accounts2))
+        setCards3(generateCards(accounts3))
+    }
+
+    let generateCards = (accounts) => {
+
         let cards = []
 
         for (let i = 0; i < accounts.length; i++) {
 
             let account = accounts[i]
             let current = account.current
-            let name = getType(account.type)
-                .charAt(0)
-                .replace('S', '') + (account.groupIndex + 1)
+
+            let name = getType(account.type).charAt(0).replace('S', '')
+                + (account.groupIndex + 1)
+
             cards.push(
-                <div key={i} className={styles.card + (current ? '' : ' ' + styles.card_select) + ' ' + styles.small}>
+                <div key={i}
+                     className={styles.card + (current ? '' : ' ' + styles.card_select) + ' ' + styles.small}>
 
                     <div className={styles.row}>
                         <div>Account {name}</div>
@@ -251,11 +262,11 @@ export default function Selector(props) {
 
                     <div className={styles.card_field} title={Number(account.amount) / 1e10 + ''}>
                         {(account.amount > 0 ?
-                            (Number(account.amount) / 1e10).toFixed(4)
-                            :
-                            '0.0')
+                                (Number(account.amount) / 1e10).toFixed(4)
+                                :
+                                '0.0')
 
-                        + ' BIT'}
+                            + ' BIT'}
                     </div>
 
                     <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
@@ -266,7 +277,7 @@ export default function Selector(props) {
             )
         }
 
-        setCards(cards)
+        return cards
     }
 
     const copyPublicKey = (publicKey) => {
@@ -323,40 +334,41 @@ export default function Selector(props) {
 
         userStorage.user.loadUser().then(async account => {
 
-                // TODO global transport object. may be in app.js. need do save new model.
-                let Transport = !props.ledgerTransport ? await TransportWebHID.create() : props.ledgerTransport
-                if (!props.ledgerTransport) {
-                    props.setTransport(Transport)
-                }
-                await getPublicKey(account.ledgerAccountsArray.length, Transport)
-                    .then(async data => {
+            // TODO global transport object. may be in app.js. need do save new model.
+            let Transport = !props.ledgerTransport ? await TransportWebHID.create() : props.ledgerTransport
+            if (!props.ledgerTransport) {
+                props.setTransport(Transport)
+            }
+            await getPublicKey(account.ledgerAccountsArray.length, Transport).then(async data => {
 
-                        console.log(data)
-                        // account.ledger = true
-                        // console.log(ledger)
+                console.log(data)
+                // account.ledger = true
+                // console.log(ledger)
 
-                        // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
-                        // TODO This one is test
+                // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
+                // TODO This one is test
 
-                        // account.ledgerAccountsArray = [data.substr(0, 66)]
+                // account.ledgerAccountsArray = [data.substr(0, 66)]
 
-                        // await userStorage.promise.sendPromise({
-                        //     account: true,
-                        //     set: true,
-                        //     data: account
-                        // })
+                // await userStorage.promise.sendPromise({
+                //     account: true,
+                //     set: true,
+                //     data: account
+                // })
 
-                        await addLedgerAccount(data)
-                        console.log('Ledger worked')
-                        setLedger(true)
-                    })
-                    .catch(msg => {
-                        console.error('Ledger error')
-                        console.log(msg)
-                        setLedger(false)
-                    })
+                await addLedgerAccount(data)
 
+                console.log('Ledger worked')
+                setLedger(true)
+
+            }).catch(msg => {
+
+                console.error('Ledger error')
+                console.log(msg)
+                setLedger(false)
             })
+
+        })
     }
 
     return (
@@ -364,18 +376,31 @@ export default function Selector(props) {
 
             <div className={styles.field} onClick={() => {
                 props.setAccountSelector(false)
-            }}>❮ Back
-            </div>
-
-            <div className={styles.field + ' ' + styles.button}
-                 onClick={props.setImportKey}>Import Key
+            }}>
+                ❮ Back
             </div>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
-                    {cards}
+                    {cards1}
                 </div>
             </div>
+
+            <div className={styles.field + ' ' + styles.button} onClick={props.setImportKey}>
+                Import Key
+            </div>
+
+            <div className={styles.cards_container}>
+                <div className={styles.cards}>
+                    {cards2}
+                </div>
+            </div>
+
+            {/*<div className={styles.cards_container}>*/}
+            {/*    <div className={styles.cards}>*/}
+            {/*        {cards.filter(item => item.type === 0).map(item => item.div)}*/}
+            {/*    </div>*/}
+            {/*</div>*/}
 
             {seed && <div className={styles.field + ' ' + styles.button}
                           onClick={addMnemonicAccount}>Add Mnemonic Account</div>}
@@ -385,6 +410,12 @@ export default function Selector(props) {
 
             {!seed && <div className={styles.field + ' ' + styles.button}
                            onClick={props.setImportMnemonic}>Import Mnemonic</div>}
+
+            <div className={styles.cards_container}>
+                <div className={styles.cards}>
+                    {cards3}
+                </div>
+            </div>
 
             {!ledger && <div className={styles.field + ' ' + styles.button}
                              onClick={connectLedger}>Connect Ledger</div>}
