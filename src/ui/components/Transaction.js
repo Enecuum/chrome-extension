@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import styles from '../css/index.module.css'
 import elements from '../css/elements.module.css'
-import TransactionSend from './TransactionSend'
 import Separator from '../elements/Separator'
 import { regexAddress } from '../Utils'
 import Input from '../elements/Input'
@@ -225,105 +224,98 @@ export default class Transaction extends React.Component {
 
     render() {
 
-        if (this.state.isTransactionSend) {
+        let balanceAfter = this.props.isTransaction.balance ?
 
-            return <TransactionSend setTransaction={this.props.setTransaction} txHash={this.state.txHash}/>
-
-        } else {
-
-            let balanceAfter = this.props.isTransaction.balance ?
-
-                (
-                    Number(
-                        this.props.isTransaction.balance
-                        - BigInt(Math.floor(this.state.amount * this.state.decimals))
-                        - BigInt(Math.floor(this.state.fee * this.state.decimals))
-                    )
-                    / this.state.decimals
+            (
+                Number(
+                    this.props.isTransaction.balance
+                    - BigInt(Math.floor(this.state.amount * this.state.decimals))
+                    - BigInt(Math.floor(this.state.fee * this.state.decimals))
                 )
-
-                : '0.0'
-
-            balanceAfter += ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : 'COIN')
-
-            return (
-                <div className={styles.main}>
-
-                    <div className={styles.content}>
-
-                        <Input type="text"
-                               spellCheck={false}
-                               onChange={this.handleChangeAddress}
-                               value={this.state.address}
-                               className={styles.field + ' ' + (regexAddress.test(this.state.address) ? styles.field_correct : '')}
-                               placeholder={'Address'}
-                        />
-
-                        <Input type="number"
-                               onChange={this.handleChangeAmount}
-                               value={this.state.amount}
-                               className={styles.field}
-                               placeholder={'Amount'}
-                        />
-
-                        <div
-                            className={styles.field_ticker}>{this.props.isTransaction.ticker ? this.props.isTransaction.ticker : 'COIN'}</div>
-
-                        <Input type="text"
-                               spellCheck={false}
-                               onChange={this.handleChangeData}
-                               value={this.state.data}
-                               className={styles.field}
-                               placeholder={'Data'}
-                        />
-
-                        {/*{this.state.needPassword && <Input type="password"*/}
-                        {/*                        spellCheck={false}*/}
-                        {/*                        onChange={(e) => this.setState({password: e.target.value})}*/}
-                        {/*                        value={this.state.password}*/}
-                        {/*                        className={styles.field}*/}
-                        {/*                        placeholder={'Password'}*/}
-                        {/*/>}*/}
-
-                    </div>
-
-
-                    <div className={styles.info}>
-
-                        <div className={styles.field + ' ' + elements.rowLine}>
-                            Network: <div className={elements.network_name}>{this.state.network}</div>
-                        </div>
-
-                        <div className={styles.field}>
-                            Fee: {this.state.fee + ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : 'COIN')}
-                        </div>
-
-                        <div className={styles.field}>
-                            Balance after: {balanceAfter}
-                        </div>
-
-                        {/*{this.state.needPassword && <div className={styles.field}>*/}
-                        {/*    You have to unlock account*/}
-                        {/*</div>}*/}
-
-                    </div>
-
-                    <div className={styles.form}>
-
-                        <div onClick={this.submit}
-                             className={styles.field + ' ' + styles.button + ' ' + (regexAddress.test(this.state.address) ? styles.button_blue : '')}>Send
-                        </div>
-
-                        <div onClick={() => this.props.setTransaction(false)}
-                             className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Back
-                        </div>
-
-                        <Separator/>
-
-                    </div>
-                </div>
+                / this.state.decimals
             )
-        }
+
+            : '0.0'
+
+        balanceAfter += ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : 'COIN')
+
+        return (
+            <div className={styles.main}>
+
+                <div className={styles.content}>
+
+                    <Input type="text"
+                           spellCheck={false}
+                           onChange={this.handleChangeAddress}
+                           value={this.state.address}
+                           className={styles.field + ' ' + (regexAddress.test(this.state.address) ? styles.field_correct : '')}
+                           placeholder={'Address'}
+                    />
+
+                    <Input type="number"
+                           onChange={this.handleChangeAmount}
+                           value={this.state.amount}
+                           className={styles.field}
+                           placeholder={'Amount'}
+                    />
+
+                    <div
+                        className={styles.field_ticker}>{this.props.isTransaction.ticker ? this.props.isTransaction.ticker : 'COIN'}</div>
+
+                    <Input type="text"
+                           spellCheck={false}
+                           onChange={this.handleChangeData}
+                           value={this.state.data}
+                           className={styles.field}
+                           placeholder={'Data'}
+                    />
+
+                    {/*{this.state.needPassword && <Input type="password"*/}
+                    {/*                        spellCheck={false}*/}
+                    {/*                        onChange={(e) => this.setState({password: e.target.value})}*/}
+                    {/*                        value={this.state.password}*/}
+                    {/*                        className={styles.field}*/}
+                    {/*                        placeholder={'Password'}*/}
+                    {/*/>}*/}
+
+                </div>
+
+
+                <div className={styles.info}>
+
+                    <div className={styles.field + ' ' + elements.rowLine}>
+                        Network: <div className={elements.network_name}>{this.state.network}</div>
+                    </div>
+
+                    <div className={styles.field}>
+                        Fee: {this.state.fee + ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : 'COIN')}
+                    </div>
+
+                    <div className={styles.field}>
+                        Balance after: {balanceAfter}
+                    </div>
+
+                    {/*{this.state.needPassword && <div className={styles.field}>*/}
+                    {/*    You have to unlock account*/}
+                    {/*</div>}*/}
+
+                </div>
+
+                <div className={styles.form}>
+
+                    <div onClick={this.submit}
+                         className={styles.field + ' ' + styles.button + ' ' + (regexAddress.test(this.state.address) ? styles.button_blue : '')}>Send
+                    </div>
+
+                    <div onClick={() => this.props.setTransaction(false)}
+                         className={styles.field + ' ' + styles.button + ' ' + styles.button_blue}>Back
+                    </div>
+
+                    <Separator/>
+
+                </div>
+            </div>
+        )
     }
 }
 
