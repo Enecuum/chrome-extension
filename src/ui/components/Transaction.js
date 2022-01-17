@@ -118,15 +118,15 @@ export default class Transaction extends React.Component {
 
         //TODO
         let user = await userStorage.user.loadUser()
-        if (!user.privateKey && !user.ledger) {
-            user = await userStorage.promise.sendPromise({
-                account: true,
-                unlock: true,
-                password: this.state.password
-            })
-            console.log(user)
-            return
-        }
+        // if (!user.privateKey && user.type !== 2) {
+        //     user = await userStorage.promise.sendPromise({
+        //         account: true,
+        //         unlock: true,
+        //         password: this.state.password
+        //     })
+        //     console.log(user)
+        //     return
+        // }
 
         let wallet = {
             pubkey: user.publicKey,
@@ -142,8 +142,8 @@ export default class Transaction extends React.Component {
             tokenHash: user.token
         }
 
-        // console.log(data)
-        // console.log(user)
+        console.log(data)
+        console.log(user)
 
         let response
         try {
