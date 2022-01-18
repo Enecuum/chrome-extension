@@ -284,10 +284,6 @@ export default function Selector(props) {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(publicKey)
             setCopied(publicKey)
-            {
-                console.log(copied)
-            }
-            // loadUser()
         } else {
             console.error('navigator.clipboard: ' + false)
         }
