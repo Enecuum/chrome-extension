@@ -197,7 +197,7 @@ export default function App(props) {
     }
 
     if (isKeys) {
-        return <Keys setKeys={setKeys}/>
+        return <Keys isKeys={isKeys} setKeys={setKeys}/>
     }
 
     if (isAccountSelector) {

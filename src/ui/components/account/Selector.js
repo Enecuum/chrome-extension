@@ -260,7 +260,7 @@ export default function Selector(props) {
                         onClick={() => copyPublicKey(account.publicKey)}
                         title={account.publicKey + copyText}>{shortHash(account.publicKey)}</div>
 
-                    <div className={styles.card_field} title={Number(account.amount) / 1e10 + ''}>
+                    <div className={styles.card_field + ' ' + styles.card_field_amount} title={Number(account.amount) / 1e10 + ''}>
                         {(account.amount > 0 ?
                                 (Number(account.amount) / 1e10).toFixed(4)
                                 :
@@ -269,10 +269,25 @@ export default function Selector(props) {
                             + ' BIT'}
                     </div>
 
-                    <div className={styles.card_field_select + ' ' + (current ? '' : 'select')}
-                         onClick={(current ? () => {
-                             props.setKeys(true)
-                         } : () => selectAccount(account))}>{current ? 'SHOW KEYS ❯' : 'SELECT'}</div>
+                    {/*<div className={styles.card_field_select + ' ' + (current ? '' : 'select')}*/}
+                    {/*     onClick={(current ? () => {*/}
+                    {/*         props.setKeys(true)*/}
+                    {/*     } : () => selectAccount(account))}>{current ? 'CURRENT' : ''}</div>*/}
+
+                    <div className={styles.card_buttons}>
+
+                        <div onClick={(current ?
+                            () => {}
+                            :
+                            () => selectAccount(account))
+                        }>{current ? 'CURRENT' : 'SELECT'}</div>
+
+                        <div onClick={() => {props.setKeys(account)}}>
+                            DETAILS ❯
+                        </div>
+
+                    </div>
+
                 </div>
             )
         }
