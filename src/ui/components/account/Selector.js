@@ -260,7 +260,8 @@ export default function Selector(props) {
                         onClick={() => copyPublicKey(account.publicKey)}
                         title={account.publicKey + copyText}>{shortHash(account.publicKey)}</div>
 
-                    <div className={styles.card_field + ' ' + styles.card_field_amount} title={Number(account.amount) / 1e10 + ''}>
+                    <div className={styles.card_field + ' ' + styles.card_field_amount}
+                         title={Number(account.amount) / 1e10 + ''}>
                         {(account.amount > 0 ?
                                 (Number(account.amount) / 1e10).toFixed(4)
                                 :
@@ -276,14 +277,17 @@ export default function Selector(props) {
 
                     <div className={styles.card_buttons}>
 
-                        <div onClick={(current ?
-                            () => {}
-                            :
-                            () => selectAccount(account))
-                        }>{current ? 'CURRENT' : 'SELECT'}</div>
+                        <div className={current ? styles.card_button_current : ''}
+                             onClick={(current ? () => {
+                                 }
+                                 :
+                                 () => selectAccount(account))
+                             }>{current ? 'CURRENT' : 'SELECT'}</div>
 
-                        <div onClick={() => {props.setKeys(account)}}>
-                            DETAILS ❯
+                        <div onClick={() => {
+                            props.setKeys(account)
+                        }}>
+                            DETAILS
                         </div>
 
                     </div>
@@ -341,45 +345,48 @@ export default function Selector(props) {
 
     let connectLedger = () => {
 
-        // createPopupWindow('index.html?type=connectLedger')
+        let params = getUrlVars()
+        if (params.type !== 'accounts') {
+            createPopupWindow('index.html?type=accounts')
+        } else
 
-        userStorage.user.loadUser().then(async account => {
+            userStorage.user.loadUser().then(async account => {
 
-            // TODO global transport object. may be in app.js. need do save new model.
-            let Transport = !props.ledgerTransport ? await TransportWebHID.create() : props.ledgerTransport
-            if (!props.ledgerTransport) {
-                props.setTransport(Transport)
-            }
-            await getPublicKey(account.ledgerAccountsArray.length, Transport).then(async data => {
+                // TODO global transport object. may be in app.js. need do save new model.
+                let Transport = !props.ledgerTransport ? await TransportWebHID.create() : props.ledgerTransport
+                if (!props.ledgerTransport) {
+                    props.setTransport(Transport)
+                }
+                await getPublicKey(account.ledgerAccountsArray.length, Transport).then(async data => {
 
-                console.log(data)
-                // account.ledger = true
-                // console.log(ledger)
+                    console.log(data)
+                    // account.ledger = true
+                    // console.log(ledger)
 
-                // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
-                // TODO This one is test
+                    // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
+                    // TODO This one is test
 
-                // account.ledgerAccountsArray = [data.substr(0, 66)]
+                    // account.ledgerAccountsArray = [data.substr(0, 66)]
 
-                // await userStorage.promise.sendPromise({
-                //     account: true,
-                //     set: true,
-                //     data: account
-                // })
+                    // await userStorage.promise.sendPromise({
+                    //     account: true,
+                    //     set: true,
+                    //     data: account
+                    // })
 
-                await addLedgerAccount(data)
+                    await addLedgerAccount(data)
 
-                console.log('Ledger worked')
-                setLedger(true)
+                    console.log('Ledger worked')
+                    setLedger(true)
 
-            }).catch(msg => {
+                }).catch(msg => {
 
-                console.error('Ledger error')
-                console.log(msg)
-                setLedger(false)
+                    console.error('Ledger error')
+                    console.log(msg)
+                    setLedger(false)
+                })
+
             })
-
-        })
     }
 
     return (

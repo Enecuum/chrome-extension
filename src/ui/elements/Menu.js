@@ -128,7 +128,7 @@ export default function Menu(props) {
 
         setOpenEnable(openPopup)
 
-        await diuserStoragesk.config.setConfig(config)
+        userStorage.config.setConfig(config)
     }
 
     // const checkConnectLedger = () => {
