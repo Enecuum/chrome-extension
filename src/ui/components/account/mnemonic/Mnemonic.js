@@ -40,7 +40,12 @@ export default function Mnemonic(props) {
     const loginSeed = async (mnemonicString) => {
 
         let privateKey = getMnemonicFirstPrivateKey(mnemonicString)
-        let data = generateMnemonicAccountData(privateKey, (await userStorage.user.loadUser()), getMnemonicHex(mnemonicString))
+        let accountData = await userStorage.user.loadUser()
+        if (!accountData.publicKey)
+            accountData = account
+
+        let data = generateMnemonicAccountData(privateKey, accountData, getMnemonicHex(mnemonicString))
+        data.seedAccountsArray.push(0)
 
         // data.privateKeys = account.privateKeys
         // if (!data.privateKeys.includes(keyString))
