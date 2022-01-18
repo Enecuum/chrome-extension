@@ -12,29 +12,24 @@ export default function Keys(props) {
     let [privateKey, setPrivateKey] = useState('')
     let [type, setType] = useState('')
     useEffect(() => {
-        loadUser()
+        loadUser().then()
     })
 
-    let loadUser = () => {
-        userStorage.user.loadUser()
-            .then(async account => {
-                // console.log(account)
-                setPublicKey(account.publicKey)
-                setPrivateKey(account.type === 2 ? '...' : account.privateKey)
-                setType(account.type)
+    let loadUser = async () => {
 
-                // let hex = account.seed
-                // if (hex) {
-                //     let account2 = getMnemonicPrivateKeyHex(hex, 1)
-                //     const publicKey2 = ENQWeb.Utils.Sign.getPublicKey(account2, true)
-                //     // console.log(account2)
-                // }
+        let account
 
-                // if (account.type === 2) {
-                //     setPrivateKey('')
-                // }
+        console.log(props)
 
-            })
+        if (props.isKeys.publicKey) {
+            account = props.isKeys
+        } else {
+            account = await userStorage.user.loadUser()
+        }
+
+        setPublicKey(account.publicKey)
+        setPrivateKey(account.type === 2 ? '...' : account.privateKey)
+        setType(account.type)
     }
 
     return (

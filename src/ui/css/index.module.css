@@ -1017,6 +1017,40 @@ input[type=number] {
     color: var(--color-blue-dark)
 }
 
+.card_field_amount {
+    position: absolute;
+    right: 20px;
+    top: 42px;
+}
+
+.card_buttons {
+    width: 100%;
+    height: 42px;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+.card_buttons > div {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    /*padding-left: 20px;*/
+    width: 50%;
+    text-align: center;
+    background: var(--color-blue-dark);
+}
+
+.card_buttons > div:last-child {
+    left: auto;
+    right: 0;
+}
+
+.card_buttons > div:hover {
+    background: var(--color-blue);
+}
+
 .data_bottom_tabs > div {
     width: 30% !important;
 }
