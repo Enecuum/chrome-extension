@@ -441,6 +441,10 @@ export default function Selector(props) {
             {ledger && <div className={styles.field + ' ' + styles.button}
                             onClick={connectLedger}>Add Ledger Account</div>}
 
+            {chrome.runtime.web || getUrlVars().type === 'accounts' ? '' : <div className={styles.field + ' ' + styles.text}>
+                There will be separate window for Ledger connection instead of popup.
+            </div>}
+
             <Separator/>
 
         </div>
