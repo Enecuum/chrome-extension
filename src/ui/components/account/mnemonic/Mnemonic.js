@@ -6,6 +6,7 @@ import * as bip32 from 'bip32';
 import Input from "../../../elements/Input";
 import {getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../../Utils";
 import {generateAccountData, generateMnemonicAccountData} from "../../../../user";
+import {account} from '../../../../user'
 
 let seedLength = 12
 
