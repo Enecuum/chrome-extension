@@ -188,6 +188,13 @@ export default function Account(props) {
                 return false
             }
         }
+        if (params.type === 'accounts') {
+            if (!isLocked) {
+                // props.setTransactionRequest(task[params.id])
+                props.setAccountSelector(true)
+                return false
+            }
+        }
 
         return true
     }

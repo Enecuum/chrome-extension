@@ -1051,6 +1051,10 @@ input[type=number] {
     background: var(--color-blue);
 }
 
+.card_button_current {
+    pointer-events: none;
+}
+
 .data_bottom_tabs > div {
     width: 30% !important;
 }
