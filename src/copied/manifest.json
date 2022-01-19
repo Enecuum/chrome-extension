@@ -12,7 +12,7 @@
     },
     "browser_action": {
         "default_title": "Enecuum Wallet",
-        "default_popup": "index.html",
+        "default_popup": "index.html?popup=true",
         "default_icon":  "images/enq.png"
     },
     "icons": {
