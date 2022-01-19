@@ -62,6 +62,20 @@ export default function App(props) {
 
     const [isKeys, setKeys] = useState(false)
 
+    let [deferredPrompt, setDeferredPrompt] = useState()
+    let initPWA = () => {
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setDeferredPrompt(e)
+        })
+    }
+    let installPWA = async () => {
+        deferredPrompt.prompt()
+        const {outcome} = await deferredPrompt.userChoice
+        deferredPrompt = null
+    }
+
     eventBus.on('lock', (data) => {
         console.warn('EVENT: ' + 'lock' + ' ' + data.message)
         setLock(data.message)
@@ -90,6 +104,7 @@ export default function App(props) {
     }
 
     useEffect(() => {
+        initPWA()
         const version = chrome.runtime.getManifest().version
         console.log('App: ' + version)
         console.log('Lib: ' + ENQWeb.version)
@@ -289,5 +304,6 @@ export default function App(props) {
                     setMnemonic={setMnemonic}
                     setAccountSelector={setAccountSelector}
                     setImportMnemonic={setImportMnemonic}
+                    installPWA={installPWA}
     />
 }

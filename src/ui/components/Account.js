@@ -440,6 +440,7 @@ export default function Account(props) {
                          setMnemonic={props.setMnemonic}
                          setAccountSelector={props.setAccountSelector}
                          setImportMnemonic={props.setImportMnemonic}
+                         installPWA={props.installPWA}
             />
         }
     }
