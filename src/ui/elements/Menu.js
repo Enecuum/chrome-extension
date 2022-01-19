@@ -31,7 +31,7 @@ export default function Menu(props) {
     const [account2Amount, setAccount2Amount] = useState(BigInt(0))
 
     const window = () => {
-        userStorage.promise.sendPromise({window: true}).then()
+        createPopupWindow()
     }
 
     // console.log(enablePopup)

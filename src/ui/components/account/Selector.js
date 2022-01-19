@@ -5,7 +5,7 @@ import {explorerAddress, getMnemonicPrivateKeyHex, ledgerPath, regexToken, short
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
-import {createPopupWindow} from '../../../handler'
+import {createPopupWindow, createTabWindow} from '../../../handler'
 // import eventBus from "../../../utils/eventBus";
 import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
@@ -347,7 +347,8 @@ export default function Selector(props) {
 
         let params = getUrlVars()
         if (params.type !== 'accounts') {
-            createPopupWindow('index.html?type=accounts')
+            // createPopupWindow('index.html?type=accounts')
+            createTabWindow()
         } else
 
             userStorage.user.loadUser().then(async account => {
