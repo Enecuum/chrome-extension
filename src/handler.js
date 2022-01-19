@@ -213,7 +213,7 @@ function createTabWindow(params = '') {
     // chrome.windows.create({
     //     url: window.location.href + params,
     // })
-    window.open(window.location.href + params, '_blank').focus();
+    window.open(window.location.href.split('?')[0] + params, '_blank').focus();
 }
 
 export {

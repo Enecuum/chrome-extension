@@ -345,10 +345,8 @@ export default function Selector(props) {
 
     let connectLedger = () => {
 
-        let params = getUrlVars()
-        if (params.type !== 'accounts') {
-            // createPopupWindow('index.html?type=accounts')
-            createTabWindow()
+        if (getUrlVars().popup) {
+            createTabWindow('')
         } else
 
             userStorage.user.loadUser().then(async account => {
@@ -389,6 +387,8 @@ export default function Selector(props) {
 
             })
     }
+
+    // console.log(getUrlVars())
 
     return (
         <div className={styles.main}>
@@ -442,9 +442,9 @@ export default function Selector(props) {
             {ledger && <div className={styles.field + ' ' + styles.button}
                             onClick={connectLedger}>Add Ledger Account</div>}
 
-            {chrome.runtime.web || getUrlVars().type === 'accounts' ? '' : <div className={styles.field + ' ' + styles.text}>
+            {getUrlVars().popup ? <div className={styles.field + ' ' + styles.text}>
                 There will be separate window for Ledger connection instead of popup.
-            </div>}
+            </div> : ''}
 
             <Separator/>
 

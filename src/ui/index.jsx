@@ -15,7 +15,7 @@ export async function initApp(background) {
             <Analytics/>
         </div>,
         document.getElementById('app')
-    );
+    )
 
     // Web desktop init
     if (chrome.runtime.getManifest().version.endsWith(versions.WEB)) {
