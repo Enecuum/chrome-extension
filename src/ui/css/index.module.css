@@ -1051,8 +1051,9 @@ input[type=number] {
     background: var(--color-blue);
 }
 
-.card_button_current {
-    pointer-events: none;
+.card_buttons > div.card_button_current {
+    cursor: auto;
+    background: var(--color-blue-background);
 }
 
 .data_bottom_tabs > div {

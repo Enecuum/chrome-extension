@@ -14,7 +14,7 @@ export default class Login extends React.Component {
             privateKey: '',
             seed: '',
             isNetwork: false,
-            state: 0,
+            state: 1,
             setMnemonic: props.setMnemonic
         }
         this.handleChangePrivateKey = this.handleChangePrivateKey.bind(this)
@@ -116,7 +116,7 @@ export default class Login extends React.Component {
                         onChange={this.handleChangeSeed}
                         value={this.state.seed}
                         className={styles.field + ' ' + (regexSeed.test(this.state.seed) ? styles.field_correct : '')}
-                        label={'Seed Phrase'}
+                        label={'Mnemonic Phrase'}
                         placeholder={'12+ words'}
                     />}
 
@@ -151,19 +151,25 @@ export default class Login extends React.Component {
 
                     </div>
 
+                    <div
+                        onClick={this.generateMnemonic}
+                        className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                        Generate
+                    </div>
+
                     <div className={`${styles.buttons_field}`}>
 
-                        {this.state.state === 1 && <div
-                            onClick={this.generateMnemonic}
-                            className={`${styles.field} ${styles.button}`}>
-                            Generate
-                        </div>}
+                        {/*{this.state.state === 1 && <div*/}
+                        {/*    onClick={this.generateMnemonic}*/}
+                        {/*    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>*/}
+                        {/*    Generate*/}
+                        {/*</div>}*/}
 
-                        {this.state.state === 1 && <div
-                            onClick={() => this.setState({state: 0})}
-                            className={`${styles.field} ${styles.button}`}>
-                            Private Key
-                        </div>}
+                        {/*{this.state.state === 1 && <div*/}
+                        {/*    onClick={() => this.setState({state: 0})}*/}
+                        {/*    className={`${styles.field} ${styles.button}`}>*/}
+                        {/*    Private Key*/}
+                        {/*</div>}*/}
 
                     </div>
 

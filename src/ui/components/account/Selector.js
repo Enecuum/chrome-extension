@@ -278,11 +278,9 @@ export default function Selector(props) {
                     <div className={styles.card_buttons}>
 
                         <div className={current ? styles.card_button_current : ''}
-                             onClick={(current ? () => {
-                                 }
-                                 :
-                                 () => selectAccount(account))
-                             }>{current ? 'CURRENT' : 'SELECT'}</div>
+                             onClick={(current ? () => {} : () => selectAccount(account))}>
+                            {current ? 'CURRENT' : 'SELECT'}
+                        </div>
 
                         <div onClick={() => {
                             props.setKeys(account)
