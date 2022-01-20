@@ -203,6 +203,7 @@ a:hover {
 .welcome1 {
     width: 100%;
     padding-left: 30px;
+    margin-bottom: 5px;
     line-height: 100%;
     text-align: left;
     font-size: var(--font-size-giant);

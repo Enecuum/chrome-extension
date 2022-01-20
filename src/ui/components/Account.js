@@ -190,8 +190,8 @@ export default function Account(props) {
         }
         if (params.type === 'ledger') {
             if (!isLocked) {
-                props.setAccountSelector(true)
                 props.setLedger(true)
+                props.setAccountSelector(true)
                 return false
             }
         }
