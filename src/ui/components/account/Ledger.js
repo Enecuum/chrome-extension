@@ -1,7 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import {explorerAddress, getMnemonicPrivateKeyHex, ledgerPath, regexToken, shortHash} from '../../Utils'
+import {
+    explorerAddress,
+    getMnemonicPrivateKeyHex,
+    ledgerPath,
+    regexToken,
+    shortHash,
+    toggleFullScreen
+} from '../../Utils'
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
@@ -69,11 +76,13 @@ export default function Ledger(props) {
         for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
             let publicKey = account.ledgerAccountsArray[i]
             let current = account.publicKey === publicKey
+            let added = account.ledgerAccountsArray.includes(publicKey)
             accounts.push({
                 privateKey: i,
                 publicKey: publicKey,
                 amount: balance[publicKey],
                 current,
+                added,
                 groupIndex: i,
                 type: 2
             })
@@ -181,9 +190,9 @@ export default function Ledger(props) {
 
                     <div className={styles.card_buttons}>
 
-                        <div className={current ? styles.card_button_current : ''}
-                             onClick={(current ? () => {} : () => selectAccount(account))}>
-                            {current ? 'CURRENT' : 'SELECT'}
+                        <div className={current || account.added ? styles.card_button_current : ''}
+                             onClick={(current ? () => {} : () => {})}>
+                            {current ? 'CURRENT' : (account.added ? 'ADD' : '')}
                         </div>
 
                         <div onClick={() => {
@@ -209,41 +218,6 @@ export default function Ledger(props) {
             console.error('navigator.clipboard: ' + false)
         }
     }
-
-    // let connectLedgerEth = async () => {
-    //
-    //     // TransportWebUSB.list().then(devices => {
-    //     //     console.log(devices)
-    //     //     let output = devices.length > 0 && devices.find(device => device.manufacturerName === 'Ledger')
-    //     //     console.log(!!output)
-    //     //     setUsbDevice(!!output)
-    //     // })
-    //
-    //     return await TransportWebUSB.create()
-    //         .then(async transport => {
-    //
-    //             const eth = new Eth(transport)
-    //
-    //             console.log(eth)
-    //
-    //             let account = (await userStorage.user.loadUser())
-    //
-    //             eth.getAddress(ledgerPath + account.ledgerAccountsArray.length)
-    //                 .then(o => {
-    //
-    //                     if (!ledger) {
-    //                         setLedger(true)
-    //                     } else {
-    //                         addLedgerAccount(o.address)
-    //                     }
-    //                     console.log(o.address)
-    //
-    //                 })
-    //                 .catch(e => {
-    //                     setLedger(false)
-    //                 })
-    //         })
-    // }
 
     let connectLedger = () => {
 
@@ -295,7 +269,18 @@ export default function Ledger(props) {
     return (
         <div className={styles.main}>
 
-            <Back setFalse={() => props.setLedger(false)}/>
+            {/*<Back setFalse={() => props.setLedger(false)}/>*/}
+
+            <div className={styles.content}>
+                <img className={styles.login_logo} src="./images/ledger.png" onClick={toggleFullScreen}/>
+
+                <div className={styles.welcome1}>Connect</div>
+                <div className={styles.welcome1}>to Ledger</div>
+                {/*<div className={styles.welcome1}>wallet</div>*/}
+
+                <div className={styles.welcome2}>Connect your wallet to your computer</div>
+                <div className={styles.welcome2}>Unlock Ledger and open the ENQ App</div>
+            </div>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
@@ -303,15 +288,16 @@ export default function Ledger(props) {
                 </div>
             </div>
 
-            {!ledger && <div className={styles.field + ' ' + styles.button}
-                             onClick={connectLedger}>Connect Ledger</div>}
+            <div className={styles.form}>
+                {!ledger && <div className={styles.field + ' ' + styles.button}
+                                 onClick={connectLedger}>Continue</div>}
 
-            {getUrlVars().popup ? <div className={styles.field + ' ' + styles.text}>
-                There will be separate window for Ledger connection instead of popup.
-            </div> : ''}
+                {getUrlVars().popup ? <div className={styles.field + ' ' + styles.text}>
+                    There will be separate window for Ledger connection instead of popup.
+                </div> : ''}
 
-            <Separator/>
-
+                <Separator/>
+            </div>
         </div>
     )
 }

@@ -308,6 +308,7 @@ export default function App(props) {
                     setSignRequest={setSignRequest}
                     setMnemonic={setMnemonic}
                     setAccountSelector={setAccountSelector}
+                    setLedger={setLedger}
                     setImportMnemonic={setImportMnemonic}
                     installPWA={installPWA}
     />
