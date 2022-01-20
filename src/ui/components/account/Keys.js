@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import { explorerAddress, getMnemonicPrivateKeyHex, shortHash, shortHashLong } from '../../Utils'
+import Back from "../../elements/Back";
 
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -69,9 +70,7 @@ export default function Keys(props) {
 
             <div className={styles.form}>
 
-                <div onClick={() => props.setKeys(false)}
-                     className={styles.field + ' ' + styles.button}>Back
-                </div>
+                <Back setFalse={() => props.setKeys(false)}/>
 
                 <Separator/>
 

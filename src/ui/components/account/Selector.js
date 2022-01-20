@@ -14,6 +14,7 @@ import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
 import {copyText} from '../../../utils/names'
+import Back from "../../elements/Back";
 
 // let balance = {}
 
@@ -344,7 +345,7 @@ export default function Selector(props) {
     let connectLedger = () => {
 
         if (getUrlVars().popup) {
-            createTabWindow('')
+            createTabWindow('?type=accounts')
         } else
 
             userStorage.user.loadUser().then(async account => {
@@ -391,11 +392,7 @@ export default function Selector(props) {
     return (
         <div className={styles.main}>
 
-            <div className={styles.field} onClick={() => {
-                props.setAccountSelector(false)
-            }}>
-                ❮ Back
-            </div>
+            <Back setFalse={() => props.setAccountSelector(false)}/>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
