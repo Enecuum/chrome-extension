@@ -24,6 +24,7 @@ import Selector from "./components/account/Selector";
 import {NET} from "../utils/names";
 import ImportKey from "./components/account/ImportKey";
 import eventBus from "../utils/eventBus";
+import Ledger from "./components/account/Ledger";
 
 let net = localStorage.getItem(NET)
 if (!net) {
@@ -57,7 +58,7 @@ export default function App(props) {
     const [isImportKey, setImportKey] = useState(false)
 
 
-    const [isConnectLedger, setConnectLedger] = useState(false)
+    const [isLedger, setLedger] = useState(false)
     const [ledgerTransport, setLedgerTransport] = useState(false)
 
     const [isKeys, setKeys] = useState(false)
@@ -215,8 +216,13 @@ export default function App(props) {
         return <Keys isKeys={isKeys} setKeys={setKeys}/>
     }
 
+    if (isLedger) {
+        return <Ledger setLedger={setLedger} setKeys={setKeys}/>
+    }
+
     if (isAccountSelector) {
         return <Selector login={login2}
+                         setLedger={setLedger}
                          setKeys={setKeys}
                          setAccountSelector={setAccountSelector}
                          setMnemonic={setMnemonic}
@@ -268,9 +274,9 @@ export default function App(props) {
                                    user={user}/>
     }
 
-    if (isConnectLedger) {
-        return <ConnectLedger getLedgerTransport={getLedgerTransport} login={login2}/>
-    }
+    // if (isConnectLedger) {
+    //     return <ConnectLedger getLedgerTransport={getLedgerTransport} login={login2}/>
+    // }
 
     if (isSignRequest) {
         return <SignRequest setSignRequest={setSignRequest} request={isSignRequest}
@@ -298,7 +304,6 @@ export default function App(props) {
                     setPublicKeyRequest={setPublicKeyRequest}
                     setTransactionRequest={setTransactionRequest}
                     setTransactionHistory={setTransactionHistory}
-                    setConnectLedger={setConnectLedger}
                     setKeys={setKeys}
                     setSignRequest={setSignRequest}
                     setMnemonic={setMnemonic}

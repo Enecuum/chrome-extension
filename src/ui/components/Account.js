@@ -182,9 +182,16 @@ export default function Account(props) {
             }
         }
         if (params.type === 'connectLedger') {
+            // if (!isLocked) {
+            //     // props.setTransactionRequest(task[params.id])
+            //     props.setConnectLedger(true)
+            //     return false
+            // }
+        }
+        if (params.type === 'ledger') {
             if (!isLocked) {
-                // props.setTransactionRequest(task[params.id])
-                props.setConnectLedger(true)
+                props.setAccountSelector(true)
+                props.setLedger(true)
                 return false
             }
         }
