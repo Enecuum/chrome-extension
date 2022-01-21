@@ -397,7 +397,7 @@ export default function Selector(props) {
             {!ledger && <div className={styles.field + ' ' + styles.button}
                              onClick={() => connectLedger()}>Connect Ledger</div>}
 
-            {getUrlVars().popup ? <div className={styles.field + ' ' + styles.text}>
+            {getUrlVars().popup ? <div className={styles.field + ' ' + styles.text + ' ' + styles.text_help}>
                 There will be separate window for Ledger connection instead of popup.
             </div> : ''}
 
