@@ -37,6 +37,8 @@ export default function Keys(props) {
 
         <div className={styles.main}>
 
+            <Back setFalse={() => props.setKeys(false)}/>
+
             <div className={styles.content}>
 
                 <Separator/>
@@ -70,7 +72,7 @@ export default function Keys(props) {
 
             <div className={styles.form}>
 
-                <Back setFalse={() => props.setKeys(false)}/>
+
 
                 <Separator/>
 

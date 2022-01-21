@@ -37,6 +37,7 @@ export default function Ledger(props) {
     let [tokenCorrect, setTokenCorrect] = useState(false)
 
     let [keys, setKeys] = useState()
+    let [userAccounts, setUserAccounts] = useState([])
     let [accounts, setAccounts] = useState([])
     let [cards1, setCards1] = useState([])
     let [cards2, setCards2] = useState([])
@@ -67,18 +68,18 @@ export default function Ledger(props) {
             })
     }
 
-    let buildAccountsArray = async (account) => {
+    let buildAccountsArray = async (ledgerAccountsArray) => {
 
         // console.log(account)
 
-        accounts = []
+        // accounts = []
 
-        const mainPublicKey = account.type === 2 || account.privateKey < 3 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true)
+        // const mainPublicKey = account.type === 2 || account.privateKey < 3 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true)
 
-        for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
-            let publicKey = account.ledgerAccountsArray[i]
-            let current = account.publicKey === publicKey
-            let added = account.ledgerAccountsArray.includes(publicKey)
+        for (let i = 0; i < ledgerAccountsArray.length; i++) {
+            let publicKey = ledgerAccountsArray[i]
+            let current = '' === publicKey
+            let added = userAccounts.includes(publicKey)
             accounts.push({
                 privateKey: i,
                 publicKey: publicKey,
@@ -100,8 +101,7 @@ export default function Ledger(props) {
     let loadUser = () => {
         userStorage.user.loadUser().then(async account => {
             // console.log(account)
-            let accounts = await buildAccountsArray(account)
-            renderCards(accounts)
+            setUserAccounts(account.ledgerAccountsArray)
         })
     }
 
@@ -196,8 +196,10 @@ export default function Ledger(props) {
                     <div className={styles.card_buttons}>
 
                         <div className={current ? styles.card_button_current : ''}
-                             onClick={(current ? () => {} : () => {})}>
-                            {current ? 'CURRENT' : (account.added ? 'REMOVE' : 'ADD')}
+                             onClick={(!account.added ? async () => {
+                                 await addLedgerAccount(account.publicKey)
+                             } : () => {})}>
+                            {(account.added ? 'REMOVE' : 'ADD')}
                         </div>
 
                         <div onClick={() => {
@@ -232,39 +234,24 @@ export default function Ledger(props) {
 
             userStorage.user.loadUser().then(async account => {
 
-                // TODO global transport object. may be in app.js. need do save new model.
                 let Transport = !props.ledgerTransport ? await TransportWebHID.create() : props.ledgerTransport
                 if (!props.ledgerTransport) {
                     props.setTransport(Transport)
                 }
-                await getPublicKey(account.ledgerAccountsArray.length, Transport).then(async data => {
 
-                    console.log(data)
-                    // account.ledger = true
-                    // console.log(ledger)
-
-                    // TODO HERE WE GET PUBLIC KEYS FROM LEDGER
-                    // TODO This one is test
-
-                    // account.ledgerAccountsArray = [data.substr(0, 66)]
-
-                    // await userStorage.promise.sendPromise({
-                    //     account: true,
-                    //     set: true,
-                    //     data: account
-                    // })
-
-                    await addLedgerAccount(data)
-
-                    console.log('Ledger worked')
+                await getPublicKey(0, Transport).then(() => {
                     setLedger(true)
-
-                }).catch(msg => {
-
-                    console.error('Ledger error')
-                    console.log(msg)
-                    setLedger(false)
                 })
+
+                let accounts = await buildAccountsArray([
+                    await getPublicKey(0, Transport),
+                    await getPublicKey(1, Transport),
+                    await getPublicKey(2, Transport),
+                    await getPublicKey(3, Transport),
+                    await getPublicKey(4, Transport),
+                    ]
+                )
+                renderCards(accounts)
 
             })
     }
@@ -288,6 +275,8 @@ export default function Ledger(props) {
                 <img className={styles.login_logo} style={{filter: 'invert(100%)'}}  src="./images/ledger.png"/>
                 <div className={styles.welcome1}>Select</div>
                 <div className={styles.welcome1}>an Account</div>
+                <div className={styles.welcome2}>You can add or remove</div>
+                <div className={styles.welcome2}>at any time</div>
             </div> : ''}
 
             {ledger ? <div className={styles.cards_container}>

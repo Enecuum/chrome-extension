@@ -118,7 +118,7 @@ export default function Selector(props) {
             })
         }
 
-        setAccounts(accounts)
+        // setAccounts(accounts)
 
         return accounts
     }
@@ -127,7 +127,7 @@ export default function Selector(props) {
         userStorage.user.loadUser().then(async account => {
             // console.log(account)
             let accounts = await buildAccountsArray(account)
-            renderCards(accounts, null)
+            renderCards(accounts)
         })
     }
 
@@ -221,7 +221,7 @@ export default function Selector(props) {
         }
     }
 
-    let renderCards = (accounts, hex) => {
+    let renderCards = (accounts) => {
 
         let accounts1 = accounts.filter(item => item.type === 0)
         let accounts2 = accounts.filter(item => item.type === 1)
