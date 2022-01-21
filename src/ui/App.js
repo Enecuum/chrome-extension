@@ -217,7 +217,12 @@ export default function App(props) {
     }
 
     if (isLedger) {
-        return <Ledger setLedger={setLedger} setKeys={setKeys}/>
+        return <Ledger setLedger={setLedger}
+                       getLedgerTransport={getLedgerTransport}
+                       setTransport={setLedgerTransport}
+                       ledgerTransport={ledgerTransport}
+                       setKeys={setKeys}
+        />
     }
 
     if (isAccountSelector) {

@@ -71,6 +71,8 @@ export default function Ledger(props) {
 
         // console.log(account)
 
+        accounts = []
+
         const mainPublicKey = account.type === 2 || account.privateKey < 3 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true)
 
         for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
@@ -99,7 +101,7 @@ export default function Ledger(props) {
         userStorage.user.loadUser().then(async account => {
             // console.log(account)
             let accounts = await buildAccountsArray(account)
-            renderCards(accounts, null)
+            renderCards(accounts)
         })
     }
 
@@ -110,7 +112,7 @@ export default function Ledger(props) {
 
         data.publicKey = ledgerPublicKey
         data.ledgerAccountsArray.push(ledgerPublicKey)
-        data.ledger = ''
+        // data.ledger = ''
 
         await userStorage.promise.sendPromise({
             account: true,
@@ -133,7 +135,7 @@ export default function Ledger(props) {
         }
     }
 
-    let renderCards = (accounts, hex) => {
+    let renderCards = (accounts) => {
 
         // let accounts1 = accounts.filter(item => item.type === 0)
         // let accounts2 = accounts.filter(item => item.type === 1)
@@ -141,6 +143,9 @@ export default function Ledger(props) {
 
         // setCards1(generateCards(accounts1))
         // setCards2(generateCards(accounts2))
+
+        console.log(accounts3.length)
+
         setCards3(generateCards(accounts3))
     }
 
@@ -153,8 +158,8 @@ export default function Ledger(props) {
             let account = accounts[i]
             let current = account.current
 
-            let name = getType(account.type).charAt(0).replace('S', '')
-                + (account.groupIndex + 1)
+            // let name = getType(account.type).charAt(0).replace('S', '')
+            //     + (account.groupIndex + 1)
 
             cards.push(
                 <div key={i}
@@ -190,9 +195,9 @@ export default function Ledger(props) {
 
                     <div className={styles.card_buttons}>
 
-                        <div className={current || account.added ? styles.card_button_current : ''}
+                        <div className={current ? styles.card_button_current : ''}
                              onClick={(current ? () => {} : () => {})}>
-                            {current ? 'CURRENT' : (account.added ? 'ADD' : '')}
+                            {current ? 'CURRENT' : (account.added ? 'REMOVE' : 'ADD')}
                         </div>
 
                         <div onClick={() => {
@@ -271,33 +276,54 @@ export default function Ledger(props) {
 
             {/*<Back setFalse={() => props.setLedger(false)}/>*/}
 
-            <div className={styles.content}>
-                <img className={styles.login_logo} src="./images/ledger.png" onClick={toggleFullScreen}/>
-
+            {!ledger ? <div className={styles.content}>
+                <img className={styles.login_logo} src="./images/ledger.png"/>
                 <div className={styles.welcome1}>Connect</div>
                 <div className={styles.welcome1}>to Ledger</div>
-                {/*<div className={styles.welcome1}>wallet</div>*/}
-
                 <div className={styles.welcome2}>Connect your wallet to your computer</div>
                 <div className={styles.welcome2}>Unlock Ledger and open the ENQ App</div>
-            </div>
+            </div> : ''}
 
-            <div className={styles.cards_container}>
+            {ledger ? <div className={styles.content}>
+                <img className={styles.login_logo} style={{filter: 'invert(100%)'}}  src="./images/ledger.png"/>
+                <div className={styles.welcome1}>Select</div>
+                <div className={styles.welcome1}>an Account</div>
+            </div> : ''}
+
+            {ledger ? <div className={styles.cards_container}>
                 <div className={styles.cards}>
                     {cards3}
                 </div>
-            </div>
+                <Separator/>
+            </div> : ''}
 
             <div className={styles.form}>
                 {!ledger && <div className={styles.field + ' ' + styles.button}
                                  onClick={connectLedger}>Continue</div>}
 
-                {getUrlVars().popup ? <div className={styles.field + ' ' + styles.text}>
+                {getUrlVars().popup ? <div className={styles.field + ' ' + styles.text + ' ' + styles.text_help}>
                     There will be separate window for Ledger connection instead of popup.
                 </div> : ''}
 
                 <Separator/>
             </div>
+
+            {/*{ledger ? <div className={`${styles.card_buttons}`}>*/}
+
+            {/*    <div onClick={() => {props.setLedger(false)}}*/}
+            {/*         className={`${styles.field} ${styles.button} ${styles.button_blue}`}>*/}
+            {/*        Back*/}
+            {/*    </div>*/}
+
+            {/*    <div onClick={() => {}}*/}
+            {/*         className={`${styles.field} ${styles.button}`}>*/}
+            {/*        Unlock*/}
+            {/*    </div>*/}
+
+            {/*    <Separator/>*/}
+
+            {/*</div> : ''}*/}
+
         </div>
     )
 }

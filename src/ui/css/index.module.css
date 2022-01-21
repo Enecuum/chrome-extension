@@ -187,6 +187,11 @@ a:hover {
     padding-bottom: 50px;
 }
 
+.ledger_logo {
+    padding-bottom: 20px;
+}
+
+
 .content_logo {
     width: 30px;
     height: 30px;
@@ -236,6 +241,10 @@ a:hover {
     /*font-weight: 300;*/
     /*overflow: auto;*/
     white-space: normal !important;
+}
+
+.text_help {
+    margin-top: 10px !important;
 }
 
 .field {
