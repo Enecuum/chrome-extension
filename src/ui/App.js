@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import Login from './components/Login'
 import Lock from './components/Lock'
 import Transaction from './components/Transaction'
@@ -21,11 +21,11 @@ import Keys from './components/account/Keys'
 import Mnemonic from './components/account/mnemonic/Mnemonic'
 import ImportMnemonic from './components/account/mnemonic/ImoprtMnemonic'
 import Selector from './components/account/Selector'
-import { NET } from '../utils/names'
+import {NET} from '../utils/names'
 import ImportKey from './components/account/ImportKey'
 import eventBus from '../utils/eventBus'
 import Ledger from './components/account/Ledger'
-import { ledgerPath } from './Utils'
+import {ledgerPath} from './Utils'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 
 
@@ -76,7 +76,7 @@ export default function App(props) {
     }
     let installPWA = async () => {
         deferredPrompt.prompt()
-        const { outcome } = await deferredPrompt.userChoice
+        const {outcome} = await deferredPrompt.userChoice
         deferredPrompt = null
     }
 
@@ -88,23 +88,23 @@ export default function App(props) {
 
     const ledgerTransportController = async () => {
         // console.log("Support WebHID:", await TransportWebHID.isSupported())
-        try{
-            console.info("connect: ", navigator.userAgentData.platform )
+        try {
+            console.info("connect: ", navigator.userAgentData.platform)
             if (ledgerTransport === false) {
                 console.log('work')
                 let Transport
-                if(navigator.userAgentData.platform === "Android"){
+                if (navigator.userAgentData.platform === "Android") {
                     Transport = await TransportWebUSB.create()
-                }else{
+                } else {
                     Transport = await TransportWebHID.create()
                 }
                 console.warn(Transport)
                 setLedgerTransport(Transport)
                 return Transport
-            }else{
-                return  ledgerTransport
+            } else {
+                return ledgerTransport
             }
-        }catch (err){
+        } catch (err) {
             console.error(err)
             setLedgerTransport(false)
             return false
@@ -167,7 +167,7 @@ export default function App(props) {
         })
             .then(() => {
 
-                asyncRequest({ reject_all: true })
+                asyncRequest({reject_all: true})
 
                 setLock(false)
                 setLogin(true)
