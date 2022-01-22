@@ -102,9 +102,8 @@ export default function Selector(props) {
                 groupIndex: i,
                 type: 1
             })
-            requestBalance(publicKey)
-                .then(r => {
-                })
+
+            requestBalance(publicKey).then(r => {})
         }
 
         for (let i = 0; i < account.ledgerAccountsArray.length; i++) {

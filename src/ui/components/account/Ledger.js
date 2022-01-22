@@ -99,9 +99,7 @@ export default function Ledger(props) {
 
             // So here react fuck me in ass... Fuck you react and all react developers!
             setAccounts([...accounts])
-            requestBalance(publicKey)
-                .then(r => {
-                })
+            requestBalance(publicKey).then(r => {})
         }
 
         // console.log(ledgerPublicKeys)
@@ -143,9 +141,7 @@ export default function Ledger(props) {
         setMainPublicKey(ledgerPublicKey)
         userAccounts.push(ledgerPublicKey)
         setUserAccounts([...userAccounts])
-        buildAccountsArray()
-            .then(r => {
-            })
+        buildAccountsArray().then(r => {})
     }
 
     let removeLedgerAccount = async (ledgerPublicKey) => {
@@ -182,9 +178,8 @@ export default function Ledger(props) {
                 }
             }
             setUserAccounts(array)
-            buildAccountsArray()
-                .then(r => {
-                })
+
+            buildAccountsArray().then(r => {})
         }
 
     }
@@ -280,17 +275,17 @@ export default function Ledger(props) {
     }
 
     let requestBalance = async (publicKey) => {
-        // if (!balance[publicKey] && balance[publicKey] !== 0) {
-        //     await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
-        //         balance[publicKey] = res[0] ? res[0].amount : 0
-        //         setBalance({...balance})
-        //         // console.log(balance)
-        //
-        //         if (balance[publicKey] > 0) {
-        //             buildAccountsArray()
-        //         }
-        //     })
-        // }
+        if (!balance[publicKey] && balance[publicKey] !== 0) {
+            await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
+                balance[publicKey] = res[0] ? res[0].amount : 0
+                setBalance({...balance})
+                // console.log(balance)
+
+                if (balance[publicKey] > 0) {
+                    buildAccountsArray()
+                }
+            })
+        }
     }
 
     return (
