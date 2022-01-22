@@ -123,6 +123,7 @@ export default function Ledger(props) {
             data: data
         })
 
+        setMainPublicKey(ledgerPublicKey)
         userAccounts.push(ledgerPublicKey)
         setUserAccounts([...userAccounts])
         buildAccountsArray().then(r => {})
