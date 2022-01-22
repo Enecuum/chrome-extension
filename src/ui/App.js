@@ -25,6 +25,7 @@ import {NET} from "../utils/names";
 import ImportKey from "./components/account/ImportKey";
 import eventBus from "../utils/eventBus";
 import Ledger from "./components/account/Ledger";
+import {ledgerPath} from "./Utils";
 
 let net = localStorage.getItem(NET)
 if (!net) {
@@ -219,7 +220,7 @@ export default function App(props) {
     if (isLedger) {
         return <Ledger setLedger={setLedger}
                        getLedgerTransport={getLedgerTransport}
-                       setTransport={setLedgerTransport}
+                       setLedgerTransport={setLedgerTransport}
                        ledgerTransport={ledgerTransport}
                        setKeys={setKeys}
         />
@@ -248,7 +249,7 @@ export default function App(props) {
                 getLedgerTransport={getLedgerTransport}
                 setTransactionRequest={setTransactionRequest}
                 setTransactionHistory={setTransactionHistory}
-                setTransport={setLedgerTransport}
+                setLedgerTransport={setLedgerTransport}
                 ledgerTransport={ledgerTransport}
             />
         )

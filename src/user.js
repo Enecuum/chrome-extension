@@ -76,7 +76,6 @@ let generateLedgerAccountData = (index, accountData = account) => {
         }
     }
     data.publicKey = found ? data.publicKey : ''
-    // data.publicKey = accountData.ledgerAccountsArray[index]
     data.privateKey = index
     return data
 }

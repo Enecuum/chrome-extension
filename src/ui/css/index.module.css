@@ -179,6 +179,10 @@ a:hover {
     padding-bottom: 20px;
 }
 
+.content.ledger {
+    padding-bottom: 10px;
+}
+
 
 .login_logo {
     width: 100px;
