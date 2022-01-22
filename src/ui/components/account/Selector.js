@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import { explorerAddress, getMnemonicPrivateKeyHex, ledgerPath, regexToken, shortHash } from '../../Utils'
+import {explorerAddress, getMnemonicPrivateKeyHex, ledgerPath, regexToken, shortHash} from '../../Utils'
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
-import { createPopupWindow, createTabWindow } from '../../../handler'
+import {createPopupWindow, createTabWindow} from '../../../handler'
 // import eventBus from "../../../utils/eventBus";
-import { signHash, getVersion, getPublicKey } from '../../../utils/ledgerShell'
+import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
-import { generateAccountData, generateLedgerAccountData } from '../../../user'
+import {generateAccountData, generateLedgerAccountData} from '../../../user'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
-import { copyText } from '../../../utils/names'
+import {copyText} from '../../../utils/names'
 import Back from '../../elements/Back'
 
 // let balance = {}
@@ -67,7 +67,7 @@ export default function Selector(props) {
 
         // console.log(account)
 
-        const mainPublicKey = account.type === 2 || account.privateKey < 3 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true)
+        const mainPublicKey = account.type === 2 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true)
 
         let accounts = []
 
@@ -82,9 +82,8 @@ export default function Selector(props) {
                 groupIndex: i,
                 type: 0
             })
-            requestBalance(publicKey)
-                .then(r => {
-                })
+
+            requestBalance(publicKey).then(r => {})
         }
 
         if (account.seed) {
@@ -116,12 +115,11 @@ export default function Selector(props) {
                 publicKey: publicKey.publicKey,
                 amount: balance[publicKey.publicKey],
                 current,
-                groupIndex: i,
+                groupIndex: publicKey.index,
                 type: 2
             })
-            requestBalance(publicKey.publicKey)
-                .then(r => {
-                })
+
+            requestBalance(publicKey.publicKey).then(r => {})
         }
 
         // setAccounts(accounts)
@@ -130,12 +128,10 @@ export default function Selector(props) {
     }
 
     let loadUser = () => {
-        userStorage.user.loadUser()
-            .then(async account => {
-                // console.log(account)
-                let accounts = await buildAccountsArray(account)
-                renderCards(accounts)
-            })
+        userStorage.user.loadUser().then(async account => {
+            let accounts = await buildAccountsArray(account)
+            renderCards(accounts)
+        })
     }
 
     // let loginSeed = (i) => {
@@ -198,23 +194,6 @@ export default function Selector(props) {
         loadUser()
     }
 
-    let addLedgerAccount = async (ledgerPublicKey) => {
-
-        let account = (await userStorage.user.loadUser())
-        let data = generateLedgerAccountData(account.ledgerAccountsArray.length, account)
-
-        data.publicKey = ledgerPublicKey
-        data.ledgerAccountsArray.push(ledgerPublicKey)
-        data.ledger = ''
-
-        await userStorage.promise.sendPromise({
-            account: true,
-            set: true,
-            data: data
-        })
-
-        loadUser()
-    }
 
     let getType = (type) => {
         if (type === 0) {
@@ -273,11 +252,11 @@ export default function Selector(props) {
                     <div className={styles.card_field + ' ' + styles.card_field_amount}
                          title={Number(account.amount) / 1e10 + ''}>
                         {(account.amount > 0 ?
-                            (Number(account.amount) / 1e10).toFixed(4)
-                            :
-                            '0.0')
+                                (Number(account.amount) / 1e10).toFixed(4)
+                                :
+                                '0.0')
 
-                        + ' BIT'}
+                            + ' BIT'}
                     </div>
 
                     {/*<div className={styles.card_field_select + ' ' + (current ? '' : 'select')}*/}

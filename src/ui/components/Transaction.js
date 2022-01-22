@@ -152,7 +152,7 @@ export default class Transaction extends React.Component {
             } else {
                 let Transport = !this.props.ledgerTransport ? await TransportWebHID.create() : this.props.ledgerTransport
                 if (!this.props.ledgerTransport) {
-                    this.props.setTransport(Transport)
+                    this.props.setLedgerTransport(Transport)
                 }
 
                 data.nonce = data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
