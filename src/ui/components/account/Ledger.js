@@ -174,7 +174,7 @@ export default function Ledger(props) {
         for (let i = 0; i < accounts.length; i++) {
 
             let account = accounts[i]
-            let current = account.current
+            let current = account.publicKey === mainPublicKey
 
             let name = 'L' + (account.groupIndex + 1)
 
