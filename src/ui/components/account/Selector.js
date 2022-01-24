@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import {explorerAddress, getMnemonicPrivateKeyHex, ledgerPath, regexToken, shortHash} from '../../Utils'
+import { explorerAddress, getMnemonicPrivateKeyHex, ledgerPath, regexToken, shortHash } from '../../Utils'
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
-import {createPopupWindow, createTabWindow} from '../../../handler'
+import { createPopupWindow, createTabWindow } from '../../../handler'
 // import eventBus from "../../../utils/eventBus";
-import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
+import { signHash, getVersion, getPublicKey } from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
-import {generateAccountData, generateLedgerAccountData} from '../../../user'
+import { generateAccountData, generateLedgerAccountData } from '../../../user'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
-import {copyText} from '../../../utils/names'
-import Back from "../../elements/Back";
+import { copyText } from '../../../utils/names'
+import Back from '../../elements/Back'
 
 // let balance = {}
 
@@ -49,15 +49,18 @@ export default function Selector(props) {
     }, [balance, copied])
 
     let requestBalance = async (publicKey) => {
-        if (!balance[publicKey] && balance[publicKey] !== 0)
-            await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
-                balance[publicKey] = res[0] ? res[0].amount : 0
-                setBalance(balance)
-                // console.log(balance)
+        if (!balance[publicKey] && balance[publicKey] !== 0) {
+            await ENQWeb.Net.get.getBalanceAll(publicKey)
+                .then((res) => {
+                    balance[publicKey] = res[0] ? res[0].amount : 0
+                    setBalance(balance)
+                    // console.log(balance)
 
-                if (balance[publicKey] > 0)
-                    loadUser()
-            })
+                    if (balance[publicKey] > 0) {
+                        loadUser()
+                    }
+                })
+        }
     }
 
     let buildAccountsArray = async (account) => {
@@ -79,8 +82,9 @@ export default function Selector(props) {
                 groupIndex: i,
                 type: 0
             })
-            requestBalance(publicKey).then(r => {
-            })
+            requestBalance(publicKey)
+                .then(r => {
+                })
         }
 
         if (account.seed) {
@@ -99,8 +103,9 @@ export default function Selector(props) {
                 groupIndex: i,
                 type: 1
             })
-            requestBalance(publicKey).then(r => {
-            })
+            requestBalance(publicKey)
+                .then(r => {
+                })
         }
 
         for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
@@ -114,8 +119,9 @@ export default function Selector(props) {
                 groupIndex: i,
                 type: 2
             })
-            requestBalance(publicKey).then(r => {
-            })
+            requestBalance(publicKey.publicKey)
+                .then(r => {
+                })
         }
 
         // setAccounts(accounts)
@@ -124,11 +130,12 @@ export default function Selector(props) {
     }
 
     let loadUser = () => {
-        userStorage.user.loadUser().then(async account => {
-            // console.log(account)
-            let accounts = await buildAccountsArray(account)
-            renderCards(accounts)
-        })
+        userStorage.user.loadUser()
+            .then(async account => {
+                // console.log(account)
+                let accounts = await buildAccountsArray(account)
+                renderCards(accounts)
+            })
     }
 
     // let loginSeed = (i) => {
@@ -241,7 +248,9 @@ export default function Selector(props) {
             let account = accounts[i]
             let current = account.current
 
-            let name = getType(account.type).charAt(0).replace('S', '')
+            let name = getType(account.type)
+                    .charAt(0)
+                    .replace('S', '')
                 + (account.groupIndex + 1)
 
             cards.push(
@@ -264,11 +273,11 @@ export default function Selector(props) {
                     <div className={styles.card_field + ' ' + styles.card_field_amount}
                          title={Number(account.amount) / 1e10 + ''}>
                         {(account.amount > 0 ?
-                                (Number(account.amount) / 1e10).toFixed(4)
-                                :
-                                '0.0')
+                            (Number(account.amount) / 1e10).toFixed(4)
+                            :
+                            '0.0')
 
-                            + ' BIT'}
+                        + ' BIT'}
                     </div>
 
                     {/*<div className={styles.card_field_select + ' ' + (current ? '' : 'select')}*/}
@@ -279,7 +288,8 @@ export default function Selector(props) {
                     <div className={styles.card_buttons}>
 
                         <div className={current ? styles.card_button_current : ''}
-                             onClick={(current ? () => {} : () => selectAccount(account))}>
+                             onClick={(current ? () => {
+                             } : () => selectAccount(account))}>
                             {current ? 'CURRENT' : 'SELECT'}
                         </div>
 
@@ -346,8 +356,9 @@ export default function Selector(props) {
 
         if (getUrlVars().popup) {
             createTabWindow('?type=ledger')
-        } else
+        } else {
             props.setLedger(true)
+        }
     }
 
     // console.log(getUrlVars())
