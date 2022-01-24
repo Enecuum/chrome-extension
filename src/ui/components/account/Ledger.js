@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import {
@@ -12,16 +12,16 @@ import {
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
-import {createPopupWindow, createTabWindow} from '../../../handler'
+import { createPopupWindow, createTabWindow } from '../../../handler'
 // import eventBus from "../../../utils/eventBus";
-import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
+import { signHash, getVersion, getPublicKey } from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
-import {generateAccountData, generateLedgerAccountData} from '../../../user'
+import { generateAccountData, generateLedgerAccountData } from '../../../user'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
-import {copyText} from '../../../utils/names'
-import Back from "../../elements/Back";
+import { copyText } from '../../../utils/names'
+import Back from '../../elements/Back'
 
 // let balance = {}
 
@@ -57,15 +57,18 @@ export default function Ledger(props) {
     }, [balance, copied])
 
     let requestBalance = async (publicKey) => {
-        if (!balance[publicKey] && balance[publicKey] !== 0)
-            await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
-                balance[publicKey] = res[0] ? res[0].amount : 0
-                setBalance(balance)
-                // console.log(balance)
+        if (!balance[publicKey] && balance[publicKey] !== 0) {
+            await ENQWeb.Net.get.getBalanceAll(publicKey)
+                .then((res) => {
+                    balance[publicKey] = res[0] ? res[0].amount : 0
+                    setBalance(balance)
+                    // console.log(balance)
 
-                if (balance[publicKey] > 0)
-                    loadUser()
-            })
+                    if (balance[publicKey] > 0) {
+                        loadUser()
+                    }
+                })
+        }
     }
 
     let buildAccountsArray = async (ledgerAccountsArray) => {
@@ -89,8 +92,9 @@ export default function Ledger(props) {
                 groupIndex: i,
                 type: 2
             })
-            requestBalance(publicKey).then(r => {
-            })
+            requestBalance(publicKey)
+                .then(r => {
+                })
         }
 
         setAccounts(accounts)
@@ -99,19 +103,27 @@ export default function Ledger(props) {
     }
 
     let loadUser = () => {
-        userStorage.user.loadUser().then(async account => {
-            // console.log(account)
-            setUserAccounts(account.ledgerAccountsArray)
-        })
+        userStorage.user.loadUser()
+            .then(async account => {
+                // console.log(account)
+                let accountsArray = []
+                for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
+                    accountsArray.push(account.ledgerAccountsArray[i].publicKey)
+                }
+                setUserAccounts(accountsArray)
+            })
     }
 
-    let addLedgerAccount = async (ledgerPublicKey) => {
+    let addLedgerAccount = async (ledgerPublicKey, index) => {
 
         let account = (await userStorage.user.loadUser())
-        let data = generateLedgerAccountData(account.ledgerAccountsArray.length, account)
+        let data = generateLedgerAccountData(index, account)
 
         data.publicKey = ledgerPublicKey
-        data.ledgerAccountsArray.push(ledgerPublicKey)
+        data.ledgerAccountsArray.push({
+            publicKey: ledgerPublicKey,
+            index: index
+        })
         // data.ledger = ''
 
         await userStorage.promise.sendPromise({
@@ -121,6 +133,30 @@ export default function Ledger(props) {
         })
 
         loadUser()
+    }
+
+    let removeLedgerAccount = async (ledgerPublicKey) => {
+        let account = (await userStorage.user.loadUser())
+        let ledgerAccounts = account.ledgerAccountsArray
+        if (ledgerPublicKey === account.publicKey) {
+            console.warn('change account')
+        } else {
+            let array = []
+            for (let i = 0; i < ledgerAccounts.length; i++) {
+                if (ledgerAccounts[i].publicKey !== ledgerPublicKey) {
+                    array.push(ledgerAccounts[i])
+                }
+            }
+            account.ledgerAccountsArray = array
+            await userStorage.promise.sendPromise({
+                account: true,
+                set: true,
+                data: account
+            })
+
+            loadUser()
+        }
+
     }
 
     let getType = (type) => {
@@ -181,11 +217,11 @@ export default function Ledger(props) {
                     <div className={styles.card_field + ' ' + styles.card_field_amount}
                          title={Number(account.amount) / 1e10 + ''}>
                         {(account.amount > 0 ?
-                                (Number(account.amount) / 1e10).toFixed(4)
-                                :
-                                '0.0')
+                            (Number(account.amount) / 1e10).toFixed(4)
+                            :
+                            '0.0')
 
-                            + ' BIT'}
+                        + ' BIT'}
                     </div>
 
                     {/*<div className={styles.card_field_select + ' ' + (current ? '' : 'select')}*/}
@@ -197,8 +233,10 @@ export default function Ledger(props) {
 
                         <div className={current ? styles.card_button_current : ''}
                              onClick={(!account.added ? async () => {
-                                 await addLedgerAccount(account.publicKey)
-                             } : () => {})}>
+                                 await addLedgerAccount(account.publicKey, i)
+                             } : async () => {
+                                 await removeLedgerAccount(account.publicKey)
+                             })}>
                             {(account.added ? 'REMOVE' : 'ADD')}
                         </div>
 
@@ -230,30 +268,32 @@ export default function Ledger(props) {
 
         if (getUrlVars().popup) {
             createTabWindow('?type=ledger')
-        } else
+        } else {
+            userStorage.user.loadUser()
+                .then(async account => {
 
-            userStorage.user.loadUser().then(async account => {
+                    let Transport = !props.ledgerTransport ? await TransportWebHID.create() : props.ledgerTransport
+                    if (!props.ledgerTransport) {
+                        props.setTransport(Transport)
+                    }
 
-                let Transport = !props.ledgerTransport ? await TransportWebHID.create() : props.ledgerTransport
-                if (!props.ledgerTransport) {
-                    props.setTransport(Transport)
-                }
+                    await getPublicKey(0, Transport)
+                        .then(() => {
+                            setLedger(true)
+                        })
 
-                await getPublicKey(0, Transport).then(() => {
-                    setLedger(true)
+                    let accounts = await buildAccountsArray([
+                            await getPublicKey(0, Transport),
+                            await getPublicKey(1, Transport),
+                            await getPublicKey(2, Transport),
+                            await getPublicKey(3, Transport),
+                            await getPublicKey(4, Transport),
+                        ]
+                    )
+                    renderCards(accounts)
+
                 })
-
-                let accounts = await buildAccountsArray([
-                    await getPublicKey(0, Transport),
-                    await getPublicKey(1, Transport),
-                    await getPublicKey(2, Transport),
-                    await getPublicKey(3, Transport),
-                    await getPublicKey(4, Transport),
-                    ]
-                )
-                renderCards(accounts)
-
-            })
+        }
     }
 
     // console.log(getUrlVars())
@@ -272,7 +312,7 @@ export default function Ledger(props) {
             </div> : ''}
 
             {ledger ? <div className={styles.content}>
-                <img className={styles.login_logo} style={{filter: 'invert(100%)'}}  src="./images/ledger.png"/>
+                <img className={styles.login_logo} style={{ filter: 'invert(100%)' }} src="./images/ledger.png"/>
                 <div className={styles.welcome1}>Select</div>
                 <div className={styles.welcome1}>an Account</div>
                 <div className={styles.welcome2}>You can add or remove</div>

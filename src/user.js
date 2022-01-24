@@ -1,4 +1,4 @@
-import indexDB from "./utils/indexDB";
+import indexDB from './utils/indexDB'
 
 // let user = {
 //     accounts: []
@@ -64,9 +64,19 @@ let generateMnemonicAccountData = (privateKey, accountData = account, hex) => {
 }
 
 let generateLedgerAccountData = (index, accountData = account) => {
+
     let data = generateAccountData('', accountData)
     data.type = 2
-    data.publicKey = accountData.ledgerAccountsArray[index]
+    let found = false
+    for (let i = 0; i < accountData.ledgerAccountsArray.length; i++) {
+        if (accountData.ledgerAccountsArray[i].index === index) {
+            data.publicKey = accountData.ledgerAccountsArray[i].publicKey
+            found = true
+            break
+        }
+    }
+    data.publicKey = found ? data.publicKey : ''
+    // data.publicKey = accountData.ledgerAccountsArray[index]
     data.privateKey = index
     return data
 }
@@ -97,4 +107,4 @@ let generateLedgerAccountData = (index, accountData = account) => {
 //
 // }
 
-export {account, generateAccountData, generateMnemonicAccountData, generateLedgerAccountData}
+export { account, generateAccountData, generateMnemonicAccountData, generateLedgerAccountData }
