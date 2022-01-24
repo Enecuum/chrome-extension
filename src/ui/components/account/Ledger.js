@@ -101,17 +101,21 @@ export default function Ledger(props) {
     let loadUser = () => {
         userStorage.user.loadUser().then(async account => {
             // console.log(account)
-            setUserAccounts(account.ledgerAccountsArray)
+            let accountsArray = []
+            for(let i=0; i<account.ledgerAccountsArray.length;i++){
+                accountsArray.push(account.ledgerAccountsArray[i].publicKey)
+            }
+            setUserAccounts(accountsArray)
         })
     }
 
-    let addLedgerAccount = async (ledgerPublicKey) => {
+    let addLedgerAccount = async (ledgerPublicKey, index) => {
 
         let account = (await userStorage.user.loadUser())
-        let data = generateLedgerAccountData(account.ledgerAccountsArray.length, account)
+        let data = generateLedgerAccountData(index, account)
 
         data.publicKey = ledgerPublicKey
-        data.ledgerAccountsArray.push(ledgerPublicKey)
+        data.ledgerAccountsArray.push({ publicKey:ledgerPublicKey, index:index })
         // data.ledger = ''
 
         await userStorage.promise.sendPromise({
@@ -197,7 +201,7 @@ export default function Ledger(props) {
 
                         <div className={current ? styles.card_button_current : ''}
                              onClick={(!account.added ? async () => {
-                                 await addLedgerAccount(account.publicKey)
+                                 await addLedgerAccount(account.publicKey, i)
                              } : () => {})}>
                             {(account.added ? 'REMOVE' : 'ADD')}
                         </div>
