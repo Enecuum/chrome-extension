@@ -138,12 +138,12 @@ export default function Ledger(props) {
     let removeLedgerAccount = async (ledgerPublicKey) => {
         let account = (await userStorage.user.loadUser())
         let ledgerAccounts = account.ledgerAccountsArray
-        if(ledgerPublicKey === account.publicKey){
-            console.warn("change account")
-        }else{
+        if (ledgerPublicKey === account.publicKey) {
+            console.warn('change account')
+        } else {
             let array = []
-            for(let i = 0; i < ledgerAccounts.length; i++){
-                if(ledgerAccounts[i].publicKey !== ledgerPublicKey){
+            for (let i = 0; i < ledgerAccounts.length; i++) {
+                if (ledgerAccounts[i].publicKey !== ledgerPublicKey) {
                     array.push(ledgerAccounts[i])
                 }
             }
