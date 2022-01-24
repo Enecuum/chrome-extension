@@ -105,11 +105,11 @@ export default function Selector(props) {
 
         for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
             let publicKey = account.ledgerAccountsArray[i]
-            let current = account.publicKey === publicKey
+            let current = account.publicKey === publicKey.publicKey
             accounts.push({
-                privateKey: i,
-                publicKey: publicKey,
-                amount: balance[publicKey],
+                privateKey: publicKey.index,
+                publicKey: publicKey.publicKey,
+                amount: balance[publicKey.publicKey],
                 current,
                 groupIndex: i,
                 type: 2
