@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Login from './components/Login'
 import Lock from './components/Lock'
 import Transaction from './components/Transaction'
@@ -13,19 +13,21 @@ import TransactionRequest from './components/requests/TransactionRequest'
 import ConnectLedger from './components/requests/ConnectLedger'
 import Confirm from './components/Confirm'
 
-import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
-import Eth from "@ledgerhq/hw-app-eth";
-import SignRequest from "./components/requests/SignRequest";
-import TransactionHistory from "./components/requests/TransactionHistory";
-import Keys from "./components/account/Keys";
-import Mnemonic from "./components/account/mnemonic/Mnemonic";
-import ImportMnemonic from "./components/account/mnemonic/ImoprtMnemonic";
-import Selector from "./components/account/Selector";
-import {NET} from "../utils/names";
-import ImportKey from "./components/account/ImportKey";
-import eventBus from "../utils/eventBus";
-import Ledger from "./components/account/Ledger";
-import {ledgerPath} from "./Utils";
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
+import Eth from '@ledgerhq/hw-app-eth'
+import SignRequest from './components/requests/SignRequest'
+import TransactionHistory from './components/requests/TransactionHistory'
+import Keys from './components/account/Keys'
+import Mnemonic from './components/account/mnemonic/Mnemonic'
+import ImportMnemonic from './components/account/mnemonic/ImoprtMnemonic'
+import Selector from './components/account/Selector'
+import { NET } from '../utils/names'
+import ImportKey from './components/account/ImportKey'
+import eventBus from '../utils/eventBus'
+import Ledger from './components/account/Ledger'
+import { ledgerPath } from './Utils'
+import TransportWebHID from '@ledgerhq/hw-transport-webhid'
+
 
 let net = localStorage.getItem(NET)
 if (!net) {
@@ -67,14 +69,14 @@ export default function App(props) {
     let [deferredPrompt, setDeferredPrompt] = useState()
     let initPWA = () => {
         window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
+            e.preventDefault()
+            deferredPrompt = e
             setDeferredPrompt(e)
         })
     }
     let installPWA = async () => {
         deferredPrompt.prompt()
-        const {outcome} = await deferredPrompt.userChoice
+        const { outcome } = await deferredPrompt.userChoice
         deferredPrompt = null
     }
 
@@ -82,6 +84,16 @@ export default function App(props) {
         console.warn('EVENT: ' + 'lock' + ' ' + data.message)
         setLock(data.message)
     })
+
+
+    const ledgerTransportController = async () => {
+        let Transport = !ledgerTransport ? await TransportWebHID.create() : ledgerTransport
+        if (ledgerTransport === false) {
+            setLedgerTransport(Transport)
+        }
+        return Transport
+
+    }
 
     const checkLock = () => {
 
@@ -111,7 +123,8 @@ export default function App(props) {
         console.log('App: ' + version)
         console.log('Lib: ' + ENQWeb.version)
         console.log('OS: ' + window.navigator.platform)
-        getUser().then()
+        getUser()
+            .then()
     }, [])
 
 
@@ -137,7 +150,7 @@ export default function App(props) {
         })
             .then(() => {
 
-                asyncRequest({reject_all: true})
+                asyncRequest({ reject_all: true })
 
                 setLock(false)
                 setLogin(true)
@@ -152,24 +165,26 @@ export default function App(props) {
 
     const createLedgerTransport = async () => {
 
-        return await TransportWebUSB.create().then(async transport => {
+        return await TransportWebUSB.create()
+            .then(async transport => {
 
-            const eth = new Eth(transport)
-            console.log(eth)
+                const eth = new Eth(transport)
+                console.log(eth)
 
-            return await eth.getAddress("44'/60'/0'/0/0").then(async o => {
+                return await eth.getAddress('44\'/60\'/0\'/0/0')
+                    .then(async o => {
 
-                console.log(o.address)
+                        console.log(o.address)
 
-                // this.setState({
-                //     address: o.address
-                // })
+                        // this.setState({
+                        //     address: o.address
+                        // })
 
-                setLedgerTransport(transport)
+                        setLedgerTransport(transport)
 
-                return transport
+                        return transport
+                    })
             })
-        })
     }
 
     const getLedgerTransport = async () => {
@@ -223,6 +238,7 @@ export default function App(props) {
                        setLedgerTransport={setLedgerTransport}
                        ledgerTransport={ledgerTransport}
                        setKeys={setKeys}
+                       ledgerTransportController={ledgerTransportController}
         />
     }
 
@@ -235,7 +251,9 @@ export default function App(props) {
                          setImportMnemonic={setImportMnemonic}
                          setImportKey={setImportKey}
                          setTransport={setLedgerTransport}
-                         ledgerTransport={ledgerTransport}/>
+                         ledgerTransport={ledgerTransport}
+                         ledgerTransportController={ledgerTransportController}
+        />
     }
 
     // TODO user
@@ -251,6 +269,7 @@ export default function App(props) {
                 setTransactionHistory={setTransactionHistory}
                 setLedgerTransport={setLedgerTransport}
                 ledgerTransport={ledgerTransport}
+                ledgerTransportController={ledgerTransportController}
             />
         )
     }
