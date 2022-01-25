@@ -150,11 +150,7 @@ export default class Transaction extends React.Component {
             if (user.type !== 2) {
                 response = await ENQWeb.Net.post.tx_fee_off(data)
             } else {
-                let Transport = !this.props.ledgerTransport ? await TransportWebHID.create() : this.props.ledgerTransport
-                if (!this.props.ledgerTransport) {
-                    this.props.setLedgerTransport(Transport)
-                }
-
+                let Transport = await this.props.ledgerTransportController()
                 data.nonce = data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
                 data.ticker = data.tokenHash
                 data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)

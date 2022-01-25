@@ -42,13 +42,26 @@ export default function Ledger(props) {
 
     const [ledgerTransport, setLedgerTransport] = useState(false)
 
-    useEffect(() => {
+    let Transport
+    useEffect(async () => {
+
+        // if (!ledgerTransport) {
+        //     TransportWebHID.create().then(transport => {
+        //         setLedgerTransport(transport)
+        //     })
+        // }
+
+        // Transport = !this.props.ledgerTransport ? await TransportWebHID.create() : this.props.ledgerTransport
+        // if (!this.props.ledgerTransport) {
+        //     this.props.setLedgerTransport(Transport)
+        // }
 
         if (!ledgerTransport) {
-            TransportWebHID.create().then(transport => {
+            props.ledgerTransportController().then(transport=>{
                 setLedgerTransport(transport)
             })
         }
+
 
         userStorage.user.loadUser().then(account => {
             setMainPublicKey(account.type === 2 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true))
