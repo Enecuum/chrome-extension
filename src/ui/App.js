@@ -87,7 +87,7 @@ export default function App(props) {
 
 
     const ledgerTransportController = async () => {
-        let Transport = !ledgerTransport ? await TransportWebHID.create() : ledgerTransport
+        let Transport = !ledgerTransport ? await TransportWebUSB.create() : ledgerTransport
         if (ledgerTransport === false) {
             setLedgerTransport(Transport)
         }
