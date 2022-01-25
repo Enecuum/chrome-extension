@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import {
@@ -12,15 +12,15 @@ import {
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
-import {createPopupWindow, createTabWindow} from '../../../handler'
+import { createPopupWindow, createTabWindow } from '../../../handler'
 // import eventBus from "../../../utils/eventBus";
-import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
+import { signHash, getVersion, getPublicKey } from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
-import {generateAccountData, generateLedgerAccountData} from '../../../user'
+import { generateAccountData, generateLedgerAccountData } from '../../../user'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
-import {copyText} from '../../../utils/names'
+import { copyText } from '../../../utils/names'
 import Back from '../../elements/Back'
 
 // let balance = {}
@@ -57,16 +57,18 @@ export default function Ledger(props) {
         // }
 
         if (!ledgerTransport) {
-            props.ledgerTransportController().then(transport=>{
-                setLedgerTransport(transport)
-            })
+            props.ledgerTransportController()
+                .then(transport => {
+                    setLedgerTransport(transport)
+                })
         }
 
 
-        userStorage.user.loadUser().then(account => {
-            setMainPublicKey(account.type === 2 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true))
-            setUserAccounts(account.ledgerAccountsArray.map(a => a.publicKey))
-        })
+        userStorage.user.loadUser()
+            .then(account => {
+                setMainPublicKey(account.type === 2 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true))
+                setUserAccounts(account.ledgerAccountsArray.map(a => a.publicKey))
+            })
 
     }, [balance, copied])
 
@@ -97,7 +99,9 @@ export default function Ledger(props) {
 
             // So here react fuck me in ass... Fuck you react and all react developers!
             setAccounts([...accounts])
-            requestBalance(publicKey).then(r => {})
+            requestBalance(publicKey)
+                .then(r => {
+                })
         }
 
         // console.log(ledgerPublicKeys)
@@ -139,7 +143,9 @@ export default function Ledger(props) {
         setMainPublicKey(ledgerPublicKey)
         userAccounts.push(ledgerPublicKey)
         setUserAccounts([...userAccounts])
-        buildAccountsArray().then(r => {})
+        buildAccountsArray()
+            .then(r => {
+            })
     }
 
     let removeLedgerAccount = async (ledgerPublicKey) => {
@@ -176,7 +182,9 @@ export default function Ledger(props) {
                 }
             }
             setUserAccounts(array)
-            buildAccountsArray().then(r => {})
+            buildAccountsArray()
+                .then(r => {
+                })
         }
 
     }
@@ -211,25 +219,26 @@ export default function Ledger(props) {
                     <div className={styles.card_field + ' ' + styles.card_field_amount}
                          title={Number(account.amount) / 1e10 + ''}>
                         {(account.amount > 0 ?
-                                (Number(account.amount) / 1e10).toFixed(4)
-                                :
-                                '0.0')
+                            (Number(account.amount) / 1e10).toFixed(4)
+                            :
+                            '0.0')
 
-                            + ' BIT'}
+                        + ' BIT'}
                     </div>
 
                     <div className={styles.card_buttons}>
 
                         <div className={current ? styles.card_button_current : ''}
                              onClick={
-                            account.publicKey === mainPublicKey ? () => {} :
-                            (!userAccounts.includes(account.publicKey) ?
-                                     () => addLedgerAccount(account.publicKey, i)
-                                     :
-                                     () => removeLedgerAccount(account.publicKey)
-                             )}>
+                                 account.publicKey === mainPublicKey ? () => {
+                                     } :
+                                     (!userAccounts.includes(account.publicKey) ?
+                                             () => addLedgerAccount(account.publicKey, i)
+                                             :
+                                             () => removeLedgerAccount(account.publicKey)
+                                     )}>
                             {account.publicKey === mainPublicKey ? 'CURRENT' :
-                            (userAccounts.includes(account.publicKey) ? 'REMOVE' : 'ADD')}
+                                (userAccounts.includes(account.publicKey) ? 'REMOVE' : 'ADD')}
                         </div>
 
                         <div onClick={() => {
@@ -263,9 +272,10 @@ export default function Ledger(props) {
 
         } else {
 
-            userStorage.user.loadUser().then(async account => {
-                await buildAccountsArray()
-            })
+            userStorage.user.loadUser()
+                .then(async account => {
+                    await buildAccountsArray()
+                })
         }
     }
 
@@ -297,7 +307,7 @@ export default function Ledger(props) {
             </div> : ''}
 
             {ledger ? <div className={styles.content + ' ' + styles.ledger}>
-                <img className={styles.login_logo} style={{filter: 'invert(100%)'}} src="./images/ledger.png"/>
+                <img className={styles.login_logo} style={{ filter: 'invert(100%)' }} src="./images/ledger.png"/>
                 <div className={styles.welcome1}>Select</div>
                 <div className={styles.welcome1}>an Account</div>
                 <div className={styles.welcome2}>You can add or remove at any time</div>
