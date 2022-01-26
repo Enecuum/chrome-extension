@@ -55,7 +55,6 @@ module.exports = () => {
         resolve: {
             extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".styl", ".css", ".png", ".jpg", ".gif", ".svg", ".woff", ".woff2", ".ttf", ".otf"]
         },
-
         plugins,
 
         module: {
