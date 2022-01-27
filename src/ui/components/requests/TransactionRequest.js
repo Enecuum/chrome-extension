@@ -134,6 +134,7 @@ export default function TransactionRequest(props) {
 
     const confirm = async () => {
         if (!isBlock) {
+            setBlock(true)
             await asyncRequest({
                 allow: true,
                 taskId: taskId
