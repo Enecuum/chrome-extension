@@ -27,7 +27,7 @@ export default class Transaction extends React.Component {
             network: ENQWeb.Net.currentProvider.replace('https://', '')
                 .replace('http://', '')
                 .toUpperCase(),
-            block:false
+            block: false
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
@@ -117,7 +117,7 @@ export default class Transaction extends React.Component {
             return
         }
 
-        if(this.state.block){
+        if (this.state.block) {
             return
         }
 
@@ -152,7 +152,7 @@ export default class Transaction extends React.Component {
 
         let response
         try {
-            this.setState({block:true})
+            this.setState({ block: true })
             if (user.type !== 2) {
                 response = await ENQWeb.Net.post.tx_fee_off(data)
             } else {
@@ -174,7 +174,7 @@ export default class Transaction extends React.Component {
                     })
             }
         } catch (e) {
-            this.setState({block:false})
+            this.setState({ block: false })
         }
 
         if (response) {
@@ -306,7 +306,7 @@ export default class Transaction extends React.Component {
                 <div className={styles.form}>
 
                     <div onClick={this.submit}
-                         className={styles.field + ' ' + styles.button + ' ' + (regexAddress.test(this.state.address) && !this.state.block  ? styles.button_blue : styles.button_disabled)}>Send
+                         className={styles.field + ' ' + styles.button + ' ' + (regexAddress.test(this.state.address) && !this.state.block ? styles.button_blue : styles.button_disabled)}>Send
                     </div>
 
                     <div onClick={() => this.props.setTransaction(false)}
