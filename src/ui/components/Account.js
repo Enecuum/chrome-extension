@@ -78,6 +78,7 @@ export default function Account(props) {
         if (typeof connects === 'number') {
             setConnectionsCounter(connects)
         }
+        return connects
     }
 
     const copyPublicKey = () => {
@@ -505,7 +506,10 @@ export default function Account(props) {
                                              ports: true,
                                              disconnect: true,
                                              name: key
-                                         }).then(() => console.log(`${key} is disconnected`))
+                                         }).then(() => {
+                                             console.log(`${key} is disconnected`)
+                                             getConnects().then()
+                                         })
                                      }}>✕</div>
                                  </div>)
                          }
