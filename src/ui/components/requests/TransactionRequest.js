@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import elements from '../../css/elements.module.css'
-import {shortHash} from '../../Utils'
+import { shortHash } from '../../Utils'
 
 // let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -10,7 +10,7 @@ const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 export default function TransactionRequest(props) {
 
     // console.log(props.request.tx)
-    ENQWeb.Enq.provider = props.user.net;
+    ENQWeb.Enq.provider = props.user.net
 
     const [jsonFrom] = useState(props.request.tx.from)
     const [activeTab, setActiveTab] = useState(0)
@@ -66,7 +66,7 @@ export default function TransactionRequest(props) {
 
     const dataParse = (field) => {
         return new Promise((resolve, reject) => {
-            let dataParser = new Worker("./js/workerDataParse.js",)
+            let dataParser = new Worker('./js/workerDataParse.js',)
             let timer
             dataParser.onmessage = (msg) => {
                 clearTimeout(timer)
@@ -74,13 +74,13 @@ export default function TransactionRequest(props) {
                 resolve(msg)
             }
             dataParser.onerror = err => {
-                console.warn(err);
+                console.warn(err)
                 reject(err)
             }
             dataParser.postMessage(field)
             timer = setTimeout(() => {
-                dataParser.terminate();
-                reject("timeout")
+                dataParser.terminate()
+                reject('timeout')
             }, 2000)
         })
     }
@@ -88,7 +88,8 @@ export default function TransactionRequest(props) {
     global.testing = dataParse
 
     const parseData = () => {
-        initTickerAndFee().then()
+        initTickerAndFee()
+            .then()
         let dataTextArray = []
         let field = data
         if (ENQWeb.Utils.ofd.isContract(field)) {
@@ -113,7 +114,7 @@ export default function TransactionRequest(props) {
                 })
                 .catch(err => {
                     console.warn(err)
-                    setType("invalid data field".toUpperCase())
+                    setType('invalid data field'.toUpperCase())
                 })
 
         } else {
@@ -134,15 +135,27 @@ export default function TransactionRequest(props) {
 
     const confirm = async () => {
         if (!isBlock) {
-            setBlock(true)
-            await asyncRequest({
-                allow: true,
-                taskId: taskId
-            })
-            props.setTransactionRequest(false)
-            closeModalWindow()
+            try {
+                setBlock(true)
+                await asyncRequest({
+                    allow: true,
+                    taskId: taskId
+                })
+                    .then(answer => {
+                        if (answer.data.status === 'reject') {
+                            setBlock(false)
+                        } else {
+                            props.setTransactionRequest(false)
+                            closeModalWindow()
+                        }
+                    })
+
+            } catch (err) {
+                setBlock(false)
+            }
+
         } else {
-            console.warn("bad data")
+            console.warn('bad data')
         }
     }
 
@@ -194,7 +207,8 @@ export default function TransactionRequest(props) {
                 <div
                     className={styles.transaction_type}>{
                     ENQWeb.Utils.ofd.isContract(data) ?
-                        type.toUpperCase().replaceAll('_', ' ') :
+                        type.toUpperCase()
+                            .replaceAll('_', ' ') :
                         'TOKEN TRANSFER'
                 }</div>
 

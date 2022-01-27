@@ -194,13 +194,25 @@ async function msgPopupHandler(msg, sender) {
     } else {
         if (msg.allow && msg.taskId) {
             await taskHandler(msg.taskId)
-            taskCounter()
-            if (msg.async) {
-                ports.popup.postMessage({
-                    asyncAnswer: true,
-                    data: msg
+                .then(() => {
+                    taskCounter()
+                    if (msg.async) {
+                        ports.popup.postMessage({
+                            asyncAnswer: true,
+                            data: msg
+                        })
+                    }
                 })
-            }
+                .catch(err => {
+                    console.warn(err)
+                    if (msg.async) {
+                        ports.popup.postMessage({
+                            asyncAnswer: true,
+                            data: { status: 'reject' }
+                        })
+                    }
+                })
+
         } else if (msg.disallow && msg.taskId) {
             await rejectTaskHandler(msg.taskId)
             taskCounter()
@@ -359,17 +371,26 @@ async function taskHandler(taskId) {
                     ledgerTransport = Transport
                 }
                 data.sign = await signHash(ENQWeb.Utils.crypto.sha256(data.hash), wallet.prvkey, Transport)
+                    .catch(() => {
+                        return false
+                    })
                 console.log({ sign: data.sign })
-                data = await ENQWeb.Enq.sendTx(data)
-                    .then(data => {
-                        if (data.hash) {
-                            return data
-                        }
-                        console.warn(data)
-                    })
-                    .catch(er => {
-                        console.error(er)
-                    })
+                if (data.sign) {
+                    data = await ENQWeb.Enq.sendTx(data)
+                        .then(data => {
+                            if (data.hash) {
+                                return data
+                            }
+                            console.warn(data)
+                        })
+                        .catch(er => {
+                            console.error(er)
+                        })
+                } else {
+                    console.warn('Transaction rejected')
+                    throw new Error('reject')
+                }
+
             } else {
                 data.from = wallet
                 data.amount = data.value ? Number(data.value) : Number(data.amount)
