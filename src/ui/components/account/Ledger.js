@@ -42,7 +42,6 @@ export default function Ledger(props) {
 
     const [ledgerTransport, setLedgerTransport] = useState(false)
 
-    let Transport
     useEffect(async () => {
 
         // if (!ledgerTransport) {
@@ -127,9 +126,8 @@ export default function Ledger(props) {
         // console.log(userAccounts)
 
         let account = (await userStorage.user.loadUser())
-        let data = generateLedgerAccountData(index, account)
-        data.publicKey = ledgerPublicKey
-        data.ledgerAccountsArray.push({
+        // let data = generateLedgerAccountData(index, account)
+        account.ledgerAccountsArray.push({
             publicKey: ledgerPublicKey,
             index: index
         })
@@ -137,7 +135,7 @@ export default function Ledger(props) {
         await userStorage.promise.sendPromise({
             account: true,
             set: true,
-            data: data
+            data: account
         })
 
         setMainPublicKey(ledgerPublicKey)
