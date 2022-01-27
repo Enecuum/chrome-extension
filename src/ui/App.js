@@ -94,7 +94,7 @@ export default function App(props) {
                 console.log('work')
                 let Transport
                 if(navigator.userAgentData.platform === "Android"){
-                    Transport = await TransportHID.create()
+                    Transport = await TransportWebUSB.create()
                 }else{
                     Transport = await TransportWebHID.create()
                 }
