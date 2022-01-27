@@ -27,7 +27,8 @@ export default class Transaction extends React.Component {
             network: ENQWeb.Net.currentProvider.replace('https://', '')
                 .replace('http://', '')
                 .toUpperCase(),
-            block: false
+            block: false,
+            nonce:  Math.floor(Math.random() * 1e10)
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
@@ -144,7 +145,8 @@ export default class Transaction extends React.Component {
             amount: Number(this.state.amount) * 1e10,
             to: this.state.address,
             data: '',
-            tokenHash: user.token
+            tokenHash: user.token,
+            nonce: this.state.nonce
         }
 
         console.log(data)
