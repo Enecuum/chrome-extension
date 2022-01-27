@@ -157,7 +157,6 @@ export default class Transaction extends React.Component {
             this.setState({ block: true })
             if (user.type !== 2) {
                 response = await ENQWeb.Net.post.tx_fee_off(data)
-                await ENQWeb.Net.post.tx_fee_off(data)
             } else {
                 let Transport = await this.props.ledgerTransportController()
                 data.nonce = data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
