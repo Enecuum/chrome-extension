@@ -31,8 +31,8 @@ function lockAccount(timer = false) {
     const accountLockedString = 'Account locked'
     console.log(accountLockedString)
 
-    if (timer)
-        location.reload()
+    // if (timer)
+    //     location.reload()
 }
 
 //

@@ -26,7 +26,8 @@ export default class Transaction extends React.Component {
             localNetworks: JSON.parse(localStorage.getItem('networks')) || [],
             network: ENQWeb.Net.currentProvider.replace('https://', '')
                 .replace('http://', '')
-                .toUpperCase()
+                .toUpperCase(),
+            block: false
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
@@ -116,6 +117,10 @@ export default class Transaction extends React.Component {
             return
         }
 
+        if (this.state.block) {
+            return
+        }
+
         //TODO
         let user = await userStorage.user.loadUser()
         // if (!user.privateKey && user.type !== 2) {
@@ -147,6 +152,7 @@ export default class Transaction extends React.Component {
 
         let response
         try {
+            this.setState({ block: true })
             if (user.type !== 2) {
                 response = await ENQWeb.Net.post.tx_fee_off(data)
             } else {
@@ -168,7 +174,7 @@ export default class Transaction extends React.Component {
                     })
             }
         } catch (e) {
-
+            this.setState({ block: false })
         }
 
         if (response) {
@@ -300,7 +306,7 @@ export default class Transaction extends React.Component {
                 <div className={styles.form}>
 
                     <div onClick={this.submit}
-                         className={styles.field + ' ' + styles.button + ' ' + (regexAddress.test(this.state.address) ? styles.button_blue : '')}>Send
+                         className={styles.field + ' ' + styles.button + ' ' + (regexAddress.test(this.state.address) && !this.state.block ? styles.button_blue : styles.button_disabled)}>Send
                     </div>
 
                     <div onClick={() => this.props.setTransaction(false)}
