@@ -71,7 +71,8 @@ async function messageHandler(msg, sender, sendResponse) {
         ports = {}
     }
 
-    globalMessageHandler(msg, ENQWeb).then(answer => sendResponse(answer))
+    globalMessageHandler(msg, ENQWeb)
+        .then(answer => sendResponse(answer))
 }
 
 async function msgConnectHandler(msg, sender) {
@@ -128,7 +129,7 @@ async function msgConnectHandler(msg, sender) {
                     data: msg.data,
                 })
                 if (msg.data.net.length > 0) {
-                    if (msg.data.net !== JSON.parse(localuserStorage.tokens).net) {
+                    if (msg.data.net !== ENQWeb.Enq.User.net) {
                         console.log('bad net work')
                         rejectTaskHandler(msg.taskId, `Network mismatch. Set ${msg.data.net}`)
                         return false
@@ -142,7 +143,9 @@ async function msgConnectHandler(msg, sender) {
                 })
             }
             if (!requestsMethods[msg.type]) {
-                taskHandler(msg.taskId).then(r => {})
+                taskHandler(msg.taskId)
+                    .then(r => {
+                    })
             } else {
                 taskCounter()
                 if (ports[msg.cb.url].enabled && popupOpenMethods[msg.type]) {
@@ -320,7 +323,7 @@ async function taskHandler(taskId) {
         prvkey: account.privateKey
     }
     switch (task.type) {
-    // TODO Description
+        // TODO Description
     case 'enable':
         data = {
             pubkey: account.publicKey,
@@ -336,7 +339,7 @@ async function taskHandler(taskId) {
         ports[task.cb.url].enabled = true
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'tx':
         if (ports[task.cb.url].enabled) {
             console.log('tx handler work!')
@@ -388,7 +391,7 @@ async function taskHandler(taskId) {
         }
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'balanceOf':
         console.log('balanceOf handler work!')
         if (ports[task.cb.url].enabled) {
@@ -420,7 +423,7 @@ async function taskHandler(taskId) {
         }
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'getProvider':
         if (ports[task.cb.url].enabled) {
             ENQWeb.Net.provider = account.net
@@ -439,7 +442,7 @@ async function taskHandler(taskId) {
         }
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'getVersion':
         if (ports[task.cb.url].enabled) {
             console.log('version: ', extensionApi.app.getDetails().version)
@@ -452,7 +455,7 @@ async function taskHandler(taskId) {
         }
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'sign':
         console.log('sign work')
         if (ports[task.cb.url].enabled) {
@@ -465,7 +468,7 @@ async function taskHandler(taskId) {
         }
         userStorage.task.removeTask(taskId)
         break
-    // TODO Description
+        // TODO Description
     case 'reconnect':
         console.log('reconnect')
         let connected = ports[task.cb.url].enabled ? true : false
@@ -521,11 +524,11 @@ function broadcast(host, data) {
 async function connectHandler(port) {
     await connectController(port)
     switch (port.name) {
-    // TODO Description
+        // TODO Description
     case 'content':
         port.onMessage.addListener(msgConnectHandler)
         break
-    // TODO Description
+        // TODO Description
     case 'popup':
         port.onMessage.addListener(msgPopupHandler)
         break
