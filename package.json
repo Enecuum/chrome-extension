@@ -67,6 +67,7 @@
     },
     "dependencies": {
         "@ledgerhq/hw-app-eth": "^6.6.0",
+        "@ledgerhq/hw-transport-web-ble": "^6.21.0",
         "@ledgerhq/hw-transport-webhid": "^6.11.2",
         "@ledgerhq/hw-transport-webusb": "^6.6.0",
         "bip32": "^2.0.6",

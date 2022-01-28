@@ -55,12 +55,12 @@ export default function Ledger(props) {
         //     this.props.setLedgerTransport(Transport)
         // }
 
-        if (!ledgerTransport) {
-            props.ledgerTransportController()
-                .then(transport => {
-                    setLedgerTransport(transport)
-                })
-        }
+        // if (!ledgerTransport) {
+        //     props.ledgerTransportController()
+        //         .then(transport => {
+        //             setLedgerTransport(transport)
+        //         })
+        // }
 
 
         userStorage.user.loadUser()
@@ -263,8 +263,23 @@ export default function Ledger(props) {
         }
     }
 
-    let connectLedger = () => {
+    let connectLedger = async (type = false) => {
 
+        if(type){
+            if (!ledgerTransport) {
+                await props.ledgerTransportController(type)
+                    .then(transport => {
+                        setLedgerTransport(transport)
+                    })
+            }
+        }else{
+            if (!ledgerTransport) {
+                await props.ledgerTransportController()
+                    .then(transport => {
+                        setLedgerTransport(transport)
+                    })
+            }
+        }
         if (getUrlVars().popup) {
             createTabWindow('?type=ledger')
 
@@ -320,8 +335,14 @@ export default function Ledger(props) {
             </div> : ''}
 
             <div className={styles.form}>
+                {/*{!ledger && <div className={styles.field + ' ' + styles.button}*/}
+                {/*                 onClick={connectLedger}>Continue</div>}*/}
+
                 {!ledger && <div className={styles.field + ' ' + styles.button}
-                                 onClick={connectLedger}>Continue</div>}
+                                 onClick={()=>connectLedger("ble")}>Connect bluetooth</div>}
+
+                {!ledger && <div className={styles.field + ' ' + styles.button}
+                                 onClick={()=>connectLedger('usb')}>Connect usb</div>}
 
                 {getUrlVars().popup ? <div className={styles.field + ' ' + styles.text + ' ' + styles.text_help}>
                     There will be separate window for Ledger connection instead of popup.

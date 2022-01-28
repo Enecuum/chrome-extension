@@ -27,6 +27,8 @@ import eventBus from '../utils/eventBus'
 import Ledger from './components/account/Ledger'
 import { ledgerPath } from './Utils'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
+// import TransportWebBLE from '@ledgerhq/hw-transport-web-ble'
+import BluetoothTransport from '@ledgerhq/hw-transport-web-ble'
 
 
 let net = localStorage.getItem(NET)
@@ -86,24 +88,48 @@ export default function App(props) {
     })
 
 
-    const ledgerTransportController = async () => {
+    const ledgerTransportController = async (type = false) => {
         // console.log("Support WebHID:", await TransportWebHID.isSupported())
         try{
             console.info("connect: ", navigator.userAgentData.platform )
-            if (ledgerTransport === false) {
-                console.log('work')
-                let Transport
-                if(navigator.userAgentData.platform === "Android"){
-                    Transport = await TransportWebUSB.create()
-                }else{
-                    Transport = await TransportWebHID.create()
+            let Transport
+            if(type){
+                if(ledgerTransport === false){
+                    if(type === 'ble'){
+                        if(navigator.bluetooth !== undefined){
+                            return await BluetoothTransport.create()
+                        }
+                    }
+                    if(type === 'usb'){
+                        if(navigator.hid !== undefined){
+                            return await TransportWebHID.create()
+                        }
+                        if(navigator.usb !== undefined){
+                            return await TransportWebUSB.create()
+                        }
+                        return false
+                    }
+                }else {
+                    return  ledgerTransport
                 }
-                console.warn(Transport)
-                setLedgerTransport(Transport)
-                return Transport
+
             }else{
-                return  ledgerTransport
+                if (ledgerTransport === false) {
+                    console.log('work')
+
+                    if(navigator.userAgentData.platform === "Android"){
+                        Transport = await TransportWebUSB.create()
+                    }else{
+                        Transport = await TransportWebHID.create()
+                    }
+                    console.warn(Transport)
+                    setLedgerTransport(Transport)
+                    return Transport
+                }else{
+                    return  ledgerTransport
+                }
             }
+
         }catch (err){
             console.error(err)
             setLedgerTransport(false)
