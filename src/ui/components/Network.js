@@ -156,7 +156,7 @@ export default function Network(props) {
                 })
             })
 
-        cacheTokens().then(() => {
+        await cacheTokens().then(() => {
             location.reload(false)
         })
     }
