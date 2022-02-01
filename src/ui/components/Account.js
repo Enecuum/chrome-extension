@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../css/index.module.css'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import {explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
+import { explorerAddress, explorerTX, generateIcon, shortHash } from '../Utils'
 
 const names = {
     enable: 'Share account address',
@@ -71,7 +71,7 @@ export default function Account(props) {
     // addConnect('google.com', '26.07.2022')
 
     const getConnects = async () => {
-        let connects = await asyncRequest({connectionList: true})
+        let connects = await asyncRequest({ connectionList: true })
         if (typeof connects === 'object') {
             setConnectionsCounter(Object.keys(connects.ports).length)
         }
@@ -133,7 +133,8 @@ export default function Account(props) {
                 setAmount(amount)
                 setTicker(ticker)
                 setLogo(image)
-                cacheTokens(tickers).then()
+                cacheTokens(tickers)
+                    .then()
 
                 if (props.user.net === 'https://pulse.enecuum.com') {
                     ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
@@ -237,7 +238,8 @@ export default function Account(props) {
                 <div>
                     <div>{names[item.type]}</div>
                     <div className={styles.time}>
-                        {new Date(item.data.date).toISOString().slice(0, 10) + ' '}
+                        {new Date(item.data.date).toISOString()
+                            .slice(0, 10) + ' '}
                         {(item.tx ? <div className={styles.history_link}
                                          onClick={() => explorerAddress(item.tx.to)}>To: {shortHash(item.tx.to)}</div> : item.cb.url)}
                     </div>
@@ -324,7 +326,8 @@ export default function Account(props) {
                     <div>
                         <div>{names[item.type]}</div>
                         <div className={styles.time}>
-                            {new Date(item.data.date).toISOString().slice(0, 10)}
+                            {new Date(item.data.date).toISOString()
+                                .slice(0, 10)}
                             <div className={styles.history_link}
                                  onClick={() => explorerTX(item.tx.hash)}>{shortHash(item.tx.hash)}</div>
                         </div>
@@ -404,7 +407,8 @@ export default function Account(props) {
                 <div key={key}
                      className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}
                      onClick={() => {
-                         changeToken(item.tokenHash).then()
+                         changeToken(item.tokenHash)
+                             .then()
                      }}>
                     <img className={styles.icon} src={item.image}/>
                     <div>
@@ -456,21 +460,27 @@ export default function Account(props) {
 
     useEffect(() => {
 
-        openPopup().then(result => {
-            if (result === true) {
-                getConnects().then()
-                getHistory().then((history) => {
+        openPopup()
+            .then(result => {
+                if (result === true) {
+                    getConnects()
+                        .then()
+                    getHistory()
+                        .then((history) => {
 
-                    // console.log(history)
-                    if (isMounted)
-                        renderHistory(history)
-                })
-                getBalance()
-            }
-        })
+                            // console.log(history)
+                            if (isMounted) {
+                                renderHistory(history)
+                            }
+                        })
+                    getBalance()
+                }
+            })
 
         let isMounted = true
-        return () => { isMounted = false }
+        return () => {
+            isMounted = false
+        }
 
     }, [])
 
@@ -492,43 +502,52 @@ export default function Account(props) {
                      setCopied={setCopied}
                      isMainToken={props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider]}
                      setMainToken={() => {
-                         changeToken(ENQWeb.Enq.token[ENQWeb.Enq.provider]).then()
+                         changeToken(ENQWeb.Enq.token[ENQWeb.Enq.provider])
+                             .then()
                      }}
                      setConnects={(connects) => {
                          // console.log(connects)
                          let elements = []
                          for (const key in connects) {
                              elements.push(
-                                 <div key={key} onClick={() => {}} className={`${styles.connect}`}>
+                                 <div key={key} onClick={() => {
+                                 }} className={`${styles.connect}`}>
                                      <div>{key.replaceAll('https://', '')}</div>
                                      <div onClick={() => {
                                          userStorage.promise.sendPromise({
                                              ports: true,
                                              disconnect: true,
                                              name: key
-                                         }).then(() => {
-                                             console.log(`${key} is disconnected`)
-                                             getConnects().then()
-                                             setActiveTab(0)
                                          })
-                                     }}>✕</div>
+                                             .then(() => {
+                                                 console.log(`${key} is disconnected`)
+                                                 getConnects()
+                                                     .then()
+                                                 setActiveTab(0)
+                                             })
+                                     }}>✕
+                                     </div>
                                  </div>)
                          }
-                         elements.push(
-                             <div onClick={()=> {
-                                 userStorage.promise.sendPromise({
-                                     ports: true,
-                                     disconnect: true,
-                                     all: true
-                                 }).then(() => {
-                                     console.warn('disconnect All')
-                                     getConnects().then()
-                                     setActiveTab(0)
-                                 })
+                         if (elements.length >= 2) {
+                             elements.push(
+                                 <div onClick={() => {
+                                     userStorage.promise.sendPromise({
+                                         ports: true,
+                                         disconnect: true,
+                                         all: true
+                                     })
+                                         .then(() => {
+                                             console.warn('disconnect All')
+                                             getConnects()
+                                                 .then()
+                                             setActiveTab(0)
+                                         })
 
-                             }} className={`${styles.field} ${styles.button}`}>
-                                 Disconnect all
-                             </div>)
+                                 }} className={`${styles.field} ${styles.button}`}>
+                                     Disconnect all
+                                 </div>)
+                         }
                          setConnectsElements(elements)
                          setConnects(true)
                          setActiveTab(2)
