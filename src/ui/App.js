@@ -176,7 +176,7 @@ export default function App(props) {
 
                 localStorage.removeItem(NET)
 
-                location.reload()
+                location.reload(false)
             })
     }
 
