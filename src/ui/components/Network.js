@@ -157,7 +157,7 @@ export default function Network(props) {
             })
 
         cacheTokens().then(() => {
-            location.reload()
+            location.reload(false)
         })
     }
 
