@@ -514,6 +514,21 @@ export default function Account(props) {
                                      }}>✕</div>
                                  </div>)
                          }
+                         elements.push(
+                             <div onClick={()=> {
+                                 userStorage.promise.sendPromise({
+                                     ports: true,
+                                     disconnect: true,
+                                     all: true
+                                 }).then(() => {
+                                     console.warn('disconnect All')
+                                     getConnects().then()
+                                     setActiveTab(0)
+                                 })
+
+                             }} className={`${styles.field} ${styles.button}`}>
+                                 Disconnect all
+                             </div>)
                          setConnectsElements(elements)
                          setConnects(true)
                          setActiveTab(2)
