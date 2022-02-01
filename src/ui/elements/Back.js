@@ -6,7 +6,7 @@ export default function Back(props) {
 
     return (
         <div className={styles.field} onClick={() => {
-            window.history.pushState({}, document.title, '/')
+            window.history.pushState({}, document.title, '/index.html')
             props.setFalse()
         }}>
             ❮ Back
