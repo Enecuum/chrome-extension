@@ -509,6 +509,7 @@ export default function Account(props) {
                                          }).then(() => {
                                              console.log(`${key} is disconnected`)
                                              getConnects().then()
+                                             setActiveTab(0)
                                          })
                                      }}>✕</div>
                                  </div>)
