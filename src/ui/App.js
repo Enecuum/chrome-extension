@@ -67,6 +67,9 @@ export default function App(props) {
     const [isKeys, setKeys] = useState(false)
 
     let [deferredPrompt, setDeferredPrompt] = useState()
+
+    const [timeIntervals, setTimeIntervals] = useState([])
+
     let initPWA = () => {
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault()
@@ -362,5 +365,7 @@ export default function App(props) {
                     setImportMnemonic={setImportMnemonic}
                     installPWA={installPWA}
                     updateUserData={updateUserData}
+                    timeIntervals={timeIntervals}
+                    setTimeIntervals={setTimeIntervals}
     />
 }

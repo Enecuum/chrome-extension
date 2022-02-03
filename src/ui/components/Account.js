@@ -42,6 +42,10 @@ export default function Account(props) {
     const [allTokens, setAllTokens] = useState((userStorage.tokens.getTokens()).tokens ? (userStorage.tokens.getTokens()).tokens : {})
 
     const [isCopied, setCopied] = useState(false)
+    const [activityElements, setActivityElements] = useState([])
+    const [updateTime, setUpdateTime] = useState(5000)
+    // const [timeIntervals, setTimeIntervals] = useState([])
+
 
     const clickMenu = () => {
         setMenu(!menu)
@@ -208,7 +212,7 @@ export default function Account(props) {
         return true
     }
 
-    const activityElements = []
+    // const activityElements = []
 
     // &nbsp;
 
@@ -216,43 +220,110 @@ export default function Account(props) {
         return allTokens[hash] !== undefined ? allTokens[hash] : (await ENQWeb.Net.get.token_info(hash)).ticker
     }
 
-    for (const key in activity) {
-        const item = activity[key]
-        // console.log(item)
-        activityElements.push(
-            <div
-                key={key} onClick={() => {
-                if (item.type === 'enable') {
-                    props.setPublicKeyRequest(item)
-                }
-                if (item.type === 'tx') {
-                    props.setTransactionRequest(item)
-                }
-                if (item.type === 'sign') {
-                    props.setSignRequest(item)
-                }
-            }} className={`${styles.activity}`}>
-                <img className={styles.icon}
-                     src={(item.type === 'enable' ? './images/icons/13.png' : './images/icons/12.png')}
-                     alt=""/>
-                <div>
-                    <div>{names[item.type]}</div>
-                    <div className={styles.time}>
-                        {new Date(item.data.date).toISOString()
-                            .slice(0, 10) + ' '}
-                        {(item.tx ? <div className={styles.history_link}
-                                         onClick={() => explorerAddress(item.tx.to)}>To: {shortHash(item.tx.to)}</div> : item.cb.url)}
+    const renderActivity = (list = []) => {
+        let localActivityElements = []
+        let localActivity = list.length > 0 ? list : activity
+        console.log(localActivity)
+        for (const key in localActivity) {
+            const item = localActivity[key]
+            // console.log(item)
+            localActivityElements.push(
+                <div
+                    key={key} onClick={() => {
+                    if (item.type === 'enable') {
+                        props.setPublicKeyRequest(item)
+                    }
+                    if (item.type === 'tx') {
+                        props.setTransactionRequest(item)
+                    }
+                    if (item.type === 'sign') {
+                        props.setSignRequest(item)
+                    }
+                }} className={`${styles.activity}`}>
+                    <img className={styles.icon}
+                         src={(item.type === 'enable' ? './images/icons/13.png' : './images/icons/12.png')}
+                         alt=""/>
+                    <div>
+                        <div>{names[item.type]}</div>
+                        <div className={styles.time}>
+                            {new Date(item.data.date).toISOString()
+                                .slice(0, 10) + ' '}
+                            {(item.tx ? <div className={styles.history_link}
+                                             onClick={() => explorerAddress(item.tx.to)}>To: {shortHash(item.tx.to)}</div> : item.cb.url)}
+                        </div>
                     </div>
-                </div>
-                {item.tx ?
-                    <div className={styles.activity_data}>
+                    {item.tx ?
+                        <div className={styles.activity_data}>
 
-                        <div>{'-' + (item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
+                            <div>{'-' + (item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
 
-                    </div> : ''}
-            </div>,
-        )
+                        </div> : ''}
+                </div>,
+            )
+        }
+        setActivityElements(localActivityElements)
     }
+
+
+    const updateActivity = async () => {
+        setActivityElements([])
+        setActivity(userStorage.list.listOfTask())
+        renderActivity(userStorage.list.listOfTask())
+    }
+
+    const updateHandler = () => {
+        let timers = props.timeIntervals
+        if(timers.length === 0){
+            let activityTimer = setInterval(updateActivity, updateTime)
+            timers.push(activityTimer)
+            props.setTimeIntervals(timers)
+        }else{
+            for(let i = 0; i < timers.length; i++){
+                clearInterval(timers[i])
+            }
+            updateHandler()
+        }
+    }
+
+    // renderActivity()
+
+    // for (const key in activity) {
+    //     const item = activity[key]
+    //     // console.log(item)
+    //     activityElements.push(
+    //         <div
+    //             key={key} onClick={() => {
+    //             if (item.type === 'enable') {
+    //                 props.setPublicKeyRequest(item)
+    //             }
+    //             if (item.type === 'tx') {
+    //                 props.setTransactionRequest(item)
+    //             }
+    //             if (item.type === 'sign') {
+    //                 props.setSignRequest(item)
+    //             }
+    //         }} className={`${styles.activity}`}>
+    //             <img className={styles.icon}
+    //                  src={(item.type === 'enable' ? './images/icons/13.png' : './images/icons/12.png')}
+    //                  alt=""/>
+    //             <div>
+    //                 <div>{names[item.type]}</div>
+    //                 <div className={styles.time}>
+    //                     {new Date(item.data.date).toISOString()
+    //                         .slice(0, 10) + ' '}
+    //                     {(item.tx ? <div className={styles.history_link}
+    //                                      onClick={() => explorerAddress(item.tx.to)}>To: {shortHash(item.tx.to)}</div> : item.cb.url)}
+    //                 </div>
+    //             </div>
+    //             {item.tx ?
+    //                 <div className={styles.activity_data}>
+    //
+    //                     <div>{'-' + (item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
+    //
+    //                 </div> : ''}
+    //         </div>,
+    //     )
+    // }
 
     const getHistory = async () => {
 
@@ -357,8 +428,9 @@ export default function Account(props) {
                 disallow: true,
                 taskId: item.cb.taskId
             })
-            setActivity([])
         }
+        // setActivity([])
+        // setActiveTab(0)
     }
 
     let changeToken = async (hash) => {
@@ -474,6 +546,10 @@ export default function Account(props) {
                             }
                         })
                     getBalance()
+                    renderActivity()
+                    // updateActivity()
+                    updateHandler()
+
                 }
             })
 
@@ -636,7 +712,7 @@ export default function Account(props) {
 
                     {activityElements}
 
-                    {activityElements.length > 1 && <div onClick={rejectAll}
+                    {activityElements.length > 1 && <div onClick={()=>{rejectAll().then()}}
                                                          className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
                         Reject all
                     </div>}
