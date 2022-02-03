@@ -156,8 +156,10 @@ export default function Network(props) {
                 })
             })
 
-        await cacheTokens().then(() => {
-            location.reload(false)
+        await cacheTokens().then(async () => {
+            // location.reload(false)
+            await props.updateUserData()
+            props.setNetwork(false)
         })
     }
 
