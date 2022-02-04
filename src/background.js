@@ -21,6 +21,7 @@ global.userStorage = new Storage('background')
 
 let ports = {}
 let requestQueue = {}
+let limitOfTransactions = 10
 
 let requestsMethods = {
     'tx': true,
@@ -130,13 +131,13 @@ async function msgConnectHandler(msg, sender) {
                     cb: msg.cb,
                     data: msg.data,
                 })
-                if(requestQueue[msg.cb.url] >= 10){
+                if (requestQueue[msg.cb.url] >= limitOfTransactions) {
                     console.log('too many requests')
                     rejectTaskHandler(msg.taskId, `too many requests`)
-                    requestQueue[msg.cb.url]+=1
+                    requestQueue[msg.cb.url] += 1
                     return false
-                }else{
-                    requestQueue[msg.cb.url]+=1
+                } else {
+                    requestQueue[msg.cb.url] += 1
                     console.log(requestQueue[msg.cb.url])
                 }
                 if (msg.data.net.length > 0) {
@@ -283,7 +284,7 @@ function connectController(port) {
         ports[port.name] = []
         ports[port.name].push(port)
     }
-    if(!requestQueue[port.name]){
+    if (!requestQueue[port.name]) {
         requestQueue[port.name] = 0
     }
 }
@@ -425,8 +426,8 @@ async function taskHandler(taskId) {
             ENQWeb.Net.provider = buf
         }
         userStorage.task.removeTask(taskId)
-        if(requestQueue[task.cb.url] > 0){
-            requestQueue[task.cb.url]-=1
+        if (requestQueue[task.cb.url] > 0) {
+            requestQueue[task.cb.url] -= 1
         }
         break
         // TODO Description
@@ -536,9 +537,9 @@ function rejectTaskHandler(taskId, reason = 'rejected') {
         cb: task.cb || ''
     })
         .then()
-    if(task.type === 'tx'){
-        if(requestQueue[task.cb.url] > 0){
-            requestQueue[task.cb.url]-=1
+    if (task.type === 'tx') {
+        if (requestQueue[task.cb.url] > 0) {
+            requestQueue[task.cb.url] -= 1
         }
     }
     return true
