@@ -126,12 +126,17 @@ export default function App(props) {
     const [isLock, setLock] = useState(checkLock)
 
     const getUser = async () => {
-        let account = await userStorage.user.loadUser()
-        setUser(account)
+        let account = await updateUserData()
         console.warn('App get user object')
         console.log(account)
         setLogin(!account.publicKey || account.publicKey.length <= 0)
         // setLogin(true)
+    }
+
+    const updateUserData = async ()=>{
+        let account = await userStorage.user.loadUser()
+        setUser(account)
+        return account
     }
 
     useEffect(() => {
@@ -270,6 +275,7 @@ export default function App(props) {
                          setTransport={setLedgerTransport}
                          ledgerTransport={ledgerTransport}
                          ledgerTransportController={ledgerTransportController}
+                         updateUserData={updateUserData}
         />
     }
 
@@ -292,7 +298,9 @@ export default function App(props) {
     }
 
     if (isNetwork) {
-        return <Network setNetwork={setNetwork}/>
+        return <Network setNetwork={setNetwork}
+                        updateUserData={updateUserData}
+        />
     }
 
     // if (isReceive) {
@@ -353,5 +361,6 @@ export default function App(props) {
                     setLedger={setLedger}
                     setImportMnemonic={setImportMnemonic}
                     installPWA={installPWA}
+                    updateUserData={updateUserData}
     />
 }
