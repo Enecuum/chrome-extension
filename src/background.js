@@ -44,6 +44,11 @@ let popupOpenMethods = {
     'sign': true
 }
 
+let antiSpamMethods = {
+    'tx': true,
+    'sign': true
+}
+
 let ledgerTransport = false
 const VALID_VERSION_LIB = '0.2.3'
 
@@ -56,6 +61,15 @@ function setupApp() {
     taskCounter()
     if (!userStorage.config.getConfig()) {
         userStorage.config.initConfig()
+    }
+    let tasks = userStorage.list.listOfTask()
+    for (let i in tasks) {
+        if (antiSpamMethods[tasks[i].type]) {
+            if (!requestQueue[tasks[i].cb.url]) {
+                requestQueue[tasks[i].cb.url] = 0
+            }
+            requestQueue[tasks[i].cb.url] += 1
+        }
     }
 }
 
