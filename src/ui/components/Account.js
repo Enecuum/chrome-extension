@@ -350,15 +350,8 @@ export default function Account(props) {
 
     //Reject all
     let rejectAll = async () => {
-        for (const key in activity) {
-            const item = activity[key]
-            // asyncRequest({reject_all: true})
-            await asyncRequest({
-                disallow: true,
-                taskId: item.cb.taskId
-            })
-            setActivity([])
-        }
+        await asyncRequest({reject_all: true})
+        setActivity([])
     }
 
     let changeToken = async (hash) => {
