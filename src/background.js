@@ -20,6 +20,8 @@ const Storage = require('./utils/localStorage')
 global.userStorage = new Storage('background')
 
 let ports = {}
+let requestQueue = {}
+
 let requestsMethods = {
     'tx': true,
     'enable': false,
@@ -128,6 +130,15 @@ async function msgConnectHandler(msg, sender) {
                     cb: msg.cb,
                     data: msg.data,
                 })
+                if(requestQueue[msg.cb.url] >= 10){
+                    console.log('too many requests')
+                    rejectTaskHandler(msg.taskId, `too many requests`)
+                    requestQueue[msg.cb.url]+=1
+                    return false
+                }else{
+                    requestQueue[msg.cb.url]+=1
+                    console.log(requestQueue[msg.cb.url])
+                }
                 if (msg.data.net.length > 0) {
                     if (msg.data.net !== ENQWeb.Enq.User.net) {
                         console.log('bad net work')
@@ -272,6 +283,9 @@ function connectController(port) {
         ports[port.name] = []
         ports[port.name].push(port)
     }
+    if(!requestQueue[port.name]){
+        requestQueue[port.name] = 0
+    }
 }
 
 function checkConnection() {
@@ -411,6 +425,9 @@ async function taskHandler(taskId) {
             ENQWeb.Net.provider = buf
         }
         userStorage.task.removeTask(taskId)
+        if(requestQueue[task.cb.url] > 0){
+            requestQueue[task.cb.url]-=1
+        }
         break
         // TODO Description
     case 'balanceOf':
@@ -519,6 +536,11 @@ function rejectTaskHandler(taskId, reason = 'rejected') {
         cb: task.cb || ''
     })
         .then()
+    if(task.type === 'tx'){
+        if(requestQueue[task.cb.url] > 0){
+            requestQueue[task.cb.url]-=1
+        }
+    }
     return true
 }
 
