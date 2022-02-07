@@ -344,7 +344,7 @@ export default function Selector(props) {
     return (
         <div className={styles.main}>
 
-            <Back setFalse={() => props.setAccountSelector(false)}/>
+            <Back setFalse={() => props.updateUserData().then(()=>{props.setAccountSelector(false)})}/>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
