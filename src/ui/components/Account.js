@@ -370,8 +370,9 @@ export default function Account(props) {
         window.scrollTo(0, 0)
     }
 
-    const assetsElements = []
     let renderAssets = () => {
+
+        const assetsElements = []
 
         // console.log(assets)
         let mainToken = assets.find(element => element.main === true)
@@ -420,6 +421,8 @@ export default function Account(props) {
                 </div>
             )
         }
+
+        return assetsElements
     }
 
 
@@ -475,12 +478,12 @@ export default function Account(props) {
             isMounted = false
         }
 
-    }, [])
+    }, [assets])
 
     // TODO What's going on here
     // renderHistory()
 
-    renderAssets()
+    // renderAssets()
 
     return (
         <div className={styles.main}>
@@ -615,7 +618,7 @@ export default function Account(props) {
 
                 <div className={styles.bottom_assets + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
-                    {assetsElements}
+                    {renderAssets()}
 
                     <div onClick={() => {
                     }}

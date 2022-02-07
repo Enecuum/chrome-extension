@@ -37,6 +37,7 @@ export default function ImportKey(props) {
                     type="text"
                     spellCheck={false}
                     autoComplete={false}
+                    autoFocus={false}
                     onChange={async (e) => {
                         setKeyString(e.target.value)
                         // loginSeed(e.target.value)
