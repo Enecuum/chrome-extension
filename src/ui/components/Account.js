@@ -4,6 +4,7 @@ import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
 import { explorerAddress, explorerTX, generateIcon, shortHash } from '../Utils'
+import Separator from "../elements/Separator";
 
 const names = {
     enable: 'Share account address',
@@ -365,7 +366,7 @@ export default function Account(props) {
         })
         // window.location.reload(false)
         await getBalance()
-        await renderAssets()
+        // await renderAssets()
         setActiveTab(props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? 0 : 1)
         window.scrollTo(0, 0)
     }
@@ -647,6 +648,8 @@ export default function Account(props) {
                     className={`${styles.bottom_list} ${styles.bottom_list_activity} ${activeTab === 2 ? '' : `${styles.bottom_list_disabled}`}`}>
 
                     {connectsElements}
+
+                    <Separator/>
 
                 </div>
 
