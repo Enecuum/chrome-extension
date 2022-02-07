@@ -1,19 +1,19 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import {explorerAddress, getMnemonicPrivateKeyHex, ledgerPath, regexToken, shortHash} from '../../Utils'
+import { explorerAddress, getMnemonicPrivateKeyHex, ledgerPath, regexToken, shortHash } from '../../Utils'
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
-import {createPopupWindow, createTabWindow} from '../../../handler'
+import { createPopupWindow, createTabWindow } from '../../../handler'
 // import eventBus from "../../../utils/eventBus";
-import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
+import { signHash, getVersion, getPublicKey } from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
-import {generateAccountData, generateLedgerAccountData} from '../../../user'
+import { generateAccountData, generateLedgerAccountData } from '../../../user'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
-import {copyText} from '../../../utils/names'
+import { copyText } from '../../../utils/names'
 import Back from '../../elements/Back'
 
 // let balance = {}
@@ -83,7 +83,9 @@ export default function Selector(props) {
                 type: 0
             })
 
-            requestBalance(publicKey).then(r => {})
+            requestBalance(publicKey)
+                .then(r => {
+                })
         }
 
         if (account.seed) {
@@ -103,7 +105,9 @@ export default function Selector(props) {
                 type: 1
             })
 
-            requestBalance(publicKey).then(r => {})
+            requestBalance(publicKey)
+                .then(r => {
+                })
         }
 
         for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
@@ -118,7 +122,9 @@ export default function Selector(props) {
                 type: 2
             })
 
-            requestBalance(publicKey.publicKey).then(r => {})
+            requestBalance(publicKey.publicKey)
+                .then(r => {
+                })
         }
 
         // setAccounts(accounts)
@@ -127,10 +133,11 @@ export default function Selector(props) {
     }
 
     let loadUser = () => {
-        userStorage.user.loadUser().then(async account => {
-            let accounts = await buildAccountsArray(account)
-            renderCards(accounts)
-        })
+        userStorage.user.loadUser()
+            .then(async account => {
+                let accounts = await buildAccountsArray(account)
+                renderCards(accounts)
+            })
     }
 
     // let loginSeed = (i) => {
@@ -251,11 +258,11 @@ export default function Selector(props) {
                     <div className={styles.card_field + ' ' + styles.card_field_amount}
                          title={Number(account.amount) / 1e10 + ''}>
                         {(account.amount > 0 ?
-                                (Number(account.amount) / 1e10).toFixed(4)
-                                :
-                                '0.0')
+                            (Number(account.amount) / 1e10).toFixed(4)
+                            :
+                            '0.0')
 
-                            + ' BIT'}
+                        + ' BIT'}
                     </div>
 
                     {/*<div className={styles.card_field_select + ' ' + (current ? '' : 'select')}*/}
@@ -344,7 +351,10 @@ export default function Selector(props) {
     return (
         <div className={styles.main}>
 
-            <Back setFalse={() => props.updateUserData().then(()=>{props.setAccountSelector(false)})}/>
+            <Back setFalse={() => props.updateUserData()
+                .then(() => {
+                    props.setAccountSelector(false)
+                })}/>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
