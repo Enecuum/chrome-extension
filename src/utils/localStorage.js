@@ -2,6 +2,7 @@
 
 const {LIST, TASK, USER, LOCK, CONFIG, TOKENS} = require("./names");
 const indexDB = require('./indexDB')
+const {generateAccountData, account} = require("../user");
 // import indexDB from './indexDB'
 // import {LIST, TASK, USER, LOCK, CONFIG, TOKENS} from "./names";
 
@@ -106,6 +107,25 @@ function userExist() {
 
 //
 function loadUser() {
+
+    // let oldUser = localStorage.getItem('User')
+    // if (oldUser && oldUser.length > 0) {
+    //
+    //     let privateKey = JSON.parse(oldUser).privateKey
+    //     let data = generateAccountData(privateKey, account)
+    //     data.privateKeys.push(privateKey)
+    //
+    //     userStorage.promise.sendPromise({
+    //         account: true,
+    //         set: true,
+    //         data: data
+    //     }).then(() => {return
+    //         localStorage.setItem('User', '')
+    //     })
+    //
+    //     return data
+    // }
+
     let user = localStorage.getItem(USER)
 
     indexDB.get(USER).then(user => {
