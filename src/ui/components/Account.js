@@ -479,7 +479,7 @@ export default function Account(props) {
             isMounted = false
         }
 
-    }, [assets])
+    }, [])
 
     // TODO What's going on here
     // renderHistory()

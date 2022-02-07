@@ -69,7 +69,7 @@ export default function Ledger(props) {
                 setUserAccounts(account.ledgerAccountsArray.map(a => a.publicKey))
             })
 
-    }, [balance, copied])
+    }, [balance, copied, accounts])
 
     let buildAccountsArray = async () => {
 
@@ -182,7 +182,7 @@ export default function Ledger(props) {
 
     }
 
-    let cards = () => {
+    let renderCards = () => {
 
         let cards = []
 
@@ -309,7 +309,7 @@ export default function Ledger(props) {
 
             {ledger ? <div className={styles.cards_container}>
                 <div className={styles.cards}>
-                    {cards()}
+                    {renderCards()}
                 </div>
                 <Separator/>
             </div> : ''}
