@@ -253,6 +253,18 @@
     /*background: red;*/
 }
 
+.separatorLine {
+    width: calc(100% - 40px);
+    height: 1px;
+    /*box-shadow: 1px 1px var(--color-blue) 0.3;*/
+    background: var(--color-white);
+    margin-left: 20px;
+    margin-top: 20px;
+    /*margin-top: 20px;*/
+    /*margin-bottom: 10px;*/
+    /*background: red;*/
+}
+
 .row {
     display: flex;
     flex-direction: row;

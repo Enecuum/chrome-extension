@@ -356,6 +356,8 @@ export default function Selector(props) {
                 Import Key
             </div>
 
+            <Separator line={true}/>
+
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
                     {cards2}
@@ -376,6 +378,8 @@ export default function Selector(props) {
 
             {!seed && <div className={styles.field + ' ' + styles.button}
                            onClick={props.setImportMnemonic}>Import Mnemonic</div>}
+
+            <Separator line={true}/>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
