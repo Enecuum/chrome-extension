@@ -131,14 +131,10 @@ function loadUser() {
             set: true,
             data: data
         }).then(() => {
-            return data
             // localStorage.setItem('User', '')
+            return data
         })
-
-        // return data
     }
-
-    // let user = localStorage.getItem(USER)
 
     indexDB.get(USER).then(user => {
         // console.dir('IndexDB user exist: ' + !!user)
