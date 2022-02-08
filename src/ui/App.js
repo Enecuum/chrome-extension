@@ -89,16 +89,16 @@ export default function App(props) {
     const ledgerTransportController = async () => {
         // console.log("Support WebHID:", await TransportWebHID.isSupported())
         try {
-            console.info("connect: ", navigator.userAgentData.platform)
+            // console.info("connect: ", navigator.userAgentData.platform)
             if (ledgerTransport === false) {
-                console.log('work')
+                // console.log('work')
                 let Transport
                 if (navigator.userAgentData.platform === "Android") {
                     Transport = await TransportWebUSB.create()
                 } else {
                     Transport = await TransportWebHID.create()
                 }
-                console.warn(Transport)
+                // console.warn(Transport)
                 setLedgerTransport(Transport)
                 return Transport
             } else {
