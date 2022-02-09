@@ -128,7 +128,7 @@ export default function App(props) {
     const getUser = async () => {
         let account = await updateUserData()
         console.warn('App get user object')
-        console.log(account)
+        // console.log(account)
         setLogin(!account.publicKey || account.publicKey.length <= 0)
         // setLogin(true)
     }
