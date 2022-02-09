@@ -69,32 +69,38 @@ export default function Network(props) {
         // xhr.send(null)
 
         try {
-            fetch(url + '/api/v1/native_token')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.hash && data.hash.length > 0) {
-                        setHostCorrect(true)
-                        setHost(url)
-                        setTokenCorrect(true)
-                        setToken(data.hash)
-                    }
-                })
-                .catch(e => {
-                    setHostCorrect(false)
-                    fetch(url + '/api/v1/stats')
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.network_hashrate) {
-                                setHostCorrect(true)
-                                setHost(url)
 
-                                if (regexToken.test(token))
-                                    setTokenCorrect(true)
-                            }
-                        })
-                        .catch(e => {})
-                })
-        } catch (e) {}
+            new URL(url)
+
+            if (validURL(url))
+                fetch(url + '/api/v1/native_token')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.hash && data.hash.length > 0) {
+                            setHostCorrect(true)
+                            setHost(url)
+                            setTokenCorrect(true)
+                            setToken(data.hash)
+                        }
+                    })
+                    .catch(e => {
+                        setHostCorrect(false)
+                        fetch(url + '/api/v1/stats')
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.network_hashrate) {
+                                    setHostCorrect(true)
+                                    setHost(url)
+
+                                    if (regexToken.test(token))
+                                        setTokenCorrect(true)
+                                }
+                            })
+                            .catch(e => {
+                            })
+                    })
+        } catch (e) {
+        }
     }
 
     let addNet = async () => {
@@ -146,21 +152,36 @@ export default function Network(props) {
 
         await userStorage.user.loadUser().then(async account => {
 
-                account.net = value
-                account.token = token
+            account.net = value
+            account.token = token
 
-                await userStorage.promise.sendPromise({
-                    account: true,
-                    set: true,
-                    data: account
-                })
+            await userStorage.promise.sendPromise({
+                account: true,
+                set: true,
+                data: account
             })
+        })
 
         await cacheTokens().then(async () => {
             // location.reload(false)
             await props.updateUserData()
             props.setNetwork(false)
         })
+    }
+
+
+    let validURL = (str) => {
+        // console.log(str)
+        let pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+            '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+        console.log(!!pattern.test(str))
+
+        return !!pattern.test(str)
     }
 
     let renderCards = () => {
@@ -175,17 +196,18 @@ export default function Network(props) {
 
         // for (let i = 0; i < libNetworks.length; i++) {
         //
-            let current = ENQWeb.Enq.provider === libNetworks[0][1]
+        let current = ENQWeb.Enq.provider === libNetworks[0][1]
 
-            cards.push(
-                <div key={'bit' + 'card'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
-                    <div className={styles.card_field}>{libNetworks[0][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
-                    <div className={styles.card_field}>{libNetworks[0][1]}</div>
-                    <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[0][1]])}</div>
-                    <div className={styles.card_field_select} onClick={(current ? () => {
-                    } : () => setNet(libNetworks[0][1]))}>{current ? 'CONNECTED' : 'SELECT'}</div>
-                </div>
-            )
+        cards.push(
+            <div key={'bit' + 'card'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
+                <div
+                    className={styles.card_field}>{libNetworks[0][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
+                <div className={styles.card_field}>{libNetworks[0][1]}</div>
+                <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[0][1]])}</div>
+                <div className={styles.card_field_select} onClick={(current ? () => {
+                } : () => setNet(libNetworks[0][1]))}>{current ? 'CURRENT' : 'SELECT'}</div>
+            </div>
+        )
         // }
 
         for (let i = 0; i < localNetworks.length; i++) {
