@@ -69,7 +69,7 @@ export default function Ledger(props) {
                 setUserAccounts(account.ledgerAccountsArray.map(a => a.publicKey))
             })
 
-    }, [balance, copied, accounts])
+    }, [balance, copied])
 
     let buildAccountsArray = async () => {
 
