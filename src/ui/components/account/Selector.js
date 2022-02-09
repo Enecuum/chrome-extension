@@ -52,8 +52,17 @@ export default function Selector(props) {
         if (!balance[publicKey] && balance[publicKey] !== 0) {
             await ENQWeb.Net.get.getBalanceAll(publicKey)
                 .then((res) => {
-                    balance[publicKey] = res[0] ? res[0].amount : 0
-                    setBalance(balance)
+                    for (let i in res) {
+                        if (res[i].token === ENQWeb.Enq.ticker) {
+                            balance[publicKey] = res[i] ? res[i].amount : 0
+                            setBalance(balance)
+                        }
+                    }
+                    if (!balance[publicKey]) {
+                        balance[publicKey] = 0
+                        setBalance(balance)
+                    }
+
                     // console.log(balance)
 
                     if (balance[publicKey] > 0) {
