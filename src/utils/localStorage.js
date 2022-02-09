@@ -131,7 +131,7 @@ function loadUser() {
             set: true,
             data: data
         }).then(() => {
-            // localStorage.setItem('User', '')
+            localStorage.setItem('User', '')
             return data
         })
     }
