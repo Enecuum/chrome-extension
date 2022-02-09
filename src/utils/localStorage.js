@@ -109,9 +109,8 @@ function userExist() {
 function loadUser() {
 
     let oldUser = localStorage.getItem('User')
-    let user = localStorage.getItem(USER)
 
-    if (oldUser && (!user || !user.privateKey)) {
+    if (oldUser) {
 
         console.warn('OLD USER MIGRATION')
 
@@ -121,24 +120,29 @@ function loadUser() {
         let oldAccount = JSON.parse(ENQWeb.Utils.crypto.decrypt(oldUser, password))
         console.log(oldAccount)
         let data = generateAccountData(oldAccount.privateKey, account)
-        console.log(data)
 
         if (!data.privateKeys.includes(oldAccount.privateKey))
             data.privateKeys.push(oldAccount.privateKey)
 
-        return userStorage.promise.sendPromise({
-            account: true,
-            set: true,
-            data: data
-        }).then(() => {
-            localStorage.setItem('User', '')
-            return data
-        })
+        localStorage.setItem('User', '')
+
+        // console.log(data)
+
+        let password2 = userStorage.lock.getHashPassword()
+        password2 = ENQWeb.Utils.crypto.strengthenPassword(SALT + password2)
+        let account2 = ENQWeb.Utils.crypto.encrypt(JSON.stringify(data), password2)
+        userStorage.user.changeUser(account2)
+
+        // console.log(account2)
+
+        localStorage.setItem(USER, account2)
     }
 
     indexDB.get(USER).then(user => {
         // console.dir('IndexDB user exist: ' + !!user)
     })
+
+    let user = localStorage.getItem(USER)
 
     if (!user) {
         return {}
