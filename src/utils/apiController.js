@@ -21,7 +21,7 @@ const getAccountTransactions = async (publicKey, page) => {
 const getBalance = async (publicKey, tokenHash) => {
     return await ENQWeb.Net.get.getBalance(publicKey, tokenHash)
 }
-const getTx = async (hash) => {
+const getTransaction = async (hash) => {
     return await ENQWeb.Net.get.tx(hash)
 }
 
@@ -30,7 +30,7 @@ const apiController = {
     getBalanceAll,
     getTokenInfo,
     getAccountTransactions,
-    getTx,
+    getTransaction,
     sendTX,
     sendAPI,
     sendRequest

@@ -115,7 +115,7 @@ export default function TransactionHistory(props) {
     }
 
     const getTransaction = async () => {
-        let transaction = await apiController.getTx(props.request.tx.hash)
+        let transaction = await apiController.getTransaction(props.request.tx.hash)
 
         if (typeIn)
             setFrom(transaction.from)
