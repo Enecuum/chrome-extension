@@ -149,11 +149,11 @@ async function setupUI() {
     }
 
     userStorage.promise.sendPromise({ initial: true }).then(r => {})
-    if (!version.includes('web')) {
-        setInterval(() => {
-            userStorage.promise.sendPromise({ initial: true }).then(r => {})
-        }, lockOffsetInterval)
-    }
+    // if (!version.includes('web')) {
+    //     setInterval(() => {
+    //         userStorage.promise.sendPromise({ initial: true }).then(r => {})
+    //     }, lockOffsetInterval)
+    // }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
