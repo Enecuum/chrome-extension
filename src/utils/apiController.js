@@ -36,7 +36,10 @@ const getTokenInfo = async (tokenHash) => {
     return cacheTokenInfo[ENQWeb.Enq.provider][tokenHash]
 }
 
-const getAccountTransactions = async (publicKey, page) => {
+const getAccountTransactions = async (publicKey, page, fromCache = false) => {
+    if(!fromCache){
+        return await ENQWeb.Net.get.accountTransactions(publicKey, page)
+    }
     if (!cacheAccountTransactions[ENQWeb.Enq.provider]) {
         cacheAccountTransactions[ENQWeb.Enq.provider] = {}
     }
