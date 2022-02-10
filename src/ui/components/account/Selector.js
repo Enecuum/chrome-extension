@@ -365,6 +365,8 @@ export default function Selector(props) {
                     props.setAccountSelector(false)
                 })}/>
 
+            <div className={styles.welcome3}>List of single PRIVATE KEYS</div>
+
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
                     {cards1}
@@ -376,6 +378,8 @@ export default function Selector(props) {
             </div>
 
             <Separator line={true}/>
+
+            <div className={styles.welcome3}>MNEMONIC or SEED PHRASE</div>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
@@ -399,6 +403,8 @@ export default function Selector(props) {
                            onClick={props.setImportMnemonic}>Import Mnemonic</div>}
 
             <Separator line={true}/>
+
+            <div className={styles.welcome3}>LEDGER ACCOUNTS</div>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>

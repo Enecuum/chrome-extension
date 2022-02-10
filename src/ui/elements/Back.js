@@ -9,7 +9,7 @@ let isWeb = !chrome.runtime || chrome.runtime.getManifest().version.includes(ver
 export default function Back(props) {
 
     return (
-        <div className={styles.field} onClick={() => {
+        <div className={styles.field + ' ' + styles.pointer} onClick={() => {
             window.history.pushState({}, document.title,  isWeb ? '' : '/index.html')
             props.setFalse()
         }}>
