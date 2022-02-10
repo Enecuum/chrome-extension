@@ -1,19 +1,22 @@
 const sendAPI = async (api, fields) => {
     return await ENQWeb.Enq.sendAPI(api, fields)
 }
-const sendTX = async (tx) => {
-    return await ENQWeb.Enq.sendTx(tx)
+const sendTransaction = async (transactionString) => {
+    return await ENQWeb.Enq.sendTx(transactionString)
 }
 const sendRequest = async (url, method, fields) => {
     return await ENQWeb.Enq.sendRequest(url, method, fields)
 }
 
+const postTransaction = async (transactionObject) => {
+    return await ENQWeb.Net.post.tx_fee_off(transactionObject)
+}
 
 const getBalanceAll = async (publicKey) => {
     return await ENQWeb.Net.get.getBalanceAll(publicKey)
 }
 const getTokenInfo = async (tokenHash) => {
-    return await ENQWeb.Net.get.token_info(hash)
+    return await ENQWeb.Net.get.token_info(tokenHash)
 }
 const getAccountTransactions = async (publicKey, page) => {
     return await ENQWeb.Net.get.accountTransactions(publicKey, page)
@@ -21,8 +24,8 @@ const getAccountTransactions = async (publicKey, page) => {
 const getBalance = async (publicKey, tokenHash) => {
     return await ENQWeb.Net.get.getBalance(publicKey, tokenHash)
 }
-const getTransaction = async (hash) => {
-    return await ENQWeb.Net.get.tx(hash)
+const getTransaction = async (transactionHash) => {
+    return await ENQWeb.Net.get.tx(transactionHash)
 }
 
 const apiController = {
@@ -31,9 +34,10 @@ const apiController = {
     getTokenInfo,
     getAccountTransactions,
     getTransaction,
-    sendTX,
+    sendTransaction,
     sendAPI,
-    sendRequest
+    sendRequest,
+    postTransaction
 }
 
 export { apiController }

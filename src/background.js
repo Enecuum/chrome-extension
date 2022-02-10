@@ -406,7 +406,7 @@ async function taskHandler(taskId) {
                     })
                 console.log({ sign: data.sign })
                 if (data.sign) {
-                    data = await ENQWeb.Enq.sendTx(data)
+                    data = await apiController.sendTransaction(data)
                         .then(data => {
                             if (data.hash) {
                                 return data
@@ -426,7 +426,7 @@ async function taskHandler(taskId) {
                 data.amount = data.value ? Number(data.value) : Number(data.amount)
                 data.tokenHash = data.ticker ? data.ticker : data.tokenHash
                 data.value = ''
-                data = await ENQWeb.Net.post.tx_fee_off(data)
+                data = await apiController.postTransaction(data)
                     .catch(err => {
                         console.log(err)
                         return false
