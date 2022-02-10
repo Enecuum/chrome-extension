@@ -40,7 +40,7 @@ const getAccountTransactions = async (publicKey, page) => {
         cacheAccountTransactions[ENQWeb.Enq.provider][publicKey] = {}
     }
     if (!cacheAccountTransactions[ENQWeb.Enq.provider][publicKey][page]) {
-        cacheAccountTransactions[ENQWeb.Enq.provider][publicKey][page] =  await ENQWeb.Net.get.accountTransactions(publicKey, page)
+        cacheAccountTransactions[ENQWeb.Enq.provider][publicKey][page] = await ENQWeb.Net.get.accountTransactions(publicKey, page)
     }
     return cacheAccountTransactions[ENQWeb.Enq.provider][publicKey][page]
 }
