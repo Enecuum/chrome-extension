@@ -18,10 +18,10 @@ const getBalanceAll = async (publicKey) => {
     return await ENQWeb.Net.get.getBalanceAll(publicKey)
 }
 const getTokenInfo = async (tokenHash) => {
-    if(!cacheTokenInfo[ENQWeb.Enq.provider]){
+    if (!cacheTokenInfo[ENQWeb.Enq.provider]) {
         cacheTokenInfo[ENQWeb.Enq.provider] = {}
     }
-    if(!cacheTokenInfo[ENQWeb.Enq.provider][tokenHash]){
+    if (!cacheTokenInfo[ENQWeb.Enq.provider][tokenHash]) {
         cacheTokenInfo[ENQWeb.Enq.provider][tokenHash] = await ENQWeb.Net.get.token_info(tokenHash)
     }
     return cacheTokenInfo[ENQWeb.Enq.provider][tokenHash]
