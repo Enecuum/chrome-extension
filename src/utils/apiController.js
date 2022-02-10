@@ -1,5 +1,6 @@
 let cacheTokenInfo = {}
 let cacheTransactions = {}
+let cacheAccountTransactions = {}
 
 const sendAPI = async (api, fields) => {
     return await ENQWeb.Enq.sendAPI(api, fields)
@@ -32,7 +33,16 @@ const getTokenInfo = async (tokenHash) => {
 }
 
 const getAccountTransactions = async (publicKey, page) => {
-    return await ENQWeb.Net.get.accountTransactions(publicKey, page)
+    if (!cacheAccountTransactions[ENQWeb.Enq.provider]) {
+        cacheAccountTransactions[ENQWeb.Enq.provider] = {}
+    }
+    if (!cacheAccountTransactions[ENQWeb.Enq.provider][publicKey]) {
+        cacheAccountTransactions[ENQWeb.Enq.provider][publicKey] = {}
+    }
+    if (!cacheAccountTransactions[ENQWeb.Enq.provider][publicKey][page]) {
+        cacheAccountTransactions[ENQWeb.Enq.provider][publicKey][page] =  await ENQWeb.Net.get.accountTransactions(publicKey, page)
+    }
+    return cacheAccountTransactions[ENQWeb.Enq.provider][publicKey][page]
 }
 
 const getBalance = async (publicKey, tokenHash) => {
@@ -58,7 +68,10 @@ const apiController = {
     sendTransaction,
     sendAPI,
     sendRequest,
-    postTransaction
+    postTransaction,
+    cacheTransactions,
+    cacheTokenInfo,
+    cacheAccountTransactions
 }
 
 export { apiController }
