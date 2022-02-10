@@ -3,6 +3,7 @@ import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import elements from '../../css/elements.module.css'
 import {explorerTX, shortHash} from '../../Utils'
+import { apiController } from '../../../utils/apiController'
 
 // let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -50,7 +51,7 @@ export default function TransactionHistory(props) {
 
     const initTickerAndFee = async () => {
         let tokenHash = props.request.tx.tokenHash
-        let tokenInfo = await ENQWeb.Net.get.token_info(tokenHash)
+        let tokenInfo = await apiController.getTokenInfo(tokenHash)
         if (tokenInfo.length === 0) {
             console.warn('Token info error')
         } else {
@@ -114,7 +115,7 @@ export default function TransactionHistory(props) {
     }
 
     const getTransaction = async () => {
-        let transaction = await ENQWeb.Net.get.tx(props.request.tx.hash)
+        let transaction = await apiController.getTx(props.request.tx.hash)
 
         if (typeIn)
             setFrom(transaction.from)
