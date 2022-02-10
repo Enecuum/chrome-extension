@@ -22,6 +22,10 @@ const getBalanceAll = async (publicKey) => {
     return await ENQWeb.Net.get.getBalanceAll(publicKey)
 }
 
+const getMainTokenBalance = async (publicKey)=>{
+    return await getBalance(publicKey, ENQWeb.Enq.token[ENQWeb.Enq.provider])
+}
+
 const getTokenInfo = async (tokenHash) => {
     if (!cacheTokenInfo[ENQWeb.Enq.provider]) {
         cacheTokenInfo[ENQWeb.Enq.provider] = {}
@@ -62,6 +66,7 @@ const getTransaction = async (transactionHash) => {
 const apiController = {
     getBalance,
     getBalanceAll,
+    getMainTokenBalance,
     getTokenInfo,
     getAccountTransactions,
     getTransaction,
