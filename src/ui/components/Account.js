@@ -141,7 +141,7 @@ export default function Account(props) {
                     .then()
 
                 if (props.user.net === 'https://pulse.enecuum.com') {
-                    ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
+                    apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
                         .then((answer) => {
                             if (answer['enq-enecuum'] !== undefined) {
 
