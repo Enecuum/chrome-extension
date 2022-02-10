@@ -4,6 +4,7 @@ import { extensionApi } from './utils/extensionApi'
 import { lockAccount, say } from './lockAccount'
 import { createPopupWindow, globalMessageHandler } from './handler'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
+import { apiController } from './utils/apiController'
 
 document.addEventListener('DOMContentLoaded', function () {
     if (!userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {
@@ -456,7 +457,7 @@ async function taskHandler(taskId) {
             }
             ENQWeb.Net.provider = data.net || account.net
             console.log(task.data, ENQWeb.Net.provider)
-            data = await ENQWeb.Net.get.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
+            data = await apiController.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
                 .catch(err => {
                     console.log(err)
                     return false
