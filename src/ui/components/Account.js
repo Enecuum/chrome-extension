@@ -17,6 +17,8 @@ const names = {
 
 let tickers = {}
 
+global.api = apiController
+
 export default function Account(props) {
     ENQWeb.Enq.provider = props.user.net
 
