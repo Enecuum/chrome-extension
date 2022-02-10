@@ -6,6 +6,7 @@ import { regexAddress } from '../Utils'
 import Input from '../elements/Input'
 import { signHash } from '../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
+import { apiController } from '../../utils/apiController'
 
 //TODO decimals to tokens
 
@@ -200,7 +201,7 @@ export default class Transaction extends React.Component {
     }
 
     decimalsSearch() {
-        ENQWeb.Net.get.token_info(this.props.isTransaction.token)
+        apiController.getTokenInfo(this.props.isTransaction.token)
             .then(info => {
                 if (info.length === 0) {
                     console.warn('Token not found.')

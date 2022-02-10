@@ -15,6 +15,7 @@ import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
 import { copyText } from '../../../utils/names'
 import Back from '../../elements/Back'
+import { apiController } from '../../../utils/apiController'
 
 // let balance = {}
 
@@ -50,7 +51,7 @@ export default function Selector(props) {
 
     let requestBalance = async (publicKey) => {
         if (!balance[publicKey] && balance[publicKey] !== 0) {
-            await ENQWeb.Net.get.getBalanceAll(publicKey)
+            await apiController.getBalanceAll(publicKey)
                 .then((res) => {
                     for (let i in res) {
                         if (res[i].token === ENQWeb.Enq.ticker) {
