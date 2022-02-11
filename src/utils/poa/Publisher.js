@@ -54,7 +54,8 @@ class Publisher {
 	constructor(url, poa, config) {
 
 		const POA_PROTOCOL_VERSION = 4;
-		const ENQ_TOKEN = config.token;
+		// const ENQ_TOKEN = config.token;
+		const ENQ_TOKEN = "0000000000000000000000000000000000000000000000000000000000000001";
 		const SOME_TOKEN = "145e5feb2012a2db325852259fc6b8a6fd63cc5188a89bac9f35139fc8664fd2";
 		let tokens = [ENQ_TOKEN, ENQ_TOKEN]
 		let split = url.toString().replace('ws://', '').split(':');
