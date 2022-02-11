@@ -33,6 +33,10 @@ export default function Keys(props) {
         setType(account.type)
     }
 
+    let poa = ()=>{
+        userStorage.promise.sendPromise({poa:true, account:{publicKey,privateKey}}).then()
+    }
+
     return (
 
         <div className={styles.main}>
@@ -66,6 +70,13 @@ export default function Keys(props) {
                 <div className={styles.field + ' ' + styles.button}
                      onClick={() => explorerAddress(publicKey)}>
                     Show in blockchain explorer
+                </div>
+
+                <div className={styles.field + ' ' + styles.button}
+                     onClick={() => {
+                         poa()
+                     }}>
+                    PoA validator
                 </div>
 
             </div>

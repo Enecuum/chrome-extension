@@ -4,6 +4,7 @@ import { extensionApi } from './utils/extensionApi'
 import { lockAccount, say } from './lockAccount'
 import { createPopupWindow, globalMessageHandler } from './handler'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
+import {startPoa} from "./utils/poa/index"
 
 document.addEventListener('DOMContentLoaded', function () {
     if (!userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {
@@ -82,6 +83,10 @@ async function messageHandler(msg, sender, sendResponse) {
         if (msg.name) {
             disconnectPorts(msg.name)
         }
+    }
+
+    if(msg.poa && msg.account){
+        startPoa(msg.account, ENQWeb.Enq.ticker)
     }
 
     if (msg.account && msg.logout) {

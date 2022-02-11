@@ -5,6 +5,7 @@ import Address from '../elements/Address'
 import Menu from '../elements/Menu'
 import { explorerAddress, explorerTX, generateIcon, shortHash } from '../Utils'
 import Separator from "../elements/Separator";
+import {startPoa} from "../../utils/poa/index"
 
 const names = {
     enable: 'Share account address',
