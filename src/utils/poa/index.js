@@ -3,7 +3,7 @@
 import { Publisher } from './Publisher'
 
 let startPoa = (acc, token, net = 'test') => {
-    console.log(acc)
+
     let keyfile = [
         {
             // "id" : "wallet1",
