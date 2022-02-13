@@ -155,7 +155,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             if(PoAs.find(el=>el.id === msg.account.publicKey) !== undefined){
                 resolve({response: false})
             }else{
-                startPoa(msg.account, ENQWeb.Enq.ticker, 'test').forEach(el=>PoAs.push(el))
+                startPoa(msg.account, ENQWeb.Enq.ticker, ENQWeb.Enq.provider).forEach(el=>PoAs.push(el))
             }
             console.log(PoAs)
         }
