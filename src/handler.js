@@ -1,11 +1,11 @@
-import {decryptAccount, encryptAccount, lockAccount, lockTime} from "./lockAccount"
+import { decryptAccount, encryptAccount, lockAccount, lockTime } from './lockAccount'
 
 // const cacheStore = require('./indexDB') // es6
 import indexDB from './utils/indexDB'
-import {account} from "./user";
-import {LOCK, USER} from "./utils/names";
-import * as events from "events";
-import eventBus from "./utils/eventBus";
+import { account } from './user'
+import { LOCK, USER } from './utils/names'
+import * as events from 'events'
+import eventBus from './utils/eventBus'
 import { startPoa } from './utils/poa' // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
@@ -15,15 +15,16 @@ export function globalMessageHandler(msg, ENQWeb) {
 
     return new Promise((resolve, reject) => {
 
-        indexDB.get(USER).then(function (user) {
-            // console.warn('IndexDB USER')
-            // console.log(user)
-        })
+        indexDB.get(USER)
+            .then(function (user) {
+                // console.warn('IndexDB USER')
+                // console.log(user)
+            })
 
         // TODO Description
         if (msg.initial) {
             runLockTimer()
-            resolve({response: true})
+            resolve({ response: true })
         }
 
         // TODO Open new window from background or worker
@@ -41,16 +42,16 @@ export function globalMessageHandler(msg, ENQWeb) {
 
             // If user locked
             if (userStorage.lock.checkLock()) {
-                resolve({response: false})
+                resolve({ response: false })
             }
 
             // If user on background or worker memory
             if (Object.keys(ENQWeb.Enq.User).length > 0) {
 
                 console.log('Memory session')
-                resolve({response: ENQWeb.Enq.User})
+                resolve({ response: ENQWeb.Enq.User })
 
-            // User unlocked but not on memory, old web version
+                // User unlocked but not on memory, old web version
             } else {
 
                 // We lost session
@@ -59,8 +60,8 @@ export function globalMessageHandler(msg, ENQWeb) {
                 if (userStorage.user.userExist()) {
 
                     lockAccount()
-                    eventBus.dispatch('lock', {message: true})
-                    resolve({response: false})
+                    eventBus.dispatch('lock', { message: true })
+                    resolve({ response: false })
                 }
 
                 // let webSession = JSON.parse(sessionStorage.getItem('User'))
@@ -78,7 +79,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             try {
                 account = decryptAccount(msg.password)
             } catch (e) {
-                eventBus.dispatch('lock', {message: false})
+                eventBus.dispatch('lock', { message: false })
             }
 
             if (account) {
@@ -93,10 +94,10 @@ export function globalMessageHandler(msg, ENQWeb) {
                 // createWebSession(account)
 
                 encryptAccount()
-                resolve({response: account})
+                resolve({ response: account })
 
             } else {
-                resolve({response: false})
+                resolve({ response: false })
             }
         }
 
@@ -114,7 +115,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             userStorage.user.addUser(account)
 
             encryptAccount()
-            resolve({response: account})
+            resolve({ response: account })
         }
 
         // TODO
@@ -127,13 +128,13 @@ export function globalMessageHandler(msg, ENQWeb) {
             }
 
             encryptAccount()
-            resolve({response: true})
+            resolve({ response: true })
         }
 
         // Lock user model
         if (msg.lock) {
             lockAccount()
-            resolve({response: true})
+            resolve({ response: true })
         }
 
         // TODO Logout
@@ -144,23 +145,48 @@ export function globalMessageHandler(msg, ENQWeb) {
             userStorage.user.removeUser()
 
             // disconnectPorts()
-            resolve({response: true})
+            resolve({ response: true })
         }
 
-        if(msg.poa && msg.get){
-            resolve({response: PoAs})
+        if (msg.poa && msg.get) {
+            let data = []
+            PoAs.forEach(el => {
+                data.push({
+                    id: el.id || null,
+                    readyState: el.ws.readyState || null
+                })
+            })
+            resolve({ response: data })
         }
 
-        if(msg.poa && msg.account){
-            if(PoAs.find(el=>el.id === msg.account.publicKey) !== undefined){
-                resolve({response: false})
-            }else{
-                startPoa(msg.account, ENQWeb.Enq.ticker, ENQWeb.Enq.provider).forEach(el=>PoAs.push(el))
+        if (msg.poa && msg.disconnect) {
+            let index = PoAs.findIndex(el => el.id === msg.disconnect)
+            PoAs[index].close()
+            delete PoAs[index]
+            PoAs = PoAs.filter(el => el.id ? el : false)
+        }
+
+        if (msg.poa && msg.account) {
+            let index = PoAs.findIndex(el => el.id === msg.account.publicKey)
+            if (index !== -1) {
+                if (PoAs[index].ws.readyState === 1) {
+                    resolve({ response: false })
+                } else {
+                    delete PoAs[index]
+                    startPoa(msg.account, ENQWeb.Enq.ticker, ENQWeb.Enq.provider)
+                        .forEach(el => PoAs.push(el))
+                }
+
+            } else {
+                startPoa(msg.account, ENQWeb.Enq.ticker, ENQWeb.Enq.provider)
+                    .forEach(el => PoAs.push(el))
             }
-            console.log(PoAs)
+            if (msg.log) {
+                console.log(PoAs)
+            }
         }
 
-        resolve({response: false})
+        resolve({ response: false })
     })
 }
 
@@ -184,12 +210,12 @@ export function runLockTimer() {
     if (lockTimer !== undefined) {
         clearTimeout(lockTimer)
     }
-    if (userStorage.name === "background") {
+    if (userStorage.name === 'background') {
         lockTimer = setTimeout(() => lockAccount(true), lockTime)
     } else {
         lockTimer = setTimeout(() => {
-            eventBus.dispatch('lock', {message: true})
-            userStorage.promise.sendPromise({lock: true})
+            eventBus.dispatch('lock', { message: true })
+            userStorage.promise.sendPromise({ lock: true })
         }, lockTime)
     }
 }
@@ -229,7 +255,8 @@ function createTabWindow(params = '') {
     // chrome.windows.create({
     //     url: window.location.href + params,
     // })
-    window.open(window.location.href.split('?')[0] + params, '_blank').focus();
+    window.open(window.location.href.split('?')[0] + params, '_blank')
+        .focus();
 }
 
 export {

@@ -21,6 +21,9 @@ class Publisher {
         }
         this.id = poa.pubkey
         this.ws = new WebSocket(`ws://${ip}:${port}`)
+        this.close = () => {
+            this.ws.close()
+        }
         this.ws.onopen = function open() {
             console.log(`${poa.id} connected`)
             let hash = crypto.createHash('sha256')
@@ -39,13 +42,16 @@ class Publisher {
         }
         this.ws.onclose = function close(e) {
             console.log(`${poa.id} disconnected`)
-            console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason)
-            setTimeout(function () {
-                new Publisher(Url, poa, token)
-            }, 1000)
+            // console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason)
+            // setTimeout(function () {
+            //     new Publisher(Url, poa, token)
+            // }, 1000)
         }
         this.ws.onerror = function (err) {
             console.error('Socket encountered error: ', err.message, 'Closing socket')
+            setTimeout(function () {
+                new Publisher(Url, poa, token)
+            }, 1000)
             //ws.close();
         }
         this.ws.onmessage = function (msg) {
@@ -141,7 +147,7 @@ function hash_tx(tx) {
         .join('')
     return crypto.createHash('sha256')
         .update(str)
-        .digest('hex');
+        .digest('hex')
 }
 
-export { Publisher };
+export { Publisher }

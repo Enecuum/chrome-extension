@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import { explorerAddress, getMnemonicPrivateKeyHex, shortHash, shortHashLong } from '../../Utils'
-import Back from "../../elements/Back";
+import Back from '../../elements/Back'
 
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -12,8 +12,21 @@ export default function Keys(props) {
     let [publicKey, setPublicKey] = useState('')
     let [privateKey, setPrivateKey] = useState('')
     let [type, setType] = useState('')
+    let [poa, setPoa] = useState(false)
     useEffect(() => {
-        loadUser().then()
+        loadUser()
+            .then()
+        userStorage.promise.sendPromise({
+            poa: true,
+            get: true
+        })
+            .then(poas => {
+                poas.find(el => {
+                    if (el.id === publicKey && el.readyState === 1) {
+                        setPoa(true)
+                    }
+                })
+            })
     })
 
     let loadUser = async () => {
@@ -33,10 +46,29 @@ export default function Keys(props) {
         setType(account.type)
     }
 
-    let poa = ()=>{
-        userStorage.promise.sendPromise({poa:true, account:{publicKey,privateKey}}).then()
+    let poaSubmit = () => {
+        userStorage.promise.sendPromise({
+            poa: true,
+            account: {
+                publicKey,
+                privateKey
+            }
+        })
+            .then(() => {
+                setPoa(true)
+            })
     }
 
+    let disablePoa = () => {
+        console.log('disconnect: ' + publicKey)
+        userStorage.promise.sendPromise({
+            poa: true,
+            disconnect: publicKey
+        })
+            .then(() => {
+                setPoa(false)
+            })
+    }
 
 
     return (
@@ -58,7 +90,7 @@ export default function Keys(props) {
 
                 <Separator/>
 
-                <div className={styles.field}>{type === 0 ||  type === 1 ? shortHashLong(privateKey) : privateKey}</div>
+                <div className={styles.field}>{type === 0 || type === 1 ? shortHashLong(privateKey) : privateKey}</div>
 
                 <div className={styles.field + ' ' + styles.button} onClick={() => {
                     navigator.clipboard.writeText(privateKey)
@@ -74,17 +106,20 @@ export default function Keys(props) {
                     Show in blockchain explorer
                 </div>
 
-                { privateKey.length === 64  ? <div className={styles.field + ' ' + styles.button}
-                      onClick={() => {
-                          poa()
-                      }}>
-                    PoA validator
+                {privateKey.length === 64 ? <div className={styles.field + ' ' + styles.button}
+                                                 onClick={() => {
+                                                     if (!poa) {
+                                                         poaSubmit()
+                                                     } else {
+                                                         disablePoa()
+                                                     }
+                                                 }}>
+                    {poa ? 'in work!' : 'PoA validator'}
                 </div> : ''}
 
             </div>
 
             <div className={styles.form}>
-
 
 
                 <Separator/>
