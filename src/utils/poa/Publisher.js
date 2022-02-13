@@ -1,62 +1,14 @@
 var crypto = require('crypto');
 var r = require('jsrsasign');
-// var enq = require('./addon')
-// var WebSocket = require('ws');
-
-// const ecc_mode = "long";
-
-// class ECC {
-// 	constructor(mode) {
-// 		if (mode === "short") {
-// 			this.a = enq.BigNumber(25);
-// 			this.b = enq.BigNumber(978);
-// 			this.p = enq.BigNumber(1223);
-// 			this.order = enq.BigNumber(1183);
-// 			this.g0x = enq.BigNumber(972);
-// 			this.g0y = enq.BigNumber(795);
-// 			this.gx = enq.BigNumber(1158);
-// 			this.gy = enq.BigNumber(92);
-// 			this.curve = enq.Curve(this.a, this.b, this.p, this.order, this.g0x, this.g0y);
-// 			this.G0 = enq.Point(this.g0x, this.g0y, this.curve);
-// 			this.G = enq.Point(this.gx, this.gy, this.curve);
-// 			this.MPK = enq.Point(enq.BigNumber(512), enq.BigNumber(858), this.curve);
-// 		} else {
-// 			this.a = enq.BigNumber(1);
-// 			this.b = enq.BigNumber(0);
-// 			this.p = enq.BigNumber("80000000000000000000000000000000000200014000000000000000000000000000000000010000800000020000000000000000000000000000000000080003");
-// 			this.order = enq.BigNumber("80000000000000000000000000000000000200014000000000000000000000000000000000010000800000020000000000000000000000000000000000080004");
-// 			this.g0x = enq.BigNumber("2920f2e5b594160385863841d901a3c0a73ba4dca53a8df03dc61d31eb3afcb8c87feeaa3f8ff08f1cca6b5fec5d3f2a4976862cf3c83ebcc4b78ebe87b44177");
-// 			this.g0y = enq.BigNumber("2c022abadb261d2e79cb693f59cdeeeb8a727086303285e5e629915e665f7aebcbf20b7632c824b56ed197f5642244f3721c41c9d2e2e4aca93e892538cd198a");
-//
-// 			this.G0_fq = {
-// 				"x": "1 1971424652593645857677685913504949042673180456464917721388355467732670356866868453718540344482523620218083146279366045128738893020712321933640175997249379 4296897641464992034676854814757495000621938623767876348735377415270791885507945430568382535788680955541452197460367952645174915991662132695572019313583345",
-// 				"y": "1 5439973223440119070103328012315186243431766339870489830477397472399815594412903491893756952248783128391927052429939035290789135974932506387114453095089572 3254491657578196534138971223937186183707778225921454196686815561535427648524577315556854258504535233566592842007776061702323300678216177012235337721726634"
-// 			};
-// 			this.MPK_fq = {
-// 				"x" : "1 3880112175745769906129488456404571855313298496010825544782964964123833489278388802716228358058131528518953774702792145679842058700395879994915548189595077 2080522071627240824848138990257546083185256914799209977492439073918549876575237775765153830820632785082314470786485656726830053964692583149237097989320386",
-// 				"y" : "1 5670372393738907536622431434430349740406923175794846022394579096835401282364953141839015655887440665019253725982752473996102582433456993998941961062159678 2218500320645904249775794701597206295659537597791055170003216970928769044251419537635292801466765144220996985453770076693072401342092975755321573943161131"
-// 			}
-// 			this.curve = enq.Curve(this.a, this.b, this.p, this.order, this.g0x, this.g0y);
-// 			this.strIrred = "2 1 1 6703903964971298549787012499102923063739684112761466562144343758833001675653841939454385015500446199477853424663597373826728056308768000892499915006541826";
-// 			this.strA = "0 1";
-// 			this.strB = "0 0";
-// 			this.e_fq = enq.Curve_Fq(this.p.decString(), 2, this.strIrred, this.strA, this.strB);
-// 		}
-// 	}
-// }
-
-// const POA_PROTOCOL_VERSION = 4;
-// const ENQ_TOKEN = "0000000000000000000000000000000000000000000000000000000000000001";
-// const SOME_TOKEN = "145e5feb2012a2db325852259fc6b8a6fd63cc5188a89bac9f35139fc8664fd2";
-// let tokens = [ENQ_TOKEN, ENQ_TOKEN]
 
 class Publisher {
-	constructor(url, poa, config) {
+	constructor(url, poa, token) {
 
+		url = atob(url)
 		const POA_PROTOCOL_VERSION = 4;
-		// const ENQ_TOKEN = config.token;
-		const ENQ_TOKEN = "0000000000000000000000000000000000000000000000000000000000000001";
-		const SOME_TOKEN = "145e5feb2012a2db325852259fc6b8a6fd63cc5188a89bac9f35139fc8664fd2";
+		const ENQ_TOKEN = token;
+		// const ENQ_TOKEN = "0000000000000000000000000000000000000000000000000000000000000001";
+		// const SOME_TOKEN = "145e5feb2012a2db325852259fc6b8a6fd63cc5188a89bac9f35139fc8664fd2";
 		let tokens = [ENQ_TOKEN, ENQ_TOKEN]
 		let split = url.toString().replace('ws://', '').split(':');
 		let ip = split[0];
@@ -64,6 +16,7 @@ class Publisher {
 		// let ecc = new ECC(ecc_mode);
 		if (poa.id == undefined)
 			poa.id = poa.pubkey.slice(0, 6);
+		this.id = poa.pubkey
 		this.ws = new WebSocket(`ws://${ip}:${port}`);
 		this.ws.onopen = function open() {
 			console.log(`${poa.id} connected`);
@@ -93,7 +46,6 @@ class Publisher {
 		this.ws.onmessage = function(msg) {
 			try{
 				msg = JSON.parse(msg.data)
-
 			}catch (er){
 				console.error(er)
 				return;
@@ -102,20 +54,7 @@ class Publisher {
 				return;
 
 			let data = msg.data;
-			// let PK_LPoS = enq.getHash(data.mblock_data.kblocks_hash.toString() + data.leader_id.toString() + data.mblock_data.nonce.toString());
-			// let PK_LPoS = ENQWeb.Utils.crypto.sha256(data.mblock_data.kblocks_hash.toString() + data.leader_id.toString() + data.mblock_data.nonce.toString());
 			let isValid = true;
-			// try {
-			// 	if (ecc_mode === "short") {
-			// 		isValid = enq.verify(data.leader_sign, data.m_hash, PK_LPoS, ecc.G, ecc.G0, ecc.MPK, data.leader_id, ecc.p, ecc.curve);
-			// 	} else {
-			// 		isValid = enq.verify_tate(data.leader_sign, data.m_hash, PK_LPoS, ecc.G0_fq, ecc.MPK_fq, data.leader_id, ecc.curve, ecc.e_fq);
-			// 	}
-			// } catch (e) {
-			// 	console.log("Lucky 7");
-			// 	//console.log(e)
-			// 	return;
-			// }
 			let isCorrect = (hashBlock(data.mblock_data) == data.m_hash)
 
 			console.log(` ${poa.id}  Sign: ${(isValid ? "OK" : "BAD")}  m_hash: ${data.m_hash}  ${(isCorrect ? "OK" : "BAD")}`);

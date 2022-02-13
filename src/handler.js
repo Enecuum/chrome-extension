@@ -5,8 +5,11 @@ import indexDB from './utils/indexDB'
 import {account} from "./user";
 import {LOCK, USER} from "./utils/names";
 import * as events from "events";
-import eventBus from "./utils/eventBus"; // commonjs
+import eventBus from "./utils/eventBus";
+import { startPoa } from './utils/poa' // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
+
+let PoAs = []
 
 export function globalMessageHandler(msg, ENQWeb) {
 
@@ -142,6 +145,19 @@ export function globalMessageHandler(msg, ENQWeb) {
 
             // disconnectPorts()
             resolve({response: true})
+        }
+
+        if(msg.poa && msg.get){
+            resolve({response: PoAs})
+        }
+
+        if(msg.poa && msg.account){
+            if(PoAs.find(el=>el.id === msg.account.publicKey) !== undefined){
+                resolve({response: false})
+            }else{
+                startPoa(msg.account, ENQWeb.Enq.ticker, 'test').forEach(el=>PoAs.push(el))
+            }
+            console.log(PoAs)
         }
 
         resolve({response: false})

@@ -85,10 +85,6 @@ async function messageHandler(msg, sender, sendResponse) {
         }
     }
 
-    if(msg.poa && msg.account){
-        startPoa(msg.account, ENQWeb.Enq.ticker)
-    }
-
     if (msg.account && msg.logout) {
         ports = {}
     }
