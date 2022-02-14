@@ -214,6 +214,8 @@ export default function Menu(props) {
 
             {version.endsWith(versions.MOBILE) ? <div className={styles.button_link} onClick={props.installPWA}>Install</div> : ''}
 
+            <div className={styles.button_link} onClick={() => props.setWebView({url: 'app.enex.space'})}>ENEX</div>
+
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}
             {/*<div className={styles.row}>*/}
