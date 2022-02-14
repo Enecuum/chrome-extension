@@ -173,12 +173,12 @@ export function globalMessageHandler(msg, ENQWeb) {
                     resolve({ response: false })
                 } else {
                     delete PoAs[index]
-                    startPoa(msg.account, ENQWeb.Enq.ticker, ENQWeb.Enq.provider)
+                    startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
                         .forEach(el => PoAs.push(el))
                 }
 
             } else {
-                startPoa(msg.account, ENQWeb.Enq.ticker, ENQWeb.Enq.provider)
+                startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
                     .forEach(el => PoAs.push(el))
             }
             if (msg.log) {
