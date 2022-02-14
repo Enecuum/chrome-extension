@@ -1222,3 +1222,8 @@ input[type=number] {
     flex-direction: row;
     justify-content: space-between;
 }
+
+iframe {
+    width: 350px;
+    height: 670px;
+}

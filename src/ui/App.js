@@ -27,6 +27,7 @@ import eventBus from '../utils/eventBus'
 import Ledger from './components/account/Ledger'
 import {ledgerPath} from './Utils'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
+import WebView from "./components/WebView";
 
 
 let net = localStorage.getItem(NET)
@@ -38,6 +39,10 @@ if (!net) {
 ENQWeb.Net.provider = net
 
 export default function App(props) {
+
+
+    const [isWebView, setWebView] = useState(false)
+
     const [isPassword, setPassword] = useState(!userStorage.lock.getHashPassword())
     const [isLogin, setLogin] = useState(true)
 
@@ -341,12 +346,15 @@ export default function App(props) {
 
     if (isLogin) return <Login login={login2} setMnemonic={setMnemonic}/>
 
+    if (isWebView) return <WebView url={isWebView}  setWebView={setWebView}/>
+
     // TODO user
     return <Account user={user}
                     login={login2}
                     logout={logout}
                     setLock={setLock}
                     setPassword={setPassword}
+                    setWebView={setWebView}
                     setConfirm={setConfirm}
                     setNetwork={setNetwork}
                     setReceive={setReceive}

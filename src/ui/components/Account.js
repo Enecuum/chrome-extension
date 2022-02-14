@@ -446,6 +446,7 @@ export default function Account(props) {
                          setNetwork={props.setNetwork}
                          setKeys={props.setKeys}
                          setPassword={props.setPassword}
+                         setWebView={props.setWebView}
                          setMnemonic={props.setMnemonic}
                          setAccountSelector={props.setAccountSelector}
                          setImportMnemonic={props.setImportMnemonic}
