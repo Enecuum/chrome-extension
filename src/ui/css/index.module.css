@@ -1224,6 +1224,7 @@ input[type=number] {
 }
 
 iframe {
+    border: none;
     width: 350px;
-    height: 670px;
+    height: 630px;
 }
