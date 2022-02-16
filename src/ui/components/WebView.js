@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "../css/index.module.css";
 import Separator from "../elements/Separator";
+import Header from "../elements/Header";
 
 
 export default function WebView(props) {
@@ -12,10 +13,12 @@ export default function WebView(props) {
     return (
         <div className={styles.main}>
 
-            <div onClick={() => props.setWebView(false)}
-                 className={styles.field + ' ' + styles.button}>Back</div>
+            {/*<div onClick={() => props.setWebView(false)}*/}
+            {/*     className={styles.field + ' ' + styles.button}>Back</div>*/}
 
-            <Separator/>
+            <Header clickMenu={() => props.setWebView(false)} user={{}}/>
+
+            {/*<Separator/>*/}
 
             <iframe src="https://app.enex.space"/>
 
