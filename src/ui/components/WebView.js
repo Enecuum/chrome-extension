@@ -12,6 +12,11 @@ export default function WebView(props) {
     return (
         <div className={styles.main}>
 
+            <div onClick={() => props.setWebView(false)}
+                 className={styles.field + ' ' + styles.button}>Back</div>
+
+            <Separator/>
+
             <iframe src="https://app.enex.space"/>
 
         </div>
