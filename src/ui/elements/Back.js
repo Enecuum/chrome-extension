@@ -3,8 +3,8 @@ import elements from "../css/elements.module.css";
 import React, {useState} from 'react';
 import {versions} from "../../utils/names";
 
-// We need normal client routing
-let isWeb = !chrome.runtime || !chrome.runtime.getManifest || chrome.runtime.getManifest().version.includes(versions.WEB)
+// We need normal client routing TODO
+let isWeb = !chrome || !chrome.runtime || !chrome.runtime.getManifest || chrome.runtime.getManifest().version.includes(versions.WEB)
 
 export default function Back(props) {
 
