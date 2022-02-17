@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import {versions} from "../../utils/names";
 
 // We need normal client routing TODO
-let isWeb = !chrome || !chrome.runtime || !chrome.runtime.getManifest || chrome.runtime.getManifest().version.includes(versions.WEB)
+let isWeb = false
 
 export default function Back(props) {
 
