@@ -1,11 +1,12 @@
-import {initApp} from "./ui/index"
-import {globalMessageHandler, messagePopupHandler} from "./handler"
+import { initApp } from './ui/index'
+import { globalMessageHandler, messagePopupHandler } from './handler'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-import {versions} from "./utils/names";
+import { versions } from './utils/names'
 
 // Init storage
 import Storage from './utils/localStorage'
-import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
+
 global.userStorage = new Storage('popup')
 
 // TODO
@@ -22,6 +23,8 @@ let dataId = []
 // TODO Description
 let time = 200
 
+let lockOffsetInterval = 10 * 1000
+
 // if (navigator.storage && navigator.storage.estimate) {
 //     navigator.storage.estimate().then(quota => {
 //         const remaining = quota.quota - quota.usage;
@@ -34,23 +37,34 @@ console.log('HEAD: ' + VERSION)
 console.log('Cache available: ' + ('caches' in self))
 console.log('Web workers available: ' + (typeof window.Worker === 'function'))
 
-TransportWebUSB.isSupported().then((result) => {
-    console.log('WebUSB supported: ' + result)
-})
+TransportWebUSB.isSupported()
+    .then((result) => {
+        console.log('WebUSB supported: ' + result)
+    })
 
 global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 
 // console.log(navigator.userAgent)
-let electron = navigator.userAgent.toLowerCase().includes('electron')
-let mobile = navigator.userAgent.toLowerCase().includes('mobile')
+let electron = navigator.userAgent.toLowerCase()
+    .includes('electron')
+let mobile = navigator.userAgent.toLowerCase()
+    .includes('mobile')
 let type = electron ? versions.ELECTRON : (mobile ? versions.MOBILE : versions.WEB)
 
 chrome.manifest = (function () {
-    let manifestObject = false;
-    let xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {if (xhr.readyState == 4) {manifestObject = JSON.parse(xhr.responseText)}}
+    let manifestObject = false
+    let xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            manifestObject = JSON.parse(xhr.responseText)
+        }
+    }
     xhr.open('GET', '/manifest.json', false)
-    try {xhr.send()} catch (e) {console.error('OFFLINE')}
+    try {
+        xhr.send()
+    } catch (e) {
+        console.error('OFFLINE')
+    }
     return manifestObject
 })()
 
@@ -76,10 +90,10 @@ if (!chrome.runtime) {
         }
     }
     chrome.runtime.sendMessage = () => {
-        return {response: true}
+        return { response: true }
     }
     chrome.runtime.getManifest = () => {
-        return {version: alterVersion}
+        return { version: alterVersion }
     }
     chrome.runtime.web = true
 }
@@ -103,7 +117,7 @@ if (!chrome.runtime.getManifest) {
     console.log('chrome.runtime.getManifest: false')
     chrome.runtime.web = true
     chrome.runtime.getManifest = () => {
-        return {version: alterVersion}
+        return { version: alterVersion }
     }
 }
 
@@ -124,7 +138,7 @@ async function setupUI() {
     } else { // Extension version
 
         // Connect to background
-        backgroundPort = chrome.runtime.connect({name: 'popup'})
+        backgroundPort = chrome.runtime.connect({ name: 'popup' })
         backgroundPort.onMessage.addListener(mainListener)
 
         // TODO
@@ -134,11 +148,17 @@ async function setupUI() {
         await initApp(backgroundPort)
     }
 
-    userStorage.promise.sendPromise({initial: true}).then(r => {})
+    userStorage.promise.sendPromise({ initial: true }).then(r => {})
+    // if (!version.includes('web')) {
+    //     setInterval(() => {
+    //         userStorage.promise.sendPromise({ initial: true }).then(r => {})
+    //     }, lockOffsetInterval)
+    // }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    setupUI().then()
+    setupUI()
+        .then()
 })
 
 
@@ -176,7 +196,7 @@ function asyncRequest(data) {
     let answer = ''
     if (version.includes('web')) {
         return messagePopupHandler(data)
-    } else
+    } else {
         return new Promise(async (resolve, reject) => {
             backgroundPort.postMessage(data)
             backgroundPort.onMessage.addListener(asyncMessenger)
@@ -190,6 +210,7 @@ function asyncRequest(data) {
                     resolve(answer)
                 })
         })
+    }
 }
 
 async function asyncMessenger(msg, sender, sendResponse) {
@@ -203,7 +224,10 @@ async function asyncMessenger(msg, sender, sendResponse) {
 // TODO Description
 async function cacheTokenInfo(tokens) {
     // let tokens = await  ENQWeb.Enq.sendAPI('get_tickers_all')
-    userStorage.tokens.setTokens({net: ENQWeb.Enq.provider, tokens: tokens})
+    userStorage.tokens.setTokens({
+        net: ENQWeb.Enq.provider,
+        tokens: tokens
+    })
     return true
 }
 
