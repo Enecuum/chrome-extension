@@ -1,6 +1,6 @@
 // This is storage object,
 
-const {LIST, TASK, USER, LOCK, CONFIG, TOKENS} = require("./names");
+const {LIST, TASK, USER, LOCK, CONFIG, TOKENS, BALANCE} = require("./names");
 const indexDB = require('./indexDB')
 const {generateAccountData, account} = require("../user");
 // import indexDB from './indexDB'
@@ -367,6 +367,21 @@ function setTokens(obj) {
     return true
 }
 
+function getBalance(){
+    let balance = JSON.parse(localStorage.getItem(BALANCE))
+    if (!balance) {
+        balance = {}
+    }
+    return balance
+}
+
+function setBalance(obj){
+    localStorage.setItem(BALANCE, JSON.stringify(obj))
+    return true
+}
+
+
+
 // TODO constructor
 function Storage(name) {
 
@@ -392,7 +407,9 @@ function Storage(name) {
         clearUsers,
         setNet,
         changeUser,
-        loadUserNotJson
+        loadUserNotJson,
+        getBalance,
+        setBalance
     }
     this.list = {
         name,

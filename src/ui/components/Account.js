@@ -46,6 +46,7 @@ export default function Account(props) {
     const [allTokens, setAllTokens] = useState((userStorage.tokens.getTokens()).tokens ? (userStorage.tokens.getTokens()).tokens : {})
 
     const [isCopied, setCopied] = useState(false)
+    const [isCachedBalance, setCachedBalance ] = useState(true)
 
     const clickMenu = () => {
         setMenu(!menu)
@@ -108,7 +109,7 @@ export default function Account(props) {
         // console.log(token)
         let tokens = []
 
-        apiController.getBalanceAll(props.user.publicKey)
+        apiController.getBalanceAll(props.user.publicKey, true)
             .then((res) => {
                 // console.log(res.map(a => a.ticker + ': ' + a.amount))
                 let amount = 0
@@ -159,6 +160,7 @@ export default function Account(props) {
                     tokenHash: token,
                     main: true
                 }, ...tokens])
+                setCachedBalance(true)
                 // console.log(res.amount / 1e10)
             })
             .catch((err) => {
@@ -463,6 +465,7 @@ export default function Account(props) {
 
         openPopup()
             .then(result => {
+                // setAmount(userStorage.user.getBalance()[props.user.net][props.user.publicKey][props.user.token].amount || BigInt(0))
                 if (result === true) {
                     getConnects()
                         .then()

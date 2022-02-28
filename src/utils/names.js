@@ -15,6 +15,7 @@ const CONFIG = 'config'
 const NETWORKS = 'networks'
 // TODO Current network string
 const NET = 'net'
+const BALANCE = 'balance'
 
 const STORAGE_NAME_POPUP = 'popup'
 const STORAGE_NAME_BACKGROUND = 'background'
@@ -53,5 +54,6 @@ module.exports = {
     versions,
     ENQ_CONTENT,
     strings,
-    copyText
+    copyText,
+    BALANCE
 }

@@ -1,6 +1,7 @@
 let cacheTokenInfo = {}
 let cacheTransactions = {}
 let cacheAccountTransactions = {}
+let cacheBalanceAll = {}
 
 const sendAPI = async (api, fields) => {
     return await ENQWeb.Enq.sendAPI(api, fields)
@@ -18,12 +19,43 @@ const postTransaction = async (transactionObject) => {
     return await ENQWeb.Net.post.tx_fee_off(transactionObject)
 }
 
-const getBalanceAll = async (publicKey) => {
+
+const getBalanceAll = async (publicKey, fromCache= false) => {
+    if(!fromCache)
+        return await ENQWeb.Net.get.getBalanceAll(publicKey)
+    cacheBalanceAll = userStorage.user.getBalance()
+    if (!cacheBalanceAll[ENQWeb.Enq.provider]) {
+        cacheBalanceAll[ENQWeb.Enq.provider] = {}
+    }
+    if (!cacheBalanceAll[ENQWeb.Enq.provider][publicKey]) {
+        cacheBalanceAll[ENQWeb.Enq.provider][publicKey] = {}
+        let balances = (await ENQWeb.Net.get.getBalanceAll(publicKey))
+        balances.forEach(el=>{
+            cacheBalanceAll[ENQWeb.Enq.provider][publicKey][el.token] = el
+        })
+        userStorage.user.setBalance(cacheBalanceAll)
+        return balances
+    }
     return await ENQWeb.Net.get.getBalanceAll(publicKey)
+
 }
 
-const getMainTokenBalance = async (publicKey)=>{
-    return await getBalance(publicKey, ENQWeb.Enq.token[ENQWeb.Enq.provider])
+const getMainTokenBalance = async (publicKey, fromCache = false)=>{
+    if(!fromCache)
+        return await getBalance(publicKey, ENQWeb.Enq.token[ENQWeb.Enq.provider])
+    let balances = userStorage.user.getBalance()
+    if(!balances[ENQWeb.Enq.provider]){
+        balances[ENQWeb.Enq.provider] = {}
+    }
+    if(!balances[ENQWeb.Enq.provider][publicKey]){
+        balances[ENQWeb.Enq.provider][publicKey] = {}
+    }
+    if(!balances[ENQWeb.Enq.provider][publicKey][ENQWeb.Enq.token[ENQWeb.Enq.provider]]){
+        let newBalance = await getBalance(publicKey, ENQWeb.Enq.token[ENQWeb.Enq.provider])
+        balances[ENQWeb.Enq.provider][publicKey][ENQWeb.Enq.token[ENQWeb.Enq.provider]] = newBalance
+        userStorage.user.setBalance(balances)
+    }
+    return balances[ENQWeb.Enq.provider][publicKey][ENQWeb.Enq.token[ENQWeb.Enq.provider]]
 }
 
 const getTokenInfo = async (tokenHash) => {
@@ -52,7 +84,10 @@ const getAccountTransactions = async (publicKey, page, fromCache = false) => {
     return cacheAccountTransactions[ENQWeb.Enq.provider][publicKey][page]
 }
 
-const getBalance = async (publicKey, tokenHash) => {
+const getBalance = async (publicKey, tokenHash, fromCache = false) => {
+    if(!fromCache) {
+        return await ENQWeb.Net.get.getBalance(publicKey, tokenHash)
+    }
     return await ENQWeb.Net.get.getBalance(publicKey, tokenHash)
 }
 
