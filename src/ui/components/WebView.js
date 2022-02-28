@@ -6,9 +6,45 @@ import Header from "../elements/Header";
 
 export default function WebView(props) {
 
+    let account = props.user
+
     let confirm = () => {
 
     }
+
+    let onMessage = (event)=>{
+        let data = event.data
+        console.warn(event.data)
+        if(data.checkConnect !== undefined){
+            event.source.postMessage({'iframe':true}, event.origin)
+        }
+        if(data.type !== undefined){
+            let response = ''
+            switch (data.type){
+            case 'enable':
+                response = {
+                    pubkey: account.publicKey,
+                    net: account.net,
+                }
+                break
+            case 'getProvider':
+                break
+            case 'getVersion':
+                break
+            case 'balanceOf':
+                break
+            case 'reconnect':
+                break
+            case 'sign':
+                break
+            default:
+                break
+            }
+            event.source.postMessage({answer:{taskId:data.cb.taskId, data:response}}, event.origin)
+        }
+    }
+
+    window.addEventListener('message', onMessage, false)
 
     return (
         <div className={styles.main}>
@@ -20,7 +56,7 @@ export default function WebView(props) {
 
             {/*<Separator/>*/}
 
-            <iframe src="https://app.enex.space"/>
+            <iframe id="iframe" src="http://localhost:1234"/>
 
         </div>
     )
