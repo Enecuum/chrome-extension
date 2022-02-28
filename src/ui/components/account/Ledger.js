@@ -22,6 +22,7 @@ import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
 import { copyText } from '../../../utils/names'
 import Back from '../../elements/Back'
+import { apiController } from '../../../utils/apiController'
 
 // let balance = {}
 
@@ -274,7 +275,7 @@ export default function Ledger(props) {
 
     let requestBalance = async (publicKey) => {
         if (!balance[publicKey] && balance[publicKey] !== 0) {
-            await ENQWeb.Net.get.getBalanceAll(publicKey).then((res) => {
+            await apiController.getBalanceAll(publicKey).then((res) => {
                 balance[publicKey] = res[0] ? res[0].amount : 0
                 setBalance({...balance})
                 // console.log(balance)
