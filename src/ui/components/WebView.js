@@ -2,11 +2,14 @@ import React from "react";
 import styles from "../css/index.module.css";
 import Separator from "../elements/Separator";
 import Header from "../elements/Header";
+import { extensionApi } from '../../utils/extensionApi'
 
 
 export default function WebView(props) {
 
     let account = props.user
+
+    let connect = false
 
     let confirm = () => {
 
@@ -26,14 +29,22 @@ export default function WebView(props) {
                     pubkey: account.publicKey,
                     net: account.net,
                 }
+                connect = true
                 break
             case 'getProvider':
+                ENQWeb.Net.provider = account.net
+                if (task.cb.fullUrl) {
+                    response = { net: ENQWeb.Net.provider }
+                } else {
+                    response = { net: ENQWeb.Net.currentProvider }
+                }
                 break
             case 'getVersion':
                 break
             case 'balanceOf':
                 break
             case 'reconnect':
+                response = { status: connect }
                 break
             case 'sign':
                 break
