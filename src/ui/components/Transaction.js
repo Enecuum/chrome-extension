@@ -6,6 +6,7 @@ import { regexAddress } from '../Utils'
 import Input from '../elements/Input'
 import { signHash } from '../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
+import { apiController } from '../../utils/apiController'
 
 //TODO decimals to tokens
 
@@ -156,7 +157,7 @@ export default class Transaction extends React.Component {
         try {
             this.setState({ block: true })
             if (user.type !== 2) {
-                response = await ENQWeb.Net.post.tx_fee_off(data)
+                response = await apiController.postTransaction(data)
             } else {
                 let Transport = await this.props.ledgerTransportController()
                 data.nonce = data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
@@ -164,7 +165,7 @@ export default class Transaction extends React.Component {
                 data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)
                 data.sign = await signHash(ENQWeb.Utils.crypto.sha256(data.hash), user.privateKey, Transport)
                 console.log({ sign: data.sign })
-                response = await ENQWeb.Enq.sendTx(data).then(data => {
+                response = await apiController.sendTransaction(data).then(data => {
                         if (data.hash) {
                             return data
                         }
@@ -200,7 +201,7 @@ export default class Transaction extends React.Component {
     }
 
     decimalsSearch() {
-        ENQWeb.Net.get.token_info(this.props.isTransaction.token)
+        apiController.getTokenInfo(this.props.isTransaction.token)
             .then(info => {
                 if (info.length === 0) {
                     console.warn('Token not found.')

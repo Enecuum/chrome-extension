@@ -5,6 +5,7 @@ import Address from '../elements/Address'
 import Menu from '../elements/Menu'
 import { explorerAddress, explorerTX, generateIcon, shortHash } from '../Utils'
 import Separator from "../elements/Separator";
+import { apiController } from '../../utils/apiController'
 
 const names = {
     enable: 'Share account address',
@@ -15,6 +16,8 @@ const names = {
 }
 
 let tickers = {}
+
+global.api = apiController
 
 export default function Account(props) {
     ENQWeb.Enq.provider = props.user.net
@@ -105,7 +108,7 @@ export default function Account(props) {
         // console.log(token)
         let tokens = []
 
-        ENQWeb.Net.get.getBalanceAll(props.user.publicKey)
+        apiController.getBalanceAll(props.user.publicKey)
             .then((res) => {
                 // console.log(res.map(a => a.ticker + ': ' + a.amount))
                 let amount = 0
@@ -138,7 +141,7 @@ export default function Account(props) {
                     .then()
 
                 if (props.user.net === 'https://pulse.enecuum.com') {
-                    ENQWeb.Enq.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
+                    apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
                         .then((answer) => {
                             if (answer['enq-enecuum'] !== undefined) {
 
@@ -214,7 +217,7 @@ export default function Account(props) {
     // &nbsp;
 
     const findTickerInCache = async (hash) => {
-        return allTokens[hash] !== undefined ? allTokens[hash] : (await ENQWeb.Net.get.token_info(hash)).ticker
+        return allTokens[hash] !== undefined ? allTokens[hash] : (await apiController.getTokenInfo(hash)).ticker
     }
 
     for (const key in activity) {
@@ -260,7 +263,7 @@ export default function Account(props) {
         let history = {}
         history.records = []
         for (let i = 0; i < 4; i++) {
-            let historyRecords = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, i)
+            let historyRecords = await apiController.getAccountTransactions(props.user.publicKey, i)
             history.records = history.records.concat(historyRecords.records)
         }
 

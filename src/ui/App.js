@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Login from './components/Login'
 import Lock from './components/Lock'
 import Transaction from './components/Transaction'
@@ -21,11 +21,11 @@ import Keys from './components/account/Keys'
 import Mnemonic from './components/account/mnemonic/Mnemonic'
 import ImportMnemonic from './components/account/mnemonic/ImoprtMnemonic'
 import Selector from './components/account/Selector'
-import {NET} from '../utils/names'
+import { NET } from '../utils/names'
 import ImportKey from './components/account/ImportKey'
 import eventBus from '../utils/eventBus'
 import Ledger from './components/account/Ledger'
-import {ledgerPath} from './Utils'
+import { ledgerPath } from './Utils'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import WebView from "./components/WebView";
 
@@ -81,7 +81,7 @@ export default function App(props) {
     }
     let installPWA = async () => {
         deferredPrompt.prompt()
-        const {outcome} = await deferredPrompt.userChoice
+        const { outcome } = await deferredPrompt.userChoice
         deferredPrompt = null
     }
 
@@ -98,7 +98,7 @@ export default function App(props) {
             if (ledgerTransport === false) {
                 // console.log('work')
                 let Transport
-                if (navigator.userAgentData.platform === "Android") {
+                if (navigator.userAgentData.platform === 'Android') {
                     Transport = await TransportWebUSB.create()
                 } else {
                     Transport = await TransportWebHID.create()
@@ -117,18 +117,30 @@ export default function App(props) {
 
     }
 
-    const checkLock = () => {
+    const checkLock = (log = true) => {
 
         if (userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {
-            console.log('LOCKED')
+            if (log) {
+                console.log('LOCKED')
+            }
             return true
         } else {
-            console.log('OPEN')
+            if (log) {
+                console.log('OPEN')
+            }
             return false
         }
     }
 
     const [isLock, setLock] = useState(checkLock)
+
+    const lockChecker = () => {
+        setInterval(() => {
+            setLock(checkLock(false))
+        }, 10 * 1000)
+    }
+
+    lockChecker()
 
     const getUser = async () => {
         let account = await updateUserData()
@@ -138,7 +150,7 @@ export default function App(props) {
         // setLogin(true)
     }
 
-    const updateUserData = async ()=>{
+    const updateUserData = async () => {
         let account = await userStorage.user.loadUser()
         setUser(account)
         return account
@@ -177,7 +189,7 @@ export default function App(props) {
         })
             .then(() => {
 
-                asyncRequest({reject_all: true})
+                asyncRequest({ reject_all: true })
 
                 setLock(false)
                 setLogin(true)
