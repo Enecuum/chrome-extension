@@ -1,14 +1,20 @@
-import React from "react";
-import styles from "../css/index.module.css";
-import Separator from "../elements/Separator";
-import Header from "../elements/Header";
+import React, {useState} from "react"
+import styles from "../css/index.module.css"
+import Separator from "../elements/Separator"
+import Header from "../elements/Header"
+import {regexSeed} from "../Utils";
+import Input from "../elements/Input";
 
+// let defaultUrl = 'http://localhost:1234/#!action=swap'
+let defaultUrl = 'https://devapp.enex.space/#!action=swap'
 
 export default function WebView(props) {
 
-    let confirm = () => {
+    let [url, setUrl] = useState(defaultUrl)
 
-    }
+    let confirm = () => {}
+
+    let handleChangeUrl = () => {}
 
     return (
         <div className={styles.main}>
@@ -20,7 +26,17 @@ export default function WebView(props) {
 
             {/*<Separator/>*/}
 
-            <iframe src="https://app.enex.space"/>
+            <Input
+                type="text"
+                spellCheck={false}
+                onChange={handleChangeUrl}
+                value={url}
+                className={styles.field}
+                label={'URL'}
+                placeholder={'Place url of DEX here'}
+            />
+
+            <iframe src={url}/>
 
         </div>
     )
