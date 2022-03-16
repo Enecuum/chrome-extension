@@ -73,7 +73,11 @@ export default function Address(props) {
                      title={props.publicKey + copyText}>{shortHash(props.publicKey)}</div>
             </div>
 
-            <div></div>
+            <div className={elements.block}>
+                <div>13:31</div>
+                <div>22 10 2022</div>
+                <div>301033</div>
+            </div>
 
         </div>
     )
