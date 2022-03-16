@@ -95,6 +95,13 @@
     cursor: pointer;
 }
 
+.address_row .block {
+    font-size: var(--font-size-small);
+    /*background: red;*/
+    justify-content: center;
+    color: var(--color-gray-ligth)
+}
+
 .copied {
     /*color: var(--color-blue)*/
     /*font-weight: 600;*/

@@ -14,7 +14,9 @@ export default function WebView(props) {
 
     let confirm = () => {}
 
-    let handleChangeUrl = () => {}
+    let handleChangeUrl = (e) => {
+        setUrl(e.target.value)
+    }
 
     return (
         <div className={styles.main}>

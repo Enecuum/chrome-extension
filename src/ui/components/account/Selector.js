@@ -360,21 +360,7 @@ export default function Selector(props) {
                     props.setAccountSelector(false)
                 })}/>
 
-            <div className={styles.welcome3}>List of single PRIVATE KEYS</div>
-
-            <div className={styles.cards_container}>
-                <div className={styles.cards}>
-                    {cards1}
-                </div>
-            </div>
-
-            <div className={styles.field + ' ' + styles.button} onClick={props.setImportKey}>
-                Import Key
-            </div>
-
-            <Separator line={true}/>
-
-            <div className={styles.welcome3}>MNEMONIC or SEED PHRASE</div>
+            <div className={styles.welcome3}>MNEMONIC</div>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
@@ -399,7 +385,7 @@ export default function Selector(props) {
 
             <Separator line={true}/>
 
-            <div className={styles.welcome3}>LEDGER ACCOUNTS</div>
+            <div className={styles.welcome3}>LEDGER</div>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
@@ -413,6 +399,20 @@ export default function Selector(props) {
             {getUrlVars().popup ? <div className={styles.field + ' ' + styles.text + ' ' + styles.text_help}>
                 There will be separate window for Ledger connection instead of popup.
             </div> : ''}
+
+            <Separator line={true}/>
+
+            <div className={styles.welcome3}>PRIVATE KEYS</div>
+
+            <div className={styles.cards_container}>
+                <div className={styles.cards}>
+                    {cards1}
+                </div>
+            </div>
+
+            <div className={styles.field + ' ' + styles.button} onClick={props.setImportKey}>
+                Import Key
+            </div>
 
             <Separator/>
 
