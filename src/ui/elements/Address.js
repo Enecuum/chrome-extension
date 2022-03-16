@@ -2,12 +2,16 @@ import React, {useState, useEffect} from "react";
 import elements from "../css/elements.module.css";
 import {shortHash} from "../Utils";
 import styles from "../css/index.module.css";
+import {apiController} from "../../utils/apiController";
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
 export default function Address(props) {
 
     let [status, setStatus] = useState('')
+
+    let [blockDate, setBlockDate] = useState(new Date(0))
+    let [blockN, setBlockN] = useState(0)
 
     async function checkConnect(count) {
         // console.log(count)
@@ -25,9 +29,16 @@ export default function Address(props) {
             return setStatus(`Connected ${count}`);
     }
 
+    let getBlock = async () => {
+        let block = await apiController.getCurrentBlock()
+        setBlockN(block.n)
+        setBlockDate(new Date(block.time * 1000))
+    }
+
     useEffect(() => {
         checkConnect(props.connectionsCounter).then()
-    })
+        getBlock().then()
+    }, [])
 
     const showConnections = async () => {
 
@@ -74,9 +85,9 @@ export default function Address(props) {
             </div>
 
             <div className={elements.block}>
-                <div>13:31</div>
-                <div>22 10 2022</div>
-                <div>301033</div>
+                <div>{blockN}</div>
+                <div>{blockDate.getDate()}.{blockDate.getMonth() + 1}.{blockDate.getFullYear()}</div>
+                <div>{blockDate.getHours()}:{blockDate.getMinutes()}</div>
             </div>
 
         </div>

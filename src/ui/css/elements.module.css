@@ -99,6 +99,10 @@
     font-size: var(--font-size-small);
     /*background: red;*/
     justify-content: center;
+    color: var(--color-gray)
+}
+
+.address_row .block:hover {
     color: var(--color-gray-ligth)
 }
 

@@ -22,8 +22,15 @@ const getBalanceAll = async (publicKey) => {
     return await ENQWeb.Net.get.getBalanceAll(publicKey)
 }
 
-const getMainTokenBalance = async (publicKey)=>{
+const getMainTokenBalance = async (publicKey) => {
     return await getBalance(publicKey, ENQWeb.Enq.token[ENQWeb.Enq.provider])
+}
+
+// Need caching here with balance
+const getCurrentBlock = async () => {
+    let height = (await ENQWeb.Net.get.height()).height
+    let macroBlock = await ENQWeb.Net.get.macroblockByHeight(height)
+    return {n: macroBlock.kblock.n, time: macroBlock.kblock.time}
 }
 
 const getTokenInfo = async (tokenHash) => {
@@ -37,7 +44,7 @@ const getTokenInfo = async (tokenHash) => {
 }
 
 const getAccountTransactions = async (publicKey, page, fromCache = false) => {
-    if(!fromCache){
+    if (!fromCache) {
         return await ENQWeb.Net.get.accountTransactions(publicKey, page)
     }
     if (!cacheAccountTransactions[ENQWeb.Enq.provider]) {
@@ -70,6 +77,7 @@ const apiController = {
     getBalance,
     getBalanceAll,
     getMainTokenBalance,
+    getCurrentBlock,
     getTokenInfo,
     getAccountTransactions,
     getTransaction,
@@ -82,4 +90,4 @@ const apiController = {
     cacheAccountTransactions
 }
 
-export { apiController }
+export {apiController}
