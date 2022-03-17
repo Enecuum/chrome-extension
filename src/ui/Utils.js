@@ -102,9 +102,7 @@ function hashStringToColor(token) {
 function toggleFullScreen() {
     console.log('toggleFullScreen')
     if (!document.fullscreenElement) {
-        // document.documentElement.requestFullscreen().then()
         document.documentElement.requestFullscreen({navigationUI: "hide"}).then()
-        // document.getElementById('app').requestFullscreen({navigationUI: "hide"}).then()
     } else {
         if (document.exitFullscreen) {
             document.exitFullscreen().then();

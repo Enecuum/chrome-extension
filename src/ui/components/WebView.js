@@ -21,10 +21,16 @@ export default function WebView(props) {
     return (
         <div className={styles.main}>
 
-            {/*<div onClick={() => props.setWebView(false)}*/}
-            {/*     className={styles.field + ' ' + styles.button}>Back</div>*/}
+            <div>
+                <div className={styles.field} onClick={() => props.setWebView(false)}>❮ Back</div>
+                <div className={styles.dapps}>
+                    <div onClick={() => setUrl('https://app.enex.space')}>ENEX</div>
+                    <div onClick={() => setUrl('https://bit-wallet.enecuum.com')}>WALLET</div>
+                    <div onClick={() => setUrl('https://faucet-bit.enecuum.com')}>FAUCET</div>
+                </div>
+            </div>
 
-            <Header clickMenu={() => props.setWebView(false)} user={{}}/>
+            {/*<Header clickMenu={() => props.setWebView(false)} user={{}}/>*/}
 
             {/*<Separator/>*/}
 
