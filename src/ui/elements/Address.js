@@ -74,7 +74,9 @@ export default function Address(props) {
     return (
         <div className={elements.address_row}>
 
-            {!props.isMainToken ? <div onClick={props.setMainToken}>❮ Back</div> : <div className={elements.connect} onClick={showConnections}>·&nbsp;&nbsp;{status}</div>}
+            {!props.isMainToken ?
+                <div onClick={props.setMainToken}>❮ Back</div> :
+                <div className={elements.connect} onClick={showConnections}>·&nbsp;&nbsp;{status}</div>}
 
             {/*{console.log(props.isMainToken)}*/}
 
@@ -86,8 +88,8 @@ export default function Address(props) {
 
             <div className={elements.block}>
                 <div>{blockN}</div>
-                <div>{blockDate.getDate()}.{blockDate.getMonth() + 1}.{blockDate.getFullYear()}</div>
-                <div>{blockDate.getHours()}:{blockDate.getMinutes()}</div>
+                <div>{blockDate.toLocaleDateString().replaceAll('/', '.')}</div>
+                <div>{blockDate.toLocaleTimeString()}</div>
             </div>
 
         </div>
