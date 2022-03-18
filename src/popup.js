@@ -51,6 +51,8 @@ let mobile = navigator.userAgent.toLowerCase()
     .includes('mobile')
 let type = electron ? versions.ELECTRON : (mobile ? versions.MOBILE : versions.WEB)
 
+let standalone = window.navigator.standalone === true
+
 chrome.manifest = (function () {
     let manifestObject = false
     let xhr = new XMLHttpRequest()
