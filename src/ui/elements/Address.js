@@ -88,7 +88,7 @@ export default function Address(props) {
 
             <div className={elements.block}>
                 <div>{blockN}</div>
-                <div>{blockDate.toLocaleDateString().replaceAll('/', '.')}</div>
+                <div>{blockDate.toLocaleDateString()}</div>
                 <div>{blockDate.toLocaleTimeString()}</div>
             </div>
 
