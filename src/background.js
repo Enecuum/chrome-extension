@@ -81,7 +81,10 @@ async function messageHandler(msg, sender, sendResponse) {
             disconnectPorts()
         }
         if (msg.name) {
-            disconnectPorts(msg.name)
+            if(msg.favorite)
+                disconnectFavoriteSite(msg.name)
+            else
+                disconnectPorts(msg.name)
         }
     }
 
@@ -127,12 +130,12 @@ async function msgConnectHandler(msg, sender) {
                     rejectTaskHandler(msg.taskId, 'old version')
                     return
                 } else {
-                    taskCounter()
                     if(sites[msg.cb.url] === true && !lock){
                         taskHandler(msg.taskId)
                             .then(r => {
                             })
                     }else{
+                        taskCounter()
                         if (popupOpenMethods.enable) {
                             createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
                         }
@@ -348,13 +351,16 @@ function disconnectPorts(name) {
         }
     } else {
         ports[name].enabled = false
-        let sites = userStorage.sites.getSites()
-        if(sites[name] === true){
-            sites[name] = false
-            userStorage.sites.setSites(sites)
-        }
     }
     return true
+}
+
+function disconnectFavoriteSite(name){
+    let sites = userStorage.sites.getSites()
+    if(sites[name] === true){
+        sites[name] = false
+        userStorage.sites.setSites(sites)
+    }
 }
 
 global.disconnectPorts = disconnectPorts
