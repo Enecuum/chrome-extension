@@ -378,6 +378,8 @@ async function taskHandler(taskId) {
     let task = userStorage.task.getTask(taskId)
     console.log(task)
 
+    let sites = userStorage.sites.getSites()
+
     let account = ENQWeb.Enq.User
     let data = ''
 
@@ -547,6 +549,8 @@ async function taskHandler(taskId) {
     case 'reconnect':
         console.log('reconnect')
         let connected = ports[task.cb.url].enabled ? true : false
+        if(sites[task.cb.url] === true)
+            connected = true
         broadcast(task.cb.url, {
             data: JSON.stringify({ status: connected }),
             taskId: taskId,
