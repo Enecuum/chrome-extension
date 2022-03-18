@@ -1,6 +1,6 @@
-import React from "react";
-import styles from "../../css/index.module.css";
-import Separator from "../../elements/Separator";
+import React from 'react'
+import styles from '../../css/index.module.css'
+import Separator from '../../elements/Separator'
 
 export default class PublicKeyRequest extends React.Component {
     constructor(props) {
@@ -16,6 +16,12 @@ export default class PublicKeyRequest extends React.Component {
 
 
         this.syncRequest()
+
+        let sites = userStorage.sites.getSites()
+        if(sites[this.state.url] === true){
+            console.log("1234555555")
+            this.allow().then()
+        }
     }
 
     syncRequest() {
@@ -29,14 +35,28 @@ export default class PublicKeyRequest extends React.Component {
     }
 
     async allow() {
-        await asyncRequest({allow: true, taskId: this.state.taskId})
+
+        await asyncRequest({
+            allow: true,
+            taskId: this.state.taskId
+        })
+        let remember = (document.getElementById('checkbox'))
+        if (remember.checked === true) {
+            let sites = userStorage.sites.getSites()
+            sites[this.state.url] = true
+            userStorage.sites.setSites(sites)
+        }
+        console.log("remember: " + remember.checked)
         this.props.setPublicKeyRequest(false)
         await this.closeModalWindow()
         console.log('TODO bug')
     }
 
     async disallow() {
-        await asyncRequest({disallow: true, taskId: this.state.taskId})
+        await asyncRequest({
+            disallow: true,
+            taskId: this.state.taskId
+        })
         this.props.setPublicKeyRequest(false)
         await this.closeModalWindow()
     }
@@ -84,6 +104,10 @@ export default class PublicKeyRequest extends React.Component {
                     {/*<div onClick={this.allow}*/}
                     {/*     className={styles.field}>{this.state.website}*/}
                     {/*</div>*/}
+
+                    <div
+                        className={styles.field + ' '}> Remember this site <input id="checkbox" type="checkbox"/>
+                    </div>
 
                     <div onClick={this.disallow}
                          className={styles.field + ' ' + styles.button}>Disallow

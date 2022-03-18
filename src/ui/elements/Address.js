@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from "react";
-import elements from "../css/elements.module.css";
-import {shortHash} from "../Utils";
-import styles from "../css/index.module.css";
-import {apiController} from "../../utils/apiController";
+import React, { useState, useEffect } from 'react'
+import elements from '../css/elements.module.css'
+import { shortHash } from '../Utils'
+import styles from '../css/index.module.css'
+import { apiController } from '../../utils/apiController'
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
@@ -19,14 +19,15 @@ export default function Address(props) {
         let found = false
         tasks.forEach(key => {
             if (key.type === 'enable') {
-                setStatus('Await connect');
-                found = true;
+                setStatus('Await connect')
+                found = true
             }
         })
-        if (count === 0 && !found)
+        if (count === 0 && !found) {
             return setStatus(`Not connected`)
-        else if (count > 0 && !found)
-            return setStatus(`Connected ${count}`);
+        } else if (count > 0 && !found) {
+            return setStatus(`Connected ${count}`)
+        }
     }
 
     let getBlock = async () => {
@@ -36,8 +37,13 @@ export default function Address(props) {
     }
 
     useEffect(() => {
-        checkConnect(props.connectionsCounter).then()
-        getBlock().then()
+        checkConnect(props.connectionsCounter)
+            .then()
+    })
+
+    useEffect(() => {
+        getBlock()
+            .then()
     }, [])
 
     const showConnections = async () => {
@@ -52,13 +58,13 @@ export default function Address(props) {
                 // console.log(task)
                 if (task.type === 'enable') {
                     // console.log(task)
-                    props.setPublicKeyRequest(task);
+                    props.setPublicKeyRequest(task)
                 }
             })
         }
         if (status.startsWith('Connected')) {
 
-            const ports = (await asyncRequest({connectionList: true})).ports
+            const ports = (await asyncRequest({ connectionList: true })).ports
             props.setConnects(ports)
         }
     }
@@ -67,8 +73,9 @@ export default function Address(props) {
         if (navigator.clipboard) {
             navigator.clipboard.writeText(props.publicKey)
             props.setCopied(true)
-        } else
+        } else {
             console.error('navigator.clipboard: ' + false)
+        }
     }
 
     return (
@@ -82,7 +89,8 @@ export default function Address(props) {
 
             <div>
                 <div className={elements.account_name}>Account 1</div>
-                <div className={elements.address_string + ' ' + (props.isCopied ? elements.copied : '')} onClick={copyPublicKey}
+                <div className={elements.address_string + ' ' + (props.isCopied ? elements.copied : '')}
+                     onClick={copyPublicKey}
                      title={props.publicKey + copyText}>{shortHash(props.publicKey)}</div>
             </div>
 

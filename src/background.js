@@ -97,6 +97,7 @@ async function msgConnectHandler(msg, sender) {
     // console.log(msg)
     let answer = ''
     if (msg.taskId) {
+        let sites = userStorage.sites.getSites()
         popupOpenMethods.enable = userStorage.config.getConfig().openEnablePopup
         popupOpenMethods.tx = userStorage.config.getConfig().openTxPopup
         popupOpenMethods.sign = userStorage.config.getConfig().openSignPopup
@@ -112,6 +113,7 @@ async function msgConnectHandler(msg, sender) {
         //         return
         //     }
         // }
+
         if (!ports[msg.cb.url].enabled) {
             if (msg.type === 'enable') {
                 await userStorage.task.setTask(msg.taskId, {
@@ -119,14 +121,21 @@ async function msgConnectHandler(msg, sender) {
                     type: msg.type,
                     cb: msg.cb
                 })
+
                 if (typeof msg.data !== 'object' || msg.data.version < VALID_VERSION_LIB) {
                     console.log('old version of ENQWeb lib')
                     rejectTaskHandler(msg.taskId, 'old version')
                     return
                 } else {
                     taskCounter()
-                    if (popupOpenMethods.enable) {
-                        createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
+                    if(sites[msg.cb.url] === true && !lock){
+                        taskHandler(msg.taskId)
+                            .then(r => {
+                            })
+                    }else{
+                        if (popupOpenMethods.enable) {
+                            createPopupWindow(`index.html?type=${msg.type}&id=${msg.taskId}`)
+                        }
                     }
                 }
             }
@@ -168,6 +177,7 @@ async function msgConnectHandler(msg, sender) {
                     type: msg.type,
                     cb: msg.cb
                 })
+
             }
             if (!requestsMethods[msg.type]) {
                 taskHandler(msg.taskId)
@@ -338,6 +348,11 @@ function disconnectPorts(name) {
         }
     } else {
         ports[name].enabled = false
+        let sites = userStorage.sites.getSites()
+        if(sites[name] === true){
+            sites[name] = false
+            userStorage.sites.setSites(sites)
+        }
     }
     return true
 }
