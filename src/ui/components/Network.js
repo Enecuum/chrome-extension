@@ -159,6 +159,8 @@ export default function Network(props) {
                 account: true,
                 set: true,
                 data: account
+            }).then(async ()=>{
+                await asyncRequest({reject_all: true})
             })
         })
 
