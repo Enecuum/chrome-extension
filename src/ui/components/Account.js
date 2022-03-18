@@ -533,27 +533,31 @@ export default function Account(props) {
                                      }}>✕
                                      </div>
                                  </div>)
+
+                         }
+
+                         for(const key in sites){
                              if (sites[key] === true) {
                                  favSites.push(
                                      <div key={key} onClick={() => {
-                                        }} className={`${styles.connect}`}>
-                                     <div>{key.replaceAll('https://', '')}</div>
-                                     <div onClick={() => {
-                                         userStorage.promise.sendPromise({
-                                             ports: true,
-                                             disconnect: true,
-                                             favorite: true,
-                                             name: key
-                                         })
-                                             .then(() => {
-                                                 console.log(`${key} is disconnected`)
-                                                 getConnects()
-                                                     .then()
-                                                 setActiveTab(0)
+                                     }} className={`${styles.connect}`}>
+                                         <div>{key.replaceAll('https://', '')}</div>
+                                         <div onClick={() => {
+                                             userStorage.promise.sendPromise({
+                                                 ports: true,
+                                                 disconnect: true,
+                                                 favorite: true,
+                                                 name: key
                                              })
-                                     }}>✕
-                                     </div>
-                                    </div>)
+                                                 .then(() => {
+                                                     console.log(`${key} is disconnected`)
+                                                     getConnects()
+                                                         .then()
+                                                     setActiveTab(0)
+                                                 })
+                                         }}>✕
+                                         </div>
+                                     </div>)
                              }
                          }
 
