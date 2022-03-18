@@ -4,7 +4,7 @@ import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
 import { explorerAddress, explorerTX, generateIcon, shortHash } from '../Utils'
-import Separator from "../elements/Separator";
+import Separator from '../elements/Separator'
 import { apiController } from '../../utils/apiController'
 
 const names = {
@@ -46,6 +46,8 @@ export default function Account(props) {
     const [allTokens, setAllTokens] = useState((userStorage.tokens.getTokens()).tokens ? (userStorage.tokens.getTokens()).tokens : {})
 
     const [isCopied, setCopied] = useState(false)
+
+    const [favoriteSites, setFavoriteSites] = useState([])
 
     const clickMenu = () => {
         setMenu(!menu)
@@ -354,7 +356,7 @@ export default function Account(props) {
 
     //Reject all
     let rejectAll = async () => {
-        await asyncRequest({reject_all: true})
+        await asyncRequest({ reject_all: true })
         setActivity([])
     }
 
@@ -509,6 +511,8 @@ export default function Account(props) {
                      setConnects={(connects) => {
                          // console.log(connects)
                          let elements = []
+                         let sites = userStorage.sites.getSites()
+                         let favSites = []
                          for (const key in connects) {
                              elements.push(
                                  <div key={key} onClick={() => {
@@ -529,7 +533,30 @@ export default function Account(props) {
                                      }}>✕
                                      </div>
                                  </div>)
+                             if (sites[key] === true) {
+                                 favSites.push(
+                                     <div key={key} onClick={() => {
+                                        }} className={`${styles.connect}`}>
+                                     <div>{key.replaceAll('https://', '')}</div>
+                                     <div onClick={() => {
+                                         userStorage.promise.sendPromise({
+                                             ports: true,
+                                             disconnect: true,
+                                             favorite: true,
+                                             name: key
+                                         })
+                                             .then(() => {
+                                                 console.log(`${key} is disconnected`)
+                                                 getConnects()
+                                                     .then()
+                                                 setActiveTab(0)
+                                             })
+                                     }}>✕
+                                     </div>
+                                    </div>)
+                             }
                          }
+
                          if (elements.length >= 2) {
                              elements.push(
                                  <div onClick={() => {
@@ -549,6 +576,7 @@ export default function Account(props) {
                                      Disconnect all
                                  </div>)
                          }
+                         setFavoriteSites(favSites)
                          setConnectsElements(elements)
                          setConnects(true)
                          setActiveTab(2)
@@ -653,10 +681,13 @@ export default function Account(props) {
 
                     {connectsElements}
 
+                    {favoriteSites.length > 0 && <div className={styles.usd}>Favorite Sites:</div>}
+
+                    {favoriteSites}
+
                     <Separator/>
 
                 </div>
-
             </div>
 
 
