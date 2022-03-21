@@ -936,6 +936,18 @@ input[type=number] {
     margin-left: 20px;
 }
 
+.checkbox {
+    cursor: pointer;
+}
+
+.checkbox img {
+    /*filter: invert();*/
+}
+
+.checkbox:hover {
+    color: var(--color-gray-ligth)
+}
+
 .cards_container {
     /*position: relative;*/
     width: 100%;

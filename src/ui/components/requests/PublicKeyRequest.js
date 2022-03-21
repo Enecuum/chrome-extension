@@ -8,7 +8,8 @@ export default class PublicKeyRequest extends React.Component {
         this.state = {
             url: 'enecuum.com',
             type: '',
-            taskId: ''
+            taskId: '',
+            remember: true
         }
         this.allow = this.allow.bind(this)
         this.disallow = this.disallow.bind(this)
@@ -40,14 +41,14 @@ export default class PublicKeyRequest extends React.Component {
             taskId: this.state.taskId
         })
 
-        let remember = (document.getElementById('checkbox'))
+        // let remember = (document.getElementById('checkbox'))
 
-        if (remember.checked === true) {
+        if (this.state.remember === true) {
             let sites = userStorage.sites.getSites()
             sites[this.state.url] = true
             userStorage.sites.setSites(sites)
         }
-        console.log('Remember: ' + remember.checked)
+        console.log('Remember: ' + this.state.remember)
 
         this.props.setPublicKeyRequest(false)
         await this.closeModalWindow()
@@ -91,19 +92,21 @@ export default class PublicKeyRequest extends React.Component {
                     </div>
                     <div className={styles.field + ' ' + styles.request_text_gray}>Allow this site to:</div>
 
-                    <div className={styles.request_text2}>
-                        <img src={'./images/icons/13.png'}/>
+                    <div className={styles.request_text2 + ' ' + styles.checkbox}>
+                        <img src={'./images/icons/checkbox2.png'}/>
                         <div>View the address of your permitted accounts (required)</div>
                     </div>
 
-                    <div className={styles.request_text2}>
-                        <img src={'./images/icons/13.png'}/>
+                    <div className={styles.request_text2 + ' ' + styles.checkbox}>
+                        <img src={'./images/icons/checkbox2.png'}/>
                         <div>View selected network (required)</div>
                     </div>
 
-                    <div className={styles.request_text2} onClick={''}>
-                        <input id="checkbox" type="checkbox"/>
-                        <img src={'./images/icons/13.png'}/>
+                    <div className={styles.request_text2 + ' ' + styles.checkbox} onClick={() => {
+                        this.setState({remember: !this.state.remember})
+                    }}>
+                        {/*<input id="checkbox" type="checkbox"/>*/}
+                        {this.state.remember ? <img src={'./images/icons/checkbox2.png'}/> : <img src={'./images/icons/checkbox1.png'}/>}
                         <div>Remember this site</div>
                     </div>
 
