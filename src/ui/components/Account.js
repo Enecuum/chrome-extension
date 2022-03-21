@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../css/index.module.css'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import { explorerAddress, explorerTX, generateIcon, shortHash } from '../Utils'
+import {explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
 import Separator from '../elements/Separator'
-import { apiController } from '../../utils/apiController'
+import {apiController} from '../../utils/apiController'
 
 const names = {
     enable: 'Share account address',
@@ -77,7 +77,7 @@ export default function Account(props) {
     // addConnect('google.com', '26.07.2022')
 
     const getConnects = async () => {
-        let connects = await asyncRequest({ connectionList: true })
+        let connects = await asyncRequest({connectionList: true})
         if (typeof connects === 'object') {
             setConnectionsCounter(Object.keys(connects.ports).length)
         }
@@ -356,7 +356,7 @@ export default function Account(props) {
 
     //Reject all
     let rejectAll = async () => {
-        await asyncRequest({ reject_all: true })
+        await asyncRequest({reject_all: true})
         setActivity([])
     }
 
@@ -536,7 +536,7 @@ export default function Account(props) {
 
                          }
 
-                         for(const key in sites){
+                         for (const key in sites) {
                              if (sites[key] === true) {
                                  favSites.push(
                                      <div key={key} onClick={() => {
@@ -685,13 +685,14 @@ export default function Account(props) {
 
                     {connectsElements}
 
-                    {favoriteSites.length > 0 && <div className={styles.usd}>Favorite Sites:</div>}
-
-                    {favoriteSites}
+                    {favoriteSites.length > 0 && <div className={styles.favorites}>Favorites</div>}
 
                     <Separator/>
 
+                    {favoriteSites}
+
                 </div>
+
             </div>
 
 

@@ -37,13 +37,11 @@ export default function Address(props) {
     }
 
     useEffect(() => {
-        checkConnect(props.connectionsCounter)
-            .then()
+        checkConnect(props.connectionsCounter).then()
     })
 
     useEffect(() => {
-        getBlock()
-            .then()
+        getBlock().then()
     }, [])
 
     const showConnections = async () => {
