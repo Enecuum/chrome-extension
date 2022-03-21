@@ -239,7 +239,7 @@ export default function Account(props) {
                 }
             }} className={`${styles.activity}`}>
                 <img className={styles.icon}
-                     src={(item.type === 'enable' ? './images/icons/13.png' : './images/icons/12.png')}
+                     src={(item.type === 'enable' ? './images/icons/checkbox2.png' : './images/icons/checkbox1.png')}
                      alt=""/>
                 <div>
                     <div>{names[item.type]}</div>
