@@ -60,7 +60,8 @@ export default function Address(props) {
                 }
             })
         }
-        if (status.startsWith('Connected')) {
+        const favorite = (await asyncRequest({ favoriteList: true })).ports
+        if (status.startsWith('Connected') || favorite.length > 0) {
 
             const ports = (await asyncRequest({ connectionList: true })).ports
             props.setConnects(ports)

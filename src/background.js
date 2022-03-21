@@ -229,7 +229,14 @@ async function msgPopupHandler(msg, sender) {
             data: msg,
             ports: enabledPorts()
         })
-    } else {
+    }  else if (msg.favoriteList) {
+
+        ports.popup.postMessage({
+            asyncAnswer: true,
+            data: msg,
+            ports: favoriteSites()
+        })
+    }else {
         if (msg.allow && msg.taskId) {
             await taskHandler(msg.taskId)
                 .then(() => {
@@ -283,6 +290,17 @@ function enabledPorts() {
     for (let i in ports) {
         if (ports[i].enabled) {
             list[i] = ports[i]
+        }
+    }
+    return list
+}
+
+function favoriteSites() {
+    let sites = userStorage.sites.getSites()
+    let list = []
+    for (let i in sites) {
+        if (sites[i] === true) {
+            list.push(i)
         }
     }
     return list
