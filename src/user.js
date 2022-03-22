@@ -38,7 +38,7 @@ let generateAccountData = (privateKey, accountData = account) => {
     let data = {
         ...account,
 
-        publicKey: privateKey.length ? ENQWeb.Utils.Sign.getPublicKey(privateKey, true) : '',
+        publicKey: privateKey.length ? ENQWeb.Utils.Sign.getPublicKey(privateKey, true) : accountData.type === 2 ? accountData.publicKey : '',
         privateKey: privateKey,
 
         net: ENQWeb.Net.provider,
@@ -52,6 +52,7 @@ let generateAccountData = (privateKey, accountData = account) => {
         // Ledger ID
         ledger: accountData.ledger,
         ledgerAccountsArray: accountData.ledgerAccountsArray,
+        type: accountData.type
     }
     return data
 }
