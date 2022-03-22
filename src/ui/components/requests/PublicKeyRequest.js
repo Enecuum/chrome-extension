@@ -1,14 +1,15 @@
-import React from "react";
-import styles from "../../css/index.module.css";
-import Separator from "../../elements/Separator";
+import React from 'react'
+import styles from '../../css/index.module.css'
+import Separator from '../../elements/Separator'
 
 export default class PublicKeyRequest extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            url: 'www.example.com',
+            url: 'enecuum.com',
             type: '',
-            taskId: ''
+            taskId: '',
+            remember: true
         }
         this.allow = this.allow.bind(this)
         this.disallow = this.disallow.bind(this)
@@ -16,6 +17,11 @@ export default class PublicKeyRequest extends React.Component {
 
 
         this.syncRequest()
+
+        let sites = userStorage.sites.getSites()
+        if (sites[this.state.url] === true) {
+            this.allow().then()
+        }
     }
 
     syncRequest() {
@@ -29,14 +35,32 @@ export default class PublicKeyRequest extends React.Component {
     }
 
     async allow() {
-        await asyncRequest({allow: true, taskId: this.state.taskId})
+
+        await asyncRequest({
+            allow: true,
+            taskId: this.state.taskId
+        })
+
+        // let remember = (document.getElementById('checkbox'))
+
+        if (this.state.remember === true) {
+            let sites = userStorage.sites.getSites()
+            sites[this.state.url] = true
+            userStorage.sites.setSites(sites)
+        }
+        console.log('Remember: ' + this.state.remember)
+
         this.props.setPublicKeyRequest(false)
         await this.closeModalWindow()
+
         console.log('TODO bug')
     }
 
     async disallow() {
-        await asyncRequest({disallow: true, taskId: this.state.taskId})
+        await asyncRequest({
+            disallow: true,
+            taskId: this.state.taskId
+        })
         this.props.setPublicKeyRequest(false)
         await this.closeModalWindow()
     }
@@ -68,13 +92,22 @@ export default class PublicKeyRequest extends React.Component {
                     </div>
                     <div className={styles.field + ' ' + styles.request_text_gray}>Allow this site to:</div>
 
-                    <div className={styles.request_text2}>
-                        <img src={'./images/icons/13.png'}/>
+                    <div className={styles.request_text2 + ' ' + styles.checkbox}>
+                        <img src={'./images/icons/checkbox2.png'}/>
                         <div>View the address of your permitted accounts (required)</div>
                     </div>
-                    <div className={styles.request_text2}>
-                        <img src={'./images/icons/13.png'}/>
-                        <div>View selected network</div>
+
+                    <div className={styles.request_text2 + ' ' + styles.checkbox}>
+                        <img src={'./images/icons/checkbox2.png'}/>
+                        <div>View selected network (required)</div>
+                    </div>
+
+                    <div className={styles.request_text2 + ' ' + styles.checkbox} onClick={() => {
+                        this.setState({remember: !this.state.remember})
+                    }}>
+                        {/*<input id="checkbox" type="checkbox"/>*/}
+                        {this.state.remember ? <img src={'./images/icons/checkbox2.png'}/> : <img src={'./images/icons/checkbox1.png'}/>}
+                        <div>Remember this site</div>
                     </div>
 
                 </div>
@@ -98,7 +131,6 @@ export default class PublicKeyRequest extends React.Component {
                         {/*<div onClick={() => this.props.setPublicKeyRequest(false)}*/}
                         {/*     className={styles.field + ' ' + styles.button}>Back*/}
                         {/*</div>*/}
-
 
                     </div>
 

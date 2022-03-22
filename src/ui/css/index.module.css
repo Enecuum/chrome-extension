@@ -530,6 +530,13 @@ input[type=number] {
     color: var(--color-gray-ligth)
 }
 
+.favorites {
+    /*font-size: var(--font-size-small);*/
+    color: var(--color-gray-ligth);
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
 .time {
     color: var(--color-gray-ligth);
     white-space: normal !important;
@@ -927,6 +934,18 @@ input[type=number] {
     height: 20px;
 
     margin-left: 20px;
+}
+
+.checkbox {
+    cursor: pointer;
+}
+
+.checkbox img {
+    /*filter: invert();*/
+}
+
+.checkbox:hover {
+    color: var(--color-gray-ligth)
 }
 
 .cards_container {
