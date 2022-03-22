@@ -1,10 +1,10 @@
 // TODO We have to renew timer every event
 // TODO
 
-let lockTime = 10 * 60 * 1000
+let lockTime = 10 * 60 * 1000 * 6 * 100 // 100 hours
 import eventBus from "./utils/eventBus";
 
-// let lockTime = 60 * 1000 // 10 sec
+// let lockTime = 60 * 1000 // 60 sec
 
 console.log('Lock time: ' + (lockTime / 1000) + ' sec.')
 

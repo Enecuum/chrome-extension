@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../css/index.module.css'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import { explorerAddress, explorerTX, generateIcon, shortHash } from '../Utils'
-import Separator from "../elements/Separator";
-import { apiController } from '../../utils/apiController'
+import {explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
+import Separator from '../elements/Separator'
+import {apiController} from '../../utils/apiController'
 
 const names = {
     enable: 'Share account address',
@@ -47,6 +47,8 @@ export default function Account(props) {
 
     const [isCopied, setCopied] = useState(false)
 
+    const [favoriteSites, setFavoriteSites] = useState([])
+
     const clickMenu = () => {
         setMenu(!menu)
     }
@@ -75,7 +77,7 @@ export default function Account(props) {
     // addConnect('google.com', '26.07.2022')
 
     const getConnects = async () => {
-        let connects = await asyncRequest({ connectionList: true })
+        let connects = await asyncRequest({connectionList: true})
         if (typeof connects === 'object') {
             setConnectionsCounter(Object.keys(connects.ports).length)
         }
@@ -237,7 +239,7 @@ export default function Account(props) {
                 }
             }} className={`${styles.activity}`}>
                 <img className={styles.icon}
-                     src={(item.type === 'enable' ? './images/icons/13.png' : './images/icons/12.png')}
+                     src={(item.type === 'enable' ? './images/icons/checkbox2.png' : './images/icons/checkbox1.png')}
                      alt=""/>
                 <div>
                     <div>{names[item.type]}</div>
@@ -509,6 +511,8 @@ export default function Account(props) {
                      setConnects={(connects) => {
                          // console.log(connects)
                          let elements = []
+                         let sites = userStorage.sites.getSites()
+                         let favSites = []
                          for (const key in connects) {
                              elements.push(
                                  <div key={key} onClick={() => {
@@ -529,7 +533,34 @@ export default function Account(props) {
                                      }}>✕
                                      </div>
                                  </div>)
+
                          }
+
+                         for (const key in sites) {
+                             if (sites[key] === true) {
+                                 favSites.push(
+                                     <div key={key} onClick={() => {
+                                     }} className={`${styles.connect}`}>
+                                         <div>{key.replaceAll('https://', '')}</div>
+                                         <div onClick={() => {
+                                             userStorage.promise.sendPromise({
+                                                 ports: true,
+                                                 disconnect: true,
+                                                 favorite: true,
+                                                 name: key
+                                             })
+                                                 .then(() => {
+                                                     console.log(`${key} is disconnected`)
+                                                     getConnects()
+                                                         .then()
+                                                     setActiveTab(0)
+                                                 })
+                                         }}>✕
+                                         </div>
+                                     </div>)
+                             }
+                         }
+
                          if (elements.length >= 2) {
                              elements.push(
                                  <div onClick={() => {
@@ -549,6 +580,7 @@ export default function Account(props) {
                                      Disconnect all
                                  </div>)
                          }
+                         setFavoriteSites(favSites)
                          setConnectsElements(elements)
                          setConnects(true)
                          setActiveTab(2)
@@ -653,7 +685,11 @@ export default function Account(props) {
 
                     {connectsElements}
 
+                    {favoriteSites.length > 0 && <div className={styles.favorites}>Favorites</div>}
+
                     <Separator/>
+
+                    {favoriteSites}
 
                 </div>
 
