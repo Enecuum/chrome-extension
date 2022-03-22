@@ -229,14 +229,14 @@ async function msgPopupHandler(msg, sender) {
             data: msg,
             ports: enabledPorts()
         })
-    }  else if (msg.favoriteList) {
+    } else if (msg.favoriteList) {
 
         ports.popup.postMessage({
             asyncAnswer: true,
             data: msg,
             ports: favoriteSites()
         })
-    }else {
+    } else {
         if (msg.allow && msg.taskId) {
             await taskHandler(msg.taskId)
                 .then(() => {
