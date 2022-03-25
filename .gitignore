@@ -9,3 +9,5 @@ logs
 /src/copied/localhost.pem
 /src/copied/localhost-key.pem
 /dist.zip
+ios
+android

@@ -1,0 +1,7 @@
+{
+  "name": "enecuum",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
