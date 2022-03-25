@@ -48,6 +48,7 @@ global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 let electron = navigator.userAgent.toLowerCase().includes('electron')
 let mobile = navigator.userAgent.toLowerCase().includes('mobile')
 let standalone = window.navigator.standalone === true
+let type = electron ? versions.ELECTRON : (mobile ? versions.MOBILE + ' ' + standalone : versions.WEB)
 
 chrome.manifest = (function () {
     let manifestObject = false
