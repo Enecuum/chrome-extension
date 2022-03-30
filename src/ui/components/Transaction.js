@@ -66,6 +66,12 @@ export default class Transaction extends React.Component {
         return {
             data: {
                 date: new Date().getTime(),
+                feeTicker: this.state.feeTicker,
+                feeDecimals: this.state.feeDecimals,
+                decimals: this.state.decimals,
+                ticker: this.state.ticker,
+                fee_type: this.state.fee_type,
+                fee:this.state.fee
             },
             rectype: 'iout',
             tx: {
