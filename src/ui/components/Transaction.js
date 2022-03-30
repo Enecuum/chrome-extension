@@ -7,6 +7,7 @@ import Input from '../elements/Input'
 import { signHash } from '../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import { apiController } from '../../utils/apiController'
+import { logger } from 'workbox-core/_private'
 
 //TODO decimals to tokens
 
@@ -16,6 +17,7 @@ export default class Transaction extends React.Component {
         this.state = {
             isTransactionSend: false,
             decimals: 1e10,
+            feeDecimals:1e10,
             address: '',
             amount: '',
             txHash: '',
@@ -29,7 +31,10 @@ export default class Transaction extends React.Component {
                 .replace('http://', '')
                 .toUpperCase(),
             block: false,
-            nonce:  Math.floor(Math.random() * 1e10)
+            nonce:  Math.floor(Math.random() * 1e10),
+            feeTicker: '',
+            ticker: '',
+            fee_type: 0
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
         this.handleChangeAmount = this.handleChangeAmount.bind(this)
@@ -39,6 +44,7 @@ export default class Transaction extends React.Component {
 
         this.feeCount = this.feeCount.bind(this)
         this.decimalsSearch = this.decimalsSearch.bind(this)
+        this.feeDecimalsSearch = this.feeDecimalsSearch.bind(this)
 
         this.feeCount()
         this.decimalsSearch()
@@ -69,11 +75,11 @@ export default class Transaction extends React.Component {
                 },
                 data: this.state.data,
                 hash: hash,
-                fee_value: this.state.fee * 1e10,
+                fee_value: this.state.fee * this.state.feeDecimals,
                 tokenHash: '',
                 // ticker: await findTickerInCache(history.records[id].token_hash) || false,
                 ticker: '',
-                value: this.state.amount * -1 * 1e10
+                value: this.state.amount * -1 * this.state.decimals
             },
             cb: {
                 taskId: 0,
@@ -143,7 +149,7 @@ export default class Transaction extends React.Component {
         console.log(user)
         let data = {
             from: user.type === 2 ? wallet.pubkey : wallet,
-            amount: Number(this.state.amount) * 1e10,
+            amount: Number(this.state.amount) * this.state.decimals,
             to: this.state.address,
             data: '',
             tokenHash: user.token,
@@ -190,14 +196,30 @@ export default class Transaction extends React.Component {
     }
 
     feeCount() {
-        ENQweb3lib.fee_counter(this.props.isTransaction.token, BigInt(Math.floor(this.state.amount * 1e10)))
-            .then(fee => {
-                // console.log(typeof fee)
-                // console.log(fee)
-                let currentFee = Number(fee) / this.state.decimals
-                // console.log(currentFee)
-                this.setState({ fee: currentFee })
+        apiController.getTokenInfo(this.props.isTransaction.token)
+            .then(tokenInfo=>{
+                this.setState({ticker:tokenInfo[0]['ticker']})
+                if(tokenInfo[0]['fee_type'] === 2){
+                    this.setState({fee_type:2})
+                    apiController.getTokenInfo(ENQWeb.Enq.ticker)
+                        .then(mainToken=>{
+                            this.feeDecimalsSearch(mainToken)
+                            this.setState({feeTicker:mainToken[0]['ticker']})
+                            let currentFee = Number(tokenInfo[0]['fee_value']) / this.state.feeDecimals
+                            this.setState({ fee: currentFee })
+                        })
+                }else{
+                    ENQweb3lib.fee_counter(this.props.isTransaction.token, BigInt(Math.floor(this.state.amount * this.state.decimals)))
+                        .then(fee => {
+                            // console.log(typeof fee)
+                            // console.log(fee)
+                            let currentFee = Number(fee) / this.state.decimals
+                            // console.log(currentFee)
+                            this.setState({ fee: currentFee })
+                        })
+                }
             })
+
     }
 
     decimalsSearch() {
@@ -207,9 +229,15 @@ export default class Transaction extends React.Component {
                     console.warn('Token not found.')
                 } else {
                     let decimals = 10 ** info[0].decimals
+                    console.log(decimals)
                     this.setState({ decimals: decimals })
                 }
             })
+    }
+
+    feeDecimalsSearch(token) {
+        let decimals = 10 ** token[0].decimals
+        this.setState({feeDecimals:decimals})
     }
 
     // pending() {
@@ -228,7 +256,7 @@ export default class Transaction extends React.Component {
 
     render() {
 
-        let balanceAfter = this.props.isTransaction.balance ?
+        let balanceAfter =  this.state.fee_type === 0 ? this.props.isTransaction.balance ?
 
             (
                 Number(
@@ -239,7 +267,11 @@ export default class Transaction extends React.Component {
                 / this.state.decimals
             )
 
-            : '0.0'
+            : '0.0' : (Number(
+                this.props.isTransaction.balance
+                - BigInt(Math.floor(this.state.amount * this.state.decimals))
+            )
+            / this.state.decimals)
 
         balanceAfter += ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : 'COIN')
 
@@ -292,7 +324,7 @@ export default class Transaction extends React.Component {
                     </div>
 
                     <div className={styles.field}>
-                        Fee: {this.state.fee + ' ' + (this.props.isTransaction.ticker ? this.props.isTransaction.ticker : 'COIN')}
+                        Fee: {this.state.fee + ' ' + (this.state.fee_type === 0 ? this.props.isTransaction.ticker : this.state.feeTicker)}
                     </div>
 
                     <div className={styles.field}>
