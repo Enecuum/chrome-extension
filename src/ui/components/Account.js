@@ -48,6 +48,7 @@ export default function Account(props) {
     const [isCopied, setCopied] = useState(false)
 
     const [favoriteSites, setFavoriteSites] = useState([])
+    const [decimals, setDecimals] = useState(1e10)
 
     const clickMenu = () => {
         setMenu(!menu)
@@ -116,11 +117,12 @@ export default function Account(props) {
                 let amount = 0
                 let ticker = ''
                 let decimal
+                let decimalArray = {}
                 let image = './images/enq.png'
                 for (let i in res) {
                     // console.log(res[i])
                     tickers[res[i].token] = res[i].ticker
-
+                    decimalArray[res[i].token] = 10 ** res[i].decimals
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
@@ -151,7 +153,7 @@ export default function Account(props) {
                             if (answer['enq-enecuum'] !== undefined) {
 
                                 const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
-                                const value = usd * BigInt(amount) / BigInt(1e10)
+                                const value = usd * BigInt(amount) / BigInt(10 ** decimal)
                                 setUSD(value)
                             }
                         })
@@ -165,6 +167,7 @@ export default function Account(props) {
                     decimals: 10 ** decimal,
                     main: true
                 }, ...tokens])
+                setDecimals(decimalArray)
                 // console.log(res.amount / 1e10)
             })
             .catch((err) => {
@@ -601,8 +604,8 @@ export default function Account(props) {
             <div className={styles.content}>
 
                 <img className={styles.content_logo} src={logo} alt=""/>
-                <div className={styles.balance} title={(Number(amount) / 1e10)}>
-                    {(Number(amount) / 1e10).toFixed(4)}
+                <div className={styles.balance} title={(Number(amount) / decimals[props.user.token])}>
+                    {(Number(amount) / decimals[props.user.token]).toFixed(4)}
                     {' '}
                     {ticker}
                 </div>
