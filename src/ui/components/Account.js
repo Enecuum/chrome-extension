@@ -308,12 +308,19 @@ export default function Account(props) {
         // renderHistory()
     }
 
-    let renderHistory = (historyArray) => {
+    let renderHistory = async (historyArray) => {
 
         const historyElements = []
+        let tokenDecimals = {}
         for (const key in historyArray.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
             const item = historyArray[key]
             // console.log(item)
+            if(!tokenDecimals[item.tx.tokenHash]){
+                await apiController.getTokenInfo(item.tx.tokenHash)
+                    .then(token=>{
+                        tokenDecimals[item.tx.tokenHash] = 10 ** token[0]['decimals']
+                    })
+            }
             historyElements.push(
                 <div
                     key={key} onClick={() => {
@@ -341,7 +348,7 @@ export default function Account(props) {
                     {item.tx ?
                         <div className={styles.activity_data}>
 
-                            <div>{(item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
+                            <div>{(item.tx.value ? (item.tx.value / tokenDecimals[item.tx.tokenHash] || 1e10) : (item.tx.amount / tokenDecimals[item.tx.tokenHash] || 1e10)) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
 
                         </div> : ''}
                 </div>,
