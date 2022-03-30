@@ -165,6 +165,12 @@
     letter-spacing: 1px;
 }
 
+.disabled {
+    color: var(--color-gray);
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
 .menu .separator {
     width: calc(100% - 20px);
     height: 1px;
