@@ -178,6 +178,7 @@ export default function Selector(props) {
         } else {
             data = generateAccountData(selected.privateKey, account)
         }
+        data.type = selected.type
         await userStorage.promise.sendPromise({
             account: true,
             set: true,

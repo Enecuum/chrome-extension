@@ -21,6 +21,9 @@ export default function TransactionRequest(props) {
 
     //TODO
     const [ticker, setTicker] = useState('BIT')
+    const [feeTicker, setFeeTicker] = useState(ticker)
+    const [decimals, setDecimals] = useState(1e10)
+    const [feeDecimals, setFeeDecimals] = useState(1e10)
     const [to, setTo] = useState(props.request.tx.to)
     const [amount, setAmount] = useState(props.request.tx.value ? BigInt(props.request.tx.value) : BigInt(props.request.tx.amount))
     const [nonce, setNonce] = useState(props.request.tx.nonce)
@@ -49,20 +52,42 @@ export default function TransactionRequest(props) {
         navigator.clipboard.writeText(props.txHash)
     }
 
+
+    const decimalsSearch = (tokenInfo)=>{
+        let decimals = 10 ** tokenInfo[0].decimals
+        setDecimals(decimals)
+    }
+    const feeDecimalsSearch = (tokenInfo)=>{
+        let feeDecimals = 10 ** tokenInfo[0].decimals
+        setFeeDecimals(feeDecimals)
+    }
     const initTickerAndFee = async () => {
         let tokenHash = props.request.tx.ticker ? props.request.tx.ticker : props.request.tx.tokenHash
         let tokenInfo = await apiController.getTokenInfo(tokenHash)
+        decimalsSearch(tokenInfo)
+        console.log({ tokenInfo, tokenHash} )
         if (tokenInfo.length === 0) {
             console.warn('token info error...')
         } else {
             setTicker(tokenInfo[0].ticker)
-            if (props.request.data.fee_use !== false) {
-                let originAmount = amount - BigInt(props.request.data.fee_value)
-                setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, originAmount)))
-            } else {
-                setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, amount)))
+            setFeeTicker(ticker)
+            if(tokenInfo[0]['fee_type'] === 2){
+                let mainToken = await apiController.getTokenInfo(ENQWeb.Enq.ticker)
+                feeDecimalsSearch(mainToken)
+                setFee(BigInt(tokenInfo[0]['fee_value']))
+                setFeeTicker(mainToken[0]['ticker'])
             }
+            else{
+                if (props.request.data.fee_use !== false) {
+                    let originAmount = amount - BigInt(props.request.data.fee_value)
+                    setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, originAmount)))
+                } else {
+                    setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, amount)))
+                }
+            }
+
         }
+        console.log({decimals,feeDecimals})
     }
 
     const dataParse = (field) => {
@@ -220,7 +245,7 @@ export default function TransactionRequest(props) {
                 {/*<div className={styles.field}>Ticker: {this.state.ticker}</div>*/}
                 {/*<div className={styles.field}>Nonce: {this.state.nonce}</div>*/}
                 {/*<div className={styles.field}>Data: {this.state.data}</div>*/}
-                <div className={styles.transaction_amount}>{Number(amount - fee) / 1e10 + ' ' + ticker}</div>
+                <div className={styles.transaction_amount}>{ ticker === feeTicker? Number(amount - fee) / decimals : Number(amount) / decimals + ' ' + ticker + " - "+ Number(fee) / feeDecimals + ' ' + feeTicker}</div>
 
             </div>
 
@@ -250,12 +275,12 @@ export default function TransactionRequest(props) {
 
                 <div className={styles.transaction_data_fee}>
                     <div>FEE</div>
-                    <div>{Number(fee) / 1e10 + ' ' + ticker}</div>
+                    <div>{Number(fee) / feeDecimals + ' ' + feeTicker}</div>
                 </div>
 
                 <div className={styles.transaction_data_amount}>
                     <div>TOTAL</div>
-                    <div>{(Number(amount) / 1e10) + ' ' + ticker}</div>
+                    <div>{(Number(amount) / decimals) + ' ' + ticker}</div>
                 </div>
 
             </div>
