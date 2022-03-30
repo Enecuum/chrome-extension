@@ -413,7 +413,7 @@ export default function Account(props) {
             // console.log(props.user.token)
             // console.log(item.tokenHash)
             // console.log(item.tokenHash === ENQWeb.Net.ticker)
-            console.log(item)
+            // console.log(item)
             assetsElements.push(
                 <div key={key}
                      className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}
