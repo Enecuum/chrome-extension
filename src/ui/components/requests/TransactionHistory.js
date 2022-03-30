@@ -19,6 +19,7 @@ export default function TransactionHistory(props) {
 
     //TODO
     const [ticker, setTicker] = useState('BIT')
+    const [feeTicker, setFeeTicker] = useState('BIT')
 
     const [to, setTo] = useState(props.request.tx.to)
     const [from, setFrom] = useState(props.request.tx.from.pubkey)
@@ -45,18 +46,26 @@ export default function TransactionHistory(props) {
 
     let typeIn = props.request.rectype === 'iin'
 
+    console.log(props)
+
     const copyHash = () => {
         navigator.clipboard.writeText(props.txHash)
     }
 
     const initTickerAndFee = async () => {
-        let tokenHash = props.request.tx.tokenHash
-        let tokenInfo = await apiController.getTokenInfo(tokenHash)
-        if (tokenInfo.length === 0) {
-            console.warn('Token info error')
-        } else {
-            setTicker(tokenInfo[0].ticker)
-        }
+        // let tokenHash = props.request.tx.tokenHash
+        // let tokenInfo = await apiController.getTokenInfo(tokenHash)
+        // if (tokenInfo.length === 0) {
+        //     console.warn('Token info error')
+        // } else {
+        //     setTicker(tokenInfo[0].ticker)
+        // }
+        setTicker(props.request.data.ticker)
+        if( props.request.data.fee_type === 0 )
+            setFeeTicker(props.request.data.ticker)
+        else
+            setFeeTicker(props.request.data.feeTicker)
+        console.log(feeTicker)
         setFee(BigInt((typeIn ? 1 : -1) * props.request.tx.fee_value))
     }
 
@@ -180,7 +189,7 @@ export default function TransactionHistory(props) {
                 {/*<div className={styles.field}>Ticker: {this.state.ticker}</div>*/}
                 {/*<div className={styles.field}>Nonce: {this.state.nonce}</div>*/}
                 {/*<div className={styles.field}>Data: {this.state.data}</div>*/}
-                <div className={styles.transaction_amount}>{Number(amount - fee) / 1e10 + ' ' + ticker}</div>
+                <div className={styles.transaction_amount}>{props.request.data.fee_type === 0 ? Number(amount - fee) / props.request.data.decimals + ' ' + ticker : Number(amount) / props.request.data.decimals + ' ' + ticker}</div>
 
             </div>
 
@@ -210,12 +219,12 @@ export default function TransactionHistory(props) {
 
                 <div className={styles.transaction_data_fee}>
                     <div>FEE</div>
-                    <div>{Number(fee) / 1e10 + ' ' + ticker}</div>
+                    <div>{Number(fee) / props.request.data.feeDecimals + ' ' + feeTicker}</div>
                 </div>
 
                 <div className={styles.transaction_data_amount}>
                     <div>TOTAL</div>
-                    <div>{(Number(amount) / 1e10) + ' ' + ticker}</div>
+                    <div>{(Number(amount) / props.request.data.decimals) + ' ' + ticker}</div>
                 </div>
 
             </div>
