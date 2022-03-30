@@ -115,22 +115,25 @@ export default function Account(props) {
                 // console.log(res.map(a => a.ticker + ': ' + a.amount))
                 let amount = 0
                 let ticker = ''
+                let decimal
                 let image = './images/enq.png'
                 for (let i in res) {
-
+                    // console.log(res[i])
                     tickers[res[i].token] = res[i].ticker
 
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
                         image = res[i].token === mainToken ? './images/enq.png' : generateIcon(res[i].token)
+                        decimal = res[i].decimals
                     } else {
                         tokens.push({
                             amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
                             usd: 0,
                             image: res[i].token === mainToken ? './images/enq.png' : generateIcon(res[i].token),
-                            tokenHash: res[i].token
+                            tokenHash: res[i].token,
+                            decimals: 10 ** res[i].decimals
                         })
                     }
                 }
@@ -159,6 +162,7 @@ export default function Account(props) {
                     usd: usd,
                     image: image,
                     tokenHash: token,
+                    decimals: 10 ** decimal,
                     main: true
                 }, ...tokens])
                 // console.log(res.amount / 1e10)
@@ -409,7 +413,7 @@ export default function Account(props) {
             // console.log(props.user.token)
             // console.log(item.tokenHash)
             // console.log(item.tokenHash === ENQWeb.Net.ticker)
-
+            console.log(item)
             assetsElements.push(
                 <div key={key}
                      className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}
@@ -420,7 +424,7 @@ export default function Account(props) {
                     <img className={styles.icon} src={item.image}/>
                     <div>
                         <div>
-                            {(Number(item.amount) / 1e10).toFixed(4)}
+                            {(Number(item.amount) / item.decimals).toFixed(4)}
                             {' '}
                             {item.ticker}
                         </div>
