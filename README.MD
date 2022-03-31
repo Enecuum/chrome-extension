@@ -21,6 +21,10 @@
 - npm run ci - run ci webhook inside pm2
 - npm run "ci stop" - stop ci webhook
 
+- npx cap add ios/android
+- npx cap copy ios/android
+- npx cap open ios/android
+
 ### Manifest
 - v2 now, will be v3
 - There is two manifests files for reasons
