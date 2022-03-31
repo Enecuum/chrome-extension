@@ -24,14 +24,18 @@
     display: none;
 }
 
-#leftLinksTitle {
+#leftLinks > div:not(:last-child) {
     padding-bottom: 10px;
+}
+
+#leftLinksTitle {
+    /*padding-bottom: 10px;*/
     font-size: var(--font-size-big);
 }
 
-#leftLinksText {
-    padding-bottom: 10px;
-}
+/*#leftLinksText {*/
+/*    padding-bottom: 10px;*/
+/*}*/
 
 #leftLinksTextBottom {
     padding-top: 10px;
