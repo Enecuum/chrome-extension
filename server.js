@@ -1,6 +1,6 @@
 let express = require('express')
 let app = express()
-app.use(express.static('dist'))
+app.use('/', express.static('dist'))
 app.listen(8080)
 
 // const https = require('https')
@@ -12,3 +12,8 @@ app.listen(8080)
 // };
 // let server = https.createServer(options, app)
 // server.listen(8080)
+
+app.get('/android', function(req, res){
+    const file = `${__dirname}/android/app/build/outputs/apk/debug/enecuum.apk`;
+    res.download(file); // Set disposition and send it.
+})
