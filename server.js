@@ -14,6 +14,21 @@ app.listen(8080)
 // server.listen(8080)
 
 app.get('/android', function(req, res){
-    const file = `${__dirname}/android/app/build/outputs/apk/debug/enecuum.apk`;
+    const file = `${__dirname}/download/enecuum.apk`;
+    res.download(file); // Set disposition and send it.
+})
+
+app.get('/mac', function(req, res){
+    const file = `${__dirname}/desktop/mac/Enecuum-1.0.0.dmg`;
+    res.download(file); // Set disposition and send it.
+})
+
+app.get('/win', function(req, res){
+    const file = `${__dirname}/desktop/mac/Enecuum.app`;
+    res.download(file); // Set disposition and send it.
+})
+
+app.get('/linux', function(req, res){
+    const file = `${__dirname}/desktop/linux/Enecuum.`;
     res.download(file); // Set disposition and send it.
 })
