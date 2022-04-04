@@ -51,7 +51,7 @@ const createDisclaimer = () => {
     linksDiv.innerHTML += '<div id="leftLinksTitle">DISCLAIMER</div>'
     linksDiv.innerHTML += '<div id="leftLinksText">This is a test web wallet and is NOT intended for production usage. Please do not use mainnet private info (keys, seed phrases) with this version. Please, use the following apps.</div>'
     linksDiv.innerHTML += '<div><a href="https://chrome.google.com/webstore/detail/enecuum/oendodccclbjedifljnlkapjejklgekf?hl=en" target="_blank">Chrome Extension</div>'
-    linksDiv.innerHTML += '<div><a href="/ios" target="_blank">iOS</a> / <a href="/android" target="_blank">Android</a></div>'
+    linksDiv.innerHTML += '<div><a href="https://testflight.apple.com/join/EhGhg78t" target="_blank">iOS</a> / <a href="https://play.google.com/store/apps/details?id=com.enecuum.wallet" target="_blank">Android</a> / <a href="/android" target="_blank">Android APK</a></div>'
     linksDiv.innerHTML += '<div><a href="/mac" target="_blank">macOS</a> / <a href="/win" target="_blank">Win</a> / <a href="/linux" target="_blank">Linux</a></div>'
     linksDiv.innerHTML += '<div id="leftLinksTextBottom">' + chrome.runtime.getManifest().version + ' ' + VERSION + '</div>'
     // linksDiv.innerHTML += '<div><a href="/electron" target="_blank">Electron Desktop Application</div>'
