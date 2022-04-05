@@ -25,6 +25,7 @@ export default function Account(props) {
     let [localNetworks, setLocalNetworks] = useState(JSON.parse(localStorage.getItem('networks')) || [])
 
     const [amount, setAmount] = useState(BigInt(0))
+    const [amountDecimal, setAmountDecimal] = useState(1e10)
     const [usd, setUSD] = useState(BigInt(0))
     const [ticker, setTicker] = useState('')
     const [logo, setLogo] = useState('./images/enq.png')
@@ -48,7 +49,8 @@ export default function Account(props) {
     const [isCopied, setCopied] = useState(false)
 
     const [favoriteSites, setFavoriteSites] = useState([])
-    const [decimals, setDecimals] = useState(1e10)
+
+    let decimals = {}
 
     const clickMenu = () => {
         setMenu(!menu)
@@ -101,7 +103,7 @@ export default function Account(props) {
     //     setLocked(false)
     // }
 
-    const getBalance = () => {
+    const getBalance = async () => {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
         const mainToken = ENQWeb.Enq.token[ENQWeb.Enq.provider] ? ENQWeb.Enq.token[ENQWeb.Enq.provider] : (localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
@@ -111,18 +113,17 @@ export default function Account(props) {
         // console.log(token)
         let tokens = []
 
-        apiController.getBalanceAll(props.user.publicKey)
+        await apiController.getBalanceAll(props.user.publicKey)
             .then((res) => {
                 // console.log(res.map(a => a.ticker + ': ' + a.amount))
                 let amount = 0
                 let ticker = ''
                 let decimal
-                let decimalArray = {}
                 let image = './images/enq.png'
                 for (let i in res) {
                     // console.log(res[i])
                     tickers[res[i].token] = res[i].ticker
-                    decimalArray[res[i].token] = 10 ** res[i].decimals
+                    decimals[res[i].token] = 10 ** res[i].decimals
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
@@ -144,6 +145,7 @@ export default function Account(props) {
                 setAmount(amount)
                 setTicker(ticker)
                 setLogo(image)
+                setAmountDecimal(10**decimal)
                 cacheTokens(tickers)
                     .then()
 
@@ -167,7 +169,6 @@ export default function Account(props) {
                     decimals: 10 ** decimal,
                     main: true
                 }, ...tokens])
-                setDecimals(decimalArray)
                 // console.log(res.amount / 1e10)
             })
             .catch((err) => {
@@ -229,43 +230,47 @@ export default function Account(props) {
         return allTokens[hash] !== undefined ? allTokens[hash] : (await apiController.getTokenInfo(hash)).ticker
     }
 
-    for (const key in activity) {
-        const item = activity[key]
-        // console.log(item)
-        activityElements.push(
-            <div
-                key={key} onClick={() => {
-                if (item.type === 'enable') {
-                    props.setPublicKeyRequest(item)
-                }
-                if (item.type === 'tx') {
-                    props.setTransactionRequest(item)
-                }
-                if (item.type === 'sign') {
-                    props.setSignRequest(item)
-                }
-            }} className={`${styles.activity}`}>
-                <img className={styles.icon}
-                     src={(item.type === 'enable' ? './images/icons/checkbox2.png' : './images/icons/checkbox1.png')}
-                     alt=""/>
-                <div>
-                    <div>{names[item.type]}</div>
-                    <div className={styles.time}>
-                        {new Date(item.data.date).toISOString()
-                            .slice(0, 10) + ' '}
-                        {(item.tx ? <div className={styles.history_link}
-                                         onClick={() => explorerAddress(item.tx.to)}>To: {shortHash(item.tx.to)}</div> : item.cb.url)}
+
+    const renderActivity = ()=>{
+        for (const key in activity) {
+            const item = activity[key]
+            // console.log(item)
+            activityElements.push(
+                <div
+                    key={key} onClick={() => {
+                    if (item.type === 'enable') {
+                        props.setPublicKeyRequest(item)
+                    }
+                    if (item.type === 'tx') {
+                        props.setTransactionRequest(item)
+                    }
+                    if (item.type === 'sign') {
+                        props.setSignRequest(item)
+                    }
+                }} className={`${styles.activity}`}>
+                    <img className={styles.icon}
+                         src={(item.type === 'enable' ? './images/icons/checkbox2.png' : './images/icons/checkbox1.png')}
+                         alt=""/>
+                    <div>
+                        <div>{names[item.type]}</div>
+                        <div className={styles.time}>
+                            {new Date(item.data.date).toISOString()
+                                .slice(0, 10) + ' '}
+                            {(item.tx ? <div className={styles.history_link}
+                                             onClick={() => explorerAddress(item.tx.to)}>To: {shortHash(item.tx.to)}</div> : item.cb.url)}
+                        </div>
                     </div>
-                </div>
-                {item.tx ?
-                    <div className={styles.activity_data}>
+                    {item.tx ?
+                        <div className={styles.activity_data}>
 
-                        <div>{'-' + (item.tx.value ? (item.tx.value / 1e10) : (item.tx.amount / 1e10)) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
+                            <div>{'-' + (item.tx.value ? (item.tx.value / (decimals[item.tx.tokenHash] || 1e10)) : (item.tx.amount /(decimals[item.tx.tokenHash] || 1e10) )) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
 
-                    </div> : ''}
-            </div>,
-        )
+                        </div> : ''}
+                </div>,
+            )
+        }
     }
+
 
     const getHistory = async () => {
 
@@ -287,6 +292,12 @@ export default function Account(props) {
                 oldActivity.push({
                     data: {
                         date: history.records[id].time * 1000,
+                        feeTicker: false,
+                        feeDecimals: false,
+                        decimals: decimals[history.records[id].token_hash] || 1e10,
+                        ticker: false,
+                        fee_type: history.records[id].fee_type,
+                        fee:history.records[id].fee_value
                     },
                     rectype: history.records[id].rectype,
                     tx: {
@@ -322,10 +333,10 @@ export default function Account(props) {
         for (const key in historyArray.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
             const item = historyArray[key]
             // console.log(item)
-            if(!tokenDecimals[item.tx.tokenHash]){
+            if(!decimals[item.tx.tokenHash]){
                 await apiController.getTokenInfo(item.tx.tokenHash)
                     .then(token=>{
-                        tokenDecimals[item.tx.tokenHash] = 10 ** token[0]['decimals']
+                        decimals[item.tx.tokenHash] = 10 ** token[0]['decimals']
                     })
             }
             historyElements.push(
@@ -355,7 +366,7 @@ export default function Account(props) {
                     {item.tx ?
                         <div className={styles.activity_data}>
 
-                            <div>{(item.tx.value ? (item.tx.value / tokenDecimals[item.tx.tokenHash] || 1e10) : (item.tx.amount / tokenDecimals[item.tx.tokenHash] || 1e10)) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
+                            <div>{(item.tx.value ? (item.tx.value / (decimals[item.tx.tokenHash] || 1e10)) : (item.tx.amount / (decimals[item.tx.tokenHash] || 1e10))) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
 
                         </div> : ''}
                 </div>,
@@ -478,8 +489,9 @@ export default function Account(props) {
     useEffect(() => {
 
         openPopup()
-            .then(result => {
+            .then(async result => {
                 if (result === true) {
+                    getBalance().then()
                     getConnects()
                         .then()
                     getHistory()
@@ -490,7 +502,7 @@ export default function Account(props) {
                                 renderHistory(history)
                             }
                         })
-                    getBalance()
+                    renderActivity()
                 }
             })
 
@@ -500,6 +512,7 @@ export default function Account(props) {
         }
 
     }, [])
+
 
     // TODO What's going on here
     // renderHistory()
@@ -605,7 +618,7 @@ export default function Account(props) {
 
                 <img className={styles.content_logo} src={logo} alt=""/>
                 <div className={styles.balance} title={(Number(amount) / decimals[props.user.token])}>
-                    {(Number(amount) / decimals[props.user.token]).toFixed(4)}
+                    {(Number(amount) / amountDecimal).toFixed(4)}
                     {' '}
                     {ticker}
                 </div>
