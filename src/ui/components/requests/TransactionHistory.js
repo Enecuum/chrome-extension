@@ -4,6 +4,7 @@ import Separator from '../../elements/Separator'
 import elements from '../../css/elements.module.css'
 import {explorerTX, shortHash} from '../../Utils'
 import { apiController } from '../../../utils/apiController'
+import { ENQ_CONTENT } from '../../../utils/names'
 
 // let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -29,6 +30,8 @@ export default function TransactionHistory(props) {
     const [taskId, setTaskId] = useState(props.request.cb.taskId)
     const [dataText, setDataText] = useState([])
     const [fee, setFee] = useState(BigInt(0.1 * 1e10))
+    let mainToken
+    const [feeDecimal, setFeeDecimal] = useState(1e10)
 
     // token transfer (data не парсится)
     // create token
@@ -60,12 +63,17 @@ export default function TransactionHistory(props) {
         // } else {
         //     setTicker(tokenInfo[0].ticker)
         // }
-        setTicker(props.request.data.ticker)
-        if( props.request.data.fee_type === 0 )
-            setFeeTicker(props.request.data.ticker)
-        else
-            setFeeTicker(props.request.data.feeTicker)
-        console.log(feeTicker)
+        setTicker(props.request.data.ticker || props.request.tx.ticker)
+        if( props.request.data.fee_type !== 2 )
+            setFeeTicker(props.request.data.ticker || props.request.tx.ticker || 'COIN')
+
+        else{
+            if(!props.request.tx.feeTicker && !props.request.tx.feeDecimals){
+                mainToken = (await apiController.getTokenInfo(ENQWeb.Enq.ticker))[0]
+                setFeeDecimal(10 ** mainToken.decimals)
+            }
+            setFeeTicker(props.request.data.feeTicker || mainToken.ticker)
+        }
         setFee(BigInt((typeIn ? 1 : -1) * props.request.tx.fee_value))
     }
 
@@ -189,7 +197,7 @@ export default function TransactionHistory(props) {
                 {/*<div className={styles.field}>Ticker: {this.state.ticker}</div>*/}
                 {/*<div className={styles.field}>Nonce: {this.state.nonce}</div>*/}
                 {/*<div className={styles.field}>Data: {this.state.data}</div>*/}
-                <div className={styles.transaction_amount}>{props.request.data.fee_type === 0 ? Number(amount - fee) / props.request.data.decimals + ' ' + ticker : Number(amount) / props.request.data.decimals + ' ' + ticker}</div>
+                <div className={styles.transaction_amount}>{props.request.data.fee_type !== 2 ? Number(amount - fee) / props.request.data.decimals + ' ' + ticker : Number(amount) / props.request.data.decimals + ' ' + ticker}</div>
 
             </div>
 
@@ -219,7 +227,7 @@ export default function TransactionHistory(props) {
 
                 <div className={styles.transaction_data_fee}>
                     <div>FEE</div>
-                    <div>{Number(fee) / props.request.data.feeDecimals + ' ' + feeTicker}</div>
+                    <div>{Number(fee) / (props.request.data.feeDecimals || feeDecimal) + ' ' + feeTicker}</div>
                 </div>
 
                 <div className={styles.transaction_data_amount}>

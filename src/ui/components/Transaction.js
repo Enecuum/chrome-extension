@@ -262,7 +262,7 @@ export default class Transaction extends React.Component {
 
     render() {
 
-        let balanceAfter =  this.state.fee_type === 0 ? this.props.isTransaction.balance ?
+        let balanceAfter =  this.state.fee_type !== 2 ? this.props.isTransaction.balance ?
 
             (
                 Number(
