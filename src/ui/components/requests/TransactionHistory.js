@@ -232,7 +232,7 @@ export default function TransactionHistory(props) {
 
                 <div className={styles.transaction_data_amount}>
                     <div>TOTAL</div>
-                    <div>{(Number(amount) / props.request.data.decimals) + ' ' + ticker}</div>
+                    <div>{(Number(amount) / props.request.data.decimals) + ' ' + ticker + (props.request.data.fee_type !== 2 ? '' : ' ' + ((typeIn ? '- ' : '')) + Number(fee) / (props.request.data.feeDecimals || feeDecimal) + ' ' + feeTicker)}</div>
                 </div>
 
             </div>
