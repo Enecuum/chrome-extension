@@ -245,7 +245,7 @@ export default function TransactionRequest(props) {
                 {/*<div className={styles.field}>Ticker: {this.state.ticker}</div>*/}
                 {/*<div className={styles.field}>Nonce: {this.state.nonce}</div>*/}
                 {/*<div className={styles.field}>Data: {this.state.data}</div>*/}
-                <div className={styles.transaction_amount}>{ ticker === feeTicker? Number(amount - fee) / decimals + ' ' + ticker: Number(amount) / decimals + ' ' + ticker + " - "+ Number(fee) / feeDecimals + ' ' + feeTicker}</div>
+                <div className={styles.transaction_amount}>{ ticker === feeTicker? Number(amount - fee) / decimals + ' ' + ticker: Number(amount) / decimals + ' ' + ticker}</div>
 
             </div>
 
@@ -280,8 +280,9 @@ export default function TransactionRequest(props) {
 
                 <div className={styles.transaction_data_amount}>
                     <div>TOTAL</div>
-                    <div>{(Number(amount) / decimals) + ' ' + ticker}</div>
+                    <div>{(Number(amount) / decimals) + ' ' + ticker + (ticker !== feeTicker ? ' + ' + Number(fee) / feeDecimals + ' ' + feeTicker : '')}</div>
                 </div>
+
 
             </div>
 
