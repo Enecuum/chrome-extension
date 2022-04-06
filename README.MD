@@ -66,4 +66,4 @@
 - ENQWeb.Net -
 
 ### Ledger features
- - чтобы правильно подписать транзакцию через леджер необходимо сначала посчитать хеш по полям транзакции, этот хэш поместить в tx.hash, а в подпись передать hash(tx.hash)
+ - To correctly sign a transaction through the ledger, you must first calculate the hash of the transaction fields, put this hash in tx.hash, and pass the hash (tx.hash) to the signature
