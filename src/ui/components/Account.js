@@ -271,6 +271,7 @@ export default function Account(props) {
         }
     }
 
+    renderActivity()
 
     const getHistory = async () => {
 
@@ -502,7 +503,6 @@ export default function Account(props) {
                                 renderHistory(history)
                             }
                         })
-                    renderActivity()
                 }
             })
 
