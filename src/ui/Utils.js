@@ -1,5 +1,6 @@
 const bip39 = require("bip39");
 const bip32 = require("bip32");
+const {Clipboard} = require("@capacitor/clipboard");
 let regexData = /^[0-9a-zA-Z _\-/.]{0,512}$/
 let regexAddress = /^(02|03)[0-9a-fA-F]{64}$/
 let regexToken = /^[0-9a-fA-F]{64}$/
@@ -110,6 +111,14 @@ function toggleFullScreen() {
     }
 }
 
+const copyToClipboard = async (text) => {
+    if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text)
+    } else {
+        console.error('navigator.clipboard: ' + false)
+    }
+    await Clipboard.write({string: text})
+}
 
 module.exports = {
     shortHash,
@@ -118,6 +127,7 @@ module.exports = {
     explorerAddress,
     toggleFullScreen,
     generateIcon,
+    copyToClipboard,
     regexData,
     regexAddress,
     regexToken,
