@@ -68,6 +68,7 @@
     "dependencies": {
         "@capacitor/android": "3.4.3",
         "@capacitor/cli": "^3.4.3",
+        "@capacitor/clipboard": "^1.0.8",
         "@capacitor/core": "^3.4.3",
         "@capacitor/ios": "^3.4.3",
         "@ledgerhq/hw-app-eth": "^6.6.0",
