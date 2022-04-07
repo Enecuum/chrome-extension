@@ -315,9 +315,8 @@ export default function Selector(props) {
     // }
 
     const copyPublicKey = (publicKey) => {
-        copyToClipboard(publicKey).then(() => {
-            setCopied(publicKey)
-        })
+        copyToClipboard(publicKey)
+        setCopied(publicKey)
     }
 
     // let connectLedgerEth = async () => {

@@ -9,9 +9,7 @@ export default function Receive(props) {
     // }
 
     const copyPublicKey = () => {
-        copyToClipboard(props.user.publicKey).then(() => {
-            // setCopied(true)
-        })
+        copyToClipboard(props.user.publicKey)
     }
 
     return (

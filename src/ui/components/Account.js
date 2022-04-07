@@ -91,9 +91,8 @@ export default function Account(props) {
     }
 
     const copyPublicKey = () => {
-        copyToClipboard(props.user.publicKey).then(() => {
-            setCopied(true)
-        })
+        copyToClipboard(props.user.publicKey)
+        setCopied(true)
     }
 
     // const unlock = () => {

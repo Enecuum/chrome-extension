@@ -78,9 +78,8 @@ export default function Address(props) {
     // }
 
     const copyPublicKey = () => {
-        copyToClipboard(props.publicKey).then(() => {
-            props.setCopied(true)
-        })
+        copyToClipboard(props.publicKey)
+        props.setCopied(true)
     }
 
     return (

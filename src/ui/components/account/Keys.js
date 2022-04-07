@@ -47,7 +47,7 @@ export default function Keys(props) {
 
                 <div className={styles.field + ' ' + styles.button} onClick={() => {
                     // navigator.clipboard.writeText(publicKey)
-                    copyToClipboard(publicKey).then(() => {})
+                    copyToClipboard(publicKey)
                 }}>Copy public key
                 </div>
 
