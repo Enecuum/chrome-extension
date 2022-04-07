@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import { explorerAddress, getMnemonicPrivateKeyHex, ledgerPath, regexToken, shortHash } from '../../Utils'
+import {
+    copyToClipboard,
+    explorerAddress,
+    getMnemonicPrivateKeyHex,
+    ledgerPath,
+    regexToken,
+    shortHash
+} from '../../Utils'
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
@@ -298,13 +305,19 @@ export default function Selector(props) {
         return cards
     }
 
+    // const copyPublicKey = (publicKey) => {
+    //     if (navigator.clipboard) {
+    //         navigator.clipboard.writeText(publicKey)
+    //         setCopied(publicKey)
+    //     } else {
+    //         console.error('navigator.clipboard: ' + false)
+    //     }
+    // }
+
     const copyPublicKey = (publicKey) => {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(publicKey)
+        copyToClipboard(publicKey).then(() => {
             setCopied(publicKey)
-        } else {
-            console.error('navigator.clipboard: ' + false)
-        }
+        })
     }
 
     // let connectLedgerEth = async () => {

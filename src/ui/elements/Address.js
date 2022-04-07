@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import elements from '../css/elements.module.css'
-import { shortHash } from '../Utils'
+import {copyToClipboard, shortHash} from '../Utils'
 import styles from '../css/index.module.css'
 import { apiController } from '../../utils/apiController'
 
@@ -68,13 +68,19 @@ export default function Address(props) {
         }
     }
 
+    // const copyPublicKey = () => {
+    //     if (navigator.clipboard) {
+    //         navigator.clipboard.writeText(props.publicKey)
+    //         props.setCopied(true)
+    //     } else {
+    //         console.error('navigator.clipboard: ' + false)
+    //     }
+    // }
+
     const copyPublicKey = () => {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(props.publicKey)
+        copyToClipboard(props.publicKey).then(() => {
             props.setCopied(true)
-        } else {
-            console.error('navigator.clipboard: ' + false)
-        }
+        })
     }
 
     return (

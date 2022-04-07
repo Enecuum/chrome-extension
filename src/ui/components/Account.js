@@ -3,7 +3,7 @@ import styles from '../css/index.module.css'
 import Header from '../elements/Header'
 import Address from '../elements/Address'
 import Menu from '../elements/Menu'
-import {explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
+import {copyToClipboard, explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
 import Separator from '../elements/Separator'
 import {apiController} from '../../utils/apiController'
 
@@ -91,12 +91,9 @@ export default function Account(props) {
     }
 
     const copyPublicKey = () => {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(props.user.publicKey)
+        copyToClipboard(props.user.publicKey).then(() => {
             setCopied(true)
-        } else {
-            console.error('navigator.clipboard: ' + false)
-        }
+        })
     }
 
     // const unlock = () => {

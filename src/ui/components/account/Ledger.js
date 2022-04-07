@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import {
+    copyToClipboard,
     explorerAddress,
     getMnemonicPrivateKeyHex,
     ledgerPath,
@@ -250,13 +251,19 @@ export default function Ledger(props) {
         return cards
     }
 
+    // const copyPublicKey = (publicKey) => {
+    //     if (navigator.clipboard) {
+    //         navigator.clipboard.writeText(publicKey)
+    //         setCopied(publicKey)
+    //     } else {
+    //         console.error('navigator.clipboard: ' + false)
+    //     }
+    // }
+
     const copyPublicKey = (publicKey) => {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(publicKey)
+        copyToClipboard(publicKey).then(() => {
             setCopied(publicKey)
-        } else {
-            console.error('navigator.clipboard: ' + false)
-        }
+        })
     }
 
     let connectLedger = () => {

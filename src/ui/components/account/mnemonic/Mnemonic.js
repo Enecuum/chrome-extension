@@ -4,7 +4,7 @@ import Separator from '../../../elements/Separator'
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
 import Input from "../../../elements/Input";
-import {getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../../Utils";
+import {copyToClipboard, getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../../Utils";
 import {generateAccountData, generateMnemonicAccountData} from "../../../../user";
 import {account} from '../../../../user'
 
@@ -141,7 +141,8 @@ export default function Mnemonic(props) {
             <div className={styles.form}>
 
                 {state === 0 && <div onClick={() => {
-                    navigator.clipboard.writeText(mnemonicString)
+                    // navigator.clipboard.writeText(mnemonicString)
+                    copyToClipboard(mnemonicString).then(() => {})
                 }}
                                      className={styles.field + ' ' + styles.button}>Copy
                 </div>}
