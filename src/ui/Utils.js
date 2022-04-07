@@ -111,13 +111,13 @@ function toggleFullScreen() {
     }
 }
 
-const copyToClipboard = async (text) => {
+const copyToClipboard = (text) => {
     if (navigator.clipboard) {
-        await navigator.clipboard.writeText(text)
+        navigator.clipboard.writeText(text)
     } else {
         console.error('navigator.clipboard: ' + false)
     }
-    await Clipboard.write({string: text})
+    Clipboard.write({string: text})
 }
 
 module.exports = {
