@@ -1,10 +1,17 @@
 import React from "react";
 import styles from "../css/index.module.css";
+import {copyToClipboard} from "../Utils";
 
 export default function Receive(props) {
 
-    let copyPublicKey = () => {
-        navigator.clipboard.writeText(props.user.publicKey)
+    // let copyPublicKey = () => {
+    //     navigator.clipboard.writeText()
+    // }
+
+    const copyPublicKey = () => {
+        copyToClipboard(props.user.publicKey).then(() => {
+            // setCopied(true)
+        })
     }
 
     return (

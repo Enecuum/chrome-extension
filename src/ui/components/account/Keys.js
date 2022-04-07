@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import { explorerAddress, getMnemonicPrivateKeyHex, shortHash, shortHashLong } from '../../Utils'
+import {copyToClipboard, explorerAddress, getMnemonicPrivateKeyHex, shortHash, shortHashLong} from '../../Utils'
 import Back from "../../elements/Back";
 
 
@@ -46,7 +46,8 @@ export default function Keys(props) {
                 <div className={styles.field}>{shortHashLong(publicKey)}</div>
 
                 <div className={styles.field + ' ' + styles.button} onClick={() => {
-                    navigator.clipboard.writeText(publicKey)
+                    // navigator.clipboard.writeText(publicKey)
+                    copyToClipboard(publicKey).then(() => {})
                 }}>Copy public key
                 </div>
 
