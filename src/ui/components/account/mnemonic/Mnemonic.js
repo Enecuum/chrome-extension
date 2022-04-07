@@ -142,7 +142,7 @@ export default function Mnemonic(props) {
 
                 {state === 0 && <div onClick={() => {
                     // navigator.clipboard.writeText(mnemonicString)
-                    copyToClipboard(mnemonicString).then(() => {})
+                    copyToClipboard(mnemonicString)
                 }}
                                      className={styles.field + ' ' + styles.button}>Copy
                 </div>}
