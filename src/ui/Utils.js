@@ -113,11 +113,11 @@ function toggleFullScreen() {
 
 const copyToClipboard = (text) => {
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(text)
+        navigator.clipboard.writeText(text).then(r => {})
     } else {
         console.error('navigator.clipboard: ' + false)
     }
-    Clipboard.write({string: text})
+    Clipboard.write({string: text}).then(r => {})
 }
 
 module.exports = {
