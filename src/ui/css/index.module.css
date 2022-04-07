@@ -3,6 +3,10 @@ html {
     margin-bottom: env(safe-area-inset-bottom);
 }
 
+ion-content {
+    --ion-background-color: var(--color-blue-super-dark);
+}
+
 body {
     margin: 0;
     font-family: 'Open Sans', sans-serif;
