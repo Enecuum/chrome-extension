@@ -53,7 +53,10 @@ module.exports = () => {
         },
         devtool: 'inline-source-map',
         resolve: {
-            extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".styl", ".css", ".png", ".jpg", ".gif", ".svg", ".woff", ".woff2", ".ttf", ".otf"]
+            extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".styl", ".css", ".png", ".jpg", ".gif", ".svg", ".woff", ".woff2", ".ttf", ".otf"],
+            fallback: {
+                "stream": require.resolve("stream-browserify")
+            }
         },
         plugins,
 
