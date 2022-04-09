@@ -157,7 +157,7 @@ export default class Transaction extends React.Component {
             from: user.type === 2 ? wallet.pubkey : wallet,
             amount: Number(this.state.amount) * this.state.decimals,
             to: this.state.address,
-            data: '',
+            data: this.state.data,
             tokenHash: user.token,
             nonce: this.state.nonce
         }
