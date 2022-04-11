@@ -10,7 +10,7 @@
     transition: left 1s, top 1s;
 }
 
-#leftLinks {
+#disclaimer {
     z-index: 1;
     padding: 20px;
     color: white;
@@ -24,8 +24,12 @@
     display: none;
 }
 
-#leftLinks > img {
-    height: 44px;
+@media screen and (max-width: 400px) {
+
+}
+
+#disclaimer a > img {
+    height: 40px;
 }
 
 .row {
@@ -44,7 +48,7 @@
     cursor: pointer;
 }
 
-#leftLinks > div:not(:last-child) {
+#disclaimer > div {
     padding-bottom: 10px;
 }
 
@@ -69,10 +73,27 @@
 }
 
 @media screen and (min-width: 1000px) {
-    #leftLinks {
+    #disclaimer {
         display: block;
     }
     #space {
         display: block;
+    }
+}
+
+
+@media screen and (max-width: 500px) {
+    #disclaimer {
+        display: block;
+        width: 100%;
+        min-width: 350px;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--color-blue-super-dark);
+    }
+    #disclaimer a > img {
+        height: 40px;
     }
 }

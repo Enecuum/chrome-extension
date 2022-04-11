@@ -46,12 +46,12 @@ const createSpace = () => {
 const createDisclaimer = () => {
 
     const linksDiv = document.createElement('div')
-    linksDiv.id = 'leftLinks'
+    linksDiv.id = 'disclaimer'
     linksDiv.innerHTML = ''
     linksDiv.innerHTML += '<div id="leftLinksTitle">DISCLAIMER</div>'
-    linksDiv.innerHTML += '<div id="leftLinksText">This is a test web wallet and is NOT intended for production usage. Please do not use mainnet private info (keys, seed phrases) with this version. Please, use the following apps.</div>'
+    linksDiv.innerHTML += '<div id="leftLinksText">This is a test web wallet and is NOT intended for production usage. Please do not use mainnet private info (keys, seed phrases) with this version. Please, use the following apps:</div>'
     linksDiv.innerHTML += '<div><a href="https://chrome.google.com/webstore/detail/enecuum/oendodccclbjedifljnlkapjejklgekf?hl=en" target="_blank">Chrome Extension</div>'
-    linksDiv.innerHTML += '<div id="leftLinksText">We started testing the mobile version:</div>'
+    linksDiv.innerHTML += '<div id="leftLinksText">We made a mobile version:</div>'
     linksDiv.innerHTML +=
         '<div class="row">' +
         '<div><a href="https://testflight.apple.com/join/EhGhg78t" target="_blank"><img src="./images/applestore.svg"></a></div>' +
@@ -60,15 +60,15 @@ const createDisclaimer = () => {
 
     linksDiv.innerHTML += '<div id="leftLinksText">Download Android install file:</div>'
 
-    linksDiv.innerHTML += '<div><a href="/android" target="_blank">Android APK</a></div>'
+    linksDiv.innerHTML += '<div><a href="/android" download>Android APK</a></div>'
 
     linksDiv.innerHTML += '<div id="leftLinksText">And the desktop versions:</div>'
 
     linksDiv.innerHTML +=
         '<div class="">' +
-        '<div><a href="/macos" target="_blank">macOS</a></div>' +
-        '<div><a href="/windows" target="_blank">Windows</a></div>' +
-        '<div><a href="/linux" target="_blank">Linux</a></div>' +
+        '<div><a href="/macos">macOS</a></div>' +
+        '<div><a href="/windows">Windows</a></div>' +
+        '<div><a href="/linux">Linux</a></div>' +
         '</div>'
     linksDiv.innerHTML += '<div id="leftLinksTextBottom">' + chrome.runtime.getManifest().version + ' ' + VERSION + '</div>'
     const close = document.createElement('div')
