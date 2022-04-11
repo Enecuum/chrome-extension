@@ -95,6 +95,13 @@ export default class Password extends React.Component {
                     <div className={styles.welcome1}>Password</div>
                     }
 
+                    {!this.props.publicKey &&
+                        <div className={styles.welcome2}>Please set a Password to initialize</div>
+                    }
+                    {!this.props.publicKey &&
+                    <div className={styles.welcome2}> the application.</div>
+                    }
+
                 </div>
 
                 <div className={styles.form}>
