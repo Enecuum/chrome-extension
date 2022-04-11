@@ -1,14 +1,18 @@
 ### Versions
 - Chrome extension (default)
-- Browsers extension
+- 
+- Android
+- iOS
+- 
+- Electron (Win, Mac, Linux)
 - 
 - Web version for browsers
 - Mobile web version for browsers
-- PWA on desktop (mostly like web version)
 - PWA on Android
 - PWA on iOS
-- 
-- Electron (Win, Mac)
+- PWA on desktop (mostly like web version)
+- Browsers extension (not Chrome)
+
 
 ### NPM Commands
 - npm run start - webpack update files
@@ -32,7 +36,7 @@
 ### Manifest
 - v2 now, will be v3
 - There is two manifests files for reasons
-- manifest.json - electron default manifest
+- manifest.json - chrome and electron default manifest
 - manifest.webmanifest - web and pwa default manifest
 
 ### SRC
@@ -55,9 +59,9 @@
 
 
 ### Account options
-- Simple private keys with option to import more old ones
 - Mnemonic phrase
 - Ledger
+- Simple private keys with option to import more old ones
 
 ### Memory
 - global.userStorage - storage implementation
