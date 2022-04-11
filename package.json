@@ -74,7 +74,7 @@
         "@ledgerhq/hw-app-eth": "^6.6.0",
         "@ledgerhq/hw-transport-webhid": "^6.11.2",
         "@ledgerhq/hw-transport-webusb": "^6.6.0",
-        "bip32": "^3.0.1",
+        "bip32": "^2.0.6",
         "bip39": "^3.0.4",
         "dotenv": "^16.0.0",
         "enq-web3": "^0.4.2",
