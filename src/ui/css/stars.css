@@ -14,14 +14,34 @@
     z-index: 1;
     padding: 20px;
     color: white;
-    width: 400px;
-    /*height: 350px;*/
+    width: 350px;
+    height: 670px;
     border-radius: 3px;
     background: var(--color-blue-background);
     position: absolute;
-    top: calc(50% - 175px);
+    top: calc(50% - 335px);
     left: calc(50% + 175px + 20px);
     display: none;
+}
+
+img {
+    height: 44px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#close {
+    position: absolute;
+    bottom: 20px;
+    /*left: 0;*/
+    right: 20px;
+    text-align: center;
+    /*font-size: var(--font-size-giant);*/
+    cursor: pointer;
 }
 
 #leftLinks > div:not(:last-child) {
@@ -33,12 +53,19 @@
     font-size: var(--font-size-big);
 }
 
+#leftLinksTextBottom {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    /*padding-bottom: 20px;*/
+}
+
 /*#leftLinksText {*/
 /*    padding-bottom: 10px;*/
 /*}*/
 
 #leftLinksTextBottom {
-    padding-top: 10px;
+    /*padding-top: 10px;*/
 }
 
 @media screen and (min-width: 1000px) {

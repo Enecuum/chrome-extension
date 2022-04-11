@@ -129,7 +129,7 @@ async function setupUI() {
         // Simple message provider
         global.webBackgroundPort = globalMessageHandler
         // Service worker start
-        serviceWorkerRegistration.register()
+        // serviceWorkerRegistration.register()
 
         global.asyncRequest = asyncRequest
         await initApp()
