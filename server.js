@@ -24,11 +24,11 @@ app.get('/mac', function(req, res){
 })
 
 app.get('/win', function(req, res){
-    const file = `${__dirname}/desktop/mac/Enecuum.app`;
+    const file = `${__dirname}/desktop/win/Enecuum.exe`;
     res.download(file); // Set disposition and send it.
 })
 
 app.get('/linux', function(req, res){
-    const file = `${__dirname}/desktop/linux/Enecuum.`;
+    const file = `${__dirname}/desktop/linux/Enecuum`;
     res.download(file); // Set disposition and send it.
 })
