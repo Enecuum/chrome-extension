@@ -273,6 +273,7 @@ a:hover {
 
 .field {
     /*width: 280px;*/
+    height: 44px;
     padding: 10px;
     margin: 20px 20px 0;
     /*border-radius: 3px;*/
@@ -429,6 +430,7 @@ a:hover {
 input.field {
     background: var(--color-blue-background);
     width: calc(100% - 40px);
+    height: 44px;
     /*margin-top: 0;*/
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
