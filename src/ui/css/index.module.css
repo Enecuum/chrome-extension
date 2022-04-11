@@ -1129,6 +1129,8 @@ input[type=number] {
 }
 
 .transaction_history_back {
+    height: 44px;
+    line-height: 44px;
     position: absolute;
     top: 20px;
     left: 20px;

@@ -18,17 +18,17 @@ app.get('/android', function(req, res){
     res.download(file); // Set disposition and send it.
 })
 
-app.get('/mac', function(req, res){
-    const file = `${__dirname}/desktop/mac/Enecuum-1.0.0.dmg`;
+app.get('/macos', function(req, res){
+    const file = `${__dirname}/download/enecuum.dmg`;
     res.download(file); // Set disposition and send it.
 })
 
-app.get('/win', function(req, res){
-    const file = `${__dirname}/desktop/win/Enecuum.exe`;
+app.get('/windows', function(req, res){
+    const file = `${__dirname}/download/enecuum.exe`;
     res.download(file); // Set disposition and send it.
 })
 
 app.get('/linux', function(req, res){
-    const file = `${__dirname}/desktop/linux/Enecuum`;
+    const file = `${__dirname}/download/enecuum`;
     res.download(file); // Set disposition and send it.
 })

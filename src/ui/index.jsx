@@ -1,5 +1,5 @@
 import React from 'react'
-import {render} from 'react-dom'
+import {createRoot} from 'react-dom/client'
 import App from "./App";
 import Analytics from "./elements/Analytics";
 
@@ -9,12 +9,12 @@ import {versions} from "../utils/names";
 
 export async function initApp(background) {
 
-    render(
+    const root = createRoot(document.getElementById('app'))
+    root.render(
         <div>
             <App background={background}/>
             <Analytics/>
         </div>,
-        document.getElementById('app')
     )
 
     // Web desktop init

@@ -613,7 +613,7 @@ export default function Account(props) {
             <div className={styles.content}>
 
                 <img className={styles.content_logo} src={logo} alt=""/>
-                <div className={styles.balance} title={(Number(amount) / decimals[props.user.token])}>
+                <div className={styles.balance} title={decimals[props.user.token] ? (Number(amount) / decimals[props.user.token]) : ''}>
                     {(Number(amount) / amountDecimal).toFixed(4)}
                     {' '}
                     {ticker}
