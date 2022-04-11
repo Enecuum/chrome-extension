@@ -8,6 +8,10 @@ ion-content {
 }
 
 body {
+    overflow: hidden;
+}
+
+body {
     margin: 0;
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
@@ -81,6 +85,7 @@ main {
     min-width: 350px;
     min-height: 600px;
     overflow: scroll;
+    scrollbar-width: none;
     /*padding-bottom: 20px;*/
     /*margin-bottom: 20px;*/
 

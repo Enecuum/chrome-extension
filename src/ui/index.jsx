@@ -18,7 +18,7 @@ export async function initApp(background) {
     )
 
     // Web desktop init
-    if (chrome.runtime.getManifest().version.endsWith(versions.WEB)) {
+    if (chrome.runtime.getManifest().version.includes(versions.WEB)) {
         createSpace()
         createDisclaimer()
         createResizeWatcher()
