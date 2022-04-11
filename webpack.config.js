@@ -34,6 +34,9 @@ module.exports = () => {
     }))
     // plugins.push(new webpack.EnvironmentPlugin(['VERSION']))
     plugins.push(new webpack.DefinePlugin({VERSION: JSON.stringify(VERSION)}))
+    plugins.push(new webpack.ProvidePlugin({
+        Buffer: ['buffer', 'Buffer'],
+    }))
 
     return {
         mode,
@@ -53,7 +56,16 @@ module.exports = () => {
         },
         devtool: 'inline-source-map',
         resolve: {
-            extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".styl", ".css", ".png", ".jpg", ".gif", ".svg", ".woff", ".woff2", ".ttf", ".otf"]
+            extensions: [".ts", ".tsx", ".js", ".jsx", ".json", ".styl", ".css", ".png", ".jpg", ".gif", ".svg", ".woff", ".woff2", ".ttf", ".otf"],
+            fallback: {
+                "stream": require.resolve("stream-browserify"),
+                "buffer": require.resolve("buffer")
+            },
+            alias: {
+                "buffer": "buffer",
+                "stream": "stream-browserify"
+            }
+
         },
         plugins,
 
