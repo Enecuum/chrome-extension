@@ -33,10 +33,17 @@ module.exports = () => {
         content: VERSION
     }))
     // plugins.push(new webpack.EnvironmentPlugin(['VERSION']))
-    plugins.push(new webpack.DefinePlugin({VERSION: JSON.stringify(VERSION)}))
+    plugins.push(new webpack.DefinePlugin({
+        VERSION: JSON.stringify(VERSION),
+        process: 'process',
+    }))
     plugins.push(new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],
     }))
+
+    // new webpack.DefinePlugin({
+    //
+    // })
 
     return {
         mode,

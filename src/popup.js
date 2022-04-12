@@ -128,6 +128,10 @@ async function setupUI() {
 
         // Simple message provider
         global.webBackgroundPort = globalMessageHandler
+
+        console.log('We are looking for process here.')
+        // console.log('Process: ' + !!process)
+
         // Service worker start
         serviceWorkerRegistration.register()
 
