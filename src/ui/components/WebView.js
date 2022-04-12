@@ -23,11 +23,6 @@ export default function WebView(props) {
 
             <div>
                 <div className={styles.field} onClick={() => props.setWebView(false)}>❮ Back</div>
-                <div className={styles.dapps}>
-                    <div onClick={() => setUrl('https://app.enex.space')}>ENEX</div>
-                    <div onClick={() => setUrl('https://bit-wallet.enecuum.com')}>WALLET</div>
-                    <div onClick={() => setUrl('https://faucet-bit.enecuum.com')}>FAUCET</div>
-                </div>
             </div>
 
             {/*<Header clickMenu={() => props.setWebView(false)} user={{}}/>*/}
@@ -43,6 +38,14 @@ export default function WebView(props) {
                 label={'URL'}
                 placeholder={'Place url of DEX here'}
             />
+
+            <div className={styles.dapps}>
+                <div onClick={() => setUrl('https://app.enex.space')}>ENEX</div>
+                <div onClick={() => setUrl('https://bit-wallet.enecuum.com')}>WALLET</div>
+                <div onClick={() => setUrl('https://faucet-bit.enecuum.com')}>FAUCET</div>
+                <div onClick={() => {}}>SAVE</div>
+
+            </div>
 
             <iframe src={url}/>
 
