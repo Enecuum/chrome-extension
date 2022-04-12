@@ -29,6 +29,6 @@ app.get('/windows', function(req, res){
 })
 
 app.get('/linux', function(req, res){
-    const file = `${__dirname}/download/enecuum`;
+    const file = `${__dirname}/download/enecuum.snap`;
     res.download(file); // Set disposition and send it.
 })

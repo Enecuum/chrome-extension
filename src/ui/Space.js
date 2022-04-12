@@ -66,9 +66,9 @@ const createDisclaimer = () => {
 
     linksDiv.innerHTML +=
         '<div class="">' +
-        '<div><a href="/macos">macOS</a></div>' +
-        '<div><a href="/windows">Windows</a></div>' +
-        '<div><a href="/linux">Linux</a></div>' +
+        '<div><a href="/macos" download>macOS</a></div>' +
+        '<div><a href="/windows" download>Windows</a></div>' +
+        '<div><a href="/linux" download>Linux</a></div>' +
         '</div>'
     linksDiv.innerHTML += '<div id="leftLinksTextBottom">' + chrome.runtime.getManifest().version + ' ' + VERSION + '</div>'
     const close = document.createElement('div')
