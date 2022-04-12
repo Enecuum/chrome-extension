@@ -1269,19 +1269,20 @@ iframe {
 }
 
 .dapps {
-    position: absolute;
-    right: 20px;
-    top: 20px;
+    /*position: absolute;*/
+    /*right: 20px;*/
+    /*top: 20px;*/
     display: flex;
     flex-direction: row;
-    font-size: var(--font-size-small);
+    /*font-size: var(--font-size-small);*/
     color: var(--color-gray);
     /*height: 62px;*/
     /*line-height: 100%;*/
+    margin-top: 20px;
 }
 
 .dapps div {
-    margin-left: 10px;
+    margin-left: 20px;
     cursor: pointer;
 }
 
