@@ -7,8 +7,10 @@ function createWindow () {
   const mainWindow = new BrowserWindow({
     width: 350,
     height: 630,
-    icon: __dirname + './images/enq.png',
-    webPreferences: {}
+    icon: __dirname + './images/s512.png',
+    webPreferences: {},
+    autoHideMenuBar: true,
+    title: 'Enecuum Desktop Wallet',
   })
 
   // and load the index.html of the app.

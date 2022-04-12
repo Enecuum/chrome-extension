@@ -27,7 +27,7 @@
             "icon": "./dist/images/mac.icns"
         },
         "win": {
-            "icon": "./dist/images/512.png"
+            "icon": "./dist/images/s512.png"
         }
     },
     "author": "Enecuum",
