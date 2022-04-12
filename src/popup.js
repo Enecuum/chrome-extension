@@ -58,7 +58,7 @@ chrome.manifest = (function () {
             manifestObject = JSON.parse(xhr.responseText)
         }
     }
-    xhr.open('GET', '/manifest.json', false)
+    xhr.open('GET', 'manifest.json', false)
     try {
         xhr.send()
     } catch (e) {

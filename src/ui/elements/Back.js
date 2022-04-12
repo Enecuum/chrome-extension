@@ -10,7 +10,7 @@ export default function Back(props) {
 
     return (
         <div className={styles.field + ' ' + styles.pointer} onClick={() => {
-            window.history.pushState({}, document.title,  isWeb ? '' : '/index.html')
+            // window.history.pushState({}, document.title,  isWeb ? '' : '/')
             props.setFalse()
         }}>
             ❮ Back
