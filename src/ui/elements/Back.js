@@ -10,6 +10,7 @@ export default function Back(props) {
 
     return (
         <div className={styles.field + ' ' + styles.pointer} onClick={() => {
+            // We have a bug here with ledger window now
             // window.history.pushState({}, document.title,  isWeb ? '' : '/')
             props.setFalse()
         }}>
