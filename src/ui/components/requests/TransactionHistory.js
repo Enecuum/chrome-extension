@@ -5,6 +5,7 @@ import elements from '../../css/elements.module.css'
 import {explorerTX, shortHash} from '../../Utils'
 import { apiController } from '../../../utils/apiController'
 import { ENQ_CONTENT } from '../../../utils/names'
+import Back from "../../elements/Back";
 
 // let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -158,7 +159,7 @@ export default function TransactionHistory(props) {
     return (
         <div className={styles.main}>
 
-            <div className={styles.transaction_history_back} onClick={() => props.setTransactionHistory(false)}>❮ Back</div>
+            <Back setFalse={() => props.setTransactionHistory(false)}/>
 
 
             <div className={styles.transaction_network}>
