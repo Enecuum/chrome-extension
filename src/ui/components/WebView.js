@@ -6,17 +6,67 @@ import {regexSeed} from "../Utils";
 import Input from "../elements/Input";
 
 // let defaultUrl = 'http://localhost:1234/#!action=swap'
-let defaultUrl = 'https://devapp.enex.space/#!action=swap'
+// let defaultUrl = 'https://devapp.enex.space/#!action=swap'
+let defaultUrl = 'http://95.216.207.173:9990/testing1'
 
 export default function WebView(props) {
 
+    let account = props.user
+
     let [url, setUrl] = useState(defaultUrl)
 
-    let confirm = () => {}
+    let [connect, setConnect] = useState('')
+
+    let confirm = () => {
+    }
 
     let handleChangeUrl = (e) => {
         setUrl(e.target.value)
     }
+
+    let onMessage = (event) => {
+        let data = event.data
+        console.warn(event.data)
+        if (data.checkConnect !== undefined) {
+            event.source.postMessage({'iframe': true}, event.origin)
+        }
+        if (data.type !== undefined) {
+            let response = ''
+            switch (data.type) {
+                case 'enable':
+                    response = {
+                        pubkey: account.publicKey,
+                        net: account.net,
+                    }
+                    connect = true
+                    break
+                case 'getProvider':
+                    ENQWeb.Net.provider = account.net
+                    if (task.cb.fullUrl) {
+                        response = {net: ENQWeb.Net.provider}
+                    } else {
+                        response = {net: ENQWeb.Net.currentProvider}
+                    }
+                    break
+                case 'getVersion':
+                    response = extensionApi.app.getDetails().version
+                    break
+                case 'balanceOf':
+                    response = balance
+                    break
+                case 'reconnect':
+                    response = {status: connect}
+                    break
+                case 'sign':
+                    break
+                default:
+                    break
+            }
+            event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+        }
+    }
+
+    window.addEventListener('message', onMessage, false)
 
     return (
         <div className={styles.main}>
@@ -43,7 +93,9 @@ export default function WebView(props) {
                 <div onClick={() => setUrl('https://app.enex.space')}>ENEX</div>
                 <div onClick={() => setUrl('https://bit-wallet.enecuum.com')}>WALLET</div>
                 <div onClick={() => setUrl('https://faucet-bit.enecuum.com')}>FAUCET</div>
-                <div onClick={() => {}}>SAVE</div>
+                <div onClick={() => {
+                }}>SAVE
+                </div>
 
             </div>
 
