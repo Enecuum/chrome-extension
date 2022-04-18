@@ -4,7 +4,9 @@
 - Android
 - iOS
 - 
-- Electron (Win, Mac, Linux)
+- Win Electron
+- Mac Electron
+- Linux Electron
 - 
 - Web version for browsers
 - Mobile web version for browsers

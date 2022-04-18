@@ -358,7 +358,7 @@ export default function App(props) {
 
     if (isLogin) return <Login login={login2} setMnemonic={setMnemonic}/>
 
-    if (isWebView) return <WebView url={isWebView}  setWebView={setWebView}/>
+    if (isWebView) return <WebView url={isWebView}  setWebView={setWebView} user={user}/>
 
     // TODO user
     return <Account user={user}
