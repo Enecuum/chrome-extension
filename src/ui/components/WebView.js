@@ -1,9 +1,10 @@
-import React, {useState} from "react"
+import React, { useEffect, useState } from 'react'
 import styles from "../css/index.module.css"
 import Separator from "../elements/Separator"
 import Header from "../elements/Header"
 import {regexSeed} from "../Utils";
 import Input from "../elements/Input";
+import { webBackground } from '../../handler'
 
 // let defaultUrl = 'http://localhost:1234/#!action=swap'
 // let defaultUrl = 'https://devapp.enex.space/#!action=swap'
@@ -11,9 +12,10 @@ let defaultUrl = 'http://95.216.207.173:9990/testing1'
 
 export default function WebView(props) {
 
+    let iframe = document.getElementById('iframe')
     let account = props.user
 
-    let [url, setUrl] = useState(defaultUrl)
+    let [url, setUrl] = useState( iframe.getAttribute('src') || defaultUrl)
 
     let [connect, setConnect] = useState('')
 
@@ -26,21 +28,52 @@ export default function WebView(props) {
         setUrl(e.target.value)
     }
 
-    let onMessage = (event) => {
+
+    const waitingFunction = ()=>{
+        let time = 200
+        return new Promise((resolve)=>{
+            let a = setInterval(()=>{
+                if(props.bufferMsg !== false){
+                    clearInterval(a)
+                    resolve(true)
+                }
+            }, time)
+        })
+    }
+
+    let updateIrameZIndexLock = false
+
+    let onMessage = async (event) => {
+        setIframeWork(true)
+
         let data = event.data
         console.warn(event.data)
         if (data.checkConnect !== undefined) {
             event.source.postMessage({'iframe': true}, event.origin)
         }
         if (data.type !== undefined) {
+            updateIrameZIndexLock = true
+            webBackground(data)
+            props.setBufferMsg(false)
             let response = ''
             switch (data.type) {
             case 'enable':
-                response = {
-                    pubkey: account.publicKey,
-                    net: account.net,
-                }
-                connect = true
+                // response = {
+                //     pubkey: account.publicKey,
+                //     net: account.net,
+                // }
+                // connect = true
+                iframe.style.zIndex = "-1"
+                props.setPublicKeyRequest(data)
+                await waitingFunction().then(()=>{})
+                response = props.bufferMsg
+                break
+            case 'tx':
+                iframe.style.zIndex = "-1"
+                props.setTransactionRequest(data)
+                await waitingFunction().then(()=>{
+                    response = props.bufferMsg
+                })
                 break
             case 'getProvider':
                 ENQWeb.Net.provider = account.net
@@ -65,34 +98,39 @@ export default function WebView(props) {
                 break
             }
             event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+            updateIrameZIndexLock = false
+            setIframeWork(false)
         }
     }
 
     const iframeActivation = ()=>{
-        let iframe = document.getElementById('iframe')
         iframe.hidden = false
-        iframe.style.zIndex = "2"
-        iframe.setAttribute('src', url)
+        if(!updateIrameZIndexLock)
+            iframe.style.zIndex = "2"
+        if((iframe.getAttribute('src') === null) || (iframe.getAttribute('src') !== url)){
+            console.log(url)
+            iframe.setAttribute('src', url)
+        }
     }
 
     const iframeDeactivation = ()=>{
         let iframe = document.getElementById('iframe')
         iframe.hidden = true
         iframe.style.zIndex = "-1"
-        iframe.setAttribute('src', '')
     }
 
     // window.addEventListener('message', onMessage, false)
 
     massageListenerSetup(onMessage)
 
+
     return (
         <div className={styles.main}>
 
             <div>
                 <div className={styles.field} onClick={() => {
-                    props.setWebView(false)
                     iframeDeactivation()
+                    props.setWebView(false)
                 }}>❮ Back</div>
             </div>
 
