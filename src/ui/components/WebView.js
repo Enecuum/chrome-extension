@@ -80,7 +80,7 @@ export default function WebView(props) {
                 props.setTransactionRequest(data)
                 iframe.style.zIndex = "-1"
                 await waitingFunction().then(()=>{
-
+                    console.log(bufferForMsg)
                     response = JSON.parse(bufferForMsg)
                     event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
                     updateIrameZIndexLock = false
@@ -97,12 +97,15 @@ export default function WebView(props) {
                 break
             case 'getVersion':
                 response = extensionApi.app.getDetails().version
+                event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
                 break
             case 'balanceOf':
                 response = balance
                 break
             case 'reconnect':
                 response = {status: connect}
+                userStorage.task.removeTask(data.cb.taskId)
+                event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
                 break
             case 'sign':
                 break
