@@ -157,6 +157,11 @@ async function setupUI() {
     //         userStorage.promise.sendPromise({ initial: true }).then(r => {})
     //     }, lockOffsetInterval)
     // }
+
+    const el = document.createElement("iframe");
+    el.setAttribute("id", "iframe")
+    el.hidden = true
+    document.body.appendChild(el)
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -164,6 +169,19 @@ document.addEventListener('DOMContentLoaded', () => {
         .then()
 })
 
+let messageListener = {}
+
+function massageListenerSetup(cb){
+    try{
+        window.removeEventListener('message',messageListener, false)
+        window.addEventListener('message',cb, false)
+        messageListener = cb
+    }catch (e){
+        console.warn("bug in onmessage setup")
+    }
+}
+
+global.massageListenerSetup = massageListenerSetup
 
 // TODO Rename CB
 function mainListener(msg, sender, sendResponse) {
