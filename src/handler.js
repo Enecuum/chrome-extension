@@ -152,7 +152,7 @@ export function globalMessageHandler(msg, ENQWeb) {
     })
 }
 
-
+//TODO add rule for add to storage
 const webBackground = (msg)=>{
     if (msg.cb.taskId) {
         if (msg.type === 'tx') {
@@ -257,7 +257,7 @@ let ledgerTransport
 
 const taskHandler = async (taskId)=>{
     let task = userStorage.task.getTask(taskId)
-
+    let buf
     let account = await userStorage.user.loadUser()
     let data = ''
 
@@ -281,67 +281,64 @@ const taskHandler = async (taskId)=>{
         }
         // TODO Description
     case 'tx':
-        if (ports[task.cb.url].enabled) {
-            data = task.tx
-            console.log(data)
-            let buf = ENQWeb.Net.provider
-            ENQWeb.Net.provider = account.net
-            if (account.ledger !== undefined && account.type === 2) {
-                data.from = wallet.pubkey
-                data.amount = data.value ? Number(data.value) : Number(data.amount)
-                data.tokenHash = data.ticker ? data.ticker : data.tokenHash
-                data.value = ''
-                data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
-                data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)
-                let Transport = ledgerTransport ? ledgerTransport : await TransportWebHID.create()
-                if (!ledgerTransport) {
-                    ledgerTransport = Transport
-                }
-                data.sign = await signHash(ENQWeb.Utils.crypto.sha256(data.hash), wallet.prvkey, Transport)
-                    .catch(() => {
-                        return false
+        data = task.tx
+        console.log(data)
+        buf = ENQWeb.Net.provider
+        ENQWeb.Net.provider = account.net
+        if (account.ledger !== undefined && account.type === 2) {
+            data.from = wallet.pubkey
+            data.amount = data.value ? Number(data.value) : Number(data.amount)
+            data.tokenHash = data.ticker ? data.ticker : data.tokenHash
+            data.value = ''
+            data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
+            data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)
+            let Transport = ledgerTransport ? ledgerTransport : await TransportWebHID.create()
+            if (!ledgerTransport) {
+                ledgerTransport = Transport
+            }
+            data.sign = await signHash(ENQWeb.Utils.crypto.sha256(data.hash), wallet.prvkey, Transport)
+                .catch(() => {
+                    return false
+                })
+            if (data.sign) {
+                data = await apiController.sendTransaction(data)
+                    .then(data => {
+                        if (data.hash) {
+                            return data
+                        }
+                        console.warn(data)
                     })
-                if (data.sign) {
-                    data = await apiController.sendTransaction(data)
-                        .then(data => {
-                            if (data.hash) {
-                                return data
-                            }
-                            console.warn(data)
-                        })
-                        .catch(er => {
-                            console.error(er)
-                        })
-                } else {
-                    console.warn('Transaction rejected')
-                    throw new Error('reject')
-                }
-
+                    .catch(er => {
+                        console.error(er)
+                    })
             } else {
-                data.from = wallet
-                data.amount = data.value ? Number(data.value) : Number(data.amount)
-                data.tokenHash = data.ticker ? data.ticker : data.tokenHash
-                data.value = ''
-                data = await apiController.postTransaction(data)
-                    .catch(err => {
-                        console.log(err)
-                        return false
-                    })
+                console.warn('Transaction rejected')
+                throw new Error('reject')
             }
-            ENQWeb.Net.provider = buf
-            userStorage.task.removeTask(taskId)
-            return  {
-                data: JSON.stringify({hash: data.hash ? data.hash : 'Error'}),
-                taskId: taskId,
-                cb: task.cb
-            }
-        }
 
+        } else {
+            data.from = wallet
+            data.amount = data.value ? Number(data.value) : Number(data.amount)
+            data.tokenHash = data.ticker ? data.ticker : data.tokenHash
+            data.value = ''
+            data = await apiController.postTransaction(data)
+                .catch(err => {
+                    console.log(err)
+                    return false
+                })
+        }
+        ENQWeb.Net.provider = buf
+        userStorage.task.removeTask(taskId)
+        return  {
+            data: JSON.stringify({hash: data.hash ? data.hash : 'Error'}),
+            taskId: taskId,
+            cb: task.cb
+        }
         break
         // TODO Description
     case 'balanceOf':
         data = task.data
-        let buf = ENQWeb.Net.provider
+        buf = ENQWeb.Net.provider
         console.log(account)
         if (data.to) {
             wallet.pubkey = data.to

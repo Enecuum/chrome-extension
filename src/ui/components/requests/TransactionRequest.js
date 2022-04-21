@@ -5,6 +5,7 @@ import elements from '../../css/elements.module.css'
 import { shortHash } from '../../Utils'
 import { apiController } from '../../../utils/apiController'
 import Back from "../../elements/Back";
+import { msg } from '@babel/core/lib/config/validation/option-assertions'
 
 // let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -169,6 +170,11 @@ export default function TransactionRequest(props) {
                     taskId: taskId
                 })
                     .then(answer => {
+                        try{
+                            bufferForMsg = data.data.data
+                        }catch (e) {
+
+                        }
                         if (answer.data.status === 'reject') {
                             setBlock(false)
                         } else {
@@ -190,6 +196,12 @@ export default function TransactionRequest(props) {
         await asyncRequest({
             disallow: true,
             taskId: taskId
+        }).then(data=>{
+            try{
+                bufferForMsg = data.data.data
+            }catch (e) {
+
+            }
         })
         props.setTransactionRequest(false)
         closeModalWindow()

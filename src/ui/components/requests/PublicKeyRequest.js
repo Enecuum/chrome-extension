@@ -40,7 +40,11 @@ export default class PublicKeyRequest extends React.Component {
             allow: true,
             taskId: this.state.taskId
         }).then(data=>{
-            bufferForMsg = data.data.data
+            try{
+                bufferForMsg = data.data.data
+            }catch (e) {
+
+            }
         })
         // let remember = (document.getElementById('checkbox'))
 
@@ -62,7 +66,11 @@ export default class PublicKeyRequest extends React.Component {
             disallow: true,
             taskId: this.state.taskId
         }).then(data=>{
-            bufferForMsg = data.data.data
+            try{
+                bufferForMsg = data.data.data
+            }catch (e) {
+
+            }
         })
         this.props.setPublicKeyRequest(false)
         await this.closeModalWindow()
