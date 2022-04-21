@@ -17,6 +17,8 @@ export default function WebView(props) {
 
     let [connect, setConnect] = useState('')
 
+    // let [iframe, setIframe] = useState('')
+
     let confirm = () => {
     }
 
@@ -33,46 +35,65 @@ export default function WebView(props) {
         if (data.type !== undefined) {
             let response = ''
             switch (data.type) {
-                case 'enable':
-                    response = {
-                        pubkey: account.publicKey,
-                        net: account.net,
-                    }
-                    connect = true
-                    break
-                case 'getProvider':
-                    ENQWeb.Net.provider = account.net
-                    if (task.cb.fullUrl) {
-                        response = {net: ENQWeb.Net.provider}
-                    } else {
-                        response = {net: ENQWeb.Net.currentProvider}
-                    }
-                    break
-                case 'getVersion':
-                    response = extensionApi.app.getDetails().version
-                    break
-                case 'balanceOf':
-                    response = balance
-                    break
-                case 'reconnect':
-                    response = {status: connect}
-                    break
-                case 'sign':
-                    break
-                default:
-                    break
+            case 'enable':
+                response = {
+                    pubkey: account.publicKey,
+                    net: account.net,
+                }
+                connect = true
+                break
+            case 'getProvider':
+                ENQWeb.Net.provider = account.net
+                if (task.cb.fullUrl) {
+                    response = {net: ENQWeb.Net.provider}
+                } else {
+                    response = {net: ENQWeb.Net.currentProvider}
+                }
+                break
+            case 'getVersion':
+                response = extensionApi.app.getDetails().version
+                break
+            case 'balanceOf':
+                response = balance
+                break
+            case 'reconnect':
+                response = {status: connect}
+                break
+            case 'sign':
+                break
+            default:
+                break
             }
             event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
         }
     }
 
-    window.addEventListener('message', onMessage, false)
+    const iframeActivation = ()=>{
+        let iframe = document.getElementById('iframe')
+        iframe.hidden = false
+        iframe.style.zIndex = "2"
+        iframe.setAttribute('src', url)
+    }
+
+    const iframeDeactivation = ()=>{
+        let iframe = document.getElementById('iframe')
+        iframe.hidden = true
+        iframe.style.zIndex = "-1"
+        iframe.setAttribute('src', '')
+    }
+
+    // window.addEventListener('message', onMessage, false)
+
+    massageListenerSetup(onMessage)
 
     return (
         <div className={styles.main}>
 
             <div>
-                <div className={styles.field} onClick={() => props.setWebView(false)}>❮ Back</div>
+                <div className={styles.field} onClick={() => {
+                    props.setWebView(false)
+                    iframeDeactivation()
+                }}>❮ Back</div>
             </div>
 
             {/*<Header clickMenu={() => props.setWebView(false)} user={{}}/>*/}
@@ -99,7 +120,8 @@ export default function WebView(props) {
 
             </div>
 
-            <iframe src={url}/>
+            {/*<iframe src={url}/>*/}
+            {iframeActivation()}
 
         </div>
     )
