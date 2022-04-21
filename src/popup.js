@@ -211,11 +211,19 @@ function awaitAsync(data) {
     })
 }
 
+let iframeWork = false
+
+let setIframeWork = (data)=>{
+    iframeWork = data
+}
+
+global.setIframeWork = setIframeWork
+
 function asyncRequest(data) {
     data.async = true
     awaitId[data] = false
     let answer = ''
-    if (version.includes('web')) {
+    if (version.includes('web') || iframeWork === true) {
         return messagePopupHandler(data)
     } else {
         return new Promise(async (resolve, reject) => {
