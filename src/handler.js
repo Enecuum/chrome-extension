@@ -154,7 +154,6 @@ export function globalMessageHandler(msg, ENQWeb) {
 
 
 const webBackground = (msg)=>{
-    console.log(msg)
     if (msg.cb.taskId) {
         if (msg.type === 'tx') {
             userStorage.task.setTask(msg.cb.taskId, {
@@ -221,33 +220,31 @@ export function runLockTimer() {
 }
 
 export async function messagePopupHandler(msg) {
-    console.log(msg)
     if (msg.allow && msg.taskId) {
-        await taskHandler(msg.taskId)
-            .then(() => {
-                if (msg.async) {
-                    return {
-                        asyncAnswer: true,
-                        data: msg
-                    }
+        return await taskHandler(msg.taskId)
+            .then(data => {
+                return {
+                    asyncAnswer: true,
+                    data: data
                 }
             })
             .catch(err => {
                 console.warn(err)
-                if (msg.async) {
-                    return {
-                        asyncAnswer: true,
-                        data: {status: 'reject'}
-                    }
+                return {
+                    asyncAnswer: true,
+                    data: {status: 'reject'}
                 }
             })
 
     } else if (msg.disallow && msg.taskId) {
         rejectTaskHandler(msg.taskId)
-        if (msg.async) {
-            return {
-                asyncAnswer: true,
-                data: msg
+        return {
+            reject: true,
+            data: {
+                data:JSON.stringify({
+                    reject: true,
+                    data: 'rejected'
+                })
             }
         }
     }
@@ -259,10 +256,9 @@ export async function messagePopupHandler(msg) {
 let ledgerTransport
 
 const taskHandler = async (taskId)=>{
-    console.log(taskId)
     let task = userStorage.task.getTask(taskId)
 
-    let account = userStorage.user.loadUser()
+    let account = await userStorage.user.loadUser()
     let data = ''
 
     let wallet = {

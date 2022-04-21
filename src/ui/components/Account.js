@@ -20,6 +20,9 @@ let tickers = {}
 global.api = apiController
 
 export default function Account(props) {
+
+    global.setIframeWork(false)
+
     ENQWeb.Enq.provider = props.user.net
 
     let [localNetworks, setLocalNetworks] = useState(JSON.parse(localStorage.getItem('networks')) || [])

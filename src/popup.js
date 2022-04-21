@@ -211,6 +211,10 @@ function awaitAsync(data) {
     })
 }
 
+let bufferForMsg
+
+global.bufferForMsg = bufferForMsg
+
 let iframeWork = false
 
 let setIframeWork = (data)=>{
@@ -223,8 +227,11 @@ function asyncRequest(data) {
     data.async = true
     awaitId[data] = false
     let answer = ''
+    // iframeWork = true
     if (version.includes('web') || iframeWork === true) {
-        return messagePopupHandler(data)
+        answer = messagePopupHandler(data)
+        console.log(answer)
+        return answer
     } else {
         return new Promise(async (resolve, reject) => {
             backgroundPort.postMessage(data)
