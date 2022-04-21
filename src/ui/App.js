@@ -71,8 +71,6 @@ export default function App(props) {
 
     const [isKeys, setKeys] = useState(false)
 
-    const [bufferMsg, setBufferMsg] = useState('')
-
     let [deferredPrompt, setDeferredPrompt] = useState()
     let initPWA = () => {
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -327,13 +325,13 @@ export default function App(props) {
     // }
 
     if (isPublicKeyRequest) {
-        return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} request={isPublicKeyRequest} setBufferMsg={setBufferMsg}/>
+        return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} request={isPublicKeyRequest}/>
     }
 
     // TODO user
     if (isTransactionRequest) {
         return <TransactionRequest setTransactionRequest={setTransactionRequest} request={isTransactionRequest}
-                                   user={user} setBufferMsg={setBufferMsg}/>
+                                   user={user}/>
     }
 
     // TODO user
@@ -362,9 +360,7 @@ export default function App(props) {
 
     if (isWebView) return <WebView url={isWebView}  setWebView={setWebView} user={user}
                                    setTransactionRequest={setTransactionRequest}
-                                   setPublicKeyRequest={setPublicKeyRequest}
-                                   bufferMsg={bufferMsg}
-                                   setBufferMsg={setBufferMsg}/>
+                                   setPublicKeyRequest={setPublicKeyRequest}/>
 
     // TODO user
     return <Account user={user}

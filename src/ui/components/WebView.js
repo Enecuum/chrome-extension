@@ -31,11 +31,14 @@ export default function WebView(props) {
 
     const waitingFunction = ()=>{
         let time = 200
-        return new Promise((resolve)=>{
-            let a = setInterval(()=>{
-                if(props.bufferMsg !== false){
+        // props.setBufferMsg(false)
+        global.bufferForMsg = false
+        return new Promise((resolve, reject) => {
+            let a = setInterval(() => {
+                if (bufferForMsg !== false) {
+                    console.log(bufferForMsg)
                     clearInterval(a)
-                    resolve(true)
+                    resolve()
                 }
             }, time)
         })
@@ -54,7 +57,6 @@ export default function WebView(props) {
         if (data.type !== undefined) {
             updateIrameZIndexLock = true
             webBackground(data)
-            props.setBufferMsg(false)
             let response = ''
             switch (data.type) {
             case 'enable':
@@ -65,14 +67,24 @@ export default function WebView(props) {
                 // connect = true
                 iframe.style.zIndex = "-1"
                 props.setPublicKeyRequest(data)
-                await waitingFunction().then(()=>{})
-                response = props.bufferMsg
+                await waitingFunction().then(()=>{
+                    console.log(bufferForMsg)
+                    response = JSON.parse(bufferForMsg)
+                    event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                    updateIrameZIndexLock = false
+                    setIframeWork(false)
+                })
+
                 break
             case 'tx':
-                iframe.style.zIndex = "-1"
                 props.setTransactionRequest(data)
+                iframe.style.zIndex = "-1"
                 await waitingFunction().then(()=>{
-                    response = props.bufferMsg
+
+                    response = JSON.parse(bufferForMsg)
+                    event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                    updateIrameZIndexLock = false
+                    setIframeWork(false)
                 })
                 break
             case 'getProvider':
@@ -97,9 +109,9 @@ export default function WebView(props) {
             default:
                 break
             }
-            event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
-            updateIrameZIndexLock = false
-            setIframeWork(false)
+            // event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+            // updateIrameZIndexLock = false
+            // setIframeWork(false)
         }
     }
 
