@@ -20,6 +20,9 @@ let tickers = {}
 global.api = apiController
 
 export default function Account(props) {
+
+    global.setIframeWork(false)
+
     ENQWeb.Enq.provider = props.user.net
 
     let [localNetworks, setLocalNetworks] = useState(JSON.parse(localStorage.getItem('networks')) || [])
@@ -333,7 +336,11 @@ export default function Account(props) {
             if(!decimals[item.tx.tokenHash]){
                 await apiController.getTokenInfo(item.tx.tokenHash)
                     .then(token=>{
-                        decimals[item.tx.tokenHash] = 10 ** token[0]['decimals']
+                        try {
+                            decimals[item.tx.tokenHash] = (10 ** token[0]['decimals'])
+                        }catch (e) {
+                            decimals[item.tx.tokenHash] = 1e10
+                        }
                     })
             }
             historyElements.push(

@@ -39,8 +39,13 @@ export default class PublicKeyRequest extends React.Component {
         await asyncRequest({
             allow: true,
             taskId: this.state.taskId
-        })
+        }).then(data=>{
+            try{
+                bufferForMsg = data.data.data
+            }catch (e) {
 
+            }
+        })
         // let remember = (document.getElementById('checkbox'))
 
         if (this.state.remember === true) {
@@ -60,6 +65,12 @@ export default class PublicKeyRequest extends React.Component {
         await asyncRequest({
             disallow: true,
             taskId: this.state.taskId
+        }).then(data=>{
+            try{
+                bufferForMsg = data.data.data
+            }catch (e) {
+
+            }
         })
         this.props.setPublicKeyRequest(false)
         await this.closeModalWindow()
