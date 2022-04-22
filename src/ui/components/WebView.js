@@ -142,26 +142,28 @@ export default function WebView(props) {
     return (
         <div className={styles.main}>
 
-            <div>
+            <div className={styles.header}>
                 <div className={styles.field} onClick={() => {
                     iframeDeactivation()
                     props.setWebView(false)
                 }}>❮ Back</div>
+
+                <Input
+                    type="text"
+                    spellCheck={false}
+                    onChange={handleChangeUrl}
+                    value={url}
+                    className={styles.field}
+                    label={'URL'}
+                    placeholder={'Place url of DEX here'}
+                />
             </div>
 
             {/*<Header clickMenu={() => props.setWebView(false)} user={{}}/>*/}
 
             {/*<Separator/>*/}
 
-            <Input
-                type="text"
-                spellCheck={false}
-                onChange={handleChangeUrl}
-                value={url}
-                className={styles.field}
-                label={'URL'}
-                placeholder={'Place url of DEX here'}
-            />
+
 
             <div className={styles.dapps}>
                 <div onClick={() => setUrl('https://app.enex.space')}>ENEX</div>
