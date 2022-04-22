@@ -1277,6 +1277,7 @@ iframe {
     top: 170px;
     bottom: 0;
     z-index: 3;
+    /*scroll-behavior: auto;*/
 }
 
 .dapps {

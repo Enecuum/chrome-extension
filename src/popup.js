@@ -152,16 +152,17 @@ async function setupUI() {
     }
 
     userStorage.promise.sendPromise({ initial: true }).then(r => {})
+
     // if (!version.includes('web')) {
     //     setInterval(() => {
     //         userStorage.promise.sendPromise({ initial: true }).then(r => {})
     //     }, lockOffsetInterval)
     // }
 
-    const el = document.createElement("iframe");
-    el.setAttribute("id", "iframe")
-    el.hidden = true
-    document.body.appendChild(el)
+    const iframe = document.createElement("iframe");
+    iframe.setAttribute("id", "iframe")
+    iframe.hidden = true
+    document.body.appendChild(iframe)
 }
 
 document.addEventListener('DOMContentLoaded', () => {

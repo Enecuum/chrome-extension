@@ -6,8 +6,8 @@ import {regexSeed} from "../Utils";
 import Input from "../elements/Input";
 
 // let defaultUrl = 'http://localhost:1234/#!action=swap'
-// let defaultUrl = 'https://devapp.enex.space/#!action=swap'
-let defaultUrl = 'http://95.216.207.173:9990/testing1'
+let defaultUrl = 'https://devapp.enex.space/#!action=swap'
+// let defaultUrl = 'http://95.216.207.173:9990/testing1'
 
 export default function WebView(props) {
 
