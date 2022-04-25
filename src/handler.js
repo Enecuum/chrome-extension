@@ -154,7 +154,15 @@ export function globalMessageHandler(msg, ENQWeb) {
 
 //TODO add rule for add to storage
 const webBackground = (msg)=>{
+    let popupOpenMethods = {
+        'enable': true,
+        'tx': true,
+        'sign': false
+    }
     if (msg.cb.taskId) {
+        if(!popupOpenMethods[msg.type]){
+            return false
+        }
         if (msg.type === 'tx') {
             userStorage.task.setTask(msg.cb.taskId, {
                 tx: msg.tx,
