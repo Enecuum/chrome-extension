@@ -48,11 +48,13 @@ export default function WebView(props) {
 
     let onMessage = async (event) => {
         setIframeWork(true)
-
+        let sites = await userStorage.sites.getSites()
         let data = event.data
         console.warn(event.data)
         if (data.checkConnect !== undefined) {
             event.source.postMessage({'iframe': true}, event.origin)
+            updateIrameZIndexLock = false
+            setIframeWork(false)
         }
         if (data.type !== undefined) {
             updateIrameZIndexLock = true
@@ -60,11 +62,6 @@ export default function WebView(props) {
             let response = ''
             switch (data.type) {
             case 'enable':
-                // response = {
-                //     pubkey: account.publicKey,
-                //     net: account.net,
-                // }
-                // connect = true
                 iframe.style.zIndex = "-1"
                 props.setPublicKeyRequest(data)
                 await waitingFunction().then(()=>{
@@ -94,27 +91,39 @@ export default function WebView(props) {
                 } else {
                     response = {net: ENQWeb.Net.currentProvider}
                 }
+                event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                updateIrameZIndexLock = false
+                setIframeWork(false)
                 break
             case 'getVersion':
                 response = extensionApi.app.getDetails().version
                 event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                updateIrameZIndexLock = false
+                setIframeWork(false)
                 break
             case 'balanceOf':
                 response = balance
+                event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                updateIrameZIndexLock = false
+                setIframeWork(false)
                 break
             case 'reconnect':
-                response = {status: connect}
-                userStorage.task.removeTask(data.cb.taskId)
+                response = {status: sites[data.cb.url]}
                 event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                updateIrameZIndexLock = false
+                setIframeWork(false)
                 break
             case 'sign':
+                response = {status: "in progress"}
+                event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                updateIrameZIndexLock = false
+                setIframeWork(false)
                 break
             default:
+                updateIrameZIndexLock = false
+                setIframeWork(false)
                 break
             }
-            // event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
-            // updateIrameZIndexLock = false
-            // setIframeWork(false)
         }
     }
 
@@ -134,8 +143,6 @@ export default function WebView(props) {
         iframe.style.zIndex = "-1"
     }
 
-    // window.addEventListener('message', onMessage, false)
-
     massageListenerSetup(onMessage)
 
 
@@ -144,6 +151,7 @@ export default function WebView(props) {
 
             <div className={styles.header}>
                 <div className={styles.field} onClick={() => {
+                    setIframeWork(false)
                     iframeDeactivation()
                     props.setWebView(false)
                 }}>❮ Back</div>
