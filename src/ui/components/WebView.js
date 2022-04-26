@@ -74,15 +74,14 @@ export default function WebView(props) {
             updateIframeZIndexLock = true
             switch (data.type) {
                 case 'enable':
-                    iframe.style.zIndex = "-1"
                     if(global.connected[data.cb.url]){
                         response = JSON.parse((await taskHandler(data.cb.taskId)).data)
                         console.log(response)
                         event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
                         updateIframeZIndexLock = false
                         setIframeWork(false)
-                        iframe.style.zIndex = "2"
                     }else{
+                        iframe.style.zIndex = "-1"
                         props.setPublicKeyRequest(data)
                         await waitingFunction().then(() => {
                             console.log(bufferForMsg)
@@ -95,13 +94,12 @@ export default function WebView(props) {
                     }
                     break
                 case 'tx':
-                    props.setTransactionRequest(data)
                     iframe.style.zIndex = "-1"
+                    props.setTransactionRequest(data)
                     await waitingFunction().then(() => {
                         console.log(bufferForMsg)
                         response = JSON.parse(bufferForMsg)
-                        console.log(response)
-                        event.source.postMessage({answer: {taskId: data.cb.taskId, data: JSON.parse(response)}}, event.origin)
+                        event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
                         updateIframeZIndexLock = false
                         setIframeWork(false)
                     })
