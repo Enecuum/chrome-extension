@@ -117,20 +117,17 @@ main {
     }
 
     iframe {
-        display: none;
-        /*background: black;*/
-        /*border: none;*/
-        /*max-width: 350px;*/
-        /*max-height: 670px;*/
-        /*border-radius: 5px;*/
-        /*!*margin-top: 20px;*!*/
-        /*min-height: 600px;*/
-        /*!*height: 140%;*!*/
-        /*!*position: absolute;*!*/
-        /*!*top: 106px;*!*/
-        /*!*bottom: 0;*!*/
-        /*z-index: 4;*/
-        /*scroll-behavior: auto;*/
+        z-index: 3;
+        /*padding: 20px;*/
+        /*color: white;*/
+        max-width: 350px;
+        max-height: 670px;
+        border-radius: 3px;
+        /*background: var(--color-blue-background);*/
+        position: absolute;
+        top: calc(50% - 355px) !important;
+        left: calc(50% - 350px - 175px - 20px);
+        /*display: none;*/
     }
 
     /*.welcome1 {*/
