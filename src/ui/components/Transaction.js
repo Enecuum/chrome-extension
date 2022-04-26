@@ -17,7 +17,7 @@ export default class Transaction extends React.Component {
         this.state = {
             isTransactionSend: false,
             decimals: 1e10,
-            feeDecimals:1e10,
+            feeDecimals: 1e10,
             address: '',
             amount: '',
             txHash: '',
@@ -34,6 +34,7 @@ export default class Transaction extends React.Component {
             nonce:  Math.floor(Math.random() * 1e10),
             feeTicker: '',
             ticker: '',
+            //TODO
             fee_type: 0
         }
         this.handleChangeAddress = this.handleChangeAddress.bind(this)
@@ -71,7 +72,7 @@ export default class Transaction extends React.Component {
                 decimals: this.state.decimals,
                 ticker: this.state.ticker,
                 fee_type: this.state.fee_type,
-                fee:this.state.fee
+                fee: this.state.fee
             },
             rectype: 'iout',
             tx: {
@@ -203,9 +204,9 @@ export default class Transaction extends React.Component {
 
     feeCount() {
         apiController.getTokenInfo(this.props.isTransaction.token)
-            .then(tokenInfo=>{
+            .then(tokenInfo => {
                 this.setState({ticker:tokenInfo[0]['ticker']})
-                if(tokenInfo[0]['fee_type'] === 2){
+                if (tokenInfo[0]['fee_type'] === 2) {
                     this.setState({fee_type:2})
                     apiController.getTokenInfo(ENQWeb.Enq.ticker)
                         .then(mainToken=>{
@@ -214,7 +215,7 @@ export default class Transaction extends React.Component {
                             let currentFee = Number(tokenInfo[0]['fee_value']) / this.state.feeDecimals
                             this.setState({ fee: currentFee })
                         })
-                }else{
+                } else {
                     ENQweb3lib.fee_counter(this.props.isTransaction.token, BigInt(Math.floor(this.state.amount * this.state.decimals)))
                         .then(fee => {
                             // console.log(typeof fee)

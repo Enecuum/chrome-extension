@@ -212,6 +212,8 @@ function awaitAsync(data) {
     })
 }
 
+
+// TODO Msg => Message
 let bufferForMsg
 
 global.bufferForMsg = bufferForMsg

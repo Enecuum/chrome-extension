@@ -116,6 +116,23 @@ main {
         width: 50%;
     }
 
+    iframe {
+        display: none;
+        /*background: black;*/
+        /*border: none;*/
+        /*max-width: 350px;*/
+        /*max-height: 670px;*/
+        /*border-radius: 5px;*/
+        /*!*margin-top: 20px;*!*/
+        /*min-height: 600px;*/
+        /*!*height: 140%;*!*/
+        /*!*position: absolute;*!*/
+        /*!*top: 106px;*!*/
+        /*!*bottom: 0;*!*/
+        /*z-index: 4;*/
+        /*scroll-behavior: auto;*/
+    }
+
     /*.welcome1 {*/
     /*    margin-left: -200px;*/
     /*    color: var(--color-black);*/
