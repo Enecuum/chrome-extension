@@ -4,7 +4,7 @@ import Separator from "../elements/Separator"
 import Header from "../elements/Header"
 import {regexSeed} from "../Utils";
 import Input from "../elements/Input";
-import {webBackground} from '../../handler'
+import { taskHandler, webBackground } from '../../handler'
 
 // let defaultUrl = 'http://localhost:1234/#!action=swap'
 let defaultUrl = 'https://devapp.enex.space/#!action=swap'
@@ -46,9 +46,13 @@ export default function WebView(props) {
 
     let updateIframeZIndexLock = false
 
+    let connected = {}
+    global.connected = connected
+
     let onMessage = async (event) => {
         setIframeWork(true)
         let sites = await userStorage.sites.getSites()
+        let net = account.net
         let data = event.data
         console.warn(event.data)
         if (data.checkConnect !== undefined) {
@@ -56,22 +60,39 @@ export default function WebView(props) {
             updateIframeZIndexLock = false
             setIframeWork(false)
         }
+
         if (data.type !== undefined) {
-            updateIframeZIndexLock = true
-            webBackground(data)
             let response = ''
+            let check = webBackground(data, net)
+            if(check !== true) {
+                updateIframeZIndexLock = false
+                setIframeWork(false)
+                response = {"reject":true,"data":check}
+                event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                return false
+            }
+            updateIframeZIndexLock = true
             switch (data.type) {
                 case 'enable':
                     iframe.style.zIndex = "-1"
-                    props.setPublicKeyRequest(data)
-                    await waitingFunction().then(() => {
-                        console.log(bufferForMsg)
-                        response = JSON.parse(bufferForMsg)
+                    if(global.connected[data.cb.url]){
+                        response = JSON.parse((await taskHandler(data.cb.taskId)).data)
+                        console.log(response)
                         event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
                         updateIframeZIndexLock = false
                         setIframeWork(false)
-                    })
-
+                        iframe.style.zIndex = "2"
+                    }else{
+                        props.setPublicKeyRequest(data)
+                        await waitingFunction().then(() => {
+                            console.log(bufferForMsg)
+                            global.connected[data.cb.url] = true
+                            response = JSON.parse(bufferForMsg)
+                            event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                            updateIframeZIndexLock = false
+                            setIframeWork(false)
+                        })
+                    }
                     break
                 case 'tx':
                     props.setTransactionRequest(data)
@@ -79,7 +100,8 @@ export default function WebView(props) {
                     await waitingFunction().then(() => {
                         console.log(bufferForMsg)
                         response = JSON.parse(bufferForMsg)
-                        event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                        console.log(response)
+                        event.source.postMessage({answer: {taskId: data.cb.taskId, data: JSON.parse(response)}}, event.origin)
                         updateIframeZIndexLock = false
                         setIframeWork(false)
                     })
@@ -108,7 +130,7 @@ export default function WebView(props) {
                     setIframeWork(false)
                     break
                 case 'reconnect':
-                    response = {status: sites[data.cb.url]}
+                    response = {status: sites[data.cb.url] ? true : global.connected[data.cb.url] ? true : false}
                     event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
                     updateIframeZIndexLock = false
                     setIframeWork(false)

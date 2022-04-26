@@ -153,16 +153,17 @@ export function globalMessageHandler(msg, ENQWeb) {
 }
 
 //TODO add rule for add to storage
-const webBackground = (msg) => {
+const webBackground = (msg, net) => {
     let popupOpenMethods = {
         'enable': true,
         'tx': true,
-        'sign': false
+        'sign': true
     }
     if (msg.cb.taskId) {
         if (!popupOpenMethods[msg.type]) {
-            return false
+            return true
         }
+        console.log(msg)
         if (msg.type === 'tx') {
             userStorage.task.setTask(msg.cb.taskId, {
                 tx: msg.tx,
@@ -171,10 +172,10 @@ const webBackground = (msg) => {
                 data: msg.data,
             })
             if (msg.data.net.length > 0) {
-                if (msg.data.net !== ENQWeb.Enq.User.net) {
+                if (msg.data.net !== net) {
                     console.log('bad net work')
                     rejectTaskHandler(msg.cb.taskId, `Network mismatch. Set ${msg.data.net}`)
-                    return false
+                    return `Network mismatch. Set ${msg.data.net}`
                 }
             }
         } else {
@@ -438,5 +439,5 @@ function createTabWindow(params = '') {
 }
 
 export {
-    createPopupWindow, createTabWindow, webBackground
+    createPopupWindow, createTabWindow, webBackground, taskHandler
 }
