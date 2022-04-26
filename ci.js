@@ -45,6 +45,8 @@ let restartServer = async () => {
     console.log(execSync('npm i --force'))
     STATE = 'MAKE'
     console.log(execSync('npm run make'))
+    STATE = 'PACK'
+    console.log(execSync('npm run pack'))
     STATE = 'PROD'
     console.log(execSync('npm run prod'))
     STATE = 'PRODUCTION'
