@@ -171,9 +171,9 @@ export default function TransactionRequest(props) {
                 })
                     .then(answer => {
                         try{
-                            bufferForMsg = data.data.data
+                            bufferForMsg = answer.data.data
                         }catch (e) {
-
+                            console.error(e)
                         }
                         if (answer.data.status === 'reject') {
                             setBlock(false)
