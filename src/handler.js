@@ -7,9 +7,9 @@ import {LOCK, USER} from "./utils/names";
 import * as events from "events";
 import eventBus from "./utils/eventBus";
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
-import { signHash } from './utils/ledgerShell'
-import { apiController } from './utils/apiController'
-import { extensionApi } from './utils/extensionApi' // commonjs
+import {signHash} from './utils/ledgerShell'
+import {apiController} from './utils/apiController'
+import {extensionApi} from './utils/extensionApi' // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
 export function globalMessageHandler(msg, ENQWeb) {
@@ -51,7 +51,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                 console.log('Memory session')
                 resolve({response: ENQWeb.Enq.User})
 
-            // User unlocked but not on memory, old web version
+                // User unlocked but not on memory, old web version
             } else {
 
                 // We lost session
@@ -153,14 +153,14 @@ export function globalMessageHandler(msg, ENQWeb) {
 }
 
 //TODO add rule for add to storage
-const webBackground = (msg)=>{
+const webBackground = (msg) => {
     let popupOpenMethods = {
         'enable': true,
         'tx': true,
         'sign': false
     }
     if (msg.cb.taskId) {
-        if(!popupOpenMethods[msg.type]){
+        if (!popupOpenMethods[msg.type]) {
             return false
         }
         if (msg.type === 'tx') {
@@ -249,7 +249,7 @@ export async function messagePopupHandler(msg) {
         return {
             reject: true,
             data: {
-                data:JSON.stringify({
+                data: JSON.stringify({
                     reject: true,
                     data: 'rejected'
                 })
@@ -263,7 +263,7 @@ export async function messagePopupHandler(msg) {
 
 let ledgerTransport
 
-const taskHandler = async (taskId)=>{
+const taskHandler = async (taskId) => {
     let task = userStorage.task.getTask(taskId)
     let buf
     let account = await userStorage.user.loadUser()
@@ -275,133 +275,133 @@ const taskHandler = async (taskId)=>{
     }
     switch (task.type) {
         // TODO Description
-    case 'enable':
-        data = {
-            pubkey: account.publicKey,
-            net: account.net,
-        }
-        console.log('enable. returned: ', data)
-        userStorage.task.removeTask(taskId)
-        return {
-            data: JSON.stringify(data),
-            taskId: taskId,
-            cb: task.cb
-        }
+        case 'enable':
+            data = {
+                pubkey: account.publicKey,
+                net: account.net,
+            }
+            console.log('enable. returned: ', data)
+            userStorage.task.removeTask(taskId)
+            return {
+                data: JSON.stringify(data),
+                taskId: taskId,
+                cb: task.cb
+            }
         // TODO Description
-    case 'tx':
-        data = task.tx
-        console.log(data)
-        buf = ENQWeb.Net.provider
-        ENQWeb.Net.provider = account.net
-        if (account.ledger !== undefined && account.type === 2) {
-            data.from = wallet.pubkey
-            data.amount = data.value ? Number(data.value) : Number(data.amount)
-            data.tokenHash = data.ticker ? data.ticker : data.tokenHash
-            data.value = ''
-            data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
-            data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)
-            let Transport = ledgerTransport ? ledgerTransport : await TransportWebHID.create()
-            if (!ledgerTransport) {
-                ledgerTransport = Transport
-            }
-            data.sign = await signHash(ENQWeb.Utils.crypto.sha256(data.hash), wallet.prvkey, Transport)
-                .catch(() => {
-                    return false
-                })
-            if (data.sign) {
-                data = await apiController.sendTransaction(data)
-                    .then(data => {
-                        if (data.hash) {
-                            return data
-                        }
-                        console.warn(data)
+        case 'tx':
+            data = task.tx
+            console.log(data)
+            buf = ENQWeb.Net.provider
+            ENQWeb.Net.provider = account.net
+            if (account.ledger !== undefined && account.type === 2) {
+                data.from = wallet.pubkey
+                data.amount = data.value ? Number(data.value) : Number(data.amount)
+                data.tokenHash = data.ticker ? data.ticker : data.tokenHash
+                data.value = ''
+                data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
+                data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)
+                let Transport = ledgerTransport ? ledgerTransport : await TransportWebHID.create()
+                if (!ledgerTransport) {
+                    ledgerTransport = Transport
+                }
+                data.sign = await signHash(ENQWeb.Utils.crypto.sha256(data.hash), wallet.prvkey, Transport)
+                    .catch(() => {
+                        return false
                     })
-                    .catch(er => {
-                        console.error(er)
-                    })
-            } else {
-                console.warn('Transaction rejected')
-                throw new Error('reject')
-            }
+                if (data.sign) {
+                    data = await apiController.sendTransaction(data)
+                        .then(data => {
+                            if (data.hash) {
+                                return data
+                            }
+                            console.warn(data)
+                        })
+                        .catch(er => {
+                            console.error(er)
+                        })
+                } else {
+                    console.warn('Transaction rejected')
+                    throw new Error('reject')
+                }
 
-        } else {
-            data.from = wallet
-            data.amount = data.value ? Number(data.value) : Number(data.amount)
-            data.tokenHash = data.ticker ? data.ticker : data.tokenHash
-            data.value = ''
-            data = await apiController.postTransaction(data)
+            } else {
+                data.from = wallet
+                data.amount = data.value ? Number(data.value) : Number(data.amount)
+                data.tokenHash = data.ticker ? data.ticker : data.tokenHash
+                data.value = ''
+                data = await apiController.postTransaction(data)
+                    .catch(err => {
+                        console.log(err)
+                        return false
+                    })
+            }
+            ENQWeb.Net.provider = buf
+            userStorage.task.removeTask(taskId)
+            return {
+                data: JSON.stringify({hash: data.hash ? data.hash : 'Error'}),
+                taskId: taskId,
+                cb: task.cb
+            }
+            break
+        // TODO Description
+        case 'balanceOf':
+            data = task.data
+            buf = ENQWeb.Net.provider
+            console.log(account)
+            if (data.to) {
+                wallet.pubkey = data.to
+            }
+            ENQWeb.Net.provider = data.net || account.net
+            console.log(task.data, ENQWeb.Net.provider)
+            data = await apiController.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
                 .catch(err => {
                     console.log(err)
                     return false
                 })
-        }
-        ENQWeb.Net.provider = buf
-        userStorage.task.removeTask(taskId)
-        return  {
-            data: JSON.stringify({hash: data.hash ? data.hash : 'Error'}),
-            taskId: taskId,
-            cb: task.cb
-        }
-        break
+            userStorage.task.removeTask(taskId)
+            ENQWeb.Net.provider = buf
+            return {
+                data: JSON.stringify(data),
+                taskId: taskId,
+                cb: task.cb
+            }
         // TODO Description
-    case 'balanceOf':
-        data = task.data
-        buf = ENQWeb.Net.provider
-        console.log(account)
-        if (data.to) {
-            wallet.pubkey = data.to
-        }
-        ENQWeb.Net.provider = data.net || account.net
-        console.log(task.data, ENQWeb.Net.provider)
-        data = await apiController.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
-            .catch(err => {
-                console.log(err)
-                return false
-            })
-        userStorage.task.removeTask(taskId)
-        ENQWeb.Net.provider = buf
-        return {
-            data: JSON.stringify(data),
-            taskId: taskId,
-            cb: task.cb
-        }
+        case 'getProvider':
+            ENQWeb.Net.provider = account.net
+            if (task.cb.fullUrl) {
+                data = {net: ENQWeb.Net.provider}
+            } else {
+                data = {net: ENQWeb.Net.currentProvider}
+            }
+            userStorage.task.removeTask(taskId)
+            return {
+                data: JSON.stringify(data),
+                taskId: taskId,
+                cb: task.cb
+            }
         // TODO Description
-    case 'getProvider':
-        ENQWeb.Net.provider = account.net
-        if (task.cb.fullUrl) {
-            data = {net: ENQWeb.Net.provider}
-        } else {
-            data = {net: ENQWeb.Net.currentProvider}
-        }
-        userStorage.task.removeTask(taskId)
-        return {
-            data: JSON.stringify(data),
-            taskId: taskId,
-            cb: task.cb
-        }
+        case 'getVersion':
+            console.log('version: ', extensionApi.app.getDetails().version)
+            userStorage.task.removeTask(taskId)
+            return {
+                data: JSON.stringify(extensionApi.app.getDetails().version),
+                taskId: taskId,
+                cb: task.cb
+            }
         // TODO Description
-    case 'getVersion':
-        console.log('version: ', extensionApi.app.getDetails().version)
-        userStorage.task.removeTask(taskId)
-        return {
-            data: JSON.stringify(extensionApi.app.getDetails().version),
-            taskId: taskId,
-            cb: task.cb
-        }
+        case 'sign':
+            userStorage.task.removeTask(taskId)
+            return {
+                data: JSON.stringify(task.result),
+                taskId: taskId,
+                cb: task.cb
+            }
         // TODO Description
-    case 'sign':
-        userStorage.task.removeTask(taskId)
-        return {
-            data: JSON.stringify(task.result),
-            taskId: taskId,
-            cb: task.cb
-        }
-        // TODO Description
-    case 'reconnect':
-        console.log('reconnect')
-        userStorage.task.removeTask(taskId)
-    default:
-        break
+        case 'reconnect':
+            console.log('reconnect')
+            userStorage.task.removeTask(taskId)
+        default:
+            break
     }
     return true
 }

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from "../css/index.module.css"
 import Separator from "../elements/Separator"
 import Header from "../elements/Header"
 import {regexSeed} from "../Utils";
 import Input from "../elements/Input";
-import { webBackground } from '../../handler'
+import {webBackground} from '../../handler'
 
 // let defaultUrl = 'http://localhost:1234/#!action=swap'
 let defaultUrl = 'https://devapp.enex.space/#!action=swap'
@@ -15,7 +15,7 @@ export default function WebView(props) {
     let iframe = document.getElementById('iframe')
     let account = props.user
 
-    let [url, setUrl] = useState( iframe.getAttribute('src') || defaultUrl)
+    let [url, setUrl] = useState(iframe.getAttribute('src') || defaultUrl)
 
     let [connect, setConnect] = useState('')
 
@@ -29,7 +29,7 @@ export default function WebView(props) {
     }
 
 
-    const waitingFunction = ()=>{
+    const waitingFunction = () => {
         let time = 200
         // props.setBufferMsg(false)
         global.bufferForMsg = false
@@ -44,7 +44,7 @@ export default function WebView(props) {
         })
     }
 
-    let updateIrameZIndexLock = false
+    let updateIframeZIndexLock = false
 
     let onMessage = async (event) => {
         setIframeWork(true)
@@ -53,91 +53,91 @@ export default function WebView(props) {
         console.warn(event.data)
         if (data.checkConnect !== undefined) {
             event.source.postMessage({'iframe': true}, event.origin)
-            updateIrameZIndexLock = false
+            updateIframeZIndexLock = false
             setIframeWork(false)
         }
         if (data.type !== undefined) {
-            updateIrameZIndexLock = true
+            updateIframeZIndexLock = true
             webBackground(data)
             let response = ''
             switch (data.type) {
-            case 'enable':
-                iframe.style.zIndex = "-1"
-                props.setPublicKeyRequest(data)
-                await waitingFunction().then(()=>{
-                    console.log(bufferForMsg)
-                    response = JSON.parse(bufferForMsg)
-                    event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
-                    updateIrameZIndexLock = false
-                    setIframeWork(false)
-                })
+                case 'enable':
+                    iframe.style.zIndex = "-1"
+                    props.setPublicKeyRequest(data)
+                    await waitingFunction().then(() => {
+                        console.log(bufferForMsg)
+                        response = JSON.parse(bufferForMsg)
+                        event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                        updateIframeZIndexLock = false
+                        setIframeWork(false)
+                    })
 
-                break
-            case 'tx':
-                props.setTransactionRequest(data)
-                iframe.style.zIndex = "-1"
-                await waitingFunction().then(()=>{
-                    console.log(bufferForMsg)
-                    response = JSON.parse(bufferForMsg)
+                    break
+                case 'tx':
+                    props.setTransactionRequest(data)
+                    iframe.style.zIndex = "-1"
+                    await waitingFunction().then(() => {
+                        console.log(bufferForMsg)
+                        response = JSON.parse(bufferForMsg)
+                        event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                        updateIframeZIndexLock = false
+                        setIframeWork(false)
+                    })
+                    break
+                case 'getProvider':
+                    ENQWeb.Net.provider = account.net
+                    if (task.cb.fullUrl) {
+                        response = {net: ENQWeb.Net.provider}
+                    } else {
+                        response = {net: ENQWeb.Net.currentProvider}
+                    }
                     event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
-                    updateIrameZIndexLock = false
+                    updateIframeZIndexLock = false
                     setIframeWork(false)
-                })
-                break
-            case 'getProvider':
-                ENQWeb.Net.provider = account.net
-                if (task.cb.fullUrl) {
-                    response = {net: ENQWeb.Net.provider}
-                } else {
-                    response = {net: ENQWeb.Net.currentProvider}
-                }
-                event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
-                updateIrameZIndexLock = false
-                setIframeWork(false)
-                break
-            case 'getVersion':
-                response = extensionApi.app.getDetails().version
-                event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
-                updateIrameZIndexLock = false
-                setIframeWork(false)
-                break
-            case 'balanceOf':
-                response = balance
-                event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
-                updateIrameZIndexLock = false
-                setIframeWork(false)
-                break
-            case 'reconnect':
-                response = {status: sites[data.cb.url]}
-                event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
-                updateIrameZIndexLock = false
-                setIframeWork(false)
-                break
-            case 'sign':
-                response = {status: "in progress"}
-                event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
-                updateIrameZIndexLock = false
-                setIframeWork(false)
-                break
-            default:
-                updateIrameZIndexLock = false
-                setIframeWork(false)
-                break
+                    break
+                case 'getVersion':
+                    response = extensionApi.app.getDetails().version
+                    event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                    updateIframeZIndexLock = false
+                    setIframeWork(false)
+                    break
+                case 'balanceOf':
+                    response = balance
+                    event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                    updateIframeZIndexLock = false
+                    setIframeWork(false)
+                    break
+                case 'reconnect':
+                    response = {status: sites[data.cb.url]}
+                    event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                    updateIframeZIndexLock = false
+                    setIframeWork(false)
+                    break
+                case 'sign':
+                    response = {status: "in progress"}
+                    event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
+                    updateIframeZIndexLock = false
+                    setIframeWork(false)
+                    break
+                default:
+                    updateIframeZIndexLock = false
+                    setIframeWork(false)
+                    break
             }
         }
     }
 
-    const iframeActivation = ()=>{
+    const iframeActivation = () => {
         iframe.hidden = false
-        if(!updateIrameZIndexLock)
+        if (!updateIframeZIndexLock)
             iframe.style.zIndex = "2"
-        if((iframe.getAttribute('src') === null) || (iframe.getAttribute('src') !== url)){
+        if ((iframe.getAttribute('src') === null) || (iframe.getAttribute('src') !== url)) {
             console.log(url)
             iframe.setAttribute('src', url)
         }
     }
 
-    const iframeDeactivation = ()=>{
+    const iframeDeactivation = () => {
         let iframe = document.getElementById('iframe')
         iframe.hidden = true
         iframe.style.zIndex = "-1"
@@ -154,7 +154,8 @@ export default function WebView(props) {
                     setIframeWork(false)
                     iframeDeactivation()
                     props.setWebView(false)
-                }}>❮ Back</div>
+                }}>❮ Back
+                </div>
 
                 <Input
                     type="text"
@@ -170,7 +171,6 @@ export default function WebView(props) {
             {/*<Header clickMenu={() => props.setWebView(false)} user={{}}/>*/}
 
             {/*<Separator/>*/}
-
 
 
             <div className={styles.dapps}>
