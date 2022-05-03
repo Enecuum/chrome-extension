@@ -233,7 +233,7 @@ function asyncRequest(data) {
     // iframeWork = true
     if (version.includes('web') || iframeWork === true) {
         answer = messagePopupHandler(data)
-        console.log(answer)
+        // console.log(answer)
         return answer
     } else {
         return new Promise(async (resolve, reject) => {

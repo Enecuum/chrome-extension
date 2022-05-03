@@ -239,7 +239,7 @@ export default function Network(props) {
     return (
         <div className={styles.main}>
 
-            <div className={styles.field} onClick={() => {
+            <div className={styles.field + ' ' + styles.pointer} onClick={() => {
 
                 if (showAdd) {
                     setShowAdd(false)

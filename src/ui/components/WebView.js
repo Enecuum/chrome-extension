@@ -170,7 +170,7 @@ export default function WebView(props) {
         <div className={styles.main}>
 
             <div className={styles.header}>
-                <div className={styles.field} onClick={() => {
+                <div className={styles.field + ' ' + styles.pointer} onClick={() => {
                     setIframeWork(false)
                     iframeDeactivation()
                     props.setWebView(false)

@@ -28,6 +28,7 @@ import Ledger from './components/account/Ledger'
 import { ledgerPath } from './Utils'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import WebView from "./components/WebView";
+import Mining from "./components/Mining";
 
 
 let net = localStorage.getItem(NET)
@@ -52,6 +53,7 @@ export default function App(props) {
 
     const [isNetwork, setNetwork] = useState(false)
     const [isReceive, setReceive] = useState(false)
+    const [isMining, setMining] = useState(false)
     const [isTransaction, setTransaction] = useState(false)
 
     const [isPublicKeyRequest, setPublicKeyRequest] = useState(false)
@@ -320,6 +322,10 @@ export default function App(props) {
         />
     }
 
+    if (isMining) {
+        return <Mining setMining={setMining}/>
+    }
+
     // if (isReceive) {
     //     return <Receive setReceive={setReceive} user={user}/>
     // }
@@ -371,6 +377,7 @@ export default function App(props) {
                     setWebView={setWebView}
                     setConfirm={setConfirm}
                     setNetwork={setNetwork}
+                    setMining={setMining}
                     setReceive={setReceive}
                     setTransaction={setTransaction}
                     setPublicKeyRequest={setPublicKeyRequest}
