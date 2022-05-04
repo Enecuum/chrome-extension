@@ -44,7 +44,7 @@ export default function Ledger(props) {
 
     const [ledgerTransport, setLedgerTransport] = useState(false)
 
-    useEffect(async () => {
+    useEffect(() => {
 
         // if (!ledgerTransport) {
         //     TransportWebHID.create().then(transport => {
@@ -71,7 +71,7 @@ export default function Ledger(props) {
                 setUserAccounts(account.ledgerAccountsArray.map(a => a.publicKey))
             })
 
-    }, [balance, copied])
+    }, [])
 
     let buildAccountsArray = async () => {
 
