@@ -1,10 +1,12 @@
-var crypto = require('crypto')
-var r = require('jsrsasign')
+let crypto = require('crypto-browserify')
+let r = require('jsrsasign')
 
 class Publisher {
-    constructor(Url, poa, token) {
 
-        let url = atob(Url)
+    constructor(miningUrl, poa, token) {
+
+        let url = atob(miningUrl)
+        console.log(url)
         const POA_PROTOCOL_VERSION = 4
         const ENQ_TOKEN = token
         // const ENQ_TOKEN = "0000000000000000000000000000000000000000000000000000000000000001";
@@ -50,7 +52,7 @@ class Publisher {
         this.ws.onerror = function (err) {
             console.error('Socket encountered error: ', err.message, 'Closing socket')
             setTimeout(function () {
-                new Publisher(Url, poa, token)
+                new Publisher(miningUrl, poa, token)
             }, 1000)
             //ws.close();
         }
@@ -71,6 +73,7 @@ class Publisher {
 
             console.log(` ${poa.id}  Sign: ${(isValid ? 'OK' : 'BAD')}  m_hash: ${data.m_hash}  ${(isCorrect ? 'OK' : 'BAD')}`)
             //console.log(`poaId: ${poa.id}-${i}   Sign: ${(isValid?"OK":"BAD")}   ${(isCorrect?"OK":"BAD")}`);
+
             if (!isValid) {
                 //console.log("Incorrect sign")
                 return
@@ -93,9 +96,11 @@ class Publisher {
                     'id': poa.pubkey
                 }
             }
+
             if (poa.hasOwnProperty('referrer')) {
                 res.data.referrer = poa.referrer
             }
+
             this.send(JSON.stringify(res))
         }
     }
