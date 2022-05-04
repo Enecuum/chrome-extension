@@ -6,11 +6,11 @@ let startPoa = (acc, token, net = 'test') => {
 
     let keyfile = [
         {
-            // "id" : "wallet1",
             'pubkey': acc.publicKey,
             'prvkey': acc.privateKey
         }
     ]
+
     let poa
 
     try {

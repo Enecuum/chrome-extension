@@ -1,5 +1,5 @@
 let crypto = require('crypto-browserify')
-let r = require('jsrsasign')
+let jsrsasign = require('jsrsasign')
 
 class Publisher {
 
@@ -9,28 +9,36 @@ class Publisher {
         console.log(url)
         const POA_PROTOCOL_VERSION = 4
         const ENQ_TOKEN = token
+
         // const ENQ_TOKEN = "0000000000000000000000000000000000000000000000000000000000000001";
         // const SOME_TOKEN = "145e5feb2012a2db325852259fc6b8a6fd63cc5188a89bac9f35139fc8664fd2";
+
         let tokens = [ENQ_TOKEN, ENQ_TOKEN]
         let split = url.toString()
             .replace('ws://', '')
             .split(':')
+
         let ip = split[0]
         let port = split[1]
         // let ecc = new ECC(ecc_mode);
         if (poa.id == undefined) {
             poa.id = poa.pubkey.slice(0, 6)
         }
+
         this.id = poa.pubkey
+
         this.ws = new WebSocket(`ws://${ip}:${port}`)
+
         this.close = () => {
+            console.log(`${poa.id} closed`)
             this.ws.close()
         }
+
         this.ws.onopen = function open() {
+
             console.log(`${poa.id} connected`)
-            let hash = crypto.createHash('sha256')
-                .update(ip)
-                .digest('hex')
+            let hash = crypto.createHash('sha256').update(ip).digest('hex')
+
             let hail = {
                 'data': {
                     'hash': hash,
@@ -42,6 +50,7 @@ class Publisher {
             }
             this.send(JSON.stringify(hail))
         }
+
         this.ws.onclose = function close(e) {
             console.log(`${poa.id} disconnected`)
             // console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason)
@@ -49,6 +58,7 @@ class Publisher {
             //     new Publisher(Url, poa, token)
             // }, 1000)
         }
+
         this.ws.onerror = function (err) {
             console.error('Socket encountered error: ', err.message, 'Closing socket')
             setTimeout(function () {
@@ -56,6 +66,7 @@ class Publisher {
             }, 1000)
             //ws.close();
         }
+
         this.ws.onmessage = function (msg) {
             try {
                 msg = JSON.parse(msg.data)
@@ -63,6 +74,9 @@ class Publisher {
                 console.error(er)
                 return
             }
+
+            console.log(msg)
+
             if (msg.method != 'on_leader_beacon') {
                 return
             }
@@ -82,8 +96,9 @@ class Publisher {
                 //console.log("Incorrect m_hash")
                 return
             }
+
             let token = tokens[Math.random() >= 0.8 ? 1 : 0]
-            let forsign = data.m_hash + (poa.hasOwnProperty('referrer') ? poa.referrer : '') + token
+            let forSign = data.m_hash + (poa.hasOwnProperty('referrer') ? poa.referrer : '') + token
 
             let res = {
                 'ver': POA_PROTOCOL_VERSION,
@@ -92,7 +107,7 @@ class Publisher {
                     'kblocks_hash': data.mblock_data.kblocks_hash,
                     'm_hash': data.m_hash,
                     'token': token,
-                    'sign': sign(poa.prvkey, forsign),
+                    'sign': sign(poa.prvkey, forSign),
                     'id': poa.pubkey
                 }
             }
@@ -107,7 +122,7 @@ class Publisher {
 }
 
 function sign(prvkey, msg) {
-    var sig = new r.Signature({ 'alg': 'SHA256withECDSA' })
+    var sig = new jsrsasign.Signature({ 'alg': 'SHA256withECDSA' })
     sig.init({
         d: prvkey,
         curve: 'secp256k1'
@@ -118,7 +133,7 @@ function sign(prvkey, msg) {
 }
 
 function verify(pubkey, msg, signedMsg) {
-    var sig = new r.Signature({ 'alg': 'SHA256withECDSA' })
+    var sig = new jsrsasign.Signature({ 'alg': 'SHA256withECDSA' })
     sig.init({
         xy: pubkey,
         curve: 'secp256k1'
@@ -146,13 +161,10 @@ function hash_tx(tx) {
     }
 
     let str = ['amount', 'data', 'from', 'nonce', 'sign', 'ticker', 'to'].map(v => crypto.createHash('sha256')
-        .update(tx[v].toString()
-            .toLowerCase())
-        .digest('hex'))
-        .join('')
+        .update(tx[v].toString().toLowerCase()).digest('hex')).join('')
+
     return crypto.createHash('sha256')
-        .update(str)
-        .digest('hex')
+        .update(str).digest('hex')
 }
 
 export { Publisher }
