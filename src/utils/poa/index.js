@@ -29,6 +29,8 @@ let startPoa = (acc, token, net = 'test') => {
         config.url = 'OTUuMjE2LjI0Ni4xMTY6MzAwMA=='
     }
 
+    console.log(atob('OTUuMjE2LjI0Ni4xMTY6MzAwMA=='))
+
     //bit
     if (net.includes(atob('Yml0LmVuZWN1dW0uY29t'))) {
         config.url = 'OTUuMjE2LjI0Ni4xMTY6MzAwMA=='

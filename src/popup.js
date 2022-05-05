@@ -9,6 +9,9 @@ import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 
 global.userStorage = new Storage('popup')
 
+// TODO we have to move this to background or service worker
+global.publisher = {ws: {readyState: 3}}
+
 // TODO
 global.Buffer = global.Buffer || require('buffer').Buffer
 

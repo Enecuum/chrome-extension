@@ -5,10 +5,18 @@ import {regexToken, shortHash} from "../Utils";
 import Input from "../elements/Input";
 import {NET, NETWORKS} from "../../utils/names";
 import {startPoa} from "../../utils/poa";
+import {Publisher} from "../../utils/poa/Publisher";
+
+let status = {
+
+}
 
 export default function Mining(props) {
 
-    let [mining, setMining] = useState(false)
+    let [readyState, setReadyState] = useState(global.publisher.ws.readyState)
+
+    // let [connect, setConnect] = useState(false)
+
     // let [host, setHost] = useState('')
     // let [hostCorrect, setHostCorrect] = useState(false)
     // let [token, setToken] = useState('')
@@ -20,15 +28,33 @@ export default function Mining(props) {
 
     // let [showAdd, setShowAdd] = useState(false)
 
-    let startMining = async () => {
-        setMining(true)
-        let account = await userStorage.user.loadUser()
-        console.log(account)
-        startPoa(account, account.token, 'test')
+    let startMining = () => {
+
+        userStorage.user.loadUser().then(account => {
+
+            global.publisher = new Publisher(account, account.token)
+
+            console.log(global.publisher.ws)
+
+            global.publisher.ws.addEventListener('open', function (event) {
+                setReadyState(publisher.ws.readyState)
+            })
+
+            global.publisher.ws.addEventListener('close', function (event) {
+                setReadyState(publisher.ws.readyState)
+            })
+
+            global.publisher.ws.addEventListener('error', function (event) {
+                setReadyState(publisher.ws.readyState)
+            })
+        })
     }
 
+    useEffect(() => {
+    }, [])
+
     let stopMining = () => {
-        setMining(false)
+        global.publisher.ws.close()
     }
 
     useEffect(() => {
@@ -45,9 +71,11 @@ export default function Mining(props) {
 
             {/*<Separator/>*/}
 
-            <div onClick={mining ? stopMining : startMining}
-                 className={styles.button_round + ' ' + (mining ? styles.mining : '')}>{!mining ? 'START' : 'STOP'}
+            <div onClick={readyState === 1 ? stopMining : startMining}
+                 className={styles.button_round + ' ' + (readyState === 1 ? styles.mining : '')}>{readyState === 1 ? 'STOP' : 'START'}
             </div>
+
+            <div className={styles.mining_status}>STATUS</div>
 
             <Separator/>
 
