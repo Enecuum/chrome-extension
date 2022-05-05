@@ -82,6 +82,10 @@ class Publisher {
 
             console.log(msg)
 
+            if (msg.err === 'ERR_DUPLICATE_KEY') {
+
+            }
+
             if (msg.method != 'on_leader_beacon') {
                 return
             }

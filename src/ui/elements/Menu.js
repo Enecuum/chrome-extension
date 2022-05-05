@@ -224,7 +224,7 @@ export default function Menu(props) {
 
             <div className={styles.separator}/>
 
-            {version.endsWith(versions.MOBILE) ? <div className={styles.button_link} onClick={props.installPWA}>Install</div> : ''}
+            {/*{version.endsWith(versions.MOBILE) ? <div className={styles.button_link} onClick={props.installPWA}>Install</div> : ''}*/}
 
             <div className={styles.button_link} onClick={props.setPassword}>Set password</div>
             {/*<div className={styles.button_link} onClick={expand}>Expand</div>*/}

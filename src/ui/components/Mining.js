@@ -8,7 +8,11 @@ import {startPoa} from "../../utils/poa";
 import {Publisher} from "../../utils/poa/Publisher";
 
 let status = {
-
+    0: 'CONNECTING',
+    1: 'MINING',
+    2: 'CLOSING',
+    3: 'CLOSED',
+    10: 'DUPLICATE KEY',
 }
 
 export default function Mining(props) {
@@ -45,7 +49,9 @@ export default function Mining(props) {
             })
 
             global.publisher.ws.addEventListener('error', function (event) {
+                console.log(event)
                 setReadyState(publisher.ws.readyState)
+
             })
         })
     }
@@ -75,7 +81,7 @@ export default function Mining(props) {
                  className={styles.button_round + ' ' + (readyState === 1 ? styles.mining : '')}>{readyState === 1 ? 'STOP' : 'START'}
             </div>
 
-            <div className={styles.mining_status}>STATUS</div>
+            <div className={styles.mining_status}>{status[readyState]}</div>
 
             <Separator/>
 
