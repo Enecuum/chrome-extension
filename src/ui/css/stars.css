@@ -84,7 +84,8 @@
 
 @media screen and (max-width: 500px) {
     #disclaimer {
-        display: block;
+        display: none;
+        /*display: block;*/
         width: 100%;
         min-width: 350px;
         height: 100%;

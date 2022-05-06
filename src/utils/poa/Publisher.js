@@ -1,6 +1,8 @@
 let crypto = require('crypto-browserify')
 let jsrsasign = require('jsrsasign')
 
+const POA_PROTOCOL_VERSION = 4
+
 class Publisher {
 
     constructor(account, token) {
@@ -8,28 +10,7 @@ class Publisher {
         // token = '0d0b6da9d730e6eae5e6cff889051d909b8f66be0f4dc315c3fcedf27395c0cb'
         token = 'de0942b3b1194cde66ba9bf45bd1bdf406e714d6d514b8c0e6fd58b5ee833693'
 
-
-        // let url = atob(miningUrl)
-        // console.log(url)
-        const POA_PROTOCOL_VERSION = 4
-        // const ENQ_TOKEN = token
-
-        // const ENQ_TOKEN = "0000000000000000000000000000000000000000000000000000000000000001";
-        // const SOME_TOKEN = "145e5feb2012a2db325852259fc6b8a6fd63cc5188a89bac9f35139fc8664fd2";
-
-        // let tokens = [ENQ_TOKEN, ENQ_TOKEN]
-        // let split = url.toString()
-        //     .replace('ws://', '')
-        //     .split(':')
-
-        // let ip = split[0]
-        // let port = split[1]
-        // let ecc = new ECC(ecc_mode);
-
         let id = account.publicKey.slice(0, 6)
-        // this.id = poa.publicKey
-
-        // this.ws = new WebSocket(`ws://${ip}:${port}`)
 
         let ip = '95.216.246.116'
         this.ws = new WebSocket(`ws://95.216.246.116:3000`)
@@ -58,10 +39,6 @@ class Publisher {
 
         this.ws.onclose = function close(e) {
             console.log(`${id} disconnected`)
-            // console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason)
-            // setTimeout(function () {
-            //     new Publisher(Url, poa, token)
-            // }, 1000)
         }
 
         this.ws.onerror = function (err) {
@@ -69,7 +46,6 @@ class Publisher {
             setTimeout(function () {
                 new Publisher(account, token)
             }, 1000)
-            //ws.close();
         }
 
         this.ws.onmessage = function (msg) {

@@ -4,7 +4,7 @@ import Separator from "../elements/Separator";
 import {regexToken, shortHash} from "../Utils";
 import Input from "../elements/Input";
 import {NET, NETWORKS} from "../../utils/names";
-import {startPoa} from "../../utils/poa";
+// import {startPoa} from "../../utils/poa";
 import {Publisher} from "../../utils/poa/Publisher";
 
 let status = {
@@ -18,6 +18,8 @@ let status = {
 export default function Mining(props) {
 
     let [readyState, setReadyState] = useState(global.publisher.ws.readyState)
+
+    // userStorage.promise.sendPromise({poa: true, account: {publicKey, privateKey}}).then()
 
     // let [connect, setConnect] = useState(false)
 
@@ -49,7 +51,6 @@ export default function Mining(props) {
             })
 
             global.publisher.ws.addEventListener('error', function (event) {
-                console.log(event)
                 setReadyState(publisher.ws.readyState)
 
             })

@@ -58,4 +58,4 @@ let startPoa = (acc, token, net = 'test') => {
     return poas
 }
 
-export { startPoa }
+// export { startPoa }

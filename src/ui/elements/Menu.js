@@ -14,7 +14,7 @@ export default function Menu(props) {
     const [activeAccount, setActiveAccount] = useState(1)
 
     // TODO
-    const [accountName, setAccountName] = useState('Account 1 ')
+    // const [accountName, setAccountName] = useState('Account 1 ')
 
     const [seed, setSeed] = useState(true)
 
@@ -143,28 +143,28 @@ export default function Menu(props) {
     //     })
     // }
 
-    const connectLedger = () => {
-
-        // console.log(global.transportWebUSB)
-
-        TransportWebUSB.create().then(transport => {
-
-            // console.log(transport)
-
-            const eth = new Eth(transport)
-            // console.log(eth)
-
-            eth.getAddress("44'/60'/0'/0/0").then(o => {
-
-                setLedger(transport)
-                setEthAddress(o.address)
-
-                global.transportWebUSB = transport
-                // console.log(o.address)
-            })
-
-        })
-    }
+    // const connectLedger = () => {
+    //
+    //     // console.log(global.transportWebUSB)
+    //
+    //     TransportWebUSB.create().then(transport => {
+    //
+    //         // console.log(transport)
+    //
+    //         const eth = new Eth(transport)
+    //         // console.log(eth)
+    //
+    //         eth.getAddress("44'/60'/0'/0/0").then(o => {
+    //
+    //             setLedger(transport)
+    //             setEthAddress(o.address)
+    //
+    //             global.transportWebUSB = transport
+    //             // console.log(o.address)
+    //         })
+    //
+    //     })
+    // }
 
     const version = chrome.runtime.getManifest().version
     // const version = 'VERSION DEBUG'
@@ -218,8 +218,8 @@ export default function Menu(props) {
 
             <div className={styles.separator}/>
 
-            <div className={styles.title}>
-                <div className={styles.button_link} onClick={props.setMining}>Mining</div>
+            <div className={styles.title + ' ' + styles.disabled}>
+                <div className={styles.button_link} onClick={props.setMining}>PoA</div>
             </div>
 
             <div className={styles.separator}/>

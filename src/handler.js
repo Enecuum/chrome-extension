@@ -12,6 +12,8 @@ import {apiController} from './utils/apiController'
 import {extensionApi} from './utils/extensionApi' // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
+let miners = []
+
 export function globalMessageHandler(msg, ENQWeb) {
 
     return new Promise((resolve, reject) => {
@@ -147,6 +149,18 @@ export function globalMessageHandler(msg, ENQWeb) {
             // disconnectPorts()
             resolve({response: true})
         }
+
+        // if (msg.poa && msg.get) {
+        //     resolve({response: miners})
+        // }
+
+        // if (msg.poa && msg.account) {
+        //     if (miners.find(element => element.id === msg.account.publicKey) !== undefined) {
+        //         resolve({response: false})
+        //     } else {
+        //         // startPoa(msg.account, ENQWeb.Enq.ticker, 'test').forEach(element => miners.push(element))
+        //     }
+        // }
 
         resolve({response: false})
     })

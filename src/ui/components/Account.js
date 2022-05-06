@@ -655,6 +655,12 @@ export default function Account(props) {
                     {/*<div>Transaction</div>*/}
                 </div>
 
+                {/*<div className={styles.circle_button} onClick={props.setMining}>*/}
+                {/*    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/9.png"/>*/}
+                {/*    </div>*/}
+                {/*    <div>Mining</div>*/}
+                {/*</div>*/}
+
             </div>
 
             {/*TABS*/}
