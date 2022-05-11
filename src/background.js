@@ -1,3 +1,8 @@
+let document = ''
+let window = ''
+importScripts('/lib/enqweb3lib.ext.min.js')
+// importScripts('js/backgroundDeps')
+
 import {signHash} from './utils/ledgerShell'
 
 import {extensionApi} from './utils/extensionApi'
@@ -7,11 +12,12 @@ import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import {apiController} from './utils/apiController'
 
 document.addEventListener('DOMContentLoaded', function () {
-    if (!userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {
-        lockAccount()
-    }
-    console.log('Lock status: ', userStorage.lock.checkLock())
-    console.log('Hash password: ', userStorage.lock.getHashPassword() ? true : false)
+    // if (!userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {
+    //     lockAccount()
+    // }
+    // console.log('Lock status: ', userStorage.lock.checkLock())
+    // console.log('Hash password: ', userStorage.lock.getHashPassword() ? true : false)
+    console.log("loaded")
 })
 
 // TODO Hmm
@@ -57,8 +63,9 @@ let Account = {}
 
 function setupApp() {
     // console.log('background ready')
-    extensionApi.runtime.onMessage.addListener(messageHandler)
-    extensionApi.runtime.onConnect.addListener(connectHandler)
+    chrome.runtime.onConnect.addListener(connectHandler)
+    // chrome.runtime.onMessage.addListener(messageHandler)
+    chrome.runtime.onMessage.addListener(testMessageHandler)
     taskCounter()
     if (!userStorage.config.getConfig()) {
         userStorage.config.initConfig()
@@ -72,6 +79,10 @@ function setupApp() {
             requestQueue[tasks[i].cb.url] += 1
         }
     }
+}
+
+async  function testMessageHandler({ type, name }){
+    console.log({type, name})
 }
 
 async function messageHandler(msg, sender, sendResponse) {
@@ -94,10 +105,11 @@ async function messageHandler(msg, sender, sendResponse) {
 
     globalMessageHandler(msg, ENQWeb)
         .then(answer => sendResponse(answer))
+    console.log(msg)
 }
 
 async function msgConnectHandler(msg, sender) {
-    // console.log(msg)
+    console.log(msg)
     let answer = ''
     if (msg.taskId) {
         let sites = userStorage.sites.getSites()
@@ -318,6 +330,7 @@ function disconnectHandler(port) {
 }
 
 function connectController(port) {
+    console.log(port)
     if (port.name === 'popup') {
         ports[port.name] = port
         return
