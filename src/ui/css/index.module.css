@@ -1,13 +1,14 @@
-html {
-    margin-top: env(safe-area-inset-top);
-    margin-bottom: env(safe-area-inset-bottom);
-}
+/*html {*/
+/*    margin-top: env(safe-area-inset-top);*/
+/*    margin-bottom: env(safe-area-inset-bottom);*/
+/*}*/
 
-ion-content {
-    --ion-background-color: var(--color-blue-super-dark);
-}
+/*ion-content {*/
+/*    --ion-background-color: var(--color-blue-super-dark);*/
+/*}*/
 
 body {
+    padding-top: env(safe-area-inset-top) !important;
     overflow: hidden;
 }
 

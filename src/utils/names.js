@@ -24,11 +24,12 @@ const STORAGE_NAME_WORKER = 'worker'
 
 const versions = {
     EXTENSION: '', // Default, not used
-    ELECTRON: ' web electron',
+    ELECTRON: ' electron',
     // TODO We have to separate (mobile / PWA), (iOS / Android)
-    MOBILE: ' web mobile', // Android and iOS web and PWA installs
+    MOBILE: ' web mobile',
+    // MOBILE: ' ' + Capacitor.platform + ' mobile', // Android and iOS web and PWA installs
     // TODO We have to add OS version
-    WEB: ' web ',
+    WEB: ' web',
 }
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()

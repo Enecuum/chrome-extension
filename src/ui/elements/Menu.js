@@ -241,7 +241,7 @@ export default function Menu(props) {
             <div className={styles.button_link_logout}>
                 <div className={styles.button_link} onClick={() => props.setConfirm(true)}>Logout</div>
                 <div className={styles.version + ' ' + (clickIterator >= clickIteratorLimit ? styles.blue : '')}
-                     onClick={clickVersion}>{version + ' ' + (clickIterator >= 2 ? VERSION : '')}</div>
+                     onClick={clickVersion}>{version.replace('web', Capacitor.platform) + ' ' + (clickIterator >= 2 ? VERSION : '')}</div>
             </div>
 
         </div>
