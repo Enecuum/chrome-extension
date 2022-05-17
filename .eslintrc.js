@@ -20,6 +20,8 @@ module.exports = {
         'react/jsx-indent': 0,
         'no-plusplus': 0,
         'no-multiple-empty-lines': ['warn', {max: 2}],
+        "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+        "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
     },
 
     "globals": {
