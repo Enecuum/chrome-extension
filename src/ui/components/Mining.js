@@ -19,6 +19,10 @@ export default function Mining(props) {
 
     let [readyState, setReadyState] = useState(global.publisher.ws.readyState)
 
+    let [accounts, setAccounts] = useState([])
+
+    let [keys, setKeys] = useState([])
+
     // userStorage.promise.sendPromise({poa: true, account: {publicKey, privateKey}}).then()
 
     // let [connect, setConnect] = useState(false)
@@ -66,7 +70,58 @@ export default function Mining(props) {
 
     useEffect(() => {
 
+        userStorage.user.loadUser().then(account => {
+
+            setKeys(account.seedAccountsArray)
+
+            let localAccounts = []
+            for (let i = 0; i < account.seedAccountsArray.length; i++) {
+                localAccounts.push({
+                    i: i + 1,
+                    key: '',
+                    mining: true,
+                    list: true
+                })
+            }
+
+            setAccounts(localAccounts)
+        })
+
     }, [])
+
+
+
+    let renderCards = () => {
+
+        let cards = []
+
+        for (let i = 0; i < accounts.length; i++) {
+
+            cards.push(
+                <div key={i + 'card'} className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining ? styles.mining_card_mine : '')}>
+                    <div className={styles.row}>
+                        <div>Account M{keys[i] + 1}</div>
+                        <div onClick={() => {
+                            accounts[i].mining = !accounts[i].mining
+                            setAccounts([...accounts])
+                        }}>{accounts[i].mining ? 'STOP' : 'START'}</div>
+                    </div>
+
+                    <div>
+                        <div className={styles.card_field}>{(Math.floor(Math.random() * 100)) + ' BIT'}</div>
+                    </div>
+
+                    <div className={styles.card_field_select} onClick={(() => {
+                        accounts[i].list = !accounts[i].list
+                        setAccounts([...accounts])
+                    })}>{accounts[i].list ? '↓' : '↑'}</div>
+
+                </div>
+            )
+        }
+
+        return cards
+    }
 
     return (
         <div className={styles.main}>
@@ -83,6 +138,12 @@ export default function Mining(props) {
             </div>
 
             <div className={styles.mining_status}>{status[readyState]}</div>
+
+            <Separator/>
+
+            <div className={styles.cards}>
+                {renderCards()}
+            </div>
 
             <Separator/>
 

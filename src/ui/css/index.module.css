@@ -407,9 +407,12 @@ a:hover {
     font-weight: bold;
     letter-spacing: 4px;
 
-    position: absolute;
-    top: calc(50% - 100px);
-    left: calc(50% - 100px);
+    /*position: absolute;*/
+    /*top: calc(50% - 100px);*/
+    /*left: calc(50% - 100px);*/
+
+    /*margin-top: 100px;*/
+    margin: 100px auto 40px auto;
 
     height: 200px;
     width: 200px;
@@ -438,10 +441,11 @@ a:hover {
 }
 
 .mining_status {
-    position: absolute;
-    bottom: 50px;
-    left: 0;
-    right: 0;
+    /*position: absolute;*/
+    /*bottom: 50px;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    /*margin-top: 100px;*/
     text-align: center;
     font-size: var(--font-size-big);
 }
@@ -1076,6 +1080,15 @@ input[type=number] {
     /*background: red;*/
     flex-shrink: 0;
     margin-bottom: 0;
+}
+
+.mining_card {
+    border: 2px solid var(--color-blue-button);
+    transition: border 1s;
+}
+
+.mining_card.mining_card_mine {
+    border: 2px solid var(--color-white);
 }
 
 .cards .card.small {
