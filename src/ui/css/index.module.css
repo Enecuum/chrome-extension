@@ -1088,6 +1088,7 @@ input[type=number] {
 }
 
 .mining_card.mining_card_mine {
+    background: var(--color-blue);
     border: 2px solid var(--color-white);
 }
 

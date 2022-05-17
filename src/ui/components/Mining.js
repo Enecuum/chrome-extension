@@ -19,7 +19,10 @@ export default function Mining(props) {
 
     let [readyState, setReadyState] = useState(global.publisher.ws.readyState)
 
+    // let [mining, setMining] = useState(false)
+
     let [accounts, setAccounts] = useState([])
+    let [tokens, setTokens] = useState([])
 
     let [keys, setKeys] = useState([])
 
@@ -61,11 +64,16 @@ export default function Mining(props) {
         })
     }
 
-    useEffect(() => {
-    }, [])
-
     let stopMining = () => {
         global.publisher.ws.close()
+
+        // for (let i = 0; i < accounts.length; i++) {
+        //     // accounts[i].pause = true
+        //     // accounts[i].mining = false
+        // }
+
+        setAccounts([...accounts])
+
     }
 
     useEffect(() => {
@@ -79,13 +87,16 @@ export default function Mining(props) {
                 localAccounts.push({
                     i: i + 1,
                     key: '',
-                    mining: true,
+                    mining: false,
                     list: true
                 })
             }
 
             setAccounts(localAccounts)
         })
+
+        setTokens(userStorage.tokens.getTokens())
+        console.log()
 
     }, [])
 
@@ -97,27 +108,40 @@ export default function Mining(props) {
 
         for (let i = 0; i < accounts.length; i++) {
 
-            cards.push(
-                <div key={i + 'card'} className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining ? styles.mining_card_mine : '')}>
+            let card =
+                <div key={i + 'card'} className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining && readyState === 1 ? styles.mining_card_mine : '')}>
                     <div className={styles.row}>
                         <div>Account M{keys[i] + 1}</div>
                         <div onClick={() => {
                             accounts[i].mining = !accounts[i].mining
                             setAccounts([...accounts])
-                        }}>{accounts[i].mining ? 'STOP' : 'START'}</div>
+                        }}>{accounts[i].mining && readyState === 1 ? 'STOP' : 'START'}</div>
                     </div>
 
-                    <div>
-                        <div className={styles.card_field}>{(Math.floor(Math.random() * 100)) + ' BIT'}</div>
+                    <div className={styles.card_field}>
+                        <div>{shortHash('02e8a2510b0dcc431feae460c5a8c0ac2720484db07c3f014044deefbae3574124')}</div>
                     </div>
+
+                    {accounts[i].list && <div className={styles.card_field}>
+                        <div>{(Math.floor(Math.random() * 100)) + ' BIT'}</div>
+                    </div>}
+
+                    {!accounts[i].list && <div className={styles.card_field}>
+                        <div>{(Math.floor(Math.random() * 100)) + ' BIT'}</div>
+                        <div>{(Math.floor(Math.random() * 100)) + ' TEST'}</div>
+                        <div>{(Math.floor(Math.random() * 100)) + ' DAR'}</div>
+                        <div>{(Math.floor(Math.random() * 100)) + ' RED'}</div>
+                        <div>{(Math.floor(Math.random() * 100)) + ' BLUE'}</div>
+                        <div>{(Math.floor(Math.random() * 100)) + ' IT'}</div>
+                    </div>}
 
                     <div className={styles.card_field_select} onClick={(() => {
                         accounts[i].list = !accounts[i].list
                         setAccounts([...accounts])
                     })}>{accounts[i].list ? '↓' : '↑'}</div>
-
                 </div>
-            )
+
+            cards.push(card)
         }
 
         return cards
