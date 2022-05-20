@@ -5,6 +5,7 @@ import Eth from "@ledgerhq/hw-app-eth";
 import {createPopupWindow} from "../../handler";
 import * as bip32 from 'bip32';
 import {versions} from "../../utils/names";
+import {useUserContext} from "../context/useUserContext";
 
 // global.WebUSB = TransportWebUSB
 // global.transportWebUSB = {}
@@ -34,6 +35,8 @@ export default function Menu(props) {
     const window = () => {
         createPopupWindow()
     }
+
+    const {user} = useUserContext()
 
     // console.log(enablePopup)
 
@@ -218,7 +221,7 @@ export default function Menu(props) {
 
             <div className={styles.separator}/>
 
-            <div className={styles.title}>
+            <div className={styles.title + ' ' + styles.disabled}>
                 <div className={styles.button_link} onClick={props.setMining}>PoA</div>
             </div>
 
