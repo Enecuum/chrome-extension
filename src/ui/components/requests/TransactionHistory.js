@@ -163,7 +163,7 @@ export default function TransactionHistory(props) {
 
 
             <div className={styles.transaction_network}>
-                Network: {ENQWeb.Net.currentProvider.toUpperCase()}
+                Network: {ENQWeb.Net.currentProvider.replace('https://', '').toUpperCase()}
             </div>
 
             <div className={styles.card}>

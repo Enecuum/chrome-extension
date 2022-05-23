@@ -64,7 +64,7 @@ body {
 
     position: relative;
 
-    height: 600px;
+    height: 550px;
     min-height: 100vh;
 
     user-select: none;
@@ -1318,7 +1318,7 @@ input[type=number] {
 }
 
 .transaction_data_data {
-    width: 350px;
+    width: calc(100% - 40px);
     padding: 20px;
     user-select: text;
     /*background: red;*/
