@@ -5,6 +5,7 @@ import {lockAccount, say} from './lockAccount'
 import {createPopupWindow, globalMessageHandler} from './handler'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import {apiController} from './utils/apiController'
+// import {startPoa} from "./utils/poa/index"
 
 document.addEventListener('DOMContentLoaded', function () {
     if (!userStorage.lock.checkLock() && userStorage.lock.getHashPassword()) {

@@ -150,6 +150,44 @@ export function globalMessageHandler(msg, ENQWeb) {
             resolve({response: true})
         }
 
+        if (msg.poa && msg.get) {
+            let data = []
+            PoAs.forEach(el => {
+                data.push({
+                    id: el.id || null,
+                    readyState: el.ws.readyState || null
+                })
+            })
+            resolve({ response: data })
+        }
+
+        if (msg.poa && msg.disconnect) {
+            let index = PoAs.findIndex(el => el.id === msg.disconnect)
+            PoAs[index].close()
+            delete PoAs[index]
+            PoAs = PoAs.filter(el => el.id ? el : false)
+        }
+
+        if (msg.poa && msg.account) {
+            let index = PoAs.findIndex(el => el.id === msg.account.publicKey)
+            if (index !== -1) {
+                if (PoAs[index].ws.readyState === 1) {
+                    resolve({ response: false })
+                } else {
+                    delete PoAs[index]
+                    startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
+                        .forEach(el => PoAs.push(el))
+                }
+
+            } else {
+                startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
+                    .forEach(el => PoAs.push(el))
+            }
+            if (msg.log) {
+                console.log(PoAs)
+            }
+        }
+
         // if (msg.poa && msg.get) {
         //     resolve({response: miners})
         // }
