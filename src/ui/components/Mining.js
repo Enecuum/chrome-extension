@@ -79,6 +79,17 @@ export default function Mining(props) {
 
     }
 
+    let selectToken = (accountId, token) => {
+
+        if (token.minable === 0)
+            return
+
+        console.log(accountId)
+        console.log(token)
+        accounts[accountId].token = token
+        setAccounts([...accounts])
+    }
+
     useEffect(() => {
 
         userStorage.user.loadUser().then(async account => {
@@ -93,12 +104,15 @@ export default function Mining(props) {
 
                 let tokens = await getBalance(publicKey)
 
+                console.log(tokens)
+
                 localAccounts.push({
                     i: i + 1,
                     publicKey: publicKey,
                     mining: false,
                     list: true,
-                    tokens
+                    tokens,
+                    token: tokens[0] ? tokens[0] : '',
                 })
             }
 
@@ -107,7 +121,7 @@ export default function Mining(props) {
             setAccounts(localAccounts)
         })
 
-        setTokens(userStorage.tokens.getTokens())
+        // setTokens(userStorage.tokens.getTokens())
 
     }, [])
 
@@ -119,12 +133,13 @@ export default function Mining(props) {
             .then((res) => {
 
                 for (let i in res) {
-                    // console.log(res)
+                    console.log(res)
                     // console.log(res[i].token + ' ' + res[i].ticker)
 
                     tokens.push({
                         token: res[i].token,
                         ticker: res[i].ticker,
+                        minable: res[i].minable,
                         amount: BigInt(res[i].amount),
                         decimals: 10 ** res[i].decimals
                     })
@@ -146,28 +161,37 @@ export default function Mining(props) {
 
         for (let i = 0; i < accounts.length; i++) {
 
-            let tokens = accounts[i].tokens.map((token) => <div key={token.token}>{token.ticker + ' ' + (Number(token.amount) / token.decimals).toFixed(4)}</div>)
+            let tokens = accounts[i].tokens.map((token) => <div key={token.token} onClick={() => selectToken(i, token)} className={token.minable === 0 ? styles.card_grid_disabled : (token.token === accounts[i].token.token ? styles.card_grid_select : '')}>
+                <div>{token.ticker}</div>
+                <div>{(Number(token.amount) / token.decimals).toFixed(0)}</div>
+            </div>)
 
             let card =
                 <div key={i + 'card'} className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining && readyState === 1 ? styles.mining_card_mine : '')}>
                     <div className={styles.row}>
                         <div>Account M{keys[i] + 1}</div>
                         <div onClick={() => {
-                            accounts[i].mining = !accounts[i].mining
-                            setAccounts([...accounts])
-                        }}>{accounts[i].mining ? 'ON' : 'OFF'}</div>
+                            if (accounts[i].token) {
+                                accounts[i].mining = !accounts[i].mining
+                                setAccounts([...accounts])
+                            }
+                        }} className={styles.text_big}>{accounts[i].mining ? 'ON' : 'OFF'}</div>
                     </div>
 
                     <div className={styles.card_field}>
                         <div>{shortHash(accounts[i].publicKey)}</div>
                     </div>
 
-                    {accounts[i].list && <div className={styles.card_field}>
+                    {accounts[i].list && tokens.length > 0 && <div className={styles.card_field_long} onClick={() => {
+                        accounts[i].list = !accounts[i].list
+                        setAccounts([...accounts])
+                    }}>
                         {/*<div>{(Math.floor(Math.random() * 100)) + ' BIT'}</div>*/}
-                        {tokens.length > 0 && tokens[0]}
+                        <div>{accounts[i].token.ticker}</div>
+                        <div>{(Number(accounts[i].token.amount) / accounts[i].token.decimals).toFixed(0)}</div>
                     </div>}
 
-                    {!accounts[i].list && <div className={styles.card_field}>
+                    {!accounts[i].list && accounts[i].tokens.length > 0 && <div className={styles.card_field + ' ' + styles.card_grid}>
                         {tokens}
                     </div>}
 

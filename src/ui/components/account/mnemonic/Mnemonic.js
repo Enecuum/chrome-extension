@@ -18,7 +18,7 @@ export default function Mnemonic(props) {
 
     useEffect(() => {
         // console.log(mnemonicString)
-    })
+    }, [])
 
     // const addSeed = (mnemonicString) => {
     //     let hex = bip39.mnemonicToSeedSync(mnemonicString)
