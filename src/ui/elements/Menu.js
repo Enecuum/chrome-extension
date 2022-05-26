@@ -221,7 +221,7 @@ export default function Menu(props) {
 
             <div className={styles.separator}/>
 
-            <div className={styles.title + ' ' + styles.disabled}>
+            <div className={styles.title}>
                 <div className={styles.button_link} onClick={props.setMining}>PoA</div>
             </div>
 

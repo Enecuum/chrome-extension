@@ -8,7 +8,9 @@ class Publisher {
     constructor(account, token) {
 
         // token = '0d0b6da9d730e6eae5e6cff889051d909b8f66be0f4dc315c3fcedf27395c0cb'
-        token = 'de0942b3b1194cde66ba9bf45bd1bdf406e714d6d514b8c0e6fd58b5ee833693'
+        // token = 'de0942b3b1194cde66ba9bf45bd1bdf406e714d6d514b8c0e6fd58b5ee833693'
+
+        console.log(token)
 
         let id = account.publicKey.slice(0, 6)
 
