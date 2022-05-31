@@ -1201,12 +1201,19 @@ input[type=number] {
     background-color: transparent;
 }
 
+.card_grid > div:hover:not(.card_grid_disabled) {
+    color: var(--color-blue-background);
+    background: var(--color-white-opacity-small);
+}
+
 .card_grid > div.card_grid_select {
+    color: var(--color-blue);
     background-color: var(--color-white-opacity-small);;
 }
 
-.card_grid > div:hover:not(.card_grid_disabled) {
-    background: var(--color-white-opacity-small);
+.card_grid > div.card_grid_select:hover {
+    color: var(--color-blue);
+    /*background-color: var(--color-white-opacity-small);;*/
 }
 
 .card:hover .card_field_select {

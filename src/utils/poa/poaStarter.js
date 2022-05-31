@@ -1,6 +1,6 @@
 // const argv = require('yargs').argv;
 // const fs = require('fs');
-import { Publisher } from './Publisher'
+import { Publisher } from './publisher'
 
 let startPoa = (acc, token, net = 'test') => {
 
@@ -58,4 +58,4 @@ let startPoa = (acc, token, net = 'test') => {
     return poas
 }
 
-// export { startPoa }
+export { startPoa }

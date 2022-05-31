@@ -5,7 +5,7 @@ import {generateIcon, getMnemonicPrivateKeyHex, regexToken, shortHash} from "../
 import Input from "../elements/Input";
 import {NET, NETWORKS} from "../../utils/names";
 // import {startPoa} from "../../utils/poa";
-import {Publisher} from "../../utils/poa/Publisher";
+import {Publisher} from "../../utils/poa/publisher";
 import {apiController} from "../../utils/apiController";
 
 let status = {
@@ -198,7 +198,7 @@ export default function Mining(props) {
                     <div className={styles.card_field_select} onClick={(() => {
                         accounts[i].list = !accounts[i].list
                         setAccounts([...accounts])
-                    })}>{accounts[i].list ? '↓' : '↑'}</div>
+                    })}>{accounts[i].list ? 'SHOW' : 'HIDE'}</div>
                 </div>
 
             cards.push(card)

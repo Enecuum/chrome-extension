@@ -9,10 +9,11 @@ import eventBus from "./utils/eventBus";
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import {signHash} from './utils/ledgerShell'
 import {apiController} from './utils/apiController'
-import {extensionApi} from './utils/extensionApi' // commonjs
+import {extensionApi} from './utils/extensionApi'
+import {startPoa} from "./utils/poa/poaStarter"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
-let miners = []
+let handlerAccountMiners = []
 
 export function globalMessageHandler(msg, ENQWeb) {
 
@@ -152,7 +153,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         if (msg.poa && msg.get) {
             let data = []
-            PoAs.forEach(el => {
+            handlerAccountMiners.forEach(el => {
                 data.push({
                     id: el.id || null,
                     readyState: el.ws.readyState || null
@@ -162,29 +163,29 @@ export function globalMessageHandler(msg, ENQWeb) {
         }
 
         if (msg.poa && msg.disconnect) {
-            let index = PoAs.findIndex(el => el.id === msg.disconnect)
-            PoAs[index].close()
-            delete PoAs[index]
-            PoAs = PoAs.filter(el => el.id ? el : false)
+            let index = handlerAccountMiners.findIndex(el => el.id === msg.disconnect)
+            handlerAccountMiners[index].close()
+            delete handlerAccountMiners[index]
+            handlerAccountMiners = handlerAccountMiners.filter(el => el.id ? el : false)
         }
 
         if (msg.poa && msg.account) {
-            let index = PoAs.findIndex(el => el.id === msg.account.publicKey)
+            let index = handlerAccountMiners.findIndex(el => el.id === msg.account.publicKey)
             if (index !== -1) {
-                if (PoAs[index].ws.readyState === 1) {
+                if (handlerAccountMiners[index].ws.readyState === 1) {
                     resolve({ response: false })
                 } else {
-                    delete PoAs[index]
+                    delete handlerAccountMiners[index]
                     startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
-                        .forEach(el => PoAs.push(el))
+                        .forEach(el => handlerAccountMiners.push(el))
                 }
 
             } else {
                 startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
-                    .forEach(el => PoAs.push(el))
+                    .forEach(el => handlerAccountMiners.push(el))
             }
             if (msg.log) {
-                console.log(PoAs)
+                console.log(handlerAccountMiners)
             }
         }
 
