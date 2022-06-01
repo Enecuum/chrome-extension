@@ -54,7 +54,7 @@ const createDisclaimer = () => {
     linksDiv.innerHTML += '<div id="leftLinksText">We made a mobile version:</div>'
     linksDiv.innerHTML +=
         '<div class="row">' +
-        '<div><a href="https://testflight.apple.com/join/EhGhg78t" target="_blank"><img src="./images/applestore.svg"></a></div>' +
+        '<div><a href="https://testflight.apple.com/join/WHOMGLUZ" target="_blank"><img src="./images/applestore.svg"></a></div>' +
         '<div><a href="https://play.google.com/store/apps/details?id=com.enecuum.wallet" target="_blank"><img src="./images/googleplay.png"></a></div>' +
         '</div>'
 
