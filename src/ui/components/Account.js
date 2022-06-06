@@ -117,8 +117,11 @@ export default function Account(props) {
                 // console.log(res.map(a => a.ticker + ': ' + a.amount))
                 let amount = 0
                 let ticker = ''
-                let decimal
+                let decimal = 10
                 let image = './images/enq.png'
+
+                console.log(res)
+
                 for (let i in res) {
                     // console.log(res[i])
                     tickers[res[i].token] = res[i].ticker
