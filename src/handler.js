@@ -13,7 +13,14 @@ import {extensionApi} from './utils/extensionApi'
 import {startPoa} from "./utils/poa/poaStarter"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
-let handlerAccountMiners = []
+let miningProcess = false
+let handlerMiners = [
+    {
+        publicKey: '',
+        mining: true,
+        token: '',
+    }
+]
 
 export function globalMessageHandler(msg, ENQWeb) {
 
@@ -151,9 +158,11 @@ export function globalMessageHandler(msg, ENQWeb) {
             resolve({response: true})
         }
 
+
+        // Get PoA keys state
         if (msg.poa && msg.get) {
             let data = []
-            handlerAccountMiners.forEach(el => {
+            handlerMiners.forEach(el => {
                 data.push({
                     id: el.id || null,
                     readyState: el.ws.readyState || null
@@ -162,30 +171,35 @@ export function globalMessageHandler(msg, ENQWeb) {
             resolve({ response: data })
         }
 
+        // Disconnect PoA by id
         if (msg.poa && msg.disconnect) {
-            let index = handlerAccountMiners.findIndex(el => el.id === msg.disconnect)
-            handlerAccountMiners[index].close()
-            delete handlerAccountMiners[index]
-            handlerAccountMiners = handlerAccountMiners.filter(el => el.id ? el : false)
+            let index = handlerMiners.findIndex(el => el.id === msg.disconnect)
+            handlerMiners[index].close()
+            delete handlerMiners[index]
+            handlerMiners = handlerMiners.filter(el => el.id ? el : false)
         }
 
+        // Start all PoA by id
         if (msg.poa && msg.account) {
-            let index = handlerAccountMiners.findIndex(el => el.id === msg.account.publicKey)
+
+            // We have ENQWeb.Enq.User here, not msg.account
+
+            let index = handlerMiners.findIndex(el => el.id === msg.account.publicKey)
             if (index !== -1) {
-                if (handlerAccountMiners[index].ws.readyState === 1) {
+                if (handlerMiners[index].ws.readyState === 1) {
                     resolve({ response: false })
                 } else {
-                    delete handlerAccountMiners[index]
+                    delete handlerMiners[index]
                     startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
-                        .forEach(el => handlerAccountMiners.push(el))
+                        .forEach(el => handlerMiners.push(el))
                 }
 
             } else {
                 startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
-                    .forEach(el => handlerAccountMiners.push(el))
+                    .forEach(el => handlerMiners.push(el))
             }
             if (msg.log) {
-                console.log(handlerAccountMiners)
+                console.log(handlerMiners)
             }
         }
 

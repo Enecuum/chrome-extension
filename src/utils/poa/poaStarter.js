@@ -2,60 +2,65 @@
 // const fs = require('fs');
 import { Publisher } from './publisher'
 
-let startPoa = (acc, token, net = 'test') => {
+let startPoa = (account, token, net = 'test') => {
 
-    let keyfile = [
-        {
-            'pubkey': acc.publicKey,
-            'prvkey': acc.privateKey
-        }
-    ]
+    // let keyfile = [
+    //     {
+    //         'publicKey': acc.publicKey,
+    //         'privateKey': acc.privateKey
+    //     }
+    // ]
+    //
+    // let poa
+    //
+    // try {
+    //     poa = keyfile
+    // } catch (e) {
+    //     console.log(e)
+    //     console.log(`Failed to load ${keyfile}`)
+    //     return
+    // }
 
-    let poa
+    // let config = {
+    //     url: 'OTUuMjE2LjI0Ni4xMTY6MzAwMA=='
+    // }
+    //
+    // if (net === 'test') {
+    //     config.url = 'OTUuMjE2LjI0Ni4xMTY6MzAwMA=='
+    // }
+    //
+    // console.log(atob('OTUuMjE2LjI0Ni4xMTY6MzAwMA=='))
+    //
+    // //bit
+    // if (net.includes(atob('Yml0LmVuZWN1dW0uY29t'))) {
+    //     config.url = 'OTUuMjE2LjI0Ni4xMTY6MzAwMA=='
+    // }
+    //
+    // //pulse
+    // if (net.includes(atob('cHVsc2UuZW5lY3V1bS5jb20='))) {
+    //     config.url = 'OTUuMjE2LjY4LjIyMTozMDAw'
+    // }
 
-    try {
-        poa = keyfile
-    } catch (e) {
-        console.log(e)
-        console.log(`Failed to load ${keyfile}`)
-        return
-    }
+    // console.log(`Starting ${poa.length} emulators for ${config.url}`)
 
-    let config = {
-        url: 'OTUuMjE2LjI0Ni4xMTY6MzAwMA=='
-    }
+    // let poas = []
+    //
+    // for (let i = 0; i < poa.length; i++) {
+    //     if (poa[i].enable != undefined && poa[i].enable == 0) {
+    //         if (poa[i].id == undefined) {
+    //             poa[i].id = poa[i].pubkey.slice(0, 6)
+    //         }
+    //         console.log(`PoA ${poa[i].id} disabled`)
+    //         continue
+    //     }
+    //     poas.push(new Publisher(poa[i], token));
+    // }
+    // return poas
 
-    if (net === 'test') {
-        config.url = 'OTUuMjE2LjI0Ni4xMTY6MzAwMA=='
-    }
-
-    console.log(atob('OTUuMjE2LjI0Ni4xMTY6MzAwMA=='))
-
-    //bit
-    if (net.includes(atob('Yml0LmVuZWN1dW0uY29t'))) {
-        config.url = 'OTUuMjE2LjI0Ni4xMTY6MzAwMA=='
-    }
-
-    //pulse
-    if (net.includes(atob('cHVsc2UuZW5lY3V1bS5jb20='))) {
-        config.url = 'OTUuMjE2LjY4LjIyMTozMDAw'
-    }
-
-    console.log(`Starting ${poa.length} emulators for ${config.url}`)
-
-    let poas = []
-
-    for (let i = 0; i < poa.length; i++) {
-        if (poa[i].enable != undefined && poa[i].enable == 0) {
-            if (poa[i].id == undefined) {
-                poa[i].id = poa[i].pubkey.slice(0, 6)
-            }
-            console.log(`PoA ${poa[i].id} disabled`)
-            continue
-        }
-        poas.push(new Publisher(config.url, poa[i], token));
-    }
-    return poas
+    return [...new Publisher({
+        'publicKey': account.publicKey,
+        'privateKey': account.privateKey
+    }, token)]
 }
 
 export { startPoa }

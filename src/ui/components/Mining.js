@@ -8,6 +8,9 @@ import {NET, NETWORKS} from "../../utils/names";
 import {Publisher} from "../../utils/poa/publisher";
 import {apiController} from "../../utils/apiController";
 
+import { Plugins } from '@capacitor/core';
+const { App, BackgroundTask, LocalNotifications } = Plugins;
+
 let status = {
     0: 'CONNECTING',
     1: 'MINING',
@@ -44,38 +47,66 @@ export default function Mining(props) {
 
     let startMining = () => {
 
+        if (LocalNotifications)
+            LocalNotifications.schedule({
+                notifications: [{
+                    title: "Mining",
+                    body: "Mining for Account 1 of " + 0,
+                    id: this.id++,
+                    schedule: {
+                        at: new Date(Date.now() + 1000 * 2)
+                    },
+                    sound: null,
+                    attachments: null,
+                    actionTypeId: "",
+                    extra: null
+                }]
+            });
+
+        chrome.notifications.create('NOTFICATION_ID', {
+            type: 'basic',
+            iconUrl: 'images/enq.png',
+            title: 'Mining',
+            message: "Mining for Account 1 of " + 0,
+            priority: 2
+        })
+
         userStorage.user.loadUser().then(account => {
 
             console.log(account)
 
-            global.publisher = new Publisher(account, account.token)
+            // global.publisher = new Publisher(account, account.token)
 
-            console.log(global.publisher.ws)
-
-            global.publisher.ws.addEventListener('open', function (event) {
-                setReadyState(publisher.ws.readyState)
+            userStorage.promise.sendPromise({poa: true, account}).then(miners => {
+                console.log(miners)
             })
 
-            global.publisher.ws.addEventListener('close', function (event) {
-                setReadyState(publisher.ws.readyState)
-            })
+            // console.log(global.publisher.ws)
 
-            global.publisher.ws.addEventListener('error', function (event) {
-                setReadyState(publisher.ws.readyState)
-
-            })
+            // global.publisher.ws.addEventListener('open', function (event) {
+            //     setReadyState(publisher.ws.readyState)
+            // })
+            //
+            // global.publisher.ws.addEventListener('close', function (event) {
+            //     setReadyState(publisher.ws.readyState)
+            // })
+            //
+            // global.publisher.ws.addEventListener('error', function (event) {
+            //     setReadyState(publisher.ws.readyState)
+            //
+            // })
         })
     }
 
     let stopMining = () => {
-        global.publisher.ws.close()
+        // global.publisher.ws.close()
 
         // for (let i = 0; i < accounts.length; i++) {
         //     // accounts[i].pause = true
         //     // accounts[i].mining = false
         // }
 
-        setAccounts([...accounts])
+        // setAccounts([...accounts])
 
     }
 
@@ -91,6 +122,13 @@ export default function Mining(props) {
     }
 
     useEffect(() => {
+
+        userStorage.promise.sendPromise({
+            poa: true,
+            get: true,
+        }).then(miners => {
+            console.log(miners)
+        })
 
         userStorage.user.loadUser().then(async account => {
 

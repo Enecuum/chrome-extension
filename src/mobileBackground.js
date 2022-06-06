@@ -1,6 +1,15 @@
 import { Plugins } from '@capacitor/core';
 
-const { App, BackgroundTask } = Plugins;
+const { App, BackgroundTask, LocalNotifications } = Plugins;
+
+// let mobileBackgroundMiners = []
+let mobileBackgroundMiners = [
+    {
+        publicKey: '',
+        mining: true,
+        token: '',
+    }
+]
 
 App.addListener('appStateChange', state => {
 
@@ -11,7 +20,7 @@ App.addListener('appStateChange', state => {
             // In this function We might finish an upload, let a network request
             // finish, persist some data, or perform some other task
 
-            mineCoins()
+            await mineCoins()
 
             // Must call in order to end our task otherwise
             // we risk our app being terminated, and possibly
@@ -22,15 +31,39 @@ App.addListener('appStateChange', state => {
     }
 });
 
-let mineCoins = () => {
+let mineCoins = async () => {
 
     // We have to go to background and find out if there is some miner connections
 
-    // Example of long task
-    let start = new Date().getTime();
-    for (let i = 0; i < 1e18; i++) {
-        if (new Date().getTime() - start > 20000) {
-            break;
-        }
-    }
+    userStorage.promise.sendPromise({poa: true, account}).then(miners => {
+        mobileBackgroundMiners = miners
+    })
+
+    mobileBackgroundMiners = await userStorage.promise.sendPromise({
+        poa: true,
+        get: true,
+    })
+
+    LocalNotifications.schedule({
+        notifications: [{
+            title: "Mining",
+            body: "Mining for Account 1 of " + mobileBackgroundMiners.length,
+            id: this.id++,
+            schedule: {
+                at: new Date(Date.now() + 1000 * 2)
+            },
+            sound: null,
+            attachments: null,
+            actionTypeId: "",
+            extra: null
+        }]
+    });
+
+    // // Example of long task
+    // let start = new Date().getTime();
+    // for (let i = 0; i < 1e18; i++) {
+    //     if (new Date().getTime() - start > 20000) {
+    //         break;
+    //     }
+    // }
 }
