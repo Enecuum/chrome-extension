@@ -1,6 +1,9 @@
 const bip39 = require("bip39");
 const bip32 = require("bip32");
+
 const {Clipboard} = require("@capacitor/clipboard");
+const {LocalNotifications} = require("@capacitor/core");
+
 let regexData = /^[0-9a-zA-Z _\-/.]{0,512}$/
 let regexAddress = /^(02|03)[0-9a-fA-F]{64}$/
 let regexToken = /^[0-9a-fA-F]{64}$/
@@ -113,11 +116,39 @@ function toggleFullScreen() {
 
 const copyToClipboard = (text) => {
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(r => {})
+        navigator.clipboard.writeText(text).then(r => {
+        })
     } else {
         console.error('navigator.clipboard: ' + false)
     }
-    Clipboard.write({string: text}).then(r => {})
+    Clipboard.write({string: text}).then(r => {
+    })
+}
+
+const showNotification = () => {
+
+    if (LocalNotifications)
+        LocalNotifications.schedule({
+            notifications: [{
+                title: "Mining",
+                body: "Mining for Account 1 of " + 0,
+                id: this.id++,
+                schedule: {at: new Date(Date.now() + 1000 * 1)},
+                sound: null,
+                attachments: null,
+                actionTypeId: "",
+                extra: null
+            }]
+        });
+
+    if (chrome.notifications)
+        chrome.notifications.create('NOTFICATION_ID', {
+            type: 'basic',
+            iconUrl: 'images/enq.png',
+            title: 'Mining',
+            message: "Mining for Account 1 of " + 0,
+            priority: 2
+        })
 }
 
 module.exports = {
@@ -136,5 +167,6 @@ module.exports = {
     ledgerPath,
     getMnemonicFirstPrivateKey,
     getMnemonicPrivateKeyHex,
-    getMnemonicHex
+    getMnemonicHex,
+    showNotification
 }

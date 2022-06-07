@@ -17,8 +17,7 @@ class Publisher {
         let ip = '95.216.246.116'
         this.ws = new WebSocket(`ws://95.216.246.116:3000`)
 
-        this.mining = true
-        this.token = token
+        // this.token = token
 
         this.close = () => {
             console.log(`${id} closed`)

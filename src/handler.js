@@ -10,17 +10,11 @@ import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import {signHash} from './utils/ledgerShell'
 import {apiController} from './utils/apiController'
 import {extensionApi} from './utils/extensionApi'
-import {startPoa} from "./utils/poa/poaStarter"; // commonjs
+import {initPoa, startPoa} from "./utils/poa/poaStarter"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
 let miningProcess = false
-let handlerMiners = [
-    {
-        publicKey: '',
-        mining: true,
-        token: '',
-    }
-]
+let handlerMiners = []
 
 export function globalMessageHandler(msg, ENQWeb) {
 
@@ -162,13 +156,29 @@ export function globalMessageHandler(msg, ENQWeb) {
         // Get PoA keys state
         if (msg.poa && msg.get) {
             let data = []
-            handlerMiners.forEach(el => {
-                data.push({
-                    id: el.id || null,
-                    readyState: el.ws.readyState || null
-                })
-            })
-            resolve({ response: data })
+
+            console.log(handlerMiners)
+
+            if (handlerMiners.length === 0)
+                handlerMiners = initPoa(ENQWeb.Enq.User)
+
+            // console.log(handlerMiners)
+
+            // handlerMiners.forEach(el => {
+            //     data.push({
+            //         id: el.id || null,
+            //         readyState: el.ws.readyState || null
+            //     })
+            // })
+
+            resolve({ response: handlerMiners })
+        }
+
+        // Start all PoA
+        if (msg.poa && msg.start) {
+            let miners = startPoa(handlerMiners)
+            handlerMiners = miners
+            resolve({ response: miners })
         }
 
         // Disconnect PoA by id

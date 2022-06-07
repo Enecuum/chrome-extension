@@ -1,66 +1,41 @@
 // const argv = require('yargs').argv;
 // const fs = require('fs');
 import { Publisher } from './publisher'
+import {getMnemonicPrivateKeyHex} from "../../ui/Utils";
+import {apiController} from "../apiController";
 
-let startPoa = (account, token, net = 'test') => {
+let initPoa = async (account) => {
 
-    // let keyfile = [
-    //     {
-    //         'publicKey': acc.publicKey,
-    //         'privateKey': acc.privateKey
-    //     }
-    // ]
-    //
-    // let poa
-    //
-    // try {
-    //     poa = keyfile
-    // } catch (e) {
-    //     console.log(e)
-    //     console.log(`Failed to load ${keyfile}`)
-    //     return
-    // }
+    let miners = []
+    for (let i = 0; i < account.seedAccountsArray.length; i++) {
 
-    // let config = {
-    //     url: 'OTUuMjE2LjI0Ni4xMTY6MzAwMA=='
-    // }
-    //
-    // if (net === 'test') {
-    //     config.url = 'OTUuMjE2LjI0Ni4xMTY6MzAwMA=='
-    // }
-    //
-    // console.log(atob('OTUuMjE2LjI0Ni4xMTY6MzAwMA=='))
-    //
-    // //bit
-    // if (net.includes(atob('Yml0LmVuZWN1dW0uY29t'))) {
-    //     config.url = 'OTUuMjE2LjI0Ni4xMTY6MzAwMA=='
-    // }
-    //
-    // //pulse
-    // if (net.includes(atob('cHVsc2UuZW5lY3V1bS5jb20='))) {
-    //     config.url = 'OTUuMjE2LjY4LjIyMTozMDAw'
-    // }
+        let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
+        const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
 
-    // console.log(`Starting ${poa.length} emulators for ${config.url}`)
+        let tokens = await apiController.getBalanceAll(publicKey)
 
-    // let poas = []
-    //
-    // for (let i = 0; i < poa.length; i++) {
-    //     if (poa[i].enable != undefined && poa[i].enable == 0) {
-    //         if (poa[i].id == undefined) {
-    //             poa[i].id = poa[i].pubkey.slice(0, 6)
-    //         }
-    //         console.log(`PoA ${poa[i].id} disabled`)
-    //         continue
-    //     }
-    //     poas.push(new Publisher(poa[i], token));
-    // }
-    // return poas
+        miners.push({
+            publicKey,
+            mining: false,
+            list: true,
+            tokens,
+            token: tokens[0] ? tokens[0] : {token: '', decimals: 10},
+            // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
+        })
+    }
 
-    return [...new Publisher({
-        'publicKey': account.publicKey,
-        'privateKey': account.privateKey
-    }, token)]
+    return miners
 }
 
-export { startPoa }
+let startPoa = async (account, miners) => {
+
+    // let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
+
+    for (let i = 0; i < miners.length; i++) {
+        // miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({account.publicKey, account.privateKey}, tokens[0].token) : {}
+    }
+
+    // return localAccounts
+}
+
+export { startPoa, initPoa }

@@ -1,15 +1,12 @@
 import React, {useEffect, useState} from "react";
 import styles from "../css/index.module.css";
 import Separator from "../elements/Separator";
-import {generateIcon, getMnemonicPrivateKeyHex, regexToken, shortHash} from "../Utils";
+import {generateIcon, getMnemonicPrivateKeyHex, regexToken, shortHash, showNotification} from "../Utils";
 import Input from "../elements/Input";
 import {NET, NETWORKS} from "../../utils/names";
 // import {startPoa} from "../../utils/poa";
 import {Publisher} from "../../utils/poa/publisher";
 import {apiController} from "../../utils/apiController";
-
-import { Plugins } from '@capacitor/core';
-const { App, BackgroundTask, LocalNotifications } = Plugins;
 
 let status = {
     0: 'CONNECTING',
@@ -47,39 +44,20 @@ export default function Mining(props) {
 
     let startMining = () => {
 
-        if (LocalNotifications)
-            LocalNotifications.schedule({
-                notifications: [{
-                    title: "Mining",
-                    body: "Mining for Account 1 of " + 0,
-                    id: this.id++,
-                    schedule: {
-                        at: new Date(Date.now() + 1000 * 2)
-                    },
-                    sound: null,
-                    attachments: null,
-                    actionTypeId: "",
-                    extra: null
-                }]
-            });
+        showNotification()
 
-        chrome.notifications.create('NOTFICATION_ID', {
-            type: 'basic',
-            iconUrl: 'images/enq.png',
-            title: 'Mining',
-            message: "Mining for Account 1 of " + 0,
-            priority: 2
+        userStorage.promise.sendPromise({poa: true, start: true}).then(miners => {
+            console.log(miners)
+            setAccounts([...miners])
         })
 
-        userStorage.user.loadUser().then(account => {
+        // userStorage.user.loadUser().then(account => {
 
-            console.log(account)
+            // console.log(account)
 
             // global.publisher = new Publisher(account, account.token)
 
-            userStorage.promise.sendPromise({poa: true, account}).then(miners => {
-                console.log(miners)
-            })
+
 
             // console.log(global.publisher.ws)
 
@@ -95,10 +73,11 @@ export default function Mining(props) {
             //     setReadyState(publisher.ws.readyState)
             //
             // })
-        })
+        // })
     }
 
     let stopMining = () => {
+
         // global.publisher.ws.close()
 
         // for (let i = 0; i < accounts.length; i++) {
@@ -107,18 +86,31 @@ export default function Mining(props) {
         // }
 
         // setAccounts([...accounts])
+    }
+
+    let selectToken = (publicKey, token) => {
+
+        userStorage.promise.sendPromise({
+            poa: true,
+            account: {publicKey},
+            token,
+        }).then(miners => {
+            console.log(miners)
+            setAccounts([...miners])
+        })
+
+        // console.log(accountId)
+        // console.log(token)
+        // accounts[accountId].token = token
 
     }
 
-    let selectToken = (accountId, token) => {
+    let onMiner = (publicKey, token) => {
 
-        if (token.minable === 0)
-            return
+    }
 
-        console.log(accountId)
-        console.log(token)
-        accounts[accountId].token = token
-        setAccounts([...accounts])
+    let offMiner = (publicKey, token) => {
+
     }
 
     useEffect(() => {
@@ -128,69 +120,72 @@ export default function Mining(props) {
             get: true,
         }).then(miners => {
             console.log(miners)
+            setAccounts(miners)
         })
 
-        userStorage.user.loadUser().then(async account => {
+        // userStorage.user.loadUser().then(async account => {
 
-            setKeys(account.seedAccountsArray)
+            // setKeys(account.seedAccountsArray)
 
-            let localAccounts = []
-            for (let i = 0; i < account.seedAccountsArray.length; i++) {
-
-                let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
-                const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
-
-                let tokens = await getBalance(publicKey)
-
-                console.log(tokens)
-
-                localAccounts.push({
-                    i: i + 1,
-                    publicKey: publicKey,
-                    mining: false,
-                    list: true,
-                    tokens,
-                    token: tokens[0] ? tokens[0] : '',
-                })
-            }
+            // let localAccounts = []
+            // for (let i = 0; i < account.seedAccountsArray.length; i++) {
+            //
+            //     let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
+            //     const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
+            //
+            //     let tokens = await getBalance(publicKey)
+            //
+            //     console.log(tokens)
+            //
+            //     localAccounts.push({
+            //         i: i + 1,
+            //         publicKey: publicKey,
+            //         mining: false,
+            //         list: true,
+            //         tokens,
+            //         token: tokens[0] ? tokens[0] : '',
+            //     })
+            // }
 
             // console.log(localAccounts)
 
-            setAccounts(localAccounts)
-        })
+            // setAccounts(localAccounts)
+        // })
 
         // setTokens(userStorage.tokens.getTokens())
 
     }, [])
 
-    const getBalance = async (publicKey) => {
-
-        let tokens = []
-
-        await apiController.getBalanceAll(publicKey)
-            .then((res) => {
-
-                for (let i in res) {
-                    console.log(res)
-                    // console.log(res[i].token + ' ' + res[i].ticker)
-
-                    tokens.push({
-                        token: res[i].token,
-                        ticker: res[i].ticker,
-                        minable: res[i].minable,
-                        amount: BigInt(res[i].amount),
-                        decimals: 10 ** res[i].decimals
-                    })
-                }
-
-                // console.log(res.amount / 1e10)
-
-            }).catch((err) => {
-                console.error('error: ', err)
-            })
-
-        return tokens
-    }
+    // const getBalance = async (publicKey) => {
+    //
+    //     let tokens = []
+    //
+    //     await apiController.getBalanceAll(publicKey)
+    //         .then((res) => {
+    //
+    //             console.log(res)
+    //
+    //             for (let i in res) {
+    //
+    //                 // console.log(res[i].token + ' ' + res[i].ticker)
+    //
+    //                 tokens.push({
+    //                     token: res[i].token,
+    //                     ticker: res[i].ticker,
+    //                     minable: res[i].minable,
+    //                     amount: BigInt(res[i].amount),
+    //                     decimals: 10 ** res[i].decimals
+    //                 })
+    //             }
+    //
+    //             // console.log(res.amount / 1e10)
+    //
+    //         }).catch((err) => {
+    //             console.error('error: ', err)
+    //         })
+    //
+    //     return tokens
+    // }
 
 
     let renderCards = () => {
@@ -199,20 +194,23 @@ export default function Mining(props) {
 
         for (let i = 0; i < accounts.length; i++) {
 
-            let tokens = accounts[i].tokens.map((token) => <div key={token.token} onClick={() => selectToken(i, token)} className={token.minable === 0 ? styles.card_grid_disabled : (token.token === accounts[i].token.token ? styles.card_grid_select : '')}>
+            let tokens = accounts[i].tokens.map((token) => <div key={token.token}
+                                                                onClick={() => token.minable === 0 ? () => {} : selectToken(accounts[i].publicKey, token.token)}
+                                                                className={token.minable === 0 ? styles.card_grid_disabled : (token.token === accounts[i].token.token ? styles.card_grid_select : '')}>
                 <div>{token.ticker}</div>
-                <div>{(Number(token.amount) / token.decimals).toFixed(0)}</div>
+                <div>{(Number(token.amount) / (10 ** token.decimals)).toFixed(0)}</div>
             </div>)
 
             let card =
-                <div key={i + 'card'} className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining && readyState === 1 ? styles.mining_card_mine : '')}>
+                <div key={i + 'card'}
+                     className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining && readyState === 1 ? styles.mining_card_mine : '')}>
                     <div className={styles.row}>
                         <div>Account M{keys[i] + 1}</div>
                         <div onClick={() => {
-                            if (accounts[i].token) {
-                                accounts[i].mining = !accounts[i].mining
-                                setAccounts([...accounts])
-                            }
+                            // if (accounts[i].token) {
+                            //     accounts[i].mining = !accounts[i].mining
+                            //     setAccounts([...accounts])
+                            // }
                         }} className={styles.text_big}>{accounts[i].mining ? 'ON' : 'OFF'}</div>
                     </div>
 
@@ -226,12 +224,13 @@ export default function Mining(props) {
                     }}>
                         {/*<div>{(Math.floor(Math.random() * 100)) + ' BIT'}</div>*/}
                         <div>{accounts[i].token.ticker}</div>
-                        <div>{(Number(accounts[i].token.amount) / accounts[i].token.decimals).toFixed(0)}</div>
+                        <div>{(Number(accounts[i].token.amount) / (10 ** accounts[i].token.decimals)).toFixed(0)}</div>
                     </div>}
 
-                    {!accounts[i].list && accounts[i].tokens.length > 0 && <div className={styles.card_field + ' ' + styles.card_grid}>
-                        {tokens}
-                    </div>}
+                    {!accounts[i].list && accounts[i].tokens.length > 0 &&
+                        <div className={styles.card_field + ' ' + styles.card_grid}>
+                            {tokens}
+                        </div>}
 
                     <div className={styles.card_field_select} onClick={(() => {
                         accounts[i].list = !accounts[i].list
