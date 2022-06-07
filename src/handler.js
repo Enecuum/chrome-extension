@@ -147,7 +147,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             resolve({response: true})
         }
 
-        // TODO Logout
+        // Logout
         if (msg.account && msg.logout) {
 
 

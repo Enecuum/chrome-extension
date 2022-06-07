@@ -44,6 +44,8 @@ let mineCoins = async () => {
         get: true,
     })
 
+    // We have to run new PoA here
+
     LocalNotifications.schedule({
         notifications: [{
             title: "Mining",
