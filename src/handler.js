@@ -10,7 +10,7 @@ import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import {signHash} from './utils/ledgerShell'
 import {apiController} from './utils/apiController'
 import {extensionApi} from './utils/extensionApi'
-import {initPoa, startPoa} from "./utils/poa/poaStarter"; // commonjs
+import {initPoa, startPoa, stopPoa} from "./utils/poa/poaStarter"; // commonjs
 // var cacheStore = window.cacheStore // compiled javascript
 
 let miningProcess = false
@@ -18,7 +18,7 @@ let handlerMiners = []
 
 export function globalMessageHandler(msg, ENQWeb) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
         indexDB.get(USER).then(function (user) {
             // console.warn('IndexDB USER')
@@ -160,7 +160,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             // console.log(handlerMiners)
 
             if (handlerMiners.length === 0)
-                handlerMiners = initPoa(ENQWeb.Enq.User)
+                handlerMiners = await initPoa(ENQWeb.Enq.User)
 
             // console.log(handlerMiners)
 
@@ -171,55 +171,57 @@ export function globalMessageHandler(msg, ENQWeb) {
             //     })
             // })
 
-            resolve({ response: handlerMiners })
+            resolve({response: handlerMiners})
         }
 
         // Start all PoA
         if (msg.poa && msg.start) {
             console.log(handlerMiners)
-            let miners = startPoa(ENQWeb.Enq.User, handlerMiners)
-            // handlerMiners = miners
-            resolve({ response: miners })
+            let miners = await startPoa(ENQWeb.Enq.User, handlerMiners)
+            console.log(miners)
+            handlerMiners = miners
+            resolve({response: miners})
         }
 
         if (msg.poa && msg.stop) {
             console.log(handlerMiners)
-            let miners = stopPoa(handlerMiners)
-            // handlerMiners = miners
-            // resolve({ response: miners })
+            let miners = await stopPoa(handlerMiners)
+            console.log(miners)
+            handlerMiners = miners
+            resolve({ response: miners })
         }
 
-        // Disconnect PoA by id
-        if (msg.poa && msg.disconnect) {
-            let index = handlerMiners.findIndex(el => el.id === msg.disconnect)
-            handlerMiners[index].close()
-            delete handlerMiners[index]
-            handlerMiners = handlerMiners.filter(el => el.id ? el : false)
-        }
+        // // Disconnect PoA by id
+        // if (msg.poa && msg.disconnect) {
+        //     let index = handlerMiners.findIndex(el => el.id === msg.disconnect)
+        //     handlerMiners[index].close()
+        //     delete handlerMiners[index]
+        //     handlerMiners = handlerMiners.filter(el => el.id ? el : false)
+        // }
 
-        // Start all PoA by id
-        if (msg.poa && msg.account) {
-
-            // We have ENQWeb.Enq.User here, not msg.account
-
-            let index = handlerMiners.findIndex(el => el.id === msg.account.publicKey)
-            if (index !== -1) {
-                if (handlerMiners[index].ws.readyState === 1) {
-                    resolve({ response: false })
-                } else {
-                    delete handlerMiners[index]
-                    startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
-                        .forEach(el => handlerMiners.push(el))
-                }
-
-            } else {
-                startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
-                    .forEach(el => handlerMiners.push(el))
-            }
-            if (msg.log) {
-                console.log(handlerMiners)
-            }
-        }
+        // // Start all PoA by id
+        // if (msg.poa && msg.account) {
+        //
+        //     // We have ENQWeb.Enq.User here, not msg.account
+        //
+        //     let index = handlerMiners.findIndex(el => el.id === msg.account.publicKey)
+        //     if (index !== -1) {
+        //         if (handlerMiners[index].ws.readyState === 1) {
+        //             resolve({response: false})
+        //         } else {
+        //             delete handlerMiners[index]
+        //             startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
+        //                 .forEach(el => handlerMiners.push(el))
+        //         }
+        //
+        //     } else {
+        //         startPoa(msg.account, ENQWeb.Enq.User.token, ENQWeb.Enq.User.net)
+        //             .forEach(el => handlerMiners.push(el))
+        //     }
+        //     if (msg.log) {
+        //         console.log(handlerMiners)
+        //     }
+        // }
 
         // if (msg.poa && msg.get) {
         //     resolve({response: miners})

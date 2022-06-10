@@ -118,10 +118,26 @@ export default function Mining(props) {
 
     let onMiner = (publicKey, token) => {
 
+        userStorage.promise.sendPromise({
+            poa: true,
+            account: {publicKey},
+            on: true
+        }).then(miners => {
+            console.log(miners)
+            setAccounts([...miners])
+        })
     }
 
     let offMiner = (publicKey, token) => {
 
+        userStorage.promise.sendPromise({
+            poa: true,
+            account: {publicKey},
+            off: true,
+        }).then(miners => {
+            console.log(miners)
+            setAccounts([...miners])
+        })
     }
 
     useEffect(() => {
@@ -214,7 +230,7 @@ export default function Mining(props) {
 
             let card =
                 <div key={i + 'card'}
-                     className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining && readyState === 1 ? styles.mining_card_mine : '')}>
+                     className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining && mining ? styles.mining_card_mine : '')}>
                     <div className={styles.row}>
                         <div>Account M{accounts[i].i + 1}</div>
                         <div onClick={() => {

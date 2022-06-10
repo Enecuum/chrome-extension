@@ -28,7 +28,7 @@ let initPoa = async (account) => {
         miners.push({
             i,
             publicKey,
-            mining: false,
+            mining: true,
             list: true,
             tokens,
             token: tokens[0] ? tokens[0] : {token: '', decimals: 10},
@@ -48,13 +48,13 @@ let startPoa = async (account, miners) => {
     // miners = await initPoa(account)
 
     for (let i = 0; i < miners.length; i++) {
-        miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({publicKey: account.publicKey, privateKey: account.privateKey}, miners.token.token) : {}
+        miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({publicKey: account.publicKey, privateKey: account.privateKey}, miners[i].token.token) : {}
     }
 
-    // return localAccounts
+    return miners
 }
 
-let stopPoa = async (account, miners) => {
+let stopPoa = async (miners) => {
 
     // let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
 
@@ -66,7 +66,7 @@ let stopPoa = async (account, miners) => {
         miners[i].publisher.ws.close()
     }
 
-    // return localAccounts
+    return miners
 }
 
-export { startPoa, initPoa }
+export { startPoa, stopPoa, initPoa }
