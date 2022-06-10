@@ -106,7 +106,7 @@ export default function Mining(props) {
             account: {publicKey},
             token,
         }).then(miners => {
-            console.log(miners)
+            // console.log(miners)
             setAccounts([...miners])
         })
 
@@ -116,26 +116,26 @@ export default function Mining(props) {
 
     }
 
-    let onMiner = (publicKey, token) => {
+    let onMiner = (publicKey) => {
 
         userStorage.promise.sendPromise({
             poa: true,
             account: {publicKey},
             on: true
         }).then(miners => {
-            console.log(miners)
+            // console.log(miners)
             setAccounts([...miners])
         })
     }
 
-    let offMiner = (publicKey, token) => {
+    let offMiner = (publicKey) => {
 
         userStorage.promise.sendPromise({
             poa: true,
             account: {publicKey},
             off: true,
         }).then(miners => {
-            console.log(miners)
+            // console.log(miners)
             setAccounts([...miners])
         })
     }
@@ -146,7 +146,7 @@ export default function Mining(props) {
             poa: true,
             get: true,
         }).then(miners => {
-            console.log(miners)
+            // console.log(miners)
             setAccounts(miners)
         })
 
@@ -222,7 +222,7 @@ export default function Mining(props) {
         for (let i = 0; i < accounts.length; i++) {
 
             let tokens = accounts[i].tokens.map((token) => <div key={token.token}
-                                                                onClick={() => token.minable === 0 ? () => {} : selectToken(accounts[i].publicKey, token.token)}
+                                                                onClick={() => token.minable === 0 ? () => {} : selectToken(accounts[i].publicKey, token)}
                                                                 className={token.minable === 0 ? styles.card_grid_disabled : (token.token === accounts[i].token.token ? styles.card_grid_select : '')}>
                 <div>{token.ticker}</div>
                 <div>{(Number(token.amount) / (10 ** token.decimals)).toFixed(0)}</div>
@@ -234,10 +234,11 @@ export default function Mining(props) {
                     <div className={styles.row}>
                         <div>Account M{accounts[i].i + 1}</div>
                         <div onClick={() => {
-                            // if (accounts[i].token) {
-                            //     accounts[i].mining = !accounts[i].mining
-                            //     setAccounts([...accounts])
-                            // }
+                            if (accounts[i].mining) {
+                                offMiner(accounts[i].publicKey)
+                            } else {
+                                onMiner(accounts[i].publicKey)
+                            }
                         }} className={styles.text_big}>{accounts[i].mining ? 'ON' : 'OFF'}</div>
                     </div>
 

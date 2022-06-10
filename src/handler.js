@@ -191,6 +191,18 @@ export function globalMessageHandler(msg, ENQWeb) {
             resolve({ response: miners })
         }
 
+        if (msg.poa && msg.token && msg.account) {
+            console.log(handlerMiners)
+            handlerMiners.find(element => element.publicKey === msg.account.publicKey).token = msg.token
+            // console.log()
+
+            // .token = msg.token
+            // let miners = await stopPoa(handlerMiners)
+            // console.log(miners)
+            // handlerMiners = miners
+            resolve({ response: handlerMiners })
+        }
+
         // // Disconnect PoA by id
         // if (msg.poa && msg.disconnect) {
         //     let index = handlerMiners.findIndex(el => el.id === msg.disconnect)
