@@ -120,7 +120,7 @@ export default function Account(props) {
                 let decimal = 10
                 let image = './images/enq.png'
 
-                console.log(res)
+                // console.log(res)
 
                 for (let i in res) {
                     // console.log(res[i])

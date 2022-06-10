@@ -121,7 +121,8 @@ export default function Mining(props) {
         userStorage.promise.sendPromise({
             poa: true,
             account: {publicKey},
-            on: true
+            mining: true,
+            set: true,
         }).then(miners => {
             // console.log(miners)
             setAccounts([...miners])
@@ -133,7 +134,8 @@ export default function Mining(props) {
         userStorage.promise.sendPromise({
             poa: true,
             account: {publicKey},
-            off: true,
+            mining: true,
+            set: false,
         }).then(miners => {
             // console.log(miners)
             setAccounts([...miners])
@@ -144,9 +146,17 @@ export default function Mining(props) {
 
         userStorage.promise.sendPromise({
             poa: true,
+            status: true,
+        }).then(status => {
+            console.log(status)
+            setMining(status.miningProcess)
+        })
+
+        userStorage.promise.sendPromise({
+            poa: true,
             get: true,
         }).then(miners => {
-            // console.log(miners)
+            console.log(miners)
             setAccounts(miners)
         })
 
