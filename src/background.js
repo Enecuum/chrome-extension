@@ -75,7 +75,7 @@ function setupApp() {
     }
 }
 
-async function messageHandler(msg, sender, sendResponse) {
+function messageHandler(msg, sender, sendResponse) {
 
     if (msg.ports && msg.disconnect) {
         if (msg.all) {
@@ -95,6 +95,8 @@ async function messageHandler(msg, sender, sendResponse) {
 
     globalMessageHandler(msg, ENQWeb)
         .then(answer => sendResponse(answer))
+
+    return true
 }
 
 async function msgConnectHandler(msg, sender) {

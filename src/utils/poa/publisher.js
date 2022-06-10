@@ -5,7 +5,10 @@ const POA_PROTOCOL_VERSION = 4
 
 class Publisher {
 
+
     constructor(account, token) {
+
+        // this
 
         // token = '0d0b6da9d730e6eae5e6cff889051d909b8f66be0f4dc315c3fcedf27395c0cb'
         // token = 'de0942b3b1194cde66ba9bf45bd1bdf406e714d6d514b8c0e6fd58b5ee833693'
@@ -19,16 +22,13 @@ class Publisher {
 
         this.status = 'Initialisation'
 
-        this.getStatus = () => {
-            return this.status
-        }
-
         this.close = () => {
+            this.status = 'Closed'
             console.log(`${id} closed`)
             this.ws.close()
         }
 
-        this.ws.onopen = function open() {
+        this.ws.onopen = () => {
 
             console.log(`${id} connected`)
             let hash = crypto.createHash('sha256').update(ip).digest('hex')
@@ -42,27 +42,27 @@ class Publisher {
                 'method': 'hail',
                 'ver': POA_PROTOCOL_VERSION
             }
-            this.send(JSON.stringify(hail))
+            this.ws.send(JSON.stringify(hail))
 
             this.status = 'Connected'
         }
 
-        this.ws.onclose = function close(e) {
+        this.ws.onclose = (e) => {
             console.log(`${id} disconnected`)
 
-            this.status = 'Closed'
+            this.status = 'Disconnected'
         }
 
-        this.ws.onerror = function (err) {
+        this.ws.onerror = (err) => {
             console.error('Socket encountered error: ', err.message, 'Closing socket')
             setTimeout(function () {
                 new Publisher(account, token)
             }, 1000)
 
-            this.status = 'error'
+            this.status = 'Error'
         }
 
-        this.ws.onmessage = function (msg) {
+        this.ws.onmessage = (msg) => {
             try {
                 msg = JSON.parse(msg.data)
             } catch (er) {
@@ -77,19 +77,21 @@ class Publisher {
                 this.status = 'ERR_DUPLICATE_KEY'
             }
 
-            if (msg.method != 'on_leader_beacon') {
+            if (msg.method !== 'on_leader_beacon') {
+                this.status = 'Leader beacon'
                 return
             }
 
             let data = msg.data
             let isValid = true
-            let isCorrect = (hashBlock(data.mblock_data) == data.m_hash)
+            let isCorrect = (hashBlock(data.mblock_data) === data.m_hash)
 
             console.log(` ${id}  Sign: ${(isValid ? 'OK' : 'BAD')}  m_hash: ${data.m_hash}  ${(isCorrect ? 'OK' : 'BAD')}`)
             //console.log(`poaId: ${poa.id}-${i}   Sign: ${(isValid?"OK":"BAD")}   ${(isCorrect?"OK":"BAD")}`);
 
             if (!isValid) {
                 //console.log("Incorrect sign")
+                this.status = 'Incorrect sign'
                 return
             }
             if (!isCorrect) {
@@ -116,9 +118,9 @@ class Publisher {
                 res.data.referrer = account.referrer
             }
 
-            this.status = 'SIGN'
+            this.status = 'Sign'
 
-            this.send(JSON.stringify(res))
+            this.ws.send(JSON.stringify(res))
         }
     }
 }

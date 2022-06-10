@@ -2,9 +2,7 @@ import {decryptAccount, encryptAccount, lockAccount, lockTime} from "./lockAccou
 
 // const cacheStore = require('./indexDB') // es6
 import indexDB from './utils/indexDB'
-import {account} from "./user";
-import {LOCK, USER} from "./utils/names";
-import * as events from "events";
+import {USER} from "./utils/names";
 import eventBus from "./utils/eventBus";
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import {signHash} from './utils/ledgerShell'
@@ -160,11 +158,9 @@ export function globalMessageHandler(msg, ENQWeb) {
             // console.log(miningStatus)
 
             if (handlerMiners.length === 0) {
-                // console.warn('new miners')
                 handlerMiners = await initPoa(ENQWeb.Enq.User)
+                resolve({response: handlerMiners})
             }
-
-            resolve({response: handlerMiners})
         }
 
         // Start all PoA
