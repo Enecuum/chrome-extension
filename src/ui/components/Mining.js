@@ -18,9 +18,9 @@ let status = {
 
 export default function Mining(props) {
 
-    let [readyState, setReadyState] = useState(global.publisher.ws.readyState)
+    // let [readyState, setReadyState] = useState(global.publisher.ws.readyState)
 
-    // let [mining, setMining] = useState(false)
+    let [mining, setMining] = useState(false)
 
     let [accounts, setAccounts] = useState([])
     let [tokens, setTokens] = useState([])
@@ -51,6 +51,8 @@ export default function Mining(props) {
             setAccounts([...miners])
         })
 
+        setMining(true)
+
         // userStorage.user.loadUser().then(account => {
 
             // console.log(account)
@@ -77,6 +79,15 @@ export default function Mining(props) {
     }
 
     let stopMining = () => {
+
+        // hideNotification()
+
+        userStorage.promise.sendPromise({poa: true, stop: true}).then(miners => {
+            console.log(miners)
+            setAccounts([...miners])
+        })
+
+        setMining(false)
 
         // global.publisher.ws.close()
 
@@ -205,7 +216,7 @@ export default function Mining(props) {
                 <div key={i + 'card'}
                      className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining && readyState === 1 ? styles.mining_card_mine : '')}>
                     <div className={styles.row}>
-                        <div>Account M{keys[i] + 1}</div>
+                        <div>Account M{accounts[i].i + 1}</div>
                         <div onClick={() => {
                             // if (accounts[i].token) {
                             //     accounts[i].mining = !accounts[i].mining
@@ -254,11 +265,11 @@ export default function Mining(props) {
 
             {/*<Separator/>*/}
 
-            <div onClick={readyState === 1 ? stopMining : startMining}
-                 className={styles.button_round + ' ' + (readyState === 1 ? styles.mining : '')}>{readyState === 1 ? 'STOP' : 'START'}
+            <div onClick={mining ? stopMining : startMining}
+                 className={styles.button_round + ' ' + (mining ? styles.mining : '')}>{mining ? 'STOP' : 'START'}
             </div>
 
-            <div className={styles.mining_status}>{status[readyState]}</div>
+            <div className={styles.mining_status}>{'STATUS'}</div>
 
             <Separator/>
 

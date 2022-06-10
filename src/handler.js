@@ -157,7 +157,7 @@ export function globalMessageHandler(msg, ENQWeb) {
         if (msg.poa && msg.get) {
             let data = []
 
-            console.log(handlerMiners)
+            // console.log(handlerMiners)
 
             if (handlerMiners.length === 0)
                 handlerMiners = initPoa(ENQWeb.Enq.User)
@@ -176,9 +176,17 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         // Start all PoA
         if (msg.poa && msg.start) {
-            let miners = startPoa(handlerMiners)
-            handlerMiners = miners
+            console.log(handlerMiners)
+            let miners = startPoa(ENQWeb.Enq.User, handlerMiners)
+            // handlerMiners = miners
             resolve({ response: miners })
+        }
+
+        if (msg.poa && msg.stop) {
+            console.log(handlerMiners)
+            // let miners = stopPoa(handlerMiners)
+            // handlerMiners = miners
+            // resolve({ response: miners })
         }
 
         // Disconnect PoA by id
