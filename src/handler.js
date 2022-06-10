@@ -184,7 +184,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         if (msg.poa && msg.stop) {
             console.log(handlerMiners)
-            // let miners = stopPoa(handlerMiners)
+            let miners = stopPoa(handlerMiners)
             // handlerMiners = miners
             // resolve({ response: miners })
         }

@@ -45,10 +45,25 @@ let startPoa = async (account, miners) => {
 
     // console.log(account)
 
-    miners = await initPoa(account)
+    // miners = await initPoa(account)
 
     for (let i = 0; i < miners.length; i++) {
         miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({publicKey: account.publicKey, privateKey: account.privateKey}, miners.token.token) : {}
+    }
+
+    // return localAccounts
+}
+
+let stopPoa = async (account, miners) => {
+
+    // let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
+
+    // console.log(account)
+
+    // miners = await initPoa(account)
+
+    for (let i = 0; i < miners.length; i++) {
+        miners[i].publisher.ws.close()
     }
 
     // return localAccounts
