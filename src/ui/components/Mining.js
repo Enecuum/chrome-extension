@@ -22,6 +22,8 @@ export default function Mining(props) {
 
     let [mining, setMining] = useState(false)
 
+    let [status, setStatus] = useState('LOADING')
+
     let [accounts, setAccounts] = useState([])
     let [tokens, setTokens] = useState([])
 
@@ -52,6 +54,8 @@ export default function Mining(props) {
         })
 
         setMining(true)
+
+        setStatus('MINING')
 
         // userStorage.user.loadUser().then(account => {
 
@@ -88,6 +92,7 @@ export default function Mining(props) {
         })
 
         setMining(false)
+        setStatus('STOPPED')
 
         // global.publisher.ws.close()
 
@@ -150,6 +155,7 @@ export default function Mining(props) {
         }).then(status => {
             console.log(status)
             setMining(status.miningProcess)
+            // setStatus('INITIALIZATION')
         })
 
         userStorage.promise.sendPromise({
@@ -158,7 +164,17 @@ export default function Mining(props) {
         }).then(miners => {
             // console.log(miners)
             setAccounts(miners)
+            setStatus('READY')
+
+            for (let i = 0; i < miners.length; i++) {
+                apiController.getRewards(miners[i].publicKey).then(rewards => {
+                    console.log(rewards)
+                    miners[i].rewards = rewards.records
+                })
+            }
         })
+
+
 
         // userStorage.user.loadUser().then(async account => {
 
@@ -252,7 +268,7 @@ export default function Mining(props) {
                             } else {
                                 onMiner(accounts[i].publicKey)
                             }
-                        }} className={styles.text_big}>{accounts[i].mining ? 'ON' : 'OFF'}</div>
+                        }} className={styles.text_big + (accounts[i].mining ? '' : ' ' + styles.text_black)}>{accounts[i].mining ? 'ON' : 'OFF'}</div>
                     </div>
 
                     <div className={styles.card_field}>
@@ -269,14 +285,21 @@ export default function Mining(props) {
                     </div>}
 
                     {!accounts[i].list && accounts[i].tokens.length > 0 &&
-                        <div className={styles.card_field + ' ' + styles.card_grid}>
-                            {tokens}
+                        <div>
+                            {accounts[i].rewards && <div className={styles.text_help}>
+                                <div>Last reward: {(Number(accounts[i].rewards[0].amount) / 1e10).toFixed(4) + ' ' + accounts[i].rewards[0].ticker}</div>
+                                <div>{new Date(accounts[i].rewards[0].time * 1000).toTimeString()}</div>
+                            </div>}
+
+                            <div className={styles.card_field + ' ' + styles.card_grid}>
+                                {tokens}
+                            </div>
                         </div>}
 
                     <div className={styles.card_field_select} onClick={(() => {
                         accounts[i].list = !accounts[i].list
                         setAccounts([...accounts])
-                    })}>{accounts[i].list ? 'SHOW LIST' : 'HIDE'}</div>
+                    })}>{accounts[i].list ? 'SHOW TOKENS' : 'HIDE'}</div>
                 </div>
 
             cards.push(card)
@@ -299,7 +322,7 @@ export default function Mining(props) {
                  className={styles.button_round + ' ' + (mining ? styles.mining : '')}>{mining ? 'STOP' : 'START'}
             </div>
 
-            <div className={styles.mining_status}>{'STATUS'}</div>
+            <div className={styles.mining_status}>{status}</div>
 
             <Separator/>
 

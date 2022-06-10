@@ -26,6 +26,11 @@ const getMainTokenBalance = async (publicKey) => {
     return await getBalance(publicKey, ENQWeb.Enq.token[ENQWeb.Enq.provider])
 }
 
+const getRewards =  async (publicKey) => {
+    let response = await fetch('https://bit.enecuum.com/api/v1/account_rewards?id=' + publicKey + '&page=0', {})
+    return response.json()
+}
+
 // Need caching here with balance
 const getCurrentBlock = async () => {
     let height = (await ENQWeb.Net.get.height()).height
@@ -77,6 +82,7 @@ const apiController = {
     getBalance,
     getBalanceAll,
     getMainTokenBalance,
+    getRewards,
     getCurrentBlock,
     getTokenInfo,
     getAccountTransactions,
