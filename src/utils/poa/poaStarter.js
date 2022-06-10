@@ -51,7 +51,7 @@ let startPoa = async (account, miners) => {
         miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({publicKey: account.publicKey, privateKey: account.privateKey}, miners[i].token.token) : {}
     }
 
-    return miners
+    // return miners
 }
 
 let stopPoa = async (miners) => {
@@ -64,9 +64,10 @@ let stopPoa = async (miners) => {
 
     for (let i = 0; i < miners.length; i++) {
         miners[i].publisher.ws.close()
+        delete miners[i].publisher
     }
 
-    return miners
+    // return miners
 }
 
 export { startPoa, stopPoa, initPoa }

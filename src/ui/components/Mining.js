@@ -156,7 +156,7 @@ export default function Mining(props) {
             poa: true,
             get: true,
         }).then(miners => {
-            console.log(miners)
+            // console.log(miners)
             setAccounts(miners)
         })
 
@@ -242,7 +242,10 @@ export default function Mining(props) {
                 <div key={i + 'card'}
                      className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining && mining ? styles.mining_card_mine : '')}>
                     <div className={styles.row}>
-                        <div>Account M{accounts[i].i + 1}</div>
+                        <div>
+                            <div>Account M{accounts[i].i + 1}</div>
+                            <div className={styles.text_minimum}>{(accounts[i].publisher && accounts[i].publisher.status) || 'Disconnected'}</div>
+                        </div>
                         <div onClick={() => {
                             if (accounts[i].mining) {
                                 offMiner(accounts[i].publicKey)
@@ -273,7 +276,7 @@ export default function Mining(props) {
                     <div className={styles.card_field_select} onClick={(() => {
                         accounts[i].list = !accounts[i].list
                         setAccounts([...accounts])
-                    })}>{accounts[i].list ? 'SHOW' : 'HIDE'}</div>
+                    })}>{accounts[i].list ? 'SHOW LIST' : 'HIDE'}</div>
                 </div>
 
             cards.push(card)

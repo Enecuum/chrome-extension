@@ -17,7 +17,11 @@ class Publisher {
         let ip = '95.216.246.116'
         this.ws = new WebSocket(`ws://95.216.246.116:3000`)
 
-        // this.token = token
+        this.status = 'Initialisation'
+
+        this.getStatus = () => {
+            return this.status
+        }
 
         this.close = () => {
             console.log(`${id} closed`)
@@ -39,10 +43,14 @@ class Publisher {
                 'ver': POA_PROTOCOL_VERSION
             }
             this.send(JSON.stringify(hail))
+
+            this.status = 'Connected'
         }
 
         this.ws.onclose = function close(e) {
             console.log(`${id} disconnected`)
+
+            this.status = 'Closed'
         }
 
         this.ws.onerror = function (err) {
@@ -50,6 +58,8 @@ class Publisher {
             setTimeout(function () {
                 new Publisher(account, token)
             }, 1000)
+
+            this.status = 'error'
         }
 
         this.ws.onmessage = function (msg) {
@@ -60,10 +70,11 @@ class Publisher {
                 return
             }
 
-            console.log(msg)
+
 
             if (msg.err === 'ERR_DUPLICATE_KEY') {
-
+                console.warn(msg)
+                this.status = 'ERR_DUPLICATE_KEY'
             }
 
             if (msg.method != 'on_leader_beacon') {
@@ -104,6 +115,8 @@ class Publisher {
             if (account.hasOwnProperty('referrer')) {
                 res.data.referrer = account.referrer
             }
+
+            this.status = 'SIGN'
 
             this.send(JSON.stringify(res))
         }

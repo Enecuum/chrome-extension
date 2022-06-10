@@ -156,8 +156,8 @@ export function globalMessageHandler(msg, ENQWeb) {
         // Get PoA keys state
         if (msg.poa && msg.get) {
 
-            console.log(handlerMiners)
-            console.log(miningStatus)
+            // console.log(handlerMiners)
+            // console.log(miningStatus)
 
             if (handlerMiners.length === 0) {
                 // console.warn('new miners')
@@ -177,7 +177,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             console.log(handlerMiners)
             let miners = await startPoa(ENQWeb.Enq.User, handlerMiners)
             console.log(miners)
-            handlerMiners = miners
+            // handlerMiners = miners
             miningStatus.miningProcess = true
             resolve({response: miners})
         }
@@ -186,7 +186,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             console.log(handlerMiners)
             let miners = await stopPoa(handlerMiners)
             console.log(miners)
-            handlerMiners = miners
+            // handlerMiners = miners
             miningStatus.miningProcess = false
             resolve({ response: miners })
         }
