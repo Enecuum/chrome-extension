@@ -288,7 +288,7 @@ export default function Mining(props) {
                         <div>
                             {accounts[i].rewards && <div className={styles.text_help}>
                                 <div>Last reward: {(Number(accounts[i].rewards[0].amount) / 1e10).toFixed(4) + ' ' + accounts[i].rewards[0].ticker}</div>
-                                <div>{new Date(accounts[i].rewards[0].time * 1000).toTimeString()}</div>
+                                <div>{new Date(accounts[i].rewards[0].time * 1000).toString()}</div>
                             </div>}
 
                             <div className={styles.card_field + ' ' + styles.card_grid}>
