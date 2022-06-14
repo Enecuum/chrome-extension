@@ -5,7 +5,20 @@ const config: CapacitorConfig = {
   appName: 'enecuum',
   webDir: 'dist',
   bundledWebRuntime: false,
-  backgroundColor: '#282D46'
+  backgroundColor: '#282D46',
+  plugins: {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_512.png",
+      "iconColor": "#000000",
+      "sound": "beep.wav"
+    },
+    "SplashScreen": {
+      "launchShowDuration": 0
+    },
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
+  }
 };
 
 export default config;

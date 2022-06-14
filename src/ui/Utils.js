@@ -2,7 +2,7 @@ const bip39 = require("bip39");
 const bip32 = require("bip32");
 
 const {Clipboard} = require("@capacitor/clipboard");
-const {LocalNotifications} = require("@capacitor/core");
+const {LocalNotifications} = require("@capacitor/local-notifications");
 
 let regexData = /^[0-9a-zA-Z _\-/.]{0,512}$/
 let regexAddress = /^(02|03)[0-9a-fA-F]{64}$/
@@ -125,15 +125,17 @@ const copyToClipboard = (text) => {
     })
 }
 
-const showNotification = () => {
+let id = 1
+
+const showNotification = (title, text) => {
 
     if (LocalNotifications)
         LocalNotifications.schedule({
             notifications: [{
-                title: "Mining",
-                body: "Mining for Account 1 of " + 0,
-                id: this.id++,
-                schedule: {at: new Date(Date.now() + 1000 * 1)},
+                title: title,
+                body: text,
+                id: id++,
+                // schedule: {at: new Date(Date.now())},
                 sound: null,
                 attachments: null,
                 actionTypeId: "",
@@ -142,11 +144,11 @@ const showNotification = () => {
         });
 
     if (chrome.notifications)
-        chrome.notifications.create('NOTFICATION_ID', {
+        chrome.notifications.create(id, {
             type: 'basic',
             iconUrl: 'images/enq.png',
-            title: 'Mining',
-            message: "Mining for Account 1 of " + 0,
+            title: title,
+            message: text,
             priority: 2
         })
 }

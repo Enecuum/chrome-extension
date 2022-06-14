@@ -1,6 +1,6 @@
 import { Plugins } from '@capacitor/core';
 import {startPoa} from "./utils/poa/poaStarter";
-import {getMnemonicPrivateKeyHex} from "./ui/Utils";
+import {getMnemonicPrivateKeyHex, showNotification} from "./ui/Utils";
 
 const { App, BackgroundTask, LocalNotifications } = Plugins;
 
@@ -50,20 +50,7 @@ let mineCoins = async () => {
 
     // We have to run new PoA here
 
-    LocalNotifications.schedule({
-        notifications: [{
-            title: "Mining",
-            body: "Mining for Account 1 of " + mobileBackgroundMiners.length,
-            id: this.id++,
-            schedule: {
-                at: new Date(Date.now() + 1000 * 2)
-            },
-            sound: null,
-            attachments: null,
-            actionTypeId: "",
-            extra: null
-        }]
-    });
+    showNotification('Mining', 'Mobile background')
 
     // // Example of long task
     // let start = new Date().getTime();

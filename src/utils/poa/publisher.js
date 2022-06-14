@@ -1,3 +1,5 @@
+import {shortHash, showNotification} from "../../ui/Utils";
+
 let crypto = require('crypto-browserify')
 let jsrsasign = require('jsrsasign')
 
@@ -75,6 +77,8 @@ class Publisher {
             if (msg.err === 'ERR_DUPLICATE_KEY') {
                 console.warn(msg)
                 this.status = 'ERR_DUPLICATE_KEY'
+
+                showNotification('Mining error', 'Duplicate key by ' + shortHash(account.publicKey))
             }
 
             if (msg.method !== 'on_leader_beacon') {
@@ -119,6 +123,8 @@ class Publisher {
             }
 
             this.status = 'Sign block'
+
+            showNotification('Mining reward', 'Sign block by ' + shortHash(account.publicKey))
 
             this.ws.send(JSON.stringify(res))
         }

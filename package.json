@@ -71,6 +71,7 @@
         "@capacitor/clipboard": "^1.0.8",
         "@capacitor/core": "^3.4.3",
         "@capacitor/ios": "^3.4.3",
+        "@capacitor/local-notifications": "^1.1.0",
         "@capacitor/status-bar": "^1.0.8",
         "@ledgerhq/hw-app-eth": "^6.6.0",
         "@ledgerhq/hw-transport-webhid": "^6.11.2",

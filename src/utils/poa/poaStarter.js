@@ -1,7 +1,7 @@
 // const argv = require('yargs').argv;
 // const fs = require('fs');
 import {Publisher} from './publisher'
-import {getMnemonicPrivateKeyHex} from "../../ui/Utils";
+import {getMnemonicPrivateKeyHex, showNotification} from "../../ui/Utils";
 import {apiController} from "../apiController";
 
 // Miner
@@ -54,6 +54,9 @@ let startPoa = async (account, miners, accounts = []) => {
                 privateKey: accounts[i].privateKey
             }, miners[i].token.token) : {}
         }
+
+        showNotification('Mining', 'Connected ' + miners.length + ' miners')
+
     } else {
         for (let i = 0; i < miners.length; i++) {
             miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({

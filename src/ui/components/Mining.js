@@ -46,7 +46,7 @@ export default function Mining(props) {
 
     let startMining = () => {
 
-        showNotification()
+        // showNotification('Mining', 'CONNECT')
 
         userStorage.promise.sendPromise({poa: true, start: true}).then(miners => {
             console.log(miners)
@@ -156,6 +156,8 @@ export default function Mining(props) {
                         miners[i].rewards = rewards.records
                     })
                 }
+
+                // showNotification('Mining', 'READY')
             })
         })
 
