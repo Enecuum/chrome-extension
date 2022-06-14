@@ -1,6 +1,6 @@
 // const argv = require('yargs').argv;
 // const fs = require('fs');
-import { Publisher } from './publisher'
+import {Publisher} from './publisher'
 import {getMnemonicPrivateKeyHex} from "../../ui/Utils";
 import {apiController} from "../apiController";
 
@@ -39,7 +39,7 @@ let initPoa = async (account) => {
     return miners
 }
 
-let startPoa = async (account, miners) => {
+let startPoa = async (account, miners, accounts = []) => {
 
     // let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
 
@@ -47,8 +47,20 @@ let startPoa = async (account, miners) => {
 
     // miners = await initPoa(account)
 
-    for (let i = 0; i < miners.length; i++) {
-        miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({publicKey: account.publicKey, privateKey: account.privateKey}, miners[i].token.token) : {}
+    if (accounts.length > 0) {
+        for (let i = 0; i < miners.length; i++) {
+            miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({
+                publicKey: accounts[i].publicKey,
+                privateKey: accounts[i].privateKey
+            }, miners[i].token.token) : {}
+        }
+    } else {
+        for (let i = 0; i < miners.length; i++) {
+            miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({
+                publicKey: account.publicKey,
+                privateKey: account.privateKey
+            }, miners[i].token.token) : {}
+        }
     }
 
     // return miners
@@ -70,4 +82,4 @@ let stopPoa = async (miners) => {
     // return miners
 }
 
-export { startPoa, stopPoa, initPoa }
+export {startPoa, stopPoa, initPoa}

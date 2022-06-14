@@ -9,6 +9,7 @@ import {signHash} from './utils/ledgerShell'
 import {apiController} from './utils/apiController'
 import {extensionApi} from './utils/extensionApi'
 import {initPoa, startPoa, stopPoa} from "./utils/poa/poaStarter"; // commonjs
+import {getMnemonicPrivateKeyHex} from "./ui/Utils"
 // var cacheStore = window.cacheStore // compiled javascript
 
 let miningStatus = {miningProcess: false}
@@ -172,8 +173,18 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         // Start all PoA
         if (msg.poa && msg.start) {
-            console.log(handlerMiners)
-            let miners = await startPoa(ENQWeb.Enq.User, handlerMiners)
+            let miners = {}
+            let accounts = []
+            if (msg.account) {
+                miners = await startPoa(msg.account, handlerMiners)
+            } else {
+                for (let i = 0; i < ENQWeb.Enq.User.seedAccountsArray.length; i++) {
+                    console.log(handlerMiners[i])
+                    let privateKey = getMnemonicPrivateKeyHex(ENQWeb.Enq.User.seed, i)
+                    accounts.push({publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true), privateKey: privateKey})
+                }
+                miners = await startPoa(ENQWeb.Enq.User, handlerMiners, accounts)
+            }
             console.log(miners)
             // handlerMiners = miners
             miningStatus.miningProcess = true
@@ -186,19 +197,19 @@ export function globalMessageHandler(msg, ENQWeb) {
             console.log(miners)
             // handlerMiners = miners
             miningStatus.miningProcess = false
-            resolve({ response: miners })
+            resolve({response: miners})
         }
 
         if (msg.poa && msg.account && msg.token) {
             console.log(handlerMiners)
             handlerMiners.find(element => element.publicKey === msg.account.publicKey).token = msg.token
-            resolve({ response: handlerMiners })
+            resolve({response: handlerMiners})
         }
 
         if (msg.poa && msg.account && msg.mining) {
             console.log(handlerMiners)
             handlerMiners.find(element => element.publicKey === msg.account.publicKey).mining = msg.set
-            resolve({ response: handlerMiners })
+            resolve({response: handlerMiners})
         }
 
         // // Disconnect PoA by id

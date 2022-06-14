@@ -53,33 +53,21 @@ export default function Mining(props) {
             setAccounts([...miners])
         })
 
+        // TODO this is temp method
+        setInterval(() => {
+            console.dir(accounts)
+            userStorage.promise.sendPromise({
+                poa: true,
+                get: true,
+            }).then(miners => {
+                // console.log(miners)
+                setAccounts(miners)
+            })
+        }, 5000)
+
         setMining(true)
 
         setStatus('MINING')
-
-        // userStorage.user.loadUser().then(account => {
-
-            // console.log(account)
-
-            // global.publisher = new Publisher(account, account.token)
-
-
-
-            // console.log(global.publisher.ws)
-
-            // global.publisher.ws.addEventListener('open', function (event) {
-            //     setReadyState(publisher.ws.readyState)
-            // })
-            //
-            // global.publisher.ws.addEventListener('close', function (event) {
-            //     setReadyState(publisher.ws.readyState)
-            // })
-            //
-            // global.publisher.ws.addEventListener('error', function (event) {
-            //     setReadyState(publisher.ws.readyState)
-            //
-            // })
-        // })
     }
 
     let stopMining = () => {
@@ -168,44 +156,10 @@ export default function Mining(props) {
 
             for (let i = 0; i < miners.length; i++) {
                 apiController.getRewards(miners[i].publicKey).then(rewards => {
-                    console.log(rewards)
                     miners[i].rewards = rewards.records
                 })
             }
         })
-
-
-
-        // userStorage.user.loadUser().then(async account => {
-
-            // setKeys(account.seedAccountsArray)
-
-            // let localAccounts = []
-            // for (let i = 0; i < account.seedAccountsArray.length; i++) {
-            //
-            //     let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
-            //     const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
-            //
-            //     let tokens = await getBalance(publicKey)
-            //
-            //     console.log(tokens)
-            //
-            //     localAccounts.push({
-            //         i: i + 1,
-            //         publicKey: publicKey,
-            //         mining: false,
-            //         list: true,
-            //         tokens,
-            //         token: tokens[0] ? tokens[0] : '',
-            //     })
-            // }
-
-            // console.log(localAccounts)
-
-            // setAccounts(localAccounts)
-        // })
-
-        // setTokens(userStorage.tokens.getTokens())
 
     }, [])
 

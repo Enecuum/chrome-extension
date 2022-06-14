@@ -35,9 +35,9 @@ let mineCoins = async () => {
 
     // We have to go to background and find out if there is some miner connections
 
-    userStorage.promise.sendPromise({poa: true, account}).then(miners => {
-        mobileBackgroundMiners = miners
-    })
+    // userStorage.promise.sendPromise({poa: true, account}).then(miners => {
+    //     mobileBackgroundMiners = miners
+    // })
 
     mobileBackgroundMiners = await userStorage.promise.sendPromise({
         poa: true,
