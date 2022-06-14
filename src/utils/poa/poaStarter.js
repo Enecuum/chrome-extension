@@ -63,7 +63,7 @@ let startPoa = async (account, miners, accounts = []) => {
         }
     }
 
-    // return miners
+    return miners
 }
 
 let stopPoa = async (miners) => {

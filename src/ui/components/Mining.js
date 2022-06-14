@@ -144,13 +144,11 @@ export default function Mining(props) {
             console.log(status)
             setMining(status.miningProcess)
             setStatus(status.miningProcess ? 'MINING' : accounts.length > 0 ? 'READY' : 'LOADING')
-            // setStatus('INITIALIZATION')
 
             userStorage.promise.sendPromise({
                 poa: true,
                 get: true,
             }).then(miners => {
-                // console.log(miners)
                 setAccounts(miners)
                 setStatus(status.miningProcess ? 'MINING' : 'READY')
                 for (let i = 0; i < miners.length; i++) {
@@ -160,8 +158,6 @@ export default function Mining(props) {
                 }
             })
         })
-
-
 
     }, [])
 
