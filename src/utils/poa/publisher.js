@@ -118,7 +118,7 @@ class Publisher {
                 res.data.referrer = account.referrer
             }
 
-            this.status = 'Sign'
+            this.status = 'Sign block'
 
             this.ws.send(JSON.stringify(res))
         }

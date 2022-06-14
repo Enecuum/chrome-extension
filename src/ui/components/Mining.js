@@ -50,7 +50,7 @@ export default function Mining(props) {
 
         userStorage.promise.sendPromise({poa: true, start: true}).then(miners => {
             console.log(miners)
-            setAccounts([...miners])
+            // setAccounts([...miners])
         })
 
         // TODO this is temp method
@@ -76,7 +76,7 @@ export default function Mining(props) {
 
         userStorage.promise.sendPromise({poa: true, stop: true}).then(miners => {
             console.log(miners)
-            setAccounts([...miners])
+            // setAccounts([...miners])
         })
 
         setMining(false)
@@ -241,7 +241,7 @@ export default function Mining(props) {
                     {!accounts[i].list && accounts[i].tokens.length > 0 &&
                         <div>
                             {accounts[i].rewards && <div className={styles.text_help}>
-                                <div>Last reward: {(Number(accounts[i].rewards[0].amount) / 1e10).toFixed(4) + ' ' + accounts[i].rewards[0].ticker}</div>
+                                <div>Last reward #{accounts[i].rewards[0].i}: {(Number(accounts[i].rewards[0].amount) / 1e10).toFixed(4) + ' ' + accounts[i].rewards[0].ticker}</div>
                                 <div>{new Date(accounts[i].rewards[0].time * 1000).toString()}</div>
                             </div>}
 
