@@ -143,6 +143,7 @@ export default function Mining(props) {
         }).then(status => {
             console.log(status)
             setMining(status.miningProcess)
+            setStatus(status.miningProcess ? 'MINING' : accounts.length > 0 ? 'READY' : 'LOADING')
             // setStatus('INITIALIZATION')
         })
 
@@ -152,8 +153,7 @@ export default function Mining(props) {
         }).then(miners => {
             // console.log(miners)
             setAccounts(miners)
-            setStatus('READY')
-
+            setStatus(mining ? 'MINING' : 'READY')
             for (let i = 0; i < miners.length; i++) {
                 apiController.getRewards(miners[i].publicKey).then(rewards => {
                     miners[i].rewards = rewards.records
@@ -273,7 +273,7 @@ export default function Mining(props) {
             {/*<Separator/>*/}
 
             <div onClick={mining ? stopMining : startMining}
-                 className={styles.button_round + ' ' + (mining ? styles.mining : '')}>{mining ? 'STOP' : 'START'}
+                 className={styles.button_round + ' ' + (mining ? styles.mining : '') + ' ' + (accounts.length > 0 ? '' : styles.button_disabled)}>{mining ? 'STOP' : 'START'}
             </div>
 
             <div className={styles.mining_status}>{status}</div>
