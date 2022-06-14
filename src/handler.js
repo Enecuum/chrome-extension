@@ -160,6 +160,8 @@ export function globalMessageHandler(msg, ENQWeb) {
             if (handlerMiners.length === 0) {
                 handlerMiners = await initPoa(ENQWeb.Enq.User)
                 resolve({response: handlerMiners})
+            } else {
+                resolve({response: handlerMiners})
             }
         }
 
