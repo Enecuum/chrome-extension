@@ -19,6 +19,7 @@ class Publisher {
 
         let id = account.publicKey.slice(0, 6)
 
+        this.restart = true
         let ip = '95.216.246.116'
         this.ws = new WebSocket(`ws://95.216.246.116:3000`)
 
@@ -51,8 +52,12 @@ class Publisher {
 
         this.ws.onclose = (e) => {
             console.log(`${id} disconnected`)
-
-            this.status = 'Disconnected'
+            if(this.restart){
+                console.log(`${id} restarted`)
+                this.ws.onopen()
+            }else{
+                this.status = 'Disconnected'
+            }
         }
 
         this.ws.onerror = (err) => {

@@ -78,6 +78,7 @@ let stopPoa = async (miners) => {
     // miners = await initPoa(account)
 
     for (let i = 0; i < miners.length; i++) {
+        miners[i].publisher.ws.restart = false
         miners[i].publisher.ws.close()
         delete miners[i].publisher
     }

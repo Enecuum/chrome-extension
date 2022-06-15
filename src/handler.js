@@ -193,6 +193,9 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         if (msg.poa && msg.stop) {
             console.log(handlerMiners)
+            for(let i = 0; i < handlerMiners.length; i++){
+                handlerMiners[i].publisher.restart = false
+            }
             let miners = await stopPoa(handlerMiners)
             console.log(miners)
             // handlerMiners = miners
@@ -208,6 +211,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         if (msg.poa && msg.account && msg.mining) {
             console.log(handlerMiners)
+            handlerMiners.find(element => element.publicKey === msg.account.publicKey).publisher.restart = msg.set
             handlerMiners.find(element => element.publicKey === msg.account.publicKey).mining = msg.set
             resolve({response: handlerMiners})
         }

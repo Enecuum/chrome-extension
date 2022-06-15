@@ -29,6 +29,8 @@ export default function Mining(props) {
 
     let [keys, setKeys] = useState([])
 
+    let interval_cursor
+
     // userStorage.promise.sendPromise({poa: true, account: {publicKey, privateKey}}).then()
 
     // let [connect, setConnect] = useState(false)
@@ -54,7 +56,7 @@ export default function Mining(props) {
         })
 
         // TODO this is temp method
-        setInterval(() => {
+        interval_cursor = setInterval(() => {
             console.dir(accounts)
             userStorage.promise.sendPromise({
                 poa: true,
@@ -78,6 +80,8 @@ export default function Mining(props) {
             console.log(miners)
             // setAccounts([...miners])
         })
+
+        clearInterval(interval_cursor)
 
         setMining(false)
         setStatus('STOPPED')
@@ -130,7 +134,7 @@ export default function Mining(props) {
             mining: true,
             set: false,
         }).then(miners => {
-            // console.log(miners)
+            console.log(miners)
             setAccounts([...miners])
         })
     }
