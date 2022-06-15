@@ -144,13 +144,18 @@ const showNotification = (title, text) => {
         });
 
     if (chrome.notifications)
-        chrome.notifications.create(id, {
-            type: 'basic',
-            iconUrl: 'images/enq.png',
-            title: title,
-            message: text,
-            priority: 2
-        })
+        try {
+            chrome.notifications.create(id, {
+                type: 'basic',
+                iconUrl: 'images/enq.png',
+                title: title,
+                message: text,
+                priority: 2
+            })
+        }catch(e){
+            console.warn("notification error\n"+e)
+        }
+
 }
 
 module.exports = {
