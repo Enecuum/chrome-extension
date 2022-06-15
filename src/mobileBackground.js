@@ -1,8 +1,12 @@
-import { Plugins } from '@capacitor/core';
-import {startPoa} from "./utils/poa/poaStarter";
-import {getMnemonicPrivateKeyHex, showNotification} from "./ui/Utils";
+import { Plugins } from '@capacitor/core'
+import { startPoa } from './utils/poa/poaStarter'
+import { getMnemonicPrivateKeyHex, showNotification } from './ui/Utils'
 
-const { App, BackgroundTask, LocalNotifications } = Plugins;
+const {
+    App,
+    BackgroundTask,
+    LocalNotifications
+} = Plugins
 
 let mobileBackgroundMiners = []
 
@@ -21,10 +25,10 @@ App.addListener('appStateChange', state => {
             // we risk our app being terminated, and possibly
             // being labeled as impacting battery life
 
-            BackgroundTask.finish({taskId});
-        });
+            BackgroundTask.finish({ taskId })
+        })
     }
-});
+})
 
 let mineCoins = async () => {
 
@@ -43,7 +47,10 @@ let mineCoins = async () => {
 
     for (let i = 0; i < ENQWeb.Enq.User.seedAccountsArray.length; i++) {
         let privateKey = getMnemonicPrivateKeyHex(ENQWeb.Enq.User.seed, i)
-        accounts.push({publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true), privateKey: privateKey})
+        accounts.push({
+            publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
+            privateKey: privateKey
+        })
     }
 
     mobileBackgroundMiners = await startPoa(ENQWeb.Enq.User, mobileBackgroundMiners, accounts)

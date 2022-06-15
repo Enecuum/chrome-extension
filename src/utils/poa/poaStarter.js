@@ -1,8 +1,8 @@
 // const argv = require('yargs').argv;
 // const fs = require('fs');
-import {Publisher} from './publisher'
-import {getMnemonicPrivateKeyHex, showNotification} from "../../ui/Utils";
-import {apiController} from "../apiController";
+import { Publisher } from './publisher'
+import { getMnemonicPrivateKeyHex, showNotification } from '../../ui/Utils'
+import { apiController } from '../apiController'
 
 // Miner
 // {
@@ -31,7 +31,10 @@ let initPoa = async (account) => {
             mining: true,
             list: true,
             tokens,
-            token: tokens[0] ? tokens[0] : {token: '', decimals: 10},
+            token: tokens[0] ? tokens[0] : {
+                token: '',
+                decimals: 10
+            },
             // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
         })
     }
@@ -78,13 +81,14 @@ let stopPoa = async (miners) => {
     // miners = await initPoa(account)
 
     for (let i = 0; i < miners.length; i++) {
-        try{
+        try {
             miners[i].publisher.ws.close()
-        }catch (e){}
+        } catch (e) {
+        }
         delete miners[i].publisher
     }
 
     // return miners
 }
 
-export {startPoa, stopPoa, initPoa}
+export { startPoa, stopPoa, initPoa }

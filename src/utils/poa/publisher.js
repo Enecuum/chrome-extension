@@ -1,4 +1,4 @@
-import {shortHash, showNotification} from "../../ui/Utils";
+import { shortHash, showNotification } from '../../ui/Utils'
 
 let crypto = require('crypto-browserify')
 let jsrsasign = require('jsrsasign')
@@ -142,7 +142,9 @@ function init(_, id, ip, account, token) {
     _.ws.onopen = () => {
 
         console.log(`${id} connected`)
-        let hash = crypto.createHash('sha256').update(ip).digest('hex')
+        let hash = crypto.createHash('sha256')
+            .update(ip)
+            .digest('hex')
 
         let hail = {
             'data': {
@@ -160,11 +162,11 @@ function init(_, id, ip, account, token) {
 
     _.ws.onclose = (e) => {
         console.log(`${id} disconnected`)
-        if(_.restart){
+        if (_.restart) {
             console.log(`${id} restarted`)
             _.ws = new WebSocket(`ws://95.216.246.116:3000`)
             init(_, id, ip, account, token)
-        }else{
+        } else {
             _.status = 'Disconnected'
         }
     }
@@ -184,7 +186,6 @@ function init(_, id, ip, account, token) {
             console.error(er)
             return
         }
-
 
 
         if (msg.err === 'ERR_DUPLICATE_KEY') {
@@ -283,10 +284,14 @@ function hash_tx(tx) {
     }
 
     let str = ['amount', 'data', 'from', 'nonce', 'sign', 'ticker', 'to'].map(v => crypto.createHash('sha256')
-        .update(tx[v].toString().toLowerCase()).digest('hex')).join('')
+        .update(tx[v].toString()
+            .toLowerCase())
+        .digest('hex'))
+        .join('')
 
     return crypto.createHash('sha256')
-        .update(str).digest('hex')
+        .update(str)
+        .digest('hex')
 }
 
 

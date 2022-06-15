@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from "react";
-import styles from "../css/index.module.css";
-import Separator from "../elements/Separator";
-import {generateIcon, getMnemonicPrivateKeyHex, regexToken, shortHash, showNotification} from "../Utils";
-import Input from "../elements/Input";
-import {NET, NETWORKS} from "../../utils/names";
+import React, { useEffect, useState } from 'react'
+import styles from '../css/index.module.css'
+import Separator from '../elements/Separator'
+import { generateIcon, getMnemonicPrivateKeyHex, regexToken, shortHash, showNotification } from '../Utils'
+import Input from '../elements/Input'
+import { NET, NETWORKS } from '../../utils/names'
 // import {startPoa} from "../../utils/poa";
-import {Publisher} from "../../utils/poa/publisher";
-import {apiController} from "../../utils/apiController";
+import { Publisher } from '../../utils/poa/publisher'
+import { apiController } from '../../utils/apiController'
 
 let status = {
     0: 'CONNECTING',
@@ -50,10 +50,14 @@ export default function Mining(props) {
 
         // showNotification('Mining', 'CONNECT')
 
-        userStorage.promise.sendPromise({poa: true, start: true}).then(miners => {
-            console.log(miners)
-            // setAccounts([...miners])
+        userStorage.promise.sendPromise({
+            poa: true,
+            start: true
         })
+            .then(miners => {
+                console.log(miners)
+                // setAccounts([...miners])
+            })
 
         // TODO this is temp method
         interval_cursor = setInterval(() => {
@@ -61,10 +65,11 @@ export default function Mining(props) {
             userStorage.promise.sendPromise({
                 poa: true,
                 get: true,
-            }).then(miners => {
-                // console.log(miners)
-                setAccounts(miners)
             })
+                .then(miners => {
+                    // console.log(miners)
+                    setAccounts(miners)
+                })
         }, 5000)
 
         setMining(true)
@@ -76,10 +81,14 @@ export default function Mining(props) {
 
         // hideNotification()
 
-        userStorage.promise.sendPromise({poa: true, stop: true}).then(miners => {
-            console.log(miners)
-            // setAccounts([...miners])
+        userStorage.promise.sendPromise({
+            poa: true,
+            stop: true
         })
+            .then(miners => {
+                console.log(miners)
+                // setAccounts([...miners])
+            })
 
         clearInterval(interval_cursor)
 
@@ -100,12 +109,13 @@ export default function Mining(props) {
 
         userStorage.promise.sendPromise({
             poa: true,
-            account: {publicKey},
+            account: { publicKey },
             token,
-        }).then(miners => {
-            // console.log(miners)
-            setAccounts([...miners])
         })
+            .then(miners => {
+                // console.log(miners)
+                setAccounts([...miners])
+            })
 
         // console.log(accountId)
         // console.log(token)
@@ -117,26 +127,28 @@ export default function Mining(props) {
 
         userStorage.promise.sendPromise({
             poa: true,
-            account: {publicKey},
+            account: { publicKey },
             mining: true,
             set: true,
-        }).then(miners => {
-            // console.log(miners)
-            setAccounts([...miners])
         })
+            .then(miners => {
+                // console.log(miners)
+                setAccounts([...miners])
+            })
     }
 
     let offMiner = (publicKey) => {
 
         userStorage.promise.sendPromise({
             poa: true,
-            account: {publicKey},
+            account: { publicKey },
             mining: true,
             set: false,
-        }).then(miners => {
-            console.log(miners)
-            setAccounts([...miners])
         })
+            .then(miners => {
+                console.log(miners)
+                setAccounts([...miners])
+            })
     }
 
     useEffect(() => {
@@ -144,26 +156,29 @@ export default function Mining(props) {
         userStorage.promise.sendPromise({
             poa: true,
             status: true,
-        }).then(status => {
-            console.log(status)
-            setMining(status.miningProcess)
-            setStatus(status.miningProcess ? 'MINING' : accounts.length > 0 ? 'READY' : 'LOADING')
-
-            userStorage.promise.sendPromise({
-                poa: true,
-                get: true,
-            }).then(miners => {
-                setAccounts(miners)
-                setStatus(status.miningProcess ? 'MINING' : 'READY')
-                for (let i = 0; i < miners.length; i++) {
-                    apiController.getRewards(miners[i].publicKey).then(rewards => {
-                        miners[i].rewards = rewards.records
-                    })
-                }
-
-                // showNotification('Mining', 'READY')
-            })
         })
+            .then(status => {
+                console.log(status)
+                setMining(status.miningProcess)
+                setStatus(status.miningProcess ? 'MINING' : accounts.length > 0 ? 'READY' : 'LOADING')
+
+                userStorage.promise.sendPromise({
+                    poa: true,
+                    get: true,
+                })
+                    .then(miners => {
+                        setAccounts(miners)
+                        setStatus(status.miningProcess ? 'MINING' : 'READY')
+                        for (let i = 0; i < miners.length; i++) {
+                            apiController.getRewards(miners[i].publicKey)
+                                .then(rewards => {
+                                    miners[i].rewards = rewards.records
+                                })
+                        }
+
+                        // showNotification('Mining', 'READY')
+                    })
+            })
 
     }, [])
 
@@ -206,7 +221,8 @@ export default function Mining(props) {
         for (let i = 0; i < accounts.length; i++) {
 
             let tokens = accounts[i].tokens.map((token) => <div key={token.token}
-                                                                onClick={() => token.minable === 0 ? () => {} : selectToken(accounts[i].publicKey, token)}
+                                                                onClick={() => token.minable === 0 ? () => {
+                                                                } : selectToken(accounts[i].publicKey, token)}
                                                                 className={token.minable === 0 ? styles.card_grid_disabled : (token.token === accounts[i].token.token ? styles.card_grid_select : '')}>
                 <div>{token.ticker}</div>
                 <div>{(Number(token.amount) / (10 ** token.decimals)).toFixed(0)}</div>
@@ -218,7 +234,8 @@ export default function Mining(props) {
                     <div className={styles.row}>
                         <div>
                             <div>Account M{accounts[i].i + 1}</div>
-                            <div className={styles.text_minimum}>{(accounts[i].publisher && accounts[i].publisher.status) || 'Disconnected'}</div>
+                            <div
+                                className={styles.text_minimum}>{(accounts[i].publisher && accounts[i].publisher.status) || 'Disconnected'}</div>
                         </div>
                         <div onClick={() => {
                             if (accounts[i].mining) {
@@ -226,7 +243,8 @@ export default function Mining(props) {
                             } else {
                                 onMiner(accounts[i].publicKey)
                             }
-                        }} className={styles.text_big + (accounts[i].mining ? '' : ' ' + styles.text_black)}>{accounts[i].mining ? 'ON' : 'OFF'}</div>
+                        }}
+                             className={styles.text_big + (accounts[i].mining ? '' : ' ' + styles.text_black)}>{accounts[i].mining ? 'ON' : 'OFF'}</div>
                     </div>
 
                     <div className={styles.card_field}>
@@ -243,16 +261,17 @@ export default function Mining(props) {
                     </div>}
 
                     {!accounts[i].list && accounts[i].tokens.length > 0 &&
-                        <div>
-                            {accounts[i].rewards && <div className={styles.text_help}>
-                                <div>Last reward #{accounts[i].rewards[0].i}: {(Number(accounts[i].rewards[0].amount) / 1e10).toFixed(4) + ' ' + accounts[i].rewards[0].ticker}</div>
-                                <div>{new Date(accounts[i].rewards[0].time * 1000).toString()}</div>
-                            </div>}
-
-                            <div className={styles.card_field + ' ' + styles.card_grid}>
-                                {tokens}
-                            </div>
+                    <div>
+                        {accounts[i].rewards && <div className={styles.text_help}>
+                            <div>Last reward
+                                #{accounts[i].rewards[0].i}: {(Number(accounts[i].rewards[0].amount) / 1e10).toFixed(4) + ' ' + accounts[i].rewards[0].ticker}</div>
+                            <div>{new Date(accounts[i].rewards[0].time * 1000).toString()}</div>
                         </div>}
+
+                        <div className={styles.card_field + ' ' + styles.card_grid}>
+                            {tokens}
+                        </div>
+                    </div>}
 
                     <div className={styles.card_field_select} onClick={(() => {
                         accounts[i].list = !accounts[i].list
