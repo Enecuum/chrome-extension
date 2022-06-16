@@ -1,16 +1,26 @@
-import { Plugins } from '@capacitor/core'
+// import { Plugins } from '@capacitor/core'
+import { App } from '@capacitor/app'
+import { BackgroundTask } from '@robingenz/capacitor-background-task'
 import { startPoa } from './utils/poa/poaStarter'
 import { getMnemonicPrivateKeyHex, showNotification } from './ui/Utils'
 
-const {
-    App,
-    BackgroundTask,
-    LocalNotifications
-} = Plugins
+// const {
+//     App,
+//     BackgroundTask,
+//     LocalNotifications
+// } = Plugins
+//
+// console.log(Plugins)
 
 let mobileBackgroundMiners = []
 
 App.addListener('appStateChange', state => {
+
+    try {
+        showNotification('Mining', 'State change')
+    } catch (e) {
+
+    }
 
     if (!state.isActive) {
 
