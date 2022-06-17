@@ -152,8 +152,8 @@ const showNotification = (title, text) => {
                 message: text,
                 priority: 2
             })
-        }catch(e){
-            console.warn("notification error\n"+e)
+        } catch (e) {
+            console.warn(e)
         }
 
 }
