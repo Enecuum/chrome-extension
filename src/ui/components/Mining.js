@@ -50,19 +50,14 @@ export default function Mining(props) {
 
     let startMining = () => {
 
-        if (Capacitor.platform)
-
-            // showNotification('Mining', 'CONNECT')
-        {
-            userStorage.promise.sendPromise({
-                poa: true,
-                start: true
+        userStorage.promise.sendPromise({
+            poa: true,
+            start: true
+        })
+            .then(miners => {
+                console.log(miners)
+                // setAccounts([...miners])
             })
-                .then(miners => {
-                    console.log(miners)
-                    // setAccounts([...miners])
-                })
-        }
 
         // TODO this is temp method
         interval_cursor = setInterval(() => {

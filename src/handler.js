@@ -11,11 +11,12 @@ import { extensionApi } from './utils/extensionApi'
 import { initPoa, startPoa, stopPoa } from './utils/poa/poaStarter' // commonjs
 import { getMnemonicPrivateKeyHex } from './ui/Utils'
 import { Capacitor } from '@capacitor/core'
-import { startBackgroundMining } from './mobileBackground'
+import { startBackgroundMining, getMobileMiners, stopMobileMiners } from './mobileBackground'
 // var cacheStore = window.cacheStore // compiled javascript
 
 let miningStatus = { miningProcess: false }
 let handlerMiners = []
+const androidRegex = /android/
 
 export function globalMessageHandler(msg, ENQWeb) {
 
@@ -158,15 +159,20 @@ export function globalMessageHandler(msg, ENQWeb) {
         // Get PoA keys state
         if (msg.poa && msg.get) {
 
+            if (androidRegex.test(Capacitor.platform)) {
+                let answer = await getMobileMiners()
+                resolve({ response: answer })
+            } else {
+                if (handlerMiners.length === 0) {
+                    handlerMiners = await initPoa(ENQWeb.Enq.User)
+                    resolve({ response: handlerMiners })
+                } else {
+                    resolve({ response: handlerMiners })
+                }
+            }
             // console.log(handlerMiners)
             // console.log(miningStatus)
 
-            if (handlerMiners.length === 0) {
-                handlerMiners = await initPoa(ENQWeb.Enq.User)
-                resolve({ response: handlerMiners })
-            } else {
-                resolve({ response: handlerMiners })
-            }
         }
 
         // Start all PoA
@@ -176,10 +182,10 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         // Start all PoA
         if (msg.poa && msg.start) {
-            const androidRegex = /android/
             if (androidRegex.test(Capacitor.platform)) {
-                startBackgroundMining()
-                resolve({ response: true })
+                let miners = startBackgroundMining()
+                miningStatus.miningProcess = true
+                resolve({ response: miners })
             } else {
                 let miners = {}
                 let accounts = []
@@ -207,14 +213,20 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         if (msg.poa && msg.stop) {
             console.log(handlerMiners)
-            for (let i = 0; i < handlerMiners.length; i++) {
-                handlerMiners[i].publisher.restart = false
+            if (androidRegex.test(Capacitor.platform)) {
+                let miners = stopMobileMiners()
+                miningStatus.miningProcess = false
+                resolve({ response: miners })
+            } else {
+                for (let i = 0; i < handlerMiners.length; i++) {
+                    handlerMiners[i].publisher.restart = false
+                }
+                let miners = await stopPoa(handlerMiners)
+                console.log(miners)
+                // handlerMiners = miners
+                miningStatus.miningProcess = false
+                resolve({ response: miners })
             }
-            let miners = await stopPoa(handlerMiners)
-            console.log(miners)
-            // handlerMiners = miners
-            miningStatus.miningProcess = false
-            resolve({ response: miners })
         }
 
         if (msg.poa && msg.account && msg.token) {

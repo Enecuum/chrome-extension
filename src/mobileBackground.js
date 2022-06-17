@@ -1,5 +1,5 @@
 import { Plugins } from '@capacitor/core'
-import { startPoa } from './utils/poa/poaStarter'
+import { initPoa, startPoa, stopPoa } from './utils/poa/poaStarter'
 import { getMnemonicPrivateKeyHex, showNotification } from './ui/Utils'
 import { account } from './user'
 
@@ -14,6 +14,21 @@ const {
 
 let mobileBackgroundMiners = []
 
+let getMobileMiners = () => {
+    if (mobileBackgroundMiners.length === 0) {
+        mobileBackgroundMiners = initPoa(ENQWeb.Enq.User)
+    }
+    return mobileBackgroundMiners
+}
+
+let stopMobileMiners = () => {
+    for (let i = 0; i < mobileBackgroundMiners.length; i++) {
+        mobileBackgroundMiners[i].publisher.restart = false
+    }
+    let miners = stopPoa(mobileBackgroundMiners)
+    showNotification('Mining', 'Mining is stopped')
+    return miners
+}
 
 let mineCoins = async () => {
 
@@ -69,6 +84,7 @@ let startBackgroundMining = () => {
 
         BackgroundTask.finish({ taskId })
     })
+    return mobileBackgroundMiners
 }
 
 
@@ -105,4 +121,4 @@ const initMobileBackground = (accounts) => {
 
 }
 
-export { initMobileBackground, startBackgroundMining }
+export { initMobileBackground, startBackgroundMining, getMobileMiners, stopMobileMiners }
