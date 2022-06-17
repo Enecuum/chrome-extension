@@ -1,6 +1,7 @@
 import { Plugins } from '@capacitor/core'
 import { startPoa } from './utils/poa/poaStarter'
 import { getMnemonicPrivateKeyHex, showNotification } from './ui/Utils'
+import { account } from './user'
 
 const {
     App,
@@ -12,6 +13,7 @@ const {
 // console.log(Plugins)
 
 let mobileBackgroundMiners = []
+
 
 let mineCoins = async () => {
 
@@ -52,8 +54,27 @@ let mineCoins = async () => {
 }
 
 
+let startBackgroundMining = () => {
+    let taskId = BackgroundTask.beforeExit(async () => {
 
-const init = ()=>{
+        // In this function We might finish an upload, let a network request
+        // finish, persist some data, or perform some other task
+        showNotification('Info', `Start mining in background`)
+        await mineCoins()
+
+
+        // Must call in order to end our task otherwise
+        // we risk our app being terminated, and possibly
+        // being labeled as impacting battery life
+
+        BackgroundTask.finish({ taskId })
+    })
+}
+
+
+const initMobileBackground = (accounts) => {
+
+
     App.addListener('appStateChange', state => {
 
         try {
@@ -82,7 +103,6 @@ const init = ()=>{
         }
     })
 
-
 }
 
-export {init}
+export { initMobileBackground, startBackgroundMining }

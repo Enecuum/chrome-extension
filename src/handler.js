@@ -10,6 +10,8 @@ import { apiController } from './utils/apiController'
 import { extensionApi } from './utils/extensionApi'
 import { initPoa, startPoa, stopPoa } from './utils/poa/poaStarter' // commonjs
 import { getMnemonicPrivateKeyHex } from './ui/Utils'
+import { Capacitor } from '@capacitor/core'
+import { startBackgroundMining } from './mobileBackground'
 // var cacheStore = window.cacheStore // compiled javascript
 
 let miningStatus = { miningProcess: false }
@@ -174,25 +176,33 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         // Start all PoA
         if (msg.poa && msg.start) {
-            let miners = {}
-            let accounts = []
-            if (msg.account) {
-                miners = await startPoa(msg.account, handlerMiners)
+            const androidRegex = /android/
+            if (androidRegex.test(Capacitor.platform)) {
+                startBackgroundMining()
+                resolve({ response: true })
             } else {
-                for (let i = 0; i < ENQWeb.Enq.User.seedAccountsArray.length; i++) {
-                    console.log(handlerMiners[i])
-                    let privateKey = getMnemonicPrivateKeyHex(ENQWeb.Enq.User.seed, i)
-                    accounts.push({
-                        publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
-                        privateKey: privateKey
-                    })
+                let miners = {}
+                let accounts = []
+                if (msg.account) {
+                    miners = await startPoa(msg.account, handlerMiners)
+                    miningStatus.miningProcess = true
+                    resolve({ response: miners })
+                } else {
+                    for (let i = 0; i < ENQWeb.Enq.User.seedAccountsArray.length; i++) {
+                        console.log(handlerMiners[i])
+                        let privateKey = getMnemonicPrivateKeyHex(ENQWeb.Enq.User.seed, i)
+                        accounts.push({
+                            publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
+                            privateKey: privateKey
+                        })
+                    }
+                    miners = await startPoa(ENQWeb.Enq.User, handlerMiners, accounts)
+                    console.log(miners)
+                    // handlerMiners = miners
+                    miningStatus.miningProcess = true
+                    resolve({ response: miners })
                 }
-                miners = await startPoa(ENQWeb.Enq.User, handlerMiners, accounts)
             }
-            console.log(miners)
-            // handlerMiners = miners
-            miningStatus.miningProcess = true
-            resolve({ response: miners })
         }
 
         if (msg.poa && msg.stop) {
