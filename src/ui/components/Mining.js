@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
 import { generateIcon, getMnemonicPrivateKeyHex, regexToken, shortHash, showNotification } from '../Utils'
+import {init} from "../../mobileBackground"
 import Input from '../elements/Input'
 import { NET, NETWORKS } from '../../utils/names'
 // import {startPoa} from "../../utils/poa";
@@ -48,8 +49,9 @@ export default function Mining(props) {
 
     let startMining = () => {
 
-        // showNotification('Mining', 'CONNECT')
+        init()
 
+        // showNotification('Mining', 'CONNECT')
         userStorage.promise.sendPromise({
             poa: true,
             start: true
@@ -61,7 +63,7 @@ export default function Mining(props) {
 
         // TODO this is temp method
         interval_cursor = setInterval(() => {
-            console.dir(accounts)
+            // console.dir(accounts)
             userStorage.promise.sendPromise({
                 poa: true,
                 get: true,

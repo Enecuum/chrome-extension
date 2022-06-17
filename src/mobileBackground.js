@@ -1,44 +1,17 @@
-// import { Plugins } from '@capacitor/core'
-import { App } from '@capacitor/app'
-import { BackgroundTask } from '@robingenz/capacitor-background-task'
+import { Plugins } from '@capacitor/core'
 import { startPoa } from './utils/poa/poaStarter'
 import { getMnemonicPrivateKeyHex, showNotification } from './ui/Utils'
 
-// const {
-//     App,
-//     BackgroundTask,
-//     LocalNotifications
-// } = Plugins
+const {
+    App,
+    BackgroundTask,
+    LocalNotifications,
+    Background
+} = Plugins
 //
 // console.log(Plugins)
 
 let mobileBackgroundMiners = []
-
-App.addListener('appStateChange', state => {
-
-    try {
-        showNotification('Mining', 'State change')
-    } catch (e) {
-
-    }
-
-    if (!state.isActive) {
-
-        let taskId = BackgroundTask.beforeExit(async () => {
-
-            // In this function We might finish an upload, let a network request
-            // finish, persist some data, or perform some other task
-
-            await mineCoins()
-
-            // Must call in order to end our task otherwise
-            // we risk our app being terminated, and possibly
-            // being labeled as impacting battery life
-
-            BackgroundTask.finish({ taskId })
-        })
-    }
-})
 
 let mineCoins = async () => {
 
@@ -67,7 +40,7 @@ let mineCoins = async () => {
 
     // We have to run new PoA here
 
-    showNotification('Mining', 'Mobile background')
+    // showNotification('Mining', 'Mobile background')
 
     // // Example of long task
     // let start = new Date().getTime();
@@ -77,3 +50,39 @@ let mineCoins = async () => {
     //     }
     // }
 }
+
+
+
+const init = ()=>{
+    App.addListener('appStateChange', state => {
+
+        try {
+            showNotification('Mining', `State change`)
+        } catch (e) {
+
+        }
+
+        if (!state.isActive) {
+
+
+            let taskId = BackgroundTask.beforeExit(async () => {
+
+                // In this function We might finish an upload, let a network request
+                // finish, persist some data, or perform some other task
+
+                await mineCoins()
+
+
+                // Must call in order to end our task otherwise
+                // we risk our app being terminated, and possibly
+                // being labeled as impacting battery life
+
+                BackgroundTask.finish({ taskId })
+            })
+        }
+    })
+
+
+}
+
+export {init}
