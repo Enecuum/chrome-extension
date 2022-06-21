@@ -8,7 +8,7 @@ const POA_PROTOCOL_VERSION = 4
 class Publisher {
 
 
-    constructor(account, token) {
+    constructor(account, token, connector = false) {
 
         // this
 
@@ -18,7 +18,7 @@ class Publisher {
         console.log(token)
 
         let id = account.publicKey.slice(0, 6)
-
+        this.connector = connector
         this.restart = true
         let ip = '95.216.246.116'
         this.ws = new WebSocket(`ws://95.216.246.116:3000`)
@@ -88,8 +88,11 @@ function init(_, id, ip, account, token) {
         if (msg.err === 'ERR_DUPLICATE_KEY') {
             console.warn(msg)
             _.status = 'ERR_DUPLICATE_KEY'
-
-            showNotification('Mining error', 'Duplicate key by ' + shortHash(account.publicKey))
+            // if(_.connector != false){
+            //     _.connector(JSON.stringify({ method: 'notification', body:{title:"Mining error",text:'Duplicate key by ' + shortHash(account.publicKey)}}))
+            // }else{
+            //     showNotification('Mining error', 'Duplicate key by ' + shortHash(account.publicKey))
+            // }
         }
 
         if (msg.method !== 'on_leader_beacon') {
@@ -135,7 +138,11 @@ function init(_, id, ip, account, token) {
 
         _.status = 'Sign block'
 
-        showNotification('Mining reward', 'Sign block by ' + shortHash(account.publicKey))
+        // if(_.connector != false){
+        //     _.connector(JSON.stringify({ method: 'notification', body:{title:'Mining reward',text:'Sign block by ' + shortHash(account.publicKey)}}))
+        // }else {
+        //     showNotification('Mining reward', 'Sign block by ' + shortHash(account.publicKey))
+        // }
 
         _.ws.send(JSON.stringify(res))
     }

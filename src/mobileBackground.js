@@ -72,11 +72,17 @@ let mineCoins = async () => {
 let startBackgroundMining = () => {
     let taskId = BackgroundTask.beforeExit(async () => {
 
+
         // In this function We might finish an upload, let a network request
         // finish, persist some data, or perform some other task
         showNotification('Info', `Start mining in background`)
         await mineCoins()
 
+        try {
+            const wakeLock = await navigator.wakeLock.request("screen");
+        }catch (e) {
+            showNotification('Trouble', `Your system don't support wakeLock`)
+        }
 
         // Must call in order to end our task otherwise
         // we risk our app being terminated, and possibly
