@@ -10,7 +10,7 @@ import { apiController } from './utils/apiController'
 import { extensionApi } from './utils/extensionApi'
 import { initPoa, startPoa, stopPoa } from './utils/poa/poaStarter' // commonjs
 import { getMnemonicPrivateKeyHex } from './ui/Utils'
-import { Capacitor } from '@capacitor/core'
+import { Capacitor, registerPlugin } from '@capacitor/core'
 import { startBackgroundMining, getMobileMiners, stopMobileMiners } from './mobileBackground'
 // var cacheStore = window.cacheStore // compiled javascript
 
@@ -183,6 +183,10 @@ export function globalMessageHandler(msg, ENQWeb) {
         // Start all PoA
         if (msg.poa && msg.start) {
             if (androidRegex.test(Capacitor.platform)) {
+                let test = registerPlugin('PoA')
+                test.start({value:['hello', 'men']}).then(res=>{
+                    alert(res['status'])
+                })
                 let miners = startBackgroundMining()
                 miningStatus.miningProcess = true
                 resolve({ response: miners })
@@ -214,6 +218,8 @@ export function globalMessageHandler(msg, ENQWeb) {
         if (msg.poa && msg.stop) {
             console.log(handlerMiners)
             if (androidRegex.test(Capacitor.platform)) {
+                let test = registerPlugin('PoA')
+                test.stop().then(res=>{})
                 let miners = stopMobileMiners()
                 miningStatus.miningProcess = false
                 resolve({ response: miners })

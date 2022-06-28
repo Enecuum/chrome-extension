@@ -1,4 +1,4 @@
-import { Plugins } from '@capacitor/core'
+import { Plugins, registerPlugin} from '@capacitor/core'
 import { initPoa, startPoa, stopPoa } from './utils/poa/poaStarter'
 import { getMnemonicPrivateKeyHex, showNotification } from './ui/Utils'
 import { account } from './user'
@@ -76,6 +76,7 @@ let startBackgroundMining = () => {
         // In this function We might finish an upload, let a network request
         // finish, persist some data, or perform some other task
         showNotification('Info', `Start mining in background`)
+
         await mineCoins()
 
         try {
