@@ -94,7 +94,12 @@ function decryptAccount(password) {
         return false
     }
     try {
-        let accountString = ENQWeb.Utils.crypto.decrypt(JSON.parse(userData), hash)
+        try {
+            userData = JSON.parse(userData)
+        } catch (e) {
+            console.log('old algorithm')
+        }
+        let accountString = ENQWeb.Utils.crypto.decrypt(userData, hash)
         // console.log(accountString)
         let account = JSON.parse(accountString)
         // console.log(account)
