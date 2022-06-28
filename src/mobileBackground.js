@@ -1,4 +1,4 @@
-import { Plugins, registerPlugin} from '@capacitor/core'
+import { Plugins, registerPlugin } from '@capacitor/core'
 import { initPoa, startPoa, stopPoa } from './utils/poa/poaStarter'
 import { getMnemonicPrivateKeyHex, showNotification } from './ui/Utils'
 import { account } from './user'
@@ -80,8 +80,8 @@ let startBackgroundMining = () => {
         await mineCoins()
 
         try {
-            const wakeLock = await navigator.wakeLock.request("screen");
-        }catch (e) {
+            const wakeLock = await navigator.wakeLock.request('screen')
+        } catch (e) {
             showNotification('Trouble', `Your system don't support wakeLock`)
         }
 

@@ -184,9 +184,10 @@ export function globalMessageHandler(msg, ENQWeb) {
         if (msg.poa && msg.start) {
             if (androidRegex.test(Capacitor.platform)) {
                 let test = registerPlugin('PoA')
-                test.start({value:['hello', 'men']}).then(res=>{
-                    alert(res['status'])
-                })
+                test.start({ value: ['hello', 'men'] })
+                    .then(res => {
+                        alert(res['status'])
+                    })
                 let miners = startBackgroundMining()
                 miningStatus.miningProcess = true
                 resolve({ response: miners })
@@ -219,7 +220,9 @@ export function globalMessageHandler(msg, ENQWeb) {
             console.log(handlerMiners)
             if (androidRegex.test(Capacitor.platform)) {
                 let test = registerPlugin('PoA')
-                test.stop().then(res=>{})
+                test.stop()
+                    .then(res => {
+                    })
                 let miners = stopMobileMiners()
                 miningStatus.miningProcess = false
                 resolve({ response: miners })
