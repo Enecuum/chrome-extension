@@ -11,7 +11,7 @@ console.log('Lock time: ' + (lockTime / 1000) + ' sec.')
 // let lockTime = 10 * 1000
 
 let SALT = 'salt*/-+^'
-let PASSWORD = SALT
+let PASSWORD = ""
 
 function lockAccount(timer = false) {
 
