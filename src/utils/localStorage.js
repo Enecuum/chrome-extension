@@ -1,8 +1,19 @@
 // This is storage object,
 
-const {LIST, TASK, USER, LOCK, CONFIG, TOKENS, SITES} = require("./names");
+const {
+    LIST,
+    TASK,
+    USER,
+    LOCK,
+    CONFIG,
+    TOKENS,
+    SITES
+} = require('./names')
 const indexDB = require('./indexDB')
-const {generateAccountData, account} = require("../user");
+const {
+    generateAccountData,
+    account
+} = require('../user')
 // import indexDB from './indexDB'
 // import {LIST, TASK, USER, LOCK, CONFIG, TOKENS} from "./names";
 
@@ -121,8 +132,9 @@ function loadUser() {
         console.log(oldAccount)
         let data = generateAccountData(oldAccount.privateKey, account)
 
-        if (!data.privateKeys.includes(oldAccount.privateKey))
+        if (!data.privateKeys.includes(oldAccount.privateKey)) {
             data.privateKeys.push(oldAccount.privateKey)
+        }
 
         localStorage.setItem('User', '')
 
@@ -138,9 +150,10 @@ function loadUser() {
         localStorage.setItem(USER, account2)
     }
 
-    indexDB.get(USER).then(user => {
-        // console.dir('IndexDB user exist: ' + !!user)
-    })
+    indexDB.get(USER)
+        .then(user => {
+            // console.dir('IndexDB user exist: ' + !!user)
+        })
 
     let user = localStorage.getItem(USER)
 
@@ -235,7 +248,7 @@ function setPassword(password) {
     if (!state) {
         state = {}
     }
-    state.pass = password.toString()
+    state.pass = password
     localStorage.setItem(LOCK, JSON.stringify(state))
     return true
 }
@@ -283,25 +296,28 @@ function sendPromise(obj) {
 
     return new Promise((resolve) => {
 
-        if (chrome.runtime.getManifest().version.includes('web')) {
+        if (chrome.runtime.getManifest()
+            .version
+            .includes('web')) {
 
             // console.log('web send promise');
-            webBackgroundPort(obj, ENQWeb).then(answer => {
-                if (answer.response !== undefined) {
-                    resolve(answer.response);
-                } else {
-                    resolve(answer);
-                }
-            })
+            webBackgroundPort(obj, ENQWeb)
+                .then(answer => {
+                    if (answer.response !== undefined) {
+                        resolve(answer.response)
+                    } else {
+                        resolve(answer)
+                    }
+                })
 
         } else {
 
             //
             chrome.runtime.sendMessage(obj, answer => {
                 if (answer.response !== undefined) {
-                    resolve(answer.response);
+                    resolve(answer.response)
                 } else {
-                    resolve(answer);
+                    resolve(answer)
                 }
             })
         }

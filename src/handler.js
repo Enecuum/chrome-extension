@@ -1,4 +1,4 @@
-import { decryptAccount, encryptAccount, lockAccount, lockTime } from './lockAccount'
+import { decryptAccount, encryptAccount, encryptAccountWithPass, lockAccount, lockTime } from './lockAccount'
 
 // const cacheStore = require('./indexDB') // es6
 import indexDB from './utils/indexDB'
@@ -79,6 +79,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
             runLockTimer()
 
+
             let account
             try {
                 account = decryptAccount(msg.password)
@@ -92,12 +93,12 @@ export function globalMessageHandler(msg, ENQWeb) {
                 ENQWeb.Enq.User = account
 
                 // Set user to storage memory (localStorage or IndexedDB)
-                userStorage.user.addUser(account)
+                // userStorage.user.addUser(account)
 
                 // Set user to sessionStorage for web
                 // createWebSession(account)
 
-                encryptAccount()
+                encryptAccountWithPass(account)
                 resolve({ response: account })
 
             } else {
@@ -116,9 +117,9 @@ export function globalMessageHandler(msg, ENQWeb) {
             ENQWeb.Enq.User = account
 
             // Set user to storage memory (localStorage or IndexedDB)
-            userStorage.user.addUser(account)
+            // userStorage.user.addUser(account)
 
-            encryptAccount()
+            encryptAccountWithPass(account)
             resolve({ response: account })
         }
 
@@ -128,10 +129,13 @@ export function globalMessageHandler(msg, ENQWeb) {
             // TODO Password
             if (msg.again) {
                 // console.log(msg.data)
-                userStorage.user.addUser(msg.data)
+                // userStorage.user.addUser(msg.data)
+                encryptAccountWithPass(msg.data)
             }
 
-            encryptAccount()
+            if (msg.set) {
+                encryptAccountWithPass(false, msg.set)
+            }
             resolve({ response: true })
         }
 

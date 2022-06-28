@@ -2,7 +2,7 @@
 // TODO
 
 let lockTime = 10 * 60 * 1000 * 6 * 100 // 100 hours
-import eventBus from "./utils/eventBus";
+import eventBus from './utils/eventBus'
 
 // let lockTime = 60 * 1000 // 60 sec
 
@@ -11,6 +11,7 @@ console.log('Lock time: ' + (lockTime / 1000) + ' sec.')
 // let lockTime = 10 * 1000
 
 let SALT = 'salt*/-+^'
+let PASSWORD = SALT
 
 function lockAccount(timer = false) {
 
@@ -23,10 +24,13 @@ function lockAccount(timer = false) {
     //     ENQWeb.Enq.User = { publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net }
     // }
 
-    eventBus.dispatch('lock', {message: true})
+    eventBus.dispatch('lock', { message: true })
 
     // {publicKey, net}
-    ENQWeb.Enq.User = { publicKey: ENQWeb.Enq.User.publicKey, net: ENQWeb.Enq.User.net }
+    ENQWeb.Enq.User = {
+        publicKey: ENQWeb.Enq.User.publicKey,
+        net: ENQWeb.Enq.User.net
+    }
 
     const accountLockedString = 'Account locked'
     console.log(accountLockedString)
@@ -63,39 +67,53 @@ function encryptAccount() {
     }
 }
 
-function encryptAccountWithPass(account, password) {
-    if (password && !userStorage.lock.checkLock()) {
-        password = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
-        account = ENQWeb.Utils.crypto.encrypt(account, password)
-        userStorage.user.changeUser(account)
-        // console.log('account encrypted')
+function encryptAccountWithPass(account = false, password = false) {
+    // let account = userStorage.user.loadUserNotJson()
+    if (password) {
+        console.log('password install')
+        PASSWORD = password
     }
-}
-
-function decryptAccount(password) {
-    let hash = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
-    if (userStorage.lock.unlock(hash)) {
-        hash = ENQWeb.Utils.crypto.strengthenPassword(SALT + hash)
-        // console.log(hash)
-        // console.log(userStorage.user.loadUserNotJson())
-        let userData = userStorage.user.loadUserNotJson()
-        if (!userData)
-            return false
-        let accountString = ENQWeb.Utils.crypto.decrypt(userData, hash)
-        // console.log(accountString)
-        let account = JSON.parse(accountString)
-        // console.log(account)
-        return account
+    if (PASSWORD.length > 0 && !userStorage.lock.checkLock() && account) {
+        let password = ENQWeb.Utils.crypto.strengthenPassword(SALT + PASSWORD)
+        password = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
+        account = ENQWeb.Utils.crypto.encrypt(JSON.stringify(account), password)
+        userStorage.user.addUser(account)
+        // console.log('account encrypted')
+        return true
     } else {
         return false
     }
 }
 
-export {lockAccount, encryptAccount, decryptAccount, encryptAccountWithPass, lockTime}
+function decryptAccount(password) {
+    let hash = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
+    hash = ENQWeb.Utils.crypto.strengthenPassword(SALT + hash)
+    let userData = userStorage.user.loadUserNotJson()
+
+    if (!userData) {
+        return false
+    }
+    try {
+        let accountString = ENQWeb.Utils.crypto.decrypt(JSON.parse(userData), hash)
+        // console.log(accountString)
+        let account = JSON.parse(accountString)
+        // console.log(account)
+        PASSWORD = password
+        userStorage.lock.setLock(false)
+        return account
+    } catch (e) {
+        console.warn('Wrong password')
+        return false
+    }
+
+
+}
+
+export { lockAccount, encryptAccount, decryptAccount, encryptAccountWithPass, lockTime }
 
 function say() {
     let lockString = 'Lock account loaded. Background started'
     console.log(lockString)
 }
 
-export {say}
+export { say }
