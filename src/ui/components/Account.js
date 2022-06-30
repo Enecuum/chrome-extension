@@ -102,6 +102,10 @@ export default function Account(props) {
     //     setLocked(false)
     // }
 
+    let tokenList = () => {
+        
+    }
+
     const getBalance = async () => {
         // console.log(this.props)
         ENQWeb.Enq.provider = props.user.net
@@ -138,7 +142,8 @@ export default function Account(props) {
                             usd: 0,
                             image: res[i].token === mainToken ? './images/enq.png' : generateIcon(res[i].token),
                             tokenHash: res[i].token,
-                            decimals: 10 ** res[i].decimals
+                            decimals: 10 ** res[i].decimals,
+                            trusted: tokenList(res[i].ticker)
                         })
                     }
                 }
@@ -148,8 +153,7 @@ export default function Account(props) {
                 setTicker(ticker)
                 setLogo(image)
                 setAmountDecimal(10**decimal)
-                cacheTokens(tickers)
-                    .then()
+                cacheTokens(tickers).then()
 
                 if (props.user.net === 'https://pulse.enecuum.com') {
                     apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
@@ -427,6 +431,8 @@ export default function Account(props) {
         // console.log(assets[0])
         // console.log(assetsSort.indexOf(assets[0]))
 
+        let untrusted = false
+
         for (const key in assetsSort) {
             const item = assetsSort[key]
 
@@ -435,6 +441,12 @@ export default function Account(props) {
             // console.log(item.tokenHash)
             // console.log(item.tokenHash === ENQWeb.Net.ticker)
             // console.log(item)
+
+            if (item.untrusted)
+
+            if (untrusted)
+                assetsElements.push()
+
             assetsElements.push(
                 <div key={key}
                      className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}

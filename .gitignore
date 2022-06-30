@@ -12,3 +12,4 @@ logs
 ios
 android
 download/*
+*.DS_Store

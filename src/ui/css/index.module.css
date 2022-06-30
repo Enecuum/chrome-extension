@@ -1099,6 +1099,7 @@ input[type=number] {
 }
 
 .cards .card {
+    /*position: relative;*/
     width: calc(100% - 40px);
     height: auto;
     overflow: hidden;
@@ -1190,6 +1191,14 @@ input[type=number] {
 
 .card_field_copied {
     color: var(--color-gray-ligth)
+}
+
+.card_field_right_bottom {
+    pointer-events: auto;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    cursor: pointer;
 }
 
 .card_field_select {

@@ -205,7 +205,7 @@ export default function Network(props) {
                 <div className={styles.card_field}>{libNetworks[0][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
                 <div className={styles.card_field}>{libNetworks[0][1]}</div>
                 <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[0][1]])}</div>
-                <div className={styles.card_field_select} onClick={(current ? () => {
+                <div className={styles.card_field_right_bottom} onClick={(current ? () => {
                 } : () => setNet(libNetworks[0][1]))}>{current ? 'CURRENT' : 'SELECT'}</div>
             </div>
         )
