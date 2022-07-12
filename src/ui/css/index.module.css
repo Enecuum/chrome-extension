@@ -893,6 +893,13 @@ input[type=number] {
     transform: rotate(-30deg);
 }
 
+.asset_separator {
+    padding: 20px;
+    text-align: right;
+}
+
+/*BUTTON*/
+
 .button_add_token {
     width: calc(100% - 40px);
     position: absolute;

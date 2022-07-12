@@ -6,6 +6,7 @@ import Menu from '../elements/Menu'
 import {copyToClipboard, explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
 import Separator from '../elements/Separator'
 import {apiController} from '../../utils/apiController'
+import trustedTokens from "../../utils/tokenList";
 
 const names = {
     enable: 'Share account address',
@@ -103,7 +104,7 @@ export default function Account(props) {
     // }
 
     let tokenList = () => {
-        
+
     }
 
     const getBalance = async () => {
@@ -152,7 +153,7 @@ export default function Account(props) {
                 setAmount(amount)
                 setTicker(ticker)
                 setLogo(image)
-                setAmountDecimal(10**decimal)
+                setAmountDecimal(10 ** decimal)
                 cacheTokens(tickers).then()
 
                 if (props.user.net === 'https://pulse.enecuum.com') {
@@ -237,7 +238,7 @@ export default function Account(props) {
     }
 
 
-    const renderActivity = ()=>{
+    const renderActivity = () => {
         for (const key in activity) {
             const item = activity[key]
             // console.log(item)
@@ -269,7 +270,7 @@ export default function Account(props) {
                     {item.tx ?
                         <div className={styles.activity_data}>
 
-                            <div>{'-' + (item.tx.value ? (item.tx.value / (decimals[item.tx.tokenHash] || 1e10)) : (item.tx.amount /(decimals[item.tx.tokenHash] || 1e10) )) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
+                            <div>{'-' + (item.tx.value ? (item.tx.value / (decimals[item.tx.tokenHash] || 1e10)) : (item.tx.amount / (decimals[item.tx.tokenHash] || 1e10))) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
 
                         </div> : ''}
                 </div>,
@@ -304,7 +305,7 @@ export default function Account(props) {
                         decimals: decimals[history.records[id].token_hash] || 1e10,
                         ticker: false,
                         fee_type: history.records[id].fee_type,
-                        fee:history.records[id].fee_value
+                        fee: history.records[id].fee_value
                     },
                     rectype: history.records[id].rectype,
                     tx: {
@@ -340,12 +341,12 @@ export default function Account(props) {
         for (const key in historyArray.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
             const item = historyArray[key]
             // console.log(item)
-            if(!decimals[item.tx.tokenHash]){
+            if (!decimals[item.tx.tokenHash]) {
                 await apiController.getTokenInfo(item.tx.tokenHash)
-                    .then(token=>{
+                    .then(token => {
                         try {
                             decimals[item.tx.tokenHash] = (10 ** token[0]['decimals'])
-                        }catch (e) {
+                        } catch (e) {
                             decimals[item.tx.tokenHash] = 1e10
                         }
                     })
@@ -414,15 +415,15 @@ export default function Account(props) {
 
     let renderAssets = () => {
 
-        const assetsElements = []
+        let assetsElements = []
+        let trustedAssetsElements = []
+        let notTrustedAssetsElements = []
 
-        // console.log(assets)
         let mainToken = assets.find(element => element.main === true)
-        // console.log(mainToken)
 
         let assetsSort = assets.sort((a, b) => Number(a.amount) - Number(b.amount))
         assetsSort.splice(assets.indexOf(mainToken), 1)
-        // console.log(assetsSort)
+
         if (mainToken) {
             assetsSort.unshift(mainToken)
         }
@@ -431,23 +432,11 @@ export default function Account(props) {
         // console.log(assets[0])
         // console.log(assetsSort.indexOf(assets[0]))
 
-        let untrusted = false
-
         for (const key in assetsSort) {
+
             const item = assetsSort[key]
 
-            // console.log(ENQWeb.Net.ticker)
-            // console.log(props.user.token)
-            // console.log(item.tokenHash)
-            // console.log(item.tokenHash === ENQWeb.Net.ticker)
-            // console.log(item)
-
-            // if (item.untrusted)
-
-            // if (untrusted)
-            //     assetsElements.push()
-
-            assetsElements.push(
+            let element =
                 <div key={key}
                      className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}
                      onClick={() => {
@@ -469,8 +458,21 @@ export default function Account(props) {
                         </div>
                     </div>
                 </div>
-            )
+
+            if (trustedTokens.find(token => token.hash === item.tokenHash))
+                trustedAssetsElements.push(element)
+            else
+                notTrustedAssetsElements.push(element)
         }
+
+        console.log(trustedAssetsElements)
+        console.log(notTrustedAssetsElements)
+
+        assetsElements = assetsElements.concat(trustedAssetsElements)
+        assetsElements.push(<div key={'separator'} className={`${styles.asset_separator}`}>NOT TRUSTED</div>)
+        assetsElements = assetsElements.concat(notTrustedAssetsElements)
+
+        // console.log(assetsElements)
 
         return assetsElements
     }
@@ -636,7 +638,8 @@ export default function Account(props) {
             <div className={styles.content}>
 
                 <img className={styles.content_logo} src={logo} alt=""/>
-                <div className={styles.balance} title={decimals[props.user.token] ? (Number(amount) / decimals[props.user.token]) : ''}>
+                <div className={styles.balance}
+                     title={decimals[props.user.token] ? (Number(amount) / decimals[props.user.token]) : ''}>
                     {(Number(amount) / amountDecimal).toFixed(4)}
                     {' '}
                     {ticker}

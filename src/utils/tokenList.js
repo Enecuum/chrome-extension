@@ -24,3 +24,5 @@ let trustedTokens = [
         "decimals": 10,
     },
 ]
+
+module.exports = trustedTokens
