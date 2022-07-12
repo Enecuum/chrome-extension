@@ -220,7 +220,7 @@ export default function Network(props) {
                     <div className={styles.card_field}><b>{localNetworks[i].name}</b></div>
                     <div className={styles.card_field}>{localNetworks[i].host}</div>
                     <div className={styles.card_field}>{shortHash(localNetworks[i].token)}</div>
-                    <div className={styles.card_field_select} onClick={(current ? () => {
+                    <div className={styles.card_field_right_bottom} onClick={(current ? () => {
                     } : () => setNet(localNetworks[i].host))}>{current ? 'CURRENT' : 'SELECT'}</div>
                     <div className={styles.card_field_delete}
                          onClick={() => removeNet(localNetworks[i].name)}>&#x2715;</div>

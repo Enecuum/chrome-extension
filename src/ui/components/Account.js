@@ -442,10 +442,10 @@ export default function Account(props) {
             // console.log(item.tokenHash === ENQWeb.Net.ticker)
             // console.log(item)
 
-            if (item.untrusted)
+            // if (item.untrusted)
 
-            if (untrusted)
-                assetsElements.push()
+            // if (untrusted)
+            //     assetsElements.push()
 
             assetsElements.push(
                 <div key={key}
