@@ -1,3 +1,5 @@
+import trustedTokens from "./tokenList";
+
 let cacheTokenInfo = {}
 let cacheTransactions = {}
 let cacheAccountTransactions = {}
@@ -78,6 +80,13 @@ const getTransaction = async (transactionHash) => {
     return cacheTransactions[ENQWeb.Enq.provider][transactionHash]
 }
 
+const getTokenList = () => {
+
+    // let serverTokens = await ENQWeb.Net.get.tokenList()
+
+    return trustedTokens
+}
+
 const apiController = {
     getBalance,
     getBalanceAll,
@@ -87,6 +96,7 @@ const apiController = {
     getTokenInfo,
     getAccountTransactions,
     getTransaction,
+    getTokenList,
     sendTransaction,
     sendAPI,
     sendRequest,

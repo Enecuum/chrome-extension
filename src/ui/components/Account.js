@@ -6,7 +6,6 @@ import Menu from '../elements/Menu'
 import {copyToClipboard, explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
 import Separator from '../elements/Separator'
 import {apiController} from '../../utils/apiController'
-import trustedTokens from "../../utils/tokenList";
 
 const names = {
     enable: 'Share account address',
@@ -432,6 +431,8 @@ export default function Account(props) {
         // console.log(assets[0])
         // console.log(assetsSort.indexOf(assets[0]))
 
+        let trustedTokens = apiController.getTokenList()
+
         for (const key in assetsSort) {
 
             const item = assetsSort[key]
@@ -465,8 +466,8 @@ export default function Account(props) {
                 notTrustedAssetsElements.push(element)
         }
 
-        console.log(trustedAssetsElements)
-        console.log(notTrustedAssetsElements)
+        // console.log(trustedAssetsElements)
+        // console.log(notTrustedAssetsElements)
 
         assetsElements = assetsElements.concat(trustedAssetsElements)
         assetsElements.push(<div key={'separator'} className={`${styles.asset_separator}`}>NOT TRUSTED</div>)
