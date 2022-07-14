@@ -8,11 +8,9 @@ let trustedTokens = [
         "extensions": {
             "bridgeInfo": {
                 "1": {
-                    "tokenAddress": "",
-                    "originBridgeAddress": "",
-                    "destBridgeAddress": ""
+                    "tokenAddress": "0xd0d7a9f2021958e51d60d6966b7bbed9d1cb22b5"
                 }
-            }
+            },
         }
     },
     {
@@ -25,8 +23,6 @@ let trustedTokens = [
             "bridgeInfo": {
                 "1": {
                     "tokenAddress": "",
-                    "originBridgeAddress": "",
-                    "destBridgeAddress": ""
                 }
             }
         }
@@ -41,8 +37,6 @@ let trustedTokens = [
             "bridgeInfo": {
                 "1": {
                     "tokenAddress": "",
-                    "originBridgeAddress": "",
-                    "destBridgeAddress": ""
                 }
             }
         }
