@@ -460,7 +460,7 @@ export default function Account(props) {
                     </div>
                 </div>
 
-            if (trustedTokens.find(token => token.hash === item.tokenHash))
+            if (trustedTokens.find(token => token.address === item.tokenHash))
                 trustedAssetsElements.push(element)
             else
                 notTrustedAssetsElements.push(element)
