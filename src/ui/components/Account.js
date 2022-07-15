@@ -732,7 +732,7 @@ export default function Account(props) {
                         Add token
                     </div>
 
-                    {isShowUntrustedTokens && <div className={`${styles.field}`}>Not trusted tokens:</div>}
+                    {isShowUntrustedTokens && <div className={`${styles.field}`}>NOT TRUSTED:</div>}
 
                     {!isShowUntrustedTokens ? <div onClick={() => setShowUntrustedTokens(true)}
                          className={`${styles.field} ${styles.button}`}>
