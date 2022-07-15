@@ -728,7 +728,7 @@ export default function Account(props) {
 
                     <div onClick={() => {
                     }}
-                         className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                         className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_disabled}`}>
                         Add token
                     </div>
 
