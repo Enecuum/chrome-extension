@@ -53,6 +53,8 @@ export default function Account(props) {
 
     const [favoriteSites, setFavoriteSites] = useState([])
 
+    const [isShowUntrustedTokens, setShowUntrustedTokens] = useState(false)
+
     let decimals = {}
 
     const clickMenu = () => {
@@ -412,7 +414,16 @@ export default function Account(props) {
         window.scrollTo(0, 0)
     }
 
-    let renderAssets = () => {
+    // let renderTrustedTokens = () => {
+    //
+    // }
+    //
+    //
+    // let renderUntrustedTokens = () => {
+    //
+    // }
+
+    let renderAssets = (trusted) => {
 
         let assetsElements = []
         let trustedAssetsElements = []
@@ -470,14 +481,16 @@ export default function Account(props) {
         // console.log(notTrustedAssetsElements)
 
         assetsElements = assetsElements.concat(trustedAssetsElements)
-        assetsElements.push(<div key={'separator'} className={`${styles.asset_separator}`}>NOT TRUSTED</div>)
-        assetsElements = assetsElements.concat(notTrustedAssetsElements)
+        // assetsElements.push(<div key={'separator'} className={`${styles.asset_separator}`}>NOT TRUSTED</div>)
+        // assetsElements = assetsElements.concat(notTrustedAssetsElements)
 
         // console.log(assetsElements)
 
-        return assetsElements
+        if (trusted)
+            return trustedAssetsElements
+        else
+            return notTrustedAssetsElements
     }
-
 
     let addAsset = () => {
         setAssets([...assets, {
@@ -711,13 +724,20 @@ export default function Account(props) {
 
                 <div className={styles.bottom_assets + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
-                    {renderAssets()}
+                    {renderAssets(true)}
 
                     <div onClick={() => {
                     }}
-                         className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_add_token}`}>
+                         className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
                         Add token
                     </div>
+
+                    {isShowUntrustedTokens && <div className={`${styles.field}`}>Not trusted tokens:</div>}
+
+                    {!isShowUntrustedTokens ? <div onClick={() => setShowUntrustedTokens(true)}
+                         className={`${styles.field} ${styles.button}`}>
+                        Show untrusted tokens
+                    </div> : renderAssets(false)}
 
                 </div>
 

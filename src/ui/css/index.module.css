@@ -177,14 +177,14 @@ a {
     color: var(--color-white);
 }
 
-.buttonLink {
-    cursor: pointer;
+/*.buttonLink {*/
+/*    cursor: pointer;*/
 
-}
+/*}*/
 
-.buttonLink:hover {
-    color: var(--color-blue);
-}
+/*.buttonLink:hover {*/
+/*    color: var(--color-blue);*/
+/*}*/
 
 a:hover {
     color: var(--color-blue-ligth);
@@ -901,9 +901,9 @@ input[type=number] {
 /*BUTTON*/
 
 .button_add_token {
-    width: calc(100% - 40px);
-    position: absolute;
-    bottom: 20px;
+    /*width: calc(100% - 40px);*/
+    /*position: absolute;*/
+    /*bottom: 20px;*/
     cursor: not-allowed;
 
     opacity: .1;

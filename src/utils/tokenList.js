@@ -5,6 +5,7 @@ let trustedTokens = [
         "name": "BIT",
         "symbol": "BIT",
         "decimals": 10,
+        "logoURI": "",
         "extensions": {
             "bridgeInfo": {
                 "1": {
@@ -19,6 +20,7 @@ let trustedTokens = [
         "name": "ENQ",
         "symbol": "ENQ",
         "decimals": 10,
+        "logoURI": "",
         "extensions": {
             "bridgeInfo": {
                 "1": {
@@ -33,6 +35,7 @@ let trustedTokens = [
         "name": "ENX",
         "symbol": "ENX",
         "decimals": 10,
+        "logoURI": "",
         "extensions": {
             "bridgeInfo": {
                 "1": {
