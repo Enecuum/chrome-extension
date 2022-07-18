@@ -6,6 +6,7 @@ import Menu from '../elements/Menu'
 import {copyToClipboard, explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
 import Separator from '../elements/Separator'
 import {apiController} from '../../utils/apiController'
+import Input from "../elements/Input";
 
 const names = {
     enable: 'Share account address',
@@ -54,6 +55,7 @@ export default function Account(props) {
     const [favoriteSites, setFavoriteSites] = useState([])
 
     const [isShowUntrustedTokens, setShowUntrustedTokens] = useState(false)
+    const [isShowAddToken, setShowAddToken] = useState(false)
 
     let decimals = {}
 
@@ -501,6 +503,19 @@ export default function Account(props) {
         }])
     }
 
+    let addTokenName = ''
+
+    let renderAddToken = () => {
+        return <Input type="text"
+                      spellCheck={false}
+                      onChange={(e) => {}}
+                      value={addTokenName}
+                      className={styles.field + ' ' + (addTokenName.length > 0 ? styles.field_correct : '')}
+                      label={'Add token'}
+                      placeholder={'Token name or hash'}
+        />
+    }
+
     const renderMenu = () => {
         if (menu) {
             return <Menu login={props.login}
@@ -726,11 +741,10 @@ export default function Account(props) {
 
                     {renderAssets(true)}
 
-                    <div onClick={() => {
-                    }}
-                         className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_disabled}`}>
+                    {!isShowAddToken ? <div onClick={() => {setShowAddToken(true)}}
+                         className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
                         Add token
-                    </div>
+                    </div> : renderAddToken()}
 
                     {isShowUntrustedTokens && <div className={`${styles.field}`}>NOT TRUSTED:</div>}
 
