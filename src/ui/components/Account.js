@@ -137,14 +137,14 @@ export default function Account(props) {
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
-                        image = res[i].token === mainToken ? './images/enq.png' : generateIcon(res[i].token)
+                        image = generateIcon(res[i].token)
                         decimal = res[i].decimals
                     } else {
                         tokens.push({
                             amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
                             usd: 0,
-                            image: res[i].token === mainToken ? './images/enq.png' : generateIcon(res[i].token),
+                            image: generateIcon(res[i].token),
                             tokenHash: res[i].token,
                             decimals: 10 ** res[i].decimals,
                             trusted: tokenList(res[i].ticker)
@@ -647,7 +647,7 @@ export default function Account(props) {
                                          all: true
                                      })
                                          .then(() => {
-                                             console.warn('disconnect All')
+                                             console.warn('Disconnect all')
                                              getConnects()
                                                  .then()
                                              setActiveTab(0)
@@ -702,11 +702,11 @@ export default function Account(props) {
                     {/*<div>Transaction</div>*/}
                 </div>
 
-                <div className={styles.circle_button} onClick={props.setMining}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/9.png"/>
-                    </div>
-                    <div>Mining</div>
-                </div>
+                {/*<div className={styles.circle_button} onClick={props.setMining}>*/}
+                {/*    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/9.png"/>*/}
+                {/*    </div>*/}
+                {/*    <div>Mining</div>*/}
+                {/*</div>*/}
 
             </div>
 
@@ -742,7 +742,7 @@ export default function Account(props) {
                     {renderAssets(true)}
 
                     {!isShowAddToken ? <div onClick={() => {setShowAddToken(true)}}
-                         className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                         className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_disabled}`}>
                         Add token
                     </div> : renderAddToken()}
 

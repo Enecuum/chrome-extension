@@ -61,8 +61,12 @@ let test = () => {
     //     net.replace('https://', '').replace('http://', '').toUpperCase()
 }
 
-//TODO
-let icons = {}
+let icons = {
+    '0000000000000000000000000000000000000000000000000000000000000000': './images/enq.png',
+    '0000000000000000000000000000000000000000000000000000000000000001': './images/bit.png',
+    '824e7b171c01e971337c1b25a055023dd53c003d4aa5aa8b58a503d7c622651e': './images/enex.png',
+}
+
 const generateIcon = (token) => {
     if (icons[token])
         return icons[token]
