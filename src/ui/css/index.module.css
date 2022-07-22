@@ -1469,7 +1469,7 @@ iframe {
     min-height: 600px;
     height: 140%;
     position: absolute;
-    top: 106px;
+    top: calc(106px + env(safe-area-inset-top));
     bottom: 0;
     z-index: 3;
     /*scroll-behavior: auto;*/

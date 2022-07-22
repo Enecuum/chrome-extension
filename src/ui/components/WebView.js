@@ -170,6 +170,7 @@ export default function WebView(props) {
         <div className={styles.main}>
 
             <div className={styles.header}>
+
                 <div className={styles.field + ' ' + styles.pointer} onClick={() => {
                     setIframeWork(false)
                     iframeDeactivation()
@@ -197,13 +198,11 @@ export default function WebView(props) {
                 <div onClick={() => setUrl('https://app.enex.space')}>ENEX</div>
                 <div onClick={() => setUrl('https://bit-wallet.enecuum.com')}>WALLET</div>
                 <div onClick={() => setUrl('https://faucet-bit.enecuum.com')}>FAUCET</div>
-                <div onClick={() => {
-                }}>SAVE
-                </div>
-
+                <div onClick={() => {}}>SAVE</div>
             </div>
 
             {/*<iframe src={url}/>*/}
+
             {iframeActivation()}
 
         </div>
