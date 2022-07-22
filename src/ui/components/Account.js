@@ -20,6 +20,8 @@ let tickers = {}
 
 global.api = apiController
 
+let trustedTokens = apiController.getTokenList()
+
 export default function Account(props) {
 
     global.setIframeWork(false)
@@ -121,7 +123,7 @@ export default function Account(props) {
         let tokens = []
 
         await apiController.getBalanceAll(props.user.publicKey)
-            .then((res) => {
+            .then(async (res) => {
                 // console.log(res.map(a => a.ticker + ': ' + a.amount))
                 let amount = 0
                 let ticker = ''
@@ -134,20 +136,36 @@ export default function Account(props) {
                     // console.log(res[i])
                     tickers[res[i].token] = res[i].ticker
                     decimals[res[i].token] = 10 ** res[i].decimals
+
                     if (res[i].token === token) {
                         amount = BigInt(res[i].amount)
                         ticker = res[i].ticker
                         image = generateIcon(res[i].token)
                         decimal = res[i].decimals
+
+                        if (trustedTokens.find(token => token.address === res[i].token)) {
+                            let price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {cg_price: 0, decimals: 10}
+                            // console.log(price_raw)
+                            const value = BigInt(price_raw.cg_price) * BigInt(amount) / BigInt(10 ** price_raw.decimals)
+                            setUSD(value)
+                        }
+
                     } else {
+
+                        let tokenUsd = 0
+
+                        if (trustedTokens.find(token => token.address === res[i].token)) {
+                            let price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {cg_price: 0, decimals: 10}
+                            tokenUsd = BigInt(price_raw.cg_price) * BigInt(res[i].amount) / BigInt(10 ** price_raw.decimals)
+                        }
+
                         tokens.push({
                             amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
-                            usd: 0,
+                            usd: tokenUsd,
                             image: generateIcon(res[i].token),
                             tokenHash: res[i].token,
                             decimals: 10 ** res[i].decimals,
-                            trusted: tokenList(res[i].ticker)
                         })
                     }
                 }
@@ -159,17 +177,18 @@ export default function Account(props) {
                 setAmountDecimal(10 ** decimal)
                 cacheTokens(tickers).then()
 
-                if (props.user.net === 'https://pulse.enecuum.com') {
-                    apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
-                        .then((answer) => {
-                            if (answer['enq-enecuum'] !== undefined) {
+                // if (props.user.net === 'https://pulse.enecuum.com') {
+                //     apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
+                //         .then((answer) => {
+                //             if (answer['enq-enecuum'] !== undefined) {
+                //
+                //                 const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
+                //                 const value = usd * BigInt(amount) / BigInt(10 ** decimal)
+                //                 setUSD(value)
+                //             }
+                //         })
+                // }
 
-                                const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
-                                const value = usd * BigInt(amount) / BigInt(10 ** decimal)
-                                setUSD(value)
-                            }
-                        })
-                }
                 setAssets([{
                     amount: amount,
                     ticker: ticker,
@@ -179,6 +198,7 @@ export default function Account(props) {
                     decimals: 10 ** decimal,
                     main: true
                 }, ...tokens])
+
                 // console.log(res.amount / 1e10)
             })
             .catch((err) => {
@@ -444,8 +464,6 @@ export default function Account(props) {
         // console.log(assets[0])
         // console.log(assetsSort.indexOf(assets[0]))
 
-        let trustedTokens = apiController.getTokenList()
-
         for (const key in assetsSort) {
 
             const item = assetsSort[key]
@@ -561,7 +579,7 @@ export default function Account(props) {
             isMounted = false
         }
 
-    }, [])
+    }, [usd])
 
 
     // TODO What's going on here
