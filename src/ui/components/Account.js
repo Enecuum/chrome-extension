@@ -7,6 +7,7 @@ import {copyToClipboard, explorerAddress, explorerTX, generateIcon, shortHash} f
 import Separator from '../elements/Separator'
 import {apiController} from '../../utils/apiController'
 import Input from "../elements/Input";
+import Assets from "./Assets";
 
 const names = {
     enable: 'Share account address',
@@ -17,8 +18,6 @@ const names = {
 }
 
 let tickers = {}
-
-global.api = apiController
 
 let trustedTokens = apiController.getTokenList()
 
@@ -55,9 +54,6 @@ export default function Account(props) {
     const [isCopied, setCopied] = useState(false)
 
     const [favoriteSites, setFavoriteSites] = useState([])
-
-    const [isShowUntrustedTokens, setShowUntrustedTokens] = useState(false)
-    const [isShowAddToken, setShowAddToken] = useState(false)
 
     let decimals = {}
 
@@ -436,104 +432,6 @@ export default function Account(props) {
         window.scrollTo(0, 0)
     }
 
-    // let renderTrustedTokens = () => {
-    //
-    // }
-    //
-    //
-    // let renderUntrustedTokens = () => {
-    //
-    // }
-
-    let renderAssets = (trusted) => {
-
-        let assetsElements = []
-        let trustedAssetsElements = []
-        let notTrustedAssetsElements = []
-
-        let mainToken = assets.find(element => element.main === true)
-
-        let assetsSort = assets.sort((a, b) => Number(a.amount) - Number(b.amount))
-        assetsSort.splice(assets.indexOf(mainToken), 1)
-
-        if (mainToken) {
-            assetsSort.unshift(mainToken)
-        }
-
-        // console.log(mainToken)
-        // console.log(assets[0])
-        // console.log(assetsSort.indexOf(assets[0]))
-
-        for (const key in assetsSort) {
-
-            const item = assetsSort[key]
-
-            let element =
-                <div key={key}
-                     className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}
-                     onClick={() => {
-                         changeToken(item.tokenHash)
-                             .then()
-                     }}>
-                    <img className={styles.icon} src={item.image}/>
-                    <div>
-                        <div>
-                            {(Number(item.amount) / item.decimals).toFixed(4)}
-                            {' '}
-                            {item.ticker}
-                        </div>
-                        <div className={styles.time}>
-                            $
-                            {(Number(item.usd) / 1e10).toFixed(2)}
-                            {' '}
-                            USD
-                        </div>
-                    </div>
-                </div>
-
-            if (trustedTokens.find(token => token.address === item.tokenHash))
-                trustedAssetsElements.push(element)
-            else
-                notTrustedAssetsElements.push(element)
-        }
-
-        // console.log(trustedAssetsElements)
-        // console.log(notTrustedAssetsElements)
-
-        assetsElements = assetsElements.concat(trustedAssetsElements)
-        // assetsElements.push(<div key={'separator'} className={`${styles.asset_separator}`}>NOT TRUSTED</div>)
-        // assetsElements = assetsElements.concat(notTrustedAssetsElements)
-
-        // console.log(assetsElements)
-
-        if (trusted)
-            return trustedAssetsElements
-        else
-            return notTrustedAssetsElements
-    }
-
-    let addAsset = () => {
-        setAssets([...assets, {
-            amount: 0,
-            ticker: 'COIN',
-            usd: '0.00',
-            image: './images/icons/3.png'
-        }])
-    }
-
-    let addTokenName = ''
-
-    let renderAddToken = () => {
-        return <Input type="text"
-                      spellCheck={false}
-                      onChange={(e) => {}}
-                      value={addTokenName}
-                      className={styles.field + ' ' + (addTokenName.length > 0 ? styles.field_correct : '')}
-                      label={'Add token'}
-                      placeholder={'Token name or hash'}
-        />
-    }
-
     const renderMenu = () => {
         if (menu) {
             return <Menu login={props.login}
@@ -553,7 +451,6 @@ export default function Account(props) {
             />
         }
     }
-
 
     useEffect(() => {
 
@@ -580,12 +477,6 @@ export default function Account(props) {
         }
 
     }, [usd])
-
-
-    // TODO What's going on here
-    // renderHistory()
-
-    // renderAssets()
 
     return (
         <div className={styles.main}>
@@ -755,23 +646,25 @@ export default function Account(props) {
                     </div>}
                 </div>
 
-                <div className={styles.bottom_assets + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
+                {/*<div className={styles.bottom_assets + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>*/}
 
-                    {renderAssets(true)}
+                {/*    {renderAssets(true)}*/}
 
-                    {!isShowAddToken ? <div onClick={() => {setShowAddToken(true)}}
-                         className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_disabled}`}>
-                        Add token
-                    </div> : renderAddToken()}
+                {/*    {!isShowAddToken ? <div onClick={() => {setShowAddToken(true)}}*/}
+                {/*         className={`${styles.field} ${styles.button} ${styles.button_blue}`}>*/}
+                {/*        Add token*/}
+                {/*    </div> : renderAddToken()}*/}
 
-                    {isShowUntrustedTokens && <div className={`${styles.field}`}>NOT TRUSTED:</div>}
+                {/*    {isShowUntrustedTokens && <div className={`${styles.field}`}>NOT TRUSTED:</div>}*/}
 
-                    {!isShowUntrustedTokens ? <div onClick={() => setShowUntrustedTokens(true)}
-                         className={`${styles.field} ${styles.button}`}>
-                        Show untrusted tokens
-                    </div> : renderAssets(false)}
+                {/*    {!isShowUntrustedTokens ? <div onClick={() => setShowUntrustedTokens(true)}*/}
+                {/*         className={`${styles.field} ${styles.button}`}>*/}
+                {/*        Show untrusted tokens*/}
+                {/*    </div> : renderAssets(false)}*/}
 
-                </div>
+                {/*</div>*/}
+
+                <Assets activeTab={activeTab} assets={assets} changeToken={changeToken} user={props.user}/>
 
                 <div className={styles.bottom_list + (activeTab === 1 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
