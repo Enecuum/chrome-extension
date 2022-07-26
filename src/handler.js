@@ -184,13 +184,14 @@ export function globalMessageHandler(msg, ENQWeb) {
         if (msg.poa && msg.start) {
             if (androidRegex.test(Capacitor.platform)) {
                 let test = registerPlugin('PoA')
-                test.start({ value: ['hello', 'men'] })
+                test.start({ value: ['hello', 'men'], data: JSON.stringify(['hello', 'men', "2","3"])})
                     .then(res => {
-                        alert(res['status'])
+                        alert(res)
                     })
-                let miners = startBackgroundMining()
+                // let miners = startBackgroundMining()
                 miningStatus.miningProcess = true
-                resolve({ response: miners })
+                // resolve({ response: miners })
+                resolve({ response: true })
             } else {
                 let miners = {}
                 let accounts = []
