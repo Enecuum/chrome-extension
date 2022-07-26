@@ -143,7 +143,7 @@ export default function Account(props) {
                         image = generateIcon(res[i].token)
                         decimal = res[i].decimals
 
-                        if (trustedTokens.find(token => token.address === res[i].token)) {
+                        if (props.user.net !== 'https://pulse.enecuum.com' && trustedTokens.find(token => token.address === res[i].token)) {
                             let price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {cg_price: 0, decimals: 10}
                             // console.log(price_raw)
                             const value = BigInt(price_raw.cg_price) * BigInt(amount) / BigInt(10 ** price_raw.decimals)
@@ -177,17 +177,17 @@ export default function Account(props) {
                 setAmountDecimal(10 ** decimal)
                 cacheTokens(tickers).then()
 
-                // if (props.user.net === 'https://pulse.enecuum.com') {
-                //     apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
-                //         .then((answer) => {
-                //             if (answer['enq-enecuum'] !== undefined) {
-                //
-                //                 const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
-                //                 const value = usd * BigInt(amount) / BigInt(10 ** decimal)
-                //                 setUSD(value)
-                //             }
-                //         })
-                // }
+                if (props.user.net === 'https://pulse.enecuum.com') {
+                    apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
+                        .then((answer) => {
+                            if (answer['enq-enecuum'] !== undefined) {
+
+                                const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
+                                const value = usd * BigInt(amount) / BigInt(10 ** decimal)
+                                setUSD(value)
+                            }
+                        })
+                }
 
                 setAssets([{
                     amount: amount,

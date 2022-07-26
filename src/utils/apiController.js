@@ -28,7 +28,7 @@ const getMainTokenBalance = async (publicKey) => {
     return await getBalance(publicKey, ENQWeb.Enq.token[ENQWeb.Enq.provider])
 }
 
-const getRewards =  async (publicKey) => {
+const getRewards = async (publicKey) => {
     let response = await fetch('https://bit.enecuum.com/api/v1/account_rewards?id=' + publicKey + '&page=0', {})
     return response.json()
 }
@@ -85,6 +85,20 @@ const getTokenList = () => {
     // let serverTokens = await ENQWeb.Net.get.tokenList()
 
     return trustedTokens
+}
+
+const getCoinGeckoPrice = () => {
+    apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
+        .then((answer) => {
+            if (answer['enq-enecuum'] !== undefined) {
+
+                return answer['enq-enecuum'].usd
+
+                // const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
+                // const value = usd * BigInt(amount) / BigInt(10 ** decimal)
+                // setUSD(value)
+            }
+        })
 }
 
 const apiController = {
