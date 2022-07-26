@@ -4,19 +4,27 @@ import { Publisher } from './publisher'
 import { getMnemonicPrivateKeyHex, showNotification } from '../../ui/Utils'
 import { apiController } from '../apiController'
 
-let PoA_Worker = new Worker('./js/WebWorkerPOA.js')
-PoA_Worker.onerror = err=>{
-    console.warn(err)
-}
-PoA_Worker.onmessage = msg=>{
-    console.log(msg)
-    answer = msg
-    let data = JSON.parse(msg.data)
-    if(data.method === 'notification'){
-        showNotification(data.body.title, data.body.text)
+let PoA_Worker;
+let answer = ''
+
+let initWorker = async ()=>{
+    PoA_Worker = await (new Worker('./js/WebWorkerPOA.js'))
+    PoA_Worker.onerror = err=>{
+        console.warn(err)
+    }
+    PoA_Worker.onmessage = msg=>{
+        console.log(msg)
+        answer = msg
+        let data = JSON.parse(msg.data)
+        if(data.method === 'notification'){
+            showNotification(data.body.title, data.body.text)
+        }
     }
 }
-let answer = ''
+
+let stopWorker = ()=>{
+    PoA_Worker.terminate();
+}
 
 let waitAnswer = (msg)=>{
     return new Promise((resolve, reject) => {
@@ -71,6 +79,7 @@ let initPoa = async (account) => {
 
 let startPoa = async (account, miners, accounts = []) => {
 
+    await initWorker();
     // let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
 
     // console.log(account)
@@ -124,7 +133,7 @@ let stopPoa = async (miners) => {
     // }
 
     miners = (await waitAnswer({ stop:true, data:miners })).miners
-
+    await stopWorker()
     return miners
 }
 

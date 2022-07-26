@@ -47,6 +47,7 @@ function init(_, id, ip, account, token) {
             'data': {
                 'hash': hash,
                 'id': account.publicKey,
+                'token':token,
                 'sign': sign(account.privateKey, hash)
             },
             'method': 'hail',
