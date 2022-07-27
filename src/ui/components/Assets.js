@@ -163,7 +163,10 @@ export default function Assets(props) {
                 Add token
             </div> : renderAddToken()}
 
-            <div className={styles.find}>{renderFindElements(findTokens)}</div>
+            {findTokens.length > 0 ? <div className={styles.find}>
+                <div className={`${styles.field}`}>FOUND:</div>
+                {renderFindElements(findTokens)}
+            </div> : ''}
 
             {isShowUntrustedTokens && <div className={`${styles.field}`}>NOT TRUSTED:</div>}
 
