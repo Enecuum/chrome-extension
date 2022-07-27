@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import styles from "../css/index.module.css";
 import Input from "../elements/Input";
 import {apiController} from "../../utils/apiController";
-import {generateIcon} from "../Utils";
+import {generateIcon, shortHashLong} from "../Utils";
 
 let trustedTokens = apiController.getTokenList()
 
@@ -105,7 +105,7 @@ export default function Assets(props) {
                             {item.ticker}
                         </div>
                         <div className={styles.time}>
-                            {item.caption}
+                            {item.caption ? item.caption : '' + ' ' + shortHashLong(item.hash)}
                         </div>
                     </div>
                 </div>
@@ -164,7 +164,7 @@ export default function Assets(props) {
                 Add token
             </div> : renderAddToken()}
 
-            {renderFindElements(findTokens)}
+            <div className={styles.find}>{renderFindElements(findTokens)}</div>
 
             {isShowUntrustedTokens && <div className={`${styles.field}`}>NOT TRUSTED:</div>}
 
