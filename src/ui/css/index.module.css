@@ -837,11 +837,6 @@ input[type=number] {
     margin-top: 20px;
 }
 
-.find > div > div {
-    display: flex;
-    justify-content: space-between;
-}
-
 .asset {
     display: flex;
     flex-direction: row;
