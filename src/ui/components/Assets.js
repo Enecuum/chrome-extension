@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import styles from "../css/index.module.css";
 import Input from "../elements/Input";
 import {apiController} from "../../utils/apiController";
+import {generateIcon} from "../Utils";
 
 let trustedTokens = apiController.getTokenList()
 
@@ -11,6 +12,9 @@ export default function Assets(props) {
     const [isShowAddToken, setShowAddToken] = useState(false)
 
     const [addTokenName, setAddTokenName] = useState('')
+
+    let [tokens, setTokens] = useState([])
+    let [findTokens, setFindTokens] = useState([])
 
     let renderAssets = (trusted) => {
 
@@ -79,7 +83,11 @@ export default function Assets(props) {
             return notTrustedAssetsElements
     }
 
-    let renderAssetsElements = (assetsSort) => {
+    let renderFindElements = (assetsSort) => {
+
+        // caption: "SecurityCoin"
+        // hash: "ab49c2de1843883bb15230ee5ef52ca1677fa20c9efe265a4023033fe6fe5580"
+        // ticker
 
         let assetsElements = []
 
@@ -89,23 +97,15 @@ export default function Assets(props) {
 
             let element =
                 <div key={key}
-                     className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}
-                     onClick={() => {
-                         changeToken(item.tokenHash)
-                             .then()
-                     }}>
-                    <img className={styles.icon} src={item.image}/>
+                     className={styles.asset}
+                     onClick={() => {}}>
+                    <img className={styles.icon} src={generateIcon(item.hash)}/>
                     <div>
                         <div>
-                            {(Number(item.amount) / item.decimals).toFixed(4)}
-                            {' '}
                             {item.ticker}
                         </div>
                         <div className={styles.time}>
-                            $
-                            {(Number(item.usd) / 1e10).toFixed(2)}
-                            {' '}
-                            USD
+                            {item.caption}
                         </div>
                     </div>
                 </div>
@@ -125,10 +125,24 @@ export default function Assets(props) {
     //     }])
     // }
 
+    let onChangeTokenName = (e) => {
+        let selectedFindTokens = tokens.filter(token =>
+            (token.caption && token.caption.includes(e.target.value)) ||
+            token.hash.includes(e.target.value) ||
+            token.ticker.includes(e.target.value))
+        setFindTokens(selectedFindTokens)
+        setAddTokenName(e.target.value)
+    }
+
     let renderAddToken = () => {
+
+        apiController.getAllTokens().then(tokens => {
+            setTokens(tokens)
+        })
+
         return <Input type="text"
                       spellCheck={false}
-                      onChange={(e) => setAddTokenName(e.target.value)}
+                      onChange={(e) => onChangeTokenName(e)}
                       value={addTokenName}
                       className={styles.field + ' ' + (addTokenName.length > 0 ? styles.field_correct : '')}
                       label={'Add token'}
@@ -149,6 +163,8 @@ export default function Assets(props) {
                                     className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
                 Add token
             </div> : renderAddToken()}
+
+            {renderFindElements(findTokens)}
 
             {isShowUntrustedTokens && <div className={`${styles.field}`}>NOT TRUSTED:</div>}
 

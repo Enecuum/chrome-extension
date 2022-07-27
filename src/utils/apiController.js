@@ -93,12 +93,13 @@ const getCoinGeckoPrice = () => {
             if (answer['enq-enecuum'] !== undefined) {
 
                 return answer['enq-enecuum'].usd
-
-                // const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
-                // const value = usd * BigInt(amount) / BigInt(10 ** decimal)
-                // setUSD(value)
             }
         })
+}
+
+const getAllTokens = async () => {
+    let response = await fetch('https://bit.enecuum.com/api/v1/get_tickers_all', {})
+    return response.json()
 }
 
 const apiController = {
@@ -115,6 +116,7 @@ const apiController = {
     sendAPI,
     sendRequest,
     postTransaction,
+    getAllTokens,
     cacheTransactions,
     cacheTokenInfo,
     cacheAccountTransactions
