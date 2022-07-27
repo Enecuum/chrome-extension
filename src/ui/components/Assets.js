@@ -16,6 +16,8 @@ export default function Assets(props) {
     let [tokens, setTokens] = useState([])
     let [findTokens, setFindTokens] = useState([])
 
+    let [addedTokens, setAddedTokens] = useState([])
+
     let renderAssets = (trusted) => {
 
         let assetsElements = []
@@ -98,7 +100,11 @@ export default function Assets(props) {
             let element =
                 <div key={key}
                      className={styles.asset}
-                     onClick={() => {}}>
+                     onClick={() => {
+                         setAddedTokens([...addedTokens, item])
+                         setShowAddToken(false)
+                         setAddTokenName('')
+                     }}>
                     <img className={styles.icon} src={generateIcon(item.hash)}/>
                     <div>
                         <div>{item.ticker + ' ' + (item.caption ? '(' + item.caption + ')' : '')}</div>
@@ -157,6 +163,8 @@ export default function Assets(props) {
         <div className={styles.bottom_assets + (props.activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
             {renderAssets(true)}
+
+            {renderFindElements(addedTokens)}
 
             {!isShowAddToken ? <div onClick={() => {setShowAddToken(true)}}
                                     className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
