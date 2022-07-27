@@ -101,11 +101,9 @@ export default function Assets(props) {
                      onClick={() => {}}>
                     <img className={styles.icon} src={generateIcon(item.hash)}/>
                     <div>
-                        <div>
-                            {item.ticker}
-                        </div>
+                        <div>{item.ticker + ' ' + (item.caption ? '(' + item.caption + ')' : '')}</div>
                         <div className={styles.time}>
-                            {item.caption ? item.caption : '' + ' ' + shortHashLong(item.hash)}
+                            {shortHashLong(item.hash)}
                         </div>
                     </div>
                 </div>
@@ -130,15 +128,11 @@ export default function Assets(props) {
             (token.caption && token.caption.includes(e.target.value)) ||
             token.hash.includes(e.target.value) ||
             token.ticker.includes(e.target.value))
-        setFindTokens(selectedFindTokens)
+        setFindTokens(e.target.value === '' ? [] : selectedFindTokens)
         setAddTokenName(e.target.value)
     }
 
     let renderAddToken = () => {
-
-        apiController.getAllTokens().then(tokens => {
-            setTokens(tokens)
-        })
 
         return <Input type="text"
                       spellCheck={false}
@@ -152,6 +146,11 @@ export default function Assets(props) {
 
 
     useEffect(() => {
+
+        apiController.getAllTokens().then(tokens => {
+            setTokens(tokens)
+        })
+
     }, [])
 
     return (
