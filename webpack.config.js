@@ -55,6 +55,7 @@ module.exports = () => {
             '../serviceWorker': path.resolve(SOURCE_FOLDER, 'serviceWorker.ts'),
             serviceWorkerRegistration: path.resolve(SOURCE_FOLDER, 'serviceWorkerRegistration.ts'),
             workerDataParse: path.resolve(SOURCE_FOLDER, './utils/workerDataParse.js'),
+            WebWorkerPOA: path.resolve(SOURCE_FOLDER, './utils/poa/WebWorkerPOA.js'),
         },
         output: {
             filename: 'js/[name].js',

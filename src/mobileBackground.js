@@ -1,34 +1,34 @@
-import { Plugins } from '@capacitor/core'
-import { startPoa } from './utils/poa/poaStarter'
+import { Plugins, registerPlugin } from '@capacitor/core'
+import { initPoa, startPoa, stopPoa } from './utils/poa/poaStarter'
 import { getMnemonicPrivateKeyHex, showNotification } from './ui/Utils'
+import { account } from './user'
 
 const {
     App,
     BackgroundTask,
-    LocalNotifications
+    LocalNotifications,
+    Background
 } = Plugins
+//
+// console.log(Plugins)
 
 let mobileBackgroundMiners = []
 
-App.addListener('appStateChange', state => {
-
-    if (!state.isActive) {
-
-        let taskId = BackgroundTask.beforeExit(async () => {
-
-            // In this function We might finish an upload, let a network request
-            // finish, persist some data, or perform some other task
-
-            await mineCoins()
-
-            // Must call in order to end our task otherwise
-            // we risk our app being terminated, and possibly
-            // being labeled as impacting battery life
-
-            BackgroundTask.finish({ taskId })
-        })
+let getMobileMiners = () => {
+    if (mobileBackgroundMiners.length === 0) {
+        mobileBackgroundMiners = initPoa(ENQWeb.Enq.User)
     }
-})
+    return mobileBackgroundMiners
+}
+
+let stopMobileMiners = () => {
+    for (let i = 0; i < mobileBackgroundMiners.length; i++) {
+        mobileBackgroundMiners[i].publisher.restart = false
+    }
+    let miners = stopPoa(mobileBackgroundMiners)
+    showNotification('Mining', 'Mining is stopped')
+    return miners
+}
 
 let mineCoins = async () => {
 
@@ -57,7 +57,7 @@ let mineCoins = async () => {
 
     // We have to run new PoA here
 
-    showNotification('Mining', 'Mobile background')
+    // showNotification('Mining', 'Mobile background')
 
     // // Example of long task
     // let start = new Date().getTime();
@@ -67,3 +67,65 @@ let mineCoins = async () => {
     //     }
     // }
 }
+
+
+let startBackgroundMining = () => {
+    let taskId = BackgroundTask.beforeExit(async () => {
+
+
+        // In this function We might finish an upload, let a network request
+        // finish, persist some data, or perform some other task
+        showNotification('Info', `Start mining in background`)
+
+        await mineCoins()
+
+        try {
+            const wakeLock = await navigator.wakeLock.request('screen')
+        } catch (e) {
+            showNotification('Trouble', `Your system don't support wakeLock`)
+        }
+
+        // Must call in order to end our task otherwise
+        // we risk our app being terminated, and possibly
+        // being labeled as impacting battery life
+
+        BackgroundTask.finish({ taskId })
+    })
+    return mobileBackgroundMiners
+}
+
+
+const initMobileBackground = (accounts) => {
+
+
+    App.addListener('appStateChange', state => {
+
+        try {
+            showNotification('Mining', `State change`)
+        } catch (e) {
+
+        }
+
+        if (!state.isActive) {
+
+
+            let taskId = BackgroundTask.beforeExit(async () => {
+
+                // In this function We might finish an upload, let a network request
+                // finish, persist some data, or perform some other task
+
+                await mineCoins()
+
+
+                // Must call in order to end our task otherwise
+                // we risk our app being terminated, and possibly
+                // being labeled as impacting battery life
+
+                BackgroundTask.finish({ taskId })
+            })
+        }
+    })
+
+}
+
+export { initMobileBackground, startBackgroundMining, getMobileMiners, stopMobileMiners }

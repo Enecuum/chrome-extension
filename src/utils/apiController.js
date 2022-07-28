@@ -18,6 +18,9 @@ const sendRequest = async (url, method, fields) => {
 
 const postTransaction = async (transactionObject) => {
     return await ENQWeb.Net.post.tx_fee_off(transactionObject)
+        .catch(e => {
+            console.warn(e)
+        })
 }
 
 const getBalanceAll = async (publicKey) => {
@@ -37,7 +40,10 @@ const getRewards = async (publicKey) => {
 const getCurrentBlock = async () => {
     let height = (await ENQWeb.Net.get.height()).height
     let macroBlock = await ENQWeb.Net.get.macroblockByHeight(height)
-    return {n: macroBlock.kblock.n, time: macroBlock.kblock.time}
+    return {
+        n: macroBlock.kblock.n,
+        time: macroBlock.kblock.time
+    }
 }
 
 const getTokenInfo = async (tokenHash) => {
@@ -122,4 +128,4 @@ const apiController = {
     cacheAccountTransactions
 }
 
-export {apiController}
+export { apiController }
