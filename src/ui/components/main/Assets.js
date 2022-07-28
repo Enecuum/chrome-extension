@@ -59,8 +59,7 @@ export default function Assets(props) {
             <div key={item.tokenHash}
                  className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}
                  onClick={() => {
-                     props.changeToken(item.tokenHash)
-                         .then()
+                     props.changeToken(item.tokenHash).then()
                  }}>
                 <img className={styles.icon} src={item.image}/>
                 <div>
@@ -183,8 +182,7 @@ export default function Assets(props) {
 
             {!isShowAddToken ? <div onClick={() => {
                 setShowAddToken(true)
-            }}
-                                    className={`${styles.field} ${styles.button}`}>
+            }} className={`${styles.field} ${styles.button}`}>
                 Add token
             </div> : renderAddToken()}
 

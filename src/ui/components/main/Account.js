@@ -93,7 +93,7 @@ export default function Account(props) {
     }
 
     const getBalance = async () => {
-        // console.log(this.props)
+        console.log('getBalance')
         ENQWeb.Enq.provider = props.user.net
         const mainToken = ENQWeb.Enq.token[ENQWeb.Enq.provider] ? ENQWeb.Enq.token[ENQWeb.Enq.provider] : (localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
             localNetworks.find(element => element.host === ENQWeb.Net.currentProvider).token : '')
@@ -123,11 +123,18 @@ export default function Account(props) {
                         image = generateIcon(res[i].token)
                         decimal = res[i].decimals
 
-                        if (props.user.net !== 'https://pulse.enecuum.com' && trustedTokens.find(token => token.address === res[i].token)) {
-                            let price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {cg_price: 0, decimals: 10}
-                            // console.log(price_raw)
-                            const value = BigInt(price_raw.cg_price) * BigInt(amount) / BigInt(10 ** price_raw.decimals)
-                            setUSD(value)
+                        if (props.user.net !== 'https://pulse.enecuum.com') {
+                            if (trustedTokens.find(token => token.address === res[i].token)) {
+                                let price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {
+                                    cg_price: 0,
+                                    decimals: 10
+                                }
+                                // console.log(price_raw)
+                                const value = BigInt(price_raw.cg_price) * BigInt(amount) / BigInt(10 ** price_raw.decimals)
+                                setUSD(value)
+                            } else {
+                                setUSD(0)
+                            }
                         }
 
                     } else {
@@ -161,21 +168,15 @@ export default function Account(props) {
 
                 if (props.user.net === 'https://pulse.enecuum.com') {
 
-                    // apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
-                    //     .then((answer) => {
-                    //         if (answer['enq-enecuum'] !== undefined) {
-                    //
-                    //             const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
-                    //             const value = usd * BigInt(amount) / BigInt(10 ** decimal)
-                    //             setUSD(value)
-                    //         }
-                    //     })
-
-                    apiController.getCoinGeckoPrice().then(enecuumUSD => {
-                        const usd = BigInt((enecuumUSD * 1e10).toFixed(0))
-                        const value = usd * BigInt(amount) / BigInt(10 ** decimal)
-                        setUSD(value)
-                    })
+                    if (props.user.token === mainToken) {
+                        apiController.getCoinGeckoPrice().then(enecuumUSD => {
+                            const usd = BigInt((enecuumUSD * 1e10).toFixed(0))
+                            const value = usd * BigInt(amount) / BigInt(10 ** decimal)
+                            setUSD(value)
+                        })
+                    } else {
+                        setUSD(0)
+                    }
                 }
 
                 setAssets([{
@@ -248,17 +249,19 @@ export default function Account(props) {
 
 
     let changeToken = async (hash) => {
-        // console.log(hash);
+        console.log(hash);
+
         let user = props.user
         user.token = hash
+
         await userStorage.promise.sendPromise({
             account: true,
             set: true,
             data: user
         })
-        // window.location.reload(false)
-        await getBalance()
-        // await renderAssets()
+
+        // await getBalance()
+
         setActiveTab(props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? 0 : 1)
         window.scrollTo(0, 0)
     }
@@ -305,7 +308,7 @@ export default function Account(props) {
             isMounted = false
         }
 
-    }, [usd])
+    }, [usd, activeTab])
 
     return (
         <div className={styles.main}>
