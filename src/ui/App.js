@@ -5,7 +5,7 @@ import Transaction from './components/Transaction'
 import Password from './components/Password'
 import Network from './components/Network'
 import Receive from './components/Receive'
-import Account from './components/Account'
+import Account from './components/main/Account'
 
 
 import PublicKeyRequest from './components/requests/PublicKeyRequest'

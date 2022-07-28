@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react'
-import styles from '../css/index.module.css'
-import Header from '../elements/Header'
-import Address from '../elements/Address'
-import Menu from '../elements/Menu'
-import {copyToClipboard, explorerAddress, explorerTX, generateIcon, shortHash} from '../Utils'
-import Separator from '../elements/Separator'
-import {apiController} from '../../utils/apiController'
-import Input from "../elements/Input";
+import styles from '../../css/index.module.css'
+import Header from '../../elements/Header'
+import Address from '../../elements/Address'
+import Menu from '../../elements/Menu'
+import {copyToClipboard, explorerAddress, explorerTX, generateIcon, shortHash} from '../../Utils'
+import Separator from '../../elements/Separator'
+import {apiController} from '../../../utils/apiController'
+import Input from "../../elements/Input";
 import Assets from "./Assets";
 
 const names = {
