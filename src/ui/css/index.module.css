@@ -955,11 +955,13 @@ input[type=number] {
     /*justify-content: space-between;*/
     height: 70px;
 
+    background: rgba(0, 0, 0, 0.1);
+
     cursor: pointer;
 }
 
 .activity:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.15);
 }
 
 .activity > div {

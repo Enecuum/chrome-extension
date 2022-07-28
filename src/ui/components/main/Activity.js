@@ -15,7 +15,6 @@ export default function Activity(props) {
 
     const [activity, setActivity] = useState(userStorage.list.listOfTask())
     const [history, setHistory] = useState([])
-    const [activityElements, setActivityElements] = useState([])
 
     // TODO
     let decimals = {}
@@ -36,13 +35,8 @@ export default function Activity(props) {
             history.records = history.records.concat(historyRecords.records)
         }
 
-        // let history = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, 0)
-
-        // console.log(history.records)
-
         let oldActivity = []
         for (let id in history.records) {
-            // console.log(history.records[id])
             if (history.records[id]) {
                 oldActivity.push({
                     data: {
@@ -75,21 +69,19 @@ export default function Activity(props) {
             }
         }
 
-        return oldActivity
-
-        // setHistory(oldActivity)
-        // renderHistory()
+        setHistory(oldActivity)
     }
 
-    let renderHistory = async (historyArray) => {
+    let renderHistory = () => {
+
+        let historyArray = history
 
         const historyElements = []
-        let tokenDecimals = {}
         for (const key in historyArray.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
             const item = historyArray[key]
             // console.log(item)
             if (!decimals[item.tx.tokenHash]) {
-                await apiController.getTokenInfo(item.tx.tokenHash)
+                apiController.getTokenInfo(item.tx.tokenHash)
                     .then(token => {
                         try {
                             decimals[item.tx.tokenHash] = (10 ** token[0]['decimals'])
@@ -116,8 +108,7 @@ export default function Activity(props) {
                     <div>
                         <div>{names[item.type]}</div>
                         <div className={styles.time}>
-                            {new Date(item.data.date).toISOString()
-                                .slice(0, 10)}
+                            {new Date(item.data.date).toISOString().slice(0, 10)}
                             <div className={styles.history_link}
                                  onClick={() => explorerTX(item.tx.hash)}>{shortHash(item.tx.hash)}</div>
                         </div>
@@ -131,12 +122,8 @@ export default function Activity(props) {
                 </div>,
             )
         }
-
-        setHistory(historyElements)
+        return historyElements
     }
-
-    //TODO
-    // renderHistory()
 
     //Reject all
     let rejectAll = async () => {
@@ -145,6 +132,9 @@ export default function Activity(props) {
     }
 
     const renderActivity = () => {
+
+        let activityElements = []
+
         for (const key in activity) {
             const item = activity[key]
             // console.log(item)
@@ -182,18 +172,13 @@ export default function Activity(props) {
                 </div>,
             )
         }
+
+        return activityElements
     }
 
-    renderActivity()
-
     useEffect(() => {
-        getHistory().then((history) => {
 
-            // console.log(history)
-            if (isMounted) {
-                renderHistory(history)
-            }
-        })
+        getHistory().then()
 
         let isMounted = true
         return () => {
@@ -205,16 +190,16 @@ export default function Activity(props) {
     return (
         <div className={styles.bottom_list + (props.activeTab === 1 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
-            {activityElements}
+            {renderActivity()}
 
-            {activityElements.length > 1 && <div onClick={rejectAll}
+            {activity.length > 1 && <div onClick={rejectAll}
                                                  className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
                 Reject all
             </div>}
 
-            {history.length > 0 && <div className={styles.history_title}>History</div>}
+            {history.length > 0 && <div className={styles.field}>HISTORY:</div>}
 
-            {history}
+            {renderHistory()}
 
         </div>
     )

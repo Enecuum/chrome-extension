@@ -56,7 +56,7 @@ export default function Assets(props) {
     let generateAssetElement = (item) => {
 
         let element =
-            <div key={item.ticker}
+            <div key={item.tokenHash}
                  className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}
                  onClick={() => {
                      props.changeToken(item.tokenHash)

@@ -62,14 +62,14 @@ export default function Account(props) {
     //     })
     // }
 
-    let addConnect = (url, date) => {
-        console.log('addConnect')
-        let elements = [...connectsElements]
-        elements.push()
-        // console.log(elements)
-        setConnectsElements(elements)
-        // console.log(connectsElements)
-    }
+    // let addConnect = (url, date) => {
+    //     console.log('addConnect')
+    //     let elements = [...connectsElements]
+    //     elements.push()
+    //     // console.log(elements)
+    //     setConnectsElements(elements)
+    //     // console.log(connectsElements)
+    // }
 
 
     // addConnect('faucet-bit.enecuum.com', '26.04.2021')
@@ -90,14 +90,6 @@ export default function Account(props) {
     const copyPublicKey = () => {
         copyToClipboard(props.user.publicKey)
         setCopied(true)
-    }
-
-    // const unlock = () => {
-    //     setLocked(false)
-    // }
-
-    let tokenList = () => {
-
     }
 
     const getBalance = async () => {
