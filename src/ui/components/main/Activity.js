@@ -185,7 +185,7 @@ export default function Activity(props) {
             isMounted = false
         }
 
-    }, [])
+    }, [props.user])
 
     return (
         <div className={styles.bottom_list + (props.activeTab === 1 ? '' : ` ${styles.bottom_list_disabled}`)}>
