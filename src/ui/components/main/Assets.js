@@ -83,10 +83,7 @@ export default function Assets(props) {
 
         let assetsElements = []
 
-        // console.log(addedTokens)
-
         for (const key in addedTokens) {
-            console.log(addedTokens[key])
             const item = {
                 amount: 0,
                 ticker: addedTokens[key].ticker,
@@ -96,7 +93,6 @@ export default function Assets(props) {
                 decimals: 10 ** 10,
                 main: false
             }
-            console.log(addedTokens[key])
 
             let element = generateAssetElement(item)
             assetsElements.push(element)

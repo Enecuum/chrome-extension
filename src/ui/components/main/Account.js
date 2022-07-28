@@ -646,24 +646,6 @@ export default function Account(props) {
                     </div>}
                 </div>
 
-                {/*<div className={styles.bottom_assets + (activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>*/}
-
-                {/*    {renderAssets(true)}*/}
-
-                {/*    {!isShowAddToken ? <div onClick={() => {setShowAddToken(true)}}*/}
-                {/*         className={`${styles.field} ${styles.button} ${styles.button_blue}`}>*/}
-                {/*        Add token*/}
-                {/*    </div> : renderAddToken()}*/}
-
-                {/*    {isShowUntrustedTokens && <div className={`${styles.field}`}>NOT TRUSTED:</div>}*/}
-
-                {/*    {!isShowUntrustedTokens ? <div onClick={() => setShowUntrustedTokens(true)}*/}
-                {/*         className={`${styles.field} ${styles.button}`}>*/}
-                {/*        Show untrusted tokens*/}
-                {/*    </div> : renderAssets(false)}*/}
-
-                {/*</div>*/}
-
                 <Assets activeTab={activeTab} assets={assets} changeToken={changeToken} user={props.user}/>
 
                 <div className={styles.bottom_list + (activeTab === 1 ? '' : ` ${styles.bottom_list_disabled}`)}>
