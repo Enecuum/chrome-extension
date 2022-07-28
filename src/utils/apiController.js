@@ -93,8 +93,8 @@ const getTokenList = () => {
     return trustedTokens
 }
 
-const getCoinGeckoPrice = () => {
-    apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
+const getCoinGeckoPrice = async () => {
+    return apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
         .then((answer) => {
             if (answer['enq-enecuum'] !== undefined) {
 
@@ -123,6 +123,7 @@ const apiController = {
     sendRequest,
     postTransaction,
     getAllTokens,
+    getCoinGeckoPrice,
     cacheTransactions,
     cacheTokenInfo,
     cacheAccountTransactions

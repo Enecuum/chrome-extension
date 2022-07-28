@@ -161,7 +161,6 @@ export default function TransactionHistory(props) {
 
             <Back setFalse={() => props.setTransactionHistory(false)}/>
 
-
             <div className={styles.transaction_network}>
                 Network: {ENQWeb.Net.currentProvider.replace('https://', '').toUpperCase()}
             </div>

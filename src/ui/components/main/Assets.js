@@ -8,6 +8,8 @@ let trustedTokens = apiController.getTokenList()
 
 export default function Assets(props) {
 
+    // console.log(props.user)
+
     const [isShowUntrustedTokens, setShowUntrustedTokens] = useState(false)
     const [isShowAddToken, setShowAddToken] = useState(false)
 
@@ -54,7 +56,7 @@ export default function Assets(props) {
     let generateAssetElement = (item) => {
 
         let element =
-            <div key={item.ticker}
+            <div key={item.tokenHash}
                  className={styles.asset + ' ' + (props.user.token === item.tokenHash ? styles.asset_select : '')}
                  onClick={() => {
                      props.changeToken(item.tokenHash)
@@ -182,7 +184,7 @@ export default function Assets(props) {
             {!isShowAddToken ? <div onClick={() => {
                 setShowAddToken(true)
             }}
-                                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                                    className={`${styles.field} ${styles.button}`}>
                 Add token
             </div> : renderAddToken()}
 

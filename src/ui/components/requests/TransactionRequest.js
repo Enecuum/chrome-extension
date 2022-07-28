@@ -218,7 +218,7 @@ export default function TransactionRequest(props) {
     return (
         <div className={styles.main}>
 
-            <Back setFalse={() => () => {props.setTransactionRequest(false)}}/>
+            <Back setFalse={() => props.setTransactionRequest(false)}/>
 
             <div className={styles.transaction_network}>
                 Network: {ENQWeb.Net.currentProvider.toUpperCase()}
