@@ -8,6 +8,8 @@ let trustedTokens = apiController.getTokenList()
 
 export default function Assets(props) {
 
+    // console.log(props.user)
+
     const [isShowUntrustedTokens, setShowUntrustedTokens] = useState(false)
     const [isShowAddToken, setShowAddToken] = useState(false)
 

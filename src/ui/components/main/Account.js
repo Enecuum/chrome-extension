@@ -8,14 +8,9 @@ import Separator from '../../elements/Separator'
 import {apiController} from '../../../utils/apiController'
 import Input from "../../elements/Input";
 import Assets from "./Assets";
+import Activity from "./Activity";
 
-const names = {
-    enable: 'Share account address',
-    tx: 'Send transaction',
-    iin: 'Transaction in',
-    iout: 'Transaction out',
-    sign: 'Sign message'
-}
+
 
 let tickers = {}
 
@@ -45,11 +40,8 @@ export default function Account(props) {
 
     const [assets, setAssets] = useState([])
     const [activity, setActivity] = useState(userStorage.list.listOfTask())
-    const [history, setHistory] = useState([])
-
     const [menu, setMenu] = useState(false)
 
-    const [allTokens, setAllTokens] = useState((userStorage.tokens.getTokens()).tokens ? (userStorage.tokens.getTokens()).tokens : {})
 
     const [isCopied, setCopied] = useState(false)
 
@@ -155,6 +147,8 @@ export default function Account(props) {
                             tokenUsd = BigInt(price_raw.cg_price) * BigInt(res[i].amount) / BigInt(10 ** price_raw.decimals)
                         }
 
+                        // console.log(res[i].amount)
+
                         tokens.push({
                             amount: BigInt(res[i].amount),
                             ticker: res[i].ticker,
@@ -174,15 +168,22 @@ export default function Account(props) {
                 cacheTokens(tickers).then()
 
                 if (props.user.net === 'https://pulse.enecuum.com') {
-                    apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
-                        .then((answer) => {
-                            if (answer['enq-enecuum'] !== undefined) {
 
-                                const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
-                                const value = usd * BigInt(amount) / BigInt(10 ** decimal)
-                                setUSD(value)
-                            }
-                        })
+                    // apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
+                    //     .then((answer) => {
+                    //         if (answer['enq-enecuum'] !== undefined) {
+                    //
+                    //             const usd = BigInt((answer['enq-enecuum'].usd * 1e10).toFixed(0))
+                    //             const value = usd * BigInt(amount) / BigInt(10 ** decimal)
+                    //             setUSD(value)
+                    //         }
+                    //     })
+
+                    apiController.getCoinGeckoPrice().then(enecuumUSD => {
+                        const usd = BigInt((enecuumUSD * 1e10).toFixed(0))
+                        const value = usd * BigInt(amount) / BigInt(10 ** decimal)
+                        setUSD(value)
+                    })
                 }
 
                 setAssets([{
@@ -248,173 +249,11 @@ export default function Account(props) {
         return true
     }
 
-    const activityElements = []
-
-    // &nbsp;
-
-    const findTickerInCache = async (hash) => {
-        return allTokens[hash] !== undefined ? allTokens[hash] : (await apiController.getTokenInfo(hash)).ticker
-    }
 
 
-    const renderActivity = () => {
-        for (const key in activity) {
-            const item = activity[key]
-            // console.log(item)
-            activityElements.push(
-                <div
-                    key={key} onClick={() => {
-                    if (item.type === 'enable') {
-                        props.setPublicKeyRequest(item)
-                    }
-                    if (item.type === 'tx') {
-                        props.setTransactionRequest(item)
-                    }
-                    if (item.type === 'sign') {
-                        props.setSignRequest(item)
-                    }
-                }} className={`${styles.activity}`}>
-                    <img className={styles.icon}
-                         src={(item.type === 'enable' ? './images/icons/checkbox2.png' : './images/icons/checkbox1.png')}
-                         alt=""/>
-                    <div>
-                        <div>{names[item.type]}</div>
-                        <div className={styles.time}>
-                            {new Date(item.data.date).toISOString()
-                                .slice(0, 10) + ' '}
-                            {(item.tx ? <div className={styles.history_link}
-                                             onClick={() => explorerAddress(item.tx.to)}>To: {shortHash(item.tx.to)}</div> : item.cb.url)}
-                        </div>
-                    </div>
-                    {item.tx ?
-                        <div className={styles.activity_data}>
 
-                            <div>{'-' + (item.tx.value ? (item.tx.value / (decimals[item.tx.tokenHash] || 1e10)) : (item.tx.amount / (decimals[item.tx.tokenHash] || 1e10))) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
 
-                        </div> : ''}
-                </div>,
-            )
-        }
-    }
 
-    renderActivity()
-
-    const getHistory = async () => {
-
-        let history = {}
-        history.records = []
-        for (let i = 0; i < 4; i++) {
-            let historyRecords = await apiController.getAccountTransactions(props.user.publicKey, i)
-            history.records = history.records.concat(historyRecords.records)
-        }
-
-        // let history = await ENQWeb.Net.get.accountTransactions(props.user.publicKey, 0)
-
-        // console.log(history.records)
-
-        let oldActivity = []
-        for (let id in history.records) {
-            // console.log(history.records[id])
-            if (history.records[id]) {
-                oldActivity.push({
-                    data: {
-                        date: history.records[id].time * 1000,
-                        feeTicker: false,
-                        feeDecimals: false,
-                        decimals: decimals[history.records[id].token_hash] || 1e10,
-                        ticker: false,
-                        fee_type: history.records[id].fee_type,
-                        fee: history.records[id].fee_value
-                    },
-                    rectype: history.records[id].rectype,
-                    tx: {
-                        to: history.records[id].rectype === 'iin' ? props.user.publicKey : '00000',
-                        from: {
-                            pubkey: history.records[id].rectype !== 'iin' ? props.user.publicKey : '00000',
-                        },
-                        data: history.records[id].data,
-                        hash: history.records[id].hash,
-                        fee_value: history.records[id].fee_value,
-                        tokenHash: history.records[id].token_hash,
-                        ticker: await findTickerInCache(history.records[id].token_hash) || false,
-                        value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
-                    },
-                    cb: {
-                        taskId: 0,
-                    },
-                    type: history.records[id].rectype
-                })
-            }
-        }
-
-        return oldActivity
-
-        // setHistory(oldActivity)
-        // renderHistory()
-    }
-
-    let renderHistory = async (historyArray) => {
-
-        const historyElements = []
-        let tokenDecimals = {}
-        for (const key in historyArray.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
-            const item = historyArray[key]
-            // console.log(item)
-            if (!decimals[item.tx.tokenHash]) {
-                await apiController.getTokenInfo(item.tx.tokenHash)
-                    .then(token => {
-                        try {
-                            decimals[item.tx.tokenHash] = (10 ** token[0]['decimals'])
-                        } catch (e) {
-                            decimals[item.tx.tokenHash] = 1e10
-                        }
-                    })
-            }
-            historyElements.push(
-                <div
-                    key={key} onClick={() => {
-                    //TODO
-                    if (item.type === 'iin') {
-                        props.setTransactionHistory(item)
-                    }
-                    if (item.type === 'iout') {
-                        props.setTransactionHistory(item)
-                    }
-                }} className={`${styles.activity}`}
-                >
-                    <img className={styles.icon}
-                         src={(item.tx.value > 0 ? './images/icons/22.png' : './images/icons/12.png')}
-                         alt=""/>
-                    <div>
-                        <div>{names[item.type]}</div>
-                        <div className={styles.time}>
-                            {new Date(item.data.date).toISOString()
-                                .slice(0, 10)}
-                            <div className={styles.history_link}
-                                 onClick={() => explorerTX(item.tx.hash)}>{shortHash(item.tx.hash)}</div>
-                        </div>
-                    </div>
-                    {item.tx ?
-                        <div className={styles.activity_data}>
-
-                            <div>{(item.tx.value ? (item.tx.value / (decimals[item.tx.tokenHash] || 1e10)) : (item.tx.amount / (decimals[item.tx.tokenHash] || 1e10))) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
-
-                        </div> : ''}
-                </div>,
-            )
-        }
-
-        setHistory(historyElements)
-    }
-
-    //TODO
-    // renderHistory()
-
-    //Reject all
-    let rejectAll = async () => {
-        await asyncRequest({reject_all: true})
-        setActivity([])
-    }
 
     let changeToken = async (hash) => {
         // console.log(hash);
@@ -458,16 +297,14 @@ export default function Account(props) {
             .then(async result => {
                 if (result === true) {
                     getBalance().then()
-                    getConnects()
-                        .then()
-                    getHistory()
-                        .then((history) => {
-
-                            // console.log(history)
-                            if (isMounted) {
-                                renderHistory(history)
-                            }
-                        })
+                    getConnects().then()
+                    // getHistory().then((history) => {
+                    //
+                    //         // console.log(history)
+                    //         if (isMounted) {
+                    //             renderHistory(history)
+                    //         }
+                    //     })
                 }
             })
 
@@ -636,7 +473,7 @@ export default function Account(props) {
                         onClick={() => setActiveTab(1)}
                         className={(activeTab === 1 ? ` ${styles.bottom_tab_active}` : '')}
                     >
-                        Activity <sup>{activity.length}</sup>
+                        Activity {activity.length > 0 ? <sup>{activity.length}</sup> : ''}
                     </div>
                     {isConnects && activeTab === 2 && <div
                         onClick={() => setActiveTab(2)}
@@ -648,20 +485,7 @@ export default function Account(props) {
 
                 <Assets activeTab={activeTab} assets={assets} changeToken={changeToken} user={props.user}/>
 
-                <div className={styles.bottom_list + (activeTab === 1 ? '' : ` ${styles.bottom_list_disabled}`)}>
-
-                    {activityElements}
-
-                    {activityElements.length > 1 && <div onClick={rejectAll}
-                                                         className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
-                        Reject all
-                    </div>}
-
-                    {history.length > 0 && <div className={styles.history_title}>History</div>}
-
-                    {history}
-
-                </div>
+                <Activity activeTab={activeTab} decimals={decimals} user={props.user}/>
 
                 <div
                     className={`${styles.bottom_list} ${styles.bottom_list_activity} ${activeTab === 2 ? '' : `${styles.bottom_list_disabled}`}`}>
