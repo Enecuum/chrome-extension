@@ -182,32 +182,42 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         // Start all PoA
         if (msg.poa && msg.start) {
-            if (androidRegex.test(Capacitor.platform)) {
-                let test = registerPlugin('PoA')
-                test.start({ value: ['hello', 'men'], data: JSON.stringify(['hello', 'men', "2","3"])})
-                    .then(res => {
-                        alert(res)
-                    })
-                // let miners = startBackgroundMining()
+            let miners = {}
+            let accounts = []
+            if (msg.account) {
+                miners = await startPoa(msg.account, handlerMiners)
                 miningStatus.miningProcess = true
-                // resolve({ response: miners })
-                resolve({ response: true })
+                resolve({ response: miners })
             } else {
-                let miners = {}
-                let accounts = []
-                if (msg.account) {
-                    miners = await startPoa(msg.account, handlerMiners)
-                    miningStatus.miningProcess = true
-                    resolve({ response: miners })
-                } else {
-                    for (let i = 0; i < ENQWeb.Enq.User.seedAccountsArray.length; i++) {
-                        console.log(handlerMiners[i])
-                        let privateKey = getMnemonicPrivateKeyHex(ENQWeb.Enq.User.seed, i)
-                        accounts.push({
-                            publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
-                            privateKey: privateKey
-                        })
+                for (let i = 0; i < ENQWeb.Enq.User.seedAccountsArray.length; i++) {
+                    console.log(handlerMiners[i])
+                    let privateKey = getMnemonicPrivateKeyHex(ENQWeb.Enq.User.seed, i)
+                    accounts.push({
+                        publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
+                        privateKey: privateKey
+                    })
+                }
+                if (androidRegex.test(Capacitor.platform)) {
+                    try {
+                        for (let i = 0; i < handlerMiners.length; i++) {
+                            accounts[i].token = handlerMiners[i].token.token
+                        }
+                    } catch (e) {
+                        console.error('error in handle miners!')
                     }
+
+                    let test = registerPlugin('PoA')
+                    test.start({
+                        data: JSON.stringify(accounts),
+                        net: '95.216.246.116'
+                    })
+                        .then(res => {
+                        })
+                    // let miners = startBackgroundMining()
+                    miningStatus.miningProcess = true
+                    // resolve({ response: miners })
+                    resolve({ response: true })
+                } else {
                     miners = await startPoa(ENQWeb.Enq.User, handlerMiners, accounts)
                     console.log(miners)
                     // handlerMiners = miners
