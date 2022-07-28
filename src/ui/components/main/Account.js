@@ -485,7 +485,12 @@ export default function Account(props) {
 
                 <Assets activeTab={activeTab} assets={assets} changeToken={changeToken} user={props.user}/>
 
-                <Activity activeTab={activeTab} decimals={decimals} user={props.user}/>
+                <Activity activeTab={activeTab} decimals={decimals} user={props.user}
+                          setTransactionHistory={props.setTransactionHistory}
+                          setTransactionRequest={props.setTransactionRequest}
+                          setPublicKeyRequest={props.setPublicKeyRequest}
+                          setSignRequest={props.setSignRequest}
+                />
 
                 <div
                     className={`${styles.bottom_list} ${styles.bottom_list_activity} ${activeTab === 2 ? '' : `${styles.bottom_list_disabled}`}`}>

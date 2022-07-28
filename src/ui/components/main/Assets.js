@@ -184,7 +184,7 @@ export default function Assets(props) {
             {!isShowAddToken ? <div onClick={() => {
                 setShowAddToken(true)
             }}
-                                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                                    className={`${styles.field} ${styles.button}`}>
                 Add token
             </div> : renderAddToken()}
 
