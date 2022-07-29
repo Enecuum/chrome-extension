@@ -67,19 +67,23 @@ export default function Account(props) {
         setCopied(true)
     }
 
-    const getBalance = async () => {
-        // console.log('getBalance')
-        ENQWeb.Enq.provider = props.user.net
-        const mainToken = ENQWeb.Enq.token[ENQWeb.Enq.provider] ? ENQWeb.Enq.token[ENQWeb.Enq.provider] : (localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
+    const getMainToken = () => {
+        return ENQWeb.Enq.token[ENQWeb.Enq.provider] ? ENQWeb.Enq.token[ENQWeb.Enq.provider] : (localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
             localNetworks.find(element => element.host === ENQWeb.Net.currentProvider).token : '')
-        const token = props.user.token ? props.user.token : mainToken
+    }
+
+    const getBalance = async () => {
+        console.log('getBalance')
+        ENQWeb.Enq.provider = props.user.net
+        const mainToken = getMainToken()
+        const currentToken = props.user.token ? props.user.token : mainToken
 
         // console.log(token)
         let tokens = []
 
         await apiController.getBalanceAll(props.user.publicKey).then(async (res) => {
 
-            let amount = 0
+            let amount = BigInt(0)
             let ticker = ''
             let decimal = 10
 
@@ -93,7 +97,7 @@ export default function Account(props) {
                 tickers[res[i].token] = res[i].ticker
                 decimals[res[i].token] = 10 ** res[i].decimals
 
-                if (res[i].token === token) {
+                if (res[i].token === currentToken) {
                     amount = BigInt(res[i].amount)
                     ticker = res[i].ticker
                     image = generateIcon(res[i].token)
@@ -164,7 +168,7 @@ export default function Account(props) {
                 ticker: ticker,
                 usd: usd,
                 image: image,
-                tokenHash: token,
+                tokenHash: currentToken,
                 decimals: 10 ** decimal,
                 main: true
             }, ...tokens])
