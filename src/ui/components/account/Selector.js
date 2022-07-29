@@ -371,7 +371,11 @@ export default function Selector(props) {
             <Back setFalse={() => props.updateUserData()
                 .then(() => {
                     props.setAccountSelector(false)
-                })}/>
+                })}
+                  cb={()=>{
+                      userStorage.promise.sendPromise({poa:true, update:true, pull:true}).then()
+                  }}
+            />
 
             <div className={styles.welcome3}>MNEMONIC</div>
 
