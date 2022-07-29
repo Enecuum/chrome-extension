@@ -114,6 +114,7 @@ export default function Assets(props) {
                 <div key={key}
                      className={styles.asset}
                      onClick={() => {
+                         //TODO add to local storage
                          setAddedTokens([...addedTokens, item])
                          setShowAddToken(false)
                          setAddTokenName('')

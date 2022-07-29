@@ -33,8 +33,6 @@ export default function Account(props) {
 
     const [isLocked, setLocked] = useState(userStorage.lock.checkLock())
 
-    const [net, setNet] = useState(String(ENQWeb.Net.currentProvider))
-
     const [isConnects, setConnects] = useState(false)
     const [connectsElements, setConnectsElements] = useState([])
 
@@ -47,34 +45,13 @@ export default function Account(props) {
 
     const [favoriteSites, setFavoriteSites] = useState([])
 
+    const [activeTab, setActiveTab] = useState(0)
+
     let decimals = {}
 
     const clickMenu = () => {
         setMenu(!menu)
     }
-
-    const [activeTab, setActiveTab] = useState(0)
-
-    // setNetwork(value) {
-    //     this.setState({isNetwork: value}, () => {
-    //         if (!value)
-    //             window.location.reload(false);
-    //     })
-    // }
-
-    // let addConnect = (url, date) => {
-    //     console.log('addConnect')
-    //     let elements = [...connectsElements]
-    //     elements.push()
-    //     // console.log(elements)
-    //     setConnectsElements(elements)
-    //     // console.log(connectsElements)
-    // }
-
-
-    // addConnect('faucet-bit.enecuum.com', '26.04.2021')
-    // addConnect('http://95.216.207.173:8000', '26.04.2021')
-    // addConnect('google.com', '26.07.2022')
 
     const getConnects = async () => {
         let connects = await asyncRequest({connectionList: true})
@@ -104,10 +81,13 @@ export default function Account(props) {
 
         await apiController.getBalanceAll(props.user.publicKey)
             .then(async (res) => {
-                // console.log(res.map(a => a.ticker + ': ' + a.amount))
+
+
                 let amount = 0
                 let ticker = ''
                 let decimal = 10
+
+                //TODO untrusted token
                 let image = './images/enq.png'
 
                 // console.log(res)
@@ -310,6 +290,85 @@ export default function Account(props) {
 
     }, [usd, activeTab])
 
+    let setAllConnects = (connects) => {
+
+        // console.log(connects)
+        let elements = []
+        let sites = userStorage.sites.getSites()
+        let favSites = []
+        for (const key in connects) {
+            elements.push(
+                <div key={key} onClick={() => {
+                }} className={`${styles.connect}`}>
+                    <div>{key.replaceAll('https://', '')}</div>
+                    <div onClick={() => {
+                        userStorage.promise.sendPromise({
+                            ports: true,
+                            disconnect: true,
+                            name: key
+                        })
+                            .then(() => {
+                                console.log(`${key} is disconnected`)
+                                getConnects()
+                                    .then()
+                                setActiveTab(0)
+                            })
+                    }}>✕
+                    </div>
+                </div>)
+
+        }
+
+        for (const key in sites) {
+            if (sites[key] === true) {
+                favSites.push(
+                    <div key={key} onClick={() => {
+                    }} className={`${styles.connect}`}>
+                        <div>{key.replaceAll('https://', '')}</div>
+                        <div onClick={() => {
+                            userStorage.promise.sendPromise({
+                                ports: true,
+                                disconnect: true,
+                                favorite: true,
+                                name: key
+                            })
+                                .then(() => {
+                                    console.log(`${key} is disconnected`)
+                                    getConnects()
+                                        .then()
+                                    setActiveTab(0)
+                                })
+                        }}>✕
+                        </div>
+                    </div>)
+            }
+        }
+
+        if (elements.length >= 2) {
+            elements.push(
+                <div onClick={() => {
+                    userStorage.promise.sendPromise({
+                        ports: true,
+                        disconnect: true,
+                        all: true
+                    })
+                        .then(() => {
+                            console.warn('Disconnect all')
+                            getConnects()
+                                .then()
+                            setActiveTab(0)
+                        })
+
+                }} className={`${styles.field} ${styles.button}`}>
+                    Disconnect all
+                </div>)
+        }
+        setFavoriteSites(favSites)
+        setConnectsElements(elements)
+        setConnects(true)
+        setActiveTab(2)
+    }
+
     return (
         <div className={styles.main}>
 
@@ -326,83 +385,7 @@ export default function Account(props) {
                          changeToken(ENQWeb.Enq.token[ENQWeb.Enq.provider])
                              .then()
                      }}
-                     setConnects={(connects) => {
-                         // console.log(connects)
-                         let elements = []
-                         let sites = userStorage.sites.getSites()
-                         let favSites = []
-                         for (const key in connects) {
-                             elements.push(
-                                 <div key={key} onClick={() => {
-                                 }} className={`${styles.connect}`}>
-                                     <div>{key.replaceAll('https://', '')}</div>
-                                     <div onClick={() => {
-                                         userStorage.promise.sendPromise({
-                                             ports: true,
-                                             disconnect: true,
-                                             name: key
-                                         })
-                                             .then(() => {
-                                                 console.log(`${key} is disconnected`)
-                                                 getConnects()
-                                                     .then()
-                                                 setActiveTab(0)
-                                             })
-                                     }}>✕
-                                     </div>
-                                 </div>)
-
-                         }
-
-                         for (const key in sites) {
-                             if (sites[key] === true) {
-                                 favSites.push(
-                                     <div key={key} onClick={() => {
-                                     }} className={`${styles.connect}`}>
-                                         <div>{key.replaceAll('https://', '')}</div>
-                                         <div onClick={() => {
-                                             userStorage.promise.sendPromise({
-                                                 ports: true,
-                                                 disconnect: true,
-                                                 favorite: true,
-                                                 name: key
-                                             })
-                                                 .then(() => {
-                                                     console.log(`${key} is disconnected`)
-                                                     getConnects()
-                                                         .then()
-                                                     setActiveTab(0)
-                                                 })
-                                         }}>✕
-                                         </div>
-                                     </div>)
-                             }
-                         }
-
-                         if (elements.length >= 2) {
-                             elements.push(
-                                 <div onClick={() => {
-                                     userStorage.promise.sendPromise({
-                                         ports: true,
-                                         disconnect: true,
-                                         all: true
-                                     })
-                                         .then(() => {
-                                             console.warn('Disconnect all')
-                                             getConnects()
-                                                 .then()
-                                             setActiveTab(0)
-                                         })
-
-                                 }} className={`${styles.field} ${styles.button}`}>
-                                     Disconnect all
-                                 </div>)
-                         }
-                         setFavoriteSites(favSites)
-                         setConnectsElements(elements)
-                         setConnects(true)
-                         setActiveTab(2)
-                     }}
+                     setConnects={(connects) => setAllConnects(connects)}
                      setPublicKeyRequest={props.setPublicKeyRequest}/>
 
             <div className={styles.content}>
