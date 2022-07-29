@@ -5,6 +5,7 @@ import {apiController} from "../../../utils/apiController";
 import {generateIcon, shortHashLong} from "../../Utils";
 
 let trustedTokens = apiController.getTokenList()
+console.warn('Assets')
 
 export default function Assets(props) {
 

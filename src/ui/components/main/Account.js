@@ -11,7 +11,6 @@ import Assets from "./Assets";
 import Activity from "./Activity";
 
 
-
 let tickers = {}
 
 let trustedTokens = apiController.getTokenList()
@@ -70,7 +69,7 @@ export default function Account(props) {
     }
 
     const getBalance = async () => {
-        console.log('getBalance')
+        // console.log('getBalance')
         ENQWeb.Enq.provider = props.user.net
         const mainToken = ENQWeb.Enq.token[ENQWeb.Enq.provider] ? ENQWeb.Enq.token[ENQWeb.Enq.provider] : (localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
             localNetworks.find(element => element.host === ENQWeb.Net.currentProvider).token : '')
@@ -79,101 +78,101 @@ export default function Account(props) {
         // console.log(token)
         let tokens = []
 
-        await apiController.getBalanceAll(props.user.publicKey)
-            .then(async (res) => {
+        await apiController.getBalanceAll(props.user.publicKey).then(async (res) => {
 
+            let amount = 0
+            let ticker = ''
+            let decimal = 10
 
-                let amount = 0
-                let ticker = ''
-                let decimal = 10
+            //TODO untrusted token
+            let image = './images/enq.png'
 
-                //TODO untrusted token
-                let image = './images/enq.png'
+            // console.log(res)
 
-                // console.log(res)
+            for (let i in res) {
+                // console.log(res[i])
+                tickers[res[i].token] = res[i].ticker
+                decimals[res[i].token] = 10 ** res[i].decimals
 
-                for (let i in res) {
-                    // console.log(res[i])
-                    tickers[res[i].token] = res[i].ticker
-                    decimals[res[i].token] = 10 ** res[i].decimals
+                if (res[i].token === token) {
+                    amount = BigInt(res[i].amount)
+                    ticker = res[i].ticker
+                    image = generateIcon(res[i].token)
+                    decimal = res[i].decimals
 
-                    if (res[i].token === token) {
-                        amount = BigInt(res[i].amount)
-                        ticker = res[i].ticker
-                        image = generateIcon(res[i].token)
-                        decimal = res[i].decimals
-
-                        if (props.user.net !== 'https://pulse.enecuum.com') {
-                            if (trustedTokens.find(token => token.address === res[i].token)) {
-                                let price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {
-                                    cg_price: 0,
-                                    decimals: 10
-                                }
-                                // console.log(price_raw)
-                                const value = BigInt(price_raw.cg_price) * BigInt(amount) / BigInt(10 ** price_raw.decimals)
-                                setUSD(value)
-                            } else {
-                                setUSD(0)
-                            }
-                        }
-
-                    } else {
-
-                        let tokenUsd = 0
-
+                    if (props.user.net !== 'https://pulse.enecuum.com') {
                         if (trustedTokens.find(token => token.address === res[i].token)) {
-                            let price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {cg_price: 0, decimals: 10}
-                            tokenUsd = BigInt(price_raw.cg_price) * BigInt(res[i].amount) / BigInt(10 ** price_raw.decimals)
-                        }
-
-                        // console.log(res[i].amount)
-
-                        tokens.push({
-                            amount: BigInt(res[i].amount),
-                            ticker: res[i].ticker,
-                            usd: tokenUsd,
-                            image: generateIcon(res[i].token),
-                            tokenHash: res[i].token,
-                            decimals: 10 ** res[i].decimals,
-                        })
-                    }
-                }
-
-                // console.log(ticker)
-                setAmount(amount)
-                setTicker(ticker)
-                setLogo(image)
-                setAmountDecimal(10 ** decimal)
-                cacheTokens(tickers).then()
-
-                if (props.user.net === 'https://pulse.enecuum.com') {
-
-                    if (props.user.token === mainToken) {
-                        apiController.getCoinGeckoPrice().then(enecuumUSD => {
-                            const usd = BigInt((enecuumUSD * 1e10).toFixed(0))
-                            const value = usd * BigInt(amount) / BigInt(10 ** decimal)
+                            let price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {
+                                cg_price: 0,
+                                decimals: 10
+                            }
+                            // console.log(price_raw)
+                            const value = BigInt(price_raw.cg_price) * BigInt(amount) / BigInt(10 ** price_raw.decimals)
                             setUSD(value)
-                        })
-                    } else {
-                        setUSD(0)
+                        } else {
+                            setUSD(0)
+                        }
                     }
+
+                } else {
+
+                    let tokenUsd = 0
+
+                    if (trustedTokens.find(token => token.address === res[i].token)) {
+                        let price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {
+                            cg_price: 0,
+                            decimals: 10
+                        }
+                        tokenUsd = BigInt(price_raw.cg_price) * BigInt(res[i].amount) / BigInt(10 ** price_raw.decimals)
+                    }
+
+                    // console.log(res[i].amount)
+
+                    tokens.push({
+                        amount: BigInt(res[i].amount),
+                        ticker: res[i].ticker,
+                        usd: tokenUsd,
+                        image: generateIcon(res[i].token),
+                        tokenHash: res[i].token,
+                        decimals: 10 ** res[i].decimals,
+                    })
                 }
+            }
 
-                setAssets([{
-                    amount: amount,
-                    ticker: ticker,
-                    usd: usd,
-                    image: image,
-                    tokenHash: token,
-                    decimals: 10 ** decimal,
-                    main: true
-                }, ...tokens])
+            // console.log(ticker)
+            setAmount(amount)
+            setTicker(ticker)
+            setLogo(image)
+            setAmountDecimal(10 ** decimal)
+            cacheTokens(tickers).then()
 
-                // console.log(res.amount / 1e10)
-            })
-            .catch((err) => {
-                console.error('error: ', err)
-            })
+            //TODO
+            if (props.user.net === 'https://pulse.enecuum.com') {
+
+                if (props.user.token === mainToken) {
+                    apiController.getCoinGeckoPrice().then(enecuumUSD => {
+                        const usd = BigInt((enecuumUSD * 1e10).toFixed(0))
+                        const value = usd * BigInt(amount) / BigInt(10 ** decimal)
+                        setUSD(value)
+                    })
+                } else {
+                    setUSD(0)
+                }
+            }
+
+            setAssets([{
+                amount: amount,
+                ticker: ticker,
+                usd: usd,
+                image: image,
+                tokenHash: token,
+                decimals: 10 ** decimal,
+                main: true
+            }, ...tokens])
+
+        }).catch((err) => {
+            console.error('error: ', err)
+        })
     }
 
     const openPopup = async () => {
@@ -222,14 +221,8 @@ export default function Account(props) {
         return true
     }
 
-
-
-
-
-
-
-    let changeToken = async (hash) => {
-        console.log(hash);
+    const changeToken = async (hash) => {
+        // console.log(hash);
 
         let user = props.user
         user.token = hash
@@ -268,20 +261,12 @@ export default function Account(props) {
 
     useEffect(() => {
 
-        openPopup()
-            .then(async result => {
-                if (result === true) {
-                    getBalance().then()
-                    getConnects().then()
-                    // getHistory().then((history) => {
-                    //
-                    //         // console.log(history)
-                    //         if (isMounted) {
-                    //             renderHistory(history)
-                    //         }
-                    //     })
-                }
-            })
+        openPopup().then(async result => {
+            if (result === true) {
+                getBalance().then()
+                getConnects().then()
+            }
+        })
 
         let isMounted = true
         return () => {
@@ -292,7 +277,6 @@ export default function Account(props) {
 
     let setAllConnects = (connects) => {
 
-        // console.log(connects)
         let elements = []
         let sites = userStorage.sites.getSites()
         let favSites = []
