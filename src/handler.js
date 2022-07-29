@@ -93,7 +93,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
                 // Unlock user to memory user
                 ENQWeb.Enq.User = account
-
+                ENQWeb.Enq.setProvider(account.net)
                 // Set user to storage memory (localStorage or IndexedDB)
                 userStorage.user.addUser(account)
 
@@ -117,7 +117,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
             // Unlock user to memory user
             ENQWeb.Enq.User = account
-
+            ENQWeb.Enq.setProvider(account.net)
             // Set user to storage memory (localStorage or IndexedDB)
             userStorage.user.addUser(account)
 
@@ -155,6 +155,9 @@ export function globalMessageHandler(msg, ENQWeb) {
             resolve({ response: true })
         }
 
+        if(msg.update && msg.background){
+
+        }
 
         // Get PoA keys state
         if (msg.poa && msg.get) {
