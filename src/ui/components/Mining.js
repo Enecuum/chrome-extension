@@ -152,7 +152,6 @@ export default function Mining(props) {
     }
 
     useEffect(() => {
-
         userStorage.promise.sendPromise({
             poa: true,
             status: true,
@@ -233,7 +232,7 @@ export default function Mining(props) {
                      className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining && mining ? styles.mining_card_mine : '')}>
                     <div className={styles.row}>
                         <div>
-                            <div>Account M{accounts[i].i + 1}</div>
+                            <div>{accounts[i].type === "mnemonic" ? ("Account M"+ String(Number(accounts[i].i) + 1)) : ("Account P" + String(Number(accounts[i].i) + 1))}</div>
                             <div
                                 className={styles.text_minimum}>{((accounts[i].publisher && accounts[i].publisher.status) || mining ? "Connected":"") || 'Disconnected'}</div>
                         </div>

@@ -70,6 +70,28 @@ let initPoa = async (account) => {
                 token: '',
                 decimals: 10
             },
+            type:"mnemonic"
+            // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
+        })
+    }
+
+    for (let i = 0; i < account.privateKeys.length; i++) {
+
+        const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
+
+        let tokens = await apiController.getBalanceAll(publicKey)
+
+        miners.push({
+            i,
+            publicKey,
+            mining: true,
+            list: true,
+            tokens,
+            token: tokens[0] ? tokens[0] : {
+                token: '',
+                decimals: 10
+            },
+            type:"private"
             // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
         })
     }
