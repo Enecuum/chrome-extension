@@ -8,7 +8,7 @@ import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import { signHash } from './utils/ledgerShell'
 import { apiController } from './utils/apiController'
 import { extensionApi } from './utils/extensionApi'
-import { initPoa, startPoa, stopPoa } from './utils/poa/poaStarter' // commonjs
+import { getMiners, initPoa, startPoa, stopPoa } from './utils/poa/poaStarter' // commonjs
 import { getMnemonicPrivateKeyHex } from './ui/Utils'
 import { Capacitor, registerPlugin } from '@capacitor/core'
 import { startBackgroundMining, getMobileMiners, stopMobileMiners } from './mobileBackground'
@@ -168,8 +168,17 @@ export function globalMessageHandler(msg, ENQWeb) {
             } else {
                 if (handlerMiners.length === 0) {
                     handlerMiners = await initPoa(ENQWeb.Enq.User)
+                    console.log(handlerMiners)
                     resolve({ response: handlerMiners })
                 } else {
+                    let answer = await getMiners()
+
+                    handlerMiners =  answer ? answer : handlerMiners
+                    if(!answer){
+                        handlerMiners.forEach(el=>{
+                            console.log(el.publisher)
+                        })
+                    }
                     resolve({ response: handlerMiners })
                 }
             }

@@ -24,8 +24,11 @@ onmessage = (msg) => {
                 miners[i].publisher.ws.close()
             } catch (e) {
             }
-            delete miners[i].publisher
+            miners[i].publisher.status = "Disconnected"
         }
+        postMessage(JSON.stringify({resolve: true, miners:miners}))
+    }
+    if(msg.get){
         postMessage(JSON.stringify({resolve: true, miners:miners}))
     }
 }

@@ -245,7 +245,7 @@ export default function Network(props) {
                     return
                 }
                 props.setNetwork(false)
-
+                userStorage.promise.sendPromise({poa:true, update:true, pull:true}).then()
             }}>❮ Back
             </div>
 

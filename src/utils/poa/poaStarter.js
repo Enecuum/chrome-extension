@@ -6,9 +6,11 @@ import { apiController } from '../apiController'
 
 let PoA_Worker;
 let answer = ''
+let terminated;
 
 let initWorker = async ()=>{
     PoA_Worker = await (new Worker('./js/WebWorkerPOA.js'))
+    terminated = false
     PoA_Worker.onerror = err=>{
         console.warn(err)
     }
@@ -24,6 +26,7 @@ let initWorker = async ()=>{
 
 let stopWorker = ()=>{
     PoA_Worker.terminate();
+    terminated = true
 }
 
 let waitAnswer = (msg)=>{
@@ -70,7 +73,8 @@ let initPoa = async (account) => {
                 token: '',
                 decimals: 10
             },
-            type:"mnemonic"
+            type:"mnemonic",
+            publisher:false
             // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
         })
     }
@@ -91,7 +95,8 @@ let initPoa = async (account) => {
                 token: '',
                 decimals: 10
             },
-            type:"private"
+            type:"private",
+            publisher:false
             // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
         })
     }
@@ -159,4 +164,12 @@ let stopPoa = async (miners) => {
     return miners
 }
 
-export { startPoa, stopPoa, initPoa }
+let getMiners = async()=>{
+    if(PoA_Worker && !terminated){
+        let answer = JSON.parse(await waitAnswer({ get:true }))
+        return answer.miners
+    }
+    return false
+}
+
+export { startPoa, stopPoa, initPoa, getMiners }
