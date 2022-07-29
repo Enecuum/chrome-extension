@@ -235,7 +235,7 @@ export default function Mining(props) {
                         <div>
                             <div>Account M{accounts[i].i + 1}</div>
                             <div
-                                className={styles.text_minimum}>{(accounts[i].publisher && accounts[i].publisher.status) || 'Disconnected'}</div>
+                                className={styles.text_minimum}>{((accounts[i].publisher && accounts[i].publisher.status) || mining ? "Connected":"") || 'Disconnected'}</div>
                         </div>
                         <div onClick={() => {
                             if (accounts[i].mining) {

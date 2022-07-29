@@ -13,6 +13,7 @@ export default function Back(props) {
             // We have a bug here with ledger window now
             // window.history.pushState({}, document.title,  isWeb ? '' : '/')
             props.setFalse()
+            props.cb ? props.cb() : ''
         }}>
             ❮ Back
         </div>

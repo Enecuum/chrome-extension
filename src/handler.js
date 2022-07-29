@@ -175,6 +175,13 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         }
 
+        //update mining pull
+        if (msg.poa && msg.update && msg.pull) {
+            console.log("pull updated")
+            handlerMiners = await initPoa(ENQWeb.Enq.User)
+            resolve({ response: handlerMiners })
+        }
+
         // Start all PoA
         if (msg.poa && msg.status) {
             resolve({ response: miningStatus })
