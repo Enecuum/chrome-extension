@@ -147,18 +147,18 @@ const showNotification = (title, text) => {
             }]
         });
 
-    if (chrome.notifications)
-        try {
-            chrome.notifications.create(id, {
-                type: 'basic',
-                iconUrl: 'images/enq.png',
-                title: title,
-                message: text,
-                priority: 2
-            })
-        } catch (e) {
-            console.warn(e)
-        }
+    // if (chrome.notifications)
+    //     try {
+    //         chrome.notifications.create(id, {
+    //             type: 'basic',
+    //             iconUrl: 'images/enq.png',
+    //             title: title,
+    //             message: text,
+    //             priority: 2
+    //         })
+    //     } catch (e) {
+    //         console.warn(e)
+    //     }
 
 }
 

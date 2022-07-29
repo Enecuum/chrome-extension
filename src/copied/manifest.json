@@ -36,7 +36,5 @@
             "all_frames": true
         }
     ],
-    "permissions": [
-        "notifications"
-    ]
+    "permissions": []
 }
