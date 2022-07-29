@@ -47,6 +47,8 @@ export default function Account(props) {
 
     const [activeTab, setActiveTab] = useState(0)
 
+    const [userTrustedTokens, setUserTrustedTokens] = useState(JSON.parse(localStorage.getItem('trustedTokens')))
+
     const clickMenu = () => {
         setMenu(!menu)
     }
@@ -91,7 +93,7 @@ export default function Account(props) {
             let image = './images/enq.png'
 
             for (let i in res) {
-                // console.log(res[i])
+
                 tickers[res[i].token] = res[i].ticker
                 decimals[res[i].token] = 10 ** res[i].decimals
 
@@ -129,14 +131,32 @@ export default function Account(props) {
 
                     // console.log(res[i].amount)
 
-                    tokens.push({
-                        amount: BigInt(res[i].amount),
-                        ticker: res[i].ticker,
-                        usd: tokenUsd,
-                        image: generateIcon(res[i].token),
-                        tokenHash: res[i].token,
-                        decimals: 10 ** res[i].decimals,
-                    })
+                    let userTrustedToken = userTrustedTokens.find(token => token.hash === res[i].token)
+                    if (userTrustedToken) {
+                        console.log(userTrustedToken)
+                        userTrustedToken.usd = tokenUsd
+                        userTrustedToken.amount = BigInt(res[i].amount)
+                        // setUserTrustedTokens([...userTrustedTokens, userTrustedToken])
+                    } else {
+                        tokens.push({
+                            amount: BigInt(res[i].amount),
+                            ticker: res[i].ticker,
+                            usd: tokenUsd,
+                            image: generateIcon(res[i].token),
+                            tokenHash: res[i].token,
+                            decimals: 10 ** res[i].decimals,
+                        })
+                    }
+                }
+            }
+
+            for (let i in userTrustedTokens) {
+
+                if (currentToken === userTrustedTokens[i].hash) {
+                    // amount = BigInt(res[i].amount)
+                    ticker = userTrustedTokens[i].ticker
+                    image = generateIcon(userTrustedTokens[i].hash)
+                    // decimal = res[i].decimals
                 }
             }
 
@@ -273,7 +293,7 @@ export default function Account(props) {
             isMounted = false
         }
 
-    }, [usd, activeTab])
+    }, [usd, activeTab, userTrustedTokens])
 
     let setAllConnects = (connects) => {
 
@@ -351,6 +371,13 @@ export default function Account(props) {
         setConnectsElements(elements)
         setConnects(true)
         setActiveTab(2)
+    }
+
+    BigInt.prototype.toJSON = function() { return this.toString() }
+
+    const addUserTrustedToken = (item) => {
+        localStorage.setItem('trustedTokens', JSON.stringify([...userTrustedTokens, item]))
+        setUserTrustedTokens([...userTrustedTokens, item])
     }
 
     return (
@@ -445,7 +472,13 @@ export default function Account(props) {
                     </div>}
                 </div>
 
-                <Assets activeTab={activeTab} assets={assets} changeToken={changeToken} user={props.user}/>
+                <Assets activeTab={activeTab}
+                        assets={assets}
+                        changeToken={changeToken}
+                        user={props.user}
+                        userTrustedTokens={userTrustedTokens}
+                        addUserTrustedToken={addUserTrustedToken}
+                />
 
                 <Activity activeTab={activeTab}
                           decimals={decimals}

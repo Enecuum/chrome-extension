@@ -9,6 +9,11 @@ console.warn('Assets')
 
 export default function Assets(props) {
 
+    // let userTrustedTokens = JSON.parse(localStorage.getItem('trustedTokens'))
+    // for (let i in userTrustedTokens) {
+    //     console.log(userTrustedTokens[i])
+    // }
+
     // console.log(props.user)
 
     const [isShowUntrustedTokens, setShowUntrustedTokens] = useState(false)
@@ -19,7 +24,7 @@ export default function Assets(props) {
     let [tokens, setTokens] = useState([])
     let [findTokens, setFindTokens] = useState([])
 
-    let [addedTokens, setAddedTokens] = useState([])
+    // let [addedTokens, setAddedTokens] = useState(JSON.parse(localStorage.getItem('trustedTokens')))
 
     let renderAssets = (trusted) => {
 
@@ -85,14 +90,17 @@ export default function Assets(props) {
 
         let assetsElements = []
 
+        let addedTokens = props.userTrustedTokens
+        console.log(props.userTrustedTokens)
+
         for (const key in addedTokens) {
             const item = {
-                amount: 0,
+                amount: addedTokens[key].amount ? addedTokens[key].amount : 0,
                 ticker: addedTokens[key].ticker,
-                usd: 0,
+                usd: addedTokens[key].usd ? addedTokens[key].usd : 0,
                 image: generateIcon(addedTokens[key].hash),
                 tokenHash: addedTokens[key].hash,
-                decimals: 10 ** 10,
+                decimals: addedTokens[key].decimals ? addedTokens[key].decimals : 10 ** 10,
                 main: false
             }
 
@@ -116,7 +124,7 @@ export default function Assets(props) {
                      className={styles.asset}
                      onClick={() => {
                          //TODO add to local storage
-                         setAddedTokens([...addedTokens, item])
+                         props.addUserTrustedToken(item)
                          setShowAddToken(false)
                          setAddTokenName('')
                          setFindTokens([])
