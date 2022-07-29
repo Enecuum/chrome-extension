@@ -12,7 +12,6 @@ const names = {
 }
 
 
-
 export default function Activity(props) {
 
     const [activity, setActivity] = useState(userStorage.list.listOfTask())
@@ -167,7 +166,7 @@ export default function Activity(props) {
                     {item.tx ?
                         <div className={styles.activity_data}>
 
-                            <div>{'-' + (item.tx.value ? (item.tx.value / (decimals[item.tx.tokenHash] || 1e10)) : (item.tx.amount / (decimals[item.tx.tokenHash] || 1e10))) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
+                            <div>{'-' + (item.tx.value ? (item.tx.value / (props.decimals[item.tx.tokenHash] || 1e10)) : (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10))) + ' ' + (item.tx.ticker ? (allTokens[item.tx.ticker] ? allTokens[item.tx.ticker] : 'COIN') : (allTokens[item.tx.tokenHash] ? allTokens[item.tx.tokenHash] : 'COIN'))}</div>
 
                         </div> : ''}
                 </div>,
@@ -194,7 +193,7 @@ export default function Activity(props) {
             {renderActivity()}
 
             {activity.length > 1 && <div onClick={rejectAll}
-                                                 className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
+                                         className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
                 Reject all
             </div>}
 

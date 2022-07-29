@@ -12,6 +12,7 @@ import Activity from "./Activity";
 
 
 let tickers = {}
+let decimals = {}
 
 let trustedTokens = apiController.getTokenList()
 
@@ -45,8 +46,6 @@ export default function Account(props) {
     const [favoriteSites, setFavoriteSites] = useState([])
 
     const [activeTab, setActiveTab] = useState(0)
-
-    let decimals = {}
 
     const clickMenu = () => {
         setMenu(!menu)
@@ -447,7 +446,10 @@ export default function Account(props) {
 
                 <Assets activeTab={activeTab} assets={assets} changeToken={changeToken} user={props.user}/>
 
-                <Activity activeTab={activeTab} decimals={decimals} user={props.user}
+                <Activity activeTab={activeTab}
+                          decimals={decimals}
+                          tickers={tickers}
+                          user={props.user}
                           setTransactionHistory={props.setTransactionHistory}
                           setTransactionRequest={props.setTransactionRequest}
                           setPublicKeyRequest={props.setPublicKeyRequest}
