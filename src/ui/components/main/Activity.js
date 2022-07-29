@@ -11,13 +11,12 @@ const names = {
     sign: 'Sign message'
 }
 
+
+
 export default function Activity(props) {
 
     const [activity, setActivity] = useState(userStorage.list.listOfTask())
     const [history, setHistory] = useState([])
-
-    // TODO
-    let decimals = {}
 
     const [allTokens, setAllTokens] = useState((userStorage.tokens.getTokens()).tokens ? (userStorage.tokens.getTokens()).tokens : {})
 
@@ -43,7 +42,7 @@ export default function Activity(props) {
                         date: history.records[id].time * 1000,
                         feeTicker: false,
                         feeDecimals: false,
-                        decimals: decimals[history.records[id].token_hash] || 1e10,
+                        decimals: props.decimals[history.records[id].token_hash] || 1e10,
                         ticker: false,
                         fee_type: history.records[id].fee_type,
                         fee: history.records[id].fee_value
@@ -79,17 +78,19 @@ export default function Activity(props) {
         const historyElements = []
         for (const key in historyArray.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
             const item = historyArray[key]
-            // console.log(item)
-            if (!decimals[item.tx.tokenHash]) {
-                apiController.getTokenInfo(item.tx.tokenHash)
-                    .then(token => {
-                        try {
-                            decimals[item.tx.tokenHash] = (10 ** token[0]['decimals'])
-                        } catch (e) {
-                            decimals[item.tx.tokenHash] = 1e10
-                        }
-                    })
-            }
+            // console.log(item.tx.tokenHash)
+            // console.log(decimals)
+            // console.log(decimals.hasOwnProperty(item.tx.tokenHash))
+            // if (!decimals.hasOwnProperty(item.tx.tokenHash)) {
+            //     apiController.getTokenInfo(item.tx.tokenHash)
+            //         .then(token => {
+            //             try {
+            //                 decimals[item.tx.tokenHash] = (10 ** token[0]['decimals'])
+            //             } catch (e) {
+            //                 decimals[item.tx.tokenHash] = 1e10
+            //             }
+            //         })
+            // }
             historyElements.push(
                 <div
                     key={key} onClick={() => {
@@ -116,7 +117,7 @@ export default function Activity(props) {
                     {item.tx ?
                         <div className={styles.activity_data}>
 
-                            <div>{(item.tx.value ? (item.tx.value / (decimals[item.tx.tokenHash] || 1e10)) : (item.tx.amount / (decimals[item.tx.tokenHash] || 1e10))) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
+                            <div>{(item.tx.value ? (item.tx.value / (props.decimals[item.tx.tokenHash] || 1e10)) : (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10))) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
 
                         </div> : ''}
                 </div>,
