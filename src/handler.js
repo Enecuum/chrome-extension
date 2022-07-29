@@ -176,6 +176,9 @@ export function globalMessageHandler(msg, ENQWeb) {
                     handlerMiners =  answer ? answer : handlerMiners
                     if(!answer){
                         handlerMiners.forEach(el=>{
+                            if(!el.publisher){
+                                el.publisher = {}
+                            }
                             el.publisher.status = "Disconnected"
                         })
                     }
@@ -216,6 +219,16 @@ export function globalMessageHandler(msg, ENQWeb) {
                         privateKey: privateKey
                     })
                 }
+
+                for (let i = 0; i < ENQWeb.Enq.User.privateKeys.length; i++) {
+                    console.log(handlerMiners[i])
+                    let privateKey = ENQWeb.Enq.User.privateKeys[i]
+                    accounts.push({
+                        publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
+                        privateKey: privateKey
+                    })
+                }
+
                 if (androidRegex.test(Capacitor.platform)) {
                     try {
                         for (let i = 0; i < handlerMiners.length; i++) {

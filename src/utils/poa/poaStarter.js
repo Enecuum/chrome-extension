@@ -8,6 +8,11 @@ let PoA_Worker;
 let answer = ''
 let terminated;
 
+let netList = {
+    "https://bit.enecuum.com":"95.216.246.116",
+    "https://pulse.enecuum.com":"95.216.68.221"
+}
+
 let initWorker = async ()=>{
     PoA_Worker = await (new Worker('./js/WebWorkerPOA.js'))
     terminated = false
@@ -15,7 +20,6 @@ let initWorker = async ()=>{
         console.warn(err)
     }
     PoA_Worker.onmessage = msg=>{
-        console.log(msg)
         answer = msg
         let data = JSON.parse(msg.data)
         if(data.method === 'notification'){
@@ -73,6 +77,7 @@ let initPoa = async (account) => {
                 token: '',
                 decimals: 10
             },
+            net:netList[ENQWeb.Net.provider] || '95.216.246.116',
             type:"mnemonic",
             publisher:false
             // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
@@ -95,12 +100,12 @@ let initPoa = async (account) => {
                 token: '',
                 decimals: 10
             },
+            net:netList[ENQWeb.Net.provider] || '95.216.246.116',
             type:"private",
             publisher:false
             // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
         })
     }
-
     return miners
 }
 
