@@ -13,7 +13,7 @@ onmessage = (msg) => {
             miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({
                 publicKey: miners[i].publisher.account.publicKey,
                 privateKey: miners[i].publisher.account.privateKey
-            }, miners[i].publisher.token, postMessage) : {}
+            }, miners[i].publisher.token, postMessage, miners[i].net) : {}
         }
         postMessage(JSON.stringify({resolve: true, miners:miners}))
     }

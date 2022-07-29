@@ -8,7 +8,7 @@ const POA_PROTOCOL_VERSION = 4
 class Publisher {
 
 
-    constructor(account, token, connector = false) {
+    constructor(account, token, connector = false, ip = "95.216.246.116") {
 
         // this
 
@@ -20,8 +20,7 @@ class Publisher {
         let id = account.publicKey.slice(0, 6)
         this.connector = connector
         this.restart = true
-        let ip = '95.216.246.116'
-        this.ws = new WebSocket(`ws://95.216.246.116:3000`)
+        this.ws = new WebSocket(`ws://${ip}:3000`)
 
         this.status = 'Initialisation'
 
@@ -63,7 +62,7 @@ function init(_, id, ip, account, token) {
         if (_.restart) {
             setTimeout(() => {
                 console.log(`${id} restarted`)
-                _.ws = new WebSocket(`ws://95.216.246.116:3000`)
+                _.ws = new WebSocket(`ws://${ip}:3000`)
                 init(_, id, ip, account, token)
             }, 5000)
         } else {
