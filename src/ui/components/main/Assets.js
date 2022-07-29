@@ -91,7 +91,7 @@ export default function Assets(props) {
         let assetsElements = []
 
         let addedTokens = props.userTrustedTokens
-        console.log(props.userTrustedTokens)
+        // console.log(props.userTrustedTokens)
 
         for (const key in addedTokens) {
             const item = {

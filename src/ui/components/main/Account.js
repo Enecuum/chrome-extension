@@ -47,7 +47,7 @@ export default function Account(props) {
 
     const [activeTab, setActiveTab] = useState(0)
 
-    const [userTrustedTokens, setUserTrustedTokens] = useState(JSON.parse(localStorage.getItem('trustedTokens')))
+    const [userTrustedTokens, setUserTrustedTokens] = useState(JSON.parse(localStorage.getItem('trustedTokens')) || [])
 
     const clickMenu = () => {
         setMenu(!menu)
@@ -75,7 +75,7 @@ export default function Account(props) {
     }
 
     const getBalance = async () => {
-        console.log('getBalance')
+        // console.log('getBalance')
         ENQWeb.Enq.provider = props.user.net
 
         const mainToken = getMainToken()
@@ -133,7 +133,7 @@ export default function Account(props) {
 
                     let userTrustedToken = userTrustedTokens.find(token => token.hash === res[i].token)
                     if (userTrustedToken) {
-                        console.log(userTrustedToken)
+                        // console.log(userTrustedToken)
                         userTrustedToken.usd = tokenUsd
                         userTrustedToken.amount = BigInt(res[i].amount)
                         // setUserTrustedTokens([...userTrustedTokens, userTrustedToken])
