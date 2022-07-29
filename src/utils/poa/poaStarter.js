@@ -20,7 +20,6 @@ let initWorker = async ()=>{
         console.warn(err)
     }
     PoA_Worker.onmessage = msg=>{
-        console.log(msg)
         answer = msg
         let data = JSON.parse(msg.data)
         if(data.method === 'notification'){

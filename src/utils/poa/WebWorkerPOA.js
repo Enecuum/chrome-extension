@@ -5,7 +5,6 @@ let miners = []
 
 onmessage = (msg) => {
     // let data = ENQWeb.Utils.ofd.parse(msg.data)
-    console.log(msg)
     msg = msg.data
     if(msg.start){
         miners = msg.data
