@@ -160,7 +160,6 @@ export default function Mining(props) {
                 console.log(status)
                 setMining(status.miningProcess)
                 setStatus(status.miningProcess ? 'MINING' : accounts.length > 0 ? 'READY' : 'LOADING')
-
                 userStorage.promise.sendPromise({
                     poa: true,
                     get: true,
@@ -234,7 +233,7 @@ export default function Mining(props) {
                         <div>
                             <div>{accounts[i].type === "mnemonic" ? ("Account M"+ String(Number(accounts[i].i) + 1)) : ("Account P" + String(Number(accounts[i].i) + 1))}</div>
                             <div
-                                className={styles.text_minimum}>{((accounts[i].publisher && accounts[i].publisher.status) || mining ? "Connected":"") || 'Disconnected'}</div>
+                                className={styles.text_minimum}>{((accounts[i].publisher && accounts[i].publisher.status)) || 'Disconnected'}</div>
                         </div>
                         <div onClick={() => {
                             if (accounts[i].mining) {
