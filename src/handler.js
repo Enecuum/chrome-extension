@@ -176,7 +176,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                     handlerMiners =  answer ? answer : handlerMiners
                     if(!answer){
                         handlerMiners.forEach(el=>{
-                            console.log(el.publisher)
+                            el.publisher.status = "Disconnected"
                         })
                     }
                     resolve({ response: handlerMiners })
