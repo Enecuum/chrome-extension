@@ -75,10 +75,10 @@ export default function Account(props) {
     const getBalance = async () => {
         console.log('getBalance')
         ENQWeb.Enq.provider = props.user.net
+
         const mainToken = getMainToken()
         const currentToken = props.user.token ? props.user.token : mainToken
 
-        // console.log(token)
         let tokens = []
 
         await apiController.getBalanceAll(props.user.publicKey).then(async (res) => {
@@ -89,8 +89,6 @@ export default function Account(props) {
 
             //TODO untrusted token
             let image = './images/enq.png'
-
-            // console.log(res)
 
             for (let i in res) {
                 // console.log(res[i])
@@ -142,7 +140,6 @@ export default function Account(props) {
                 }
             }
 
-            // console.log(ticker)
             setAmount(amount)
             setTicker(ticker)
             setLogo(image)
