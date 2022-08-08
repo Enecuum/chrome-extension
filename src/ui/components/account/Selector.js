@@ -30,20 +30,23 @@ export default function Selector(props) {
 
     let [accountsList, setAccountsList] = useState()
 
-    let [name, setName] = useState('')
-    let [host, setHost] = useState('')
-    let [hostCorrect, setHostCorrect] = useState(false)
+    // let [name, setName] = useState('')
+    // let [host, setHost] = useState('')
+    // let [hostCorrect, setHostCorrect] = useState(false)
+    //
+    // let [token, setToken] = useState('')
+    // let [tokenCorrect, setTokenCorrect] = useState(false)
+    //
+    // let [keys, setKeys] = useState()
+    // let [accounts, setAccounts] = useState([])
 
-    let [token, setToken] = useState('')
-    let [tokenCorrect, setTokenCorrect] = useState(false)
-
-    let [keys, setKeys] = useState()
-    let [accounts, setAccounts] = useState([])
     let [cards1, setCards1] = useState([])
     let [cards2, setCards2] = useState([])
     let [cards3, setCards3] = useState([])
 
-    let [showAdd, setShowAdd] = useState(false)
+    // let [showAdd, setShowAdd] = useState(false)
+
+    let [ticker, setTicker] = useState(userStorage.tokens.getTokens().tokens[ENQWeb.Enq.token[ENQWeb.Enq.provider]])
 
     let [seed, setSeed] = useState(false)
     let [ledger, setLedger] = useState(false)
@@ -54,6 +57,7 @@ export default function Selector(props) {
 
     useEffect(() => {
         loadUser()
+        // setTicker()
     }, [balance, copied])
 
     let requestBalance = async (publicKey) => {
@@ -274,7 +278,7 @@ export default function Selector(props) {
                             :
                             '0.0')
 
-                        + ' BIT'}
+                        + ' ' + ticker}
                     </div>
 
                     {/*<div className={styles.card_field_select + ' ' + (current ? '' : 'select')}*/}
