@@ -286,7 +286,7 @@ export default function Account(props) {
 
     useEffect(() => {
 
-        props.user.token !== ENQWeb.Enq.token[ENQWeb.Enq.provider] ? setActiveTab( 1) : () => {}
+        props.user.token && props.user.token !== ENQWeb.Enq.token[ENQWeb.Enq.provider] ? setActiveTab( 1) : () => {}
 
         openPopup().then(async result => {
             if (result === true) {
@@ -300,7 +300,7 @@ export default function Account(props) {
             isMounted = false
         }
 
-    }, [usd, activeTab, userTrustedTokens])
+    }, [usd, activeTab, userTrustedTokens, props.user])
 
     let setAllConnects = (connects) => {
 
@@ -407,7 +407,7 @@ export default function Account(props) {
                      isCopied={isCopied}
                      setCopied={setCopied}
                      token={props.user.token}
-                     isMainToken={props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider]}
+                     isMainToken={!props.user.token || props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider]}
                      setMainToken={() => {
                          changeToken(ENQWeb.Enq.token[ENQWeb.Enq.provider]).then()
                      }}
@@ -467,7 +467,7 @@ export default function Account(props) {
                 {/*{console.log(props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider])}*/}
 
                 <div className={styles.bottom_tabs}>
-                    {(activeTab === 0 || props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider]) && <div
+                    {(!props.user.token || (props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider])) && <div
                         onClick={() => setActiveTab(0)}
                         className={(activeTab === 0 ? ` ${styles.bottom_tab_active}` : '')}
                     >

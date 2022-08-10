@@ -318,6 +318,7 @@ export default function App(props) {
 
     if (isNetwork) {
         return <Network setNetwork={setNetwork}
+                        user={user}
                         updateUserData={updateUserData}
         />
     }

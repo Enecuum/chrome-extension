@@ -146,7 +146,7 @@ export default function Network(props) {
 
     let setNet = async (value) => {
 
-        // console.log(value)
+        console.log(value)
 
         localStorage.setItem(NET, value)
         ENQWeb.Net.provider = value
@@ -163,6 +163,8 @@ export default function Network(props) {
             }).then(async ()=>{
                 await asyncRequest({reject_all: true})
             })
+
+            await changeToken('')
         })
 
         await cacheTokens().then(async () => {
@@ -170,6 +172,25 @@ export default function Network(props) {
             await props.updateUserData()
             props.setNetwork(false)
         })
+    }
+
+    const changeToken = async (hash) => {
+
+        console.log(hash);
+
+        let user = props.user
+        user.token = hash
+
+        await userStorage.promise.sendPromise({
+            account: true,
+            set: true,
+            data: user
+        })
+
+        // await getBalance()
+
+        // setActiveTab(props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? 0 : 1)
+        window.scrollTo(0, 0)
     }
 
 
