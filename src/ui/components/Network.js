@@ -144,7 +144,7 @@ export default function Network(props) {
         renderCards()
     }
 
-    let setNet = async (value) => {
+    let setNet = async (value, hash) => {
 
         console.log(value)
 
@@ -164,7 +164,7 @@ export default function Network(props) {
                 await asyncRequest({reject_all: true})
             })
 
-            await changeToken('')
+            await changeToken(hash)
         })
 
         await cacheTokens().then(async () => {
@@ -186,11 +186,6 @@ export default function Network(props) {
             set: true,
             data: user
         })
-
-        // await getBalance()
-
-        // setActiveTab(props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider] ? 0 : 1)
-        window.scrollTo(0, 0)
     }
 
 
@@ -220,13 +215,13 @@ export default function Network(props) {
 
         // console.log(currentIndex)
 
-        console.log(libNetworks)
+        // console.log(libNetworks)
 
 
 
         // libNetworks.splice(currentIndex, 1)
 
-        console.log(libNetworks)
+        // console.log(ENQWeb.Enq.token)
 
         // libNetworks = libNetworks.filter(item => localNetworks.find(localItem => item[1] !== localItem.host))
 
@@ -234,13 +229,15 @@ export default function Network(props) {
 
             let current = ENQWeb.Enq.provider === libNetworks[i][1]
 
+            // console.log(ENQWeb.Enq.token[libNetworks[i][1]])
+
             cards.push(
                 <div key={i + 'lib'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
                     <div className={styles.card_field}>{libNetworks[i][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
                     <div className={styles.card_field}>{libNetworks[i][1]}</div>
                     <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[i][1]])}</div>
                     <div className={styles.card_field_right_bottom} onClick={(current ? () => {
-                    } : () => setNet(libNetworks[i][1]))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                    } : () => setNet(libNetworks[i][1], ENQWeb.Enq.token[libNetworks[i][1]]))}>{current ? 'CURRENT' : 'SELECT'}</div>
                 </div>
             )
         }
@@ -261,7 +258,7 @@ export default function Network(props) {
                     <div className={styles.card_field}>{localNetworks[i].host}</div>
                     <div className={styles.card_field}>{shortHash(localNetworks[i].token)}</div>
                     <div className={styles.card_field_right_bottom} onClick={(current ? () => {
-                    } : () => setNet(localNetworks[i].host))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                    } : () => setNet(localNetworks[i].host, localNetworks[i].token))}>{current ? 'CURRENT' : 'SELECT'}</div>
                     <div className={styles.card_field_delete}
                          onClick={() => removeNet(localNetworks[i].name)}>&#x2715;</div>
                 </div>
