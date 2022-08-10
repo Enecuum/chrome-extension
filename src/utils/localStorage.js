@@ -1,6 +1,6 @@
 // This is storage object,
 
-const {LIST, TASK, USER, LOCK, CONFIG, TOKENS, SITES} = require("./names");
+const {LIST, TASK, USER, LOCK, CONFIG, TOKENS, SITES, TRUSTED_TOKENS} = require("./names");
 const indexDB = require('./indexDB')
 const {generateAccountData, account} = require("../user");
 // import indexDB from './indexDB'
@@ -385,6 +385,15 @@ function setSites(obj) {
     return true
 }
 
+let getUserTrustedTokens = () => {
+    let tokens = JSON.parse(localStorage.getItem(TRUSTED_TOKENS + ':' + ENQWeb.Enq.provider))
+    return tokens ? tokens : []
+}
+
+let setUserTrustedTokens = (tokens) => {
+    localStorage.setItem(TRUSTED_TOKENS + ':' + ENQWeb.Enq.provider, JSON.stringify(tokens))
+}
+
 // TODO constructor
 function Storage(name) {
 
@@ -437,7 +446,9 @@ function Storage(name) {
     this.tokens = {
         getTokens,
         setTokens,
-        clearTokens
+        clearTokens,
+        getUserTrustedTokens,
+        setUserTrustedTokens
     }
     this.sites = {
         getSites,

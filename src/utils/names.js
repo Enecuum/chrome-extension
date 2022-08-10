@@ -18,6 +18,8 @@ const NET = 'net'
 // TODO favorite sites
 const SITES = 'sites'
 
+const TRUSTED_TOKENS = 'trusted_tokens'
+
 const STORAGE_NAME_POPUP = 'popup'
 const STORAGE_NAME_BACKGROUND = 'background'
 const STORAGE_NAME_WORKER = 'worker'
@@ -53,6 +55,7 @@ module.exports = {
     CONFIG,
     NETWORKS,
     NET,
+    TRUSTED_TOKENS,
     versions,
     ENQ_CONTENT,
     strings,

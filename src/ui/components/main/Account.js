@@ -47,7 +47,7 @@ export default function Account(props) {
 
     const [activeTab, setActiveTab] = useState(0)
 
-    const [userTrustedTokens, setUserTrustedTokens] = useState(JSON.parse(localStorage.getItem('trustedTokens')) || [])
+    const [userTrustedTokens, setUserTrustedTokens] = useState(userStorage.tokens.getUserTrustedTokens())
 
     const clickMenu = () => {
         setMenu(!menu)
@@ -376,7 +376,7 @@ export default function Account(props) {
     BigInt.prototype.toJSON = function() { return this.toString() }
 
     const addUserTrustedToken = (item) => {
-        localStorage.setItem('trustedTokens', JSON.stringify([...userTrustedTokens, item]))
+        userStorage.tokens.setUserTrustedTokens([...userTrustedTokens, item])
         setUserTrustedTokens([...userTrustedTokens, item])
     }
 
