@@ -494,6 +494,7 @@ export default function Account(props) {
                           setTransactionRequest={props.setTransactionRequest}
                           setPublicKeyRequest={props.setPublicKeyRequest}
                           setSignRequest={props.setSignRequest}
+                          getMainToken={getMainToken}
                 />
 
                 <div
