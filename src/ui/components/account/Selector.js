@@ -278,7 +278,7 @@ export default function Selector(props) {
                             :
                             '0.0')
 
-                        + ' ' + ticker}
+                        + ' ' + (ticker ? ticker : 'BIT')}
                     </div>
 
                     {/*<div className={styles.card_field_select + ' ' + (current ? '' : 'select')}*/}

@@ -265,6 +265,7 @@ async function asyncMessenger(msg, sender, sendResponse) {
 
 // TODO Description
 async function cacheTokenInfo(tokens) {
+    // console.log(tokens)
     // let tokens = await  ENQWeb.Enq.sendAPI('get_tickers_all')
     userStorage.tokens.setTokens({
         net: ENQWeb.Enq.provider,

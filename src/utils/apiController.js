@@ -104,7 +104,8 @@ const getCoinGeckoPrice = async () => {
 }
 
 const getAllTokens = async () => {
-    let response = await fetch('https://bit.enecuum.com/api/v1/get_tickers_all', {})
+    // console.log(ENQWeb.Enq.token)
+    let response = await fetch(ENQWeb.Enq.provider + '/api/v1/get_tickers_all', {})
     return response.json()
 }
 

@@ -160,6 +160,8 @@ export default function Account(props) {
                 }
             }
 
+            // console.log(tickers)
+
             setAmount(amount)
             setTicker(ticker)
             setLogo(image)
