@@ -123,8 +123,8 @@ export default function Account(props) {
                     let tokenUsd = 0
 
                     if (trustedTokens.find(token => token.address === res[i].token)) {
-                        let api_price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw
-                        let price_raw = api_price_raw.cg_price ? api_price_raw : {
+                        let api_price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {}
+                            let price_raw = api_price_raw.cg_price ? api_price_raw : {
                             cg_price: 0,
                             decimals: 10
                         }

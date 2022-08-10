@@ -74,18 +74,18 @@ export default function Activity(props) {
 
         let historyArray = history
 
-        console.log(props.user.token)
-        console.log(historyArray)
+        // console.log(props.user.token)
+        // console.log(historyArray)
 
         const historyElements = []
             // || item.tx.data.includes(props.user.token)
 
         let filteredHistory = props.user.token !== props.getMainToken() ? historyArray.filter(item => item.tx.tokenHash === props.user.token) : historyArray
-        console.log(filteredHistory)
+        // console.log(filteredHistory)
 
         for (const key in filteredHistory) {
-            console.log(filteredHistory[key].tx.tokenHash === props.user.token)
-            console.log(filteredHistory[key].tx.tokenHash)
+            // console.log(filteredHistory[key].tx.tokenHash === props.user.token)
+            // console.log(filteredHistory[key].tx.tokenHash)
             const item = filteredHistory[key]
             // console.log(item.tx.tokenHash)
             // console.log(decimals)

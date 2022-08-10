@@ -14,7 +14,8 @@ export default function Network(props) {
     let [tokenCorrect, setTokenCorrect] = useState(false)
 
     let [networks, setNetworks] = useState()
-    let [libNetworks, setLibNetworks] = useState([...Object.entries(ENQWeb.Enq.urls)])
+    // console.log(ENQWeb.Enq.token)
+    let [libNetworks, setLibNetworks] = useState([...Object.entries(ENQWeb.Enq.User.token)])
     let [localNetworks, setLocalNetworks] = useState(JSON.parse(localStorage.getItem('networks')) || [])
 
     let [showAdd, setShowAdd] = useState(false)
