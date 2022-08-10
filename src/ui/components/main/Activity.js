@@ -74,9 +74,19 @@ export default function Activity(props) {
 
         let historyArray = history
 
+        console.log(props.user.token)
+        console.log(historyArray)
+
         const historyElements = []
-        for (const key in historyArray.filter(item => item.tx.tokenHash === props.user.token || item.tx.data.includes(props.user.token))) {
-            const item = historyArray[key]
+            // || item.tx.data.includes(props.user.token)
+
+        let filteredHistory = historyArray.filter(item => item.tx.tokenHash === props.user.token)
+        console.log(filteredHistory)
+
+        for (const key in filteredHistory) {
+            console.log(filteredHistory[key].tx.tokenHash === props.user.token)
+            console.log(filteredHistory[key].tx.tokenHash)
+            const item = filteredHistory[key]
             // console.log(item.tx.tokenHash)
             // console.log(decimals)
             // console.log(decimals.hasOwnProperty(item.tx.tokenHash))
@@ -116,7 +126,11 @@ export default function Activity(props) {
                     {item.tx ?
                         <div className={styles.activity_data}>
 
-                            <div>{(item.tx.value ? (item.tx.value / (props.decimals[item.tx.tokenHash] || 1e10)) : (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10))) + ' ' + (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
+                            <div>{(item.tx.value ?
+                                ((item.tx.value - item.tx.fee_value) / (props.decimals[item.tx.tokenHash] || 1e10)) :
+                                (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10)))
+                                + ' ' +
+                                (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
 
                         </div> : ''}
                 </div>,
@@ -185,7 +199,7 @@ export default function Activity(props) {
             isMounted = false
         }
 
-    }, [props.user])
+    }, [])
 
     return (
         <div className={styles.bottom_list + (props.activeTab === 1 ? '' : ` ${styles.bottom_list_disabled}`)}>

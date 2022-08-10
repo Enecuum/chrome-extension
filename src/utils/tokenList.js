@@ -44,6 +44,23 @@ let trustedTokens = [
             }
         }
     },
+    {
+        "chainId": 2,
+        "address": "1111111111111111111111111111111111111111111111111111111111111111",
+        "name": "BIT",
+        "symbol": "BIT",
+        "decimals": 10,
+        "logoURI": "https://bit-dev.enecuum.com/info/token/logo/bit/bit-black.png",
+        "extensions": {
+            "bridgeInfo": {
+                "1": {
+                    "tokenAddress": "",
+                }
+            }
+        }
+    },
+
+
 ]
 
 module.exports = trustedTokens

@@ -194,6 +194,8 @@ export default function Network(props) {
 
         let currentIndex = libNetworks.findIndex(element => element[1] === ENQWeb.Enq.provider)
 
+        console.log(libNetworks)
+
         libNetworks.unshift(libNetworks.splice(currentIndex, 1)[0])
 
         for (let i = 0; i < libNetworks.length; i++) {

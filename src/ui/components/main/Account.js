@@ -105,7 +105,8 @@ export default function Account(props) {
 
                     if (props.user.net !== 'https://pulse.enecuum.com') {
                         if (trustedTokens.find(token => token.address === res[i].token)) {
-                            let price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {
+                            let api_price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw
+                            let price_raw = api_price_raw.cg_price ? api_price_raw : {
                                 cg_price: 0,
                                 decimals: 10
                             }
@@ -122,7 +123,8 @@ export default function Account(props) {
                     let tokenUsd = 0
 
                     if (trustedTokens.find(token => token.address === res[i].token)) {
-                        let price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {
+                        let api_price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw
+                        let price_raw = api_price_raw.cg_price ? api_price_raw : {
                             cg_price: 0,
                             decimals: 10
                         }
@@ -381,6 +383,8 @@ export default function Account(props) {
         userStorage.tokens.setUserTrustedTokens([...userTrustedTokens, item])
         setUserTrustedTokens([...userTrustedTokens, item])
     }
+
+    // console.log(props.user.token)
 
     return (
         <div className={styles.main}>
