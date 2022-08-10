@@ -105,8 +105,8 @@ export default function Account(props) {
 
                     if (props.user.net !== 'https://pulse.enecuum.com') {
                         if (trustedTokens.find(token => token.address === res[i].token)) {
-                            let api_price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw || {}
-                            let price_raw = api_price_raw.cg_price ? api_price_raw : {
+                            let api_price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw
+                            let price_raw = api_price_raw && api_price_raw.cg_price ? api_price_raw : {
                                 cg_price: 0,
                                 decimals: 10
                             }
@@ -124,7 +124,7 @@ export default function Account(props) {
 
                     if (trustedTokens.find(token => token.address === res[i].token)) {
                         let api_price_raw = (await apiController.getTokenInfo(res[i].token))[0].price_raw
-                            let price_raw = api_price_raw.cg_price ? api_price_raw : {
+                            let price_raw = api_price_raw && api_price_raw.cg_price ? api_price_raw : {
                             cg_price: 0,
                             decimals: 10
                         }
@@ -246,7 +246,8 @@ export default function Account(props) {
     }
 
     const changeToken = async (hash) => {
-        // console.log(hash);
+
+        console.log(hash);
 
         let user = props.user
         user.token = hash
@@ -284,6 +285,8 @@ export default function Account(props) {
     }
 
     useEffect(() => {
+
+        props.user.token !== ENQWeb.Enq.token[ENQWeb.Enq.provider] ? setActiveTab( 1) : () => {}
 
         openPopup().then(async result => {
             if (result === true) {
@@ -386,6 +389,12 @@ export default function Account(props) {
 
     // console.log(props.user.token)
 
+    // console.log(ENQWeb.Enq.token[ENQWeb.Enq.provider])
+
+    // console.log(props.user.token)
+
+
+
     return (
         <div className={styles.main}>
 
@@ -397,10 +406,10 @@ export default function Account(props) {
                      connectionsCounter={connectionsCounter}
                      isCopied={isCopied}
                      setCopied={setCopied}
+                     token={props.user.token}
                      isMainToken={props.user.token === ENQWeb.Enq.token[ENQWeb.Enq.provider]}
                      setMainToken={() => {
-                         changeToken(ENQWeb.Enq.token[ENQWeb.Enq.provider])
-                             .then()
+                         changeToken(ENQWeb.Enq.token[ENQWeb.Enq.provider]).then()
                      }}
                      setConnects={(connects) => setAllConnects(connects)}
                      setPublicKeyRequest={props.setPublicKeyRequest}/>

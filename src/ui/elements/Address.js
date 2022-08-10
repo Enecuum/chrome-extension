@@ -42,7 +42,7 @@ export default function Address(props) {
 
     useEffect(() => {
         getBlock().then()
-    }, [])
+    }, [props.token])
 
     const showConnections = async () => {
 
