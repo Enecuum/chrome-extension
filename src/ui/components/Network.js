@@ -14,8 +14,8 @@ export default function Network(props) {
     let [tokenCorrect, setTokenCorrect] = useState(false)
 
     let [networks, setNetworks] = useState()
-    // console.log(ENQWeb.Enq.token)
-    let [libNetworks, setLibNetworks] = useState([...Object.entries(ENQWeb.Enq.User.token)])
+
+    let [libNetworks, setLibNetworks] = useState([...Object.entries(ENQWeb.Enq.urls)])
     let [localNetworks, setLocalNetworks] = useState(JSON.parse(localStorage.getItem('networks')) || [])
 
     let [showAdd, setShowAdd] = useState(false)
@@ -193,11 +193,21 @@ export default function Network(props) {
 
         let cards = []
 
-        let currentIndex = libNetworks.findIndex(element => element[1] === ENQWeb.Enq.provider)
+        console.log(ENQWeb.Enq.provider)
+
+        // let currentIndex = libNetworks.findIndex(element => element[1] === ENQWeb.Enq.provider)
+
+        // console.log(currentIndex)
 
         console.log(libNetworks)
 
-        libNetworks.unshift(libNetworks.splice(currentIndex, 1)[0])
+
+
+        // libNetworks.splice(currentIndex, 1)
+
+        console.log(libNetworks)
+
+        // libNetworks = libNetworks.filter(item => localNetworks.find(localItem => item[1] !== localItem.host))
 
         for (let i = 0; i < libNetworks.length; i++) {
 
@@ -213,6 +223,12 @@ export default function Network(props) {
                 </div>
             )
         }
+
+        console.log(localNetworks)
+
+        // let currentIndex = localNetworks.findIndex(element => element['host'] === ENQWeb.Enq.provider)
+
+        // localNetworks.splice(currentIndex, 1)
 
         for (let i = 0; i < localNetworks.length; i++) {
 
