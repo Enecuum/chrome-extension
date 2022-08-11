@@ -82,6 +82,10 @@ export default function Address(props) {
         props.setCopied(true)
     }
 
+    const update = () => {
+        props.getBalance().then()
+    }
+
     return (
         <div className={elements.address_row}>
 
@@ -98,7 +102,7 @@ export default function Address(props) {
                      title={props.publicKey + copyText}>{shortHash(props.publicKey)}</div>
             </div>
 
-            <div className={elements.block}>
+            <div className={elements.block} onClick={update}>
                 <div>{blockN}</div>
                 <div>{blockDate.toLocaleDateString()}</div>
                 <div>{blockDate.toLocaleTimeString()}</div>
