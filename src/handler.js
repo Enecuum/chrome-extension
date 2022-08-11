@@ -197,6 +197,14 @@ export function globalMessageHandler(msg, ENQWeb) {
             resolve({ response: handlerMiners })
         }
 
+        //update balances
+        if (msg.poa && msg.update && msg.balance) {
+            for(let i = 0; i < handlerMiners.length; i++){
+                handlerMiners[i].token = await apiController.getBalance(handlerMiners[i].publicKey, handlerMiners[i].token.token)
+            }
+            resolve({ response: handlerMiners })
+        }
+
         // Start all PoA
         if (msg.poa && msg.status) {
             resolve({ response: miningStatus })
