@@ -165,15 +165,16 @@ export default function Mining(props) {
                     get: true,
                 })
                     .then(miners => {
-                        setAccounts(miners)
-                        setStatus(status.miningProcess ? 'MINING' : 'READY')
-                        for (let i = 0; i < miners.length; i++) {
-                            apiController.getRewards(miners[i].publicKey)
-                                .then(rewards => {
-                                    miners[i].rewards = rewards.records
-                                })
-                        }
-
+                        userStorage.promise.sendPromise({poa:true, update:true, balance:true}).then(miners=>{
+                            setAccounts(miners)
+                            setStatus(status.miningProcess ? 'MINING' : 'READY')
+                            for (let i = 0; i < miners.length; i++) {
+                                apiController.getRewards(miners[i].publicKey)
+                                    .then(rewards => {
+                                        miners[i].rewards = rewards.records
+                                    })
+                            }
+                        })
                         // showNotification('Mining', 'READY')
                     })
             })
