@@ -218,7 +218,10 @@ export default function Mining(props) {
 
         for (let i = 0; i < accounts.length; i++) {
 
-            let tokens = accounts[i].tokens.map((token) => <div key={token.token}
+            if (accounts[i].tokens.length === 0)
+                accounts[i].mining = false
+
+            let tokens = accounts[i].tokens.map((token) => token.minable !== 0 && <div key={token.token}
                                                                 onClick={() => token.minable === 0 ? () => {
                                                                 } : selectToken(accounts[i].publicKey, token)}
                                                                 className={token.minable === 0 ? styles.card_grid_disabled : (token.token === accounts[i].token.token ? styles.card_grid_select : '')}>
@@ -272,9 +275,13 @@ export default function Mining(props) {
                     </div>}
 
                     <div className={styles.card_field_select} onClick={(() => {
-                        accounts[i].list = !accounts[i].list
-                        setAccounts([...accounts])
-                    })}>{accounts[i].list ? 'SHOW TOKENS' : 'HIDE'}</div>
+                        if (accounts[i].tokens.length > 0) {
+                            accounts[i].list = !accounts[i].list
+                            setAccounts([...accounts])
+                        }
+                    })}>{accounts[i].list ?
+                        (accounts[i].tokens.length > 0 ? 'SHOW TOKENS' : 'EMPTY') :
+                        'HIDE'}</div>
                 </div>
 
             cards.push(card)
