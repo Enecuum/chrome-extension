@@ -118,9 +118,17 @@ export default function Network(props) {
         }
 
         setShowAdd(false)
+        let found = false
+        localNetworks.forever(el=>{
+            if(el.host === host){
+                found = true
+            }
+        })
+        if(!found){
+            localNetworks.push({name, host, token})
+            localStorage.setItem(NETWORKS, JSON.stringify(localNetworks))
+        }
 
-        localNetworks.push({name, host, token})
-        localStorage.setItem(NETWORKS, JSON.stringify(localNetworks))
         setLocalNetworks(localNetworks)
         renderCards()
 
