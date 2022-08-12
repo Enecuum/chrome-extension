@@ -412,7 +412,9 @@ export default function Account(props) {
                          changeToken(ENQWeb.Enq.token[ENQWeb.Enq.provider]).then()
                      }}
                      setConnects={(connects) => setAllConnects(connects)}
-                     setPublicKeyRequest={props.setPublicKeyRequest}/>
+                     setPublicKeyRequest={props.setPublicKeyRequest}
+                     getBalance={getBalance}
+            />
 
             <div className={styles.content}>
 
