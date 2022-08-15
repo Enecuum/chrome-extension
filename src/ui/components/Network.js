@@ -118,11 +118,14 @@ export default function Network(props) {
 
         setShowAdd(false)
         let found = false
-        localNetworks.forEach(el=>{
-            if(el.host === host){
+
+        for(let i = 0; i < localNetworks.length; i++){
+            if(localNetworks[i].host === host){
                 found = true
+                console.log("DUPLICATE HOST")
             }
-        })
+        }
+
         if(!found){
             localNetworks.push({name, host, token})
             localStorage.setItem(NETWORKS, JSON.stringify(localNetworks))
