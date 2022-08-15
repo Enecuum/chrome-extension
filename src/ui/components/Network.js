@@ -209,17 +209,22 @@ export default function Network(props) {
 
         // for (let i = 0; i < libNetworks.length; i++) {
         //
-        let current = ENQWeb.Enq.provider === libNetworks[0][1]
 
-        cards.push(
-            <div key={'bit' + 'card'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
-                <div className={styles.card_field}>{libNetworks[0][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
-                <div className={styles.card_field}>{libNetworks[0][1]}</div>
-                <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[0][1]])}</div>
-                <div className={styles.card_field_select} onClick={(current ? () => {
-                } : () => setNet(libNetworks[0][1]))}>{current ? 'CURRENT' : 'SELECT'}</div>
-            </div>
-        )
+
+        for(let i = 0; i < 2; i++ ){
+            let current = ENQWeb.Enq.provider === libNetworks[i][1]
+            cards.push(
+                <div key={'bit' + 'card' + i} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
+                    <div className={styles.card_field}>{libNetworks[i][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
+                    <div className={styles.card_field}>{libNetworks[i][1]}</div>
+                    <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[i][1]])}</div>
+                    <div className={styles.card_field_select} onClick={(current ? () => {
+                    } : () => setNet(libNetworks[i][1]))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                </div>
+            )
+        }
+
+
         // }
 
         for (let i = 0; i < localNetworks.length; i++) {
@@ -243,6 +248,7 @@ export default function Network(props) {
     }
 
     useEffect(() => {
+        console.log(libNetworks)
         renderCards()
     }, [])
 
