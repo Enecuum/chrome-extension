@@ -177,8 +177,9 @@ export default function Network(props) {
 
         await cacheTokens().then(async () => {
             // location.reload(false)
+            renderCards()
             await props.updateUserData()
-            props.setNetwork(false)
+            // props.setNetwork(false)
         })
     }
 
@@ -248,7 +249,6 @@ export default function Network(props) {
     }
 
     useEffect(() => {
-        console.log(libNetworks)
         renderCards()
     }, [])
 
