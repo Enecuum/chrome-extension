@@ -14,7 +14,6 @@ export default function Network(props) {
     let [tokenCorrect, setTokenCorrect] = useState(false)
 
     let [networks, setNetworks] = useState()
-
     let [libNetworks, setLibNetworks] = useState([...Object.entries(ENQWeb.Enq.urls)])
     let [localNetworks, setLocalNetworks] = useState(JSON.parse(localStorage.getItem('networks')) || [])
 
@@ -155,9 +154,9 @@ export default function Network(props) {
         renderCards()
     }
 
-    let setNet = async (value, hash) => {
+    let setNet = async (value) => {
 
-        console.log(value)
+        // console.log(value)
 
         localStorage.setItem(NET, value)
         ENQWeb.Net.provider = value
@@ -174,28 +173,12 @@ export default function Network(props) {
             }).then(async ()=>{
                 await asyncRequest({reject_all: true})
             })
-
-            await changeToken(hash)
         })
 
         await cacheTokens().then(async () => {
             // location.reload(false)
             await props.updateUserData()
             props.setNetwork(false)
-        })
-    }
-
-    const changeToken = async (hash) => {
-
-        console.log(hash);
-
-        let user = props.user
-        user.token = hash
-
-        await userStorage.promise.sendPromise({
-            account: true,
-            set: true,
-            data: user
         })
     }
 
@@ -220,56 +203,36 @@ export default function Network(props) {
 
         let cards = []
 
-        console.log(ENQWeb.Enq.provider)
-
         // let currentIndex = libNetworks.findIndex(element => element[1] === ENQWeb.Enq.provider)
 
-        // console.log(currentIndex)
+        // libNetworks.unshift(libNetworks.splice(currentIndex, 1)[0])
 
-        // console.log(libNetworks)
+        // for (let i = 0; i < libNetworks.length; i++) {
+        //
+        let current = ENQWeb.Enq.provider === libNetworks[0][1]
 
-
-
-        // libNetworks.splice(currentIndex, 1)
-
-        // console.log(ENQWeb.Enq.token)
-
-        // libNetworks = libNetworks.filter(item => localNetworks.find(localItem => item[1] !== localItem.host))
-
-        for (let i = 0; i < libNetworks.length; i++) {
-
-            let current = ENQWeb.Enq.provider === libNetworks[i][1]
-
-            // console.log(ENQWeb.Enq.token[libNetworks[i][1]])
-
-            cards.push(
-                <div key={i + 'lib'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
-                    <div className={styles.card_field}>{libNetworks[i][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
-                    <div className={styles.card_field}>{libNetworks[i][1]}</div>
-                    <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[i][1]])}</div>
-                    <div className={styles.card_field_right_bottom} onClick={(current ? () => {
-                    } : () => setNet(libNetworks[i][1], ENQWeb.Enq.token[libNetworks[i][1]]))}>{current ? 'CURRENT' : 'SELECT'}</div>
-                </div>
-            )
-        }
-
-        console.log(localNetworks)
-
-        // let currentIndex = localNetworks.findIndex(element => element['host'] === ENQWeb.Enq.provider)
-
-        // localNetworks.splice(currentIndex, 1)
+        cards.push(
+            <div key={'bit' + 'card'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
+                <div className={styles.card_field}>{libNetworks[0][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
+                <div className={styles.card_field}>{libNetworks[0][1]}</div>
+                <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[0][1]])}</div>
+                <div className={styles.card_field_select} onClick={(current ? () => {
+                } : () => setNet(libNetworks[0][1]))}>{current ? 'CURRENT' : 'SELECT'}</div>
+            </div>
+        )
+        // }
 
         for (let i = 0; i < localNetworks.length; i++) {
 
             let current = ENQWeb.Enq.provider === localNetworks[i].host
 
             cards.push(
-                <div key={i + 'local'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
+                <div key={i + 'card'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
                     <div className={styles.card_field}><b>{localNetworks[i].name}</b></div>
                     <div className={styles.card_field}>{localNetworks[i].host}</div>
                     <div className={styles.card_field}>{shortHash(localNetworks[i].token)}</div>
-                    <div className={styles.card_field_right_bottom} onClick={(current ? () => {
-                    } : () => setNet(localNetworks[i].host, localNetworks[i].token))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                    <div className={styles.card_field_select} onClick={(current ? () => {
+                    } : () => setNet(localNetworks[i].host))}>{current ? 'CURRENT' : 'SELECT'}</div>
                     <div className={styles.card_field_delete}
                          onClick={() => removeNet(localNetworks[i].name)}>&#x2715;</div>
                 </div>
