@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
-import styles from "../css/index.module.css";
-import Separator from "../elements/Separator";
-import {regexToken, shortHash} from "../Utils";
-import Input from "../elements/Input";
-import {NET, NETWORKS} from "../../utils/names";
+import React, { useEffect, useState } from 'react'
+import styles from '../css/index.module.css'
+import Separator from '../elements/Separator'
+import { regexToken, shortHash } from '../Utils'
+import Input from '../elements/Input'
+import { NET, NETWORKS } from '../../utils/names'
 
 export default function Network(props) {
 
@@ -21,16 +21,16 @@ export default function Network(props) {
 
     let checkHost = (url) => {
 
-        url = url[url.length - 1] === '/' ? url.substr(0, url.length - 1) : url;
+        url = url[url.length - 1] === '/' ? url.substr(0, url.length - 1) : url
 
         setHostCorrect(false)
         setTokenCorrect(false)
 
         let urlObject
         try {
-            urlObject = new URL(url);
+            urlObject = new URL(url)
         } catch (_) {
-            return false;
+            return false
         }
 
         // let xhr = new XMLHttpRequest()
@@ -72,7 +72,7 @@ export default function Network(props) {
 
             new URL(url)
 
-            if (validURL(url))
+            if (validURL(url)) {
                 fetch(url + '/api/v1/native_token')
                     .then(response => response.json())
                     .then(data => {
@@ -92,13 +92,15 @@ export default function Network(props) {
                                     setHostCorrect(true)
                                     setHost(url)
 
-                                    if (regexToken.test(token))
+                                    if (regexToken.test(token)) {
                                         setTokenCorrect(true)
+                                    }
                                 }
                             })
                             .catch(e => {
                             })
                     })
+            }
         } catch (e) {
         }
     }
@@ -126,8 +128,12 @@ export default function Network(props) {
         //     }
         // }
 
-        if(!found){
-            localNetworks.push({name, host, token})
+        if (!found) {
+            localNetworks.push({
+                name,
+                host,
+                token
+            })
             localStorage.setItem(NETWORKS, JSON.stringify(localNetworks))
         }
 
@@ -161,26 +167,30 @@ export default function Network(props) {
         localStorage.setItem(NET, value)
         ENQWeb.Net.provider = value
 
-        await userStorage.user.loadUser().then(async account => {
+        await userStorage.user.loadUser()
+            .then(async account => {
 
-            account.net = value
-            account.token = ENQWeb.Enq.token[value]
+                account.net = value
+                account.token = ENQWeb.Enq.token[value]
 
-            await userStorage.promise.sendPromise({
-                account: true,
-                set: true,
-                data: account
-            }).then(async ()=>{
-                await asyncRequest({reject_all: true})
+                await userStorage.promise.sendPromise({
+                    account: true,
+                    set: true,
+                    data: account
+                })
+                    .then(async () => {
+                        await asyncRequest({ reject_all: true })
+                    })
             })
-        })
 
-        await cacheTokens().then(async () => {
-            // location.reload(false)
-            renderCards()
-            await props.updateUserData()
-            // props.setNetwork(false)
-        })
+        await cacheTokens()
+            .then(async () => {
+                // location.reload(false)
+                renderCards()
+                props.updateUserData()
+                    .then()
+                // props.setNetwork(false)
+            })
     }
 
 
@@ -190,8 +200,8 @@ export default function Network(props) {
             '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
             '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
             '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-            '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-            '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+            '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+            '(\\#[-a-z\\d_]*)?$', 'i') // fragment locator
 
         console.log(!!pattern.test(str))
 
@@ -212,11 +222,13 @@ export default function Network(props) {
         //
 
 
-        for (let i = 0; i < 2; i++ ) {
+        for (let i = 0; i < 2; i++) {
             let current = ENQWeb.Enq.provider === libNetworks[i][1]
             cards.push(
                 <div key={'bit' + 'card' + i} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
-                    <div className={styles.card_field}>{libNetworks[i][1].replace('https://', '').replace('.enecuum.com', '').toUpperCase()}</div>
+                    <div className={styles.card_field}>{libNetworks[i][1].replace('https://', '')
+                        .replace('.enecuum.com', '')
+                        .toUpperCase()}</div>
                     <div className={styles.card_field}>{libNetworks[i][1]}</div>
                     <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[i][1]])}</div>
                     <div className={styles.card_field_right_bottom} onClick={(current ? () => {
@@ -262,7 +274,12 @@ export default function Network(props) {
                     return
                 }
                 props.setNetwork(false)
-                userStorage.promise.sendPromise({poa:true, update:true, pull:true}).then()
+                userStorage.promise.sendPromise({
+                    poa: true,
+                    update: true,
+                    pull: true
+                })
+                    .then()
             }}>❮ Back
             </div>
 
