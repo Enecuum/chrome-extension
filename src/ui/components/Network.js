@@ -119,12 +119,12 @@ export default function Network(props) {
         setShowAdd(false)
         let found = false
 
-        for(let i = 0; i < localNetworks.length; i++){
-            if(localNetworks[i].host === host){
-                found = true
-                console.log("DUPLICATE HOST")
-            }
-        }
+        // for(let i = 0; i < localNetworks.length; i++){
+        //     if(localNetworks[i].host === host){
+        //         found = true
+        //         console.log("DUPLICATE HOST")
+        //     }
+        // }
 
         if(!found){
             localNetworks.push({name, host, token})
@@ -164,7 +164,7 @@ export default function Network(props) {
         await userStorage.user.loadUser().then(async account => {
 
             account.net = value
-            account.token = token
+            account.token = ENQWeb.Enq.token[value]
 
             await userStorage.promise.sendPromise({
                 account: true,
