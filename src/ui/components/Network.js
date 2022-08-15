@@ -118,7 +118,7 @@ export default function Network(props) {
 
         setShowAdd(false)
         let found = false
-        localNetworks.forever(el=>{
+        localNetworks.forEach(el=>{
             if(el.host === host){
                 found = true
             }
