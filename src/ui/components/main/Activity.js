@@ -100,6 +100,7 @@ export default function Activity(props) {
             //             }
             //         })
             // }
+
             historyElements.push(
                 <div
                     key={key} onClick={() => {
@@ -125,12 +126,19 @@ export default function Activity(props) {
                     </div>
                     {item.tx ?
                         <div className={styles.activity_data}>
-
-                            <div>{(item.tx.value ?
-                                ((item.tx.value - item.tx.fee_value) / (props.decimals[item.tx.tokenHash] || 1e10)) :
-                                (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10)))
+                            {item.type === 'iout' ?
+                                <div>{(item.tx.value ?
+                                    ((item.tx.value) / (props.decimals[item.tx.tokenHash] || 1e10)) :
+                                    (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10)))
                                 + ' ' +
                                 (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
+                                :
+                                <div>{(item.tx.value ?
+                                ((item.tx.value - item.tx.fee_value) / (props.decimals[item.tx.tokenHash] || 1e10)) :
+                                (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10)))
+                            + ' ' +
+                            (item.tx.ticker ? item.tx.ticker : 'COIN')}</div> }
+
 
                         </div> : ''}
                 </div>,
