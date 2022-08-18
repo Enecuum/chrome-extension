@@ -179,6 +179,9 @@ export default function Network(props) {
                     data: account
                 })
                     .then(async () => {
+                        renderCards()
+                        props.updateUserData()
+                            .then()
                         await asyncRequest({ reject_all: true })
                     })
             })
@@ -186,9 +189,6 @@ export default function Network(props) {
         await cacheTokens()
             .then(async () => {
                 // location.reload(false)
-                renderCards()
-                props.updateUserData()
-                    .then()
                 // props.setNetwork(false)
             })
     }
