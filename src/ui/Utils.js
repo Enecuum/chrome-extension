@@ -142,7 +142,7 @@ const copyToClipboard = (text) => {
     })
 }
 
-let id = 1
+let id = 0
 
 const showNotification = (title, text) => {
 

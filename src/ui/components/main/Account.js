@@ -49,6 +49,8 @@ export default function Account(props) {
 
     const [userTrustedTokens, setUserTrustedTokens] = useState(userStorage.tokens.getUserTrustedTokens())
 
+    const [isMiningToken, setMiningToken] = useState(true)
+
     const clickMenu = () => {
         setMenu(!menu)
     }
@@ -102,6 +104,8 @@ export default function Account(props) {
                     ticker = res[i].ticker
                     image = generateIcon(res[i].token)
                     decimal = res[i].decimals
+
+                    setMiningToken(res[i].minable === 1)
 
                     if (props.user.net !== 'https://pulse.enecuum.com') {
                         if (trustedTokens.find(token => token.address === res[i].token)) {
@@ -454,11 +458,11 @@ export default function Account(props) {
                     {/*<div>Transaction</div>*/}
                 </div>
 
-                <div className={styles.circle_button} onClick={props.setMining}>
+                {isMiningToken && <div className={styles.circle_button} onClick={props.setMining}>
                     <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/9.png"/>
                     </div>
                     <div>Mining</div>
-                </div>
+                </div>}
 
             </div>
 
