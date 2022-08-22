@@ -27,9 +27,14 @@ export default function Activity(props) {
 
     const getHistory = async () => {
 
+        console.log(ENQWeb.Enq.provider)
+        let globalStateHistory = globalState.state[ENQWeb.Enq.provider].history[props.user.publicKey] || []
+        console.log(globalStateHistory)
+        setHistory(globalStateHistory)
+
         let history = {}
         history.records = []
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 10; i++) {
             let historyRecords = await apiController.getAccountTransactions(props.user.publicKey, i)
             history.records = history.records.concat(historyRecords.records)
         }

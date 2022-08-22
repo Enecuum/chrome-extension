@@ -55,4 +55,4 @@ let time = 200
 
 let globalStateVersion = 1
 
-export { globalState, globalStateVersion }
+export {globalState, globalStateVersion}
