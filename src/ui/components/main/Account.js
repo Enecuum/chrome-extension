@@ -9,6 +9,7 @@ import {apiController} from '../../../utils/apiController'
 import Input from "../../elements/Input";
 import Assets from "./Assets";
 import Activity from "./Activity";
+import {globalState} from '../../../globalState'
 
 
 let tickers = {}
@@ -84,6 +85,9 @@ export default function Account(props) {
         let tokens = []
 
         await apiController.getBalanceAll(props.user.publicKey).then(async (res) => {
+
+            globalState.setBalanceData(ENQWeb.Enq.provider, props.user.publicKey, res)
+            globalState.save().then()
 
             let amount = BigInt(0)
             let ticker = ''

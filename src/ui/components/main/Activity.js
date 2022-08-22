@@ -2,6 +2,7 @@ import styles from "../../css/index.module.css";
 import React, {useEffect, useState} from "react";
 import {explorerAddress, explorerTX, shortHash} from "../../Utils";
 import {apiController} from "../../../utils/apiController";
+import {globalState} from "../../../globalState"
 
 const names = {
     enable: 'Share account address',
@@ -68,6 +69,8 @@ export default function Activity(props) {
         }
 
         setHistory(oldActivity)
+        globalState.setHistory(ENQWeb.Enq.provider, props.user.publicKey, oldActivity)
+        globalState.save().then()
     }
 
     let renderHistory = () => {

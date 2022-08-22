@@ -2,12 +2,16 @@ import { initApp } from './ui/index'
 import { globalMessageHandler, messagePopupHandler } from './handler'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import { versions } from './utils/names'
+import {globalState} from './globalState'
 
 // Init storage
 import Storage from './utils/localStorage'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 
 global.userStorage = new Storage('popup')
+
+// TODO initial globalState
+globalState.init()
 
 // TODO we have to move this to background or service worker
 global.publisher = {ws: {readyState: 3}}
