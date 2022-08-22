@@ -8,15 +8,15 @@ let globalState = {
         }
     },
     save: () => {
-        return new Promise( resolve => {
-            if(!save_active){
+        return new Promise(resolve => {
+            if (!save_active) {
                 save_active = true
                 userStorage.state.setState(globalState.state)
                 save_active = false
                 resolve()
-            }else{
-                let interval = setInterval(()=>{
-                    if(!save_active){
+            } else {
+                let interval = setInterval(() => {
+                    if (!save_active) {
                         save_active = true
                         userStorage.state.setState(globalState.state)
                         save_active = false
@@ -30,7 +30,7 @@ let globalState = {
     init: () => {
         globalState.state = userStorage.state.getState()
     },
-    setBalanceData:(network, publicKey, tokens)=>{
+    setBalanceData: (network, publicKey, tokens) => {
         globalState.state[network] = globalState.state[network] ? globalState.state[network] : {
             balances: {},
             tokens: {},
@@ -41,11 +41,11 @@ let globalState = {
 
         globalState.state[network].balances[publicKey] = globalState.state[network].balances[publicKey] ? globalState.state[network].balances[publicKey] : {}
 
-        for(let i = 0; i < tokens.length; i++){
+        for (let i = 0; i < tokens.length; i++) {
             globalState.state[network].balances[publicKey][tokens[i].token] = tokens[i].amount.toString()
         }
     },
-    setHistory:(network, publicKey, history)=>{
+    setHistory: (network, publicKey, history) => {
         globalState.state[network].history[publicKey] = history
     },
 }

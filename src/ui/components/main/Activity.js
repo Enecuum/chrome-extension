@@ -1,8 +1,8 @@
-import styles from "../../css/index.module.css";
-import React, {useEffect, useState} from "react";
-import {explorerAddress, explorerTX, shortHash} from "../../Utils";
-import {apiController} from "../../../utils/apiController";
-import {globalState} from "../../../globalState"
+import styles from '../../css/index.module.css'
+import React, { useEffect, useState } from 'react'
+import { explorerAddress, explorerTX, shortHash } from '../../Utils'
+import { apiController } from '../../../utils/apiController'
+import { globalState } from '../../../globalState'
 
 const names = {
     enable: 'Share account address',
@@ -70,7 +70,8 @@ export default function Activity(props) {
 
         setHistory(oldActivity)
         globalState.setHistory(ENQWeb.Enq.provider, props.user.publicKey, oldActivity)
-        globalState.save().then()
+        globalState.save()
+            .then()
     }
 
     let renderHistory = () => {
@@ -81,7 +82,7 @@ export default function Activity(props) {
         // console.log(historyArray)
 
         const historyElements = []
-            // || item.tx.data.includes(props.user.token)
+        // || item.tx.data.includes(props.user.token)
 
         let filteredHistory = props.user.token && props.user.token !== props.getMainToken() ? historyArray.filter(item => item.tx.tokenHash === props.user.token) : historyArray
         // console.log(filteredHistory)
@@ -122,7 +123,8 @@ export default function Activity(props) {
                     <div>
                         <div>{names[item.type]}</div>
                         <div className={styles.time}>
-                            {new Date(item.data.date).toISOString().slice(0, 10)}
+                            {new Date(item.data.date).toISOString()
+                                .slice(0, 10)}
                             <div className={styles.history_link}
                                  onClick={() => explorerTX(item.tx.hash)}>{shortHash(item.tx.hash)}</div>
                         </div>
@@ -137,10 +139,10 @@ export default function Activity(props) {
                                 (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
                                 :
                                 <div>{(item.tx.value ?
-                                ((item.tx.value - item.tx.fee_value) / (props.decimals[item.tx.tokenHash] || 1e10)) :
-                                (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10)))
-                            + ' ' +
-                            (item.tx.ticker ? item.tx.ticker : 'COIN')}</div> }
+                                    ((item.tx.value - item.tx.fee_value) / (props.decimals[item.tx.tokenHash] || 1e10)) :
+                                    (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10)))
+                                + ' ' +
+                                (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>}
 
 
                         </div> : ''}
@@ -152,7 +154,7 @@ export default function Activity(props) {
 
     //Reject all
     let rejectAll = async () => {
-        await asyncRequest({reject_all: true})
+        await asyncRequest({ reject_all: true })
         setActivity([])
     }
 
@@ -203,7 +205,8 @@ export default function Activity(props) {
 
     useEffect(() => {
 
-        getHistory().then()
+        getHistory()
+            .then()
 
         let isMounted = true
         return () => {
