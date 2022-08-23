@@ -1,6 +1,7 @@
 // This is storage object,
 
-const {LIST, TASK, USER, LOCK, CONFIG, TOKENS, SITES, TRUSTED_TOKENS,
+const {
+    LIST, TASK, USER, LOCK, CONFIG, TOKENS, SITES, TRUSTED_TOKENS,
     STATE
 } = require("./names");
 const indexDB = require('./indexDB')
@@ -396,12 +397,12 @@ let setUserTrustedTokens = (tokens) => {
     localStorage.setItem(TRUSTED_TOKENS + ':' + ENQWeb.Enq.provider, JSON.stringify(tokens))
 }
 
-let getState = ()=>{
+let getState = () => {
     let state = JSON.parse(localStorage.getItem(STATE))
     return state ? state : {}
 }
 
-let setState = (state)=>{
+let setState = (state) => {
     localStorage.setItem(STATE, JSON.stringify(state))
     return true
 }

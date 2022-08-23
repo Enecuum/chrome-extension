@@ -1,6 +1,7 @@
-import { apiController } from './utils/apiController'
+import {apiController} from './utils/apiController'
 
 let globalState = {
+
     state: {
         network1: {
             balances: {},
@@ -9,6 +10,7 @@ let globalState = {
             history: {}
         }
     },
+
     save: () => {
         return new Promise(resolve => {
             if (!save_active) {
@@ -29,9 +31,11 @@ let globalState = {
             }
         })
     },
+
     init: () => {
         globalState.state = userStorage.state.getState()
     },
+
     setBalanceData: (network, publicKey, tokens) => {
         globalState.state[network] = globalState.state[network] ? globalState.state[network] : {
             balances: {},
@@ -47,6 +51,7 @@ let globalState = {
             globalState.state[network].balances[publicKey][tokens[i].token] = tokens[i].amount.toString()
         }
     },
+
     setHistory: (network, publicKey, history) => {
         globalState.state[network].history[publicKey] = history
     },
@@ -62,6 +67,20 @@ let globalState = {
                 })
             resolve()
         })
+    },
+
+    getTokenBalance: (network, publicKey, tokenHash) => {
+        console.log(globalState.state[network].tokens[publicKey])
+        let globalStateTokenBalance = globalState.state[network].tokens[publicKey].find(token => token.token === tokenHash)
+        let globalStateBalancesObject = {
+            amount: globalStateTokenBalance.amount + '.0000',
+            ticker: globalStateTokenBalance.ticker,
+            decimal: globalStateTokenBalance.decimals,
+        }
+
+        console.log(globalStateBalancesObject)
+
+        return globalStateBalancesObject
     },
 
     updateBalance: (network, publicKey) => {
@@ -107,7 +126,6 @@ let globalState = {
                 .then(() => resolve()) : globalState.updateBalance(network, publicKey)
                 .then(() => resolve())
         })
-
     }
 }
 
@@ -116,4 +134,4 @@ let time = 200
 
 let globalStateVersion = 1
 
-export { globalState, globalStateVersion }
+export {globalState, globalStateVersion}
