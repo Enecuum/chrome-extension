@@ -1,3 +1,5 @@
+import { apiController } from './utils/apiController'
+
 let globalState = {
     state: {
         network1: {
@@ -48,6 +50,65 @@ let globalState = {
     setHistory: (network, publicKey, history) => {
         globalState.state[network].history[publicKey] = history
     },
+
+    updateBalances: (network) => {
+        return new Promise(resolve => {
+            Object.keys(globalState.state[network].balances)
+                .map(el => {
+                    apiController.getBalanceAll(el)
+                        .then(data => {
+                            globalState.setBalanceData(network, el, data)
+                        })
+                })
+            resolve()
+        })
+    },
+
+    updateBalance: (network, publicKey) => {
+
+        return new Promise(resolve => {
+
+            globalState.state[network] = globalState.state[network] ? globalState.state[network] : {
+                balances: {},
+                tokens: {},
+                tickers: {},
+                history: {}
+            }
+            globalState.state[network].tokens[publicKey] = globalState.state[network].tokens[publicKey] ? globalState.state[network].tokens[publicKey] : {}
+
+            globalState.state[network].balances[publicKey] = globalState.state[network].balances[publicKey] ? globalState.state[network].balances[publicKey] : {}
+
+            apiController.getBalanceAll(publicKey)
+                .then(data => {
+                    globalState.setBalanceData(network, publicKey, data)
+                    resolve()
+                })
+        })
+
+
+    },
+
+    setPublicKey: (network, publicKey, all = false) => {
+
+
+        return new Promise(resolve => {
+
+            globalState.state[network] = globalState.state[network] ? globalState.state[network] : {
+                balances: {},
+                tokens: {},
+                tickers: {},
+                history: {}
+            }
+            globalState.state[network].tokens[publicKey] = globalState.state[network].tokens[publicKey] ? globalState.state[network].tokens[publicKey] : {}
+
+            globalState.state[network].balances[publicKey] = globalState.state[network].balances[publicKey] ? globalState.state[network].balances[publicKey] : {}
+
+            all ? globalState.updateBalances(network)
+                .then(() => resolve()) : globalState.updateBalance(network, publicKey)
+                .then(() => resolve())
+        })
+
+    }
 }
 
 let save_active = false
@@ -55,4 +116,4 @@ let time = 200
 
 let globalStateVersion = 1
 
-export {globalState, globalStateVersion}
+export { globalState, globalStateVersion }
