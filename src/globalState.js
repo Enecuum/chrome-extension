@@ -1,29 +1,29 @@
 import {apiController} from './utils/apiController'
 
+let baseNetwork = {
+    balances: {},
+    tokens: {},
+    tickers: {},
+    history: {}
+}
+
 let globalState = {
 
-    state: {
-        network1: {
-            balances: {},
-            tokens: {},
-            tickers: {},
-            history: {}
-        }
-    },
+    state: {},
 
     save: () => {
         return new Promise(resolve => {
-            if (!save_active) {
-                save_active = true
+            if (!saveActive) {
+                saveActive = true
                 userStorage.state.setState(globalState.state)
-                save_active = false
+                saveActive = false
                 resolve()
             } else {
                 let interval = setInterval(() => {
-                    if (!save_active) {
-                        save_active = true
+                    if (!saveActive) {
+                        saveActive = true
                         userStorage.state.setState(globalState.state)
-                        save_active = false
+                        saveActive = false
                         clearInterval(interval)
                         resolve()
                     }
@@ -69,20 +69,6 @@ let globalState = {
         })
     },
 
-    getTokenBalance: (network, publicKey, tokenHash) => {
-        console.log(globalState.state[network].tokens[publicKey])
-        let globalStateTokenBalance = globalState.state[network].tokens[publicKey].find(token => token.token === tokenHash)
-        let globalStateBalancesObject = {
-            amount: globalStateTokenBalance.amount + '.0000',
-            ticker: globalStateTokenBalance.ticker,
-            decimal: globalStateTokenBalance.decimals,
-        }
-
-        console.log(globalStateBalancesObject)
-
-        return globalStateBalancesObject
-    },
-
     updateBalance: (network, publicKey) => {
 
         return new Promise(resolve => {
@@ -126,10 +112,44 @@ let globalState = {
                 .then(() => resolve()) : globalState.updateBalance(network, publicKey)
                 .then(() => resolve())
         })
-    }
+    },
+
+    // GET STATE
+
+    getNetworkState: (network) => {
+        // console.log(globalState.state[network])
+        let networkState
+        if (globalState.state[network] && globalState.state[network].balances) {
+            networkState = globalState.state[network]
+        } else {
+            // networkState = {...baseNetwork}
+            console.log(globalState)
+            console.log(baseNetwork)
+            globalState.state[network] = networkState
+            globalState.save().then()
+        }
+        console.log(networkState)
+        return networkState
+    },
+
+    getTokenBalance: (network, publicKey, tokenHash) => {
+        let tokens = globalState.getNetworkState(network).tokens[publicKey] || []
+        let globalStateTokenBalance = tokens.find(token => token.token === tokenHash) || {amount: 0, ticker: '', decimal: 10}
+        let globalStateTokenObject = {
+            amount: globalStateTokenBalance.amount,
+            ticker: globalStateTokenBalance.ticker,
+            decimal: globalStateTokenBalance.decimals,
+            // usd: globalStateTokenBalance.usd,
+        }
+
+        // console.log(globalStateBalancesObject)
+
+        return globalStateTokenObject
+    },
+
 }
 
-let save_active = false
+let saveActive = false
 let time = 200
 
 let globalStateVersion = 1

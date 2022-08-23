@@ -27,9 +27,9 @@ export default function Activity(props) {
 
     const getHistory = async () => {
 
-        console.log(ENQWeb.Enq.provider)
-        let globalStateHistory = globalState.state[ENQWeb.Enq.provider].history[props.user.publicKey] || []
-        console.log(globalStateHistory)
+        // console.log(globalState.getNetworkState(ENQWeb.Enq.provider))
+        let globalStateHistory = globalState.getNetworkState(ENQWeb.Enq.provider).history[props.user.publicKey] || []
+        // console.log(globalStateHistory)
         setHistory(globalStateHistory)
 
         let history = {}
@@ -75,8 +75,7 @@ export default function Activity(props) {
 
         setHistory(oldActivity)
         globalState.setHistory(ENQWeb.Enq.provider, props.user.publicKey, oldActivity)
-        globalState.save()
-            .then()
+        globalState.save().then()
     }
 
     let renderHistory = () => {
