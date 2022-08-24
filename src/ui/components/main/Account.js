@@ -85,11 +85,10 @@ export default function Account(props) {
         let tokens = []
 
         let globalStateBalances = globalState.getTokenBalance(ENQWeb.Enq.provider, props.user.publicKey, currentToken)
-
         setAmount(globalStateBalances.amount)
         setTicker(globalStateBalances.ticker)
         setLogo(generateIcon(currentToken))
-        setAmountDecimal(10 ** globalStateBalances.decimal)
+        setAmountDecimal(10 ** (globalStateBalances.decimal || 10))
 
         await apiController.getBalanceAll(props.user.publicKey).then(async (res) => {
 
