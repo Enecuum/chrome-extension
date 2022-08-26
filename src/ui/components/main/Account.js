@@ -87,7 +87,7 @@ export default function Account(props) {
         let tokens = []
 
         let globalStateBalances = globalState.getTokenBalance(ENQWeb.Enq.provider, props.user.publicKey, currentToken)
-        console.log('SET GLOBAL STATE AMOUNT: ' + globalStateBalances.amount)
+        // console.log('SET GLOBAL STATE AMOUNT: ' + globalStateBalances.amount)
         setAmount(globalStateBalances.amount)
         setTicker(globalStateBalances.ticker)
         setLogo(generateIcon(currentToken))
@@ -265,7 +265,7 @@ export default function Account(props) {
 
     const changeToken = async (hash) => {
 
-        console.log(hash)
+        // console.log(hash)
 
         let user = props.user
         user.token = hash

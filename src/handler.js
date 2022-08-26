@@ -1,20 +1,20 @@
-import { decryptAccount, encryptAccount, lockAccount, lockTime } from './lockAccount'
+import {decryptAccount, encryptAccount, lockAccount, lockTime} from './lockAccount'
 
 // const cacheStore = require('./indexDB') // es6
 import indexDB from './utils/indexDB'
-import { USER } from './utils/names'
+import {USER} from './utils/names'
 import eventBus from './utils/eventBus'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
-import { signHash } from './utils/ledgerShell'
-import { apiController } from './utils/apiController'
-import { extensionApi } from './utils/extensionApi'
-import { getMiners, initPoa, startPoa, stopPoa } from './utils/poa/poaStarter' // commonjs
-import { getMnemonicPrivateKeyHex } from './ui/Utils'
-import { Capacitor, registerPlugin } from '@capacitor/core'
-import { startBackgroundMining, getMobileMiners, stopMobileMiners } from './mobileBackground'
+import {signHash} from './utils/ledgerShell'
+import {apiController} from './utils/apiController'
+import {extensionApi} from './utils/extensionApi'
+import {getMiners, initPoa, startPoa, stopPoa} from './utils/poa/poaStarter' // commonjs
+import {getMnemonicPrivateKeyHex} from './ui/Utils'
+import {Capacitor, registerPlugin} from '@capacitor/core'
+import {startBackgroundMining, getMobileMiners, stopMobileMiners} from './mobileBackground'
 // var cacheStore = window.cacheStore // compiled javascript
 
-let miningStatus = { miningProcess: false }
+let miningStatus = {miningProcess: false}
 let handlerMiners = []
 const androidRegex = /android/
 
@@ -31,7 +31,7 @@ export function globalMessageHandler(msg, ENQWeb) {
         // TODO Description
         if (msg.initial) {
             runLockTimer()
-            resolve({ response: true })
+            resolve({response: true})
         }
 
         // TODO Open new window from background or worker
@@ -49,14 +49,14 @@ export function globalMessageHandler(msg, ENQWeb) {
 
             // If user locked
             if (userStorage.lock.checkLock()) {
-                resolve({ response: false })
+                resolve({response: false})
             }
 
             // If user on background or worker memory
             if (Object.keys(ENQWeb.Enq.User).length > 0) {
 
                 console.log('Memory session')
-                resolve({ response: ENQWeb.Enq.User })
+                resolve({response: ENQWeb.Enq.User})
 
                 // User unlocked but not on memory, old web version
             } else {
@@ -67,8 +67,8 @@ export function globalMessageHandler(msg, ENQWeb) {
                 if (userStorage.user.userExist()) {
 
                     lockAccount()
-                    eventBus.dispatch('lock', { message: true })
-                    resolve({ response: false })
+                    eventBus.dispatch('lock', {message: true})
+                    resolve({response: false})
                 }
 
                 // let webSession = JSON.parse(sessionStorage.getItem('User'))
@@ -86,7 +86,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             try {
                 account = decryptAccount(msg.password)
             } catch (e) {
-                eventBus.dispatch('lock', { message: false })
+                eventBus.dispatch('lock', {message: false})
             }
 
             if (account) {
@@ -101,10 +101,10 @@ export function globalMessageHandler(msg, ENQWeb) {
                 // createWebSession(account)
 
                 encryptAccount()
-                resolve({ response: account })
+                resolve({response: account})
 
             } else {
-                resolve({ response: false })
+                resolve({response: false})
             }
         }
 
@@ -122,7 +122,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             userStorage.user.addUser(account)
 
             encryptAccount()
-            resolve({ response: account })
+            resolve({response: account})
         }
 
         // TODO
@@ -135,13 +135,13 @@ export function globalMessageHandler(msg, ENQWeb) {
             }
 
             encryptAccount()
-            resolve({ response: true })
+            resolve({response: true})
         }
 
         // Lock user model
         if (msg.lock) {
             lockAccount()
-            resolve({ response: true })
+            resolve({response: true})
         }
 
         // Logout
@@ -152,10 +152,10 @@ export function globalMessageHandler(msg, ENQWeb) {
             userStorage.user.removeUser()
 
             // disconnectPorts()
-            resolve({ response: true })
+            resolve({response: true})
         }
 
-        if(msg.update && msg.background){
+        if (msg.update && msg.background) {
 
         }
 
@@ -164,25 +164,25 @@ export function globalMessageHandler(msg, ENQWeb) {
 
             if (androidRegex.test(Capacitor.platform)) {
                 let answer = await getMobileMiners()
-                resolve({ response: answer })
+                resolve({response: answer})
             } else {
                 if (handlerMiners.length === 0) {
                     handlerMiners = await initPoa(ENQWeb.Enq.User)
                     console.log(handlerMiners)
-                    resolve({ response: handlerMiners })
+                    resolve({response: handlerMiners})
                 } else {
                     let answer = await getMiners()
 
-                    handlerMiners =  answer ? answer : handlerMiners
-                    if(!answer){
-                        handlerMiners.forEach(el=>{
-                            if(!el.publisher){
+                    handlerMiners = answer ? answer : handlerMiners
+                    if (!answer) {
+                        handlerMiners.forEach(el => {
+                            if (!el.publisher) {
                                 el.publisher = {}
                             }
                             el.publisher.status = "Disconnected"
                         })
                     }
-                    resolve({ response: handlerMiners })
+                    resolve({response: handlerMiners})
                 }
             }
             // console.log(handlerMiners)
@@ -190,24 +190,25 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         }
 
+        //TODO pls no pull name
         //update mining pull
         if (msg.poa && msg.update && msg.pull) {
-            console.log("pull updated")
+            console.log('Mining pull updated')
             handlerMiners = await initPoa(ENQWeb.Enq.User)
-            resolve({ response: handlerMiners })
+            resolve({response: handlerMiners})
         }
 
         //update balances
         if (msg.poa && msg.update && msg.balance) {
-            for(let i = 0; i < handlerMiners.length; i++){
+            for (let i = 0; i < handlerMiners.length; i++) {
                 handlerMiners[i].token = await apiController.getBalance(handlerMiners[i].publicKey, handlerMiners[i].token.token)
             }
-            resolve({ response: handlerMiners })
+            resolve({response: handlerMiners})
         }
 
         // Start all PoA
         if (msg.poa && msg.status) {
-            resolve({ response: miningStatus })
+            resolve({response: miningStatus})
         }
 
         // Start all PoA
@@ -217,7 +218,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             if (msg.account) {
                 miners = await startPoa(msg.account, handlerMiners)
                 miningStatus.miningProcess = true
-                resolve({ response: miners })
+                resolve({response: miners})
             } else {
                 for (let i = 0; i < ENQWeb.Enq.User.seedAccountsArray.length; i++) {
                     console.log(handlerMiners[i])
@@ -256,13 +257,13 @@ export function globalMessageHandler(msg, ENQWeb) {
                     // let miners = startBackgroundMining()
                     miningStatus.miningProcess = true
                     // resolve({ response: miners })
-                    resolve({ response: true })
+                    resolve({response: true})
                 } else {
                     miners = await startPoa(ENQWeb.Enq.User, handlerMiners, accounts)
                     console.log(miners)
                     // handlerMiners = miners
                     miningStatus.miningProcess = true
-                    resolve({ response: miners })
+                    resolve({response: miners})
                 }
             }
         }
@@ -276,7 +277,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                     })
                 let miners = stopMobileMiners()
                 miningStatus.miningProcess = false
-                resolve({ response: miners })
+                resolve({response: miners})
             } else {
                 for (let i = 0; i < handlerMiners.length; i++) {
                     handlerMiners[i].publisher.restart = false
@@ -285,21 +286,21 @@ export function globalMessageHandler(msg, ENQWeb) {
                 console.log(miners)
                 // handlerMiners = miners
                 miningStatus.miningProcess = false
-                resolve({ response: miners })
+                resolve({response: miners})
             }
         }
 
         if (msg.poa && msg.account && msg.token) {
             console.log(handlerMiners)
             handlerMiners.find(element => element.publicKey === msg.account.publicKey).token = msg.token
-            resolve({ response: handlerMiners })
+            resolve({response: handlerMiners})
         }
 
         if (msg.poa && msg.account && msg.mining) {
             console.log(handlerMiners)
             handlerMiners.find(element => element.publicKey === msg.account.publicKey).publisher.restart = msg.set
             handlerMiners.find(element => element.publicKey === msg.account.publicKey).mining = msg.set
-            resolve({ response: handlerMiners })
+            resolve({response: handlerMiners})
         }
 
         // // Disconnect PoA by id
@@ -346,7 +347,7 @@ export function globalMessageHandler(msg, ENQWeb) {
         //     }
         // }
 
-        resolve({ response: false })
+        resolve({response: false})
     })
 }
 
@@ -420,8 +421,8 @@ export function runLockTimer() {
         lockTimer = setTimeout(() => lockAccount(true), lockTime)
     } else {
         lockTimer = setTimeout(() => {
-            eventBus.dispatch('lock', { message: true })
-            userStorage.promise.sendPromise({ lock: true })
+            eventBus.dispatch('lock', {message: true})
+            userStorage.promise.sendPromise({lock: true})
         }, lockTime)
     }
 }
@@ -439,7 +440,7 @@ export async function messagePopupHandler(msg) {
                 console.warn(err)
                 return {
                     asyncAnswer: true,
-                    data: { status: 'reject' }
+                    data: {status: 'reject'}
                 }
             })
 
@@ -474,133 +475,133 @@ const taskHandler = async (taskId) => {
     }
     switch (task.type) {
         // TODO Description
-    case 'enable':
-        data = {
-            pubkey: account.publicKey,
-            net: account.net,
-        }
-        console.log('enable. returned: ', data)
-        userStorage.task.removeTask(taskId)
-        return {
-            data: JSON.stringify(data),
-            taskId: taskId,
-            cb: task.cb
-        }
+        case 'enable':
+            data = {
+                pubkey: account.publicKey,
+                net: account.net,
+            }
+            console.log('enable. returned: ', data)
+            userStorage.task.removeTask(taskId)
+            return {
+                data: JSON.stringify(data),
+                taskId: taskId,
+                cb: task.cb
+            }
         // TODO Description
-    case 'tx':
-        data = task.tx
-        console.log(data)
-        buf = ENQWeb.Net.provider
-        ENQWeb.Net.provider = account.net
-        if (account.ledger !== undefined && account.type === 2) {
-            data.from = wallet.pubkey
-            data.amount = data.value ? Number(data.value) : Number(data.amount)
-            data.tokenHash = data.ticker ? data.ticker : data.tokenHash
-            data.value = ''
-            data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
-            data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)
-            let Transport = ledgerTransport ? ledgerTransport : await TransportWebHID.create()
-            if (!ledgerTransport) {
-                ledgerTransport = Transport
-            }
-            data.sign = await signHash(ENQWeb.Utils.crypto.sha256(data.hash), wallet.prvkey, Transport)
-                .catch(() => {
-                    return false
-                })
-            if (data.sign) {
-                data = await apiController.sendTransaction(data)
-                    .then(data => {
-                        if (data.hash) {
-                            return data
-                        }
-                        console.warn(data)
+        case 'tx':
+            data = task.tx
+            console.log(data)
+            buf = ENQWeb.Net.provider
+            ENQWeb.Net.provider = account.net
+            if (account.ledger !== undefined && account.type === 2) {
+                data.from = wallet.pubkey
+                data.amount = data.value ? Number(data.value) : Number(data.amount)
+                data.tokenHash = data.ticker ? data.ticker : data.tokenHash
+                data.value = ''
+                data.nonce ? data.nonce : Math.floor(Math.random() * 1e10)
+                data.hash = ENQWeb.Utils.Sign.hash_tx_fields(data)
+                let Transport = ledgerTransport ? ledgerTransport : await TransportWebHID.create()
+                if (!ledgerTransport) {
+                    ledgerTransport = Transport
+                }
+                data.sign = await signHash(ENQWeb.Utils.crypto.sha256(data.hash), wallet.prvkey, Transport)
+                    .catch(() => {
+                        return false
                     })
-                    .catch(er => {
-                        console.error(er)
-                    })
-            } else {
-                console.warn('Transaction rejected')
-                throw new Error('reject')
-            }
+                if (data.sign) {
+                    data = await apiController.sendTransaction(data)
+                        .then(data => {
+                            if (data.hash) {
+                                return data
+                            }
+                            console.warn(data)
+                        })
+                        .catch(er => {
+                            console.error(er)
+                        })
+                } else {
+                    console.warn('Transaction rejected')
+                    throw new Error('reject')
+                }
 
-        } else {
-            data.from = wallet
-            data.amount = data.value ? Number(data.value) : Number(data.amount)
-            data.tokenHash = data.ticker ? data.ticker : data.tokenHash
-            data.value = ''
-            data = await apiController.postTransaction(data)
+            } else {
+                data.from = wallet
+                data.amount = data.value ? Number(data.value) : Number(data.amount)
+                data.tokenHash = data.ticker ? data.ticker : data.tokenHash
+                data.value = ''
+                data = await apiController.postTransaction(data)
+                    .catch(err => {
+                        console.log(err)
+                        return false
+                    })
+            }
+            ENQWeb.Net.provider = buf
+            userStorage.task.removeTask(taskId)
+            return {
+                data: JSON.stringify({hash: data.hash ? data.hash : 'Error'}),
+                taskId: taskId,
+                cb: task.cb
+            }
+            break
+        // TODO Description
+        case 'balanceOf':
+            data = task.data
+            buf = ENQWeb.Net.provider
+            console.log(account)
+            if (data.to) {
+                wallet.pubkey = data.to
+            }
+            ENQWeb.Net.provider = data.net || account.net
+            console.log(task.data, ENQWeb.Net.provider)
+            data = await apiController.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
                 .catch(err => {
                     console.log(err)
                     return false
                 })
-        }
-        ENQWeb.Net.provider = buf
-        userStorage.task.removeTask(taskId)
-        return {
-            data: JSON.stringify({ hash: data.hash ? data.hash : 'Error' }),
-            taskId: taskId,
-            cb: task.cb
-        }
-        break
+            userStorage.task.removeTask(taskId)
+            ENQWeb.Net.provider = buf
+            return {
+                data: JSON.stringify(data),
+                taskId: taskId,
+                cb: task.cb
+            }
         // TODO Description
-    case 'balanceOf':
-        data = task.data
-        buf = ENQWeb.Net.provider
-        console.log(account)
-        if (data.to) {
-            wallet.pubkey = data.to
-        }
-        ENQWeb.Net.provider = data.net || account.net
-        console.log(task.data, ENQWeb.Net.provider)
-        data = await apiController.getBalance(wallet.pubkey, data.tokenHash || ENQWeb.Enq.token[ENQWeb.Net.provider])
-            .catch(err => {
-                console.log(err)
-                return false
-            })
-        userStorage.task.removeTask(taskId)
-        ENQWeb.Net.provider = buf
-        return {
-            data: JSON.stringify(data),
-            taskId: taskId,
-            cb: task.cb
-        }
+        case 'getProvider':
+            ENQWeb.Net.provider = account.net
+            if (task.cb.fullUrl) {
+                data = {net: ENQWeb.Net.provider}
+            } else {
+                data = {net: ENQWeb.Net.currentProvider}
+            }
+            userStorage.task.removeTask(taskId)
+            return {
+                data: JSON.stringify(data),
+                taskId: taskId,
+                cb: task.cb
+            }
         // TODO Description
-    case 'getProvider':
-        ENQWeb.Net.provider = account.net
-        if (task.cb.fullUrl) {
-            data = { net: ENQWeb.Net.provider }
-        } else {
-            data = { net: ENQWeb.Net.currentProvider }
-        }
-        userStorage.task.removeTask(taskId)
-        return {
-            data: JSON.stringify(data),
-            taskId: taskId,
-            cb: task.cb
-        }
+        case 'getVersion':
+            console.log('version: ', extensionApi.app.getDetails().version)
+            userStorage.task.removeTask(taskId)
+            return {
+                data: JSON.stringify(extensionApi.app.getDetails().version),
+                taskId: taskId,
+                cb: task.cb
+            }
         // TODO Description
-    case 'getVersion':
-        console.log('version: ', extensionApi.app.getDetails().version)
-        userStorage.task.removeTask(taskId)
-        return {
-            data: JSON.stringify(extensionApi.app.getDetails().version),
-            taskId: taskId,
-            cb: task.cb
-        }
+        case 'sign':
+            userStorage.task.removeTask(taskId)
+            return {
+                data: JSON.stringify(task.result),
+                taskId: taskId,
+                cb: task.cb
+            }
         // TODO Description
-    case 'sign':
-        userStorage.task.removeTask(taskId)
-        return {
-            data: JSON.stringify(task.result),
-            taskId: taskId,
-            cb: task.cb
-        }
-        // TODO Description
-    case 'reconnect':
-        console.log('reconnect')
-        userStorage.task.removeTask(taskId)
-    default:
-        break
+        case 'reconnect':
+            console.log('reconnect')
+            userStorage.task.removeTask(taskId)
+        default:
+            break
     }
     return true
 }

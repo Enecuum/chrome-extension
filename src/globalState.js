@@ -127,20 +127,20 @@ let globalState = {
             console.log(baseNetwork)
             globalState.state[network] = networkState
         }
-        console.log(networkState)
+        // console.log(networkState)
         return networkState
     },
 
     getTokenBalance: (network, publicKey, tokenHash) => {
         let tokens = []
         let stateTokens = globalState.getNetworkState(network).tokens
-        console.log(stateTokens)
+        // console.log(stateTokens)
         if (stateTokens[publicKey]) {
             tokens = stateTokens[publicKey]
         }
 
         let globalStateTokenBalance = tokens.find(token => token.token === tokenHash) || {amount: 0, ticker: '', decimal: 10}
-        console.log(globalStateTokenBalance)
+        // console.log(globalStateTokenBalance)
         let globalStateTokenObject = {
             amount: globalStateTokenBalance.amount,
             ticker: globalStateTokenBalance.ticker,

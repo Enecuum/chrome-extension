@@ -1,12 +1,13 @@
 let document = ''
 let window = ''
-import  {Publisher} from "./publisher"
+import {Publisher} from "./publisher"
+
 let miners = []
 
 onmessage = (msg) => {
     // let data = ENQWeb.Utils.ofd.parse(msg.data)
     msg = msg.data
-    if(msg.start){
+    if (msg.start) {
         miners = msg.data
         for (let i = 0; i < miners.length; i++) {
             miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({
@@ -14,9 +15,9 @@ onmessage = (msg) => {
                 privateKey: miners[i].publisher.account.privateKey
             }, miners[i].publisher.token, postMessage, miners[i].net) : {}
         }
-        postMessage(JSON.stringify({resolve: true, miners:miners}))
+        postMessage(JSON.stringify({resolve: true, miners: miners}))
     }
-    if(msg.stop){
+    if (msg.stop) {
         miners = msg.data
         for (let i = 0; i < miners.length; i++) {
             try {
@@ -25,9 +26,9 @@ onmessage = (msg) => {
             }
             miners[i].publisher.status = "Disconnected"
         }
-        postMessage(JSON.stringify({resolve: true, miners:miners}))
+        postMessage(JSON.stringify({resolve: true, miners: miners}))
     }
-    if(msg.get){
-        postMessage(JSON.stringify({resolve: true, miners:miners}))
+    if (msg.get) {
+        postMessage(JSON.stringify({resolve: true, miners: miners}))
     }
 }
