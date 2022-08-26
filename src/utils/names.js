@@ -18,6 +18,8 @@ const NET = 'net'
 // TODO favorite sites
 const SITES = 'sites'
 
+const STATE = 'state'
+
 const TRUSTED_TOKENS = 'trusted_tokens'
 
 const STORAGE_NAME_POPUP = 'popup'
@@ -60,5 +62,6 @@ module.exports = {
     ENQ_CONTENT,
     strings,
     copyText,
-    SITES
+    SITES,
+    STATE
 }

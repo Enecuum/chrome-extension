@@ -9,6 +9,8 @@ import { NET, NETWORKS } from '../../utils/names'
 import { Publisher } from '../../utils/poa/publisher'
 import { apiController } from '../../utils/apiController'
 import { Capacitor } from '@capacitor/core'
+import { globalState } from '../../globalState'
+
 
 let status = {
     0: 'CONNECTING',
@@ -165,16 +167,26 @@ export default function Mining(props) {
                     get: true,
                 })
                     .then(miners => {
-                        userStorage.promise.sendPromise({poa:true, update:true, balance:true}).then(miners=>{
-                            setAccounts(miners)
-                            setStatus(status.miningProcess ? 'MINING' : 'READY')
-                            for (let i = 0; i < miners.length; i++) {
-                                apiController.getRewards(miners[i].publicKey)
-                                    .then(rewards => {
-                                        miners[i].rewards = rewards.records
-                                    })
-                            }
+                        miners.forEach(el => {
+                            globalState.setPublicKey(ENQWeb.Enq.provider, el.publicKey, false)
+                                .then(() => globalState.save()
+                                    .then())
                         })
+                        userStorage.promise.sendPromise({
+                            poa: true,
+                            update: true,
+                            balance: true
+                        })
+                            .then(miners => {
+                                setAccounts(miners)
+                                setStatus(status.miningProcess ? 'MINING' : 'READY')
+                                for (let i = 0; i < miners.length; i++) {
+                                    apiController.getRewards(miners[i].publicKey)
+                                        .then(rewards => {
+                                            miners[i].rewards = rewards.records
+                                        })
+                                }
+                            })
                         // showNotification('Mining', 'READY')
                     })
             })
@@ -219,13 +231,14 @@ export default function Mining(props) {
 
         for (let i = 0; i < accounts.length; i++) {
 
-            if (accounts[i].tokens.length === 0)
+            if (accounts[i].tokens.length === 0) {
                 accounts[i].mining = false
+            }
 
             let tokens = accounts[i].tokens.map((token) => token.minable !== 0 && <div key={token.token}
-                                                                onClick={() => token.minable === 0 ? () => {
-                                                                } : selectToken(accounts[i].publicKey, token)}
-                                                                className={token.minable === 0 ? styles.card_grid_disabled : (token.token === accounts[i].token.token ? styles.card_grid_select : '')}>
+                                                                                       onClick={() => token.minable === 0 ? () => {
+                                                                                       } : selectToken(accounts[i].publicKey, token)}
+                                                                                       className={token.minable === 0 ? styles.card_grid_disabled : (token.token === accounts[i].token.token ? styles.card_grid_select : '')}>
                 <div>{token.ticker}</div>
                 <div>{(Number(token.amount) / (10 ** token.decimals)).toFixed(0)}</div>
             </div>)
@@ -235,7 +248,7 @@ export default function Mining(props) {
                      className={styles.card + ' ' + styles.mining_card + ' ' + (accounts[i].mining && mining ? styles.mining_card_mine : '')}>
                     <div className={styles.row}>
                         <div>
-                            <div>{accounts[i].type === "mnemonic" ? ("Account M"+ String(Number(accounts[i].i) + 1)) : ("Account P" + String(Number(accounts[i].i) + 1))}</div>
+                            <div>{accounts[i].type === 'mnemonic' ? ('Account M' + String(Number(accounts[i].i) + 1)) : ('Account P' + String(Number(accounts[i].i) + 1))}</div>
                             <div
                                 className={styles.text_minimum}>{((accounts[i].publisher && accounts[i].publisher.status)) || 'Disconnected'}</div>
                         </div>

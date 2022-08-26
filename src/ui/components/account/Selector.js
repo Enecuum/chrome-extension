@@ -180,7 +180,7 @@ export default function Selector(props) {
     //     }
     // }
 
-    let selectAccount = async (selected) => {
+    let selectAccount = async (selected, name) => {
         // console.log(selected)
         let account = (await userStorage.user.loadUser())
         let data
@@ -290,7 +290,7 @@ export default function Selector(props) {
 
                         <div className={current ? styles.card_button_current : ''}
                              onClick={(current ? () => {
-                             } : () => selectAccount(account))}>
+                             } : () => selectAccount(account, name))}>
                             {current ? 'CURRENT' : 'SELECT'}
                         </div>
 
