@@ -964,6 +964,10 @@ input[type=number] {
     background: rgba(0, 0, 0, 0.15);
 }
 
+.activity.today {
+    background: rgba(0, 0, 0, 0.3);
+}
+
 .activity > div {
     height: 70px;
     display: flex;
@@ -986,6 +990,11 @@ input[type=number] {
     border: 1px solid var(--color-blue);
     background: var(--color-blue);
     border-radius: 50%;
+}
+
+.activity img.reject {
+    border: 1px solid var(--color-red);
+    background: var(--color-red-ligth);
 }
 
 .activity > div:nth-child(2) {

@@ -198,6 +198,8 @@ export default function Selector(props) {
 
         props.login(data)
 
+        localStorage.setItem('accountName', name)
+
         loadUser()
     }
 
@@ -219,7 +221,7 @@ export default function Selector(props) {
 
     let getType = (type) => {
         if (type === 0) {
-            return 'SIMPLE'
+            return 'PRIVATE'
         }
         if (type === 1) {
             return 'MNEMONIC'
@@ -251,7 +253,7 @@ export default function Selector(props) {
 
             let name = getType(account.type)
                     .charAt(0)
-                    .replace('S', '')
+                    // .replace('S', '')
                 + (account.groupIndex + 1)
 
             cards.push(

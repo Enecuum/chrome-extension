@@ -13,6 +13,8 @@ export default function Address(props) {
     let [blockDate, setBlockDate] = useState(new Date(0))
     let [blockN, setBlockN] = useState(0)
 
+    let [accountName, setAccountName] = useState(localStorage.getItem('accountName') || 'P1')
+
     async function checkConnect(count) {
         // console.log(count)
         let tasks = userStorage.list.listOfTask()
@@ -96,7 +98,7 @@ export default function Address(props) {
             {/*{console.log(props.isMainToken)}*/}
 
             <div>
-                <div className={elements.account_name}>Account 1</div>
+                <div className={elements.account_name}>Account {accountName}</div>
                 <div className={elements.address_string + ' ' + (props.isCopied ? elements.copied : '')}
                      onClick={copyPublicKey}
                      title={props.publicKey + copyText}>{shortHash(props.publicKey)}</div>

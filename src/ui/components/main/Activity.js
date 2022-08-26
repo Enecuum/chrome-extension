@@ -34,7 +34,7 @@ export default function Activity(props) {
 
         let history = {}
         history.records = []
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 5; i++) {
             let historyRecords = await apiController.getAccountTransactions(props.user.publicKey, i)
             history.records = history.records.concat(historyRecords.records)
         }
@@ -43,6 +43,7 @@ export default function Activity(props) {
         for (let id in history.records) {
             if (history.records[id]) {
                 oldActivity.push({
+                    status: history.records[id].status,
                     data: {
                         date: history.records[id].time * 1000,
                         feeTicker: false,
@@ -88,6 +89,7 @@ export default function Activity(props) {
         const historyElements = []
         // || item.tx.data.includes(props.user.token)
 
+        // TODO only trusted tokens
         let filteredHistory = props.user.token && props.user.token !== props.getMainToken() ? historyArray.filter(item => item.tx.tokenHash === props.user.token) : historyArray
         // console.log(filteredHistory)
 
@@ -109,6 +111,13 @@ export default function Activity(props) {
             //         })
             // }
 
+            // console.log(item.data.date)
+            // console.log(new Date().getTime() - (1000 * 60 * 60 * 24))
+
+            let today = item.data.date > new Date().getTime() - (1000 * 60 * 60 * 24)
+
+            // console.log(item)
+
             historyElements.push(
                 <div
                     key={key} onClick={() => {
@@ -119,9 +128,9 @@ export default function Activity(props) {
                     if (item.type === 'iout') {
                         props.setTransactionHistory(item)
                     }
-                }} className={`${styles.activity}`}
+                }} className={`${styles.activity + (today ? ' ' + styles.today : '')}`}
                 >
-                    <img className={styles.icon}
+                    <img className={styles.icon + (item.status === 2 ? (' ' + styles.reject) : '')}
                          src={(item.tx.value > 0 ? './images/icons/22.png' : './images/icons/12.png')}
                          alt=""/>
                     <div>
