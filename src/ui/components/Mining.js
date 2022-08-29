@@ -20,6 +20,8 @@ let status = {
     10: 'DUPLICATE KEY',
 }
 
+
+
 export default function Mining(props) {
 
     // let [readyState, setReadyState] = useState(global.publisher.ws.readyState)
@@ -167,17 +169,19 @@ export default function Mining(props) {
                     get: true,
                 })
                     .then(miners => {
-                        miners.forEach(el => {
-                            globalState.setPublicKey(ENQWeb.Enq.provider, el.publicKey, false)
-                                .then(() => globalState.save()
-                                    .then())
-                        })
+                        setAccounts(miners)
                         userStorage.promise.sendPromise({
                             poa: true,
                             update: true,
                             balance: true
                         })
                             .then(miners => {
+
+                                miners.forEach(el => {
+                                    globalState.setPublicKey(ENQWeb.Enq.provider, el.publicKey, false)
+                                        .then(() => globalState.save()
+                                            .then())
+                                })
                                 setAccounts(miners)
                                 setStatus(status.miningProcess ? 'MINING' : 'READY')
                                 for (let i = 0; i < miners.length; i++) {

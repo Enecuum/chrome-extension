@@ -200,6 +200,9 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         //update balances
         if (msg.poa && msg.update && msg.balance) {
+            if(handlerMiners.length === 0){
+                handlerMiners = await initPoa(ENQWeb.Enq.User)
+            }
             for (let i = 0; i < handlerMiners.length; i++) {
                 handlerMiners[i].token = await apiController.getBalance(handlerMiners[i].publicKey, handlerMiners[i].token.token)
             }
@@ -239,18 +242,22 @@ export function globalMessageHandler(msg, ENQWeb) {
                 }
 
                 if (androidRegex.test(Capacitor.platform)) {
+                    let netList = {
+                        "https://bit.enecuum.com":"95.216.246.116",
+                        "https://pulse.enecuum.com":"95.216.68.221"
+                    }
                     try {
                         for (let i = 0; i < handlerMiners.length; i++) {
                             accounts[i].token = handlerMiners[i].token.token
+                            accounts[i].status = handlerMiners[i].mining;
                         }
                     } catch (e) {
                         console.error('error in handle miners!')
                     }
-
                     let test = registerPlugin('PoA')
                     test.start({
                         data: JSON.stringify(accounts),
-                        net: '95.216.246.116'
+                        net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : "95.216.246.116"
                     })
                         .then(res => {
                         })
