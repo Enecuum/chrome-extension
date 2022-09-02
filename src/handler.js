@@ -165,7 +165,7 @@ export function globalMessageHandler(msg, ENQWeb) {
         // Get PoA keys state
         if (msg.poa && msg.get) {
 
-            if (androidRegex.test(Capacitor.platform)) {
+            if (androidRegex.test(Capacitor.getPlatform())) {
                 // let answer = await getMobileMiners()
                 let answer = await test.getMiners().then(data => {
                     // console.log(data)
@@ -257,10 +257,15 @@ export function globalMessageHandler(msg, ENQWeb) {
                     })
                 }
 
-                if (androidRegex.test(Capacitor.platform)) {
+                // TODO ?
+                let pulseIP = '95.216.68.221'
+                let bitIP = '95.216.246.116'
+
+                if (androidRegex.test(Capacitor.getPlatform())) {
+
                     let netList = {
-                        "https://bit.enecuum.com": "95.216.246.116",
-                        "https://pulse.enecuum.com": "95.216.68.221"
+                        'https://bit.enecuum.com': bitIP,
+                        'https://pulse.enecuum.com': pulseIP
                     }
                     try {
                         for (let i = 0; i < handlerMiners.length; i++) {
@@ -268,18 +273,18 @@ export function globalMessageHandler(msg, ENQWeb) {
                             accounts[i].status = handlerMiners[i].mining;
                         }
                     } catch (e) {
-                        console.error('error in handle miners!')
+                        console.error('Error in handle miners!')
                     }
+
                     test.start({
                         data: JSON.stringify(accounts),
-                        net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : "95.216.246.116"
-                    })
-                        .then(res => {
-                        })
+                        net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : '95.216.246.116'
+                    }).then(res => {})
                     // let miners = startBackgroundMining()
                     miningStatus.miningProcess = true
                     // resolve({ response: miners })
                     resolve({response: true})
+
                 } else {
                     miners = await startPoa(ENQWeb.Enq.User, handlerMiners, accounts)
                     console.log(miners)
