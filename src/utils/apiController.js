@@ -32,7 +32,7 @@ const getMainTokenBalance = async (publicKey) => {
 }
 
 const getRewards = async (publicKey) => {
-    let response = await fetch(ENQWeb.Net.provider+'/api/v1/account_rewards?id=' + publicKey + '&page=0', {})
+    let response = await fetch(ENQWeb.Net.provider + '/api/v1/account_rewards?id=' + publicKey + '&page=0', {})
     return response.json()
 }
 

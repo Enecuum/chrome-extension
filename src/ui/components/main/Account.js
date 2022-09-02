@@ -95,6 +95,9 @@ export default function Account(props) {
 
         await apiController.getBalanceAll(props.user.publicKey).then(async (res) => {
 
+            let headerLoader2 = document.getElementById('header_loader')
+            headerLoader2.style.width = '95%'
+
             globalState.setBalanceData(ENQWeb.Enq.provider, props.user.publicKey, res)
             globalState.save().then()
 
@@ -211,6 +214,10 @@ export default function Account(props) {
                 decimals: 10 ** decimal,
                 main: true
             }, ...tokens])
+
+            let headerLoader3 = document.getElementById('header_loader')
+            headerLoader3.style.width = '100%'
+            headerLoader3.style.opacity = 0
 
         }).catch((err) => {
             console.error('error: ', err)

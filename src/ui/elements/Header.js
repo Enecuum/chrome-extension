@@ -27,6 +27,8 @@ export default function Header(props) {
 
             <div className={styles.menu_icon_div} onClick={props.clickMenu}><img src='./images/icons/5.png'/></div>
 
+            <div id={'header_loader'} className={styles.header_loader}></div>
+
         </div>
     )
 }
