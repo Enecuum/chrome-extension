@@ -10,6 +10,5 @@ logs
 /src/copied/localhost-key.pem
 /dist.zip
 ios
-
+android
 download/*
-*.DS_Store
