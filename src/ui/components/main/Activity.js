@@ -22,10 +22,15 @@ export default function Activity(props) {
 
 
     const findTickerInCache = async (hash) => {
-        return allTokens[hash] !== undefined ? allTokens[hash] : (await apiController.getTokenInfo(hash)).ticker
+        // console.log(allTokens)
+        let ticker = allTokens[hash] !== undefined ? allTokens[hash] : (await apiController.getTokenInfo(hash)).ticker
+        // console.log(ticker)
+        return ticker
     }
 
     const getHistory = async () => {
+
+        // console.log('getHistory')
 
         // console.log(globalState.getNetworkState(ENQWeb.Enq.provider))
         let globalStateHistory = globalState.getNetworkState(ENQWeb.Enq.provider).history[props.user.publicKey] || []
@@ -63,7 +68,7 @@ export default function Activity(props) {
                         hash: history.records[id].hash,
                         fee_value: history.records[id].fee_value,
                         tokenHash: history.records[id].token_hash,
-                        ticker: await findTickerInCache(history.records[id].token_hash) || false,
+                        ticker: await findTickerInCache(history.records[id].token_hash),
                         value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
                     },
                     cb: {
@@ -82,6 +87,8 @@ export default function Activity(props) {
     let renderHistory = () => {
 
         let historyArray = history
+
+        // console.log(history)
 
         // console.log(props.user.token)
         // console.log(historyArray)
@@ -117,7 +124,7 @@ export default function Activity(props) {
             let today = item.data.date > new Date().getTime() - (1000 * 60 * 60 * 24)
 
             // console.log(item)
-
+            // console.log(item.tx)
             historyElements.push(
                 <div
                     key={key} onClick={() => {

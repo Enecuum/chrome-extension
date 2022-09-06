@@ -353,6 +353,7 @@ function resultTask(taskId, result) {
 
 function getTokens() {
     let tokens = JSON.parse(localStorage.getItem(TOKENS))
+    // console.log(tokens)
     if (!tokens) {
         tokens = {}
     }

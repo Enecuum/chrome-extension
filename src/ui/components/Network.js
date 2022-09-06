@@ -180,17 +180,17 @@ export default function Network(props) {
                 })
                     .then(async () => {
                         renderCards()
-                        props.updateUserData()
-                            .then()
+                        props.updateUserData().then()
                         await asyncRequest({ reject_all: true })
                     })
             })
 
-        await cacheTokens()
-            .then(async () => {
+        //TODO
+        // await cacheTokens()
+        //     .then(async () => {
                 // location.reload(false)
                 // props.setNetwork(false)
-            })
+            // })
     }
 
 

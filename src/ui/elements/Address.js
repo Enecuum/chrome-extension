@@ -13,7 +13,7 @@ export default function Address(props) {
     let [blockDate, setBlockDate] = useState(new Date(0))
     let [blockN, setBlockN] = useState(0)
 
-    let [accountName, setAccountName] = useState(localStorage.getItem('accountName') || 'P1')
+    let [accountName, setAccountName] = useState(localStorage.getItem('accountName') || 'M1')
 
     async function checkConnect(count) {
         // console.log(count)
