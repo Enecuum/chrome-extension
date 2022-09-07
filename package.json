@@ -14,7 +14,9 @@
         "prod": "pm2 start ./ecosystem.config.js --only prod",
         "stop": "pm2 stop prod",
         "ci": "pm2 start ./ecosystem.config.js --only ci",
-        "ci stop": "pm2 stop ci"
+        "ci stop": "pm2 stop ci",
+        "ios": "npx cap copy ios",
+        "android": "npx cap copy android"
     },
     "build": {
         "appId": "app.enecuum.com",
