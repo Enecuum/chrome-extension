@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
+
 public class PoAService extends Service {
 
     public static Miner[] miners;
@@ -12,7 +13,7 @@ public class PoAService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            System.out.println("miners: "+miners.length);
+            System.out.println("miners: " + miners.length);
             for (Miner miner : this.miners) {
                 miner.publisher.init();
             }

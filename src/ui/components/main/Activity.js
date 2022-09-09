@@ -21,6 +21,7 @@ export default function Activity(props) {
     const [allTokens, setAllTokens] = useState((userStorage.tokens.getTokens()).tokens ? (userStorage.tokens.getTokens()).tokens : {})
 
 
+    // TODO find in global state
     const findTickerInCache = async (hash) => {
         // console.log(allTokens)
         let ticker = allTokens[hash] !== undefined ? allTokens[hash] : (await apiController.getTokenInfo(hash)).ticker
