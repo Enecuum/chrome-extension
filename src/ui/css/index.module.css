@@ -1511,3 +1511,7 @@ iframe {
 .dapps div:hover {
     color: var(--color-gray-ligth);
 }
+
+.qr {
+    height: 100px;
+}

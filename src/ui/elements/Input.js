@@ -19,6 +19,7 @@ export default function Input(props) {
                 autoFocus={!!props.autoFocus}
                 type={props.type}
                 spellCheck={false}
+                disabled={props.disabled}
                 onChange={props.onChange}
                 onFocus={onFocus}
                 onKeyUp={(e) => {

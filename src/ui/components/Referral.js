@@ -11,13 +11,24 @@ import {
 } from '../Utils'
 import Back from "../elements/Back";
 import Input from "../elements/Input";
+import QRCode from "qrcode";
 
 export default function Referral(props) {
 
     const [referralCode, setReferralCode] = useState('')
+    const [imageURL, setImageURL] = useState('')
+
+    const generateQR = async text => {
+        try {
+            let url = await QRCode.toDataURL(text)
+            setImageURL(url)
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     useEffect(() => {
-
+        generateQR('ref_77ce6b118a7f33b0856db0a5838...').then()
     }, [])
 
     let copyReferral = () => {
@@ -38,23 +49,42 @@ export default function Referral(props) {
 
                 {/*<Separator/>*/}
 
-                <div className={styles.field}>{'You\'ve unlocked your personal agent'}</div>
+                {/*<div className={styles.text}>{'You\'ve unlocked your personal referral code!'}</div>*/}
 
-                <div className={styles.field}>{'referral code!'}</div>
+                {/*<div className={styles.field}>{''}</div>*/}
 
-                <div className={styles.field}>{'ref_77ce6b118a7f33b0856db0a5838...'}</div>
+                {/*<div className={styles.field}>{''}</div>*/}
 
-                <div className={styles.field}>{'QR'}</div>
+                <Input
+                    type="text"
+                    spellCheck={false}
+                    disabled={true}
+                    label={'Your referral code'}
+                    onChange={handleChangeReferralCode}
+                    value={referralCode}
+                    className={styles.field + ' ' + (regexReferral.test(referralCode) ? styles.field_correct : '')}
+                    placeholder="ref_77ce6b118a7f33b0856db0a5838..."
+                />
+
+                <Separator/>
+
+                <Separator/>
+
+                <div className={styles.qr}>
+                    <img src={imageURL}/>
+                </div>
 
                 <div className={styles.field}>{'SHARE'}</div>
 
                 <Input
                     type="text"
                     spellCheck={false}
+                    disabled={false}
+                    label={'Referral code'}
                     onChange={handleChangeReferralCode}
                     value={referralCode}
                     className={styles.field + ' ' + (regexReferral.test(referralCode) ? styles.field_correct : '')}
-                    placeholder="Referral code"
+                    placeholder="Insert referral code here"
                 />
 
             </div>
