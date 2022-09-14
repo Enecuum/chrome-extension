@@ -18,6 +18,7 @@ import Eth from '@ledgerhq/hw-app-eth'
 import SignRequest from './components/requests/SignRequest'
 import TransactionHistory from './components/requests/TransactionHistory'
 import Keys from './components/account/Keys'
+import Referral from './components/Referral'
 import Mnemonic from './components/account/mnemonic/Mnemonic'
 import ImportMnemonic from './components/account/mnemonic/ImoprtMnemonic'
 import Selector from './components/account/Selector'
@@ -72,6 +73,7 @@ export default function App(props) {
     const [ledgerTransport, setLedgerTransport] = useState(false)
 
     const [isKeys, setKeys] = useState(false)
+    const [isReferral, setReferral] = useState(false)
 
     let [deferredPrompt, setDeferredPrompt] = useState()
     let initPWA = () => {
@@ -369,6 +371,8 @@ export default function App(props) {
                                    setTransactionRequest={setTransactionRequest}
                                    setPublicKeyRequest={setPublicKeyRequest}/>
 
+    if (isReferral) return <Referral isReferral={isReferral} setReferral={setReferral}/>
+
     // TODO user
     return <Account user={user}
                     login={login2}
@@ -392,5 +396,6 @@ export default function App(props) {
                     setImportMnemonic={setImportMnemonic}
                     installPWA={installPWA}
                     updateUserData={updateUserData}
+                    setReferral={setReferral}
     />
 }

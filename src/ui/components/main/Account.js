@@ -305,6 +305,7 @@ export default function Account(props) {
                          setAccountSelector={props.setAccountSelector}
                          setImportMnemonic={props.setImportMnemonic}
                          installPWA={props.installPWA}
+                         setReferral={props.setReferral}
             />
         }
     }

@@ -33,6 +33,10 @@ export default function Keys(props) {
         setType(account.type)
     }
 
+    let copyReferral = () => {
+
+    }
+
     return (
 
         <div className={styles.main}>
@@ -41,7 +45,7 @@ export default function Keys(props) {
 
             <div className={styles.content}>
 
-                <Separator/>
+                {/*<Separator/>*/}
 
                 <div className={styles.field}>{shortHashLong(publicKey)}</div>
 
@@ -51,7 +55,7 @@ export default function Keys(props) {
                 }}>Copy public key
                 </div>
 
-                <Separator/>
+                {/*<Separator/>*/}
 
                 <div className={styles.field}>{type === 0 ||  type === 1 ? shortHashLong(privateKey) : privateKey}</div>
 
@@ -60,7 +64,7 @@ export default function Keys(props) {
                 }}>Copy private key
                 </div>
 
-                <Separator/>
+                {/*<Separator/>*/}
 
                 <div className={styles.field}>Open new tab</div>
 
@@ -69,11 +73,16 @@ export default function Keys(props) {
                     Show in blockchain explorer
                 </div>
 
+                <div className={styles.field}>Referral</div>
+
+                <div className={styles.field + ' ' + styles.button}
+                     onClick={() => copyReferral()}>
+                    Copy mining referral link
+                </div>
+
             </div>
 
             <div className={styles.form}>
-
-
 
                 <Separator/>
 
