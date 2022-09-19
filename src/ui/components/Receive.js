@@ -13,9 +13,7 @@ export default function Receive(props) {
     }
 
     return (
-
         <div className={styles.main}>
-
             <div className={styles.content}>
 
                 <div className={styles.field}>Public key</div>

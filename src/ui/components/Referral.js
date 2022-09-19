@@ -68,7 +68,7 @@ export default function Referral(props) {
     }
 
     let scan = () => {
-
+        props.setCamera(true)
     }
 
     return (
@@ -92,9 +92,9 @@ export default function Referral(props) {
                     spellCheck={false}
                     disabled={true}
                     label={'Your referral code'}
-                    onChange={handleChangeReferralCode}
+                    onChange={() => {}}
                     value={userReferralCode}
-                    className={styles.field + ' ' + (regexReferral.test(referralCode) ? styles.field_correct : '')}
+                    className={styles.field}
                     placeholder={userReferralCode}
                 />
 
