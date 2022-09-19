@@ -134,13 +134,21 @@ function toggleFullScreen() {
 
 const copyToClipboard = (text) => {
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(r => {
-        })
+        navigator.clipboard.writeText(text).then(r => {})
     } else {
         console.error('navigator.clipboard: ' + false)
     }
-    Clipboard.write({string: text}).then(r => {
-    })
+    Clipboard.write({string: text}).then(r => {})
+}
+
+const pasteFromClipboard = () => {
+    if (navigator.clipboard) {
+        return navigator.clipboard.readText()
+    } else {
+        console.error('navigator.clipboard: ' + false)
+    }
+    const { type, value } = Clipboard.read()
+    return value
 }
 
 let id = 0
@@ -184,6 +192,7 @@ module.exports = {
     toggleFullScreen,
     generateIcon,
     copyToClipboard,
+    pasteFromClipboard,
     regexData,
     regexAddress,
     regexToken,
