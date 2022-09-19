@@ -1,4 +1,7 @@
 import { Camera, CameraResultType } from '@capacitor/camera';
+import {copyToClipboard} from "../Utils";
+import styles from "../css/index.module.css";
+import React from "react";
 
 const takePicture = async () => {
     const image = await Camera.getPhoto({
@@ -16,3 +19,26 @@ const takePicture = async () => {
     // Can be set to the src of an image now
     // imageElement.src = imageUrl;
 };
+
+export default function Camera(props) {
+
+    return (
+
+        <div className={styles.main}>
+
+            <div className={styles.content}>
+
+                <div className={styles.field}>Camera</div>
+
+            </div>
+
+            <div className={styles.form}>
+
+                <div onClick={takePicture}
+                     className={styles.field + ' ' + styles.button + ' ' + styles.red}>Scan
+                </div>
+
+            </div>
+        </div>
+    )
+}
