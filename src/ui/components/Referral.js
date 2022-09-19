@@ -56,9 +56,9 @@ export default function Referral(props) {
 
     let shareReferral = () => {
         Share.share({
-            title: 'Faino',
-            text: 'Mind help bot',
-            url: 'https://faino.help',
+            title: 'Referral code',
+            text: 'Share your referral code',
+            url: userReferralCode,
             dialogTitle: 'Share with friends',
         }).then(r => {});
     }
