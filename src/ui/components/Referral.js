@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react'
 import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
 import {
+    copyToClipboard,
+    pasteFromClipboard,
     regexReferral,
 } from '../Utils'
 import Back from "../elements/Back";
 import Input from "../elements/Input";
 import QRCode from "qrcode";
+import { Share } from '@capacitor/share';
 
 const DEFAULT_REFERRAL = 'ref_7690e00108860ff3daf4d860a19f2b8e2a03d88c5d433fe440dd530cbd0552e437'
 const REF_PREFIX = 'ref_'
@@ -23,6 +26,7 @@ function xorEncryption(s, key) {
 
 export default function Referral(props) {
 
+    const [userReferralCode, setUserReferralCode] = useState('')
     const [referralCode, setReferralCode] = useState('')
     const [imageURL, setImageURL] = useState('')
 
@@ -38,6 +42,7 @@ export default function Referral(props) {
     useEffect(() => {
         let userReferral = REF_PREFIX + xorEncryption('02c3143abeb50e4153da372868490277c14b2877f05b477e4671722152b0112473', XOR_STRING)
         console.log(userReferral)
+        setUserReferralCode(userReferral)
         generateQR(userReferral).then()
     }, [])
 
@@ -47,6 +52,19 @@ export default function Referral(props) {
 
     let handleChangeReferralCode = (e) => {
         setReferralCode(e.target.value)
+    }
+
+    let shareReferral = () => {
+        Share.share({
+            title: 'Faino',
+            text: 'Mind help bot',
+            url: 'https://faino.help',
+            dialogTitle: 'Share with friends',
+        }).then(r => {});
+    }
+
+    let activate = () => {
+        console.log(referralCode)
     }
 
     return (
@@ -71,9 +89,9 @@ export default function Referral(props) {
                     disabled={true}
                     label={'Your referral code'}
                     onChange={handleChangeReferralCode}
-                    value={referralCode}
+                    value={userReferralCode}
                     className={styles.field + ' ' + (regexReferral.test(referralCode) ? styles.field_correct : '')}
-                    placeholder=""
+                    placeholder={userReferralCode}
                 />
 
                 {/*<Separator/>*/}
@@ -102,15 +120,29 @@ export default function Referral(props) {
             <div className={styles.form}>
 
                 <div
-                    onClick={() => {}}
+                    onClick={async () => {
+                        setReferralCode(await pasteFromClipboard())
+                    }}
                     className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
-                    COPY
+                    Paste
                 </div>
 
                 <div
-                    onClick={() => {}}
+                    onClick={() => {copyToClipboard(userReferralCode)}}
                     className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
-                    SHARE
+                    Copy
+                </div>
+
+                <div
+                    onClick={() => {shareReferral()}}
+                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                    Share
+                </div>
+
+                <div
+                    onClick={() => {activate()}}
+                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                    Activate
                 </div>
 
                 <Separator/>
