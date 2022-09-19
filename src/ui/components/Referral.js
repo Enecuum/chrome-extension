@@ -40,10 +40,14 @@ export default function Referral(props) {
     }
 
     useEffect(() => {
-        let userReferral = REF_PREFIX + xorEncryption('02c3143abeb50e4153da372868490277c14b2877f05b477e4671722152b0112473', XOR_STRING)
-        console.log(userReferral)
-        setUserReferralCode(userReferral)
-        generateQR(userReferral).then()
+        // let publicKey = '02c3143abeb50e4153da372868490277c14b2877f05b477e4671722152b0112473'
+        userStorage.user.loadUser().then(account => {
+            console.log(account.publicKey)
+            let userReferral = REF_PREFIX + xorEncryption(account.publicKey, XOR_STRING)
+            console.log(userReferral)
+            setUserReferralCode(userReferral)
+            generateQR(userReferral).then()
+        })
     }, [])
 
     let copyReferral = () => {
