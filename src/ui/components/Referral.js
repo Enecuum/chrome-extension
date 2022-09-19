@@ -2,16 +2,24 @@ import React, { useEffect, useState } from 'react'
 import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
 import {
-    copyToClipboard,
-    explorerAddress,
-    getMnemonicPrivateKeyHex, regexReferral,
-    regexToken,
-    shortHash,
-    shortHashLong
+    regexReferral,
 } from '../Utils'
 import Back from "../elements/Back";
 import Input from "../elements/Input";
 import QRCode from "qrcode";
+
+const DEFAULT_REFERRAL = 'ref_7690e00108860ff3daf4d860a19f2b8e2a03d88c5d433fe440dd530cbd0552e437'
+const REF_PREFIX = 'ref_'
+const XOR_STRING = "750D7F2B34CA3DF1D6B7878DEBC8CF9A56BCB51A58435B5BCFB7E82EE09FA8BE75"
+
+function xorEncryption(s, key) {
+    const slen = s.length, keylen = key.length;
+    let result = '';
+    for (let i = 0; i < slen; i++) {
+        result += String.fromCharCode(s.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+    }
+    return result;
+}
 
 export default function Referral(props) {
 
@@ -28,15 +36,17 @@ export default function Referral(props) {
     }
 
     useEffect(() => {
-        generateQR('ref_77ce6b118a7f33b0856db0a5838...').then()
+        let userReferral = REF_PREFIX + xorEncryption('02c3143abeb50e4153da372868490277c14b2877f05b477e4671722152b0112473', XOR_STRING)
+        console.log(userReferral)
+        generateQR(userReferral).then()
     }, [])
 
     let copyReferral = () => {
 
     }
 
-    let handleChangeReferralCode = () => {
-
+    let handleChangeReferralCode = (e) => {
+        setReferralCode(e.target.value)
     }
 
     return (
@@ -63,18 +73,14 @@ export default function Referral(props) {
                     onChange={handleChangeReferralCode}
                     value={referralCode}
                     className={styles.field + ' ' + (regexReferral.test(referralCode) ? styles.field_correct : '')}
-                    placeholder="ref_77ce6b118a7f33b0856db0a5838..."
+                    placeholder=""
                 />
 
-                <Separator/>
+                {/*<Separator/>*/}
 
-                <Separator/>
+                {/*<Separator/>*/}
 
-                <div className={styles.qr}>
-                    <img src={imageURL}/>
-                </div>
-
-                <div className={styles.field}>{'SHARE'}</div>
+                {/*<div className={styles.field}>{'SHARE'}</div>*/}
 
                 <Input
                     type="text"
@@ -86,6 +92,28 @@ export default function Referral(props) {
                     className={styles.field + ' ' + (regexReferral.test(referralCode) ? styles.field_correct : '')}
                     placeholder="Insert referral code here"
                 />
+
+                <div className={styles.qr}>
+                    <img src={imageURL}/>
+                </div>
+
+            </div>
+
+            <div className={styles.form}>
+
+                <div
+                    onClick={() => {}}
+                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                    COPY
+                </div>
+
+                <div
+                    onClick={() => {}}
+                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                    SHARE
+                </div>
+
+                <Separator/>
 
             </div>
 

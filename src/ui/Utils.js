@@ -8,7 +8,7 @@ const trustedTokens = require("../utils/tokenList");
 let regexData = /^[0-9a-zA-Z _\-/.]{0,512}$/
 let regexAddress = /^(02|03)[0-9a-fA-F]{64}$/
 let regexToken = /^[0-9a-fA-F]{64}$/
-let regexReferral = /^[0-9a-fA-F]{64}$/
+let regexReferral = /^(ref_)[0-9a-fA-F]{66}$/
 // TODO
 // let regexSeed = /^[a-f, ]+$/
 let regexSeed = /^(\w+\s){11,}\w+$/
