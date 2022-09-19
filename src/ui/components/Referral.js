@@ -67,6 +67,10 @@ export default function Referral(props) {
         console.log(referralCode)
     }
 
+    let scan = () => {
+
+    }
+
     return (
 
         <div className={styles.main}>
@@ -143,6 +147,12 @@ export default function Referral(props) {
                     onClick={() => {activate()}}
                     className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
                     Activate
+                </div>
+
+                <div
+                    onClick={() => {scan()}}
+                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                    Scan
                 </div>
 
                 <Separator/>
