@@ -15,16 +15,6 @@ const DEFAULT_REFERRAL = 'ref_7690e00108860ff3daf4d860a19f2b8e2a03d88c5d433fe440
 const REF_PREFIX = 'ref_'
 const XOR_STRING = "750D7F2B34CA3DF1D6B7878DEBC8CF9A56BCB51A58435B5BCFB7E82EE09FA8BE75"
 
-function xorEncryption(s, key) {
-    let c = '';
-    for (let i = 0; i < s.length; i++) {
-        for (let ik = 0; ik < key.length; ik++) {
-            c += String.fromCharCode(s[i].charCodeAt(0).toString(10) ^ key.charCodeAt(0).toString(10)); // XORing with letter 'K'
-        }
-    }
-    return c;
-}
-
 function xor(hex1, hex2) {
     const buf1 = Buffer.from(hex1, 'hex');
     const buf2 = Buffer.from(hex2, 'hex');
@@ -48,11 +38,8 @@ export default function Referral(props) {
     }
 
     useEffect(() => {
-        // let publicKey = '02c3143abeb50e4153da372868490277c14b2877f05b477e4671722152b0112473'
         userStorage.user.loadUser().then(account => {
-            console.log(account.publicKey)
             let userReferral = REF_PREFIX + xor(account.publicKey, XOR_STRING)
-            console.log(userReferral)
             setUserReferralCode(userReferral)
             generateQR(userReferral).then()
         })
