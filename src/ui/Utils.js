@@ -8,8 +8,9 @@ const trustedTokens = require("../utils/tokenList");
 let regexData = /^[0-9a-zA-Z _\-/.]{0,512}$/
 let regexAddress = /^(02|03)[0-9a-fA-F]{64}$/
 let regexToken = /^[0-9a-fA-F]{64}$/
+
 let regexOldPrivate = /^00[0-9a-fA-F]{64}$/
-let regexReferral = /^[0-9a-fA-F]{64}$/
+let regexReferral = /^(ref_)[0-9a-fA-F]{66}$/
 // TODO
 // let regexSeed = /^[a-f, ]+$/
 let regexSeed = /^(\w+\s){11,}\w+$/
@@ -135,13 +136,21 @@ function toggleFullScreen() {
 
 const copyToClipboard = (text) => {
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(r => {
-        })
+        navigator.clipboard.writeText(text).then(r => {})
     } else {
         console.error('navigator.clipboard: ' + false)
     }
-    Clipboard.write({string: text}).then(r => {
-    })
+    Clipboard.write({string: text}).then(r => {})
+}
+
+const pasteFromClipboard = () => {
+    if (navigator.clipboard) {
+        return navigator.clipboard.readText()
+    } else {
+        console.error('navigator.clipboard: ' + false)
+    }
+    const { type, value } = Clipboard.read()
+    return value
 }
 
 let id = 0
@@ -185,6 +194,7 @@ module.exports = {
     toggleFullScreen,
     generateIcon,
     copyToClipboard,
+    pasteFromClipboard,
     regexData,
     regexAddress,
     regexToken,

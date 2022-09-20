@@ -30,6 +30,7 @@ import { ledgerPath } from './Utils'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import WebView from "./components/WebView";
 import Mining from "./components/Mining";
+import Camera from "./components/Camera";
 
 
 let net = localStorage.getItem(NET)
@@ -74,6 +75,7 @@ export default function App(props) {
 
     const [isKeys, setKeys] = useState(false)
     const [isReferral, setReferral] = useState(false)
+    const [isCamera, setCamera] = useState(false)
 
     let [deferredPrompt, setDeferredPrompt] = useState()
     let initPWA = () => {
@@ -371,7 +373,9 @@ export default function App(props) {
                                    setTransactionRequest={setTransactionRequest}
                                    setPublicKeyRequest={setPublicKeyRequest}/>
 
-    if (isReferral) return <Referral isReferral={isReferral} setReferral={setReferral}/>
+    if (isCamera) return <Camera isCamera={isCamera} setCamera={setCamera}/>
+
+    if (isReferral) return <Referral isReferral={isReferral} setReferral={setReferral} setCamera={setCamera}/>
 
     // TODO user
     return <Account user={user}
