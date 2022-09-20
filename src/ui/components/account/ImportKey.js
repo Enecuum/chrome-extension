@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
-import {getMnemonicHex, regexToken} from "../../Utils";
+import {getMnemonicHex, regexToken, regexOldPrivate} from "../../Utils";
 import Input from "../../elements/Input";
 import Separator from "../../elements/Separator";
 import {account, generateAccountData} from "../../../user";
@@ -9,10 +9,14 @@ export default function ImportKey(props) {
 
     const [keyString, setKeyString] = useState('')
 
-    useEffect(() => {})
+    useEffect(() => {
+    })
 
     let loginKey = async () => {
 
+        if (keyString.length === 66) {
+            setKeyString(keyString.substr(2))
+        }
         let account = (await userStorage.user.loadUser())
         let data = generateAccountData(keyString, account)
 
@@ -55,16 +59,21 @@ export default function ImportKey(props) {
             <div className={styles.form}>
 
                 <div onClick={() => {
-                    if (regexToken.test(keyString)) {
+                    if (regexToken.test(keyString) || regexOldPrivate.test(keyString)) {
                         // console.log(regexToken.test(keyString))
                         // console.log(keyString)
                         loginKey(keyString).then()
                         // props.setImportKey(false)
                     }
-                }} className={styles.field + ' ' + styles.button + ' ' + (regexToken.test(keyString) ? styles.button_blue : '')}>Import Key
+                }}
+                     className={styles.field + ' ' + styles.button + ' ' + (regexToken.test(keyString) || regexOldPrivate.test(keyString) ? styles.button_blue : '')}>Import
+                    Key
                 </div>
 
-                <div onClick={() => {props.setImportKey(false)}} className={styles.field + ' ' + styles.button}>Back</div>
+                <div onClick={() => {
+                    props.setImportKey(false)
+                }} className={styles.field + ' ' + styles.button}>Back
+                </div>
 
                 <Separator/>
 
