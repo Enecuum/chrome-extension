@@ -30,7 +30,7 @@ import { ledgerPath } from './Utils'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import WebView from "./components/WebView";
 import Mining from "./components/Mining";
-import Camera from "./components/Camera";
+import QRCamera from "./components/QRCamera";
 
 
 let net = localStorage.getItem(NET)
@@ -373,7 +373,7 @@ export default function App(props) {
                                    setTransactionRequest={setTransactionRequest}
                                    setPublicKeyRequest={setPublicKeyRequest}/>
 
-    if (isCamera) return <Camera isCamera={isCamera} setCamera={setCamera}/>
+    if (isCamera) return <QRCamera isCamera={isCamera} setCamera={setCamera}/>
 
     if (isReferral) return <Referral isReferral={isReferral} setReferral={setReferral} setCamera={setCamera}/>
 

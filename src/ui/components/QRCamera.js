@@ -1,8 +1,9 @@
 import { Camera, CameraResultType } from '@capacitor/camera';
 import styles from "../css/index.module.css";
 import React from "react";
+import Separator from "../elements/Separator";
 
-export default function Camera(props) {
+export default function QRCamera(props) {
 
     const takePicture = async () => {
         const image = await Camera.getPhoto({
@@ -20,6 +21,7 @@ export default function Camera(props) {
         // Can be set to the src of an image now
         // imageElement.src = imageUrl;
 
+
         props.setCamera(false)
     };
 
@@ -36,6 +38,8 @@ export default function Camera(props) {
                 <div onClick={takePicture}
                      className={styles.field + ' ' + styles.button + ' ' + styles.red}>Scan
                 </div>
+
+                <Separator/>
 
             </div>
         </div>
