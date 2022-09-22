@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
-import {copyToClipboard, explorerAddress, getMnemonicPrivateKeyHex, shortHash, shortHashLong} from '../../Utils'
+import {
+    copyToClipboard,
+    explorerAddress,
+    getMnemonicPrivateKeyHex,
+    REF_PREFIX,
+    shortHash,
+    shortHashLong, xor, XOR_STRING
+} from '../../Utils'
 import Back from "../../elements/Back";
 
 
@@ -34,7 +41,10 @@ export default function Keys(props) {
     }
 
     let copyReferral = () => {
-
+        userStorage.user.loadUser().then(account => {
+            let userReferral = REF_PREFIX + xor(account.publicKey, XOR_STRING)
+            copyToClipboard(userReferral)
+        })
     }
 
     return (
@@ -77,7 +87,7 @@ export default function Keys(props) {
 
                 <div className={styles.field + ' ' + styles.button}
                      onClick={() => copyReferral()}>
-                    Copy mining referral link
+                    Copy mining referral code
                 </div>
 
             </div>
