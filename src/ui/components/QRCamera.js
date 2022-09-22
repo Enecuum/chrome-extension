@@ -28,9 +28,10 @@ export default function QRCamera(props) {
 
     return (
         <div className={styles.main}>
-            <div className={styles.content}>
 
-                <Back setFalse={() => props.setCamera(false)}/>
+            <Back setFalse={() => props.setCamera(false)}/>
+
+            <div className={styles.content}>
 
                 <div className={styles.field}>Camera</div>
 
