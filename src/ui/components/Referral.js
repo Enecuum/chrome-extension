@@ -26,7 +26,7 @@ function xor(hex1, hex2) {
 export default function Referral(props) {
 
     const [userReferralCode, setUserReferralCode] = useState('')
-    const [referralCode, setReferralCode] = useState('')
+    const [referralCode, setReferralCode] = useState(localStorage.getItem(REFERRAL) || '')
     const [imageURL, setImageURL] = useState('')
 
     const generateQR = async text => {
