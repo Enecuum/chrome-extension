@@ -10,6 +10,7 @@ import Back from "../elements/Back";
 import Input from "../elements/Input";
 import QRCode from "qrcode";
 import {Share} from '@capacitor/share';
+import {REFERRAL} from "../../utils/names";
 
 const DEFAULT_REFERRAL = 'ref_7690e00108860ff3daf4d860a19f2b8e2a03d88c5d433fe440dd530cbd0552e437'
 const REF_PREFIX = 'ref_'
@@ -65,6 +66,7 @@ export default function Referral(props) {
 
     let activate = () => {
         console.log(referralCode)
+        localStorage.setItem(REFERRAL, referralCode)
     }
 
     let scan = () => {

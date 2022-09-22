@@ -2,6 +2,7 @@ import { Camera, CameraResultType } from '@capacitor/camera';
 import styles from "../css/index.module.css";
 import React from "react";
 import Separator from "../elements/Separator";
+import Back from "../elements/Back";
 
 export default function QRCamera(props) {
 
@@ -28,6 +29,8 @@ export default function QRCamera(props) {
     return (
         <div className={styles.main}>
             <div className={styles.content}>
+
+                <Back setFalse={() => props.setCamera(false)}/>
 
                 <div className={styles.field}>Camera</div>
 

@@ -20,6 +20,8 @@ const SITES = 'sites'
 
 const STATE = 'state'
 
+const REFERRAL = 'referral'
+
 const TRUSTED_TOKENS = 'trusted_tokens'
 
 const STORAGE_NAME_POPUP = 'popup'
@@ -63,5 +65,6 @@ module.exports = {
     strings,
     copyText,
     SITES,
-    STATE
+    STATE,
+    REFERRAL
 }
