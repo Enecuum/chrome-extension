@@ -41,6 +41,7 @@ export default function Referral(props) {
 
     let handleChangeReferralCode = (e) => {
         setReferralCode(e.target.value)
+        localStorage.setItem(REFERRAL, referralCode)
     }
 
     let shareReferral = () => {
@@ -53,10 +54,10 @@ export default function Referral(props) {
         });
     }
 
-    let activate = () => {
-        console.log(referralCode)
-        localStorage.setItem(REFERRAL, referralCode)
-    }
+    // let activate = () => {
+    //     console.log(referralCode)
+    //     localStorage.setItem(REFERRAL, referralCode)
+    // }
 
     let scan = () => {
         props.setCamera(true)
@@ -78,16 +79,16 @@ export default function Referral(props) {
 
                 {/*<div className={styles.field}>{''}</div>*/}
 
-                <Input
-                    type="text"
-                    spellCheck={false}
-                    disabled={true}
-                    label={'Your referral code'}
-                    onChange={() => {}}
-                    value={userReferralCode}
-                    className={styles.field}
-                    placeholder={userReferralCode}
-                />
+                {/*<Input*/}
+                {/*    type="text"*/}
+                {/*    spellCheck={false}*/}
+                {/*    disabled={true}*/}
+                {/*    label={'Your referral code'}*/}
+                {/*    onChange={() => {}}*/}
+                {/*    value={userReferralCode}*/}
+                {/*    className={styles.field}*/}
+                {/*    placeholder={userReferralCode}*/}
+                {/*/>*/}
 
                 {/*<Separator/>*/}
 
@@ -138,13 +139,13 @@ export default function Referral(props) {
                     Share
                 </div>
 
-                <div
-                    onClick={() => {
-                        activate()
-                    }}
-                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
-                    Activate
-                </div>
+                {/*<div*/}
+                {/*    onClick={() => {*/}
+                {/*        activate()*/}
+                {/*    }}*/}
+                {/*    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>*/}
+                {/*    Activate*/}
+                {/*</div>*/}
 
                 <div
                     onClick={() => {
