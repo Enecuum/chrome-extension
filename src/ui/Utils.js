@@ -186,14 +186,11 @@ const showNotification = (title, text) => {
 
 }
 
-function xor(hex1, hex2) {
-    const buf1 = Buffer.from(hex1, 'hex');
-    const buf2 = Buffer.from(hex2, 'hex');
-    const bufResult = buf1.map((b, i) => b ^ buf2[i]);
-    return bufResult.toString('hex');
-}
+const DEFAULT_REFERRAL = 'ref_7690e00108860ff3daf4d860a19f2b8e2a03d88c5d433fe440dd530cbd0552e437'
+const REF_PREFIX = 'ref_'
+const XOR_STRING = "750D7F2B34CA3DF1D6B7878DEBC8CF9A56BCB51A58435B5BCFB7E82EE09FA8BE75"
 
-function xorBack(hex2, hex1) {
+function xor(hex1, hex2) {
     const buf1 = Buffer.from(hex1, 'hex');
     const buf2 = Buffer.from(hex2, 'hex');
     const bufResult = buf1.map((b, i) => b ^ buf2[i]);
@@ -222,5 +219,7 @@ module.exports = {
     getMnemonicHex,
     showNotification,
     xor,
-    xorBack
+    DEFAULT_REFERRAL,
+    REF_PREFIX,
+    XOR_STRING
 }

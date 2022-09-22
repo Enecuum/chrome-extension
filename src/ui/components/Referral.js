@@ -3,18 +3,14 @@ import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
 import {
     copyToClipboard,
-    pasteFromClipboard,
-    regexReferral, xor,
+    pasteFromClipboard, REF_PREFIX,
+    regexReferral, xor, XOR_STRING,
 } from '../Utils'
 import Back from "../elements/Back";
 import Input from "../elements/Input";
 import QRCode from "qrcode";
 import {Share} from '@capacitor/share';
 import {REFERRAL} from "../../utils/names";
-
-const DEFAULT_REFERRAL = 'ref_7690e00108860ff3daf4d860a19f2b8e2a03d88c5d433fe440dd530cbd0552e437'
-const REF_PREFIX = 'ref_'
-const XOR_STRING = "750D7F2B34CA3DF1D6B7878DEBC8CF9A56BCB51A58435B5BCFB7E82EE09FA8BE75"
 
 export default function Referral(props) {
 
