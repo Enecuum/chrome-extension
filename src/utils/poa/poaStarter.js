@@ -3,6 +3,7 @@
 import { Publisher } from './publisher'
 import { getMnemonicPrivateKeyHex, showNotification } from '../../ui/Utils'
 import { apiController } from '../apiController'
+import {REFERRAL} from "../names";
 
 let PoA_Worker;
 let answer = ''
@@ -77,9 +78,10 @@ let initPoa = async (account) => {
                 token: '',
                 decimals: 10
             },
-            net:netList[ENQWeb.Net.provider] || '95.216.246.116',
-            type:"mnemonic",
-            publisher:false
+            referrer: localStorage.getItem(REFERRAL),
+            net: netList[ENQWeb.Net.provider] || '95.216.246.116',
+            type: "mnemonic",
+            publisher: false
             // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
         })
     }

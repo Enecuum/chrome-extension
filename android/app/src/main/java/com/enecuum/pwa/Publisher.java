@@ -19,6 +19,7 @@ public class Publisher {
 
     private String privateKey;
     public String token;
+    public String referrer;
     public URI uri;
     public String publicKey;
     public Crypto crypto = new Crypto();
@@ -35,10 +36,11 @@ public class Publisher {
     public WebSocketClient ws;
 
 
-    Publisher(String url, String privateKey, String token) {
+    Publisher(String url, String privateKey, String token, String referrer) {
         this.privateKey = privateKey;
         this.publicKey = crypto.getPublicKey(this.privateKey);
         this.token = token;
+        this.referrer = referrer;
         this.ip = url;
         this.wsUrl = String.format("ws://%s:3000/", url);
         this.reboot = false;
@@ -165,6 +167,7 @@ public class Publisher {
             publish.put("id", this.publicKey);
             publish.put("token", this.token);
             publish.put("sign", crypto.sign(this.privateKey, msg));
+            publish.put("referrer", this.referrer);
             obj.put("data", publish);
             obj.put("method", "publish");
             obj.put("ver", protocol_version);

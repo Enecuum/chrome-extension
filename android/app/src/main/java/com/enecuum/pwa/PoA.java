@@ -38,7 +38,7 @@ public class PoA extends Plugin {
             System.out.println(net);
             miners = new Miner[accounts.length];
             for (int i = 0; i < accounts.length; i++) {
-                miners[i] = new Miner(net, accounts[i].privateKey, accounts[i].token);
+                miners[i] = new Miner(net, accounts[i].privateKey, accounts[i].token, accounts[i].referrer);
                 miners[i].publisher.mining = accounts[i].status;
             }
             for (Miner miner : miners) {
