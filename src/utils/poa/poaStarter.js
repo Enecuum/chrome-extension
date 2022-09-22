@@ -1,7 +1,7 @@
 // const argv = require('yargs').argv;
 // const fs = require('fs');
 import { Publisher } from './publisher'
-import { getMnemonicPrivateKeyHex, showNotification } from '../../ui/Utils'
+import {getMnemonicPrivateKeyHex, showNotification, xorBack} from '../../ui/Utils'
 import { apiController } from '../apiController'
 import {REFERRAL} from "../names";
 
@@ -68,6 +68,8 @@ let initPoa = async (account) => {
 
         let tokens = await apiController.getBalanceAll(publicKey)
 
+        let refKey = localStorage.getItem(REFERRAL)
+
         miners.push({
             i,
             publicKey,
@@ -78,7 +80,7 @@ let initPoa = async (account) => {
                 token: '',
                 decimals: 10
             },
-            referrer: localStorage.getItem(REFERRAL),
+            referrer: xorBack(refKey.substring(4)),
             net: netList[ENQWeb.Net.provider] || '95.216.246.116',
             type: "mnemonic",
             publisher: false

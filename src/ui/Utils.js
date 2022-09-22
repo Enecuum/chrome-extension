@@ -186,6 +186,20 @@ const showNotification = (title, text) => {
 
 }
 
+function xor(hex1, hex2) {
+    const buf1 = Buffer.from(hex1, 'hex');
+    const buf2 = Buffer.from(hex2, 'hex');
+    const bufResult = buf1.map((b, i) => b ^ buf2[i]);
+    return bufResult.toString('hex');
+}
+
+function xorBack(hex2, hex1) {
+    const buf1 = Buffer.from(hex1, 'hex');
+    const buf2 = Buffer.from(hex2, 'hex');
+    const bufResult = buf1.map((b, i) => b ^ buf2[i]);
+    return bufResult.toString('hex');
+}
+
 module.exports = {
     shortHash,
     shortHashLong,
@@ -206,5 +220,7 @@ module.exports = {
     getMnemonicFirstPrivateKey,
     getMnemonicPrivateKeyHex,
     getMnemonicHex,
-    showNotification
+    showNotification,
+    xor,
+    xorBack
 }
