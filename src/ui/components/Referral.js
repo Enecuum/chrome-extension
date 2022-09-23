@@ -107,37 +107,41 @@ export default function Referral(props) {
                     placeholder="Insert referral code here"
                 />
 
-                <div className={styles.qr}>
-                    <img src={imageURL}/>
-                </div>
+                {/*<div className={styles.qr}>*/}
+                {/*    <img src={imageURL}/>*/}
+                {/*</div>*/}
 
             </div>
 
             <div className={styles.form}>
 
                 <div
-                    onClick={async () => {
-                        setReferralCode(await pasteFromClipboard())
+                    onClick={() => {
+                        pasteFromClipboard().then(refCode => {
+                            console.log(refCode)
+                            setReferralCode(refCode)
+                            localStorage.setItem(REFERRAL, refCode)
+                        })
                     }}
                     className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
                     Paste
                 </div>
 
-                <div
-                    onClick={() => {
-                        copyToClipboard(userReferralCode)
-                    }}
-                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
-                    Copy
-                </div>
+                {/*<div*/}
+                {/*    onClick={() => {*/}
+                {/*        copyToClipboard(userReferralCode)*/}
+                {/*    }}*/}
+                {/*    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>*/}
+                {/*    Copy*/}
+                {/*</div>*/}
 
-                <div
-                    onClick={() => {
-                        shareReferral()
-                    }}
-                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
-                    Share
-                </div>
+                {/*<div*/}
+                {/*    onClick={() => {*/}
+                {/*        shareReferral()*/}
+                {/*    }}*/}
+                {/*    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>*/}
+                {/*    Share*/}
+                {/*</div>*/}
 
                 {/*<div*/}
                 {/*    onClick={() => {*/}
@@ -147,13 +151,13 @@ export default function Referral(props) {
                 {/*    Activate*/}
                 {/*</div>*/}
 
-                <div
-                    onClick={() => {
-                        scan()
-                    }}
-                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
-                    Scan
-                </div>
+                {/*<div*/}
+                {/*    onClick={() => {*/}
+                {/*        scan()*/}
+                {/*    }}*/}
+                {/*    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>*/}
+                {/*    Scan*/}
+                {/*</div>*/}
 
                 <Separator/>
 
