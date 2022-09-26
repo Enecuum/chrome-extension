@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-
 public class PoAService extends Service {
 
     public static Miner[] miners;
@@ -14,7 +13,7 @@ public class PoAService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
             System.out.println("miners: " + miners.length);
-            for (Miner miner : this.miners) {
+            for (Miner miner : miners) {
                 miner.publisher.init();
             }
 
@@ -28,7 +27,7 @@ public class PoAService extends Service {
     public void onDestroy() {
         System.out.println("Destroyed");
         try {
-            for (Miner miner : this.miners) {
+            for (Miner miner : miners) {
                 miner.publisher.stop();
             }
         } catch (Exception e) {

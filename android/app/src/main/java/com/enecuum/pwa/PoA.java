@@ -1,21 +1,15 @@
 package com.enecuum.pwa;
 
-import android.content.Context;
 import android.content.Intent;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-
 import org.json.JSONException;
-
 import com.google.gson.Gson;
-
 import java.util.Timer;
 import java.util.TimerTask;
-
 
 @CapacitorPlugin(name = "PoA")
 public class PoA extends Plugin {

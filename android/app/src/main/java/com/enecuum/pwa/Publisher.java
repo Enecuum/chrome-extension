@@ -1,23 +1,15 @@
 package com.enecuum.pwa;
 
 import java.net.URI;
-
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
-
 import java.net.URISyntaxException;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import com.getcapacitor.JSObject;
 import com.google.gson.Gson;
 
 public class Publisher {
 
-    private String privateKey;
+    private final String privateKey;
     public String token;
     public String referrer;
     public URI uri;
@@ -50,7 +42,7 @@ public class Publisher {
 
             ws = new WebSocketClient(this.uri) {
                 @Override
-                public void onOpen(ServerHandshake handshakedata) {
+                public void onOpen(ServerHandshake handshakeData) {
                     try {
                         System.out.println("connect from " + publicKey.substring(0, 6) + " to " + this.uri.toString());
                         ws.send(hail());
@@ -128,7 +120,6 @@ public class Publisher {
     }
 
     public String hail() {
-        Gson g = new Gson();
         String hash = crypto.sha256(this.ip);
         JSObject obj = new JSObject();
         JSObject hail = new JSObject();

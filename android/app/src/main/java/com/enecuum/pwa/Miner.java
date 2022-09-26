@@ -2,7 +2,7 @@ package com.enecuum.pwa;
 
 public class Miner {
     public String url;
-    private String key;
+    private final String key;
     public String token;
     public String referrer;
     public Publisher publisher;

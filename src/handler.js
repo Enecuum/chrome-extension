@@ -298,9 +298,7 @@ export function globalMessageHandler(msg, ENQWeb) {
         if (msg.poa && msg.stop) {
             console.log(handlerMiners)
             if (androidRegex.test(Capacitor.platform)) {
-                test.stop()
-                    .then(res => {
-                    })
+                test.stop().then(res => {})
                 let miners = stopMobileMiners()
                 miningStatus.miningProcess = false
                 resolve({response: miners})
