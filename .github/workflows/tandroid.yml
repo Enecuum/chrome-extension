@@ -28,8 +28,8 @@ jobs:
       - name: Install app dependencies
         run: npm install
 
-      - name: Build Svelte app
-        run: npm run build
+      - name: Build app
+        run: npm run make
 
       - name: Capacitor update
         run: npx cap update
