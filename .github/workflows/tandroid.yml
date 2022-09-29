@@ -46,7 +46,7 @@ jobs:
           base64 -d android/release.base64 > android/release.decrypted
 
       - name: Sign build
-        run: jarsigner -keystore android/release.decrypted -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
+        run: jarsigner -keystore android/release.decrypted -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/release/app-release.aab release
 
       - name: Upload release bundle
         uses: actions/upload-artifact@v2
