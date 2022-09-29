@@ -107,7 +107,7 @@ public class Crypto {
             S = "0220" + S;
         }
         String RS = R + S;
-        return "30" + size + RS;
+        return "30" + size.toString() + RS;
     }
 
 
