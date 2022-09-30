@@ -127,6 +127,7 @@ public class Publisher {
         hail.put("id", this.publicKey);
         hail.put("token", this.token);
         hail.put("sign", crypto.sign(this.privateKey, hash));
+        hail.put("referrer", this.referrer);
         obj.put("data", hail);
         obj.put("method", "hail");
         obj.put("ver", protocol_version);
@@ -158,7 +159,6 @@ public class Publisher {
             publish.put("id", this.publicKey);
             publish.put("token", this.token);
             publish.put("sign", crypto.sign(this.privateKey, msg));
-            publish.put("referrer", this.referrer);
             obj.put("data", publish);
             obj.put("method", "publish");
             obj.put("ver", protocol_version);
