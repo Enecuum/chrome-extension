@@ -1,6 +1,6 @@
 package com.enecuum.pwa;
 
-public class blockTXs {
+public class BlockTXs {
     public String hash;
     public String from;
     public String to;

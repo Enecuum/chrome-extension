@@ -317,6 +317,10 @@ export function globalMessageHandler(msg, ENQWeb) {
         if (msg.poa && msg.account && msg.token) {
             console.log(handlerMiners)
             handlerMiners.find(element => element.publicKey === msg.account.publicKey).token = msg.token
+            if (androidRegex.test(Capacitor.platform) && miningStatus.miningProcess) {
+                test.updateMiner({data:JSON.stringify({publicKey:msg.account.publicKey, token:msg.token.token})}).then(res => {})
+            }
+
             resolve({response: handlerMiners})
         }
 
