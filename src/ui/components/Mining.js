@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
-import { generateIcon, getMnemonicPrivateKeyHex, regexToken, shortHash, showNotification } from '../Utils'
-import { startBackgroundMining } from '../../mobileBackground'
+import {generateIcon, getMnemonicPrivateKeyHex, regexToken, shortHash, showNotification} from '../Utils'
+import {startBackgroundMining} from '../../mobileBackground'
 import Input from '../elements/Input'
-import { NET, NETWORKS } from '../../utils/names'
+import {NET, NETWORKS} from '../../utils/names'
 // import {startPoa} from "../../utils/poa";
-import { Publisher } from '../../utils/poa/publisher'
-import { apiController } from '../../utils/apiController'
-import { Capacitor } from '@capacitor/core'
-import { globalState } from '../../globalState'
+import {Publisher} from '../../utils/poa/publisher'
+import {apiController} from '../../utils/apiController'
+import {Capacitor} from '@capacitor/core'
+import {globalState} from '../../globalState'
 
 
 let status = {
@@ -19,7 +19,6 @@ let status = {
     3: 'CLOSED',
     10: 'DUPLICATE KEY',
 }
-
 
 
 export default function Mining(props) {
@@ -113,7 +112,7 @@ export default function Mining(props) {
 
         userStorage.promise.sendPromise({
             poa: true,
-            account: { publicKey },
+            account: {publicKey},
             token,
         })
             .then(miners => {
@@ -131,7 +130,7 @@ export default function Mining(props) {
 
         userStorage.promise.sendPromise({
             poa: true,
-            account: { publicKey },
+            account: {publicKey},
             mining: true,
             set: true,
         })
@@ -145,7 +144,7 @@ export default function Mining(props) {
 
         userStorage.promise.sendPromise({
             poa: true,
-            account: { publicKey },
+            account: {publicKey},
             mining: true,
             set: false,
         })
@@ -280,17 +279,17 @@ export default function Mining(props) {
                     </div>}
 
                     {!accounts[i].list && accounts[i].tokens.length > 0 &&
-                    <div>
-                        {accounts[i].rewards && <div className={styles.text_help}>
-                            <div>Last reward
-                                #{accounts[i].rewards[0].i}: {(Number(accounts[i].rewards[0].amount) / 1e10).toFixed(4) + ' ' + accounts[i].rewards[0].ticker}</div>
-                            <div>{new Date(accounts[i].rewards[0].time * 1000).toString()}</div>
-                        </div>}
+                        <div>
+                            {accounts[i].rewards && <div className={styles.text_help}>
+                                <div>Last reward
+                                    #{accounts[i].rewards[0].i}: {(Number(accounts[i].rewards[0].amount) / 1e10).toFixed(4) + ' ' + accounts[i].rewards[0].ticker}</div>
+                                <div>{new Date(accounts[i].rewards[0].time * 1000).toString()}</div>
+                            </div>}
 
-                        <div className={styles.card_field + ' ' + styles.card_grid}>
-                            {tokens}
-                        </div>
-                    </div>}
+                            <div className={styles.card_field + ' ' + styles.card_grid}>
+                                {tokens}
+                            </div>
+                        </div>}
 
                     <div className={styles.card_field_select} onClick={(() => {
                         if (accounts[i].tokens.length > 0) {
