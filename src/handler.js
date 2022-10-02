@@ -279,7 +279,8 @@ export function globalMessageHandler(msg, ENQWeb) {
                     test.start({
                         data: JSON.stringify(accounts),
                         net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : '95.216.246.116'
-                    }).then(res => {})
+                    }).then(res => {
+                    })
                     // let miners = startBackgroundMining()
                     miningStatus.miningProcess = true
                     // resolve({ response: miners })
@@ -298,7 +299,8 @@ export function globalMessageHandler(msg, ENQWeb) {
         if (msg.poa && msg.stop) {
             console.log(handlerMiners)
             if (androidRegex.test(Capacitor.platform)) {
-                test.stop().then(res => {})
+                test.stop().then(res => {
+                })
                 let miners = stopMobileMiners()
                 miningStatus.miningProcess = false
                 resolve({response: miners})
@@ -318,7 +320,13 @@ export function globalMessageHandler(msg, ENQWeb) {
             console.log(handlerMiners)
             handlerMiners.find(element => element.publicKey === msg.account.publicKey).token = msg.token
             if (androidRegex.test(Capacitor.platform) && miningStatus.miningProcess) {
-                test.updateMiner({data:JSON.stringify({publicKey:msg.account.publicKey, token:msg.token.token})}).then(res => {})
+                test.updateMiner({
+                    data: JSON.stringify({
+                        publicKey: msg.account.publicKey,
+                        token: msg.token.token
+                    })
+                }).then(res => {
+                })
             }
 
             resolve({response: handlerMiners})
@@ -326,8 +334,19 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         if (msg.poa && msg.account && msg.mining) {
             console.log(handlerMiners)
-            handlerMiners.find(element => element.publicKey === msg.account.publicKey).publisher.restart = msg.set
+            try {
+                handlerMiners.find(element => element.publicKey === msg.account.publicKey).publisher.restart = msg.set
+            } catch (e) {
+            }
             handlerMiners.find(element => element.publicKey === msg.account.publicKey).mining = msg.set
+            if (miningStatus.miningProcess && androidRegex.test(Capacitor.platform)) {
+                test.minerSwitch({
+                    data: JSON.stringify({
+                        publicKey: msg.account.publicKey,
+                        status: msg.set
+                    })
+                }).then()
+            }
             resolve({response: handlerMiners})
         }
 

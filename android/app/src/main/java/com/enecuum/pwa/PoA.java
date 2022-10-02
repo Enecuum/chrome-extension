@@ -86,6 +86,23 @@ public class PoA extends Plugin {
     }
 
     @PluginMethod()
+    public void minerSwitch(PluginCall call) {
+        Gson g = new Gson();
+        String jsonString = call.getString("data");
+        try {
+            Account account = g.fromJson(jsonString, Account.class);
+            for (Miner miner : miners) {
+                if (miner.publisher.publicKey.equals(account.publicKey)) {
+                    commitSwitch(miner, account.status);
+                    System.out.println(String.format("switch %s %s", account.publicKey.substring(0, 6), account.status ? "ON" : "OFF"));
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("error in switch miner");
+        }
+    }
+
+    @PluginMethod()
     public void getMiners(PluginCall call) {
         try {
             JSObject obj = new JSObject();
@@ -131,6 +148,15 @@ public class PoA extends Plugin {
         miner.restartPublisher();
         miner.publisher.init();
         miner.publisher.countBlocks = buf;
+    }
+
+    private void commitSwitch(Miner miner, boolean switcher) {
+        if (!switcher) {
+            miner.publisher.stop();
+        } else {
+            miner.restartPublisher();
+            miner.publisher.init();
+        }
     }
 
     private void cleanTimer() {
