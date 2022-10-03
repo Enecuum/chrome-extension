@@ -149,8 +149,8 @@ const pasteFromClipboard = () => {
     } else {
         console.error('navigator.clipboard: ' + false)
     }
-    const { type, value } = Clipboard.read()
-    return value
+    return Clipboard.read()
+    // return value
 }
 
 let id = 0
