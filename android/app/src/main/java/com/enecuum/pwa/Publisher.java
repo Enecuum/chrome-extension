@@ -1,9 +1,12 @@
 package com.enecuum.pwa;
 
 import java.net.URI;
+
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+
 import java.net.URISyntaxException;
+
 import com.getcapacitor.JSObject;
 import com.google.gson.Gson;
 
@@ -138,7 +141,7 @@ public class Publisher {
 
     public String onBlock(String m_block) {
         Gson g = new Gson();
-        block block = g.fromJson(m_block, block.class);
+        Block block = g.fromJson(m_block, Block.class);
 //        System.out.println("len of txs = " + block.data.mblock_data.txs.length);
 //        System.out.println(this.token + "\n" + this.publicKey + "\n" + this.privateKey);
         System.out.println(block.method);

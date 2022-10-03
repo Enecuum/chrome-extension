@@ -1,7 +1,7 @@
 package com.enecuum.pwa;
 
-public class blockData {
+public class BlockData {
     public String leader_id;
     public String m_hash;
-    public mBlockData mblock_data;
+    public MBlockData mblock_data;
 }

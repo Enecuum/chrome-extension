@@ -1,13 +1,17 @@
 package com.enecuum.pwa;
 
 import android.content.Intent;
+
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+
 import org.json.JSONException;
+
 import com.google.gson.Gson;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -63,6 +67,40 @@ public class PoA extends Plugin {
         call.resolve();
     }
 
+    @PluginMethod()
+    public void updateMiner(PluginCall call) {
+        Gson g = new Gson();
+        String jsonString = call.getString("data");
+        try {
+            Account account = g.fromJson(jsonString, Account.class);
+            for (Miner miner : miners) {
+                if (miner.publisher.publicKey.equals(account.publicKey)) {
+                    miner.token = account.token;
+                    rebootMiner(miner);
+                    System.out.println(String.format("Change %s token on %s", account.publicKey.substring(0, 6), account.token));
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("error in change token");
+        }
+    }
+
+    @PluginMethod()
+    public void minerSwitch(PluginCall call) {
+        Gson g = new Gson();
+        String jsonString = call.getString("data");
+        try {
+            Account account = g.fromJson(jsonString, Account.class);
+            for (Miner miner : miners) {
+                if (miner.publisher.publicKey.equals(account.publicKey)) {
+                    commitSwitch(miner, account.status);
+                    System.out.println(String.format("switch %s %s", account.publicKey.substring(0, 6), account.status ? "ON" : "OFF"));
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("error in switch miner");
+        }
+    }
 
     @PluginMethod()
     public void getMiners(PluginCall call) {
@@ -94,12 +132,7 @@ public class PoA extends Plugin {
                     for (Integer i = 0; i < miners.length; i++) {
 //                        System.out.println(String.format("miner %s is %s", miners[i].publisher.publicKey.substring(0,6), miners[i].publisher.status));
                         if (miners[i].publisher.reboot) {
-//                            System.out.println(String.format("miner %s need reboot", miners[i].publisher.publicKey.substring(0,6)));
-                            Integer buf = miners[i].publisher.countBlocks;
-                            miners[i].publisher.stop();
-                            miners[i].restartPublisher();
-                            miners[i].publisher.countBlocks = buf;
-                            miners[i].publisher.init();
+                            rebootMiner(miners[i]);
                         }
                     }
                 } catch (Exception ex) {
@@ -107,6 +140,23 @@ public class PoA extends Plugin {
                 }
             }
         }, 0, 1000 * 5);
+    }
+
+    private void rebootMiner(Miner miner) {
+        Integer buf = miner.publisher.countBlocks;
+        miner.publisher.stop();
+        miner.restartPublisher();
+        miner.publisher.init();
+        miner.publisher.countBlocks = buf;
+    }
+
+    private void commitSwitch(Miner miner, boolean switcher) {
+        if (!switcher) {
+            miner.publisher.stop();
+        } else {
+            miner.restartPublisher();
+            miner.publisher.init();
+        }
     }
 
     private void cleanTimer() {

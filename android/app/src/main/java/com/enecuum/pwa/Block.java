@@ -1,9 +1,9 @@
 package com.enecuum.pwa;
 
-public class block {
+public class Block {
     public String method;
     public String ver;
-    public blockData data;
+    public BlockData data;
     public String err;
 }
 

@@ -1,6 +1,6 @@
 package com.enecuum.pwa;
 
-public class mBlockData {
+public class MBlockData {
     public String kblocks_hash;
-    public blockTXs[] txs;
+    public BlockTXs[] txs;
 }
