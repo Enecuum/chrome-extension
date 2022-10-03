@@ -40,8 +40,8 @@ export default function Referral(props) {
     }
 
     let handleChangeReferralCode = (e) => {
+        localStorage.setItem(REFERRAL, e.target.value)
         setReferralCode(e.target.value)
-        localStorage.setItem(REFERRAL, referralCode)
     }
 
     let shareReferral = () => {
@@ -118,9 +118,9 @@ export default function Referral(props) {
                 <div
                     onClick={() => {
                         pasteFromClipboard().then(refCode => {
-                            console.log(refCode)
-                            setReferralCode(refCode)
-                            localStorage.setItem(REFERRAL, refCode)
+                            console.log(refCode.value)
+                            setReferralCode(refCode.value)
+                            localStorage.setItem(REFERRAL, refCode.value)
                         })
                     }}
                     className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
