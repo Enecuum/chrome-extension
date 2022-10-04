@@ -46,11 +46,11 @@ jobs:
           base64 -d android/release.base64 > android/release.decrypted
 
       - name: Sign build
-        run: jarsigner -keystore android/release.decrypted -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" -signedjar android/app/build/outputs/apk/release/app-release-unsigned.apk android/app/build/outputs/apk/release/app-release-unsigned.apk release
+        run: jarsigner -keystore android/release.decrypted -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" -signedjar android/app/build/outputs/apk/release/app-release-signed.apk android/app/build/outputs/apk/release/app-release-unsigned.apk release
 
       - name: Upload release bundle
         uses: actions/upload-artifact@v2
         with:
           name: app-release
-          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          path: android/app/build/outputs/apk/release/app-release-signed.apk
           retention-days: 60
