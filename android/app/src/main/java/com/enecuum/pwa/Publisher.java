@@ -51,6 +51,7 @@ public class Publisher {
                         ws.send(hail());
                         status = "Connected";
                     } catch (Exception ex) {
+                        System.out.println("Error in open WS\n" + ex.getMessage() + "\n" + ex.getStackTrace());
                         status = "Disconnected";
                     }
 
@@ -60,7 +61,12 @@ public class Publisher {
                 public void onMessage(String message) {
 //                ws.send("hello, mean");
                     System.out.println("account " + publicKey.substring(0, 6) + " take block");
-                    ws.send(onBlock(message));
+                    try {
+                        ws.send(onBlock(message));
+                    } catch (Exception ex) {
+                        System.out.println("Error in block\n" + ex.getMessage() + "\n" + ex.getStackTrace());
+                        status = "Disconnected";
+                    }
                 }
 
                 @Override
@@ -130,7 +136,7 @@ public class Publisher {
         hail.put("id", this.publicKey);
         hail.put("token", this.token);
         hail.put("sign", crypto.sign(this.privateKey, hash));
-        hail.put("referrer", this.referrer);
+//        hail.put("referrer", this.referrer);
         obj.put("data", hail);
         obj.put("method", "hail");
         obj.put("ver", protocol_version);
@@ -171,6 +177,7 @@ public class Publisher {
 //            this.status = "Sign block";
             this.status = String.format("Sign block (%d)", countBlocks);
 
+            System.out.println(obj.toString());
             return obj.toString();
         }
         System.out.println("not found");

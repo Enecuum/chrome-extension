@@ -84,7 +84,7 @@ public class Crypto {
         ECKeyPair keyPair = new ECKeyPair(privKey, pubKey);
         byte[] hash = sha256Bytes(msg);
 
-        Sign.SignatureData signature = Sign.signMessage(hash, keyPair);
+        Sign.SignatureData signature = Sign.signMessage(hash, keyPair, false);
 
         String R;
         String S;

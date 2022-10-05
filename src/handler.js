@@ -260,6 +260,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                 // TODO ?
                 let pulseIP = '95.216.68.221'
                 let bitIP = '95.216.246.116'
+                let f3IP = '95.216.207.173'
 
                 if (androidRegex.test(Capacitor.getPlatform())) {
 
