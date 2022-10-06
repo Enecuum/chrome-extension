@@ -2,7 +2,7 @@ import {decryptAccount, encryptAccount, lockAccount, lockTime} from './lockAccou
 
 // const cacheStore = require('./indexDB') // es6
 import indexDB from './utils/indexDB'
-import {USER} from './utils/names'
+import {USER, REFERRAL} from './utils/names'
 import eventBus from './utils/eventBus'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import {signHash} from './utils/ledgerShell'
@@ -260,9 +260,11 @@ export function globalMessageHandler(msg, ENQWeb) {
                 // TODO ?
                 let pulseIP = '95.216.68.221'
                 let bitIP = '95.216.246.116'
+                let f3IP = '95.216.207.173'
 
                 if (androidRegex.test(Capacitor.getPlatform())) {
 
+                    let refCode = localStorage.getItem(REFERRAL)
                     let netList = {
                         'https://bit.enecuum.com': bitIP,
                         'https://pulse.enecuum.com': pulseIP
@@ -271,10 +273,13 @@ export function globalMessageHandler(msg, ENQWeb) {
                         for (let i = 0; i < handlerMiners.length; i++) {
                             accounts[i].token = handlerMiners[i].token.token
                             accounts[i].status = handlerMiners[i].mining;
+                            accounts[i].referrer = refCode
                         }
                     } catch (e) {
                         console.error('Error in handle miners!')
                     }
+
+                    console.log(accounts)
 
                     test.start({
                         data: JSON.stringify(accounts),

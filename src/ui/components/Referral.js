@@ -59,7 +59,7 @@ export default function Referral(props) {
     //     localStorage.setItem(REFERRAL, referralCode)
     // }
 
-    let scan = () => {
+    let scan = (refCode) => {
         props.setCamera(true)
     }
 

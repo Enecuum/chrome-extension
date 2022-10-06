@@ -375,7 +375,7 @@ export default function App(props) {
 
     if (isCamera) return <QRCamera isCamera={isCamera} setCamera={setCamera}/>
 
-    if (isReferral) return <Referral isReferral={isReferral} setReferral={setReferral} setCamera={setCamera}/>
+    if (isReferral) return <Referral isReferral={isReferral} setReferral={setReferral} setCamera={setCamera} publicKey={user.publicKey}/>
 
     // TODO user
     return <Account user={user}
