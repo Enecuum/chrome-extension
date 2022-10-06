@@ -11,12 +11,13 @@ public class Miner {
         this.key = key;
         this.url = url;
         this.token = token;
-        this.publisher = new Publisher(url, key, token, referrer);
+        this.referrer = referrer.equals(null) ? "" : referrer.substring(4);
+        this.publisher = new Publisher(url, key, token, this.referrer);
     }
 
     public void restartPublisher() {
         Boolean buf = this.publisher.mining;
-        this.publisher = new Publisher(url, key, token, referrer);
+        this.publisher = new Publisher(this.url, this.key, this.token, this.referrer);
         this.publisher.mining = buf;
     }
 }
