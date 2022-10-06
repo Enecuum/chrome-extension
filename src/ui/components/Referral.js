@@ -40,14 +40,8 @@ export default function Referral(props) {
     }
 
     let handleChangeReferralCode = (e) => {
-        // localStorage.setItem(REFERRAL, e.target.value)
+        localStorage.setItem(REFERRAL, e.target.value)
         setReferralCode(e.target.value)
-        saveRef()
-    }
-
-    let saveRef = ()=>{
-        console.log(props)
-        localStorage.setItem(REFERRAL, referralCode)
     }
 
     let shareReferral = () => {
@@ -126,8 +120,7 @@ export default function Referral(props) {
                         pasteFromClipboard().then(refCode => {
                             console.log(refCode.value)
                             setReferralCode(refCode.value)
-                            saveRef()
-                            // localStorage.setItem(REFERRAL, refCode.value)
+                            localStorage.setItem(REFERRAL, refCode.value)
                         })
                     }}
                     className={`${styles.field} ${styles.button} ${styles.button_blue}`}>

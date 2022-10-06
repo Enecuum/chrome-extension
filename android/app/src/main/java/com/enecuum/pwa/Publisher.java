@@ -49,6 +49,7 @@ public class Publisher {
                     try {
                         System.out.println("connect from " + publicKey.substring(0, 6) + " to " + this.uri.toString());
                         ws.send(hail());
+
                         status = "Connected";
                     } catch (Exception ex) {
                         System.out.println("Error in open WS\n" + ex.getMessage() + "\n" + ex.getStackTrace());
@@ -59,7 +60,6 @@ public class Publisher {
 
                 @Override
                 public void onMessage(String message) {
-//                ws.send("hello, mean");
                     System.out.println("account " + publicKey.substring(0, 6) + " take block");
                     try {
                         ws.send(onBlock(message));
@@ -129,18 +129,22 @@ public class Publisher {
     }
 
     public String hail() {
-        String hash = crypto.sha256(this.ip);
+        String hash = crypto.sha256(this.ip + (this.referrer.length() > 0 ? this.referrer : "" ) + this.token);
+//        String hash = crypto.sha256(this.ip + this.token);
         JSObject obj = new JSObject();
         JSObject hail = new JSObject();
         hail.put("hash", hash);
         hail.put("id", this.publicKey);
         hail.put("token", this.token);
         hail.put("sign", crypto.sign(this.privateKey, hash));
-//        hail.put("referrer", this.referrer);
+        if (this.referrer.length() > 0) {
+            hail.put("referrer", this.referrer);
+        }
         obj.put("data", hail);
         obj.put("method", "hail");
         obj.put("ver", protocol_version);
 
+        System.out.println(obj.toString());
         return obj.toString();
     }
 
@@ -148,8 +152,6 @@ public class Publisher {
     public String onBlock(String m_block) {
         Gson g = new Gson();
         Block block = g.fromJson(m_block, Block.class);
-//        System.out.println("len of txs = " + block.data.mblock_data.txs.length);
-//        System.out.println(this.token + "\n" + this.publicKey + "\n" + this.privateKey);
         System.out.println(block.method);
 
         if (block.err != null) {
@@ -160,19 +162,21 @@ public class Publisher {
         }
 
         if (block.method.equals("on_leader_beacon")) {
-            String msg = block.data.m_hash + this.token;
+            String msg = block.data.m_hash + (this.referrer.length() > 0 ? this.referrer : "" ) + this.token;
             JSObject obj = new JSObject();
             JSObject publish = new JSObject();
             publish.put("kblocks_hash", block.data.mblock_data.kblocks_hash);
             publish.put("m_hash", block.data.m_hash);
             publish.put("id", this.publicKey);
             publish.put("token", this.token);
+            if (this.referrer.length() > 0) {
+                publish.put("referrer", this.referrer);
+            }
             publish.put("sign", crypto.sign(this.privateKey, msg));
             obj.put("data", publish);
             obj.put("method", "publish");
             obj.put("ver", protocol_version);
 
-//        System.out.println(obj.toString());
             this.countBlocks++;
 //            this.status = "Sign block";
             this.status = String.format("Sign block (%d)", countBlocks);
