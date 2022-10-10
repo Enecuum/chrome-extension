@@ -273,7 +273,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                         for (let i = 0; i < handlerMiners.length; i++) {
                             accounts[i].token = handlerMiners[i].token.token
                             accounts[i].status = handlerMiners[i].mining;
-                            accounts[i].referrer = refCode
+                            accounts[i].referrer = refCode || "false"
                         }
                     } catch (e) {
                         console.error('Error in handle miners!')

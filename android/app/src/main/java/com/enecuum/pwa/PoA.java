@@ -61,7 +61,12 @@ public class PoA extends Plugin {
     public void stop(PluginCall call) {
         cleanTimer();
         for (Miner miner : miners) {
-            miner.publisher.stop();
+            try{
+                miner.publisher.stop();
+            }
+            catch (Exception ex){
+                System.out.println("Stop miner error!\n" + ex.getStackTrace() + "\n" + ex.getMessage());
+            }
         }
         getActivity().stopService(this.PoAIntent);
         call.resolve();

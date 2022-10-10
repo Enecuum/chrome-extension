@@ -11,7 +11,7 @@ public class Miner {
         this.key = key;
         this.url = url;
         this.token = token;
-        this.referrer = referrer.equals(null) ? "" : referrer.substring(4);
+        this.referrer = referrer.equals(null) || referrer.length() != 70 ? "" : referrer.substring(4);
         this.publisher = new Publisher(url, key, token, this.referrer);
     }
 
