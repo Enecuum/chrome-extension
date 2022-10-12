@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import elements from '../../css/elements.module.css'
-import { shortHash } from '../../Utils'
-import { apiController } from '../../../utils/apiController'
+import {shortHash} from '../../Utils'
+import {apiController} from '../../../utils/apiController'
 import Back from "../../elements/Back";
-import { msg } from '@babel/core/lib/config/validation/option-assertions'
+import {msg} from '@babel/core/lib/config/validation/option-assertions'
 
 // let fee = BigInt(0.1 * 1e10)
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
@@ -55,11 +55,11 @@ export default function TransactionRequest(props) {
     }
 
 
-    const decimalsSearch = (tokenInfo)=>{
+    const decimalsSearch = (tokenInfo) => {
         let decimals = 10 ** tokenInfo[0].decimals
         setDecimals(decimals)
     }
-    const feeDecimalsSearch = (tokenInfo)=>{
+    const feeDecimalsSearch = (tokenInfo) => {
         let feeDecimals = 10 ** tokenInfo[0].decimals
         setFeeDecimals(feeDecimals)
     }
@@ -67,19 +67,19 @@ export default function TransactionRequest(props) {
         let tokenHash = props.request.tx.ticker ? props.request.tx.ticker : props.request.tx.tokenHash
         let tokenInfo = await apiController.getTokenInfo(tokenHash)
         decimalsSearch(tokenInfo)
-        console.log({ tokenInfo, tokenHash} )
+        console.log({tokenInfo, tokenHash})
         if (tokenInfo.length === 0) {
             console.warn('token info error...')
         } else {
             setTicker(tokenInfo[0].ticker)
-            setFeeTicker(ticker)
-            if(tokenInfo[0]['fee_type'] === 2){
+            // RN-117
+            setFeeTicker(tokenInfo[0].ticker)
+            if (tokenInfo[0]['fee_type'] === 2) {
                 let mainToken = await apiController.getTokenInfo(ENQWeb.Enq.ticker)
                 feeDecimalsSearch(mainToken)
                 setFee(BigInt(tokenInfo[0]['fee_value']))
                 setFeeTicker(mainToken[0]['ticker'])
-            }
-            else{
+            } else {
                 if (props.request.data.fee_use !== false) {
                     let originAmount = amount - BigInt(props.request.data.fee_value)
                     setFee(BigInt(await ENQWeb.Web.fee_counter(tokenHash, originAmount)))
@@ -89,7 +89,7 @@ export default function TransactionRequest(props) {
             }
 
         }
-        console.log({decimals,feeDecimals})
+        console.log({decimals, feeDecimals})
     }
 
     const dataParse = (field) => {
@@ -170,9 +170,9 @@ export default function TransactionRequest(props) {
                     taskId: taskId
                 })
                     .then(answer => {
-                        try{
+                        try {
                             bufferForMsg = answer.data.data
-                        }catch (e) {
+                        } catch (e) {
                             console.error(e)
                         }
                         if (answer.data.status === 'reject') {
@@ -196,10 +196,10 @@ export default function TransactionRequest(props) {
         await asyncRequest({
             disallow: true,
             taskId: taskId
-        }).then(data=>{
-            try{
+        }).then(data => {
+            try {
                 bufferForMsg = data.data.data
-            }catch (e) {
+            } catch (e) {
 
             }
         })
@@ -257,7 +257,7 @@ export default function TransactionRequest(props) {
                 {/*<div className={styles.field}>Ticker: {this.state.ticker}</div>*/}
                 {/*<div className={styles.field}>Nonce: {this.state.nonce}</div>*/}
                 {/*<div className={styles.field}>Data: {this.state.data}</div>*/}
-                <div className={styles.transaction_amount}>{ ticker === feeTicker? Number(amount - fee) / decimals + ' ' + ticker: Number(amount) / decimals + ' ' + ticker}</div>
+                <div className={styles.transaction_amount}>{ticker === feeTicker ? Number(amount - fee) / decimals + ' ' + ticker : Number(amount) / decimals + ' ' + ticker}</div>
 
             </div>
 
@@ -292,7 +292,8 @@ export default function TransactionRequest(props) {
 
                 <div className={styles.transaction_data_amount}>
                     <div>TOTAL</div>
-                    <div>{(Number(amount) / decimals) + ' ' + ticker + (ticker !== feeTicker ? ' + ' + Number(fee) / feeDecimals + ' ' + feeTicker : '')}</div>
+                    <div>{(Number(amount) / decimals) + ' ' + ticker + (ticker !== feeTicker ?
+                        ' + ' + Number(fee) / feeDecimals + ' ' + feeTicker : '')}</div>
                 </div>
 
 
