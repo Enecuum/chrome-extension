@@ -33,7 +33,7 @@
 - npx cap copy ios/android
 - npx cap sync
 - npx cap open ios/android
-
+ 
 
 ### Manifest
 - v2 now, will be v3
