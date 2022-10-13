@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import {
@@ -65,7 +65,7 @@ export default function Keys(props) {
 
                 {/*<Separator/>*/}
 
-                <div className={styles.field}>{type === 0 ||  type === 1 ? shortHashLong(privateKey) : privateKey}</div>
+                <div className={styles.field}>{type === 0 || type === 1 ? shortHashLong(privateKey) : privateKey}</div>
 
                 <div className={styles.field + ' ' + styles.button} onClick={() => {
                     navigator.clipboard.writeText(privateKey)

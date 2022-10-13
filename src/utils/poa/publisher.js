@@ -1,4 +1,4 @@
-import { shortHash, showNotification } from '../../ui/Utils'
+import {shortHash, showNotification} from '../../ui/Utils'
 
 let crypto = require('crypto-browserify')
 let jsrsasign = require('jsrsasign')
@@ -50,7 +50,7 @@ function init(_, id, ip, account, token) {
             'data': {
                 'hash': hash,
                 'id': account.publicKey,
-                'token':token,
+                'token': token,
                 'sign': sign(account.privateKey, hash)
             },
             'method': 'hail',
@@ -153,7 +153,7 @@ function init(_, id, ip, account, token) {
 }
 
 function sign(privateKey, msg) {
-    var sig = new jsrsasign.Signature({ 'alg': 'SHA256withECDSA' })
+    var sig = new jsrsasign.Signature({'alg': 'SHA256withECDSA'})
     sig.init({
         d: privateKey,
         curve: 'secp256k1'
@@ -164,7 +164,7 @@ function sign(privateKey, msg) {
 }
 
 function verify(publicKey, msg, signedMsg) {
-    var sig = new jsrsasign.Signature({ 'alg': 'SHA256withECDSA' })
+    var sig = new jsrsasign.Signature({'alg': 'SHA256withECDSA'})
     sig.init({
         xy: publicKey,
         curve: 'secp256k1'
@@ -203,4 +203,4 @@ function hash_tx(tx) {
 }
 
 
-export { Publisher }
+export {Publisher}

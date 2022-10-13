@@ -13,7 +13,7 @@ onmessage = (msg) => {
             miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? new Publisher({
                 publicKey: miners[i].publisher.account.publicKey,
                 privateKey: miners[i].publisher.account.privateKey,
-                referrer:miners[i].referrer
+                referrer: miners[i].referrer
             }, miners[i].publisher.token, postMessage, miners[i].net) : {}
         }
         postMessage(JSON.stringify({resolve: true, miners: miners}))
@@ -29,9 +29,9 @@ onmessage = (msg) => {
         }
         postMessage(JSON.stringify({resolve: true, miners: miners}))
     }
-    if (msg.updateToken){
-        for(let i =0; i < miners.length; i++){
-            if(miners[i].publicKey===msg.account){
+    if (msg.updateToken) {
+        for (let i = 0; i < miners.length; i++) {
+            if (miners[i].publicKey === msg.account) {
                 miners[i].token = msg.token
                 miners[i].publisher.token = msg.token.token
                 miners[i].publisher.close()
@@ -41,12 +41,12 @@ onmessage = (msg) => {
         }
         postMessage(JSON.stringify({resolve: true, miners: miners}))
     }
-    if(msg.switch){
-        for(let i =0; i < miners.length; i++){
-            if(miners[i].publicKey===msg.account){
-                if(msg.set){
+    if (msg.switch) {
+        for (let i = 0; i < miners.length; i++) {
+            if (miners[i].publicKey === msg.account) {
+                if (msg.set) {
                     miners[i].publisher = new Publisher(miners[i].publisher.account, miners[i].publisher.token, postMessage, miners[i].publisher.ip)
-                }else{
+                } else {
                     miners[i].publisher.close()
                 }
                 miners[i].mining = msg.set

@@ -332,7 +332,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                     })
                 }).then(res => {
                 })
-            }else{
+            } else {
                 updateToken(msg.account.publicKey, msg.token).then()
             }
 
@@ -353,8 +353,8 @@ export function globalMessageHandler(msg, ENQWeb) {
                         status: msg.set
                     })
                 }).then()
-            }else{
-                swithMiner(msg.account.publicKey,msg.set).then()
+            } else {
+                swithMiner(msg.account.publicKey, msg.set).then()
             }
             resolve({response: handlerMiners})
         }
