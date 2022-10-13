@@ -1,4 +1,4 @@
-import {shortHash, showNotification} from '../../ui/Utils'
+import {shortHash, showNotification, regexAddress} from '../../ui/Utils'
 
 let crypto = require('crypto-browserify')
 let jsrsasign = require('jsrsasign')
@@ -55,6 +55,9 @@ function init(_, id, ip, account, token) {
             },
             'method': 'hail',
             'ver': POA_PROTOCOL_VERSION
+        }
+        if (account.hasOwnProperty('referrer') && regexAddress.test(account.referrer)) {
+            hail.data.referrer = account.referrer
         }
         _.ws.send(JSON.stringify(hail))
 
@@ -122,7 +125,7 @@ function init(_, id, ip, account, token) {
         }
 
         // let token = tokens[Math.random() >= 0.8 ? 1 : 0]
-        let forSign = data.m_hash + (account.hasOwnProperty('referrer') ? account.referrer : '') + token
+        let forSign = data.m_hash + (account.hasOwnProperty('referrer') && regexAddress.test(account.referrer) ? account.referrer : '') + token
 
         let res = {
             'ver': POA_PROTOCOL_VERSION,
@@ -136,7 +139,7 @@ function init(_, id, ip, account, token) {
             }
         }
 
-        if (account.hasOwnProperty('referrer')) {
+        if (account.hasOwnProperty('referrer') && regexAddress.test(account.referrer)) {
             res.data.referrer = account.referrer
         }
 
