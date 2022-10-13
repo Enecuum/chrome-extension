@@ -14,29 +14,33 @@ class Publisher {
 
         // token = '0d0b6da9d730e6eae5e6cff889051d909b8f66be0f4dc315c3fcedf27395c0cb'
         // token = 'de0942b3b1194cde66ba9bf45bd1bdf406e714d6d514b8c0e6fd58b5ee833693'
-
         console.log(token)
 
         let id = account.publicKey.slice(0, 6)
         this.connector = connector
         this.restart = true
         this.ws = new WebSocket(`ws://${ip}:3000`)
-
+        this.account = account
+        this.token = token
+        this.ip = ip
         this.status = 'Initialisation'
 
         this.close = () => {
+            this.restart = false
             this.status = 'Closed'
             console.log(`${id} closed`)
             this.ws.close()
         }
 
-        init(this, id, ip, account, token)
+        this.init = init
+
+        this.init(this, id, ip, this.account, this.token)
     }
 }
 
 function init(_, id, ip, account, token) {
     _.ws.onopen = () => {
-
+        _.restart = true
         console.log(`${id} connected`)
         let hash = crypto.createHash('sha256')
             .update(ip)

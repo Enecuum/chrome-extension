@@ -41,10 +41,8 @@ export default function Keys(props) {
     }
 
     let copyReferral = () => {
-        userStorage.user.loadUser().then(account => {
-            let userReferral = REF_PREFIX + xor(account.publicKey, XOR_STRING)
-            copyToClipboard(userReferral)
-        })
+        let userReferral = REF_PREFIX + xor(publicKey, XOR_STRING)
+        copyToClipboard(userReferral)
     }
 
     return (

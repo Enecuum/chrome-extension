@@ -1,8 +1,8 @@
 // const argv = require('yargs').argv;
 // const fs = require('fs');
-import { Publisher } from './publisher'
+import {Publisher} from './publisher'
 import {getMnemonicPrivateKeyHex, showNotification, xor, XOR_STRING, xorBack} from '../../ui/Utils'
-import { apiController } from '../apiController'
+import {apiController} from '../apiController'
 import {REFERRAL} from "../names";
 
 let PoA_Worker;
@@ -10,36 +10,36 @@ let answer = ''
 let terminated;
 
 let netList = {
-    "https://bit.enecuum.com":"95.216.246.116",
-    "https://pulse.enecuum.com":"95.216.68.221"
+    "https://bit.enecuum.com": "95.216.246.116",
+    "https://pulse.enecuum.com": "95.216.68.221"
 }
 
-let initWorker = async ()=>{
+let initWorker = async () => {
     PoA_Worker = await (new Worker('./js/WebWorkerPOA.js'))
     terminated = false
-    PoA_Worker.onerror = err=>{
+    PoA_Worker.onerror = err => {
         console.warn(err)
     }
-    PoA_Worker.onmessage = msg=>{
+    PoA_Worker.onmessage = msg => {
         answer = msg
         let data = JSON.parse(msg.data)
-        if(data.method === 'notification'){
+        if (data.method === 'notification') {
             showNotification(data.body.title, data.body.text)
         }
     }
 }
 
-let stopWorker = ()=>{
+let stopWorker = () => {
     PoA_Worker.terminate();
     terminated = true
 }
 
-let waitAnswer = (msg)=>{
+let waitAnswer = (msg) => {
     return new Promise((resolve, reject) => {
         answer = false
         PoA_Worker.postMessage(msg)
-        let interval = setInterval(()=>{
-            if(answer != false){
+        let interval = setInterval(() => {
+            if (answer != false) {
                 clearInterval(interval)
                 resolve(answer.data)
             }
@@ -80,7 +80,7 @@ let initPoa = async (account) => {
                 token: '',
                 decimals: 10
             },
-            referrer: xor(XOR_STRING, refKey.substring(4)),
+            referrer: refKey.length === 70 ? xor(XOR_STRING, refKey.substring(4)) : null,
             net: netList[ENQWeb.Net.provider] || '95.216.246.116',
             type: "mnemonic",
             publisher: false
@@ -104,9 +104,9 @@ let initPoa = async (account) => {
                 token: '',
                 decimals: 10
             },
-            net:netList[ENQWeb.Net.provider] || '95.216.246.116',
-            type:"private",
-            publisher:false
+            net: netList[ENQWeb.Net.provider] || '95.216.246.116',
+            type: "private",
+            publisher: false
             // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
         })
     }
@@ -130,13 +130,15 @@ let startPoa = async (account, miners, accounts = []) => {
         //     }, miners[i].token.token) : {}
         // }
         for (let i = 0; i < miners.length; i++) {
-            miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? {account:{
-                publicKey: accounts[i].publicKey,
-                privateKey: accounts[i].privateKey
-            }, token:miners[i].token.token} : {}
+            miners[i].publisher = miners[i].mining && miners[i].tokens[0] ? {
+                account: {
+                    publicKey: accounts[i].publicKey,
+                    privateKey: accounts[i].privateKey,
+                    referrer: accounts[i].referrer
+                }, token: miners[i].token.token
+            } : {}
         }
-
-        miners = await waitAnswer({ start:true, data:miners })
+        miners = await waitAnswer({start: true, data: miners})
         miners = (JSON.parse(miners)).miners
         showNotification('Mining', 'Connected ' + miners.length + ' miners')
 
@@ -168,17 +170,27 @@ let stopPoa = async (miners) => {
     //     delete miners[i].publisher
     // }
 
-    miners = (await waitAnswer({ stop:true, data:miners })).miners
+    miners = (await waitAnswer({stop: true, data: miners})).miners
     await stopWorker()
     return miners
 }
 
-let getMiners = async()=>{
-    if(PoA_Worker && !terminated){
-        let answer = JSON.parse(await waitAnswer({ get:true }))
+let updateToken = async (account, token) => {
+    let miners = (await waitAnswer({updateToken: true, account: account, token: token})).miners
+    return miners
+}
+
+let swithMiner = async (account, set) => {
+    let miners = (await waitAnswer({switch: true, account: account, set: set})).miners
+    return miners
+}
+
+let getMiners = async () => {
+    if (PoA_Worker && !terminated) {
+        let answer = JSON.parse(await waitAnswer({get: true}))
         return answer.miners
     }
     return false
 }
 
-export { startPoa, stopPoa, initPoa, getMiners }
+export {startPoa, stopPoa, initPoa, getMiners, updateToken, swithMiner}
