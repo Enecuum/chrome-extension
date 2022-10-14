@@ -8,7 +8,7 @@ import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import {signHash} from './utils/ledgerShell'
 import {apiController} from './utils/apiController'
 import {extensionApi} from './utils/extensionApi'
-import {getMiners, initPoa, startPoa, stopPoa} from './utils/poa/poaStarter' // commonjs
+import {getMiners, initPoa, startPoa, stopPoa, swithMiner, updateToken} from './utils/poa/poaStarter' // commonjs
 import {getMnemonicPrivateKeyHex} from './ui/Utils'
 import {Capacitor, registerPlugin} from '@capacitor/core'
 import {startBackgroundMining, getMobileMiners, stopMobileMiners} from './mobileBackground'
@@ -332,6 +332,8 @@ export function globalMessageHandler(msg, ENQWeb) {
                     })
                 }).then(res => {
                 })
+            } else {
+                updateToken(msg.account.publicKey, msg.token).then()
             }
 
             resolve({response: handlerMiners})
@@ -351,6 +353,8 @@ export function globalMessageHandler(msg, ENQWeb) {
                         status: msg.set
                     })
                 }).then()
+            } else {
+                swithMiner(msg.account.publicKey, msg.set).then()
             }
             resolve({response: handlerMiners})
         }

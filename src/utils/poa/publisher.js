@@ -1,4 +1,4 @@
-import { shortHash, showNotification } from '../../ui/Utils'
+import {shortHash, showNotification, regexAddress} from '../../ui/Utils'
 
 let crypto = require('crypto-browserify')
 let jsrsasign = require('jsrsasign')
@@ -14,29 +14,33 @@ class Publisher {
 
         // token = '0d0b6da9d730e6eae5e6cff889051d909b8f66be0f4dc315c3fcedf27395c0cb'
         // token = 'de0942b3b1194cde66ba9bf45bd1bdf406e714d6d514b8c0e6fd58b5ee833693'
-
         console.log(token)
 
         let id = account.publicKey.slice(0, 6)
         this.connector = connector
         this.restart = true
         this.ws = new WebSocket(`ws://${ip}:3000`)
-
+        this.account = account
+        this.token = token
+        this.ip = ip
         this.status = 'Initialisation'
 
         this.close = () => {
+            this.restart = false
             this.status = 'Closed'
             console.log(`${id} closed`)
             this.ws.close()
         }
 
-        init(this, id, ip, account, token)
+        this.init = init
+
+        this.init(this, id, ip, this.account, this.token)
     }
 }
 
 function init(_, id, ip, account, token) {
     _.ws.onopen = () => {
-
+        _.restart = true
         console.log(`${id} connected`)
         let hash = crypto.createHash('sha256')
             .update(ip)
@@ -46,11 +50,14 @@ function init(_, id, ip, account, token) {
             'data': {
                 'hash': hash,
                 'id': account.publicKey,
-                'token':token,
+                'token': token,
                 'sign': sign(account.privateKey, hash)
             },
             'method': 'hail',
             'ver': POA_PROTOCOL_VERSION
+        }
+        if (account.hasOwnProperty('referrer') && regexAddress.test(account.referrer)) {
+            hail.data.referrer = account.referrer
         }
         _.ws.send(JSON.stringify(hail))
 
@@ -118,7 +125,7 @@ function init(_, id, ip, account, token) {
         }
 
         // let token = tokens[Math.random() >= 0.8 ? 1 : 0]
-        let forSign = data.m_hash + (account.hasOwnProperty('referrer') ? account.referrer : '') + token
+        let forSign = data.m_hash + (account.hasOwnProperty('referrer') && regexAddress.test(account.referrer) ? account.referrer : '') + token
 
         let res = {
             'ver': POA_PROTOCOL_VERSION,
@@ -132,7 +139,7 @@ function init(_, id, ip, account, token) {
             }
         }
 
-        if (account.hasOwnProperty('referrer')) {
+        if (account.hasOwnProperty('referrer') && regexAddress.test(account.referrer)) {
             res.data.referrer = account.referrer
         }
 
@@ -149,7 +156,7 @@ function init(_, id, ip, account, token) {
 }
 
 function sign(privateKey, msg) {
-    var sig = new jsrsasign.Signature({ 'alg': 'SHA256withECDSA' })
+    var sig = new jsrsasign.Signature({'alg': 'SHA256withECDSA'})
     sig.init({
         d: privateKey,
         curve: 'secp256k1'
@@ -160,7 +167,7 @@ function sign(privateKey, msg) {
 }
 
 function verify(publicKey, msg, signedMsg) {
-    var sig = new jsrsasign.Signature({ 'alg': 'SHA256withECDSA' })
+    var sig = new jsrsasign.Signature({'alg': 'SHA256withECDSA'})
     sig.init({
         xy: publicKey,
         curve: 'secp256k1'
@@ -199,4 +206,4 @@ function hash_tx(tx) {
 }
 
 
-export { Publisher }
+export {Publisher}

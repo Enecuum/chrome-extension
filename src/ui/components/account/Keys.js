@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import {
@@ -41,10 +41,8 @@ export default function Keys(props) {
     }
 
     let copyReferral = () => {
-        userStorage.user.loadUser().then(account => {
-            let userReferral = REF_PREFIX + xor(account.publicKey, XOR_STRING)
-            copyToClipboard(userReferral)
-        })
+        let userReferral = REF_PREFIX + xor(publicKey, XOR_STRING)
+        copyToClipboard(userReferral)
     }
 
     return (
@@ -67,7 +65,7 @@ export default function Keys(props) {
 
                 {/*<Separator/>*/}
 
-                <div className={styles.field}>{type === 0 ||  type === 1 ? shortHashLong(privateKey) : privateKey}</div>
+                <div className={styles.field}>{type === 0 || type === 1 ? shortHashLong(privateKey) : privateKey}</div>
 
                 <div className={styles.field + ' ' + styles.button} onClick={() => {
                     navigator.clipboard.writeText(privateKey)
