@@ -71,12 +71,12 @@ export default function Mining(props) {
             })
                 .then(miners => {
                     // console.log(miners)
-                    setAccounts(miners)
+                    setAccounts([...miners])
                 })
         }, 5000)
 
         setMining(true)
-
+        
         setStatus('MINING')
     }
 
