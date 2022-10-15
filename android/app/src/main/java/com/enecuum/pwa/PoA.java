@@ -1,6 +1,8 @@
 package com.enecuum.pwa;
 
 import android.content.Intent;
+import android.app.Activity;
+import android.util.Log;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -23,6 +25,7 @@ public class PoA extends Plugin {
     private Timer timer;
     private Account[] accounts;
     private String net;
+    private String TAG = "POA";
 
     @PluginMethod()
     public void start(PluginCall call) throws JSONException {
@@ -39,14 +42,15 @@ public class PoA extends Plugin {
                 miners[i] = new Miner(net, accounts[i].privateKey, accounts[i].token, accounts[i].referrer);
                 miners[i].publisher.mining = accounts[i].status;
             }
-            for (Miner miner : miners) {
-                miner.publisher.init();
-            }
-            System.out.println("Started");
+            //old format start miner
+//            for (Miner miner : miners) {
+//                miner.publisher.init();
+//            }
+            Log.d(TAG, "Started");
 
         } catch (Exception ex) {
-            System.out.println("error in json\n" + ex.getMessage());
-            System.out.println("very bad");
+            System.out.println();
+            Log.d(TAG, "error in json\n" + ex.getMessage());
         }
         if (this.PoAIntent == null) {
             PoAService.miners = miners;
@@ -61,14 +65,14 @@ public class PoA extends Plugin {
     public void stop(PluginCall call) {
         cleanTimer();
         for (Miner miner : miners) {
-            try{
+            try {
                 miner.publisher.stop();
-            }
-            catch (Exception ex){
-                System.out.println("Stop miner error!\n" + ex.getStackTrace() + "\n" + ex.getMessage());
+            } catch (Exception ex) {
+                Log.d(TAG, "Stop miner error!\n" + ex.getStackTrace() + "\n" + ex.getMessage());
             }
         }
         getActivity().stopService(this.PoAIntent);
+        this.PoAIntent = null;
         call.resolve();
     }
 
@@ -82,11 +86,11 @@ public class PoA extends Plugin {
                 if (miner.publisher.publicKey.equals(account.publicKey)) {
                     miner.token = account.token;
                     rebootMiner(miner);
-                    System.out.println(String.format("Change %s token on %s", account.publicKey.substring(0, 6), account.token));
+                    Log.d(TAG, String.format("Change %s token on %s", account.publicKey.substring(0, 6), account.token));
                 }
             }
         } catch (Exception ex) {
-            System.out.println("error in change token");
+            Log.d(TAG, "error in change token");
         }
     }
 
@@ -99,11 +103,11 @@ public class PoA extends Plugin {
             for (Miner miner : miners) {
                 if (miner.publisher.publicKey.equals(account.publicKey)) {
                     commitSwitch(miner, account.status);
-                    System.out.println(String.format("switch %s %s", account.publicKey.substring(0, 6), account.status ? "ON" : "OFF"));
+                    Log.d(TAG, String.format("switch %s %s", account.publicKey.substring(0, 6), account.status ? "ON" : "OFF"));
                 }
             }
         } catch (Exception ex) {
-            System.out.println("error in switch miner");
+            Log.d(TAG, "error in switch miner");
         }
     }
 
@@ -141,7 +145,7 @@ public class PoA extends Plugin {
                         }
                     }
                 } catch (Exception ex) {
-                    System.out.println("can't take fields");
+                    Log.d(TAG, "can't take fields");
                 }
             }
         }, 0, 1000 * 5);

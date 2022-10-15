@@ -1,5 +1,7 @@
 package com.enecuum.pwa;
 
+import android.util.Log;
+
 import java.net.URI;
 
 import org.java_websocket.client.WebSocketClient;
@@ -12,6 +14,7 @@ import com.google.gson.Gson;
 
 public class Publisher {
 
+    private String TAG = "Publisher";
     private final String privateKey;
     public String token;
     public String referrer;
@@ -47,12 +50,13 @@ public class Publisher {
                 @Override
                 public void onOpen(ServerHandshake handshakeData) {
                     try {
-                        System.out.println("connect from " + publicKey.substring(0, 6) + " to " + this.uri.toString());
+                        Log.d(TAG, "connect from " + publicKey.substring(0, 6) + " to " + this.uri.toString());
                         ws.send(hail());
 
                         status = "Connected";
                     } catch (Exception ex) {
-                        System.out.println("Error in open WS\n" + ex.getMessage() + "\n" + ex.getStackTrace());
+                        Log.d(TAG, "Error in open WS\n" + ex.getMessage() + "\n" + ex.getStackTrace());
+                        reboot = true;
                         status = "Disconnected";
                     }
 
@@ -60,12 +64,13 @@ public class Publisher {
 
                 @Override
                 public void onMessage(String message) {
-                    System.out.println("account " + publicKey.substring(0, 6) + " take block");
+                    Log.d(TAG, "account " + publicKey.substring(0, 6) + " take block");
                     try {
                         ws.send(onBlock(message));
                     } catch (Exception ex) {
-                        System.out.println("Error in block\n" + ex.getMessage() + "\n" + ex.getStackTrace());
+                        Log.d(TAG, "Error in block\n" + ex.getMessage() + "\n" + ex.getStackTrace());
                         status = "Disconnected";
+                        reboot = true;
                     }
                 }
 
@@ -74,7 +79,7 @@ public class Publisher {
                     try {
                         ws.close();
                     } catch (Exception ex) {
-                        System.out.println("WS is closed");
+                        Log.d(TAG, "WS is closed");
                     }
                     if (restartMiner) {
                         reboot = true;
@@ -108,13 +113,15 @@ public class Publisher {
                 countBlocks = 0;
                 ws.connect();
             } else {
-                System.out.println("Miner " + this.publicKey.substring(0, 6) + " deactivated");
+                Log.d(TAG, "Miner " + this.publicKey.substring(0, 6) + " deactivated");
                 this.status = "Disconnected";
+                this.reboot = true;
             }
 
         } catch (Exception ex) {
-            System.out.println("Error ws: " + ex.getMessage() + "\n" + ex.getStackTrace());
+            Log.d(TAG, "Error ws: " + ex.getMessage() + "\n" + ex.getStackTrace());
             this.status = "Disconnected";
+            this.reboot = true;
         }
     }
 
@@ -123,13 +130,13 @@ public class Publisher {
             restartMiner = false;
             ws.close();
         } catch (Exception ex) {
-            System.out.println("Error ws: " + ex.getMessage() + "\n" + ex.getStackTrace());
+            Log.d(TAG, "Error ws: " + ex.getMessage() + "\n" + ex.getStackTrace());
         }
         this.status = "Disconnected";
     }
 
     public String hail() {
-        String hash = crypto.sha256(this.ip + (this.referrer.length() > 0 ? this.referrer : "" ) + this.token);
+        String hash = crypto.sha256(this.ip + (this.referrer.length() > 0 ? this.referrer : "") + this.token);
 //        String hash = crypto.sha256(this.ip + this.token);
         JSObject obj = new JSObject();
         JSObject hail = new JSObject();
@@ -144,7 +151,7 @@ public class Publisher {
         obj.put("method", "hail");
         obj.put("ver", protocol_version);
 
-        System.out.println(obj.toString());
+        Log.d(TAG, obj.toString());
         return obj.toString();
     }
 
@@ -152,17 +159,18 @@ public class Publisher {
     public String onBlock(String m_block) {
         Gson g = new Gson();
         Block block = g.fromJson(m_block, Block.class);
-        System.out.println(block.method);
+        Log.d(TAG, block.method);
 
         if (block.err != null) {
             if (block.err.equals("ERR_DUPLICATE_KEY")) {
-                System.out.println("ERR_DUPLICATE_KEY!");
+                Log.d(TAG, "ERR_DUPLICATE_KEY!");
                 reboot = true;
+                return "";
             }
         }
 
         if (block.method.equals("on_leader_beacon")) {
-            String msg = block.data.m_hash + (this.referrer.length() > 0 ? this.referrer : "" ) + this.token;
+            String msg = block.data.m_hash + (this.referrer.length() > 0 ? this.referrer : "") + this.token;
             JSObject obj = new JSObject();
             JSObject publish = new JSObject();
             publish.put("kblocks_hash", block.data.mblock_data.kblocks_hash);
@@ -181,10 +189,10 @@ public class Publisher {
 //            this.status = "Sign block";
             this.status = String.format("Sign block (%d)", countBlocks);
 
-            System.out.println(obj.toString());
+            Log.d(TAG, obj.toString());
             return obj.toString();
         }
-        System.out.println("not found");
+        Log.d(TAG, "not found");
         return "";
     }
 }

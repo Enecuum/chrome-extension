@@ -3,16 +3,26 @@ package com.enecuum.pwa;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 public class PoAService extends Service {
 
-    public static Miner[] miners;
+    private String TAG = "PoAService";
 
+    public static Miner[] miners;
+//    public static String SERVICE_ACTION = "com.enecuum.POA";
+
+
+    @Override
+    public void onCreate() {
+        Log.d(TAG, "onCreate");
+        super.onCreate();
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            System.out.println("miners: " + miners.length);
+            Log.d(TAG, "miners: " + miners.length);
             for (Miner miner : miners) {
                 miner.publisher.init();
             }
@@ -20,12 +30,13 @@ public class PoAService extends Service {
         } catch (Exception e) {
         }
 
-        return super.onStartCommand(intent, flags, startId);
+//        return super.onStartCommand(intent, flags, startId);
+        return START_REDELIVER_INTENT;
     }
 
     @Override
     public void onDestroy() {
-        System.out.println("Destroyed");
+        Log.d(TAG, "Destroyed");
         try {
             for (Miner miner : miners) {
                 miner.publisher.stop();
