@@ -10,7 +10,6 @@ public class PoAService extends Service {
     private String TAG = "PoAService";
 
     public static Miner[] miners;
-//    public static String SERVICE_ACTION = "com.enecuum.POA";
 
 
     @Override

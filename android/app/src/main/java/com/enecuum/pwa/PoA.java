@@ -54,7 +54,10 @@ public class PoA extends Plugin {
         }
         if (this.PoAIntent == null) {
             PoAService.miners = miners;
-            this.PoAIntent = new Intent(getActivity(), PoAService.class);
+//            this.PoAIntent = new Intent(getActivity(), PoAService.class);
+            this.PoAIntent = new Intent();
+            this.PoAIntent.setAction("com.enecuum.pwa.PoAService");
+            this.PoAIntent.setPackage(getActivity().getPackageName());
             getActivity().startService(PoAIntent);
         }
         checkMiners();
@@ -122,11 +125,15 @@ public class PoA extends Plugin {
                 call.resolve(obj);
             } else {
                 obj.put("status", false);
-                call.resolve(obj);
             }
+            if (this.PoAIntent == null) {
+                obj.put("mining", false);
+            }
+            call.resolve(obj);
         } catch (Exception ex) {
             JSObject obj = new JSObject();
             obj.put("status", false);
+            obj.put("mining", false);
             call.resolve(obj);
         }
 

@@ -30,7 +30,10 @@
 
         <service
             android:enabled="true"
-            android:name="com.enecuum.pwa.PoAService">
+            android:name=".PoAService">
+            <intent-filter>
+                <action android:name="com.enecuum.pwa.PoAService"></action>
+            </intent-filter>
         </service>
 
         <provider
