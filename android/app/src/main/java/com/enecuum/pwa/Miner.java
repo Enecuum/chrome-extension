@@ -22,7 +22,7 @@ public class Miner {
             BigInteger xor = new BigInteger(this.xorString, 16);
             xor = xor.xor(ref);
             buffer = "0" + xor.toString(16);
-            if (buffer.length() == 66) {
+            if (buffer.length() == 66 && (buffer.substring(0,2).equals("02") || buffer.substring(0,2).equals("03"))) {
                 this.referrer = buffer;
             } else {
                 this.referrer = "";
