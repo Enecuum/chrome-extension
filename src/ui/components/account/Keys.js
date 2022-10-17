@@ -7,7 +7,9 @@ import {
     getMnemonicPrivateKeyHex,
     REF_PREFIX,
     shortHash,
-    shortHashLong, xor, XOR_STRING
+    shortHashLong,
+    xor,
+    XOR_STRING
 } from '../../Utils'
 import Back from "../../elements/Back";
 
@@ -45,6 +47,10 @@ export default function Keys(props) {
         copyToClipboard(userReferral)
     }
 
+    let showQR = () => {
+
+    }
+
     return (
 
         <div className={styles.main}>
@@ -57,7 +63,7 @@ export default function Keys(props) {
 
                 <div className={styles.field}>{shortHashLong(publicKey)}</div>
 
-                <div className={styles.field + ' ' + styles.button} onClick={() => {
+                <div className={styles.field + ' ' + styles.button + ' ' + styles.big} onClick={() => {
                     // navigator.clipboard.writeText(publicKey)
                     copyToClipboard(publicKey)
                 }}>Copy public key
@@ -67,8 +73,9 @@ export default function Keys(props) {
 
                 <div className={styles.field}>{type === 0 || type === 1 ? shortHashLong(privateKey) : privateKey}</div>
 
-                <div className={styles.field + ' ' + styles.button} onClick={() => {
-                    navigator.clipboard.writeText(privateKey)
+                <div className={styles.field + ' ' + styles.button + ' ' + styles.big} onClick={() => {
+                    copyToClipboard(privateKey)
+
                 }}>Copy private key
                 </div>
 
@@ -76,14 +83,14 @@ export default function Keys(props) {
 
                 <div className={styles.field}>Open new tab</div>
 
-                <div className={styles.field + ' ' + styles.button}
+                <div className={styles.field + ' ' + styles.button + ' ' + styles.big}
                      onClick={() => explorerAddress(publicKey)}>
                     Show in blockchain explorer
                 </div>
 
                 <div className={styles.field}>Referral</div>
 
-                <div className={styles.field + ' ' + styles.button}
+                <div className={styles.field + ' ' + styles.button + ' ' + styles.big}
                      onClick={() => copyReferral()}>
                     Copy mining referral code
                 </div>
