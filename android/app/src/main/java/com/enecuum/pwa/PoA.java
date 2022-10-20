@@ -1,7 +1,11 @@
 package com.enecuum.pwa;
 
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Intent;
 import android.app.Activity;
+import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.getcapacitor.JSObject;
@@ -13,6 +17,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import org.json.JSONException;
 
 import com.google.gson.Gson;
+import com.kenai.jffi.Main;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,62 +25,42 @@ import java.util.TimerTask;
 @CapacitorPlugin(name = "PoA")
 public class PoA extends Plugin {
 
-    public Miner[] miners;
-    public Intent PoAIntent;
-    private Timer timer;
-    private Account[] accounts;
     private String net;
     private String TAG = "POA";
+    public static String getPOA = "";
+
+    private Boolean STOPPED = false;
 
     @PluginMethod()
     public void start(PluginCall call) throws JSONException {
-        Gson g = new Gson();
 
         String jsonString = call.getString("data");
         net = call.getString("net");
         try {
-            accounts = g.fromJson(jsonString, Account[].class);
-            System.out.println(accounts.length);
-            System.out.println(net);
-            miners = new Miner[accounts.length];
-            for (int i = 0; i < accounts.length; i++) {
-                miners[i] = new Miner(net, accounts[i].privateKey, accounts[i].token, accounts[i].referrer);
-                miners[i].publisher.mining = accounts[i].status;
+            Intent PoAIntent = new Intent();
+            PoAIntent.setAction(MainActivity.PoAservice);
+            PoAIntent.setPackage(getActivity().getPackageName());
+            PoAIntent.putExtra("miners", jsonString).putExtra("net", net).putExtra(MainActivity.PARAM_TASK, MainActivity.PARAM_START_POA);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                getActivity().startForegroundService(PoAIntent);
             }
-            //old format start miner
-//            for (Miner miner : miners) {
-//                miner.publisher.init();
-//            }
             Log.d(TAG, "Started");
-
         } catch (Exception ex) {
             System.out.println();
             Log.d(TAG, "error in json\n" + ex.getMessage());
         }
-        if (this.PoAIntent == null) {
-            PoAService.miners = miners;
-//            this.PoAIntent = new Intent(getActivity(), PoAService.class);
-            this.PoAIntent = new Intent();
-            this.PoAIntent.setAction("com.enecuum.pwa.PoAService");
-            this.PoAIntent.setPackage(getActivity().getPackageName());
-            getActivity().startService(PoAIntent);
-        }
-        checkMiners();
         call.resolve();
     }
 
     @PluginMethod()
     public void stop(PluginCall call) {
-        cleanTimer();
-        for (Miner miner : miners) {
-            try {
-                miner.publisher.stop();
-            } catch (Exception ex) {
-                Log.d(TAG, "Stop miner error!\n" + ex.getStackTrace() + "\n" + ex.getMessage());
-            }
+        try {
+//            getActivity().startForegroundService(new Intent(MainActivity.PoAservice).putExtra(MainActivity.PARAM_STOP,true));
+            getActivity().stopService(new Intent(MainActivity.PoAservice).setPackage(getActivity().getPackageName()));
+        } catch (Exception ex) {
+            Log.d(TAG, "No activity");
         }
-        getActivity().stopService(this.PoAIntent);
-        this.PoAIntent = null;
+
         call.resolve();
     }
 
@@ -84,14 +69,10 @@ public class PoA extends Plugin {
         Gson g = new Gson();
         String jsonString = call.getString("data");
         try {
-            Account account = g.fromJson(jsonString, Account.class);
-            for (Miner miner : miners) {
-                if (miner.publisher.publicKey.equals(account.publicKey)) {
-                    miner.token = account.token;
-                    rebootMiner(miner);
-                    Log.d(TAG, String.format("Change %s token on %s", account.publicKey.substring(0, 6), account.token));
-                }
-            }
+            Intent PoAService = new Intent(MainActivity.PoAservice).setPackage(getActivity().getPackageName());
+            PoAService.putExtra(MainActivity.PARAM_TASK, MainActivity.PARAM_UPDATE_TOKEN).putExtra("data", jsonString);
+            getActivity().startForegroundService(PoAService);
+
         } catch (Exception ex) {
             Log.d(TAG, "error in change token");
         }
@@ -102,13 +83,9 @@ public class PoA extends Plugin {
         Gson g = new Gson();
         String jsonString = call.getString("data");
         try {
-            Account account = g.fromJson(jsonString, Account.class);
-            for (Miner miner : miners) {
-                if (miner.publisher.publicKey.equals(account.publicKey)) {
-                    commitSwitch(miner, account.status);
-                    Log.d(TAG, String.format("switch %s %s", account.publicKey.substring(0, 6), account.status ? "ON" : "OFF"));
-                }
-            }
+            Intent PoAService = new Intent(MainActivity.PoAservice).setPackage(getActivity().getPackageName());
+            PoAService.putExtra(MainActivity.PARAM_TASK, MainActivity.PARAM_SWITCH_MINER).putExtra("data", jsonString);
+            getActivity().startForegroundService(PoAService);
         } catch (Exception ex) {
             Log.d(TAG, "error in switch miner");
         }
@@ -116,18 +93,15 @@ public class PoA extends Plugin {
 
     @PluginMethod()
     public void getMiners(PluginCall call) {
+        Gson g = new Gson();
         try {
-            JSObject obj = new JSObject();
-            if (miners != null) {
-                for (Miner miner : miners) {
-                    obj.put(miner.publisher.publicKey, miner.publisher.status);
-                }
-                call.resolve(obj);
-            } else {
-                obj.put("status", false);
+            if (getPOA.equals("")) {
+                throw new Exception();
             }
-            if (this.PoAIntent == null) {
-                obj.put("mining", false);
+            JSObject obj = new JSObject();
+            MinerBrodcast[] miners = g.fromJson(getPOA, MinerBrodcast[].class);
+            for (MinerBrodcast miner : miners) {
+                obj.put(miner.publicKey, miner.status);
             }
             call.resolve(obj);
         } catch (Exception ex) {
@@ -137,25 +111,6 @@ public class PoA extends Plugin {
             call.resolve(obj);
         }
 
-    }
-
-    private void checkMiners() {
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    for (Integer i = 0; i < miners.length; i++) {
-//                        System.out.println(String.format("miner %s is %s", miners[i].publisher.publicKey.substring(0,6), miners[i].publisher.status));
-                        if (miners[i].publisher.reboot) {
-                            rebootMiner(miners[i]);
-                        }
-                    }
-                } catch (Exception ex) {
-                    Log.d(TAG, "can't take fields");
-                }
-            }
-        }, 0, 1000 * 5);
     }
 
     private void rebootMiner(Miner miner) {
@@ -173,10 +128,5 @@ public class PoA extends Plugin {
             miner.restartPublisher();
             miner.publisher.init();
         }
-    }
-
-    private void cleanTimer() {
-        timer.cancel();
-        timer.purge();
     }
 }
