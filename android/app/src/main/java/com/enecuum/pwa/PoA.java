@@ -99,6 +99,7 @@ public class PoA extends Plugin {
             ActivityManager res = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningServiceInfo> rs = res.getRunningServices(50);
             status = rs.size() == 0 ? false : true;
+            getPOA = status? getPOA : "";
             isMining = status;
             JSObject obj = new JSObject();
             obj.put("status", status);

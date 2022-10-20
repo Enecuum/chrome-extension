@@ -178,6 +178,13 @@ export function globalMessageHandler(msg, ENQWeb) {
                                 }
                             }
                         }
+                    }else{
+                        handlerMiners.forEach(el => {
+                            if (!el.publisher) {
+                                el.publisher = {}
+                            }
+                            el.publisher.status = "Disconnected"
+                        })
                     }
                 })
                 resolve({response: handlerMiners})
