@@ -26,7 +26,7 @@ let stopMobileMiners = () => {
         mobileBackgroundMiners[i].publisher.restart = false
     }
     let miners = stopPoa(mobileBackgroundMiners)
-    showNotification('Mining', 'Mining is stopped')
+    // showNotification('Mining', 'Mining is stopped')
     return miners
 }
 
