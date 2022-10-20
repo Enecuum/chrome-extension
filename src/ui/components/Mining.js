@@ -76,7 +76,7 @@ export default function Mining(props) {
         }, 5000)
 
         setMining(true)
-        
+
         setStatus('MINING')
     }
 

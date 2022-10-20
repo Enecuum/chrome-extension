@@ -1,11 +1,12 @@
 package com.enecuum.pwa;
 
+import android.app.ActivityManager;
+import android.app.Application;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
-import android.app.Activity;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.getcapacitor.JSObject;
@@ -17,10 +18,8 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import org.json.JSONException;
 
 import com.google.gson.Gson;
-import com.kenai.jffi.Main;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.List;
 
 @CapacitorPlugin(name = "PoA")
 public class PoA extends Plugin {
@@ -28,6 +27,8 @@ public class PoA extends Plugin {
     private String net;
     private String TAG = "POA";
     public static String getPOA = "";
+
+    private Boolean isMining = false;
 
     private Boolean STOPPED = false;
 
@@ -92,6 +93,25 @@ public class PoA extends Plugin {
     }
 
     @PluginMethod()
+    public void getServiceStatus(PluginCall call) {
+        Boolean status;
+        try {
+            ActivityManager res = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningServiceInfo> rs = res.getRunningServices(50);
+            status = rs.size() == 0 ? false : true;
+            isMining = status;
+            JSObject obj = new JSObject();
+            obj.put("status", status);
+            call.resolve(obj);
+        } catch (Exception ex) {
+            Log.d(TAG, "error in get service status");
+            JSObject obj = new JSObject();
+            obj.put("status", false);
+            call.resolve(obj);
+        }
+    }
+
+    @PluginMethod()
     public void getMiners(PluginCall call) {
         Gson g = new Gson();
         try {
@@ -112,6 +132,7 @@ public class PoA extends Plugin {
         }
 
     }
+
 
     private void rebootMiner(Miner miner) {
         Integer buf = miner.publisher.countBlocks;
