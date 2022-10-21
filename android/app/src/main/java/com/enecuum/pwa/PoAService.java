@@ -29,6 +29,7 @@ public class PoAService extends Service {
 
     private Miner[] miners;
     private Timer timer;
+    private Timer rebootTimer;
 
     private Notification notification;
     private int id;
@@ -185,6 +186,26 @@ public class PoAService extends Service {
                 }
             }
         }, 0, 1000);
+        rebootTimer = new Timer();
+        rebootTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    for(Miner miner:miners){
+                        try{
+                            rebootMiner(miner);
+                        }catch (Exception ex){
+                            Log.e(TAG, ex.getMessage()+"\n"+ex.getStackTrace());
+                        }
+
+                        Log.d(TAG, String.format("miner %s auto reboot", miner.publisher.publicKey.substring(0,6)));
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Log.d(TAG, "can't reboot miners");
+                }
+            }
+        }, 1000*5*60, 1000*5*60);
     }
 
 
@@ -194,11 +215,14 @@ public class PoAService extends Service {
         miner.restartPublisher();
         miner.publisher.init();
         miner.publisher.countBlocks = buf;
+        miner.publisher.status = String.format("Sign block (%d)", buf);
     }
 
     private void cleanTimer() {
         timer.cancel();
         timer.purge();
+        rebootTimer.cancel();
+        rebootTimer.purge();
     }
 
     private void commitSwitch(Miner miner, boolean switcher) {

@@ -1,5 +1,7 @@
 package com.enecuum.pwa;
 
+import android.util.Log;
+
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
@@ -11,6 +13,7 @@ public class Miner {
     public Publisher publisher;
     private String xorString = "750D7F2B34CA3DF1D6B7878DEBC8CF9A56BCB51A58435B5BCFB7E82EE09FA8BE75";
     public Boolean inWork = false;
+    private String TAG = "Miner";
 
     Miner(String url, String key, String token, String referrer) {
         this.key = key;
@@ -33,8 +36,14 @@ public class Miner {
     }
 
     public void restartPublisher() {
-        Boolean buf = this.publisher.mining;
-        this.publisher = new Publisher(this.url, this.key, this.token, this.referrer);
-        this.publisher.mining = buf;
+        try{
+            Boolean buf = this.publisher.mining;
+            this.publisher = null;
+            this.publisher = new Publisher(this.url, this.key, this.token, this.referrer);
+            this.publisher.mining = buf;
+        }catch (Exception ex){
+            Log.e(TAG, ex.getMessage() + "\n" + ex.getStackTrace());
+        }
+
     }
 }
