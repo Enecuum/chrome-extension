@@ -52,7 +52,6 @@ public class Publisher {
                     try {
                         Log.d(TAG, "connect from " + publicKey.substring(0, 6) + " to " + this.uri.toString());
                         ws.send(hail());
-
                         status = "Connected";
                     } catch (Exception ex) {
                         Log.d(TAG, "Error in open WS\n" + ex.getMessage() + "\n" + ex.getStackTrace());
@@ -66,7 +65,10 @@ public class Publisher {
                 public void onMessage(String message) {
                     Log.d(TAG, "account " + publicKey.substring(0, 6) + " take block");
                     try {
-                        ws.send(onBlock(message));
+                        String answer = onBlock(message);
+                        if(answer.length() > 0){
+                            ws.send(answer);
+                        }
                     } catch (Exception ex) {
                         Log.d(TAG, "Error in block\n" + ex.getMessage() + "\n" + ex.getStackTrace());
                         status = "Disconnected";
