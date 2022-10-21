@@ -95,6 +95,11 @@ export default function Keys(props) {
                     Copy mining referral code
                 </div>
 
+                <div className={styles.field + ' ' + styles.button + ' ' + styles.big}
+                     onClick={() => showQR()}>
+                    Show referral QR
+                </div>
+
             </div>
 
             <div className={styles.form}>

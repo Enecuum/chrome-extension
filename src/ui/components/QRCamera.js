@@ -1,8 +1,11 @@
 import { Camera, CameraResultType } from '@capacitor/camera';
+import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 import styles from "../css/index.module.css";
 import React from "react";
 import Separator from "../elements/Separator";
 import Back from "../elements/Back";
+import {REFERRAL} from "../../utils/names";
+import {regexReferral} from "../Utils";
 
 export default function QRCamera(props) {
 
@@ -24,23 +27,51 @@ export default function QRCamera(props) {
 
 
         props.setCamera(false)
-    };
+    }
+
+    const startScan = async () => {
+        // Check camera permission
+        // This is just a simple example, check out the better checks below
+        await BarcodeScanner.checkPermission({ force: true });
+
+        // make background of WebView transparent
+        // note: if you are using ionic this might not be enough, check below
+        BarcodeScanner.hideBackground();
+
+        const result = await BarcodeScanner.startScan(); // start scanning and wait for a result
+
+        // if the result has content
+        if (result.hasContent) {
+            console.log(result.content); // log the raw scanned content
+
+            if (regexReferral.test(result.content))
+                localStorage.setItem(REFERRAL, result.content)
+        }
+    }
+
+    const stopScan = () => {
+        BarcodeScanner.showBackground();
+        BarcodeScanner.stopScan();
+    }
 
     return (
         <div className={styles.main}>
 
-            <Back setFalse={() => props.setCamera(false)}/>
+            <Back setFalse={() => {
+                stopScan()
+                props.setCamera(false)
+            }}/>
 
             <div className={styles.content}>
 
-                <div className={styles.field}>Camera</div>
+                <div id={'camera'} className={styles.field}></div>
 
             </div>
 
             <div className={styles.form}>
 
-                <div onClick={takePicture}
-                     className={styles.field + ' ' + styles.button + ' ' + styles.red}>Scan
+                <div onClick={startScan}
+                     className={styles.field + ' ' + styles.button}>Scan
                 </div>
 
                 <Separator/>

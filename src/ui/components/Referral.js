@@ -151,13 +151,13 @@ export default function Referral(props) {
                 {/*    Activate*/}
                 {/*</div>*/}
 
-                {/*<div*/}
-                {/*    onClick={() => {*/}
-                {/*        scan()*/}
-                {/*    }}*/}
-                {/*    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>*/}
-                {/*    Scan*/}
-                {/*</div>*/}
+                <div
+                    onClick={() => {
+                        scan()
+                    }}
+                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                    Scan QR code
+                </div>
 
                 <Separator/>
 
