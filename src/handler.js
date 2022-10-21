@@ -178,6 +178,13 @@ export function globalMessageHandler(msg, ENQWeb) {
                                 }
                             }
                         }
+                    }else{
+                        handlerMiners.forEach(el => {
+                            if (!el.publisher) {
+                                el.publisher = {}
+                            }
+                            el.publisher.status = "Disconnected"
+                        })
                     }
                 })
                 resolve({response: handlerMiners})
@@ -227,6 +234,16 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         // Start all PoA
         if (msg.poa && msg.status) {
+            if (androidRegex.test(Capacitor.getPlatform())) {
+                test.getServiceStatus().then(async data => {
+                    if (handlerMiners.length == 0) {
+                        handlerMiners = await initPoa(ENQWeb.Enq.User)
+                    }
+                    miningStatus.miningProcess = data.status
+                    resolve({response: miningStatus})
+                })
+                return;
+            }
             resolve({response: miningStatus})
         }
 
