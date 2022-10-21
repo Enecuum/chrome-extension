@@ -7,8 +7,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -37,7 +39,7 @@ public class PoAService extends Service {
 
     @Override
     public void onCreate() {
-
+//        startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"getPackageName())));
         Log.d(TAG, "onCreate");
         super.onCreate();
         String CHANNEL_ID = "PoA service";
