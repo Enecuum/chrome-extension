@@ -66,7 +66,7 @@ public class Publisher {
                     Log.d(TAG, "account " + publicKey.substring(0, 6) + " take block");
                     try {
                         String answer = onBlock(message);
-                        if(answer.length() > 0){
+                        if (answer.length() > 0) {
                             ws.send(answer);
                         }
                     } catch (Exception ex) {
@@ -91,8 +91,12 @@ public class Publisher {
 
                 @Override
                 public void onError(Exception ex) {
-                    System.out.println("ERROR: " + ex.getMessage() + "\n" + ex.getStackTrace());
-                    ws.close();
+                    Log.d(TAG, "ERROR: " + ex.getMessage() + "\n" + ex.getStackTrace());
+                    try {
+                        ws.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     if (restartMiner) {
                         reboot = true;
                     }
@@ -100,8 +104,9 @@ public class Publisher {
             };
 
         } catch (URISyntaxException e) {
-            System.out.println("uri error");
+            Log.d(TAG, "uri error");
             e.printStackTrace();
+            reboot = true;
         }
 //        System.out.println(this.wsUrl);
 //        System.out.println(this.uri);
@@ -118,7 +123,7 @@ public class Publisher {
             } else {
                 Log.d(TAG, "Miner " + this.publicKey.substring(0, 6) + " deactivated");
                 this.status = "Disconnected";
-                this.reboot = true;
+//                this.reboot = true;
             }
 
         } catch (Exception ex) {
