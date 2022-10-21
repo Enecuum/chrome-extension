@@ -50,9 +50,16 @@ public class PoAService extends Service {
 //        mNotificationManager.createNotificationChannel(channel);
         ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
 
-        notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Enecuum")
-                .setContentText("PoA in work").build();
+//        notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+//                .setContentTitle("Enecuum")
+//                .setContentText("PoA in work").build();
+
+        notification =
+                new Notification.Builder(this, CHANNEL_ID)
+                        .setContentTitle(getText(R.string.app_name))
+                        .setContentText("PoA in work")
+                        .setSmallIcon(R.drawable.ic_stat_512)
+                        .build();
         id = 1;
         startForeground(id, notification);
     }
