@@ -72,6 +72,7 @@ public class Publisher {
                     } catch (Exception ex) {
                         Log.d(TAG, "Error in block\n" + ex.getMessage() + "\n" + ex.getStackTrace());
                         status = "Disconnected";
+                        ws.close();
                         reboot = true;
                     }
                 }
