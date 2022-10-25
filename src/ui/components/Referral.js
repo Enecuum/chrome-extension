@@ -14,17 +14,15 @@ import QRCode from "qrcode";
 import {Share} from '@capacitor/share';
 import {REFERRAL} from "../../utils/names";
 import {Clipboard} from "@capacitor/clipboard";
+import {Capacitor} from "@capacitor/core";
 
 const pasteFromClipboard = async () => {
-    // console.warn(navigator.clipboard)
-    // console.warn(await navigator.clipboard.readText())
-    if (navigator.clipboard) {
+    if (navigator.clipboard && Capacitor.getPlatform() !== 'android') {
         return await navigator.clipboard.readText()
     } else {
         console.error('navigator.clipboard: ' + false)
     }
-    return await Clipboard.read()
-    // return value
+    return (await Clipboard.read()).value
 }
 
 export default function Referral(props) {
@@ -65,8 +63,7 @@ export default function Referral(props) {
             text: 'Share your referral code',
             url: userReferralCode,
             dialogTitle: 'Share with friends',
-        }).then(r => {
-        });
+        }).then(r => {});
     }
 
     // let activate = () => {
