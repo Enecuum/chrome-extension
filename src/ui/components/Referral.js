@@ -3,14 +3,29 @@ import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
 import {
     copyToClipboard,
-    pasteFromClipboard, REF_PREFIX,
-    regexReferral, xor, XOR_STRING,
+    REF_PREFIX,
+    regexReferral,
+    xor,
+    XOR_STRING,
 } from '../Utils'
 import Back from "../elements/Back";
 import Input from "../elements/Input";
 import QRCode from "qrcode";
 import {Share} from '@capacitor/share';
 import {REFERRAL} from "../../utils/names";
+import {Clipboard} from "@capacitor/clipboard";
+
+const pasteFromClipboard = async () => {
+    // console.warn(navigator.clipboard)
+    // console.warn(await navigator.clipboard.readText())
+    if (navigator.clipboard) {
+        return await navigator.clipboard.readText()
+    } else {
+        console.error('navigator.clipboard: ' + false)
+    }
+    return await Clipboard.read()
+    // return value
+}
 
 export default function Referral(props) {
 
@@ -103,7 +118,7 @@ export default function Referral(props) {
                     label={'Referral code'}
                     onChange={handleChangeReferralCode}
                     value={referralCode}
-                    className={styles.field + ' ' + (regexReferral.test(referralCode) ? styles.field_correct : '')}
+                    className={styles.field + ' ' + (referralCode.length > 0 ? (regexReferral.test(referralCode) ? styles.field_correct : styles.field_incorrect) : '')}
                     placeholder="Insert referral code here"
                 />
 
@@ -116,12 +131,12 @@ export default function Referral(props) {
             <div className={styles.form}>
 
                 <div
-                    onClick={() => {
-                        pasteFromClipboard().then(refCode => {
-                            console.log(refCode.value)
-                            setReferralCode(refCode.value)
-                            localStorage.setItem(REFERRAL, refCode.value)
-                        })
+                    onClick={async () => {
+                        let refCode = await pasteFromClipboard()
+                        setReferralCode(refCode)
+                        if (regexReferral.test(refCode)) {
+                            localStorage.setItem(REFERRAL, refCode)
+                        }
                     }}
                     className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
                     Paste

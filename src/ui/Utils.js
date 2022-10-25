@@ -143,15 +143,6 @@ const copyToClipboard = (text) => {
     Clipboard.write({string: text}).then(r => {})
 }
 
-const pasteFromClipboard = () => {
-    if (navigator.clipboard) {
-        return navigator.clipboard.readText()
-    } else {
-        console.error('navigator.clipboard: ' + false)
-    }
-    return Clipboard.read()
-    // return value
-}
 
 let id = 0
 
@@ -205,7 +196,6 @@ module.exports = {
     toggleFullScreen,
     generateIcon,
     copyToClipboard,
-    pasteFromClipboard,
     regexData,
     regexAddress,
     regexToken,
