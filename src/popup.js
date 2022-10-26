@@ -8,6 +8,8 @@ import {globalState} from './globalState'
 import Storage from './utils/localStorage'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 
+const androidRegex = /android/
+
 global.userStorage = new Storage('popup')
 
 // TODO initial globalState
@@ -179,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let messageListener = {}
 
-function massageListenerSetup(cb){
+function messageListenerSetup(cb){
     try{
         window.removeEventListener('message',messageListener, false)
         window.addEventListener('message',cb, false)
@@ -189,7 +191,7 @@ function massageListenerSetup(cb){
     }
 }
 
-global.massageListenerSetup = massageListenerSetup
+global.messageListenerSetup = messageListenerSetup
 
 // TODO Rename CB
 function mainListener(msg, sender, sendResponse) {
@@ -238,7 +240,7 @@ function asyncRequest(data) {
     awaitId[data] = false
     let answer = ''
     // iframeWork = true
-    if (version.includes('web') || iframeWork === true) {
+    if (version.includes('web') || iframeWork === true || androidRegex.test(Capacitor.getPlatform()) ) {
         answer = messagePopupHandler(data)
         // console.log(answer)
         return answer

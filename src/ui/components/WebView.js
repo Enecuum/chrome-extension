@@ -129,6 +129,8 @@ export default function WebView(props) {
                     break
                 case 'reconnect':
                     response = {status: sites[data.cb.url] ? true : global.connected[data.cb.url] ? true : false}
+                    // response = JSON.parse((await taskHandler(data.cb.taskId)).data)
+                    // console.log(response);
                     event.source.postMessage({answer: {taskId: data.cb.taskId, data: response}}, event.origin)
                     updateIframeZIndexLock = false
                     setIframeWork(false)
@@ -163,7 +165,7 @@ export default function WebView(props) {
         iframe.style.zIndex = "-1"
     }
 
-    massageListenerSetup(onMessage)
+    messageListenerSetup(onMessage)
 
 
     return (

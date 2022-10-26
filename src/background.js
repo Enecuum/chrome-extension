@@ -650,3 +650,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupApp()
     setInterval(checkConnection, 1000 * 5)
 })
+
+
+export {ports, favoriteSites, enabledPorts, disconnectPorts, disconnectFavoriteSite, checkConnection}

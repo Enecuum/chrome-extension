@@ -12,6 +12,7 @@ import {getMiners, initPoa, startPoa, stopPoa, swithMiner, updateToken} from './
 import {getMnemonicPrivateKeyHex} from './ui/Utils'
 import {Capacitor, registerPlugin} from '@capacitor/core'
 import {startBackgroundMining, getMobileMiners, stopMobileMiners} from './mobileBackground'
+import {disconnectFavoriteSite,disconnectPorts, enabledPorts, favoriteSites, ports} from './background'
 // var cacheStore = window.cacheStore // compiled javascript
 
 let miningStatus = {miningProcess: false}
@@ -24,6 +25,22 @@ let test = registerPlugin('PoA')
 export function globalMessageHandler(msg, ENQWeb) {
 
     return new Promise(async (resolve, reject) => {
+
+
+        if(androidRegex.test(Capacitor.getPlatform())){
+            if (msg.ports && msg.disconnect) {
+                if (msg.all) {
+                    disconnectPorts()
+                }
+                if (msg.name) {
+                    if (msg.favorite) {
+                        disconnectFavoriteSite(msg.name)
+                    } else {
+                        disconnectPorts(msg.name)
+                    }
+                }
+            }
+        }
 
         indexDB.get(USER)
             .then(function (user) {
@@ -429,7 +446,8 @@ const webBackground = (msg, net) => {
     let popupOpenMethods = {
         'enable': true,
         'tx': true,
-        'sign': true
+        'sign': true,
+        'reconnect':false
     }
     if (msg.cb.taskId) {
         if (!popupOpenMethods[msg.type]) {
@@ -530,7 +548,18 @@ export async function messagePopupHandler(msg) {
         }
     }
     if (msg.connectionList) {
-        return 0
+        return {
+            asyncAnswer: true,
+            data: msg,
+            ports: enabledPorts()
+        }
+    }
+    if(msg.favoriteList){
+        return {
+            asyncAnswer: true,
+            data: msg,
+            ports: favoriteSites()
+        }
     }
 }
 
@@ -552,6 +581,10 @@ const taskHandler = async (taskId) => {
             data = {
                 pubkey: account.publicKey,
                 net: account.net,
+            }
+            if(androidRegex.test(Capacitor.getPlatform())){
+                ports[task.cb.url] = {}
+                ports[task.cb.url].enabled = true
             }
             console.log('enable. returned: ', data)
             userStorage.task.removeTask(taskId)
@@ -673,6 +706,12 @@ const taskHandler = async (taskId) => {
         case 'reconnect':
             console.log('reconnect')
             userStorage.task.removeTask(taskId)
+            let sites = await userStorage.sites.getSites()
+            return{
+                data: JSON.stringify(ports[task.cb.url] ? {stutus: ports[task.cb.url].enabled || false} : sites[task.cb.url] ? {status: true} : {status: false}),
+                taskId: taskId,
+                cb: task.cb
+            }
         default:
             break
     }
