@@ -6,7 +6,7 @@ android {
         applicationId "com.enecuum.pwa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 33
+        versionCode 36
         versionName "0.5.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
@@ -14,7 +14,7 @@ android {
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
-//         setProperty("archivesBaseName", "enecuum-$versionCode")
+         setProperty("archivesBaseName", "enecuum-$versionCode")
     }
     buildTypes {
         release {

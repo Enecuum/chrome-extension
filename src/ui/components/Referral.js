@@ -91,16 +91,6 @@ export default function Referral(props) {
 
                 {/*<div className={styles.field}>{''}</div>*/}
 
-                {/*<Input*/}
-                {/*    type="text"*/}
-                {/*    spellCheck={false}*/}
-                {/*    disabled={true}*/}
-                {/*    label={'Your referral code'}*/}
-                {/*    onChange={() => {}}*/}
-                {/*    value={userReferralCode}*/}
-                {/*    className={styles.field}*/}
-                {/*    placeholder={userReferralCode}*/}
-                {/*/>*/}
 
                 {/*<Separator/>*/}
 
@@ -119,9 +109,22 @@ export default function Referral(props) {
                     placeholder="Insert referral code here"
                 />
 
-                {/*<div className={styles.qr}>*/}
-                {/*    <img src={imageURL}/>*/}
-                {/*</div>*/}
+                <div className={styles.field}>{'YOURS'}</div>
+
+                <Input
+                    type="text"
+                    spellCheck={false}
+                    disabled={true}
+                    label={'Your referral code'}
+                    onChange={() => {}}
+                    value={userReferralCode}
+                    className={styles.field}
+                    placeholder={userReferralCode}
+                />
+
+                <div className={styles.qr}>
+                    <img src={imageURL}/>
+                </div>
 
             </div>
 
@@ -163,13 +166,13 @@ export default function Referral(props) {
                 {/*    Activate*/}
                 {/*</div>*/}
 
-                {/*<div*/}
-                {/*    onClick={() => {*/}
-                {/*        scan()*/}
-                {/*    }}*/}
-                {/*    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>*/}
-                {/*    Scan*/}
-                {/*</div>*/}
+                <div
+                    onClick={() => {
+                        scan()
+                    }}
+                    className={`${styles.field} ${styles.button} ${styles.button_blue}`}>
+                    Scan
+                </div>
 
                 <Separator/>
 
