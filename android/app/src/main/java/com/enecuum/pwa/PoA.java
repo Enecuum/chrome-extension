@@ -44,6 +44,8 @@ public class PoA extends Plugin {
             PoAIntent.putExtra("miners", jsonString).putExtra("net", net).putExtra(MainActivity.PARAM_TASK, MainActivity.PARAM_START_POA);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 getActivity().startForegroundService(PoAIntent);
+            } else {
+                getActivity().startService(PoAIntent);
             }
             Log.d(TAG, "Started");
         } catch (Exception ex) {
@@ -72,7 +74,12 @@ public class PoA extends Plugin {
         try {
             Intent PoAService = new Intent(MainActivity.PoAservice).setPackage(getActivity().getPackageName());
             PoAService.putExtra(MainActivity.PARAM_TASK, MainActivity.PARAM_UPDATE_TOKEN).putExtra("data", jsonString);
-            getActivity().startForegroundService(PoAService);
+//            getActivity().startForegroundService(PoAService);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                getActivity().startForegroundService(PoAService);
+            } else {
+                getActivity().startService(PoAService);
+            }
 
         } catch (Exception ex) {
             Log.d(TAG, "error in change token");
@@ -86,7 +93,12 @@ public class PoA extends Plugin {
         try {
             Intent PoAService = new Intent(MainActivity.PoAservice).setPackage(getActivity().getPackageName());
             PoAService.putExtra(MainActivity.PARAM_TASK, MainActivity.PARAM_SWITCH_MINER).putExtra("data", jsonString);
-            getActivity().startForegroundService(PoAService);
+//            getActivity().startForegroundService(PoAService);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                getActivity().startForegroundService(PoAService);
+            } else {
+                getActivity().startService(PoAService);
+            }
         } catch (Exception ex) {
             Log.d(TAG, "error in switch miner");
         }
@@ -99,7 +111,7 @@ public class PoA extends Plugin {
             ActivityManager res = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningServiceInfo> rs = res.getRunningServices(50);
             status = rs.size() == 0 ? false : true;
-            getPOA = status? getPOA : "";
+            getPOA = status ? getPOA : "";
             isMining = status;
             JSObject obj = new JSObject();
             obj.put("status", status);
