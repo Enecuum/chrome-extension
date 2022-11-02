@@ -240,14 +240,14 @@ a:hover {
     height: 500px;
 }
 
-.scanner-ui {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 3;
-}
+/*.scanner-ui {*/
+/*    position: fixed;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    top: 0;*/
+/*    bottom: 0;*/
+/*    z-index: 3;*/
+/*}*/
 
 .login_logo {
     width: 100px;
