@@ -58,8 +58,11 @@ let Account = {}
 
 function setupApp() {
     // console.log('background ready')
-    extensionApi.runtime.onMessage.addListener(messageHandler)
-    extensionApi.runtime.onConnect.addListener(connectHandler)
+    // console.log(extensionApi.runtime.onMessage)
+    if (extensionApi.runtime.onMessage)
+        extensionApi.runtime.onMessage.addListener(messageHandler)
+    if (extensionApi.runtime.onConnect)
+        extensionApi.runtime.onConnect.addListener(connectHandler)
     taskCounter()
     if (!userStorage.config.getConfig()) {
         userStorage.config.initConfig()
@@ -390,7 +393,8 @@ global.disconnectPorts = disconnectPorts
 function taskCounter() {
     let tasks = userStorage.task.loadTask()
     let ids = Object.keys(tasks)
-    extensionApi.browserAction.setBadgeText({ text: `${ids.length === 0 ? '' : ids.length}` })
+    if (extensionApi.browserAction)
+        extensionApi.browserAction.setBadgeText({ text: `${ids.length === 0 ? '' : ids.length}` })
 }
 
 global.counterTask = taskCounter
