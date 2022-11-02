@@ -177,6 +177,13 @@ public class Publisher {
             }
         }
 
+        if (block.method.equals("peer")) {
+            Peer peer = g.fromJson(m_block, Peer.class);
+            this.wsUrl = String.format("ws://%s:3000/", peer.data.ip);
+//            this.reboot
+//            restartPublisher()
+        }
+
         if (block.method.equals("on_leader_beacon")) {
             String msg = block.data.m_hash + (this.referrer.length() > 0 ? this.referrer : "") + this.token;
             JSObject obj = new JSObject();
