@@ -22,6 +22,7 @@ public class Publisher {
     public String publicKey;
     public Crypto crypto = new Crypto();
     public String ip;
+    public String port;
     public String wsUrl;
     public Integer protocol_version = 4;
 
@@ -34,13 +35,14 @@ public class Publisher {
     public WebSocketClient ws;
 
 
-    Publisher(String url, String privateKey, String token, String referrer) {
+    Publisher(String url, String port, String privateKey, String token, String referrer) {
         this.privateKey = privateKey;
         this.publicKey = crypto.getPublicKey(this.privateKey);
         this.token = token;
         this.referrer = referrer;
         this.ip = url;
-        this.wsUrl = String.format("ws://%s:3000/", url);
+        this.port = port;
+        this.wsUrl = String.format("ws://%s:%s/", url, port);
         this.reboot = false;
 
         try {

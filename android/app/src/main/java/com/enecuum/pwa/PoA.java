@@ -25,6 +25,7 @@ import java.util.List;
 public class PoA extends Plugin {
 
     private String net;
+    private String port;
     private String TAG = "POA";
     public static String getPOA = "";
 
@@ -37,11 +38,12 @@ public class PoA extends Plugin {
 
         String jsonString = call.getString("data");
         net = call.getString("net");
+        port = call.getString("port");
         try {
             Intent PoAIntent = new Intent();
             PoAIntent.setAction(MainActivity.PoAservice);
             PoAIntent.setPackage(getActivity().getPackageName());
-            PoAIntent.putExtra("miners", jsonString).putExtra("net", net).putExtra(MainActivity.PARAM_TASK, MainActivity.PARAM_START_POA);
+            PoAIntent.putExtra("miners", jsonString).putExtra("net", net).putExtra("port", port).putExtra(MainActivity.PARAM_TASK, MainActivity.PARAM_START_POA);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 getActivity().startForegroundService(PoAIntent);
             }

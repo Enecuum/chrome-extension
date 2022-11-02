@@ -295,6 +295,9 @@ export function globalMessageHandler(msg, ENQWeb) {
                 let pulseIP = '95.216.68.221'
                 let bitIP = '95.216.246.116'
                 let f3IP = '95.216.207.173'
+                
+                let network  = JSON.parse((await bootNodeGetIP()).data)
+                console.log(network);
 
                 if (androidRegex.test(Capacitor.getPlatform())) {
 
@@ -303,6 +306,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                         'https://bit.enecuum.com': bitIP,
                         'https://pulse.enecuum.com': pulseIP
                     }
+                    
                     try {
                         for (let i = 0; i < handlerMiners.length; i++) {
                             accounts[i].token = handlerMiners[i].token.token
@@ -314,10 +318,13 @@ export function globalMessageHandler(msg, ENQWeb) {
                     }
 
                     console.log(accounts)
+                    
+                    
 
                     test.start({
                         data: JSON.stringify(accounts),
-                        net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : '95.216.246.116'
+                        net: network.data.ip,
+                        port: network.data.port
                     }).then(res => {
                     })
                     // let miners = startBackgroundMining()
@@ -494,6 +501,28 @@ let createWebSession = (account) => {
     webAccount.privateKey = true
     webAccount.seed = account.seed ? true : ''
     sessionStorage.setItem('User', JSON.stringify(webAccount))
+}
+
+
+let bootNodeGetIP = ()=>{
+    return new Promise(resolve=>{
+        let bootNodeIP = '95.217.17.178'
+        let bitPort = '4000'
+        let pulsePort = '4001'
+        let portList = {
+            'https://bit.enecuum.com': bitPort,
+            'https://pulse.enecuum.com': pulsePort
+        }
+        let answer;
+        let ws = new WebSocket(`ws://${bootNodeIP}:${portList[ENQWeb.Net.provider] !== undefined ? portList[ENQWeb.Net.provider] : '4000'}`);
+        ws.onmessage = message=>{
+            answer = message
+        }
+        ws.onclose = ()=>{
+            resolve(answer)
+        }
+    })
+    
 }
 
 let lockTimer

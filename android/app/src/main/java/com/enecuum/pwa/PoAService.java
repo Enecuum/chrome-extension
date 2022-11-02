@@ -35,6 +35,7 @@ public class PoAService extends Service {
     private int id;
     private Account[] accounts;
     private String net;
+    private String port;
 
     @Override
     public void onCreate() {
@@ -74,11 +75,12 @@ public class PoAService extends Service {
                     String jsonString = intent.getStringExtra("miners");
                     accounts = g.fromJson(jsonString, Account[].class);
                     net = intent.getStringExtra("net");
+                    port = intent.getStringExtra("port");
                     System.out.println(accounts.length);
                     System.out.println(net);
                     miners = new Miner[accounts.length];
                     for (int i = 0; i < accounts.length; i++) {
-                        miners[i] = new Miner(net, accounts[i].privateKey, accounts[i].token, accounts[i].referrer);
+                        miners[i] = new Miner(net, port, accounts[i].privateKey, accounts[i].token, accounts[i].referrer);
                         miners[i].publisher.mining = accounts[i].status;
                     }
 

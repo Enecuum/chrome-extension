@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 
 public class Miner {
     public String url;
+    public String port;
     private final String key;
     public String token;
     public String referrer;
@@ -15,9 +16,10 @@ public class Miner {
     public Boolean inWork = false;
     private String TAG = "Miner";
 
-    Miner(String url, String key, String token, String referrer) {
+    Miner(String url, String port, String key, String token, String referrer) {
         this.key = key;
         this.url = url;
+        this.port = port;
         this.token = token;
         this.referrer = referrer.equals(null) || referrer.length() != 70 ? "" : referrer.substring(4);
         if (this.referrer.length() == 66) {
@@ -32,14 +34,14 @@ public class Miner {
                 this.referrer = "";
             }
         }
-        this.publisher = new Publisher(url, key, token, this.referrer);
+        this.publisher = new Publisher(url, port, key, token, this.referrer);
     }
 
     public void restartPublisher() {
         try{
             Boolean buf = this.publisher.mining;
             this.publisher = null;
-            this.publisher = new Publisher(this.url, this.key, this.token, this.referrer);
+            this.publisher = new Publisher(this.url, this.port, this.key, this.token, this.referrer);
             this.publisher.mining = buf;
         }catch (Exception ex){
             Log.e(TAG, ex.getMessage() + "\n" + ex.getStackTrace());
