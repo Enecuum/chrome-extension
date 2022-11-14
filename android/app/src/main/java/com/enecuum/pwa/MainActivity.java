@@ -19,6 +19,7 @@ public class MainActivity extends BridgeActivity {
     public final static String PARAM_GET_POA = "get poa";
     public final static String PARAM_UPDATE_TOKEN = "update token";
     public final static String PARAM_SWITCH_MINER = "switch miner";
+    public final static String PARAM_UPDATE_IP = "update ip";
 
 
     public final static String PARAM_RESULT = "result";
@@ -27,6 +28,7 @@ public class MainActivity extends BridgeActivity {
     public final static String PARAM_STOP = "STOP";
     public final static String BROADCAST_ACTION = "com.enecuum.pwa.servicebackbroadcast";
     public final static String PoAservice = "com.enecuum.pwa.PoAService";
+    public final static String IPUpdateService = "com.enecuum.pwa.IPUpdateService";
 
 
     BroadcastReceiver br;

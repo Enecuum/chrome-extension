@@ -42,6 +42,8 @@ public class PoAService extends Service {
 //        startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:"getPackageName())));
         Log.d(TAG, "onCreate");
         super.onCreate();
+        Intent IPUpdateService = new Intent(MainActivity.IPUpdateService).setPackage(getPackageName());
+        startService(IPUpdateService);
         String CHANNEL_ID = "PoA service";
         NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                 "Enecuum PoA",
@@ -66,12 +68,12 @@ public class PoAService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Gson g = new Gson();
         try {
             String type = intent.getStringExtra(MainActivity.PARAM_TASK);
             Log.d(TAG, "onStartCommand: " + type);
             if (type.equals(MainActivity.PARAM_START_POA)) {
                 if (miners == null) {
-                    Gson g = new Gson();
                     String jsonString = intent.getStringExtra("miners");
                     accounts = g.fromJson(jsonString, Account[].class);
                     net = intent.getStringExtra("net");
@@ -108,7 +110,6 @@ public class PoAService extends Service {
 
             }
             if (type.equals(MainActivity.PARAM_UPDATE_TOKEN)) {
-                Gson g = new Gson();
                 String jsonString = intent.getStringExtra("data");
                 Account account = g.fromJson(jsonString, Account.class);
                 for (Miner miner : miners) {
@@ -120,13 +121,23 @@ public class PoAService extends Service {
                 }
             }
             if (type.equals(MainActivity.PARAM_SWITCH_MINER)) {
-                Gson g = new Gson();
                 String jsonString = intent.getStringExtra("data");
                 Account account = g.fromJson(jsonString, Account.class);
                 for (Miner miner : miners) {
                     if (miner.publisher.publicKey.equals(account.publicKey)) {
                         commitSwitch(miner, account.status);
                         Log.d(TAG, String.format("switch %s %s", account.publicKey.substring(0, 6), account.status ? "ON" : "OFF"));
+                    }
+                }
+            }
+            if(type.equals(MainActivity.PARAM_UPDATE_IP)){
+                String jsonString = intent.getStringExtra("data");
+                IPUpdater ipUpdater = g.fromJson(jsonString, IPUpdater.class);
+                for(Miner miner:miners){
+                    if(miner.publisher.publicKey.equals(ipUpdater.publicKey)){
+                        miner.url = ipUpdater.ip;
+                        miner.port = ipUpdater.port;
+                        miner.restartPublisher();
                     }
                 }
             }
@@ -154,6 +165,10 @@ public class PoAService extends Service {
             cleanTimer();
         } catch (Exception e) {
         }
+        try{
+            Intent IPUpdateService = new Intent(MainActivity.IPUpdateService).setPackage(getPackageName());
+            stopService(IPUpdateService);
+        }catch (Exception e){}
         super.onDestroy();
     }
 
