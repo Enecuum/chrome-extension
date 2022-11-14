@@ -10,11 +10,11 @@ android {
         versionName "0.5.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
-             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
-             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+            // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
-         setProperty("archivesBaseName", "enecuum-$versionCode")
+        setProperty("archivesBaseName", "enecuum-$versionCode")
     }
     buildTypes {
         release {
@@ -25,7 +25,7 @@ android {
 }
 
 repositories {
-    flatDir{
+    flatDir {
         dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
     }
 }
@@ -42,7 +42,7 @@ dependencies {
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.0'
 //    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15', version: '1.51'
 //    implementation group: 'org.web3j', name: 'crypto', version: '3.2.0'
-    implementation ('org.web3j:core:4.8.7-android')
+    implementation('org.web3j:core:4.8.7-android')
 }
 
 apply from: 'capacitor.build.gradle'
@@ -52,6 +52,6 @@ try {
     if (servicesJSON.text) {
         apply plugin: 'com.google.gms.google-services'
     }
-} catch(Exception e) {
+} catch (Exception e) {
     logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
 }

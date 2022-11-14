@@ -130,14 +130,15 @@ public class PoAService extends Service {
                     }
                 }
             }
-            if(type.equals(MainActivity.PARAM_UPDATE_IP)){
+            if (type.equals(MainActivity.PARAM_UPDATE_IP)) {
                 String jsonString = intent.getStringExtra("data");
                 IPUpdater ipUpdater = g.fromJson(jsonString, IPUpdater.class);
-                for(Miner miner:miners){
-                    if(miner.publisher.publicKey.equals(ipUpdater.publicKey)){
+                for (Miner miner : miners) {
+                    if (miner.publisher.publicKey.equals(ipUpdater.publicKey)) {
                         miner.url = ipUpdater.ip;
                         miner.port = ipUpdater.port;
                         miner.restartPublisher();
+                        miner.publisher.init();
                     }
                 }
             }
@@ -165,10 +166,11 @@ public class PoAService extends Service {
             cleanTimer();
         } catch (Exception e) {
         }
-        try{
+        try {
             Intent IPUpdateService = new Intent(MainActivity.IPUpdateService).setPackage(getPackageName());
             stopService(IPUpdateService);
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         super.onDestroy();
     }
 

@@ -38,12 +38,12 @@ public class Miner {
     }
 
     public void restartPublisher() {
-        try{
+        try {
             Boolean buf = this.publisher.mining;
             this.publisher = null;
             this.publisher = new Publisher(this.url, this.port, this.key, this.token, this.referrer);
             this.publisher.mining = buf;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.e(TAG, ex.getMessage() + "\n" + ex.getStackTrace());
         }
 

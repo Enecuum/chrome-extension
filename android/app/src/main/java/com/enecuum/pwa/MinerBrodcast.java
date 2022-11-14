@@ -8,12 +8,12 @@ public class MinerBrodcast {
 
     private static String TAG = "MinerBrodcast";
 
-    public static String serialize(MinerBrodcast[] miners){
+    public static String serialize(MinerBrodcast[] miners) {
         String output = "[";
-        for(MinerBrodcast miner : miners){
-            output+= String.format("{\"publicKey\":\"%s\", \"status\":\"%s\"},", miner.publicKey,miner.status);
+        for (MinerBrodcast miner : miners) {
+            output += String.format("{\"publicKey\":\"%s\", \"status\":\"%s\"},", miner.publicKey, miner.status);
         }
-        output = output.substring(0,output.length()-1) +"]";
+        output = output.substring(0, output.length() - 1) + "]";
         return output;
     }
 }

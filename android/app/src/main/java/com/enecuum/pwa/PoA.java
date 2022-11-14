@@ -19,7 +19,11 @@ import org.json.JSONException;
 
 import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @CapacitorPlugin(name = "PoA")
 public class PoA extends Plugin {
@@ -33,6 +37,9 @@ public class PoA extends Plugin {
 
     private Boolean STOPPED = false;
 
+    public static List<String> ipUpdaterList = new ArrayList<>();
+    private Timer ipUpdateTimer;
+
     @PluginMethod()
     public void start(PluginCall call) throws JSONException {
 
@@ -45,6 +52,7 @@ public class PoA extends Plugin {
             PoAIntent.setPackage(getActivity().getPackageName());
             PoAIntent.putExtra("miners", jsonString).putExtra("net", net).putExtra("port", port).putExtra(MainActivity.PARAM_TASK, MainActivity.PARAM_START_POA);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                updateTimerInit();
                 getActivity().startForegroundService(PoAIntent);
             }
             Log.d(TAG, "Started");
@@ -60,6 +68,7 @@ public class PoA extends Plugin {
         try {
 //            getActivity().startForegroundService(new Intent(MainActivity.PoAservice).putExtra(MainActivity.PARAM_STOP,true));
             getActivity().stopService(new Intent(MainActivity.PoAservice).setPackage(getActivity().getPackageName()));
+            updateTimerPurge();
         } catch (Exception ex) {
             Log.d(TAG, "No activity");
         }
@@ -101,7 +110,7 @@ public class PoA extends Plugin {
             ActivityManager res = (ActivityManager) getActivity().getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningServiceInfo> rs = res.getRunningServices(50);
             status = rs.size() == 0 ? false : true;
-            getPOA = status? getPOA : "";
+            getPOA = status ? getPOA : "";
             isMining = status;
             JSObject obj = new JSObject();
             obj.put("status", status);
@@ -136,7 +145,6 @@ public class PoA extends Plugin {
 
     }
 
-
     private void rebootMiner(Miner miner) {
         Integer buf = miner.publisher.countBlocks;
         miner.publisher.stop();
@@ -153,4 +161,38 @@ public class PoA extends Plugin {
             miner.publisher.init();
         }
     }
+
+    private void updateTimerInit() {
+        Gson g = new Gson();
+        ipUpdateTimer = new Timer();
+        ipUpdateTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    if (ipUpdaterList.size() > 0) {
+                        Log.d(TAG, "run: " + ipUpdaterList.size());
+                        String buf;
+                        for (Integer i = 0; i < ipUpdaterList.size(); i++) {
+                            buf = ipUpdaterList.get(i);
+                            Intent intent = new Intent();
+                            intent.setPackage(getActivity().getPackageName());
+                            intent.putExtra(MainActivity.PARAM_TASK, MainActivity.PARAM_UPDATE_IP);
+                            intent.putExtra("data", buf);
+                            getActivity().startForegroundService(intent);
+                        }
+                        ipUpdaterList.clear();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    Log.d(TAG, "error in t");
+                }
+            }
+        }, 0, 3000);
+    }
+
+    private void updateTimerPurge() {
+        ipUpdateTimer.cancel();
+        ipUpdateTimer.purge();
+    }
+
 }

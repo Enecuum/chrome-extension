@@ -1,5 +1,7 @@
 package com.enecuum.pwa;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import java.net.URI;
@@ -180,10 +182,14 @@ public class Publisher {
         }
 
         if (block.method.equals("peer")) {
+            this.stop();
             Peer peer = g.fromJson(m_block, Peer.class);
-            this.wsUrl = String.format("ws://%s:3000/", peer.data.ip);
-//            this.reboot
-//            restartPublisher()
+            IPUpdater ipUpdater = new IPUpdater();
+            ipUpdater.publicKey = this.publicKey;
+            ipUpdater.ip = peer.data.ip;
+            ipUpdater.port = peer.data.port;
+            String send = ipUpdater.serialize();
+            PoA.ipUpdaterList.add(send);
         }
 
         if (block.method.equals("on_leader_beacon")) {
