@@ -46,6 +46,7 @@ public class Publisher {
         this.port = port;
         this.wsUrl = String.format("ws://%s:%s/", url, port);
         this.reboot = false;
+        this.restartMiner = false;
 
         try {
             uri = new URI(wsUrl);
