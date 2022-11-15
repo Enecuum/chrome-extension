@@ -145,6 +145,18 @@ public class PoA extends Plugin {
 
     }
 
+    @PluginMethod()
+    public void changeIPAllMiners(PluginCall call) {
+        String jsonString = call.getString("data");
+        try {
+            Intent PoAService = new Intent(MainActivity.PoAservice).setPackage(getActivity().getPackageName());
+            PoAService.putExtra(MainActivity.PARAM_TASK, MainActivity.PARAM_UPDATE_IP_ALL).putExtra("data", jsonString);
+            getActivity().startForegroundService(PoAService);
+        } catch (Exception ex) {
+            Log.d(TAG, "error in change ip all miners");
+        }
+    }
+
     private void rebootMiner(Miner miner) {
         Integer buf = miner.publisher.countBlocks;
         miner.publisher.stop();

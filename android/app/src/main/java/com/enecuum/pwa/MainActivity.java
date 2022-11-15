@@ -20,6 +20,7 @@ public class MainActivity extends BridgeActivity {
     public final static String PARAM_UPDATE_TOKEN = "update token";
     public final static String PARAM_SWITCH_MINER = "switch miner";
     public final static String PARAM_UPDATE_IP = "update ip";
+    public final static String PARAM_UPDATE_IP_ALL = "update ip all";
 
 
     public final static String PARAM_RESULT = "result";

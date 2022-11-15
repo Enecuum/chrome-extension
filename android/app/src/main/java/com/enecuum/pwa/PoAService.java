@@ -142,6 +142,16 @@ public class PoAService extends Service {
                     }
                 }
             }
+            if (type.equals(MainActivity.PARAM_UPDATE_IP_ALL)) {
+                String jsonString = intent.getStringExtra("data");
+                IPUpdater ipUpdater = g.fromJson(jsonString, IPUpdater.class);
+                for (Miner miner : miners) {
+                    miner.url = ipUpdater.ip;
+                    miner.port = ipUpdater.port;
+                    miner.restartPublisher();
+                    miner.publisher.init();
+                }
+            }
             if (type.equals(MainActivity.PARAM_STOP)) {
                 stopSelf();
             }
