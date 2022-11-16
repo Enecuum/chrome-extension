@@ -76,8 +76,12 @@ public class PoAService extends Service {
                 if (miners == null) {
                     String jsonString = intent.getStringExtra("miners");
                     accounts = g.fromJson(jsonString, Account[].class);
-                    net = intent.getStringExtra("net");
-                    port = intent.getStringExtra("port");
+//                    net = intent.getStringExtra("net");
+//                    port = intent.getStringExtra("port");
+
+                    net = "95.217.17.178";
+                    port = "4000";
+
                     System.out.println(accounts.length);
                     System.out.println(net);
                     miners = new Miner[accounts.length];
@@ -137,7 +141,7 @@ public class PoAService extends Service {
                     if (miner.publisher.publicKey.equals(ipUpdater.publicKey)) {
                         miner.url = ipUpdater.ip;
                         miner.port = ipUpdater.port;
-                        miner.restartPublisher();
+                        miner.restartPublisher(null);
                         miner.publisher.init();
                     }
                 }
@@ -148,7 +152,7 @@ public class PoAService extends Service {
                 for (Miner miner : miners) {
                     miner.url = ipUpdater.ip;
                     miner.port = ipUpdater.port;
-                    miner.restartPublisher();
+                    miner.restartPublisher(null);
                     miner.publisher.init();
                 }
             }
@@ -238,7 +242,7 @@ public class PoAService extends Service {
     private void rebootMiner(Miner miner) {
         Integer buf = miner.publisher.countBlocks;
         miner.publisher.stop();
-        miner.restartPublisher();
+        miner.restartPublisher(null);
         miner.publisher.init();
         miner.publisher.countBlocks = buf;
         miner.publisher.status = String.format("Sign block (%d)", buf);
@@ -255,7 +259,7 @@ public class PoAService extends Service {
         if (!switcher) {
             miner.publisher.stop();
         } else {
-            miner.restartPublisher();
+            miner.restartPublisher(null);
             miner.publisher.init();
         }
     }

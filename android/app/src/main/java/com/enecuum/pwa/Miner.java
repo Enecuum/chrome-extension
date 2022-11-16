@@ -3,7 +3,7 @@ package com.enecuum.pwa;
 import android.util.Log;
 
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
+import java.util.function.Function;
 
 public class Miner {
     public String url;
@@ -15,6 +15,25 @@ public class Miner {
     private String xorString = "750D7F2B34CA3DF1D6B7878DEBC8CF9A56BCB51A58435B5BCFB7E82EE09FA8BE75";
     public Boolean inWork = false;
     private String TAG = "Miner";
+
+    Function restartPublisher(Object o) {
+        try {
+            IPUpdater ipUpdater = (IPUpdater) o;
+            Boolean buf = this.publisher.mining;
+            if (ipUpdater == null) {
+                ipUpdater = new IPUpdater();
+                ipUpdater.ip = this.url;
+                ipUpdater.port = this.port;
+            }
+            this.publisher = null;
+            this.publisher = new Publisher(ipUpdater.ip, ipUpdater.port, this.key, this.token, this.referrer, this::restartPublisher);
+            this.publisher.mining = buf;
+        } catch (Exception ex) {
+            Log.e(TAG, ex.getMessage() + "\n" + ex.getStackTrace());
+        }
+
+        return null;
+    }
 
     Miner(String url, String port, String key, String token, String referrer) {
         this.key = key;
@@ -34,18 +53,6 @@ public class Miner {
                 this.referrer = "";
             }
         }
-        this.publisher = new Publisher(url, port, key, token, this.referrer);
-    }
-
-    public void restartPublisher() {
-        try {
-            Boolean buf = this.publisher.mining;
-            this.publisher = null;
-            this.publisher = new Publisher(this.url, this.port, this.key, this.token, this.referrer);
-            this.publisher.mining = buf;
-        } catch (Exception ex) {
-            Log.e(TAG, ex.getMessage() + "\n" + ex.getStackTrace());
-        }
-
+        this.publisher = new Publisher(url, port, key, token, this.referrer, this::restartPublisher);
     }
 }

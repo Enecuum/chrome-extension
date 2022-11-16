@@ -160,7 +160,7 @@ public class PoA extends Plugin {
     private void rebootMiner(Miner miner) {
         Integer buf = miner.publisher.countBlocks;
         miner.publisher.stop();
-        miner.restartPublisher();
+        miner.restartPublisher(null);
         miner.publisher.init();
         miner.publisher.countBlocks = buf;
     }
@@ -169,8 +169,8 @@ public class PoA extends Plugin {
         if (!switcher) {
             miner.publisher.stop();
         } else {
-            miner.restartPublisher();
-            miner.publisher.init();
+           miner.restartPublisher(null);
+           miner.publisher.init();
         }
     }
 

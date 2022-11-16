@@ -1,7 +1,5 @@
 package com.enecuum.pwa;
 
-import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 
 import java.net.URI;
@@ -10,6 +8,7 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URISyntaxException;
+import java.util.function.Function;
 
 import com.getcapacitor.JSObject;
 import com.google.gson.Gson;
@@ -36,8 +35,7 @@ public class Publisher {
 
     public WebSocketClient ws;
 
-
-    Publisher(String url, String port, String privateKey, String token, String referrer) {
+    Publisher(String url, String port, String privateKey, String token, String referrer, Function restart) {
         this.privateKey = privateKey;
         this.publicKey = crypto.getPublicKey(this.privateKey);
         this.token = token;
@@ -70,7 +68,7 @@ public class Publisher {
                 public void onMessage(String message) {
                     Log.d(TAG, "account " + publicKey.substring(0, 6) + " take block");
                     try {
-                        String answer = onBlock(message);
+                        String answer = onBlock(message, restart);
                         if (answer.length() > 0) {
                             ws.send(answer);
                         }
@@ -169,7 +167,7 @@ public class Publisher {
     }
 
 
-    public String onBlock(String m_block) {
+    public String onBlock(String m_block, Function restart) {
         Gson g = new Gson();
         Block block = g.fromJson(m_block, Block.class);
         Log.d(TAG, block.method);
@@ -189,8 +187,8 @@ public class Publisher {
             ipUpdater.publicKey = this.publicKey;
             ipUpdater.ip = peer.data.ip;
             ipUpdater.port = peer.data.port;
-            String send = ipUpdater.serialize();
-            PoA.ipUpdaterList.add(send);
+//             String send = ipUpdater.serialize();
+            restart.apply(ipUpdater);
         }
 
         if (block.method.equals("on_leader_beacon")) {
