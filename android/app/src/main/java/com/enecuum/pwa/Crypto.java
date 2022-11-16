@@ -1,5 +1,7 @@
 package com.enecuum.pwa;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 
 import java.io.Console;
@@ -34,7 +36,9 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
 
+
 public class Crypto {
+
     public String sha256(String msg) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -69,7 +73,14 @@ public class Crypto {
     public static String compressPubKey(BigInteger pubKey) {
         String pubKeyYPrefix = pubKey.testBit(0) ? "03" : "02";
         String pubKeyHex = pubKey.toString(16);
+        if(pubKeyHex.length() < 128) {
+            int size = 128 - pubKeyHex.length();
+            for(int i = 0; i < size; i ++){
+                pubKeyHex = "0" + pubKeyHex;
+            }
+        }
         String pubKeyX = pubKeyHex.substring(0, 64);
+//        Log.d("Crypto", "compressPubKey: " + pubKeyHex.length() + " " + pubKeyX);
         return pubKeyYPrefix + pubKeyX;
     }
 
