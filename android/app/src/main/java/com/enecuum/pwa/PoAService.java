@@ -76,12 +76,8 @@ public class PoAService extends Service {
                 if (miners == null) {
                     String jsonString = intent.getStringExtra("miners");
                     accounts = g.fromJson(jsonString, Account[].class);
-//                    net = intent.getStringExtra("net");
-//                    port = intent.getStringExtra("port");
-
-                    net = "95.217.17.178";
-                    port = "4000";
-
+                    net = intent.getStringExtra("net");
+                    port = intent.getStringExtra("port");
                     System.out.println(accounts.length);
                     System.out.println(net);
                     miners = new Miner[accounts.length];
@@ -217,25 +213,25 @@ public class PoAService extends Service {
                 }
             }
         }, 0, 1000);
-        rebootTimer = new Timer();
-        rebootTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    for (Miner miner : miners) {
-                        if (miner.publisher.status.equals("Disconnected")) {
-                            if (!miner.publisher.reboot && miner.publisher.restartMiner && miner.publisher.mining) {
-                                rebootMiner(miner);
-                                Log.d(TAG, String.format("reboot anomaly miner %s", miner.publisher.publicKey.substring(0, 6)));
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    Log.d(TAG, "can't reboot miners");
-                }
-            }
-        }, 1000 * 5, 1000 * 5);
+//        rebootTimer = new Timer();
+//        rebootTimer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                try {
+//                    for (Miner miner : miners) {
+//                        if (miner.publisher.status.equals("Disconnected")) {
+//                            if (!miner.publisher.reboot && miner.publisher.restartMiner && miner.publisher.mining) {
+//                                rebootMiner(miner);
+//                                Log.d(TAG, String.format("reboot anomaly miner %s", miner.publisher.publicKey.substring(0, 6)));
+//                            }
+//                        }
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                    Log.d(TAG, "can't reboot miners");
+//                }
+//            }
+//        }, 1000 * 5, 1000 * 5);5
     }
 
 
@@ -251,8 +247,8 @@ public class PoAService extends Service {
     private void cleanTimer() {
         timer.cancel();
         timer.purge();
-        rebootTimer.cancel();
-        rebootTimer.purge();
+//        rebootTimer.cancel();
+//        rebootTimer.purge();
     }
 
     private void commitSwitch(Miner miner, boolean switcher) {
