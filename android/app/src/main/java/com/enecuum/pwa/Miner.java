@@ -53,6 +53,6 @@ public class Miner {
                 this.referrer = "";
             }
         }
-        this.publisher = new Publisher(url, port, key, token, this.referrer);
+        this.publisher = new Publisher(url, port, key, token, this.referrer, this::restartPublisher);
     }
 }
