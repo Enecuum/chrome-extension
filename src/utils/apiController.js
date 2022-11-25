@@ -24,7 +24,7 @@ const postTransaction = async (transactionObject) => {
 }
 
 const getBalanceAll = async (publicKey) => {
-    return await ENQWeb.Net.get.getBalanceAll(publicKey)
+    return await ENQWeb.Net.get.balance_all_unfiltered(publicKey)
 }
 
 const getMainTokenBalance = async (publicKey) => {
@@ -32,8 +32,8 @@ const getMainTokenBalance = async (publicKey) => {
 }
 
 const getRewards = async (publicKey) => {
-    let response = await fetch(ENQWeb.Net.provider + '/api/v1/account_rewards?id=' + publicKey + '&page=0', {})
-    return response.json()
+    // let response = await fetch(ENQWeb.Net.provider + '/api/v1/account_rewards?id=' + publicKey + '&page=0', {})
+    return await ENQWeb.Net.get.account_rewards(publicKey)
 }
 
 // Need caching here with balance
@@ -105,8 +105,8 @@ const getCoinGeckoPrice = async () => {
 
 const getAllTokens = async () => {
     // console.log(ENQWeb.Enq.token)
-    let response = await fetch(ENQWeb.Enq.provider + '/api/v1/get_tickers_all', {})
-    return response.json()
+    // let response = await fetch(ENQWeb.Enq.provider + '/api/v1/get_tickers_all', {})
+    return await ENQWeb.Net.get.get_tickers_all_unfiltered()
 }
 
 const apiController = {
