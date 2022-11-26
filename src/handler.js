@@ -12,7 +12,7 @@ import { getMiners, initPoa, startPoa, stopPoa, swithMiner, updateToken } from '
 import { getMnemonicPrivateKeyHex } from './ui/Utils'
 import { Capacitor, registerPlugin } from '@capacitor/core'
 import { startBackgroundMining, getMobileMiners, stopMobileMiners } from './mobileBackground'
-import { disconnectFavoriteSite, disconnectPorts, enabledPorts, favoriteSites, ports } from './background'
+// import { disconnectFavoriteSite, disconnectPorts, enabledPorts, favoriteSites, ports } from './background'
 // var cacheStore = window.cacheStore // compiled javascript
 
 let miningStatus = { miningProcess: false }
