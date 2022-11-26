@@ -12,7 +12,6 @@ import { getMiners, initPoa, startPoa, stopPoa, swithMiner, updateToken } from '
 import { getMnemonicPrivateKeyHex } from './ui/Utils'
 import { Capacitor, registerPlugin } from '@capacitor/core'
 import { startBackgroundMining, getMobileMiners, stopMobileMiners } from './mobileBackground'
-// import { disconnectFavoriteSite, disconnectPorts, enabledPorts, favoriteSites, ports } from './background'
 // var cacheStore = window.cacheStore // compiled javascript
 
 let miningStatus = { miningProcess: false }
@@ -785,6 +784,70 @@ function createTabWindow(params = '') {
         .focus()
 }
 
+let ports = {}
+function favoriteSites() {
+    let sites = userStorage.sites.getSites()
+    let list = []
+    for (let i in sites) {
+        if (sites[i] === true) {
+            list.push(i)
+        }
+    }
+    return list
+}
+function enabledPorts() {
+    let list = {}
+    for (let i in ports) {
+        if (ports[i].enabled) {
+            list[i] = ports[i]
+        }
+    }
+    return list
+}
+
+function disconnectPorts(name) {
+    if (!name) {
+        for (let key in ports) {
+            // console.log(key,ports[key]);
+            if (ports[key].name !== 'popup') {
+                ports[key].enabled = false
+            }
+        }
+    } else {
+        ports[name].enabled = false
+    }
+    return true
+}
+function disconnectFavoriteSite(name) {
+    let sites = userStorage.sites.getSites()
+    if (sites[name] === true) {
+        sites[name] = false
+        userStorage.sites.setSites(sites)
+    }
+}
+
+function checkConnection() {
+    // console.log("check live")
+    if (Object.keys(ports).length > 0) {
+        for (let i in ports) {
+            // if (i === 'popup') {
+            //     continue
+            // }
+            for (let j in ports[i]) {
+                if (j === 'enabled') {
+                    continue
+                }
+                try {
+                    ports[i][j].postMessage({ check: 'are u live?' })
+                } catch (e) {
+                    // console.log("deleted")
+                    delete ports[i][j]
+                }
+            }
+        }
+    }
+}
+
 export {
-    createPopupWindow, createTabWindow, webBackground, taskHandler
+    createPopupWindow, createTabWindow, webBackground, taskHandler, ports, favoriteSites, enabledPorts, disconnectPorts, disconnectFavoriteSite, checkConnection
 }

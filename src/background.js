@@ -5,6 +5,7 @@ import { lockAccount, say } from './lockAccount'
 import { createPopupWindow, globalMessageHandler } from './handler'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import { apiController } from './utils/apiController'
+import { disconnectFavoriteSite, disconnectPorts, enabledPorts, favoriteSites, ports, checkConnection } from './handler'
 // import {startPoa} from "./utils/poa/index"
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -21,7 +22,7 @@ say()
 const Storage = require('./utils/localStorage')
 global.userStorage = new Storage('background')
 
-let ports = {}
+// let ports = {}
 let requestQueue = {}
 let limitOfTransactions = 10
 
@@ -294,26 +295,26 @@ async function msgPopupHandler(msg, sender) {
     }
 }
 
-function enabledPorts() {
-    let list = {}
-    for (let i in ports) {
-        if (ports[i].enabled) {
-            list[i] = ports[i]
-        }
-    }
-    return list
-}
+// function enabledPorts() {
+//     let list = {}
+//     for (let i in ports) {
+//         if (ports[i].enabled) {
+//             list[i] = ports[i]
+//         }
+//     }
+//     return list
+// }
 
-function favoriteSites() {
-    let sites = userStorage.sites.getSites()
-    let list = []
-    for (let i in sites) {
-        if (sites[i] === true) {
-            list.push(i)
-        }
-    }
-    return list
-}
+// function favoriteSites() {
+//     let sites = userStorage.sites.getSites()
+//     let list = []
+//     for (let i in sites) {
+//         if (sites[i] === true) {
+//             list.push(i)
+//         }
+//     }
+//     return list
+// }
 
 function listPorts() {
     global.ports = ports
@@ -346,51 +347,51 @@ function connectController(port) {
     }
 }
 
-function checkConnection() {
-    // console.log("check live")
-    if (Object.keys(ports).length > 0) {
-        for (let i in ports) {
-            // if (i === 'popup') {
-            //     continue
-            // }
-            for (let j in ports[i]) {
-                if (j === 'enabled') {
-                    continue
-                }
-                try {
-                    ports[i][j].postMessage({ check: 'are u live?' })
-                } catch (e) {
-                    // console.log("deleted")
-                    delete ports[i][j]
-                }
-            }
-        }
-    }
-}
+// function checkConnection() {
+//     // console.log("check live")
+//     if (Object.keys(ports).length > 0) {
+//         for (let i in ports) {
+//             // if (i === 'popup') {
+//             //     continue
+//             // }
+//             for (let j in ports[i]) {
+//                 if (j === 'enabled') {
+//                     continue
+//                 }
+//                 try {
+//                     ports[i][j].postMessage({ check: 'are u live?' })
+//                 } catch (e) {
+//                     // console.log("deleted")
+//                     delete ports[i][j]
+//                 }
+//             }
+//         }
+//     }
+// }
 
 global.ports = ports
 
-function disconnectPorts(name) {
-    if (!name) {
-        for (let key in ports) {
-            // console.log(key,ports[key]);
-            if (ports[key].name !== 'popup') {
-                ports[key].enabled = false
-            }
-        }
-    } else {
-        ports[name].enabled = false
-    }
-    return true
-}
+// function disconnectPorts(name) {
+//     if (!name) {
+//         for (let key in ports) {
+//             // console.log(key,ports[key]);
+//             if (ports[key].name !== 'popup') {
+//                 ports[key].enabled = false
+//             }
+//         }
+//     } else {
+//         ports[name].enabled = false
+//     }
+//     return true
+// }
 
-function disconnectFavoriteSite(name) {
-    let sites = userStorage.sites.getSites()
-    if (sites[name] === true) {
-        sites[name] = false
-        userStorage.sites.setSites(sites)
-    }
-}
+// function disconnectFavoriteSite(name) {
+//     let sites = userStorage.sites.getSites()
+//     if (sites[name] === true) {
+//         sites[name] = false
+//         userStorage.sites.setSites(sites)
+//     }
+// }
 
 global.disconnectPorts = disconnectPorts
 
@@ -654,7 +655,7 @@ async function connectHandler(port) {
     }
     listPorts()
 }
-export {ports, favoriteSites, enabledPorts, disconnectPorts, disconnectFavoriteSite, checkConnection}
+// export {ports, favoriteSites, enabledPorts, disconnectPorts, disconnectFavoriteSite, checkConnection}
 
 document.addEventListener('DOMContentLoaded', () => {
     setupApp()
