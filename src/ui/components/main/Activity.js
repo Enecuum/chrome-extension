@@ -29,6 +29,12 @@ export default function Activity(props) {
         return ticker
     }
 
+    const updateActivityTask = ()=>{
+        let updater = setInterval(()=>{
+            setActivity(userStorage.list.listOfTask())
+        },1000)
+    }
+
     const getHistory = async () => {
 
         // console.log('getHistory')
@@ -228,6 +234,8 @@ export default function Activity(props) {
 
         getHistory()
             .then()
+
+        updateActivityTask()
 
         let isMounted = true
         return () => {

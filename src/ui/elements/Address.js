@@ -40,6 +40,9 @@ export default function Address(props) {
 
     useEffect(() => {
         checkConnect(props.connectionsCounter).then()
+        let a = setInterval(()=>{
+            checkConnect(props.connectionsCounter).then()
+        }, 1000)
     })
 
     useEffect(() => {
