@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 import elements from '../css/elements.module.css'
 import {copyToClipboard, shortHash} from '../Utils'
 import styles from '../css/index.module.css'
-import { apiController } from '../../utils/apiController'
+import {apiController} from '../../utils/apiController'
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
@@ -40,7 +40,8 @@ export default function Address(props) {
 
     useEffect(() => {
         checkConnect(props.connectionsCounter).then()
-        let a = setInterval(()=>{
+        // TODO
+        let a = setInterval(() => {
             checkConnect(props.connectionsCounter).then()
         }, 1000)
     })
@@ -65,10 +66,10 @@ export default function Address(props) {
                 }
             })
         }
-        const favorite = (await asyncRequest({ favoriteList: true })).ports
+        const favorite = (await asyncRequest({favoriteList: true})).ports
         if (status.startsWith('Connected') || favorite.length > 0) {
 
-            const ports = (await asyncRequest({ connectionList: true })).ports
+            const ports = (await asyncRequest({connectionList: true})).ports
             props.setConnects(ports)
         }
     }

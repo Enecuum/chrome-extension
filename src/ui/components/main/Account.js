@@ -52,7 +52,7 @@ export default function Account(props) {
 
     const [isMiningToken, setMiningToken] = useState(true)
 
-    const [ActivityString, setActivityString] = useState(activity.length > 0 ? <sup>{activity.length}</sup> : '')
+    const [activityString, setActivityString] = useState(activity.length > 0 ? <sup>{activity.length}</sup> : '')
 
     const clickMenu = () => {
         setMenu(!menu)
@@ -524,7 +524,7 @@ export default function Account(props) {
                         onClick={() => setActiveTab(1)}
                         className={(activeTab === 1 ? ` ${styles.bottom_tab_active}` : '')}
                     >
-                        Activity {ActivityString}
+                        Activity {activityString}
                     </div>
                     {isConnects && activeTab === 2 && <div
                         onClick={() => setActiveTab(2)}

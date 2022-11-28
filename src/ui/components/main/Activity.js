@@ -1,8 +1,8 @@
 import styles from '../../css/index.module.css'
-import React, { useEffect, useState } from 'react'
-import { explorerAddress, explorerTX, shortHash } from '../../Utils'
-import { apiController } from '../../../utils/apiController'
-import { globalState } from '../../../globalState'
+import React, {useEffect, useState} from 'react'
+import {explorerAddress, explorerTX, shortHash} from '../../Utils'
+import {apiController} from '../../../utils/apiController'
+import {globalState} from '../../../globalState'
 
 const names = {
     enable: 'Share account address',
@@ -29,10 +29,10 @@ export default function Activity(props) {
         return ticker
     }
 
-    const updateActivityTask = ()=>{
-        let updater = setInterval(()=>{
+    const updateActivityTask = () => {
+        let updater = setInterval(() => {
             setActivity(userStorage.list.listOfTask())
-        },1000)
+        }, 1000)
     }
 
     const getHistory = async () => {
@@ -160,16 +160,16 @@ export default function Activity(props) {
                         <div className={styles.activity_data}>
                             {item.type === 'iout' ?
                                 <div>{(item.tx.value ?
-                                    ((item.tx.value) / (props.decimals[item.tx.tokenHash] || 1e10)) :
-                                    (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10)))
-                                + ' ' +
-                                (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
+                                        ((item.tx.value) / (props.decimals[item.tx.tokenHash] || 1e10)) :
+                                        (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10)))
+                                    + ' ' +
+                                    (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>
                                 :
                                 <div>{(item.tx.value ?
-                                    ((item.tx.value - item.tx.fee_value) / (props.decimals[item.tx.tokenHash] || 1e10)) :
-                                    (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10)))
-                                + ' ' +
-                                (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>}
+                                        ((item.tx.value - item.tx.fee_value) / (props.decimals[item.tx.tokenHash] || 1e10)) :
+                                        (item.tx.amount / (props.decimals[item.tx.tokenHash] || 1e10)))
+                                    + ' ' +
+                                    (item.tx.ticker ? item.tx.ticker : 'COIN')}</div>}
 
 
                         </div> : ''}
@@ -181,7 +181,7 @@ export default function Activity(props) {
 
     //Reject all
     let rejectAll = async () => {
-        await asyncRequest({ reject_all: true })
+        await asyncRequest({reject_all: true})
         setActivity([])
     }
 
