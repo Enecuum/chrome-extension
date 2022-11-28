@@ -52,6 +52,8 @@ export default function Account(props) {
 
     const [isMiningToken, setMiningToken] = useState(true)
 
+    const [ActivityString, setActivityString] = useState(activity.length > 0 ? <sup>{activity.length}</sup> : '')
+
     const clickMenu = () => {
         setMenu(!menu)
     }
@@ -321,7 +323,12 @@ export default function Account(props) {
                     getBalance()
                         .then()
                     getConnects()
-                        .then()
+                        .then(()=>{
+                            let a = setInterval(()=>{
+                                getConnects().then()
+                                updateActivity()
+                            },1000)
+                        })
                 }
             })
 
@@ -412,6 +419,12 @@ export default function Account(props) {
 
     BigInt.prototype.toJSON = function () {
         return this.toString()
+    }
+
+    const updateActivity = ()=>{
+        let update = userStorage.list.listOfTask()
+        setActivity(update)
+        setActivityString(update.length > 0 ? <sup>{update.length}</sup> : '')
     }
 
     const addUserTrustedToken = (item) => {
@@ -511,7 +524,7 @@ export default function Account(props) {
                         onClick={() => setActiveTab(1)}
                         className={(activeTab === 1 ? ` ${styles.bottom_tab_active}` : '')}
                     >
-                        Activity {activity.length > 0 ? <sup>{activity.length}</sup> : ''}
+                        Activity {ActivityString}
                     </div>
                     {isConnects && activeTab === 2 && <div
                         onClick={() => setActiveTab(2)}
@@ -538,6 +551,7 @@ export default function Account(props) {
                           setPublicKeyRequest={props.setPublicKeyRequest}
                           setSignRequest={props.setSignRequest}
                           getMainToken={getMainToken}
+                          updateActivity={updateActivity}
                 />
 
                 <div

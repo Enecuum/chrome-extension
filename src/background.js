@@ -5,6 +5,7 @@ import { lockAccount, say } from './lockAccount'
 import { createPopupWindow, globalMessageHandler } from './handler'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
 import { apiController } from './utils/apiController'
+import { disconnectFavoriteSite, disconnectPorts, enabledPorts, favoriteSites, ports, checkConnection } from './handler'
 // import {startPoa} from "./utils/poa/index"
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -21,7 +22,7 @@ say()
 const Storage = require('./utils/localStorage')
 global.userStorage = new Storage('background')
 
-let ports = {}
+// let ports = {}
 let requestQueue = {}
 let limitOfTransactions = 10
 
@@ -134,7 +135,7 @@ async function msgConnectHandler(msg, sender) {
 
                 if (typeof msg.data !== 'object' || msg.data.version < VALID_VERSION_LIB) {
                     console.log('old version of ENQWeb lib')
-                    rejectTaskHandler(msg.taskId, 'old version')
+                    await rejectTaskHandler(msg.taskId, 'old version')
                     return
                 } else {
                     if (sites[msg.cb.url] === true && !lock) {
@@ -155,7 +156,7 @@ async function msgConnectHandler(msg, sender) {
                     type: msg.type,
                     cb: msg.cb
                 })
-                taskHandler(msg.taskId)
+                await taskHandler(msg.taskId)
             }
         } else {
             if (msg.type === 'tx') {
@@ -167,7 +168,7 @@ async function msgConnectHandler(msg, sender) {
                 })
                 if (requestQueue[msg.cb.url] >= limitOfTransactions) {
                     console.log('too many requests')
-                    rejectTaskHandler(msg.taskId, `too many requests`)
+                    await rejectTaskHandler(msg.taskId, `too many requests`)
                     requestQueue[msg.cb.url] += 1
                     return false
                 } else {
@@ -177,7 +178,7 @@ async function msgConnectHandler(msg, sender) {
                 if (msg.data.net.length > 0) {
                     if (msg.data.net !== ENQWeb.Enq.User.net) {
                         console.log('bad net work')
-                        rejectTaskHandler(msg.taskId, `Network mismatch. Set ${msg.data.net}`)
+                        await rejectTaskHandler(msg.taskId, `Network mismatch. Set ${msg.data.net}`)
                         return false
                     }
                 }
@@ -233,14 +234,14 @@ async function msgConnectHandler(msg, sender) {
 async function msgPopupHandler(msg, sender) {
     if (msg.popup) {
     } else if (msg.connectionList) {
-        ports.popup.postMessage({
+        sender.postMessage({
             asyncAnswer: true,
             data: msg,
             ports: enabledPorts()
         })
     } else if (msg.favoriteList) {
 
-        ports.popup.postMessage({
+        sender.postMessage({
             asyncAnswer: true,
             data: msg,
             ports: favoriteSites()
@@ -251,7 +252,7 @@ async function msgPopupHandler(msg, sender) {
                 .then(() => {
                     taskCounter()
                     if (msg.async) {
-                        ports.popup.postMessage({
+                        sender.postMessage({
                             asyncAnswer: true,
                             data: msg
                         })
@@ -260,7 +261,7 @@ async function msgPopupHandler(msg, sender) {
                 .catch(err => {
                     console.warn(err)
                     if (msg.async) {
-                        ports.popup.postMessage({
+                        sender.postMessage({
                             asyncAnswer: true,
                             data: { status: 'reject' }
                         })
@@ -271,7 +272,7 @@ async function msgPopupHandler(msg, sender) {
             await rejectTaskHandler(msg.taskId)
             taskCounter()
             if (msg.async) {
-                ports.popup.postMessage({
+                sender.postMessage({
                     asyncAnswer: true,
                     data: msg
                 })
@@ -283,7 +284,7 @@ async function msgPopupHandler(msg, sender) {
             }
             taskCounter()
             if (msg.async) {
-                ports.popup.postMessage({
+                sender.postMessage({
                     asyncAnswer: true,
                     data: msg
                 })
@@ -294,26 +295,26 @@ async function msgPopupHandler(msg, sender) {
     }
 }
 
-function enabledPorts() {
-    let list = {}
-    for (let i in ports) {
-        if (ports[i].enabled) {
-            list[i] = ports[i]
-        }
-    }
-    return list
-}
+// function enabledPorts() {
+//     let list = {}
+//     for (let i in ports) {
+//         if (ports[i].enabled) {
+//             list[i] = ports[i]
+//         }
+//     }
+//     return list
+// }
 
-function favoriteSites() {
-    let sites = userStorage.sites.getSites()
-    let list = []
-    for (let i in sites) {
-        if (sites[i] === true) {
-            list.push(i)
-        }
-    }
-    return list
-}
+// function favoriteSites() {
+//     let sites = userStorage.sites.getSites()
+//     let list = []
+//     for (let i in sites) {
+//         if (sites[i] === true) {
+//             list.push(i)
+//         }
+//     }
+//     return list
+// }
 
 function listPorts() {
     global.ports = ports
@@ -328,7 +329,11 @@ function disconnectHandler(port) {
 
 function connectController(port) {
     if (port.name === 'popup') {
-        ports[port.name] = port
+        if(!ports[port.name]){
+            ports[port.name] = [];
+        }
+        port.id = ports[port.name].length
+        ports[port.name].push(port)
         return
     }
     if (ports[port.name]) {
@@ -342,51 +347,51 @@ function connectController(port) {
     }
 }
 
-function checkConnection() {
-    // console.log("check live")
-    if (Object.keys(ports).length > 0) {
-        for (let i in ports) {
-            if (i === 'popup') {
-                continue
-            }
-            for (let j in ports[i]) {
-                if (j === 'enabled') {
-                    continue
-                }
-                try {
-                    ports[i][j].postMessage({ check: 'are u live?' })
-                } catch (e) {
-                    // console.log("deleted")
-                    delete ports[i][j]
-                }
-            }
-        }
-    }
-}
+// function checkConnection() {
+//     // console.log("check live")
+//     if (Object.keys(ports).length > 0) {
+//         for (let i in ports) {
+//             // if (i === 'popup') {
+//             //     continue
+//             // }
+//             for (let j in ports[i]) {
+//                 if (j === 'enabled') {
+//                     continue
+//                 }
+//                 try {
+//                     ports[i][j].postMessage({ check: 'are u live?' })
+//                 } catch (e) {
+//                     // console.log("deleted")
+//                     delete ports[i][j]
+//                 }
+//             }
+//         }
+//     }
+// }
 
 global.ports = ports
 
-function disconnectPorts(name) {
-    if (!name) {
-        for (let key in ports) {
-            // console.log(key,ports[key]);
-            if (ports[key].name !== 'popup') {
-                ports[key].enabled = false
-            }
-        }
-    } else {
-        ports[name].enabled = false
-    }
-    return true
-}
+// function disconnectPorts(name) {
+//     if (!name) {
+//         for (let key in ports) {
+//             // console.log(key,ports[key]);
+//             if (ports[key].name !== 'popup') {
+//                 ports[key].enabled = false
+//             }
+//         }
+//     } else {
+//         ports[name].enabled = false
+//     }
+//     return true
+// }
 
-function disconnectFavoriteSite(name) {
-    let sites = userStorage.sites.getSites()
-    if (sites[name] === true) {
-        sites[name] = false
-        userStorage.sites.setSites(sites)
-    }
-}
+// function disconnectFavoriteSite(name) {
+//     let sites = userStorage.sites.getSites()
+//     if (sites[name] === true) {
+//         sites[name] = false
+//         userStorage.sites.setSites(sites)
+//     }
+// }
 
 global.disconnectPorts = disconnectPorts
 
@@ -591,13 +596,14 @@ async function taskHandler(taskId) {
     return true
 }
 
-function rejectTaskHandler(taskId, reason = 'rejected') {
+async function rejectTaskHandler(taskId, reason = 'rejected') {
     let task = userStorage.task.getTask(taskId)
     userStorage.task.removeTask(taskId)
     let data = {
         reject: true,
         data: reason
     }
+    console.log(task)
     broadcast(task.cb.url, {
         data: JSON.stringify(data),
         taskId: taskId,
@@ -649,11 +655,9 @@ async function connectHandler(port) {
     }
     listPorts()
 }
+// export {ports, favoriteSites, enabledPorts, disconnectPorts, disconnectFavoriteSite, checkConnection}
 
 document.addEventListener('DOMContentLoaded', () => {
     setupApp()
     setInterval(checkConnection, 1000 * 5)
 })
-
-
-export {ports, favoriteSites, enabledPorts, disconnectPorts, disconnectFavoriteSite, checkConnection}
