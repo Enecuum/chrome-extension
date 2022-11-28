@@ -7,8 +7,9 @@ import Input from "../elements/Input";
 import { taskHandler, webBackground } from '../../handler'
 
 // let defaultUrl = 'http://localhost:1234/#!action=swap'
-let defaultUrl = 'https://devapp.enex.space/#!action=swap'
+// let defaultUrl = 'https://devapp.enex.space/#!action=swap'
 // let defaultUrl = 'http://95.216.207.173:9990/testing1'
+let defaultUrl = 'https://app.enex.space/#!action=swap'
 
 export default function WebView(props) {
 
