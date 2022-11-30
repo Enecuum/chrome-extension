@@ -35,7 +35,7 @@ import QRCamera from "./components/QRCamera";
 
 let net = localStorage.getItem(NET)
 if (!net) {
-    net = 'bit'
+    net = 'pulse'
     localStorage.setItem(NET, net)
 }
 
