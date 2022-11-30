@@ -4,6 +4,7 @@ const bip32 = require("bip32");
 const {Clipboard} = require("@capacitor/clipboard");
 const {LocalNotifications} = require("@capacitor/local-notifications");
 const trustedTokens = require("../utils/tokenList");
+const {apiController} = require("../utils/apiController");
 
 let regexData = /^[0-9a-zA-Z _\-/.]{0,512}$/
 let regexAddress = /^(02|03)[0-9a-fA-F]{64}$/
@@ -65,16 +66,16 @@ let test = () => {
     //     net.replace('https://', '').replace('http://', '').toUpperCase()
 }
 
-let getIcons = () => {
+let getIcons = (tokens = trustedTokens) => {
     let icons = {
         '0000000000000000000000000000000000000000000000000000000000000000': './images/enq.png',
         '0000000000000000000000000000000000000000000000000000000000000001': './images/bit.png',
         '824e7b171c01e971337c1b25a055023dd53c003d4aa5aa8b58a503d7c622651e': './images/enex.png',
     }
 
-    console.log(trustedTokens)
+    // console.log(trustedTokens)
 
-    trustedTokens.map((tokenObject) => {
+    tokens.map((tokenObject) => {
         icons[tokenObject.address] = tokenObject.logoURI
     })
 
@@ -82,6 +83,11 @@ let getIcons = () => {
 }
 
 let icons = getIcons()
+
+apiController.getServerTokenList().then(tokens => {
+    icons = getIcons(tokens)
+    console.warn(icons)
+})
 
 const generateIcon = (token) => {
     if (icons[token])
