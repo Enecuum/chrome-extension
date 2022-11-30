@@ -106,7 +106,7 @@ export default function WebView(props) {
                     break
                 case 'getProvider':
                     ENQWeb.Net.provider = account.net
-                    if (task.cb.fullUrl) {
+                    if (data.cb.fullUrl) {
                         response = {net: ENQWeb.Net.provider}
                     } else {
                         response = {net: ENQWeb.Net.currentProvider}
