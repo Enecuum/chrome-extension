@@ -15,9 +15,9 @@ import {globalState} from '../../../globalState'
 let tickers = {}
 let decimals = {}
 
-let trustedTokens = apiController.getTokenList()
-
 export default function Account(props) {
+
+    const [trustedTokens, setTrustedTokens] = useState(apiController.getTokenList())
 
     global.setIframeWork(false)
 
@@ -314,8 +314,7 @@ export default function Account(props) {
 
     useEffect(() => {
 
-        props.user.token && props.user.token !== ENQWeb.Enq.token[ENQWeb.Enq.provider] ? setActiveTab(1) : () => {
-        }
+        props.user.token && props.user.token !== ENQWeb.Enq.token[ENQWeb.Enq.provider] ? setActiveTab(1) : () => {}
 
         openPopup()
             .then(async result => {
@@ -336,6 +335,10 @@ export default function Account(props) {
         return () => {
             isMounted = false
         }
+
+        apiController.getServerTokenList().then(tokens => {
+            setTrustedTokens(tokens)
+        })
 
     }, [usd, activeTab, userTrustedTokens, props.user])
 

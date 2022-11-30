@@ -2,7 +2,7 @@
     "name": "Enecuum",
     "short_name": "Enecuum",
     "description": "Enecuum Wallet",
-    "version": "0.5.4",
+    "version": "0.5.5",
     "manifest_version": 2,
     "background": {
         "persistent": true,

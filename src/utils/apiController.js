@@ -87,10 +87,11 @@ const getTransaction = async (transactionHash) => {
 }
 
 const getTokenList = () => {
-
-    // let serverTokens = await ENQWeb.Net.get.tokenList()
-
     return trustedTokens
+}
+
+const getServerTokenList = async () => {
+    return await apiController.sendRequest('https://app.enex.space/token_list')
 }
 
 const getCoinGeckoPrice = async () => {
@@ -119,6 +120,7 @@ const apiController = {
     getAccountTransactions,
     getTransaction,
     getTokenList,
+    getServerTokenList,
     sendTransaction,
     sendAPI,
     sendRequest,

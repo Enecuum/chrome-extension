@@ -4,8 +4,6 @@ import Input from "../../elements/Input";
 import {apiController} from "../../../utils/apiController";
 import {generateIcon, shortHashLong} from "../../Utils";
 
-let trustedTokens = apiController.getTokenList()
-console.warn('Assets')
 
 export default function Assets(props) {
 
@@ -15,6 +13,7 @@ export default function Assets(props) {
     // }
 
     // console.log(props.user)
+    const [trustedTokens, setTrustedTokens] = useState(apiController.getTokenList())
 
     const [isShowUntrustedTokens, setShowUntrustedTokens] = useState(false)
     const [isShowAddToken, setShowAddToken] = useState(false)
@@ -179,6 +178,10 @@ export default function Assets(props) {
 
         apiController.getAllTokens().then(tokens => {
             setTokens(tokens)
+        })
+
+        apiController.getServerTokenList().then(tokens => {
+            setTrustedTokens(tokens)
         })
 
     }, [])
