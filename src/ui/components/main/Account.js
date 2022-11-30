@@ -331,14 +331,14 @@ export default function Account(props) {
                 }
             })
 
+        apiController.getServerTokenList().then(tokens => {
+            setTrustedTokens(tokens)
+        })
+
         let isMounted = true
         return () => {
             isMounted = false
         }
-
-        apiController.getServerTokenList().then(tokens => {
-            setTrustedTokens(tokens)
-        })
 
     }, [usd, activeTab, userTrustedTokens, props.user])
 
