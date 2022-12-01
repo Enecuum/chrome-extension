@@ -143,7 +143,7 @@ export default function App(props) {
     const lockChecker = () => {
         setInterval(() => {
             setLock(checkLock(false))
-        }, 10 * 1000)
+        }, 1000)
     }
 
     lockChecker()
@@ -201,7 +201,6 @@ export default function App(props) {
                 setLogin(true)
                 setPassword(true)
                 // setPassword(true)
-
                 localStorage.removeItem(NET)
 
                 location.reload(false)

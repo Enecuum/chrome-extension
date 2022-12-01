@@ -95,7 +95,11 @@ function messageHandler(msg, sender, sendResponse) {
     }
 
     if (msg.account && msg.logout) {
-        ports = {}
+        try{
+            ports = {}
+        }catch (e) {
+
+        }
     }
 
     globalMessageHandler(msg, ENQWeb)
