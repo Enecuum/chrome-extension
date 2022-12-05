@@ -168,7 +168,17 @@ export default function WebView(props) {
 
     messageListenerSetup(onMessage)
 
-
+    let links = {
+        'https://bit.enecuum.com': [
+            <div onClick={() => setUrl('https://app.enex.space')}>ENEX</div>,
+            <div onClick={() => setUrl('https://bit-wallet.enecuum.com')}>WALLET</div>,
+            <div onClick={() => setUrl('https://faucet-bit.enecuum.com')}>FAUCET</div>,
+        ],
+        'https://pulse.enecuum.com': [
+            <div onClick={() => setUrl('https://app.enex.space')}>ENEX</div>,
+            <div onClick={() => setUrl('https://wallet.enecuum.com')}>WALLET</div>,
+        ],
+    }
     return (
         <div className={styles.main}>
 
@@ -198,10 +208,7 @@ export default function WebView(props) {
 
 
             <div className={styles.dapps}>
-                <div onClick={() => setUrl('https://app.enex.space')}>ENEX</div>
-                <div onClick={() => setUrl('https://bit-wallet.enecuum.com')}>WALLET</div>
-                <div onClick={() => setUrl('https://faucet-bit.enecuum.com')}>FAUCET</div>
-                <div onClick={() => {}}>SAVE</div>
+                {links[props.user.net] ? links[props.user.net] : links['https://pulse.enecuum.com']}
             </div>
 
             {/*<iframe src={url}/>*/}
