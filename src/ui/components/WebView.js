@@ -179,6 +179,7 @@ export default function WebView(props) {
             <div onClick={() => setUrl('https://wallet.enecuum.com')}>WALLET</div>,
         ],
     }
+
     return (
         <div className={styles.main}>
 
