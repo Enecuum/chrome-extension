@@ -103,6 +103,11 @@ export default class Transaction extends React.Component {
         // console.log(e.target.value)
         // console.log(typeof e.target.value)
 
+        if (e.target.value === '') {
+            this.setState({ amount: '' })
+            return
+        }
+
         if (e.target.value === '00') {
             //TODO
             this.setState({ amount: '0' })
