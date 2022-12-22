@@ -86,7 +86,7 @@ let icons = getIcons()
 
 apiController.getServerTokenList().then(tokens => {
     icons = getIcons(tokens)
-    console.warn(icons)
+    // console.warn(icons)
 })
 
 const generateIcon = (token) => {

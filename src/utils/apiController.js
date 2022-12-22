@@ -91,7 +91,24 @@ const getTokenList = () => {
 }
 
 const getServerTokenList = async () => {
-    return await apiController.sendRequest('https://app.enex.space/token_list')
+
+    // await apiController.sendRequest('https://devapp.enex.space/token_list')
+
+    // console.log('getServerTokenList')
+
+    // console.warn()
+
+    const response = await fetch(ENQWeb.Enq.provider + '/info/token_list.json', {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    })
+
+    const list = await response.json()
+    return list.tokens
 }
 
 const getCoinGeckoPrice = async () => {
