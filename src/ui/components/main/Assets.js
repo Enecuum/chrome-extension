@@ -189,6 +189,8 @@ export default function Assets(props) {
     return (
         <div className={styles.bottom_assets + (props.activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
 
+            <div className={styles.token_list}>Enecuum Default Token List</div>
+
             {renderAssets(true)}
 
             {renderAddedElements()}
@@ -198,6 +200,9 @@ export default function Assets(props) {
             }} className={`${styles.field} ${styles.button}`}>
                 Add token
             </div> : renderAddToken()}
+
+            {/*<div onClick={() => setShowUntrustedTokens(true)}*/}
+            {/*     className={`${styles.field} ${styles.button}`}>Add Token List</div>*/}
 
             {findTokens.length > 0 ? <div className={styles.find}>
                 <div className={`${styles.field}`}>FOUND:</div>

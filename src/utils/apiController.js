@@ -98,7 +98,7 @@ const getServerTokenList = async () => {
 
     // console.warn()
 
-    const response = await fetch(ENQWeb.Enq.provider + '/info/token_list.json', {
+    const response = await fetch('https://app.enecuum.com/default_token_list.json', {
         method: 'GET',
         mode: 'cors',
         headers: {

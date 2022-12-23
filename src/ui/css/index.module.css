@@ -701,6 +701,14 @@ input[type=number] {
 /*    box-shadow: none;*/
 /*}*/
 
+.token_list {
+    width: 100%;
+    padding: 10px 10px;
+    text-align: right;
+    font-weight: 300;
+    background: var(--color-blue-background);
+}
+
 .icon {
     height: 15px;
 
