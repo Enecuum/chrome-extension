@@ -56,21 +56,33 @@ export default class Password extends React.Component {
                 })
                     .then(data => {
                         if (data) {
-                            userStorage.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
-                            userStorage.lock.setLock(false)
                             userStorage.promise.sendPromise({
                                 account: true,
                                 encrypt: true,
-                                again: true,
-                                data: this.props.user
+                                set: this.state.password1
                             })
-                            this.props.setPassword(false)
+                                .then(() => {
+                                    userStorage.lock.setPassword(true)
+                                    userStorage.lock.setLock(false)
+                                    userStorage.promise.sendPromise({
+                                        account: true,
+                                        encrypt: true,
+                                        again: true,
+                                        data: this.props.user
+                                    })
+                                    this.props.setPassword(false)
+                                })
                         } else {
                             this.setState({ incorrectOld: true })
                         }
                     })
             } else {
-                userStorage.lock.setPassword(ENQWeb.Utils.crypto.strengthenPassword('salt*/-+^' + this.state.password1))
+                userStorage.lock.setPassword(true)
+                userStorage.promise.sendPromise({
+                    account: true,
+                    encrypt: true,
+                    set: this.state.password1
+                })
                 userStorage.lock.setLock(false)
                 this.props.setPassword(false)
             }
@@ -96,7 +108,7 @@ export default class Password extends React.Component {
                     }
 
                     {!this.props.publicKey &&
-                        <div className={styles.welcome2}>Please set a Password to initialize</div>
+                    <div className={styles.welcome2}>Please set a Password to initialize</div>
                     }
                     {!this.props.publicKey &&
                     <div className={styles.welcome2}> the application.</div>
