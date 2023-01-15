@@ -46,7 +46,6 @@ let globalState = {
         globalState.state[network].tokens[publicKey] = tokens
 
         globalState.state[network].balances[publicKey] = globalState.state[network].balances[publicKey] ? globalState.state[network].balances[publicKey] : {}
-
         for (let i = 0; i < tokens.length; i++) {
             globalState.state[network].balances[publicKey][tokens[i].token] = tokens[i].amount.toString()
         }

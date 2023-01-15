@@ -87,22 +87,30 @@ export default function Account(props) {
         const currentToken = props.user.token ? props.user.token : mainToken
 
         let tokens = []
+        try {
+            let globalStateBalances = globalState.getTokenBalance(ENQWeb.Enq.provider, props.user.publicKey, currentToken)
+            // console.log('SET GLOBAL STATE AMOUNT: ' + globalStateBalances.amount)
+            setAmount(globalStateBalances.amount)
+            setTicker(globalStateBalances.ticker)
+            setLogo(generateIcon(currentToken))
+            setAmountDecimal(10 ** (globalStateBalances.decimal || 10))
+        }catch (e) {
+            console.warn("wrong data in global state!\n")
+            console.error(e)
+        }
 
-        let globalStateBalances = globalState.getTokenBalance(ENQWeb.Enq.provider, props.user.publicKey, currentToken)
-        // console.log('SET GLOBAL STATE AMOUNT: ' + globalStateBalances.amount)
-        setAmount(globalStateBalances.amount)
-        setTicker(globalStateBalances.ticker)
-        setLogo(generateIcon(currentToken))
-        setAmountDecimal(10 ** (globalStateBalances.decimal || 10))
 
         await apiController.getBalanceAll(props.user.publicKey).then(async (res) => {
 
             let headerLoader2 = document.getElementById('header_loader')
             headerLoader2.style.width = '95%'
 
-            globalState.setBalanceData(ENQWeb.Enq.provider, props.user.publicKey, res)
-            globalState.save().then()
-
+            if(res.includes("<!DOCTYPE")){
+                console.warn("server is down")
+            }else{
+                globalState.setBalanceData(ENQWeb.Enq.provider, props.user.publicKey, res)
+                globalState.save().then()
+            }
             let amount = BigInt(0)
             let ticker = ''
             let decimal = 10
