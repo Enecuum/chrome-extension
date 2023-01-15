@@ -7,7 +7,9 @@ const {
     LOCK,
     CONFIG,
     TOKENS,
-    SITES
+    SITES,
+    TRUSTED_TOKENS,
+    STATE
 } = require('./names')
 const indexDB = require('./indexDB')
 const {
@@ -401,6 +403,24 @@ function setSites(obj) {
     return true
 }
 
+let getUserTrustedTokens = () => {
+    let tokens = JSON.parse(localStorage.getItem(TRUSTED_TOKENS + ':' + ENQWeb.Enq.provider))
+    return tokens ? tokens : []
+}
+
+let setUserTrustedTokens = (tokens) => {
+    localStorage.setItem(TRUSTED_TOKENS + ':' + ENQWeb.Enq.provider, JSON.stringify(tokens))
+}
+
+let getState = () => {
+    let state = JSON.parse(localStorage.getItem(STATE))
+    return state ? state : {}
+}
+
+let setState = (state) => {
+    localStorage.setItem(STATE, JSON.stringify(state))
+    return true
+}
 // TODO constructor
 function Storage(name) {
 
@@ -453,7 +473,9 @@ function Storage(name) {
     this.tokens = {
         getTokens,
         setTokens,
-        clearTokens
+        clearTokens,
+        getUserTrustedTokens,
+        setUserTrustedTokens
     }
     this.sites = {
         getSites,
@@ -462,6 +484,10 @@ function Storage(name) {
     }
     this.promise = {
         sendPromise
+    }
+    this.state = {
+        getState,
+        setState
     }
 }
 
