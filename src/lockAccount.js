@@ -1,6 +1,8 @@
 // TODO We have to renew timer every event
 // TODO
 
+import { PASSWORD_VERSION } from './utils/names'
+
 let lockTime = 10 * 60 * 1000 * 6 * 100 // 100 hours
 import eventBus from './utils/eventBus'
 
@@ -11,7 +13,8 @@ console.log('Lock time: ' + (lockTime / 1000) + ' sec.')
 // let lockTime = 10 * 1000
 
 let SALT = 'salt*/-+^'
-let PASSWORD = ""
+let PASSWORD = ''
+let password_version = '2.0'
 
 function lockAccount(timer = false) {
 
@@ -53,7 +56,6 @@ function encryptAccount() {
         password = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
         account = ENQWeb.Utils.crypto.encrypt(account, password)
         userStorage.user.changeUser(account)
-
         const accountEncryptedString = 'Account encrypted'
         console.log(accountEncryptedString)
 
@@ -69,11 +71,13 @@ function encryptAccount() {
 
 function encryptAccountWithPass(account = false, password = false) {
     // let account = userStorage.user.loadUserNotJson()
+
     if (password) {
         console.log('password install')
         PASSWORD = password
     }
     if (PASSWORD.length > 0 && !userStorage.lock.checkLock() && account) {
+        localStorage.setItem(PASSWORD_VERSION, JSON.stringify({ ver: password_version }))
         let password = ENQWeb.Utils.crypto.strengthenPassword(SALT + PASSWORD)
         password = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
         account = ENQWeb.Utils.crypto.encrypt(JSON.stringify(account), password)
@@ -89,7 +93,8 @@ function decryptAccount(password) {
     let hash = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
     hash = ENQWeb.Utils.crypto.strengthenPassword(SALT + hash)
     let userData = userStorage.user.loadUserNotJson()
-
+    //will be used in future
+    let password_version = localStorage.getItem(PASSWORD_VERSION)
     if (!userData) {
         return false
     }
