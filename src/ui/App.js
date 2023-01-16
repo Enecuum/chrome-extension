@@ -22,15 +22,17 @@ import Referral from './components/Referral'
 import Mnemonic from './components/account/mnemonic/Mnemonic'
 import ImportMnemonic from './components/account/mnemonic/ImoprtMnemonic'
 import Selector from './components/account/Selector'
-import { NET } from '../utils/names'
+import { NET, PASSWORD_VERSION } from '../utils/names'
 import ImportKey from './components/account/ImportKey'
 import eventBus from '../utils/eventBus'
 import Ledger from './components/account/Ledger'
 import { ledgerPath } from './Utils'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
-import WebView from "./components/WebView";
-import Mining from "./components/Mining";
-import QRCamera from "./components/QRCamera";
+import WebView from './components/WebView'
+import Mining from './components/Mining'
+import QRCamera from './components/QRCamera'
+import { Capacitor } from '@capacitor/core'
+import { NativeBiometric } from 'capacitor-native-biometric'
 
 
 let net = localStorage.getItem(NET)
@@ -76,6 +78,7 @@ export default function App(props) {
     const [isKeys, setKeys] = useState(false)
     const [isReferral, setReferral] = useState(false)
     const [isCamera, setCamera] = useState(false)
+    const [isBiometry, setBiometry] = useState('')
 
     let [deferredPrompt, setDeferredPrompt] = useState()
     let initPWA = () => {
@@ -84,11 +87,46 @@ export default function App(props) {
             deferredPrompt = e
             setDeferredPrompt(e)
         })
+        initBiometry()
+            .then()
     }
     let installPWA = async () => {
         deferredPrompt.prompt()
         const { outcome } = await deferredPrompt.userChoice
         deferredPrompt = null
+    }
+
+    const getBiometry = () => {
+        let config = JSON.parse(localStorage.getItem(PASSWORD_VERSION))
+        if (config.bio === undefined) {
+            config.bio = false
+            localStorage.setItem(PASSWORD_VERSION, JSON.stringify(config))
+        }
+        return config.bio
+    }
+
+    const changeBiometry = () => {
+        if (isBiometry) {
+            let config = JSON.parse(localStorage.getItem(PASSWORD_VERSION))
+            config.bio = !config.bio
+            localStorage.setItem(PASSWORD_VERSION, JSON.stringify(config))
+            userStorage.promise.sendPromise({
+                biometry: true,
+                update: true,
+                data: config.bio
+            })
+                .then()
+            return true
+        }
+        return false
+
+    }
+
+    let initBiometry = async () => {
+        let bio = await NativeBiometric.isAvailable()
+            .then(data => true)
+            .catch(() => false)
+        setBiometry(bio)
     }
 
     eventBus.on('lock', (data) => {
@@ -168,6 +206,7 @@ export default function App(props) {
         console.log('App: ' + version)
         console.log('Lib: ' + ENQWeb.version)
         console.log('OS: ' + window.navigator.platform)
+        console.log('Capacitor ver: ' + Capacitor.getPlatform())
         getUser()
             .then()
     }, [])
@@ -257,7 +296,8 @@ export default function App(props) {
     }
 
     if (isLock) {
-        return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm}/>
+        return <Lock unlock={unlock} logout={logout} setConfirm={setConfirm} getBiometry={getBiometry}
+                     changeBiometry={changeBiometry}/>
     }
 
     if (isImportMnemonic) {
@@ -363,18 +403,24 @@ export default function App(props) {
 
     // TODO user
     if (isPassword || (!user.publicKey && !userStorage.lock.getHashPassword())) {
-        return <Password user={user} setPassword={setPassword} login={loginState} publicKey={user.publicKey}/>
+        return <Password user={user} setPassword={setPassword} login={loginState} publicKey={user.publicKey}
+                         getBiometry={getBiometry}/>
     }
 
     if (isLogin) return <Login login={login2} setMnemonic={setMnemonic}/>
 
-    if (isWebView) return <WebView url={isWebView}  setWebView={setWebView} user={user}
-                                   setTransactionRequest={setTransactionRequest}
-                                   setPublicKeyRequest={setPublicKeyRequest}/>
+    if (isWebView) {
+        return <WebView url={isWebView} setWebView={setWebView} user={user}
+                        setTransactionRequest={setTransactionRequest}
+                        setPublicKeyRequest={setPublicKeyRequest}/>
+    }
 
     if (isCamera) return <QRCamera isCamera={isCamera} setCamera={setCamera}/>
 
-    if (isReferral) return <Referral isReferral={isReferral} setReferral={setReferral} setCamera={setCamera} publicKey={user.publicKey}/>
+    if (isReferral) {
+        return <Referral isReferral={isReferral} setReferral={setReferral} setCamera={setCamera}
+                         publicKey={user.publicKey}/>
+    }
 
     // TODO user
     return <Account user={user}
@@ -400,5 +446,7 @@ export default function App(props) {
                     installPWA={installPWA}
                     updateUserData={updateUserData}
                     setReferral={setReferral}
+                    getBiometry={getBiometry}
+                    changeBiometry={changeBiometry}
     />
 }

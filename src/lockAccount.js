@@ -5,6 +5,7 @@ import { PASSWORD_VERSION } from './utils/names'
 
 let lockTime = 10 * 60 * 1000 * 6 * 100 // 100 hours
 import eventBus from './utils/eventBus'
+import { NativeBiometric } from 'capacitor-native-biometric'
 
 // let lockTime = 60 * 1000 // 60 sec
 
@@ -77,7 +78,11 @@ function encryptAccountWithPass(account = false, password = false) {
         PASSWORD = password
     }
     if (PASSWORD.length > 0 && !userStorage.lock.checkLock() && account) {
-        localStorage.setItem(PASSWORD_VERSION, JSON.stringify({ ver: password_version }))
+        let passVersion = JSON.parse(localStorage.getItem(PASSWORD_VERSION))
+        if (passVersion.ver === undefined) {
+            passVersion.ver = password_version
+            localStorage.setItem(PASSWORD_VERSION, JSON.stringify(passVersion))
+        }
         let password = ENQWeb.Utils.crypto.strengthenPassword(SALT + PASSWORD)
         password = ENQWeb.Utils.crypto.strengthenPassword(SALT + password)
         account = ENQWeb.Utils.crypto.encrypt(JSON.stringify(account), password)
@@ -103,6 +108,7 @@ function decryptAccount(password) {
             userData = JSON.parse(userData)
         } catch (e) {
             console.log('old algorithm')
+            userStorage.lock.setPassword(true)
         }
         let accountString = ENQWeb.Utils.crypto.decrypt(userData, hash)
         // console.log(accountString)
@@ -119,7 +125,42 @@ function decryptAccount(password) {
 
 }
 
-export { lockAccount, encryptAccount, decryptAccount, encryptAccountWithPass, lockTime }
+async function getPasswordBiometry() {
+    return await NativeBiometric.getCredentials({
+        server: 'www.enecuum.com'
+    })
+        .then(data => data)
+        .catch(() => false)
+}
+
+async function savePasswordBiometry() {
+    return await NativeBiometric.setCredentials({
+        username: '',
+        password: PASSWORD,
+        server: 'www.enecuum.com'
+    })
+        .then(() => true)
+        .catch(() => false)
+}
+
+async function deletePasswordBiometry() {
+    return await NativeBiometric.deleteCredentials({
+        server: 'www.enecuum.com'
+    })
+        .then(() => true)
+        .catch(() => false)
+}
+
+export {
+    lockAccount,
+    encryptAccount,
+    decryptAccount,
+    encryptAccountWithPass,
+    lockTime,
+    savePasswordBiometry,
+    deletePasswordBiometry,
+    getPasswordBiometry
+}
 
 function say() {
     let lockString = 'Lock account loaded. Background started'

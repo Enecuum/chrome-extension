@@ -1,4 +1,11 @@
-import { decryptAccount, encryptAccount, encryptAccountWithPass, lockAccount, lockTime } from './lockAccount'
+import {
+    decryptAccount, deletePasswordBiometry,
+    encryptAccount,
+    encryptAccountWithPass, getPasswordBiometry,
+    lockAccount,
+    lockTime,
+    savePasswordBiometry
+} from './lockAccount'
 
 // const cacheStore = require('./indexDB') // es6
 import indexDB from './utils/indexDB'
@@ -12,6 +19,7 @@ import { getMiners, initPoa, startPoa, stopPoa, swithMiner, updateToken } from '
 import { getMnemonicPrivateKeyHex } from './ui/Utils'
 import { Capacitor, registerPlugin } from '@capacitor/core'
 import { startBackgroundMining, getMobileMiners, stopMobileMiners } from './mobileBackground'
+import { NativeBiometric } from 'capacitor-native-biometric'
 // var cacheStore = window.cacheStore // compiled javascript
 
 let miningStatus = { miningProcess: false }
@@ -176,6 +184,28 @@ export function globalMessageHandler(msg, ENQWeb) {
 
             // disconnectPorts()
             resolve({ response: true })
+        }
+
+        if(msg.biometry && msg.update){
+            if(msg.data)
+                savePasswordBiometry().then(data=>{
+                    resolve({response:true})
+                })
+            else
+                deletePasswordBiometry().then(data=>{
+                    resolve({response:true})
+                })
+        }
+
+        if(msg.biometry && msg.changePassword){
+            await deletePasswordBiometry().then(data=>{})
+            await savePasswordBiometry().then(data=>{})
+            resolve({response:true})
+        }
+
+        if(msg.biometry && msg.get){
+            let data =  await getPasswordBiometry()
+            resolve({response:data})
         }
 
         if (msg.update && msg.background) {

@@ -71,6 +71,15 @@ export default class Password extends React.Component {
                                         data: this.props.user
                                     })
                                     this.props.setPassword(false)
+                                    if (this.props.getBiometry() === true) {
+                                        userStorage.promise.sendPromise({
+                                            biometry: true,
+                                            changePassword: true
+                                        })
+                                            .then(() => {
+                                                console.log('biometry success changed!')
+                                            })
+                                    }
                                 })
                         } else {
                             this.setState({ incorrectOld: true })
@@ -101,17 +110,17 @@ export default class Password extends React.Component {
                     <img className={styles.login_logo} src="./images/logo_white.png" onClick={toggleFullScreen}/>
 
                     {!this.props.publicKey &&
-                    <div className={styles.welcome1}>Create</div>
+                        <div className={styles.welcome1}>Create</div>
                     }
                     {!this.props.publicKey &&
-                    <div className={styles.welcome1}>Password</div>
+                        <div className={styles.welcome1}>Password</div>
                     }
 
                     {!this.props.publicKey &&
-                    <div className={styles.welcome2}>Please set a Password to initialize</div>
+                        <div className={styles.welcome2}>Please set a Password to initialize</div>
                     }
                     {!this.props.publicKey &&
-                    <div className={styles.welcome2}> the application.</div>
+                        <div className={styles.welcome2}> the application.</div>
                     }
 
                 </div>

@@ -1,12 +1,14 @@
-import React from "react";
-import styles from "../css/index.module.css";
-import Separator from "../elements/Separator";
-import {toggleFullScreen} from "../Utils";
-import Input from "../elements/Input";
+import React from 'react'
+import styles from '../css/index.module.css'
+import Separator from '../elements/Separator'
+import { toggleFullScreen } from '../Utils'
+import Input from '../elements/Input'
+import { NativeBiometric } from 'capacitor-native-biometric'
+import { PASSWORD_VERSION } from '../../utils/names'
 
 export default class Lock extends React.Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             password: '',
             incorrect: false
@@ -14,17 +16,71 @@ export default class Lock extends React.Component {
         this.handleChangePassword = this.handleChangePassword.bind(this)
         this.submit = this.submit.bind(this)
         this.logout = this.logout.bind(this)
+        this.bio = this.bio.bind(this)
+        this.submitBiometry = this.submitBiometry.bind(this)
         // this.setConfirm = props.setConfirm
         window.scrollTo(0, 0)
     }
 
     handleChangePassword(e) {
-        this.setState({password: e.target.value})
+        this.setState({ password: e.target.value })
     }
 
     async logout() {
         await this.props.logout()
         // await userStorage.promise.sendPromise({account: true, logout: true})
+    }
+
+    async bio() {
+        try {
+            NativeBiometric.isAvailable()
+                .then(() => {
+                    NativeBiometric.verifyIdentity({
+                        reason: 'For easy log in',
+                        title: 'Log in PWA Enecuum',
+                        subtitle: '',
+                        description: '',
+                    })
+                        .then(data => {
+                                userStorage.promise.sendPromise({
+                                    biometry: true,
+                                    get: true
+                                })
+                                    .then(async data => {
+                                        await this.submitBiometry(data.password)
+                                    })
+                                    .catch(e => {
+                                        console.warn(e)
+                                    })
+
+                            }
+                        )
+                        .catch(() => {
+                            console.warn('cancel')
+                        })
+                })
+                .catch(() => {
+                    console.warn('nio no support')
+                })
+        } catch (e) {
+            console.warn(e)
+        }
+
+
+    }
+
+    async submitBiometry(password) {
+        let user = await userStorage.promise.sendPromise({
+            account: true,
+            unlock: true,
+            password: password
+        })
+
+        if (user) {
+            this.props.unlock(user)
+        } else {
+            console.warn('something wrong...')
+        }
     }
 
     async submit() {
@@ -38,15 +94,18 @@ export default class Lock extends React.Component {
         //     this.props.unlock()
         //     window.location.reload(false);
         // }
-
-        let user = await userStorage.promise.sendPromise({account: true, unlock: true, password: this.state.password})
+        let user = await userStorage.promise.sendPromise({
+            account: true,
+            unlock: true,
+            password: this.state.password
+        })
 
         if (user) {
             this.props.unlock(user)
         } else {
-            this.setState({incorrect: true})
+            this.setState({ incorrect: true })
             setTimeout(() => {
-                this.setState({incorrect: false})
+                this.setState({ incorrect: false })
             }, 1000)
         }
     }
@@ -84,6 +143,9 @@ export default class Lock extends React.Component {
                     <div onClick={() => this.props.setConfirm(true)}
                          className={`${styles.field} ${styles.button}`}>Logout
                     </div>
+
+                    {this.props.getBiometry() ?
+                        <div onClick={this.bio} className={`${styles.field} ${styles.button}`}>Bio</div> : ''}
 
                     <Separator/>
 
