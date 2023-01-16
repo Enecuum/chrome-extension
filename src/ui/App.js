@@ -101,6 +101,9 @@ export default function App(props) {
 
     const getBiometry = () => {
         let config = JSON.parse(localStorage.getItem(PASSWORD_VERSION))
+        if (config === null) {
+            config = {}
+        }
         if (config.bio === undefined) {
             config.bio = false
             localStorage.setItem(PASSWORD_VERSION, JSON.stringify(config))

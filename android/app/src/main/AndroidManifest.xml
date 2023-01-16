@@ -19,7 +19,8 @@
             android:name="com.enecuum.pwa.MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,6 +31,7 @@
 
         <service
             android:enabled="true"
+            android:exported="true"
             android:name=".PoAService">
             <intent-filter>
                 <action android:name="com.enecuum.pwa.PoAService"></action>

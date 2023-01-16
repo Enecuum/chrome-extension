@@ -79,6 +79,9 @@ function encryptAccountWithPass(account = false, password = false) {
     }
     if (PASSWORD.length > 0 && !userStorage.lock.checkLock() && account) {
         let passVersion = JSON.parse(localStorage.getItem(PASSWORD_VERSION))
+        if (passVersion === null) {
+            passVersion = {}
+        }
         if (passVersion.ver === undefined) {
             passVersion.ver = password_version
             localStorage.setItem(PASSWORD_VERSION, JSON.stringify(passVersion))

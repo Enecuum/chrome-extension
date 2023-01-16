@@ -65,8 +65,6 @@ export default class Lock extends React.Component {
         } catch (e) {
             console.warn(e)
         }
-
-
     }
 
     async submitBiometry(password) {
