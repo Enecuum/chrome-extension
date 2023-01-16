@@ -241,6 +241,9 @@ export default function App(props) {
                 setPassword(true)
                 // setPassword(true)
                 localStorage.removeItem(NET)
+                if(getBiometry() === true){
+                    changeBiometry()
+                }
 
                 location.reload(false)
             })
