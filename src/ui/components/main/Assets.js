@@ -4,8 +4,6 @@ import Input from "../../elements/Input";
 import {apiController} from "../../../utils/apiController";
 import {generateIcon, shortHashLong} from "../../Utils";
 
-let trustedTokens = apiController.getTokenList()
-console.warn('Assets')
 
 export default function Assets(props) {
 
@@ -15,6 +13,7 @@ export default function Assets(props) {
     // }
 
     // console.log(props.user)
+    const [trustedTokens, setTrustedTokens] = useState(apiController.getTokenList())
 
     const [isShowUntrustedTokens, setShowUntrustedTokens] = useState(false)
     const [isShowAddToken, setShowAddToken] = useState(false)
@@ -181,10 +180,16 @@ export default function Assets(props) {
             setTokens(tokens)
         })
 
+        apiController.getServerTokenList().then(tokens => {
+            setTrustedTokens(tokens)
+        })
+
     }, [])
 
     return (
         <div className={styles.bottom_assets + (props.activeTab === 0 ? '' : ` ${styles.bottom_list_disabled}`)}>
+
+            <div className={styles.token_list}>Enecuum Default Token List</div>
 
             {renderAssets(true)}
 
@@ -195,6 +200,9 @@ export default function Assets(props) {
             }} className={`${styles.field} ${styles.button}`}>
                 Add token
             </div> : renderAddToken()}
+
+            {/*<div onClick={() => setShowUntrustedTokens(true)}*/}
+            {/*     className={`${styles.field} ${styles.button}`}>Add Token List</div>*/}
 
             {findTokens.length > 0 ? <div className={styles.find}>
                 <div className={`${styles.field}`}>FOUND:</div>

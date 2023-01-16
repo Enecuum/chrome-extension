@@ -28,16 +28,19 @@ import eventBus from '../utils/eventBus'
 import Ledger from './components/account/Ledger'
 import { ledgerPath } from './Utils'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
+
 import WebView from './components/WebView'
 import Mining from './components/Mining'
 import QRCamera from './components/QRCamera'
 import { Capacitor } from '@capacitor/core'
 import { NativeBiometric } from 'capacitor-native-biometric'
 
+import { createGesture, Gesture } from '@ionic/react';
+
 
 let net = localStorage.getItem(NET)
 if (!net) {
-    net = 'bit'
+    net = 'pulse'
     localStorage.setItem(NET, net)
 }
 
@@ -209,6 +212,8 @@ export default function App(props) {
         console.log('Capacitor ver: ' + Capacitor.getPlatform())
         getUser()
             .then()
+
+        initGestures()
     }, [])
 
 
@@ -292,6 +297,30 @@ export default function App(props) {
         setUser(_user)
         setLock(false)
         setLogin(false)
+    }
+
+    const initGestures = () => {
+
+        const gesture = createGesture({
+            el: document.getElementById('app'),
+            threshold: 15,
+            gestureName: 'my-gesture',
+            onMove: ev => onMove(ev)
+        });
+
+        gesture.enable();
+
+        const onMove = (detail) => {
+            const type = detail.type;
+            const currentX = detail.currentX;
+            const deltaX = detail.deltaX;
+            const velocityX = detail.velocityX;
+
+            if (velocityX > 1)
+                console.log('BACK')
+
+            // console.log({type, currentX, deltaX, velocityX})
+        }
     }
 
     if (isConfirm) {

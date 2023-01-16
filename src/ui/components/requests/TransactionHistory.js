@@ -65,11 +65,12 @@ export default function TransactionHistory(props) {
         //     setTicker(tokenInfo[0].ticker)
         // }
         setTicker(props.request.data.ticker || props.request.tx.ticker)
-        if( props.request.data.fee_type !== 2 )
+        if( props.request.data.fee_type !== 2 ) {
             setFeeTicker(props.request.data.ticker || props.request.tx.ticker || 'COIN')
 
-        else{
-            if(!props.request.tx.feeTicker && !props.request.tx.feeDecimals){
+        } else {
+
+            if (!props.request.tx.feeTicker && !props.request.tx.feeDecimals) {
                 mainToken = (await apiController.getTokenInfo(ENQWeb.Enq.ticker))[0]
                 setFeeDecimal(10 ** mainToken.decimals)
             }
@@ -156,6 +157,14 @@ export default function TransactionHistory(props) {
 
     // console.log(typeIn)
 
+    const transactionStatus = {
+        0: 'UNKNOWN',
+        1: 'PENDING',
+        2: 'REJECTED',
+        3: 'CONFIRMED',
+        4: 'UNKNOWN',
+    }
+
     return (
         <div className={styles.main}>
 
@@ -198,6 +207,13 @@ export default function TransactionHistory(props) {
                 {/*<div className={styles.field}>Nonce: {this.state.nonce}</div>*/}
                 {/*<div className={styles.field}>Data: {this.state.data}</div>*/}
                 <div className={styles.transaction_amount}>{props.request.data.fee_type !== 2 ? Number(amount - fee) / props.request.data.decimals + ' ' + ticker : Number(amount) / props.request.data.decimals + ' ' + ticker}</div>
+
+                <div className={styles.transaction_status}>
+                    STATUS:
+                    <span className={props.request.status <= 2 ? styles.rejected : styles.confirmed}>
+                        {transactionStatus[props.request.status]}
+                    </span>
+                </div>
 
             </div>
 

@@ -15,9 +15,9 @@ import { globalState } from '../../../globalState'
 let tickers = {}
 let decimals = {}
 
-let trustedTokens = apiController.getTokenList()
-
 export default function Account(props) {
+
+    const [trustedTokens, setTrustedTokens] = useState(apiController.getTokenList())
 
     global.setIframeWork(false)
 
@@ -52,7 +52,7 @@ export default function Account(props) {
 
     const [isMiningToken, setMiningToken] = useState(true)
 
-    const [ActivityString, setActivityString] = useState(activity.length > 0 ? <sup>{activity.length}</sup> : '')
+    const [activityString, setActivityString] = useState(activity.length > 0 ? <sup>{activity.length}</sup> : '')
 
     const clickMenu = () => {
         setMenu(!menu)
@@ -328,8 +328,7 @@ export default function Account(props) {
 
     useEffect(() => {
 
-        props.user.token && props.user.token !== ENQWeb.Enq.token[ENQWeb.Enq.provider] ? setActiveTab(1) : () => {
-        }
+        props.user.token && props.user.token !== ENQWeb.Enq.token[ENQWeb.Enq.provider] ? setActiveTab(1) : () => {}
 
         openPopup()
             .then(async result => {
@@ -346,6 +345,10 @@ export default function Account(props) {
                         })
                 }
             })
+
+        apiController.getServerTokenList().then(tokens => {
+            setTrustedTokens(tokens)
+        })
 
         let isMounted = true
         return () => {
@@ -539,7 +542,7 @@ export default function Account(props) {
                         onClick={() => setActiveTab(1)}
                         className={(activeTab === 1 ? ` ${styles.bottom_tab_active}` : '')}
                     >
-                        Activity {ActivityString}
+                        Activity {activityString}
                     </div>
                     {isConnects && activeTab === 2 && <div
                         onClick={() => setActiveTab(2)}

@@ -87,10 +87,28 @@ const getTransaction = async (transactionHash) => {
 }
 
 const getTokenList = () => {
-
-    // let serverTokens = await ENQWeb.Net.get.tokenList()
-
     return trustedTokens
+}
+
+const getServerTokenList = async () => {
+
+    // await apiController.sendRequest('https://devapp.enex.space/token_list')
+
+    // console.log('getServerTokenList')
+
+    // console.warn()
+
+    const response = await fetch('https://app.enecuum.com/default_token_list.json', {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    })
+
+    const list = await response.json()
+    return list.tokens
 }
 
 const getCoinGeckoPrice = async () => {
@@ -119,6 +137,7 @@ const apiController = {
     getAccountTransactions,
     getTransaction,
     getTokenList,
+    getServerTokenList,
     sendTransaction,
     sendAPI,
     sendRequest,

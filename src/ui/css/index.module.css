@@ -701,6 +701,14 @@ input[type=number] {
 /*    box-shadow: none;*/
 /*}*/
 
+.token_list {
+    width: 100%;
+    padding: 10px 10px;
+    text-align: right;
+    font-weight: 300;
+    background: var(--color-blue-background);
+}
+
 .icon {
     height: 15px;
 
@@ -1360,6 +1368,30 @@ input[type=number] {
     width: 100%;
     text-align: right;
     font-size: var(--font-size-small);
+}
+
+.transaction_status {
+    position: absolute;
+    right: 20px;
+    bottom: 15px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    color: var(--color-white-opacity);
+}
+
+.transaction_status span {
+    margin-left: 5px;
+}
+
+
+.transaction_status .rejected {
+    color: var(--color-red)
+}
+
+.transaction_status .confirmed {
+    color: var(--color-green)
 }
 
 
