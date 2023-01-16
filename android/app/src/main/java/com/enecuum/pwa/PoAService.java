@@ -3,25 +3,17 @@ package com.enecuum.pwa;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.util.Log;
-
-import androidx.core.app.NotificationCompat;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.getcapacitor.FileUtils;
 import com.getcapacitor.JSObject;
 import com.google.gson.Gson;
-import com.kenai.jffi.Main;
 
 public class PoAService extends Service {
 
@@ -29,7 +21,8 @@ public class PoAService extends Service {
 
     private Miner[] miners;
     private Timer timer;
-    private Timer rebootTimer;
+    private Timer pingTimer;
+    private Boolean usePingSocket = false;
 
     private Notification notification;
     private int id;
@@ -213,25 +206,28 @@ public class PoAService extends Service {
                 }
             }
         }, 0, 1000);
-//        rebootTimer = new Timer();
-//        rebootTimer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                try {
-//                    for (Miner miner : miners) {
-//                        if (miner.publisher.status.equals("Disconnected")) {
-//                            if (!miner.publisher.reboot && miner.publisher.restartMiner && miner.publisher.mining) {
-//                                rebootMiner(miner);
-//                                Log.d(TAG, String.format("reboot anomaly miner %s", miner.publisher.publicKey.substring(0, 6)));
-//                            }
-//                        }
-//                    }
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                    Log.d(TAG, "can't reboot miners");
-//                }
-//            }
-//        }, 1000 * 5, 1000 * 5);5
+        if(usePingSocket.equals(true)){
+            pingTimer = new Timer();
+            pingTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        for (Miner miner : miners) {
+                            try{
+//                            Log.d(TAG, "run: pingpong " + miner.publisher.publicKey.substring(0,6));
+                                miner.publisher.ws.sendPing();
+                            }catch (Exception ex){
+                                Log.d(TAG, "run: pingpong fall "  + miner.publisher.publicKey.substring(0,6));
+                                rebootMiner(miner);
+                            }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        Log.d(TAG, "can't reboot miners");
+                    }
+                }
+            }, 1000 * 5, 1000 * 5);
+        }
     }
 
 
@@ -247,8 +243,10 @@ public class PoAService extends Service {
     private void cleanTimer() {
         timer.cancel();
         timer.purge();
-//        rebootTimer.cancel();
-//        rebootTimer.purge();
+        if(usePingSocket.equals(true)){
+            pingTimer.cancel();
+            pingTimer.purge();
+        }
     }
 
     private void commitSwitch(Miner miner, boolean switcher) {

@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from '../css/elements.module.css'
-import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
-import Eth from "@ledgerhq/hw-app-eth";
-import {createPopupWindow} from "../../handler";
-import * as bip32 from 'bip32';
-import {versions} from "../../utils/names";
-import {useUserContext} from "../context/useUserContext";
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
+import Eth from '@ledgerhq/hw-app-eth'
+import { createPopupWindow } from '../../handler'
+import * as bip32 from 'bip32'
+import { PASSWORD_VERSION, versions } from '../../utils/names'
+import { useUserContext } from '../context/useUserContext'
 
 // global.WebUSB = TransportWebUSB
 // global.transportWebUSB = {}
@@ -36,7 +36,7 @@ export default function Menu(props) {
         createPopupWindow()
     }
 
-    const {user} = useUserContext()
+    const { user } = useUserContext()
 
     // console.log(enablePopup)
 
@@ -52,7 +52,7 @@ export default function Menu(props) {
         //     }
         // })
 
-    }, []);
+    }, [])
 
     // const loginAccount2 = () => {
     //     userStorage.user.loadUser().then(async account => {
@@ -113,7 +113,7 @@ export default function Menu(props) {
         console.log('LOCK')
         if (userStorage.lock.getHashPassword()) {
             props.setLock(true)
-            await userStorage.promise.sendPromise({lock: true})
+            await userStorage.promise.sendPromise({ lock: true })
         }
         //TODO close popup
     }
@@ -134,6 +134,7 @@ export default function Menu(props) {
 
         userStorage.config.setConfig(config)
     }
+
 
     // const checkConnectLedger = () => {
     //     TransportWebUSB.list().then(devices => {
@@ -184,7 +185,7 @@ export default function Menu(props) {
     return (
         <div className={styles.menu}>
 
-            <div className={styles.lock} onClick={locked}><img src='./images/lock.png'
+            <div className={styles.lock} onClick={locked}><img src="./images/lock.png"
                                                                className={(!userDataLoaded ? styles.loaded : '')}
                                                                title={'Lock application'} alt={'Lock'}/></div>
 
@@ -194,11 +195,11 @@ export default function Menu(props) {
 
             {/*<div className={styles.row}>*/}
 
-                {/*<div className={styles.row}>*/}
-                {/*    <div className={styles.button_link + (activeAccount === 1 ? ' ' + styles.button_link_active : '')} onClick={() => {}}>{accountName}</div>*/}
-                {/*</div>*/}
+            {/*<div className={styles.row}>*/}
+            {/*    <div className={styles.button_link + (activeAccount === 1 ? ' ' + styles.button_link_active : '')} onClick={() => {}}>{accountName}</div>*/}
+            {/*</div>*/}
 
-                {/*<div className={styles.button_link + ' ' + styles.keys_arrow} onClick={() => props.setKeys(true)}>+</div>*/}
+            {/*<div className={styles.button_link + ' ' + styles.keys_arrow} onClick={() => props.setKeys(true)}>+</div>*/}
             {/*</div>*/}
 
 
@@ -216,7 +217,8 @@ export default function Menu(props) {
             <div className={styles.separator}/>
 
             <div className={styles.title}>
-                <div className={styles.button_link} onClick={() => props.setWebView({url: 'app.enex.space'})}>DApps</div>
+                <div className={styles.button_link} onClick={() => props.setWebView({ url: 'app.enex.space' })}>DApps
+                </div>
             </div>
 
             <div className={styles.separator}/>
@@ -240,6 +242,8 @@ export default function Menu(props) {
             {/*        <div className={styles.button_link} onClick={() => props.setNetwork(true)}>CUSTOM</div>*/}
             {/*    </div>}*/}
             {/*</div>*/}
+            {chrome.runtime.web ? <div className={styles.button_link}
+                                       onClick={props.changeBiometry}>Biometry {props.getBiometry() ? 'ON' : 'OFF'}</div> : ''}
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={window}>Window</div>}
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>}

@@ -24,6 +24,8 @@ const REFERRAL = 'referral'
 
 const TRUSTED_TOKENS = 'trusted_tokens'
 
+const PASSWORD_VERSION = 'password_version'
+
 const STORAGE_NAME_POPUP = 'popup'
 const STORAGE_NAME_BACKGROUND = 'background'
 const STORAGE_NAME_WORKER = 'worker'
@@ -66,5 +68,6 @@ module.exports = {
     copyText,
     SITES,
     STATE,
-    REFERRAL
+    REFERRAL,
+    PASSWORD_VERSION
 }

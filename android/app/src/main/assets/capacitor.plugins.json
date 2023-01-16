@@ -26,5 +26,9 @@
 	{
 		"pkg": "@robingenz/capacitor-background-task",
 		"classpath": "dev.robingenz.capacitor.backgroundtask.BackgroundTaskPlugin"
+	},
+	{
+		"pkg": "capacitor-native-biometric",
+		"classpath": "com.epicshaggy.biometric.NativeBiometric"
 	}
 ]
