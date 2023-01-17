@@ -16,7 +16,7 @@ export default class Lock extends React.Component {
         this.handleChangePassword = this.handleChangePassword.bind(this)
         this.submit = this.submit.bind(this)
         this.logout = this.logout.bind(this)
-        this.bio = this.bio.bind(this)
+        this.checkBiometric = this.checkBiometric.bind(this)
         this.submitBiometry = this.submitBiometry.bind(this)
         // this.setConfirm = props.setConfirm
         window.scrollTo(0, 0)
@@ -31,13 +31,13 @@ export default class Lock extends React.Component {
         // await userStorage.promise.sendPromise({account: true, logout: true})
     }
 
-    async bio() {
+    async checkBiometric() {
         try {
             NativeBiometric.isAvailable()
                 .then(() => {
                     NativeBiometric.verifyIdentity({
                         reason: 'For easy log in',
-                        title: 'Log in PWA Enecuum',
+                        title: 'Login Enecuum',
                         subtitle: '',
                         description: '',
                     })
@@ -124,6 +124,9 @@ export default class Lock extends React.Component {
 
                 <div className={styles.form}>
 
+                    {this.props.getBiometry() ?
+                        <img onClick={this.checkBiometric} className={styles.fingerprint_logo} src="./images/icons/fingerprint.png"/> : ''}
+
                     <Input type="password"
                            spellCheck={false}
                            onChange={this.handleChangePassword}
@@ -141,9 +144,6 @@ export default class Lock extends React.Component {
                     <div onClick={() => this.props.setConfirm(true)}
                          className={`${styles.field} ${styles.button}`}>Logout
                     </div>
-
-                    {this.props.getBiometry() ?
-                        <div onClick={this.bio} className={`${styles.field} ${styles.button}`}>Bio</div> : ''}
 
                     <Separator/>
 

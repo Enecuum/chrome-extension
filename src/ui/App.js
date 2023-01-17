@@ -81,7 +81,7 @@ export default function App(props) {
     const [isKeys, setKeys] = useState(false)
     const [isReferral, setReferral] = useState(false)
     const [isCamera, setCamera] = useState(false)
-    const [isBiometry, setBiometry] = useState('')
+    const [isBiometry, setBiometry] = useState(false)
 
     let [deferredPrompt, setDeferredPrompt] = useState()
     let initPWA = () => {
@@ -113,6 +113,7 @@ export default function App(props) {
 
     const changeBiometry = () => {
         if (isBiometry) {
+            console.log(isBiometry)
             let config = JSON.parse(localStorage.getItem(PASSWORD_VERSION))
             config.bio = !config.bio
             localStorage.setItem(PASSWORD_VERSION, JSON.stringify(config))
@@ -123,16 +124,18 @@ export default function App(props) {
             })
                 .then()
             return true
+        } else {
+            console.log('isBiometry:' + false)
         }
         return false
 
     }
 
     let initBiometry = async () => {
-        let bio = await NativeBiometric.isAvailable()
+        let isAvailable = await NativeBiometric.isAvailable()
             .then(data => true)
             .catch(() => false)
-        setBiometry(bio)
+        setBiometry(isAvailable)
     }
 
     eventBus.on('lock', (data) => {

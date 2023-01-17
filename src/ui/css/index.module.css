@@ -256,6 +256,21 @@ a:hover {
     padding-bottom: 50px;
 }
 
+.fingerprint_logo {
+    position: absolute;
+    filter: invert(1);
+    right: 25px;
+    top: 25px;
+    width: 34px;
+    height: 34px;
+    /*margin: 0 auto;*/
+    /*top: -30px;*/
+    /*padding-top: 70px;*/
+    /*padding-bottom: 50px;*/
+    margin-left: auto;
+    z-index: 3;
+}
+
 .ledger_logo {
     padding-bottom: 20px;
 }
