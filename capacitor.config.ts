@@ -20,9 +20,9 @@ const config: CapacitorConfig = {
         }
     },
     server: {
-        "hostname": "enecuum.com",
-        "androidScheme": "https",
-        "iosScheme": "https"
+        "hostname": "localhost",
+        "androidScheme": "http",
+        "iosScheme": "http"
     }
 };
 

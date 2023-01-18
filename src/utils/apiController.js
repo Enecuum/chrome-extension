@@ -100,7 +100,6 @@ const getServerTokenList = async () => {
 
     const response = await fetch('https://app.enecuum.com/default_token_list.json', {
         method: 'GET',
-        mode: 'cors',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
