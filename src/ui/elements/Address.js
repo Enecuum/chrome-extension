@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import elements from '../css/elements.module.css'
-import {copyToClipboard, shortHash} from '../Utils'
+import { copyToClipboard, shortHash } from '../Utils'
 import styles from '../css/index.module.css'
-import {apiController} from '../../utils/apiController'
+import { apiController } from '../../utils/apiController'
 
 const copyText = ('\n\nCopy address to clipboard').toUpperCase()
 
@@ -39,22 +39,25 @@ export default function Address(props) {
     }
 
     useEffect(() => {
-        checkConnect(props.connectionsCounter).then()
+        checkConnect(props.connectionsCounter)
+            .then()
         // TODO
         let a = setInterval(() => {
-            checkConnect(props.connectionsCounter).then()
+            checkConnect(props.connectionsCounter)
+                .then()
         }, 1000)
     })
 
     useEffect(() => {
-        getBlock().then()
+        getBlock()
+            .then()
     }, [props.token])
 
     const showConnections = async () => {
 
         if (status === 'Await connect') {
 
-            let tasks = await userStorage.list.listOfTask()
+            let tasks = userStorage.list.listOfTask()
 
             //TODO rename enable please, allow website access or something
             tasks.forEach((task, request) => {
@@ -66,12 +69,14 @@ export default function Address(props) {
                 }
             })
         }
-        const favorite = (await asyncRequest({favoriteList: true})).ports
-        if (status.startsWith('Connected') || favorite.length > 0) {
-
-            const ports = (await asyncRequest({connectionList: true})).ports
-            props.setConnects(ports)
-        }
+        // const favorite = (await asyncRequest({favoriteList: true})).ports
+        // if (status.startsWith('Connected') || favorite.length > 0) {
+        //
+        //     const ports = (await asyncRequest({connectionList: true})).ports
+        //     props.setConnects(ports)
+        // }
+        const ports = (await asyncRequest({ connectionList: true })).ports
+        props.setConnects(ports)
     }
 
     // const copyPublicKey = () => {
@@ -89,7 +94,8 @@ export default function Address(props) {
     }
 
     const update = () => {
-        props.getBalance().then()
+        props.getBalance()
+            .then()
     }
 
     return (

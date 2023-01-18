@@ -2,7 +2,7 @@ import { initApp } from './ui/index'
 import { globalMessageHandler, messagePopupHandler } from './handler'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import { versions } from './utils/names'
-import {globalState} from './globalState'
+import { globalState } from './globalState'
 
 // Init storage
 import Storage from './utils/localStorage'
@@ -16,21 +16,21 @@ global.userStorage = new Storage('popup')
 globalState.init()
 
 // TODO we have to move this to background or service worker
-global.publisher = {ws: {readyState: 3}}
+global.publisher = { ws: { readyState: 3 } }
 
 // TODO
 global.Buffer = global.Buffer || require('buffer').Buffer
 
-// TODO Description
+// TODO port to ext background
 let backgroundPort = {}
-// TODO Description
+// TODO array of async tasks id
 let taskId = []
-// TODO Description
+// TODO array of async tasks
 let awaitId = []
-// TODO Description
+// TODO callbacks of async tasks
 let dataId = []
-// TODO Description
-let time = 200
+// TODO time of await function
+let time = 100
 
 let lockOffsetInterval = 10 * 1000
 
@@ -54,8 +54,10 @@ TransportWebUSB.isSupported()
 global.chrome = (typeof chrome === 'undefined') ? {} : chrome
 
 // console.log(navigator.userAgent)
-let electron = navigator.userAgent.toLowerCase().includes('electron')
-let mobile = navigator.userAgent.toLowerCase().includes('mobile')
+let electron = navigator.userAgent.toLowerCase()
+    .includes('electron')
+let mobile = navigator.userAgent.toLowerCase()
+    .includes('mobile')
 // let standalone = window.navigator.standalone === true
 let type = electron ? versions.ELECTRON : (mobile ? versions.MOBILE : versions.WEB) // + ' ' + standalone
 
@@ -160,7 +162,9 @@ async function setupUI() {
         await initApp(backgroundPort)
     }
 
-    userStorage.promise.sendPromise({ initial: true }).then(r => {})
+    userStorage.promise.sendPromise({ initial: true })
+        .then(r => {
+        })
 
     // if (!version.includes('web')) {
     //     setInterval(() => {
@@ -168,8 +172,8 @@ async function setupUI() {
     //     }, lockOffsetInterval)
     // }
 
-    const iframe = document.createElement("iframe");
-    iframe.setAttribute("id", "iframe")
+    const iframe = document.createElement('iframe')
+    iframe.setAttribute('id', 'iframe')
     iframe.hidden = true
     document.body.appendChild(iframe)
 }
@@ -181,13 +185,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 let messageListener = {}
 
-function messageListenerSetup(cb){
-    try{
-        window.removeEventListener('message',messageListener, false)
-        window.addEventListener('message',cb, false)
+function messageListenerSetup(cb) {
+    try {
+        window.removeEventListener('message', messageListener, false)
+        window.addEventListener('message', cb, false)
         messageListener = cb
-    }catch (e){
-        console.warn("bug in onmessage setup")
+    } catch (e) {
+        console.warn('bug in onmessage setup')
     }
 }
 
@@ -229,7 +233,7 @@ global.bufferForMsg = bufferForMsg
 
 let iframeWork = false
 
-let setIframeWork = (data)=>{
+let setIframeWork = (data) => {
     iframeWork = data
 }
 
@@ -240,7 +244,7 @@ function asyncRequest(data) {
     awaitId[data] = false
     let answer = ''
     // iframeWork = true
-    if (version.includes('web') || iframeWork === true || androidRegex.test(Capacitor.getPlatform()) ) {
+    if (version.includes('web') || iframeWork === true || androidRegex.test(Capacitor.getPlatform())) {
         answer = messagePopupHandler(data)
         // console.log(answer)
         return answer
