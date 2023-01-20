@@ -133,9 +133,21 @@ export default function TransactionRequest(props) {
                             setType(field.type)
                         }
                         if (field.parameters) {
+                            let map = Object.keys(field.parameters)
+                            if(map.includes("compressed_data")){
+                                field.parameters["compressed_data"] = JSON.stringify(ENQWeb.Utils.ofd.parseCompressData(field.parameters["compressed_data"]))
+                            }
                             for (let key in field.parameters) {
                                 // console.log(key, field.parameters[key]);
-                                dataTextArray.push(<div key={key}>{key}: {field.parameters[key].toString()}</div>)
+                                if(key !== "compressed_data"){
+                                    dataTextArray.push(<div key={key}>{key}: {field.parameters[key].toString()}</div>)
+                                }
+                            }
+                            if(map.includes("compressed_data")){
+                                let compress = JSON.parse(field.parameters["compressed_data"])
+                                for(let key in compress){
+                                    dataTextArray.push(<div key={key}>{key}: {compress[key].toString()}</div>)
+                                }
                             }
                         }
                     }
