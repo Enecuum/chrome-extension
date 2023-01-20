@@ -22,7 +22,7 @@ public class PoAService extends Service {
     private Miner[] miners;
     private Timer timer;
     private Timer pingTimer;
-    private Boolean usePingSocket = false;
+    private Boolean usePingSocket = true;
 
     private Notification notification;
     private int id;
@@ -71,8 +71,8 @@ public class PoAService extends Service {
                     accounts = g.fromJson(jsonString, Account[].class);
                     net = intent.getStringExtra("net");
                     port = intent.getStringExtra("port");
-                    System.out.println(accounts.length);
-                    System.out.println(net);
+                    Log.d(TAG, "accounts: " + accounts.length);
+                    Log.d(TAG, "net: " + net);
                     miners = new Miner[accounts.length];
                     for (int i = 0; i < accounts.length; i++) {
                         miners[i] = new Miner(net, port, accounts[i].privateKey, accounts[i].token, accounts[i].referrer);
@@ -215,7 +215,9 @@ public class PoAService extends Service {
                         for (Miner miner : miners) {
                             try{
 //                            Log.d(TAG, "run: pingpong " + miner.publisher.publicKey.substring(0,6));
-                                miner.publisher.ws.sendPing();
+                                if(miner.publisher.mining.equals(true)){
+                                    miner.publisher.ws.sendPing();
+                                }
                             }catch (Exception ex){
                                 Log.d(TAG, "run: pingpong fall "  + miner.publisher.publicKey.substring(0,6));
                                 rebootMiner(miner);
@@ -254,6 +256,7 @@ public class PoAService extends Service {
             miner.publisher.stop();
         } else {
             miner.restartPublisher(null);
+            miner.publisher.mining = true;
             miner.publisher.init();
         }
     }
