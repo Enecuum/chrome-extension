@@ -28,6 +28,7 @@ const androidRegex = /android/
 
 let test = registerPlugin('PoA')
 
+let isBootNode = false
 
 export function globalMessageHandler(msg, ENQWeb) {
 
@@ -354,13 +355,22 @@ export function globalMessageHandler(msg, ENQWeb) {
 
                     console.log(accounts)
 
-                    test.start({
-                        data: JSON.stringify(accounts),
-                        net: network.data.ip,
-                        port: network.data.port
-                    })
-                        .then(res => {
-                        })
+                    if (isBootNode) {
+
+                        test.start({
+                            data: JSON.stringify(accounts),
+                            net: network.data.ip,
+                            port: network.data.port
+                        }).then(res => {})
+
+                    } else {
+
+                        test.start({
+                            data: JSON.stringify(accounts),
+                            net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : bitIP
+                        }).then(res => {})
+                    }
+
                     // let miners = startBackgroundMining()
                     miningStatus.miningProcess = true
                     // resolve({ response: miners })
