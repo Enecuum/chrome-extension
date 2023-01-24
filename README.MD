@@ -77,3 +77,7 @@
 
 ### Ledger features
  - To correctly sign a transaction through the ledger, you must first calculate the hash of the transaction fields, put this hash in tx.hash, and pass the hash (tx.hash) to the signature
+
+### For build ios
+1. brew install autoconf automake
+2. 

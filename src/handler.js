@@ -25,6 +25,7 @@ import { NativeBiometric } from 'capacitor-native-biometric'
 let miningStatus = { miningProcess: false }
 let handlerMiners = []
 const androidRegex = /android/
+const iosRegex = /ios/
 
 let test = registerPlugin('PoA')
 
@@ -366,6 +367,9 @@ export function globalMessageHandler(msg, ENQWeb) {
                     // resolve({ response: miners })
                     resolve({ response: true })
 
+                } else if(iosRegex.test(Capacitor.getPlatform())){
+                    let answer = await test.getM({value:"hello men"})
+                    console.log(answer)
                 } else {
                     miners = await startPoa(ENQWeb.Enq.User, handlerMiners, accounts)
                     console.log(miners)
