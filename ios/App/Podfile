@@ -19,12 +19,13 @@ def capacitor_pods
   pod 'CapacitorNativeBiometric', :path => '../../node_modules/capacitor-native-biometric'
 end
 
-def bitcoinKit
-  pod 'BitcoinKit', '~> 1.1.0'
+def crypto
+  pod 'CryptoSwift'
+  pod 'secp256k1.swift'
 end
 
 target 'App' do
   capacitor_pods
-  bitcoinKit
+  crypto
   # Add your Pods here
 end

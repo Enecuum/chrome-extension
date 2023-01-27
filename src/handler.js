@@ -335,7 +335,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                 let network = JSON.parse((await bootNodeGetIP()).data)
                 console.log(network)
 
-                if (androidRegex.test(Capacitor.getPlatform())) {
+                if (androidRegex.test(Capacitor.getPlatform()) || iosRegex.test(Capacitor.getPlatform())) {
 
                     let refCode = localStorage.getItem(REFERRAL)
                     let netList = {
@@ -353,7 +353,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                         console.error('Error in handle miners!')
                     }
 
-                    console.log(accounts)
+                    // console.log(accounts)
 
                     test.start({
                         data: JSON.stringify(accounts),
@@ -367,9 +367,6 @@ export function globalMessageHandler(msg, ENQWeb) {
                     // resolve({ response: miners })
                     resolve({ response: true })
 
-                } else if(iosRegex.test(Capacitor.getPlatform())){
-                    let answer = await test.getM({value:"hello men"})
-                    console.log(answer)
                 } else {
                     miners = await startPoa(ENQWeb.Enq.User, handlerMiners, accounts)
                     console.log(miners)
