@@ -160,7 +160,10 @@ export default function Network(props) {
         renderCards()
     }
 
-    let setNet = async (value) => {
+    let setNet = async (value, isEth = false) => {
+
+        if (!isEth)
+            setIsEth(false)
 
         // console.log(value)
 
@@ -169,6 +172,10 @@ export default function Network(props) {
 
         await userStorage.user.loadUser()
             .then(async account => {
+
+                if (isEth) {
+
+                }
 
                 account.net = value
                 account.token = ENQWeb.Enq.token[value]
@@ -346,8 +353,10 @@ export default function Network(props) {
                             .toUpperCase()}</div>
                         <div className={styles.card_field}>{ethNetworks[0][1]}</div>
                         <div className={styles.card_field}>{shortHash(ethToken)}</div>
-                        <div className={styles.card_field_right_bottom} onClick={(isEth ? () => {
-                        } : () => setNet(ethNetworks[0][1]))}>{isEth ? 'CURRENT' : 'SELECT'}</div>
+                        <div className={styles.card_field_right_bottom} onClick={(isEth ? () => {} : async () => {
+                            setIsEth(true)
+                            setNet(ethNetworks[0][1], true)
+                        })}>{isEth ? 'CURRENT' : 'SELECT'}</div>
                     </div>
 
                 </div>
