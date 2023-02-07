@@ -260,6 +260,13 @@ export default function Network(props) {
         setNetworks(cards)
     }
 
+    let [isEth, setIsEth] = useState(false)
+    let [ethNetworks, setEthNetworks] = useState([
+        [null, 'https://goerli.infura.io/v3/']
+    ])
+
+    let ethToken = '0xC2336D29B88a0071a7D72BdeaC7Ed9D1950F4D0c'
+
     useEffect(() => {
         renderCards()
     }, [])
@@ -280,8 +287,9 @@ export default function Network(props) {
                     pull: true
                 })
                     .then()
-            }}>❮ Back
-            </div>
+            }}>❮ Back</div>
+
+            <div className={styles.welcome3}>ENQ / Enecuum</div>
 
             {showAdd && <div>
 
@@ -326,6 +334,23 @@ export default function Network(props) {
 
             <div onClick={addNet}
                  className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add
+            </div>
+
+            <div className={styles.welcome3}>ETH / Ethereum</div>
+
+            <div className={styles.cards_container}>
+                <div className={styles.cards}>
+
+                    <div key={'eth' + 'card'} className={styles.card + ' ' + (isEth ? '' : styles.card_select)}>
+                        <div className={styles.card_field}>{ethNetworks[0][1].replace('https://', '').split('.')[0]
+                            .toUpperCase()}</div>
+                        <div className={styles.card_field}>{ethNetworks[0][1]}</div>
+                        <div className={styles.card_field}>{shortHash(ethToken)}</div>
+                        <div className={styles.card_field_right_bottom} onClick={(isEth ? () => {
+                        } : () => setNet(ethNetworks[0][1]))}>{isEth ? 'CURRENT' : 'SELECT'}</div>
+                    </div>
+
+                </div>
             </div>
 
             <Separator/>
