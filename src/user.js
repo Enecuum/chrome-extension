@@ -4,9 +4,15 @@ import indexDB from './utils/indexDB'
 //     accounts: []
 // }
 
+export let chains = {
+    ENECUUM: 'enecuum',
+    ETHEREUM: 'ethereum',
+}
+
 const account = {
 
     net: '',
+    chain: '',
 
     // Native token
     token: '',
