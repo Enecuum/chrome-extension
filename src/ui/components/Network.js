@@ -4,6 +4,7 @@ import Separator from '../elements/Separator'
 import { regexToken, shortHash } from '../Utils'
 import Input from '../elements/Input'
 import { NET, NETWORKS } from '../../utils/names'
+import {chains} from "../../user";
 
 export default function Network(props) {
 
@@ -160,24 +161,22 @@ export default function Network(props) {
         renderCards()
     }
 
-    let setNet = async (value, isEth = false) => {
-
-        if (!isEth)
-            setIsEth(false)
+    let setNet = async (value, chain = chains.ENECUUM) => {
 
         // console.log(value)
 
         localStorage.setItem(NET, value)
         ENQWeb.Net.provider = value
 
+        // if (chain === chains.ETHEREUM) {
+        //     account.type = 3
+        // }
+
         await userStorage.user.loadUser()
             .then(async account => {
 
-                if (isEth) {
-
-                }
-
                 account.net = value
+                account.chain = chain
                 account.token = ENQWeb.Enq.token[value]
 
                 await userStorage.promise.sendPromise({
@@ -269,10 +268,9 @@ export default function Network(props) {
 
     let [isEth, setIsEth] = useState(false)
     let [ethNetworks, setEthNetworks] = useState([
-        [null, 'https://goerli.infura.io/v3/']
+        ['GoerliETH', 'https://goerli.infura.io/v3/'],
+        ['ETH', 'https://mainnet.infura.io/v3/']
     ])
-
-    let ethToken = '0xC2336D29B88a0071a7D72BdeaC7Ed9D1950F4D0c'
 
     useEffect(() => {
         renderCards()
@@ -296,7 +294,7 @@ export default function Network(props) {
                     .then()
             }}>❮ Back</div>
 
-            <div className={styles.welcome3}>ENQ / Enecuum</div>
+            <div className={styles.welcome3}>ENECUUM</div>
 
             {showAdd && <div>
 
@@ -343,20 +341,29 @@ export default function Network(props) {
                  className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add
             </div>
 
-            <div className={styles.welcome3}>ETH / Ethereum</div>
+            <div className={styles.welcome3}>ETHEREUM / INFURA</div>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
 
-                    <div key={'eth' + 'card'} className={styles.card + ' ' + (isEth ? '' : styles.card_select)}>
+                    <div key={'eth' + 'card'} className={styles.card + ' ' + ((ENQWeb.Enq.provider === ethNetworks[0][1]) ? '' : styles.card_select)}>
                         <div className={styles.card_field}>{ethNetworks[0][1].replace('https://', '').split('.')[0]
                             .toUpperCase()}</div>
                         <div className={styles.card_field}>{ethNetworks[0][1]}</div>
-                        <div className={styles.card_field}>{shortHash(ethToken)}</div>
-                        <div className={styles.card_field_right_bottom} onClick={(isEth ? () => {} : async () => {
-                            setIsEth(true)
-                            setNet(ethNetworks[0][1], true)
-                        })}>{isEth ? 'CURRENT' : 'SELECT'}</div>
+                        <div className={styles.card_field}>{ethNetworks[0][0]}</div>
+                        <div className={styles.card_field_right_bottom} onClick={((ENQWeb.Enq.provider === ethNetworks[0][1]) ? () => {} : async () => {
+                            setNet(ethNetworks[0][1], chains.ETHEREUM)
+                        })}>{(ENQWeb.Enq.provider === ethNetworks[0][1]) ? 'CURRENT' : 'SELECT'}</div>
+                    </div>
+
+                    <div key={'eth' + 'card'} className={styles.card + ' ' + ((ENQWeb.Enq.provider === ethNetworks[1][1]) ? '' : styles.card_select)}>
+                        <div className={styles.card_field}>{ethNetworks[1][1].replace('https://', '').split('.')[0]
+                            .toUpperCase()}</div>
+                        <div className={styles.card_field}>{ethNetworks[1][1]}</div>
+                        <div className={styles.card_field}>{ethNetworks[1][0]}</div>
+                        <div className={styles.card_field_right_bottom} onClick={((ENQWeb.Enq.provider === ethNetworks[1][1]) ? () => {} : async () => {
+                            setNet(ethNetworks[1][1], chains.ETHEREUM)
+                        })}>{(ENQWeb.Enq.provider === ethNetworks[1][1]) ? 'CURRENT' : 'SELECT'}</div>
                     </div>
 
                 </div>
