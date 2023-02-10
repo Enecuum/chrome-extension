@@ -294,7 +294,7 @@ export default function Network(props) {
                     .then()
             }}>❮ Back</div>
 
-            <div className={styles.welcome3}>ENECUUM</div>
+            <div className={styles.welcome3}>ENECUUM NETWORKS</div>
 
             {showAdd && <div>
 
@@ -341,7 +341,7 @@ export default function Network(props) {
                  className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add
             </div>
 
-            <div className={styles.welcome3}>ETHEREUM / INFURA</div>
+            <div className={styles.welcome3}>ETHEREUM NETWORKS / INFURA </div>
 
             <div className={styles.cards_container}>
                 <div className={styles.cards}>
@@ -368,6 +368,8 @@ export default function Network(props) {
 
                 </div>
             </div>
+
+            <div className={styles.welcome3}>POLYGON NETWORKS / ALCHEMY</div>
 
             <Separator/>
 
