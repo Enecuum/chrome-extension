@@ -29,6 +29,7 @@ const iosRegex = /ios/
 
 let test = registerPlugin('PoA')
 
+let isBootNode = false
 
 export function globalMessageHandler(msg, ENQWeb) {
 
@@ -302,6 +303,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         // Start all PoA
         if (msg.poa && msg.start) {
+            console.log("start poa ")
             let miners = {}
             let accounts = []
             if (msg.account) {
@@ -310,7 +312,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                 resolve({ response: miners })
             } else {
                 for (let i = 0; i < ENQWeb.Enq.User.seedAccountsArray.length; i++) {
-                    console.log(handlerMiners[i])
+                    // console.log(handlerMiners[i])
                     let privateKey = getMnemonicPrivateKeyHex(ENQWeb.Enq.User.seed, i)
                     accounts.push({
                         publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
@@ -319,7 +321,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                 }
 
                 for (let i = 0; i < ENQWeb.Enq.User.privateKeys.length; i++) {
-                    console.log(handlerMiners[i])
+                    // console.log(handlerMiners[i])
                     let privateKey = ENQWeb.Enq.User.privateKeys[i]
                     accounts.push({
                         publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
@@ -332,8 +334,8 @@ export function globalMessageHandler(msg, ENQWeb) {
                 let bitIP = '95.216.246.116'
                 let f3IP = '95.216.207.173'
 
-                let network = JSON.parse((await bootNodeGetIP()).data)
-                console.log(network)
+                // let network = JSON.parse((await bootNodeGetIP()).data)
+                // console.log(network)
 
                 if (androidRegex.test(Capacitor.getPlatform()) || iosRegex.test(Capacitor.getPlatform())) {
 
@@ -355,13 +357,25 @@ export function globalMessageHandler(msg, ENQWeb) {
 
                     // console.log(accounts)
 
-                    test.start({
-                        data: JSON.stringify(accounts),
-                        net: network.data.ip,
-                        port: network.data.port
-                    })
-                        .then(res => {
-                        })
+
+                    if (isBootNode) {
+
+                        let network = JSON.parse((await bootNodeGetIP()).data)
+                        console.log(network)
+                        test.start({
+                            data: JSON.stringify(accounts),
+                            net: network.data.ip,
+                            port: network.data.port
+                        }).then(res => {})
+
+                    } else {
+
+                        test.start({
+                            data: JSON.stringify(accounts),
+                            net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : bitIP,
+                            port: "3000"
+                        }).then(res => {})
+                    }
                     // let miners = startBackgroundMining()
                     miningStatus.miningProcess = true
                     // resolve({ response: miners })

@@ -67,7 +67,7 @@ class Publisher: NSObject{
     var status: Bool?
     var duplicated: Bool = false
     var count: Int = 0
-    public var StatusString: String = "Disconnnected"
+    public var StatusString: String = "Disconnected"
     
     init(account: Account, net: String) {
         self.account = account

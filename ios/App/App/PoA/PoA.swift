@@ -21,6 +21,7 @@ public class PoA: CAPPlugin{
     }
     
     @objc func start(_ call: CAPPluginCall){
+        print("start method used")
         let jsd = JSONDecoder()
         let net = call.getString("net") ?? ""
         let port = call.getString("port") ?? ""
