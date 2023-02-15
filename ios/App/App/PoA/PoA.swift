@@ -15,9 +15,6 @@ public class PoA: CAPPlugin{
     @available(iOS 13.0, *)
     @objc func getM(_ call: CAPPluginCall){
         let value = call.getString("value") ?? ""
-        let ws = WebSocket()
-        ws.openWS(wsURL: "ws://127.0.0.1:4000")
-        ws.start()
         print("sha \(value): \(Crypto.sha256(msg: value))")
         print("sign \(Crypto.sha256(msg: value)): \(Crypto.sign(hash: Crypto.sha256(msg: value), privateKey:""))")
         call.resolve(["value":value])
@@ -51,22 +48,56 @@ public class PoA: CAPPlugin{
     }
     
     @objc func stop(_ call: CAPPluginCall){
-        let value = call.getString("value") ?? ""
-        call.resolve(["value":value])
+        print("stop background")
+        backgroundController.stopBackground()
+        call.resolve()
     }
     
     @objc func updateMiner(_ call: CAPPluginCall){
-        let value = call.getString("value") ?? ""
-        call.resolve(["value":value])
+        let jsd = JSONDecoder()
+        let jsonStringData = call.getString("data") ?? ""
+        let data = jsonStringData.data(using: .utf8)!
+        do {
+            let account = try jsd.decode(AccountUpdate.self, from: data)
+            for miner in backgroundController.miners {
+                if miner.account.publicKey == account.publicKey {
+                    miner.account.token = account.token
+                    miner.reloadUpdatedMiner()
+                }
+            }
+        }catch {
+            print("Error in update miner")
+        }
+        call.resolve()
     }
     @objc func minerSwitch(_ call: CAPPluginCall){
-        let value = call.getString("value") ?? ""
-        call.resolve(["value":value])
+        let jsd = JSONDecoder()
+        let jsonStringData = call.getString("data") ?? ""
+        let data = jsonStringData.data(using: .utf8)!
+        do {
+            let account = try jsd.decode(AccountUpdate.self, from: data)
+            for miner in backgroundController.miners {
+                if miner.account.publicKey == account.publicKey {
+                    miner.account.status = account.status!
+                    if account.status! {
+                        miner.startMiner()
+                    } else {
+                        miner.stopMiner()
+                    }
+                }
+            }
+        }catch {
+            print("Error in switch miner")
+        }
+        call.resolve()
     }
     
     @objc func getMiners(_ call: CAPPluginCall){
-        let value = call.getString("value") ?? ""
-        call.resolve(["value":value])
+        var array:JSObject = [:]
+        for miner in backgroundController.miners {
+            array[miner.account.publicKey] = miner.ws?.publisher?.StatusString
+        }
+        call.resolve(array)
     }
     
     @objc func getServiceStatus(_ call: CAPPluginCall){

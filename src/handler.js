@@ -35,7 +35,7 @@ export function globalMessageHandler(msg, ENQWeb) {
     return new Promise(async (resolve, reject) => {
 
 
-        if (androidRegex.test(Capacitor.getPlatform())) {
+        if (androidRegex.test(Capacitor.getPlatform()) || iosRegex.test(Capacitor.getPlatform())) {
             if (msg.ports && msg.disconnect) {
                 if (msg.all) {
                     disconnectPorts()
@@ -216,7 +216,7 @@ export function globalMessageHandler(msg, ENQWeb) {
         // Get PoA keys state
         if (msg.poa && msg.get) {
 
-            if (androidRegex.test(Capacitor.getPlatform())) {
+            if (androidRegex.test(Capacitor.getPlatform()) || iosRegex.test(Capacitor.getPlatform())) {
                 // let answer = await getMobileMiners()
                 let answer = await test.getMiners()
                     .then(data => {
@@ -379,7 +379,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
         if (msg.poa && msg.stop) {
             console.log(handlerMiners)
-            if (androidRegex.test(Capacitor.platform)) {
+            if (androidRegex.test(Capacitor.platform) || iosRegex.test(Capacitor.getPlatform())) {
                 test.stop()
                     .then(res => {
                     })
@@ -401,7 +401,7 @@ export function globalMessageHandler(msg, ENQWeb) {
         if (msg.poa && msg.account && msg.token) {
             console.log(handlerMiners)
             handlerMiners.find(element => element.publicKey === msg.account.publicKey).token = msg.token
-            if (androidRegex.test(Capacitor.platform) && miningStatus.miningProcess) {
+            if ((androidRegex.test(Capacitor.platform) || iosRegex.test(Capacitor.getPlatform())) && miningStatus.miningProcess) {
                 test.updateMiner({
                     data: JSON.stringify({
                         publicKey: msg.account.publicKey,
@@ -425,7 +425,7 @@ export function globalMessageHandler(msg, ENQWeb) {
             } catch (e) {
             }
             handlerMiners.find(element => element.publicKey === msg.account.publicKey).mining = msg.set
-            if (miningStatus.miningProcess && androidRegex.test(Capacitor.platform)) {
+            if (miningStatus.miningProcess && (androidRegex.test(Capacitor.platform) || iosRegex.test(Capacitor.getPlatform()))) {
                 test.minerSwitch({
                     data: JSON.stringify({
                         publicKey: msg.account.publicKey,
@@ -651,7 +651,7 @@ const taskHandler = async (taskId) => {
             pubkey: account.publicKey,
             net: account.net,
         }
-        if (androidRegex.test(Capacitor.getPlatform())) {
+        if (androidRegex.test(Capacitor.getPlatform()) || iosRegex.test(Capacitor.getPlatform())) {
             ports[task.cb.url] = {}
             ports[task.cb.url].enabled = true
         }
