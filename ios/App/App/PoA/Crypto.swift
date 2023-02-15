@@ -12,12 +12,18 @@ import CryptoSwift
 
 extension String{
     func xor(second: String) -> String {
-        var x = Array(hex: self)
-        var y = Array(hex: second)
-        for i in 0..<x.count {
-            x[i] = x[i]^y[i]
+        if (self.count == second.count) {
+            var x = Array(hex: self)
+            var y = Array(hex: second)
+            for i in 0..<x.count {
+                x[i] = x[i]^y[i]
+            }
+            return x.toHexString().lowercased()
+        } else {
+            print("Count is not equals")
+            return ""
         }
-        return x.toHexString().lowercased()
+        
     }
     
     func substring(from: Int) -> String {
