@@ -322,6 +322,8 @@ export default function Account(props) {
                          setReferral={props.setReferral}
                          getBiometry={props.getBiometry}
                          changeBiometry={props.changeBiometry}
+                         getWakeLock={props.getWakeLock}
+                         changeWakeLock={props.changeWakeLock}
             />
         }
     }

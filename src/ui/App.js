@@ -22,7 +22,7 @@ import Referral from './components/Referral'
 import Mnemonic from './components/account/mnemonic/Mnemonic'
 import ImportMnemonic from './components/account/mnemonic/ImoprtMnemonic'
 import Selector from './components/account/Selector'
-import { NET, PASSWORD_VERSION } from '../utils/names'
+import { NET, PASSWORD_VERSION, WAKELOCK } from '../utils/names'
 import ImportKey from './components/account/ImportKey'
 import eventBus from '../utils/eventBus'
 import Ledger from './components/account/Ledger'
@@ -35,7 +35,7 @@ import QRCamera from './components/QRCamera'
 import { Capacitor } from '@capacitor/core'
 import { NativeBiometric } from 'capacitor-native-biometric'
 
-import { createGesture, Gesture } from '@ionic/react';
+import { createGesture, Gesture } from '@ionic/react'
 
 
 let net = localStorage.getItem(NET)
@@ -138,6 +138,55 @@ export default function App(props) {
         setBiometry(isAvailable)
     }
 
+    let setWakeLock = async () => {
+        try {
+            const wakeLock = await navigator.wakeLock.request('screen')
+            return true
+        } catch (err) {
+            console.log(err)
+            return false
+        }
+    }
+
+    let initWakeLock = async () => {
+        try {
+            let wakelock = localStorage.getItem(WAKELOCK)
+            if (wakelock === null) {
+                localStorage.setItem(WAKELOCK, JSON.stringify({ status: false }))
+            } else {
+                console.log(wakelock)
+                wakelock = JSON.parse(wakelock)
+                if (wakelock.status) {
+                    setWakeLock()
+                        .then()
+                }
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    let changeWakeLock = async () => {
+        try {
+            let wakelock = JSON.parse(localStorage.getItem(WAKELOCK))
+            localStorage.setItem(WAKELOCK, JSON.stringify({ status: !wakelock.status }))
+            initWakeLock().then()
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    let getWakeLock = () => {
+        try {
+            let wakelock = JSON.parse(localStorage.getItem(WAKELOCK))
+            return wakelock.status;
+        } catch (e) {
+            console.log(e)
+            return false;
+        }
+    }
+
+
     eventBus.on('lock', (data) => {
         console.warn('EVENT: ' + 'lock' + ' ' + data.message)
         setLock(data.message)
@@ -220,6 +269,8 @@ export default function App(props) {
             .then()
 
         initGestures()
+        initWakeLock()
+            .then()
     }, [])
 
 
@@ -252,7 +303,7 @@ export default function App(props) {
                 setPassword(true)
                 // setPassword(true)
                 localStorage.removeItem(NET)
-                if(getBiometry() === true){
+                if (getBiometry() === true) {
                     changeBiometry()
                 }
 
@@ -312,18 +363,19 @@ export default function App(props) {
             threshold: 15,
             gestureName: 'my-gesture',
             onMove: ev => onMove(ev)
-        });
+        })
 
-        gesture.enable();
+        gesture.enable()
 
         const onMove = (detail) => {
-            const type = detail.type;
-            const currentX = detail.currentX;
-            const deltaX = detail.deltaX;
-            const velocityX = detail.velocityX;
+            const type = detail.type
+            const currentX = detail.currentX
+            const deltaX = detail.deltaX
+            const velocityX = detail.velocityX
 
-            if (velocityX > 1)
+            if (velocityX > 1) {
                 console.log('BACK')
+            }
 
             // console.log({type, currentX, deltaX, velocityX})
         }
@@ -486,5 +538,7 @@ export default function App(props) {
                     setReferral={setReferral}
                     getBiometry={getBiometry}
                     changeBiometry={changeBiometry}
+                    getWakeLock={getWakeLock}
+                    changeWakeLock={changeWakeLock}
     />
 }

@@ -17,6 +17,8 @@ const NETWORKS = 'networks'
 const NET = 'net'
 // TODO favorite sites
 const SITES = 'sites'
+//TODO wakelock name
+const WAKELOCK = 'wakelock'
 
 const STATE = 'state'
 
@@ -69,5 +71,6 @@ module.exports = {
     SITES,
     STATE,
     REFERRAL,
-    PASSWORD_VERSION
+    PASSWORD_VERSION,
+    WAKELOCK
 }

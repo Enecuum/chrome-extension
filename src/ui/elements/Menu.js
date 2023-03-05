@@ -244,6 +244,8 @@ export default function Menu(props) {
             {/*</div>*/}
             {chrome.runtime.web ? <div className={styles.button_link}
                                        onClick={props.changeBiometry}>Biometry {props.getBiometry() ? 'ON' : 'OFF'}</div> : ''}
+            {chrome.runtime.web ? <div className={styles.button_link}
+                                       onClick={props.changeWakeLock}>Wake lock {props.getWakeLock() ? 'ON' : 'OFF'}</div> : ''}
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={window}>Window</div>}
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>}
