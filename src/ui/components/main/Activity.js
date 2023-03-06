@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 import {explorerAddress, explorerTX, shortHash} from '../../Utils'
 import {apiController} from '../../../utils/apiController'
 import {globalState} from '../../../globalState'
-import {TEXTS} from "../../../utils/TEXTS";
+import {texts} from "../../../utils/texts";
 
 const names = {
     enable: 'Share account address',
@@ -266,7 +266,7 @@ export default function Activity(props) {
 
             {activity.length > 1 && <div onClick={rejectAll}
                                          className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
-                {TEXTS.reject_all}
+                {texts.reject_all}
             </div>}
 
             {history.length > 0 && <div className={styles.field}>HISTORY:</div>}

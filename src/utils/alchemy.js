@@ -14,8 +14,8 @@ const alchemy = new Alchemy(settings)
 
 const latestBlock = alchemy.core.getBlockNumber()
 latestBlock.then(block => {
-    console.log('Ethereum block number')
-    console.log(block)
+    // console.log('Ethereum block number')
+    // console.log(block)
 })
 
 
@@ -23,6 +23,6 @@ export const getBalanceAllAlchemy = () => {
     alchemy.core.getTokenBalances(publicKey).then(console.log)
     alchemy.core.getTokensForOwner(publicKey).then(console.log)
     alchemy.core.getBalance(publicKey).then(value => {
-        console.log(value.toString())
+        // console.log(value.toString())
     })
 }
