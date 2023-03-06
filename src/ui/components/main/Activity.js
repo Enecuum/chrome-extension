@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react'
 import {explorerAddress, explorerTX, shortHash} from '../../Utils'
 import {apiController} from '../../../utils/apiController'
 import {globalState} from '../../../globalState'
+import {TEXTS} from "../../../utils/TEXTS";
 
 const names = {
     enable: 'Share account address',
@@ -29,6 +30,13 @@ export default function Activity(props) {
         return ticker
     }
 
+    const findTickerInCacheLight = async (hash) => {
+        // console.log(allTokens)
+        let ticker = allTokens[hash] !== undefined ? allTokens[hash] : 'COIN'
+        // console.log(ticker)
+        return ticker
+    }
+
     const updateActivityTask = () => {
         let updater = setInterval(() => {
             setActivity(userStorage.list.listOfTask())
@@ -37,63 +45,70 @@ export default function Activity(props) {
 
     const getHistory = async () => {
 
-        // console.log('getHistory')
+        // console.warn('getHistory')
 
-        // console.log(globalState.getNetworkState(ENQWeb.Enq.provider))
+        console.log(globalState.getNetworkState(ENQWeb.Enq.provider))
         let globalStateHistory = globalState.getNetworkState(ENQWeb.Enq.provider).history[props.user.publicKey] || []
         // console.log(globalStateHistory)
         setHistory(globalStateHistory)
 
-        let history = {}
-        history.records = []
+
+        let historyRecords = []
         for (let i = 0; i < 5; i++) {
-            let historyRecords = await apiController.getAccountTransactions(props.user.publicKey, i)
-            history.records = history.records.concat(historyRecords.records)
+            let newHistoryRecords = await apiController.getAccountTransactions(props.user.publicKey, i)
+            historyRecords = historyRecords.concat(newHistoryRecords.records)
         }
 
-        let oldActivity = []
-        for (let id in history.records) {
-            if (history.records[id]) {
-                oldActivity.push({
-                    status: history.records[id].status,
-                    data: {
-                        date: history.records[id].time * 1000,
-                        feeTicker: false,
-                        feeDecimals: false,
-                        decimals: props.decimals[history.records[id].token_hash] || 1e10,
-                        ticker: false,
-                        fee_type: history.records[id].fee_type,
-                        fee: history.records[id].fee_value
+        // console.warn(historyRecords)
+
+        let historyArray = []
+        for (let id in historyRecords) {
+            // console.warn(id)
+            let record = {
+                status: historyRecords[id].status,
+                data: {
+                    date: historyRecords[id].time * 1000,
+                    feeTicker: false,
+                    feeDecimals: false,
+                    decimals: props.decimals[historyRecords[id].token_hash] || 1e10,
+                    ticker: false,
+                    fee_type: historyRecords[id].fee_type,
+                    fee: historyRecords[id].fee_value
+                },
+                rectype: historyRecords[id].rectype,
+                tx: {
+                    to: historyRecords[id].rectype === 'iin' ? props.user.publicKey : '00000',
+                    from: {
+                        pubkey: historyRecords[id].rectype !== 'iin' ? props.user.publicKey : '00000',
                     },
-                    rectype: history.records[id].rectype,
-                    tx: {
-                        to: history.records[id].rectype === 'iin' ? props.user.publicKey : '00000',
-                        from: {
-                            pubkey: history.records[id].rectype !== 'iin' ? props.user.publicKey : '00000',
-                        },
-                        data: history.records[id].data,
-                        hash: history.records[id].hash,
-                        fee_value: history.records[id].fee_value,
-                        tokenHash: history.records[id].token_hash,
-                        ticker: await findTickerInCache(history.records[id].token_hash),
-                        value: history.records[id].amount * (history.records[id].rectype === 'iin' ? 1 : -1)
-                    },
-                    cb: {
-                        taskId: 0,
-                    },
-                    type: history.records[id].rectype
-                })
+                    data: historyRecords[id].data,
+                    hash: historyRecords[id].hash,
+                    fee_value: historyRecords[id].fee_value,
+                    tokenHash: historyRecords[id].token_hash,
+                    ticker: await findTickerInCacheLight(historyRecords[id].token_hash),
+                    value: historyRecords[id].amount * (historyRecords[id].rectype === 'iin' ? 1 : -1)
+                },
+                cb: {
+                    taskId: 0,
+                },
+                type: historyRecords[id].rectype
             }
+
+            // console.warn(record)
+
+            historyArray.push(record)
         }
 
-        setHistory(oldActivity)
-        globalState.setHistory(ENQWeb.Enq.provider, props.user.publicKey, oldActivity)
+        // console.warn(historyArray)
+
+        setHistory(historyArray)
+        globalState.setHistory(ENQWeb.Enq.provider, props.user.publicKey, historyArray)
         globalState.save().then()
     }
 
     let renderHistory = () => {
 
-        let historyArray = history
+        // let historyArray = history
 
         // console.log(history)
 
@@ -104,13 +119,13 @@ export default function Activity(props) {
         // || item.tx.data.includes(props.user.token)
 
         // TODO only trusted tokens
-        let filteredHistory = props.user.token && props.user.token !== props.getMainToken() ? historyArray.filter(item => item.tx.tokenHash === props.user.token) : historyArray
+        let filteredHistory = props.user.token && props.user.token !== props.getMainToken() ? history.filter(item => item.tx.tokenHash === props.user.token) : history
         // console.log(filteredHistory)
 
-        for (const key in filteredHistory) {
+        for (const id in filteredHistory) {
             // console.log(filteredHistory[key].tx.tokenHash === props.user.token)
             // console.log(filteredHistory[key].tx.tokenHash)
-            const item = filteredHistory[key]
+            const item = filteredHistory[id]
             // console.log(item.tx.tokenHash)
             // console.log(decimals)
             // console.log(decimals.hasOwnProperty(item.tx.tokenHash))
@@ -134,7 +149,7 @@ export default function Activity(props) {
             // console.log(item.tx)
             historyElements.push(
                 <div
-                    key={key} onClick={() => {
+                    key={id} onClick={() => {
                     //TODO
                     if (item.type === 'iin') {
                         props.setTransactionHistory(item)
@@ -189,12 +204,12 @@ export default function Activity(props) {
 
         let activityElements = []
 
-        for (const key in activity) {
-            const item = activity[key]
+        for (const id in activity) {
+            const item = activity[id]
             // console.log(item)
             activityElements.push(
                 <div
-                    key={key} onClick={() => {
+                    key={id} onClick={() => {
                     if (item.type === 'enable') {
                         props.setPublicKeyRequest(item)
                     }
@@ -251,7 +266,7 @@ export default function Activity(props) {
 
             {activity.length > 1 && <div onClick={rejectAll}
                                          className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
-                Reject all
+                {TEXTS.reject_all}
             </div>}
 
             {history.length > 0 && <div className={styles.field}>HISTORY:</div>}
