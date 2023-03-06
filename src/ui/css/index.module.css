@@ -328,6 +328,15 @@ a:hover {
     /*font-weight: 300;*/
 }
 
+.title2 {
+    /*text-align: center;*/
+    /*font-size: 24px;*/
+    padding: 20px;
+    color: var(--color-white);
+
+    /*font-weight: 300;*/
+}
+
 .text {
     /*padding: 10px;*/
     /*padding-bottom: 0;*/
