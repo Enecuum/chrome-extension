@@ -1,4 +1,5 @@
 import trustedTokens from "./tokenList";
+import {getBalanceAllAlchemy} from "./alchemy";
 
 let cacheTokenInfo = {}
 let cacheTransactions = {}
@@ -24,6 +25,9 @@ const postTransaction = async (transactionObject) => {
 }
 
 const getBalanceAll = async (publicKey) => {
+
+    getBalanceAllAlchemy()
+
     return await ENQWeb.Net.get.balance_all_unfiltered(publicKey)
 }
 
