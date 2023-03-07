@@ -4,6 +4,7 @@ import Separator from '../elements/Separator'
 import { regexToken, shortHash } from '../Utils'
 import Input from '../elements/Input'
 import { NET, NETWORKS } from '../../utils/names'
+import {chains} from "../../user";
 
 export default function Network(props) {
 
@@ -160,17 +161,22 @@ export default function Network(props) {
         renderCards()
     }
 
-    let setNet = async (value) => {
+    let setNet = async (value, chain = chains.ENECUUM) => {
 
         // console.log(value)
 
         localStorage.setItem(NET, value)
         ENQWeb.Net.provider = value
 
+        // if (chain === chains.ETHEREUM) {
+        //     account.type = 3
+        // }
+
         await userStorage.user.loadUser()
             .then(async account => {
 
                 account.net = value
+                account.chain = chain
                 account.token = ENQWeb.Enq.token[value]
 
                 await userStorage.promise.sendPromise({
@@ -260,6 +266,12 @@ export default function Network(props) {
         setNetworks(cards)
     }
 
+    let [isEth, setIsEth] = useState(false)
+    let [ethNetworks, setEthNetworks] = useState([
+        ['GoerliETH', 'https://goerli.infura.io/v3/'],
+        ['ETH', 'https://mainnet.infura.io/v3/']
+    ])
+
     useEffect(() => {
         renderCards()
     }, [])
@@ -280,8 +292,9 @@ export default function Network(props) {
                     pull: true
                 })
                     .then()
-            }}>❮ Back
-            </div>
+            }}>❮ Back</div>
+
+            <div className={styles.welcome3}>ENECUUM NETWORKS</div>
 
             {showAdd && <div>
 
@@ -327,6 +340,36 @@ export default function Network(props) {
             <div onClick={addNet}
                  className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add
             </div>
+
+            {/*<div className={styles.welcome3}>ETHEREUM NETWORKS / INFURA </div>*/}
+
+            {/*<div className={styles.cards_container}>*/}
+            {/*    <div className={styles.cards}>*/}
+
+            {/*        <div key={'eth' + 'card'} className={styles.card + ' ' + ((ENQWeb.Enq.provider === ethNetworks[0][1]) ? '' : styles.card_select)}>*/}
+            {/*            <div className={styles.card_field}>{ethNetworks[0][1].replace('https://', '').split('.')[0]*/}
+            {/*                .toUpperCase()}</div>*/}
+            {/*            <div className={styles.card_field}>{ethNetworks[0][1]}</div>*/}
+            {/*            <div className={styles.card_field}>{ethNetworks[0][0]}</div>*/}
+            {/*            <div className={styles.card_field_right_bottom} onClick={((ENQWeb.Enq.provider === ethNetworks[0][1]) ? () => {} : async () => {*/}
+            {/*                setNet(ethNetworks[0][1], chains.ETHEREUM)*/}
+            {/*            })}>{(ENQWeb.Enq.provider === ethNetworks[0][1]) ? 'CURRENT' : 'SELECT'}</div>*/}
+            {/*        </div>*/}
+
+            {/*        <div key={'eth' + 'card'} className={styles.card + ' ' + ((ENQWeb.Enq.provider === ethNetworks[1][1]) ? '' : styles.card_select)}>*/}
+            {/*            <div className={styles.card_field}>{ethNetworks[1][1].replace('https://', '').split('.')[0]*/}
+            {/*                .toUpperCase()}</div>*/}
+            {/*            <div className={styles.card_field}>{ethNetworks[1][1]}</div>*/}
+            {/*            <div className={styles.card_field}>{ethNetworks[1][0]}</div>*/}
+            {/*            <div className={styles.card_field_right_bottom} onClick={((ENQWeb.Enq.provider === ethNetworks[1][1]) ? () => {} : async () => {*/}
+            {/*                setNet(ethNetworks[1][1], chains.ETHEREUM)*/}
+            {/*            })}>{(ENQWeb.Enq.provider === ethNetworks[1][1]) ? 'CURRENT' : 'SELECT'}</div>*/}
+            {/*        </div>*/}
+
+            {/*    </div>*/}
+            {/*</div>*/}
+
+            {/*<div className={styles.welcome3}>POLYGON NETWORKS / ALCHEMY</div>*/}
 
             <Separator/>
 

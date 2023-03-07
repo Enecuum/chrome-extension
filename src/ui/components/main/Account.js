@@ -10,6 +10,7 @@ import Input from '../../elements/Input'
 import Assets from './Assets'
 import Activity from './Activity'
 import { globalState } from '../../../globalState'
+import {getText, texts} from "../../../utils/texts";
 
 
 let tickers = {}
@@ -576,6 +577,9 @@ export default function Account(props) {
 
                 <div
                     className={`${styles.bottom_list} ${styles.bottom_list_activity} ${activeTab === 2 ? '' : `${styles.bottom_list_disabled}`}`}>
+
+                    {connectsElements.length === 0 &&
+                        <div className={styles.title2}>{getText('not_connected')}</div>}
 
                     {connectsElements}
 

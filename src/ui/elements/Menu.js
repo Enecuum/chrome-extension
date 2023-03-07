@@ -6,6 +6,7 @@ import { createPopupWindow } from '../../handler'
 import * as bip32 from 'bip32'
 import { PASSWORD_VERSION, versions } from '../../utils/names'
 import { useUserContext } from '../context/useUserContext'
+import {getText} from "../../utils/texts";
 
 // global.WebUSB = TransportWebUSB
 // global.transportWebUSB = {}
@@ -245,7 +246,7 @@ export default function Menu(props) {
             {chrome.runtime.web ? <div className={styles.button_link}
                                        onClick={props.changeBiometry}>Biometry {props.getBiometry() ? 'ON' : 'OFF'}</div> : ''}
             {chrome.runtime.web ? <div className={styles.button_link}
-                                       onClick={props.changeWakeLock}>Wake lock {props.getWakeLock() ? 'ON' : 'OFF'}</div> : ''}
+                                       onClick={props.changeWakeLock}>{getText('disallow_phone_sleep')} {props.getWakeLock() ? 'ON' : 'OFF'}</div> : ''}
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={window}>Window</div>}
             {chrome.runtime.web ? '' : <div className={styles.button_link} onClick={() => changeOpenPopup()}>Popup
                 window: {openEnable ? 'ON' : 'OFF'}</div>}

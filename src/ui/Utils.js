@@ -16,7 +16,11 @@ let regexReferral = /^(ref_)[0-9a-fA-F]{66}$/
 // let regexSeed = /^[a-f, ]+$/
 let regexSeed = /^(\w+\s){11,}\w+$/
 
+// TODO is Enecuum address
 let mnemonicPath = "m/44'/2045'/0'/0"
+
+// TODO is Ethereum address
+let ethMnemonicPath = "m/44'/2045'/0'/0"
 
 let ledgerPath = "44'/60'/0'/0/"
 

@@ -31,14 +31,24 @@ export default class Password extends React.Component {
     }
 
     handleChangeOldPassword(e) {
-        this.setState({ oldPassword: e.target.value })
+        this.setState({ oldPassword: e.target.value }, this.setAllow)
     }
 
     setAllow() {
-        if (this.state.password1 === this.state.password2) {
-            this.setState({ allow: true })
+        if (this.props.publicKey) {
+            if (this.state.password1 === this.state.password2 && this.state.password1.length > 0) {
+                if (this.state.oldPassword.length > 0 && this.props.publicKey) {
+                    this.setState({ allow: true })
+                } else {
+                    this.setState({ allow: false })
+                }
+            }
         } else {
-            this.setState({ allow: false })
+            if (this.state.password1 === this.state.password2 && this.state.password1.length > 0) {
+                this.setState({ allow: true })
+            } else {
+                this.setState({ allow: false })
+            }
         }
     }
 

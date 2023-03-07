@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import {
@@ -12,17 +12,17 @@ import {
 import Input from '../../elements/Input'
 import * as bip39 from 'bip39'
 import * as bip32 from 'bip32'
-import { createPopupWindow, createTabWindow } from '../../../handler'
+import {createPopupWindow, createTabWindow} from '../../../handler'
 // import eventBus from "../../../utils/eventBus";
-import { signHash, getVersion, getPublicKey } from '../../../utils/ledgerShell'
+import {signHash, getVersion, getPublicKey} from '../../../utils/ledgerShell'
 import TransportWebHID from '@ledgerhq/hw-transport-webhid'
-import { generateAccountData, generateLedgerAccountData } from '../../../user'
+import {chains, generateAccountData, generateLedgerAccountData} from '../../../user'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 import Eth from '@ledgerhq/hw-app-eth'
 import elements from '../../css/elements.module.css'
-import { copyText } from '../../../utils/names'
+import {copyText} from '../../../utils/names'
 import Back from '../../elements/Back'
-import { apiController } from '../../../utils/apiController'
+import {apiController} from '../../../utils/apiController'
 
 // let balance = {}
 
@@ -43,6 +43,7 @@ export default function Selector(props) {
     let [cards1, setCards1] = useState([])
     let [cards2, setCards2] = useState([])
     let [cards3, setCards3] = useState([])
+    let [cards4, setCards4] = useState([])
 
     // let [showAdd, setShowAdd] = useState(false)
 
@@ -54,6 +55,8 @@ export default function Selector(props) {
     let [balance, setBalance] = useState({})
 
     let [copied, setCopied] = useState()
+
+    let [chain, setChain] = useState(chains.ENECUUM)
 
     useEffect(() => {
         loadUser()
@@ -80,11 +83,34 @@ export default function Selector(props) {
 
     let buildAccountsArray = async (account) => {
 
-        // console.log(account)
+        let accounts = []
+
+        if (account.seed) {
+            setSeed(true)
+        }
+
+        if (account.chain === chains.ETHEREUM) {
+
+            setChain(chains.ETHEREUM)
+
+            const privateKey = account.privateKeys[0]
+            const publicKey = '0x86E3d1727E5Ef1b5751De64999861B7239C3cDa6'
+
+            let current = false
+
+            accounts.push({
+                privateKey: privateKey,
+                publicKey,
+                amount: 0,
+                current,
+                groupIndex: 0,
+                type: 3
+            })
+
+            return accounts
+        }
 
         const mainPublicKey = account.type === 2 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true)
-
-        let accounts = []
 
         for (let i = 0; i < account.privateKeys.length; i++) {
             const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
@@ -101,10 +127,6 @@ export default function Selector(props) {
             requestBalance(publicKey)
                 .then(r => {
                 })
-        }
-
-        if (account.seed) {
-            setSeed(true)
         }
 
         for (let i = 0; i < account.seedAccountsArray.length; i++) {
@@ -229,6 +251,9 @@ export default function Selector(props) {
         if (type === 2) {
             return 'LEDGER'
         }
+        if (type === 3) {
+            return 'ETHEREUM'
+        }
     }
 
     let renderCards = (accounts) => {
@@ -236,10 +261,12 @@ export default function Selector(props) {
         let accounts1 = accounts.filter(item => item.type === 0)
         let accounts2 = accounts.filter(item => item.type === 1)
         let accounts3 = accounts.filter(item => item.type === 2)
+        let accounts4 = accounts.filter(item => item.type === 3)
 
         setCards1(generateCards(accounts1))
         setCards2(generateCards(accounts2))
         setCards3(generateCards(accounts3))
+        setCards4(generateCards(accounts4))
     }
 
     let generateCards = (accounts) => {
@@ -253,7 +280,7 @@ export default function Selector(props) {
 
             let name = getType(account.type)
                     .charAt(0)
-                    // .replace('S', '')
+                // .replace('S', '')
                 + (account.groupIndex + 1)
 
             cards.push(
@@ -276,11 +303,11 @@ export default function Selector(props) {
                     <div className={styles.card_field + ' ' + styles.card_field_amount}
                          title={Number(account.amount) / 1e10 + ''}>
                         {(account.amount > 0 ?
-                            (Number(account.amount) / 1e10).toFixed(4)
-                            :
-                            '0.0')
+                                (Number(account.amount) / 1e10).toFixed(4)
+                                :
+                                '0.0')
 
-                        + ' ' + (ticker ? ticker : 'COIN')}
+                            + ' ' + (ticker ? ticker : 'COIN')}
                     </div>
 
                     {/*<div className={styles.card_field_select + ' ' + (current ? '' : 'select')}*/}
@@ -378,64 +405,89 @@ export default function Selector(props) {
                 .then(() => {
                     props.setAccountSelector(false)
                 })}
-                  cb={()=>{
-                      userStorage.promise.sendPromise({poa:true, update:true, pull:true}).then()
+                  cb={() => {
+                      userStorage.promise.sendPromise({poa: true, update: true, pull: true}).then()
                   }}
             />
 
-            <div className={styles.welcome3}>MNEMONIC</div>
+            <div className={styles.welcome3}>Enecuum networks accounts</div>
 
-            <div className={styles.cards_container}>
-                <div className={styles.cards}>
-                    {cards2}
+            {chain === chains.ENECUUM && <div>
+
+                <div className={styles.welcome3}>MNEMONIC</div>
+
+                <div className={styles.cards_container}>
+                    <div className={styles.cards}>
+                        {cards2}
+                    </div>
                 </div>
-            </div>
 
-            {/*<div className={styles.cards_container}>*/}
-            {/*    <div className={styles.cards}>*/}
-            {/*        {cards.filter(item => item.type === 0).map(item => item.div)}*/}
-            {/*    </div>*/}
-            {/*</div>*/}
+                {/*<div className={styles.cards_container}>*/}
+                {/*    <div className={styles.cards}>*/}
+                {/*        {cards.filter(item => item.type === 0).map(item => item.div)}*/}
+                {/*    </div>*/}
+                {/*</div>*/}
 
-            {seed && <div className={styles.field + ' ' + styles.button}
-                          onClick={addMnemonicAccount}>Add Mnemonic Account</div>}
+                {seed && <div className={styles.field + ' ' + styles.button}
+                              onClick={addMnemonicAccount}>Add Mnemonic Account</div>}
 
-            {!seed && <div className={styles.field + ' ' + styles.button}
-                           onClick={props.setMnemonic}>Generate Mnemonic</div>}
+                {!seed && <div className={styles.field + ' ' + styles.button}
+                               onClick={props.setMnemonic}>Generate Mnemonic</div>}
 
-            {!seed && <div className={styles.field + ' ' + styles.button}
-                           onClick={props.setImportMnemonic}>Import Mnemonic</div>}
+                {!seed && <div className={styles.field + ' ' + styles.button}
+                               onClick={props.setImportMnemonic}>Import Mnemonic</div>}
+
+                <Separator line={true}/>
+
+                <div className={styles.welcome3}>LEDGER</div>
+
+                <div className={styles.cards_container}>
+                    <div className={styles.cards}>
+                        {cards3}
+                    </div>
+                </div>
+
+                {!ledger && <div className={styles.field + ' ' + styles.button}
+                                 onClick={() => connectLedger()}>Connect Ledger</div>}
+
+                {getUrlVars().popup ? <div className={styles.field + ' ' + styles.text + ' ' + styles.text_help}>
+                    There will be separate window for Ledger connection instead of popup.
+                </div> : ''}
+
+                <Separator line={true}/>
+
+                <div className={styles.welcome3}>PRIVATE KEYS</div>
+
+                <div className={styles.cards_container}>
+                    <div className={styles.cards}>
+                        {cards1}
+                    </div>
+                </div>
+
+                <div className={styles.field + ' ' + styles.button} onClick={props.setImportKey}>
+                    Import Key
+                </div>
+
+            </div>}
 
             <Separator line={true}/>
 
-            <div className={styles.welcome3}>LEDGER</div>
+            <div className={styles.welcome3}>Ethereum networks accounts</div>
 
-            <div className={styles.cards_container}>
-                <div className={styles.cards}>
-                    {cards3}
+            {chain === chains.ETHEREUM && <div>
+
+                <div className={styles.welcome3}>MNEMONIC</div>
+
+                <div className={styles.cards_container}>
+                    <div className={styles.cards}>
+                        {cards4}
+                    </div>
                 </div>
-            </div>
 
-            {!ledger && <div className={styles.field + ' ' + styles.button}
-                             onClick={() => connectLedger()}>Connect Ledger</div>}
+                {seed && <div className={styles.field + ' ' + styles.button}
+                              onClick={addMnemonicAccount}>Add Mnemonic Account</div>}
 
-            {getUrlVars().popup ? <div className={styles.field + ' ' + styles.text + ' ' + styles.text_help}>
-                There will be separate window for Ledger connection instead of popup.
-            </div> : ''}
-
-            <Separator line={true}/>
-
-            <div className={styles.welcome3}>PRIVATE KEYS</div>
-
-            <div className={styles.cards_container}>
-                <div className={styles.cards}>
-                    {cards1}
-                </div>
-            </div>
-
-            <div className={styles.field + ' ' + styles.button} onClick={props.setImportKey}>
-                Import Key
-            </div>
+            </div>}
 
             <Separator/>
 
