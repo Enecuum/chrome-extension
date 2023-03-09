@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
 import Header from '../../elements/Header'
 import Address from '../../elements/Address'
 import Menu from '../../elements/Menu'
-import { copyToClipboard, explorerAddress, explorerTX, generateIcon, shortHash } from '../../Utils'
+import {copyToClipboard, explorerAddress, explorerTX, generateIcon, shortHash} from '../../Utils'
 import Separator from '../../elements/Separator'
-import { apiController } from '../../../utils/apiController'
+import {apiController} from '../../../utils/apiController'
 import Input from '../../elements/Input'
 import Assets from './Assets'
 import Activity from './Activity'
-import { globalState } from '../../../globalState'
+import {globalState} from '../../../globalState'
 import {getText, texts} from "../../../utils/texts";
 
 
@@ -62,7 +62,7 @@ export default function Account(props) {
     }
 
     const getConnects = async () => {
-        let connects = await asyncRequest({ connectionList: true })
+        let connects = await asyncRequest({connectionList: true})
         if (typeof connects === 'object') {
             setConnectionsCounter(Object.keys(connects.ports ? connects.ports : {}).length)
         }
@@ -339,7 +339,7 @@ export default function Account(props) {
             .then(async result => {
                 if (result === true) {
                     getBalance()
-                        .then(()=>{
+                        .then(() => {
                             setLoaded(true)
                         })
                     getConnects()
@@ -362,7 +362,7 @@ export default function Account(props) {
             isMounted = false
         }
 
-    }, [usd, activeTab, userTrustedTokens, props.user])
+    }, [usd, activeTab, userTrustedTokens, props.user, isLoaded])
 
     let setAllConnects = (connects) => {
 
@@ -507,28 +507,35 @@ export default function Account(props) {
             <div className={styles.center}>
 
                 <div className={styles.circle_button} onClick={copyPublicKey}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/8.png"/>
+                    <div className={styles.icon_container}>
+                        <img className={styles.icon} src="./images/icons/8.png"/>
                     </div>
                     <div>Copy</div>
                 </div>
 
-                <div className={styles.circle_button}
+                <div className={styles.circle_button + ' ' + (!isLoaded ? styles.circle_button_disabled : '')}
                      onClick={isLoaded ? () => props.setTransaction({
                          balance: amount,
                          ticker: ticker,
                          token: props.user.token
-                     }) : ()=>{}}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/12.png"/>
+                     }) : () => {
+                     }}>
+                    <div className={styles.icon_container}>
+                        <img className={styles.icon} src="./images/icons/12.png"/>
                     </div>
                     <div>Send</div>
                     {/*<div>Transaction</div>*/}
                 </div>
 
-                {isMiningToken && <div className={styles.circle_button} onClick={isLoaded ?  props.setMining : ()=>{}}>
-                    <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/9.png"/>
-                    </div>
-                    <div>Mining</div>
-                </div>}
+                {isMiningToken &&
+                    <div className={styles.circle_button + ' ' + (!isLoaded ? styles.circle_button_disabled : '')}
+                         onClick={isLoaded ? props.setMining : () => {
+                         }}>
+                        <div className={styles.icon_container}>
+                            <img className={styles.icon} src="./images/icons/9.png"/>
+                        </div>
+                        <div>Mining</div>
+                    </div>}
 
             </div>
 

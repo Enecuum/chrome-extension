@@ -759,6 +759,16 @@ input[type=number] {
     cursor: pointer;
 }
 
+.circle_button_disabled {
+    color: var(--color-gray);
+}
+
+.disabled {
+    color: var(--color-gray);
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
 .circle_button > div {
     /*background: red;*/
     line-height: 16px;
