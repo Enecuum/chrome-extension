@@ -55,6 +55,8 @@ export default function Account(props) {
 
     const [activityString, setActivityString] = useState(activity.length > 0 ? <sup>{activity.length}</sup> : '')
 
+    const [isLoaded, setLoaded] = useState(false)
+
     const clickMenu = () => {
         setMenu(!menu)
     }
@@ -337,7 +339,9 @@ export default function Account(props) {
             .then(async result => {
                 if (result === true) {
                     getBalance()
-                        .then()
+                        .then(()=>{
+                            setLoaded(true)
+                        })
                     getConnects()
                         .then(() => {
                             let a = setInterval(() => {
@@ -509,18 +513,18 @@ export default function Account(props) {
                 </div>
 
                 <div className={styles.circle_button}
-                     onClick={() => props.setTransaction({
+                     onClick={isLoaded ? () => props.setTransaction({
                          balance: amount,
                          ticker: ticker,
                          token: props.user.token
-                     })}>
+                     }) : ()=>{}}>
                     <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/12.png"/>
                     </div>
                     <div>Send</div>
                     {/*<div>Transaction</div>*/}
                 </div>
 
-                {isMiningToken && <div className={styles.circle_button} onClick={props.setMining}>
+                {isMiningToken && <div className={styles.circle_button} onClick={isLoaded ?  props.setMining : ()=>{}}>
                     <div className={styles.icon_container}><img className={styles.icon} src="./images/icons/9.png"/>
                     </div>
                     <div>Mining</div>
