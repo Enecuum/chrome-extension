@@ -38,6 +38,4 @@ let tokenList = {
 
 console.log(tokenList)
 
-// trustedTokens = []
-
 module.exports = trustedTokens

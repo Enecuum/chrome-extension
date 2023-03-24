@@ -4,6 +4,8 @@ import indexDB from './utils/indexDB'
 //     accounts: []
 // }
 
+// https://github.com/DefiLlama/chainlist/blob/main/constants/chainIds.json
+
 export let chains = {
     ENECUUM: 'enecuum',
     ETHEREUM: 'ethereum',
@@ -47,6 +49,7 @@ let generateAccountData = (privateKey, accountData = account) => {
         publicKey: privateKey.length ? ENQWeb.Utils.Sign.getPublicKey(privateKey, true) : accountData.type === 2 ? accountData.publicKey : '',
         privateKey: privateKey,
 
+        chain: chains.ENECUUM,
         net: ENQWeb.Net.provider,
         token: ENQWeb.Enq.ticker,
 

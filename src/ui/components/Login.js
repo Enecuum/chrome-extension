@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '../css/index.module.css'
 import Separator from '../elements/Separator'
-import {mnemonicPath, regexAddress, regexSeed, regexToken, toggleFullScreen} from "../Utils";
+import {enecuumMnemonicPath, regexAddress, regexSeed, regexToken, toggleFullScreen} from "../Utils";
 import Input from "../elements/Input";
 import * as bip32 from "bip32";
 import * as bip39 from "bip39";
@@ -43,7 +43,9 @@ export default class Login extends React.Component {
 
         let hex = bip39.mnemonicToSeedSync(this.state.seed)
         let node = bip32.fromSeed(hex, null)
-        let child = node.derivePath(mnemonicPath)
+
+        //TODO
+        let child = node.derivePath(enecuumMnemonicPath)
 
         let privateKey = child.derive(0).privateKey.toString('hex')
         if (privateKey) {

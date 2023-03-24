@@ -212,7 +212,7 @@ export default function Menu(props) {
             {/*</div>}*/}
 
             <div className={styles.title}>
-                <div className={styles.button_link} onClick={props.setNetwork}>Networks</div>
+                <div className={styles.button_link} onClick={props.setNetwork}>Networks+</div>
             </div>
 
             <div className={styles.separator}/>

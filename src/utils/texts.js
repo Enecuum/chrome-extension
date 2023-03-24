@@ -10,6 +10,12 @@ export let texts = {
     },
     'history': {
         en: 'HISTORY:'
+    },
+    'enecuum_networks_accounts': {
+        en: 'Enecuum networks accounts',
+    },
+    'ethereum_networks_accounts': {
+        en: 'Ethereum networks accounts',
     }
 }
 

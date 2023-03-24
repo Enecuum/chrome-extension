@@ -4,7 +4,7 @@ import Separator from '../../../elements/Separator'
 import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
 import Input from "../../../elements/Input";
-import {copyToClipboard, getMnemonicFirstPrivateKey, getMnemonicHex, mnemonicPath, regexSeed} from "../../../Utils";
+import {copyToClipboard, getMnemonicFirstPrivateKey, getMnemonicHex, regexSeed} from "../../../Utils";
 import {generateAccountData, generateMnemonicAccountData} from "../../../../user";
 import {account} from '../../../../user'
 

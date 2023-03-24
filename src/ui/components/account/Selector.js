@@ -23,6 +23,7 @@ import elements from '../../css/elements.module.css'
 import {copyText} from '../../../utils/names'
 import Back from '../../elements/Back'
 import {apiController} from '../../../utils/apiController'
+import {getText} from "../../../utils/texts";
 
 // let balance = {}
 
@@ -94,7 +95,7 @@ export default function Selector(props) {
             setChain(chains.ETHEREUM)
 
             const privateKey = account.privateKeys[0]
-            const publicKey = '0x86E3d1727E5Ef1b5751De64999861B7239C3cDa6'
+            // const publicKey = '0x86E3d1727E5Ef1b5751De64999861B7239C3cDa6'
 
             let current = false
 
@@ -107,66 +108,88 @@ export default function Selector(props) {
                 type: 3
             })
 
+            for (let i = 0; i < account.seedAccountsArray.length; i++) {
+                let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i], account)
+                console.warn(privateKey)
+                const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
+                let current = mainPublicKey === publicKey
+                accounts.push({
+                    privateKey,
+                    publicKey,
+                    amount: balance[publicKey],
+                    current,
+                    groupIndex: i,
+                    type: 1
+                })
+
+                requestBalance(publicKey)
+                    .then(r => {
+                    })
+            }
+
             return accounts
         }
 
-        const mainPublicKey = account.type === 2 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true)
+        if (account.chain === chains.ENECUUM) {
 
-        for (let i = 0; i < account.privateKeys.length; i++) {
-            const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
-            let current = mainPublicKey === publicKey
-            accounts.push({
-                privateKey: account.privateKeys[i],
-                publicKey,
-                amount: balance[publicKey],
-                current,
-                groupIndex: i,
-                type: 0
-            })
+            const mainPublicKey = account.type === 2 ? account.publicKey : ENQWeb.Utils.Sign.getPublicKey(account.privateKey, true)
 
-            requestBalance(publicKey)
-                .then(r => {
+            for (let i = 0; i < account.privateKeys.length; i++) {
+                const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
+                let current = mainPublicKey === publicKey
+                accounts.push({
+                    privateKey: account.privateKeys[i],
+                    publicKey,
+                    amount: balance[publicKey],
+                    current,
+                    groupIndex: i,
+                    type: 0
                 })
-        }
 
-        for (let i = 0; i < account.seedAccountsArray.length; i++) {
-            let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
-            const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
-            let current = mainPublicKey === publicKey
-            accounts.push({
-                privateKey,
-                publicKey,
-                amount: balance[publicKey],
-                current,
-                groupIndex: i,
-                type: 1
-            })
+                requestBalance(publicKey)
+                    .then(r => {
+                    })
+            }
 
-            requestBalance(publicKey)
-                .then(r => {
+            for (let i = 0; i < account.seedAccountsArray.length; i++) {
+                let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
+                const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
+                let current = mainPublicKey === publicKey
+                accounts.push({
+                    privateKey,
+                    publicKey,
+                    amount: balance[publicKey],
+                    current,
+                    groupIndex: i,
+                    type: 1
                 })
-        }
 
-        for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
-            let publicKey = account.ledgerAccountsArray[i]
-            let current = account.publicKey === publicKey.publicKey
-            accounts.push({
-                privateKey: publicKey.index,
-                publicKey: publicKey.publicKey,
-                amount: balance[publicKey.publicKey],
-                current,
-                groupIndex: publicKey.index,
-                type: 2
-            })
+                requestBalance(publicKey)
+                    .then(r => {
+                    })
+            }
 
-            requestBalance(publicKey.publicKey)
-                .then(r => {
+            for (let i = 0; i < account.ledgerAccountsArray.length; i++) {
+                let publicKey = account.ledgerAccountsArray[i]
+                let current = account.publicKey === publicKey.publicKey
+                accounts.push({
+                    privateKey: publicKey.index,
+                    publicKey: publicKey.publicKey,
+                    amount: balance[publicKey.publicKey],
+                    current,
+                    groupIndex: publicKey.index,
+                    type: 2
                 })
+
+                requestBalance(publicKey.publicKey)
+                    .then(r => {
+                    })
+            }
+
+            // setAccounts(accounts)
+
+            return accounts
         }
-
-        // setAccounts(accounts)
-
-        return accounts
     }
 
     let loadUser = () => {
@@ -410,7 +433,9 @@ export default function Selector(props) {
                   }}
             />
 
-            <div className={styles.welcome3}>Enecuum networks accounts</div>
+            <div className={styles.welcome3}>{getText('enecuum_networks_accounts').toUpperCase()}</div>
+
+            <Separator line={true}/>
 
             {chain === chains.ENECUUM && <div>
 
@@ -470,9 +495,9 @@ export default function Selector(props) {
 
             </div>}
 
-            <Separator line={true}/>
+            <Separator bold={true}/>
 
-            <div className={styles.welcome3}>Ethereum networks accounts</div>
+            <div className={styles.welcome3}>{getText('ethereum_networks_accounts').toUpperCase()}</div>
 
             {chain === chains.ETHEREUM && <div>
 

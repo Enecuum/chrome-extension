@@ -235,7 +235,7 @@ export default function Network(props) {
                     <div className={styles.card_field}>{libNetworks[i][1].replace('https://', '')
                         .replace('.enecuum.com', '')
                         .toUpperCase()}</div>
-                    <div className={styles.card_field}>{libNetworks[i][1]}</div>
+                    <div className={styles.card_field}>{libNetworks[i][1].replace('https://', '')}</div>
                     <div className={styles.card_field}>{shortHash(ENQWeb.Enq.token[libNetworks[i][1]])}</div>
                     <div className={styles.card_field_right_bottom} onClick={(current ? () => {
                     } : () => setNet(libNetworks[i][1]))}>{current ? 'CURRENT' : 'SELECT'}</div>
@@ -253,7 +253,7 @@ export default function Network(props) {
             cards.push(
                 <div key={i + 'card'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
                     <div className={styles.card_field}><b>{localNetworks[i].name}</b></div>
-                    <div className={styles.card_field}>{localNetworks[i].host}</div>
+                    <div className={styles.card_field}>{localNetworks[i].host.replace('https://', '')}</div>
                     <div className={styles.card_field}>{shortHash(localNetworks[i].token)}</div>
                     <div className={styles.card_field_right_bottom} onClick={(current ? () => {
                     } : () => setNet(localNetworks[i].host))}>{current ? 'CURRENT' : 'SELECT'}</div>
@@ -268,8 +268,8 @@ export default function Network(props) {
 
     let [isEth, setIsEth] = useState(false)
     let [ethNetworks, setEthNetworks] = useState([
-        ['GoerliETH', 'https://goerli.infura.io/v3/'],
-        ['ETH', 'https://mainnet.infura.io/v3/']
+        ['GoerliETH', 'https://eth-goerli.g.alchemy.com/v2/'],
+        // ['ETH', 'https://eth.g.alchemy.com/v2']
     ])
 
     useEffect(() => {
@@ -341,33 +341,35 @@ export default function Network(props) {
                  className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add
             </div>
 
-            {/*<div className={styles.welcome3}>ETHEREUM NETWORKS / INFURA </div>*/}
+            <Separator line={true}/>
 
-            {/*<div className={styles.cards_container}>*/}
-            {/*    <div className={styles.cards}>*/}
+            <div className={styles.welcome3}>ETHEREUM NETWORKS</div>
 
-            {/*        <div key={'eth' + 'card'} className={styles.card + ' ' + ((ENQWeb.Enq.provider === ethNetworks[0][1]) ? '' : styles.card_select)}>*/}
-            {/*            <div className={styles.card_field}>{ethNetworks[0][1].replace('https://', '').split('.')[0]*/}
-            {/*                .toUpperCase()}</div>*/}
-            {/*            <div className={styles.card_field}>{ethNetworks[0][1]}</div>*/}
-            {/*            <div className={styles.card_field}>{ethNetworks[0][0]}</div>*/}
-            {/*            <div className={styles.card_field_right_bottom} onClick={((ENQWeb.Enq.provider === ethNetworks[0][1]) ? () => {} : async () => {*/}
-            {/*                setNet(ethNetworks[0][1], chains.ETHEREUM)*/}
-            {/*            })}>{(ENQWeb.Enq.provider === ethNetworks[0][1]) ? 'CURRENT' : 'SELECT'}</div>*/}
-            {/*        </div>*/}
+            <div className={styles.cards_container}>
+                <div className={styles.cards}>
 
-            {/*        <div key={'eth' + 'card'} className={styles.card + ' ' + ((ENQWeb.Enq.provider === ethNetworks[1][1]) ? '' : styles.card_select)}>*/}
-            {/*            <div className={styles.card_field}>{ethNetworks[1][1].replace('https://', '').split('.')[0]*/}
-            {/*                .toUpperCase()}</div>*/}
-            {/*            <div className={styles.card_field}>{ethNetworks[1][1]}</div>*/}
-            {/*            <div className={styles.card_field}>{ethNetworks[1][0]}</div>*/}
-            {/*            <div className={styles.card_field_right_bottom} onClick={((ENQWeb.Enq.provider === ethNetworks[1][1]) ? () => {} : async () => {*/}
-            {/*                setNet(ethNetworks[1][1], chains.ETHEREUM)*/}
-            {/*            })}>{(ENQWeb.Enq.provider === ethNetworks[1][1]) ? 'CURRENT' : 'SELECT'}</div>*/}
-            {/*        </div>*/}
+                    <div key={'eth' + 'card'} className={styles.card + ' ' + ((ENQWeb.Enq.provider === ethNetworks[0][1]) ? '' : styles.card_select)}>
+                        <div className={styles.card_field}>{ethNetworks[0][1].replace('https://', '').split('.')[0]
+                            .toUpperCase()}</div>
+                        <div className={styles.card_field}>{ethNetworks[0][1].replace('https://', '')}</div>
+                        <div className={styles.card_field}>{ethNetworks[0][0]}</div>
+                        <div className={styles.card_field_right_bottom} onClick={((ENQWeb.Enq.provider === ethNetworks[0][1]) ? () => {} : async () => {
+                            setNet(ethNetworks[0][1], chains.ETHEREUM)
+                        })}>{(ENQWeb.Enq.provider === ethNetworks[0][1]) ? 'CURRENT' : 'SELECT'}</div>
+                    </div>
 
-            {/*    </div>*/}
-            {/*</div>*/}
+                    {/*<div key={'eth' + 'card'} className={styles.card + ' ' + ((ENQWeb.Enq.provider === ethNetworks[1][1]) ? '' : styles.card_select)}>*/}
+                    {/*    <div className={styles.card_field}>{ethNetworks[1][1].replace('https://', '').split('.')[0]*/}
+                    {/*        .toUpperCase()}</div>*/}
+                    {/*    <div className={styles.card_field}>{ethNetworks[1][1].replace('https://', '')}</div>*/}
+                    {/*    <div className={styles.card_field}>{ethNetworks[1][0]}</div>*/}
+                    {/*    <div className={styles.card_field_right_bottom} onClick={((ENQWeb.Enq.provider === ethNetworks[1][1]) ? () => {} : async () => {*/}
+                    {/*        setNet(ethNetworks[1][1], chains.ETHEREUM)*/}
+                    {/*    })}>{(ENQWeb.Enq.provider === ethNetworks[1][1]) ? 'CURRENT' : 'SELECT'}</div>*/}
+                    {/*</div>*/}
+
+                </div>
+            </div>
 
             {/*<div className={styles.welcome3}>POLYGON NETWORKS / ALCHEMY</div>*/}
 

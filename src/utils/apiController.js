@@ -6,18 +6,22 @@ let cacheTransactions = {}
 let cacheAccountTransactions = {}
 
 const sendAPI = async (api, fields) => {
+    console.log('API 1')
     return await ENQWeb.Enq.sendAPI(api, fields)
 }
 
 const sendTransaction = async (transactionString) => {
+    console.log('API 2')
     return await ENQWeb.Enq.sendTx(transactionString)
 }
 
 const sendRequest = async (url, method, fields) => {
+    console.log('API 3: ' + url)
     return await ENQWeb.Enq.sendRequest(url, method, fields)
 }
 
 const postTransaction = async (transactionObject) => {
+    console.log('API 4')
     return await ENQWeb.Net.post.tx_fee_off(transactionObject)
         .catch(e => {
             console.warn(e)
@@ -25,23 +29,27 @@ const postTransaction = async (transactionObject) => {
 }
 
 const getBalanceAll = async (publicKey) => {
+    console.log('API 5 balance')
 
-    getBalanceAllAlchemy()
+    getBalanceAllAlchemy(publicKey)
 
     return await ENQWeb.Net.get.balance_all_unfiltered(publicKey)
 }
 
 const getMainTokenBalance = async (publicKey) => {
+    console.log('API 6')
     return await getBalance(publicKey, ENQWeb.Enq.token[ENQWeb.Enq.provider])
 }
 
 const getRewards = async (publicKey) => {
+    console.log('API 7')
     // let response = await fetch(ENQWeb.Net.provider + '/api/v1/account_rewards?id=' + publicKey + '&page=0', {})
     return await ENQWeb.Net.get.account_rewards(publicKey)
 }
 
 // Need caching here with balance
 const getCurrentBlock = async () => {
+    console.log('API 8 block')
     let height = (await ENQWeb.Net.get.height()).height
     let macroBlock = await ENQWeb.Net.get.macroblockByHeight(height)
     return {
@@ -51,6 +59,7 @@ const getCurrentBlock = async () => {
 }
 
 const getTokenInfo = async (tokenHash) => {
+    console.log('API 9 token info')
     if (!cacheTokenInfo[ENQWeb.Enq.provider]) {
         cacheTokenInfo[ENQWeb.Enq.provider] = {}
     }
@@ -61,6 +70,7 @@ const getTokenInfo = async (tokenHash) => {
 }
 
 const getAccountTransactions = async (publicKey, page, fromCache = false) => {
+    console.log('API 10 transactions ' + page)
     if (!fromCache) {
         return await ENQWeb.Net.get.accountTransactions(publicKey, page)
     }
@@ -77,10 +87,12 @@ const getAccountTransactions = async (publicKey, page, fromCache = false) => {
 }
 
 const getBalance = async (publicKey, tokenHash) => {
+    console.log('API 11')
     return await ENQWeb.Net.get.getBalance(publicKey, tokenHash)
 }
 
 const getTransaction = async (transactionHash) => {
+    console.log('API 12')
     if (!cacheTransactions[ENQWeb.Enq.provider]) {
         cacheTransactions[ENQWeb.Enq.provider] = {}
     }
@@ -91,10 +103,13 @@ const getTransaction = async (transactionHash) => {
 }
 
 const getTokenList = () => {
+    // console.log('API 13')
     return trustedTokens
 }
 
 const getServerTokenList = async () => {
+
+    console.log('API 14 server token list app.enecuum.com')
 
     // await apiController.sendRequest('https://devapp.enex.space/token_list')
 
@@ -115,6 +130,7 @@ const getServerTokenList = async () => {
 }
 
 const getCoinGeckoPrice = async () => {
+    console.log('API 15 coingecko.com')
     return apiController.sendRequest('https://api.coingecko.com/api/v3/simple/price?ids=enq-enecuum&vs_currencies=USD')
         .then((answer) => {
             if (answer['enq-enecuum'] !== undefined) {
@@ -125,6 +141,7 @@ const getCoinGeckoPrice = async () => {
 }
 
 const getAllTokens = async () => {
+    console.log('API 16 tickers')
     // console.log(ENQWeb.Enq.token)
     // let response = await fetch(ENQWeb.Enq.provider + '/api/v1/get_tickers_all', {})
     return await ENQWeb.Net.get.get_tickers_all_unfiltered()

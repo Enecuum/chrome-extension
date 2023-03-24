@@ -5,6 +5,7 @@ const {Clipboard} = require("@capacitor/clipboard");
 const {LocalNotifications} = require("@capacitor/local-notifications");
 const trustedTokens = require("../utils/tokenList");
 const {apiController} = require("../utils/apiController");
+const {chains} = require("../user");
 
 let regexData = /^[0-9a-zA-Z _\-/.]{0,512}$/
 let regexAddress = /^(02|03)[0-9a-fA-F]{64}$/
@@ -16,24 +17,37 @@ let regexReferral = /^(ref_)[0-9a-fA-F]{66}$/
 // let regexSeed = /^[a-f, ]+$/
 let regexSeed = /^(\w+\s){11,}\w+$/
 
-// TODO is Enecuum address
-let mnemonicPath = "m/44'/2045'/0'/0"
+let enecuumMnemonicPath = "m/44'/2045'/0'/0"
+let ethereumMnemonicPath = "m/44'/60'/0'/0"
 
-// TODO is Ethereum address
-let ethMnemonicPath = "m/44'/2045'/0'/0"
+let mnemonicPath = {}
+mnemonicPath[chains.ETHEREUM] = ethereumMnemonicPath
+mnemonicPath[chains.ENECUUM] = enecuumMnemonicPath
 
 let ledgerPath = "44'/60'/0'/0/"
 
 let getMnemonicFirstPrivateKey = (mnemonicString, i = 0) => {
     let hex = bip39.mnemonicToSeedSync(mnemonicString)
     let node = bip32.fromSeed(hex, null)
-    let child = node.derivePath(mnemonicPath)
+
+    let user = {chain: 'enecuum'}
+    let chainPath = mnemonicPath[user.chain]
+
+    // if (user.chain === chains.ETHEREUM) {
+    //     chainPath = ethereumMnemonicPath
+    // } else {
+    //     chainPath = enecuumMnemonicPath
+    // }
+
+    let child = node.derivePath(chainPath)
     return child.derive(i).privateKey.toString('hex')
 }
 
-let getMnemonicPrivateKeyHex = (seed, i) => {
+let getMnemonicPrivateKeyHex = (seed, i, user = {chain: 'enecuum'}) => {
     let node = bip32.fromSeed(Buffer.from(seed), null)
-    let child = node.derivePath(mnemonicPath)
+    let chainPath = mnemonicPath[user.chain]
+
+    let child = node.derivePath(chainPath)
     return child.derive(i).privateKey.toString('hex')
 }
 
@@ -212,7 +226,7 @@ module.exports = {
     regexOldPrivate,
     regexSeed,
     regexReferral,
-    mnemonicPath,
+    enecuumMnemonicPath,
     ledgerPath,
     getMnemonicFirstPrivateKey,
     getMnemonicPrivateKeyHex,

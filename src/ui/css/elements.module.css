@@ -40,6 +40,10 @@
     white-space: nowrap;
 }
 
+.network_name_main {
+    color: var(--color-blue)
+}
+
 .network_status {
     height: 70px;
     line-height: 70px;
@@ -285,16 +289,20 @@
     /*background: red;*/
 }
 
+.separatorBold {
+    width: calc(100% - 40px);
+    height: 3px;
+    background: var(--color-white-opacity-small);
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
 .separatorLine {
     width: calc(100% - 40px);
     height: 1px;
-    /*box-shadow: 1px 1px var(--color-blue) 0.3;*/
     background: var(--color-gray-ligth);
     margin-left: 20px;
     margin-top: 20px;
-    /*margin-top: 20px;*/
-    /*margin-bottom: 10px;*/
-    /*background: red;*/
 }
 
 .row {

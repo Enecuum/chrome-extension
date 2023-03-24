@@ -319,6 +319,19 @@ a:hover {
     padding-right: 20px;
 }
 
+.welcome4 {
+    padding-top: 20px;
+    width: 100%;
+    padding-left: 30px;
+    /*padding-top: 10px;*/
+    font-weight: 600;
+    line-height: 100%;
+    text-align: right;
+    padding-right: 20px;
+
+    color: var(--color-blue);
+}
+
 .title {
     text-align: center;
     /*font-size: 24px;*/
