@@ -239,8 +239,10 @@ export default function Account(props) {
             })
             .catch((err) => {
                 console.error('error: ', err)
+
                 let headerLoader4 = document.getElementById('header_loader')
                 headerLoader4.style.width = '100%'
+                headerLoader4.style.height = '10px'
                 headerLoader4.style.backgroundColor = 'red'
                 headerLoader4.style.opacity = 1
             })
