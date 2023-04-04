@@ -410,7 +410,7 @@ export default function Selector(props) {
                   }}
             />
 
-            <div className={styles.welcome3}>Enecuum networks accounts</div>
+            {/*<div className={styles.welcome3}>Enecuum networks accounts</div>*/}
 
             {chain === chains.ENECUUM && <div>
 
