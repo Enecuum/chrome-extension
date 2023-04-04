@@ -108,6 +108,7 @@ export default function Account(props) {
 
                 let headerLoader2 = document.getElementById('header_loader')
                 headerLoader2.style.width = '95%'
+                headerLoader2.style.backgroundColor = 'white'
 
                 if (res.includes('<!DOCTYPE')) {
                     console.warn('server is down')
@@ -238,6 +239,10 @@ export default function Account(props) {
             })
             .catch((err) => {
                 console.error('error: ', err)
+                let headerLoader4 = document.getElementById('header_loader')
+                headerLoader4.style.width = '100%'
+                headerLoader4.style.backgroundColor = 'red'
+                headerLoader4.style.opacity = 1
             })
     }
 
