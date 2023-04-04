@@ -106,12 +106,10 @@ export default function Account(props) {
         await apiController.getBalanceAll(props.user.publicKey)
             .then(async (res) => {
 
-                let headerLoader2 = document.getElementById('header_loader')
-                headerLoader2.style.width = '95%'
-                headerLoader2.style.backgroundColor = 'white'
+                startLoadingBar()
 
                 if (res.includes('<!DOCTYPE')) {
-                    console.warn('server is down')
+                    console.warn('server is down'.toUpperCase())
                 } else {
                     globalState.setBalanceData(ENQWeb.Enq.provider, props.user.publicKey, res)
                     globalState.save()
@@ -232,20 +230,35 @@ export default function Account(props) {
                     main: true
                 }, ...tokens])
 
-                let headerLoader3 = document.getElementById('header_loader')
-                headerLoader3.style.width = '100%'
-                headerLoader3.style.opacity = 0
+                endLoadingBar()
 
             })
             .catch((err) => {
                 console.error('error: ', err)
-
-                let headerLoader4 = document.getElementById('header_loader')
-                headerLoader4.style.width = '100%'
-                headerLoader4.style.height = '10px'
-                headerLoader4.style.backgroundColor = 'red'
-                headerLoader4.style.opacity = 1
+                errorLoadingBar()
             })
+    }
+
+    let startLoadingBar = () => {
+        let headerLoader2 = document.getElementById('header_loader')
+        headerLoader2.style.width = '95%'
+        headerLoader2.style.height = '1px'
+        headerLoader2.style.backgroundColor = 'white'
+    }
+
+    let endLoadingBar = () => {
+        let headerLoader3 = document.getElementById('header_loader')
+        headerLoader3.style.width = '100%'
+        headerLoader3.style.opacity = 0
+    }
+
+    let errorLoadingBar = () => {
+        let headerLoader4 = document.getElementById('header_loader')
+        headerLoader4.style.transition = 'none'
+        headerLoader4.style.width = '100%'
+        headerLoader4.style.height = '10px'
+        headerLoader4.style.backgroundColor = 'red'
+        headerLoader4.style.opacity = 1
     }
 
     const openPopup = async () => {
