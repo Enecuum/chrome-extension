@@ -470,25 +470,6 @@ export default function Selector(props) {
 
             </div>}
 
-            <Separator line={true}/>
-
-            <div className={styles.welcome3}>Ethereum networks accounts</div>
-
-            {chain === chains.ETHEREUM && <div>
-
-                <div className={styles.welcome3}>MNEMONIC</div>
-
-                <div className={styles.cards_container}>
-                    <div className={styles.cards}>
-                        {cards4}
-                    </div>
-                </div>
-
-                {seed && <div className={styles.field + ' ' + styles.button}
-                              onClick={addMnemonicAccount}>Add Mnemonic Account</div>}
-
-            </div>}
-
             <Separator/>
 
         </div>
