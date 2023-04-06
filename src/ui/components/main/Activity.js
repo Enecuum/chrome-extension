@@ -47,7 +47,7 @@ export default function Activity(props) {
 
         // console.warn('getHistory')
 
-        console.log(globalState.getNetworkState(ENQWeb.Enq.provider))
+        // console.log(globalState.getNetworkState(ENQWeb.Enq.provider))
         let globalStateHistory = globalState.getNetworkState(ENQWeb.Enq.provider).history[props.user.publicKey] || []
         // console.log(globalStateHistory)
         setHistory(globalStateHistory)

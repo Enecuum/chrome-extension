@@ -154,7 +154,7 @@ export default function App(props) {
             if (wakelock === null) {
                 localStorage.setItem(WAKELOCK, JSON.stringify({ status: false }))
             } else {
-                console.log(wakelock)
+                // console.log(wakelock)
                 wakelock = JSON.parse(wakelock)
                 if (wakelock.status) {
                     setWakeLock()
@@ -228,7 +228,7 @@ export default function App(props) {
             return true
         } else {
             if (log) {
-                console.log('OPEN')
+                console.log('LOCK OPEN')
             }
             return false
         }
@@ -246,7 +246,7 @@ export default function App(props) {
 
     const getUser = async () => {
         let account = await updateUserData()
-        console.warn('App get user object')
+        // console.warn('App get user object')
         // console.log(account)
         setLogin(!account.publicKey || account.publicKey.length <= 0)
         // setLogin(true)
@@ -264,7 +264,7 @@ export default function App(props) {
         console.log('App: ' + version)
         console.log('Lib: ' + ENQWeb.version)
         console.log('OS: ' + window.navigator.platform)
-        console.log('Capacitor ver: ' + Capacitor.getPlatform())
+        console.log('Platform: ' + Capacitor.getPlatform())
         getUser()
             .then()
 

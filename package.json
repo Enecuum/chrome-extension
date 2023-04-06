@@ -93,6 +93,7 @@
         "dotenv": "^16.0.0",
         "enq-web3": "^0.4.9",
         "express": "^4.17.1",
+        "firebase": "^9.19.1",
         "jsrsasign": "^10.5.26",
         "key-encoder": "^2.0.3",
         "qrcode": "^1.5.1",

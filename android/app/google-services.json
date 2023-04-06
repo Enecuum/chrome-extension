@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "73300778516",
+    "project_id": "pwa-android-721ae",
+    "storage_bucket": "pwa-android-721ae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73300778516:android:0f4901e22b9f09e7409101",
+        "android_client_info": {
+          "package_name": "com.enecuum.pwa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "73300778516-8419no6pe05tppun8ge1ttabbvrvk2fp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsEmeTq5DNcmzxMxjocJ__hyb9GBk-ZTg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "73300778516-8419no6pe05tppun8ge1ttabbvrvk2fp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "73300778516-994smuo7088foc385mg3qilolo46m312.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.enecuum.pwa"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

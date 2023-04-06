@@ -1,8 +1,22 @@
-import { initApp } from './ui/index'
-import { globalMessageHandler, messagePopupHandler } from './handler'
+import {initApp} from './ui/index'
+import {globalMessageHandler, messagePopupHandler} from './handler'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
-import { versions } from './utils/names'
-import { globalState } from './globalState'
+import {versions} from './utils/names'
+import {globalState} from './globalState'
+import {initializeApp} from "firebase/app";
+import {getAnalytics} from "firebase/analytics";
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyAfzIpCa45DfzVYW5DRFYi3S23RdZEXkyI",
+    authDomain: "pwa-android-721ae.firebaseapp.com",
+    projectId: "pwa-android-721ae",
+    storageBucket: "pwa-android-721ae.appspot.com",
+    messagingSenderId: "73300778516",
+    appId: "1:73300778516:web:d0dc5e8f729b8639409101",
+    measurementId: "G-5ZQ7VZ6CSH"
+};
 
 // Init storage
 import Storage from './utils/localStorage'
@@ -16,7 +30,7 @@ global.userStorage = new Storage('popup')
 globalState.init()
 
 // TODO we have to move this to background or service worker
-global.publisher = { ws: { readyState: 3 } }
+global.publisher = {ws: {readyState: 3}}
 
 // TODO
 global.Buffer = global.Buffer || require('buffer').Buffer
@@ -100,10 +114,10 @@ if (!chrome.runtime) {
         }
     }
     chrome.runtime.sendMessage = () => {
-        return { response: true }
+        return {response: true}
     }
     chrome.runtime.getManifest = () => {
-        return { version: alterVersion }
+        return {version: alterVersion}
     }
     chrome.runtime.web = true
 }
@@ -127,7 +141,7 @@ if (!chrome.runtime.getManifest) {
     console.log('chrome.runtime.getManifest: false')
     chrome.runtime.web = true
     chrome.runtime.getManifest = () => {
-        return { version: alterVersion }
+        return {version: alterVersion}
     }
 }
 
@@ -152,7 +166,7 @@ async function setupUI() {
     } else { // Extension version
 
         // Connect to background
-        backgroundPort = chrome.runtime.connect({ name: 'popup' })
+        backgroundPort = chrome.runtime.connect({name: 'popup'})
         backgroundPort.onMessage.addListener(mainListener)
 
         // TODO
@@ -162,7 +176,7 @@ async function setupUI() {
         await initApp(backgroundPort)
     }
 
-    userStorage.promise.sendPromise({ initial: true })
+    userStorage.promise.sendPromise({initial: true})
         .then(r => {
         })
 
@@ -178,9 +192,20 @@ async function setupUI() {
     document.body.appendChild(iframe)
 }
 
+let errors
+window.onerror = (error, url, line) => {
+    // TODO we have to send error somewhere
+}
+
+let initFirebase = () => {
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    console.log('FIREBASE')
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    setupUI()
-        .then()
+    setupUI().then()
+    initFirebase()
 })
 
 let messageListener = {}
