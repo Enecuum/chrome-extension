@@ -9,6 +9,7 @@ install! 'cocoapods', :disable_input_output_paths => true
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
+#   pod 'CapacitorCommunityFirebaseAnalytics', :path => '../../node_modules/@capacitor-community/firebase-analytics'
   pod 'CapacitorApp', :path => '../../node_modules/@capacitor/app'
   pod 'CapacitorCamera', :path => '../../node_modules/@capacitor/camera'
   pod 'CapacitorClipboard', :path => '../../node_modules/@capacitor/clipboard'
@@ -24,8 +25,14 @@ def crypto
   pod 'secp256k1.swift'
 end
 
+def firebase
+  pod 'Firebase/Core'
+  pod 'Firebase/Analytics'
+end
+
 target 'App' do
   capacitor_pods
   crypto
+  firebase
   # Add your Pods here
 end
