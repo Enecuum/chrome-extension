@@ -231,6 +231,7 @@ export default function Account(props) {
                 }, ...tokens])
 
                 endLoadingBar()
+                setLoaded(true)
 
             })
             .catch((err) => {
@@ -241,15 +242,20 @@ export default function Account(props) {
 
     let startLoadingBar = () => {
         let headerLoader2 = document.getElementById('header_loader')
-        headerLoader2.style.width = '95%'
-        headerLoader2.style.height = '1px'
-        headerLoader2.style.backgroundColor = 'white'
+        if (headerLoader2) {
+            headerLoader2.style.width = '95%'
+            headerLoader2.style.height = '1px'
+            headerLoader2.style.backgroundColor = 'white'
+        }
+
     }
 
     let endLoadingBar = () => {
         let headerLoader3 = document.getElementById('header_loader')
-        headerLoader3.style.width = '100%'
-        headerLoader3.style.opacity = 0
+        if (headerLoader3) {
+            headerLoader3.style.width = '100%'
+            headerLoader3.style.opacity = 0
+        }
     }
 
     let errorLoadingBar = () => {
@@ -358,15 +364,10 @@ export default function Account(props) {
         openPopup()
             .then(async result => {
                 if (result === true) {
-                    getBalance()
-                        .then(() => {
-                            setLoaded(true)
-                        })
-                    getConnects()
-                        .then(() => {
+                    getBalance().then(() => {})
+                    getConnects().then(() => {
                             let a = setInterval(() => {
-                                getConnects()
-                                    .then()
+                                getConnects().then()
                                 updateActivity()
                             }, 1000)
                         })
@@ -534,12 +535,13 @@ export default function Account(props) {
                 </div>
 
                 <div className={styles.circle_button + ' ' + (!isLoaded ? styles.circle_button_disabled : '')}
-                     onClick={isLoaded ? () => props.setTransaction({
-                         balance: amount,
-                         ticker: ticker,
-                         token: props.user.token
-                     }) : () => {
-                     }}>
+                     onClick={isLoaded ? () => {
+                         props.setTransaction({
+                             balance: BigInt(amount),
+                             ticker: ticker,
+                             token: props.user.token
+                         })
+                     } : () => {}}>
                     <div className={styles.icon_container}>
                         <img className={styles.icon} src="./images/icons/12.png"/>
                     </div>
