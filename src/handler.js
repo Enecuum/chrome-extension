@@ -311,6 +311,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                 miningStatus.miningProcess = true
                 resolve({ response: miners })
             } else {
+                let duplicate = []
                 for (let i = 0; i < ENQWeb.Enq.User.seedAccountsArray.length; i++) {
                     // console.log(handlerMiners[i])
                     let privateKey = getMnemonicPrivateKeyHex(ENQWeb.Enq.User.seed, i)
@@ -318,15 +319,21 @@ export function globalMessageHandler(msg, ENQWeb) {
                         publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
                         privateKey: privateKey
                     })
+                    duplicate.push(privateKey)
                 }
 
                 for (let i = 0; i < ENQWeb.Enq.User.privateKeys.length; i++) {
                     // console.log(handlerMiners[i])
                     let privateKey = ENQWeb.Enq.User.privateKeys[i]
-                    accounts.push({
-                        publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
-                        privateKey: privateKey
-                    })
+                    if(!duplicate.includes(privateKey)){
+                        accounts.push({
+                            publicKey: ENQWeb.Utils.Sign.getPublicKey(privateKey, true),
+                            privateKey: privateKey
+                        })
+                    }else {
+                        console.log(`duplicated key ${ENQWeb.Utils.Sign.getPublicKey(privateKey, true)}`)
+                    }
+
                 }
 
                 // TODO ?
