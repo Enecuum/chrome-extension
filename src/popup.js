@@ -4,7 +4,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import {versions} from './utils/names'
 import {globalState} from './globalState'
 import {initializeApp} from "firebase/app";
-import {getAnalytics} from "firebase/analytics";
+import {getAnalytics, isSupported} from "firebase/analytics";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -198,9 +198,13 @@ window.onerror = (error, url, line) => {
 }
 
 let initFirebase = () => {
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    console.log('FIREBASE')
+    isSupported().then(result => {
+        if (result) {
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+            console.log('FIREBASE')
+        }
+    })
 }
 
 document.addEventListener('DOMContentLoaded', () => {

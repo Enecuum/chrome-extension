@@ -211,6 +211,8 @@ export default function Account(props) {
                     if (props.user.token === mainToken) {
                         apiController.getCoinGeckoPrice()
                             .then(enecuumUSD => {
+                                if (isNaN(enecuumUSD))
+                                    enecuumUSD = 0
                                 const usd = BigInt((enecuumUSD * 1e10).toFixed(0))
                                 const value = usd * BigInt(amount) / BigInt(10 ** decimal)
                                 setUSD(value)
