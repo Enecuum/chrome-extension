@@ -61,9 +61,11 @@ let waitAnswer = (msg) => {
 let initPoa = async (account) => {
 
     let miners = []
+    let duplicate = []
     for (let i = 0; i < account.seedAccountsArray.length; i++) {
 
         let privateKey = getMnemonicPrivateKeyHex(account.seed, account.seedAccountsArray[i])
+        duplicate.push(privateKey)
         const publicKey = ENQWeb.Utils.Sign.getPublicKey(privateKey, true)
 
         let tokens = await apiController.getBalanceAll(publicKey)
@@ -90,25 +92,27 @@ let initPoa = async (account) => {
 
     for (let i = 0; i < account.privateKeys.length; i++) {
 
-        const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
+        if(!duplicate.includes(account.privateKeys[i])){
+            const publicKey = ENQWeb.Utils.Sign.getPublicKey(account.privateKeys[i], true)
 
-        let tokens = await apiController.getBalanceAll(publicKey)
+            let tokens = await apiController.getBalanceAll(publicKey)
 
-        miners.push({
-            i,
-            publicKey,
-            mining: true,
-            list: true,
-            tokens,
-            token: tokens[0] ? tokens[0] : {
-                token: '',
-                decimals: 10
-            },
-            net: netList[ENQWeb.Net.provider] || '95.216.246.116',
-            type: "private",
-            publisher: false
-            // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
-        })
+            miners.push({
+                i,
+                publicKey,
+                mining: true,
+                list: true,
+                tokens,
+                token: tokens[0] ? tokens[0] : {
+                    token: '',
+                    decimals: 10
+                },
+                net: netList[ENQWeb.Net.provider] || '95.216.246.116',
+                type: "private",
+                publisher: false
+                // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
+            })
+        }
     }
     return miners
 }
