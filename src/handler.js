@@ -636,6 +636,20 @@ export async function messagePopupHandler(msg) {
                 })
             }
         }
+    } else if (msg.reject_all) {
+        let list = userStorage.list.loadList()
+        for (let i in list) {
+            rejectTaskHandler(list[i])
+        }
+        return {
+            reject: true,
+            data: {
+                data: JSON.stringify({
+                    reject: true,
+                    data: 'rejected'
+                })
+            }
+        }
     }
     if (msg.connectionList) {
         return {

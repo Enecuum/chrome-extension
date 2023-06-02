@@ -23,6 +23,7 @@ import Storage from './utils/localStorage'
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb'
 
 const androidRegex = /android/
+const iosRegex = /ios/
 
 global.userStorage = new Storage('popup')
 
@@ -273,7 +274,7 @@ function asyncRequest(data) {
     awaitId[data] = false
     let answer = ''
     // iframeWork = true
-    if (version.includes('web') || iframeWork === true || androidRegex.test(Capacitor.getPlatform())) {
+    if (version.includes('web') || iframeWork === true || androidRegex.test(Capacitor.getPlatform()) || iosRegex.test(Capacitor.getPlatform())) {
         answer = messagePopupHandler(data)
         // console.log(answer)
         return answer
