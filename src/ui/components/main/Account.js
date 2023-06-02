@@ -18,7 +18,7 @@ let decimals = {}
 
 export default function Account(props) {
 
-    const [trustedTokens, setTrustedTokens] = useState(apiController.getTokenList())
+    const [trustedTokens, setTrustedTokens] = useState([])
 
     global.setIframeWork(false)
 
@@ -361,6 +361,7 @@ export default function Account(props) {
 
     useEffect(() => {
 
+        setTrustedTokens(apiController.getTokenList())
         props.user.token && props.user.token !== ENQWeb.Enq.token[ENQWeb.Enq.provider] ? setActiveTab(1) : () => {}
 
         openPopup()

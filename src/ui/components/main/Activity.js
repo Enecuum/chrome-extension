@@ -200,6 +200,20 @@ export default function Activity(props) {
         setActivity([])
     }
 
+    let render_btn_reject_all = ()=>{
+        try{
+            if(activity.length > 0){
+                return <div onClick={rejectAll}
+                            className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
+                    {texts.reject_all.en}
+                </div>
+            }
+        }catch (e) {
+            console.error("error in activity\n" + e)
+        }
+
+    }
+
     const renderActivity = () => {
 
         let activityElements = []
@@ -249,7 +263,7 @@ export default function Activity(props) {
 
         getHistory()
             .then()
-
+        // setActivity(userStorage.list.listOfTask())
         updateActivityTask()
 
         let isMounted = true
@@ -264,10 +278,12 @@ export default function Activity(props) {
 
             {renderActivity()}
 
-            {activity.length > 1 && <div onClick={rejectAll}
-                                         className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}>
-                {texts.reject_all}
-            </div>}
+            {render_btn_reject_all()}
+            {/* {activity.length > 1 && <div onClick={rejectAll} */}
+            {/*                              className={`${styles.field} ${styles.button} ${styles.button_blue} ${styles.button_reject_all}`}> */}
+            {/*     {texts.reject_all} */}
+            {/* </div> */}
+            {/* } */}
 
             {history.length > 0 && <div className={styles.field}>HISTORY:</div>}
 
