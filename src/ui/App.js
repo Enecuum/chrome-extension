@@ -37,6 +37,10 @@ import { NativeBiometric } from 'capacitor-native-biometric'
 
 import { createGesture, Gesture } from '@ionic/react'
 
+import PoSList from './components/pos/PoSList'
+import PoSCard from './components/pos/PoSCard'
+import PosSend from "./components/pos/PosSend";
+
 
 let net = localStorage.getItem(NET)
 if (!net) {
@@ -82,6 +86,9 @@ export default function App(props) {
     const [isReferral, setReferral] = useState(false)
     const [isCamera, setCamera] = useState(false)
     const [isBiometry, setBiometry] = useState(false)
+    const [isPosList, setPosList] = useState(false)
+    const [isPosCard, setPosCard] = useState(false)
+    const [isPosSend, setPosSend] = useState(false)
 
     let [deferredPrompt, setDeferredPrompt] = useState()
     let initPWA = () => {
@@ -381,6 +388,7 @@ export default function App(props) {
         }
     }
 
+    // ________LOCK_____________
     if (isConfirm) {
         return <Confirm setConfirm={setConfirm} logout={logout}/>
     }
@@ -390,6 +398,7 @@ export default function App(props) {
                      changeBiometry={changeBiometry}/>
     }
 
+    // _____________other____________
     if (isImportMnemonic) {
         return <ImportMnemonic login={login2} setImportMnemonic={setImportMnemonic}/>
     }
@@ -464,6 +473,7 @@ export default function App(props) {
     //     return <Receive setReceive={setReceive} user={user}/>
     // }
 
+    // __________Requests____________-
     if (isPublicKeyRequest) {
         return <PublicKeyRequest setPublicKeyRequest={setPublicKeyRequest} request={isPublicKeyRequest}/>
     }
@@ -490,7 +500,21 @@ export default function App(props) {
                             getLedgerTransport={getLedgerTransport}/>
     }
 
+    // ____________POS______________
+    if (isPosSend){
+        return <PosSend isPosSend={isPosSend} setPosSend={setPosSend} isPosCard={isPosCard} user={user} setTransactionRequest={setTransactionRequest} setPosCard={setPosCard} setPosList={setPosList}/>
+    }
 
+    if (isPosCard){
+        return <PoSCard isPoSCard={isPosCard} setPosCard={setPosCard} user={user} setPosSend={setPosSend}/>
+    }
+
+    if (isPosList){
+        return <PoSList isPosList={isPosList} setPosList={setPosList} user={user} setPoSCard={setPosCard}/>
+    }
+
+
+    //__________Account__________
     // TODO user
     if (isPassword || (!user.publicKey && !userStorage.lock.getHashPassword())) {
         return <Password user={user} setPassword={setPassword} login={loginState} publicKey={user.publicKey}
@@ -540,5 +564,6 @@ export default function App(props) {
                     changeBiometry={changeBiometry}
                     getWakeLock={getWakeLock}
                     changeWakeLock={changeWakeLock}
+                    setPosList={setPosList}
     />
 }

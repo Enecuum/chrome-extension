@@ -57,6 +57,10 @@ const explorerAddress = (hash) => {
     openTab('account', hash)
 }
 
+const explorerPos = (hash) => {
+    openTab('pos-contract', hash)
+}
+
 const openTab = (path, hash) => {
     if (ENQWeb.Net.currentProvider.includes('http'))
         chrome.tabs.create({url: ENQWeb.Net.currentProvider + '/#!/' + path + '/' + hash})
@@ -203,6 +207,7 @@ module.exports = {
     shortHashLong,
     explorerTX,
     explorerAddress,
+    explorerPos,
     toggleFullScreen,
     generateIcon,
     copyToClipboard,

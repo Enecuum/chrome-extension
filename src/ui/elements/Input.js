@@ -30,6 +30,7 @@ export default function Input(props) {
                 value={props.value}
                 className={props.className}
                 placeholder={placeholder}
+                max={props.max}
             />
         </div>
     )

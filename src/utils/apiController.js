@@ -127,6 +127,14 @@ const getAllTokens = async () => {
     return await ENQWeb.Net.get.get_tickers_all_unfiltered()
 }
 
+const getAccountDelegates = async (delegator)=>{
+    return await ENQWeb.Enq.sendAPI(`get_delegated_list?delegator=${delegator}`, [])
+}
+
+const getPosListAll = async ()=>{
+    return await ENQWeb.Net.pos.get_pos_list_all()
+}
+
 const apiController = {
     getBalance,
     getBalanceAll,
@@ -144,6 +152,8 @@ const apiController = {
     postTransaction,
     getAllTokens,
     getCoinGeckoPrice,
+    getPosListAll,
+    getAccountDelegates,
     cacheTransactions,
     cacheTokenInfo,
     cacheAccountTransactions

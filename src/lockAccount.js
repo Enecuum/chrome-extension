@@ -18,7 +18,6 @@ let PASSWORD = ''
 let password_version = '2.0'
 
 function lockAccount(timer = false) {
-
     // LOCK > {lock: true}
     userStorage.lock.setLock(true)
 
