@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import Back from "../../elements/Back";
-import {explorerPos} from "../../Utils";
+import {createInternalTx, explorerPos} from "../../Utils";
 import {globalState} from "../../../globalState";
 import {apiController} from "../../../utils/apiController";
+import {webBackground} from "../../../handler";
 
 
 
@@ -40,6 +41,29 @@ export default function PoSCard(props) {
         }
 
     }
+
+    const sendTransferReward = async (type)=>{
+        let tx = await (new ENQWeb.Utils.SmartContractGenerator.TransactionGenerator(ENQWeb.Net.provider))
+        tx.from = props.user.publicKey
+        tx.amount = tx.amount.toString()
+        let data
+        if(type === "reward"){
+            data = new ENQWeb.Utils.SmartContractGenerator.SCGenerators.pos.SmartContractPosReward(props.isPoSCard.pos_id)
+        }
+        if (type === "transfer"){
+            data = new ENQWeb.Utils.SmartContractGenerator.SCGenerators.pos.SmartContractTransfer()
+        }
+        tx.data = ENQWeb.Utils.dfo(data)
+        let sendObj = createInternalTx(tx)
+        let check = webBackground(sendObj, ENQWeb.Net.provider)
+        if(check){
+            props.setTransactionRequest(sendObj)
+            props.setPosCard(false)
+            props.setPosList(false)
+        }
+    }
+
+    const sendReward = ()=>{}
 
     useEffect(() => {
         console.log(props)
@@ -98,7 +122,7 @@ export default function PoSCard(props) {
                 <div className={styles.field + ' ' + styles.button + ' ' + styles.big}
                      onClick={() => {
                          // explorerPos(props.isPoSCard.pos_id)
-
+                         sendTransferReward('reward').then()
                      }}>
                     Take reward
                 </div>

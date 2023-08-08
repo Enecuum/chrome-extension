@@ -506,7 +506,7 @@ export default function App(props) {
     }
 
     if (isPosCard){
-        return <PoSCard isPoSCard={isPosCard} setPosCard={setPosCard} user={user} setPosSend={setPosSend}/>
+        return <PoSCard isPoSCard={isPosCard} setPosCard={setPosCard} user={user} setPosSend={setPosSend} setTransactionRequest={setTransactionRequest} setPosList={setPosList}/>
     }
 
     if (isPosList){

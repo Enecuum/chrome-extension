@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import styles from '../../css/index.module.css'
 import Separator from '../../elements/Separator'
 import Back from "../../elements/Back";
-import {explorerPos, regexAddress, shortHash} from "../../Utils";
+import {createInternalTx, explorerPos, regexAddress, shortHash} from "../../Utils";
 import {globalState} from "../../../globalState";
 import {apiController} from "../../../utils/apiController";
 import Input from "../../elements/Input";
@@ -64,21 +64,7 @@ export default function PosSend(props) {
         }
         tx.data = ENQWeb.Utils.dfo(data)
         // console.log(tx)
-        let sendObj = {
-            tx:tx,
-            type:"tx",
-            cb:{
-                taskId:ENQWeb.Net.provider+"/tx/"+Math.floor(Math.random()*1e10),
-                url:ENQWeb.Net.provider
-            },
-            data:{
-                fee_use:false,
-                fee_value:"",
-                net:ENQWeb.Net.provider,
-                date:Date.now(),
-                internal:true
-            }
-        }
+        let sendObj = createInternalTx(tx)
         let check = webBackground(sendObj, ENQWeb.Net.provider)
         if(check){
             props.setTransactionRequest(sendObj)

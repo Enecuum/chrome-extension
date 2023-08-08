@@ -441,7 +441,10 @@ async function taskHandler(taskId) {
         break
         // TODO Description
     case 'tx':
-        if (ports[task.cb.url].enabled) {
+        if(ports[task.cb.url] === undefined ){
+            ports[task.cb.url] = {enabled:false}
+        }
+        if (ports[task.cb.url].enabled || task.data.internal) {
             console.log('tx handler work!')
             data = task.tx
             console.log(data)

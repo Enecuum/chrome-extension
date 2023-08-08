@@ -157,6 +157,25 @@ const copyToClipboard = (text) => {
     Clipboard.write({string: text}).then(r => {})
 }
 
+const createInternalTx = (tx)=>{
+    let sendObj = {
+        tx:tx,
+        type:"tx",
+        cb:{
+            taskId:ENQWeb.Net.provider+"/tx/"+Math.floor(Math.random()*1e10),
+            url:ENQWeb.Net.provider
+        },
+        data:{
+            fee_use:false,
+            fee_value:"",
+            net:ENQWeb.Net.provider,
+            date:Date.now(),
+            internal:true
+        }
+    }
+    return sendObj
+}
+
 
 let id = 0
 
@@ -226,5 +245,6 @@ module.exports = {
     xor,
     DEFAULT_REFERRAL,
     REF_PREFIX,
-    XOR_STRING
+    XOR_STRING,
+    createInternalTx
 }
