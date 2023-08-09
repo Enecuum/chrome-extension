@@ -107,7 +107,7 @@ export default function PoSCard(props) {
                     Delegate {ticker}
                 </div>
 
-                <div className={styles.field + ' ' + styles.button + ' ' + styles.big}
+                <div className={styles.field + ' ' + styles.button + ' ' + styles.big + ' ' + (stake > 0 ? '' : styles.button_disabled)}
                      onClick={() => {
                          // explorerPos(props.isPoSCard.pos_id)
                          props.setPosSend({
@@ -119,7 +119,7 @@ export default function PoSCard(props) {
                     Undelegate {ticker}
                 </div>
 
-                <div className={styles.field + ' ' + styles.button + ' ' + styles.big}
+                <div className={styles.field + ' ' + styles.button + ' ' + styles.big + ' ' + (reward > 0 ? '' : styles.button_disabled)}
                      onClick={() => {
                          // explorerPos(props.isPoSCard.pos_id)
                          sendTransferReward('reward').then()
@@ -129,10 +129,10 @@ export default function PoSCard(props) {
 
                 <div className={styles.field}>Transfer {transfer} {ticker}</div>
 
-                <div className={styles.field + ' ' + styles.button + ' ' + styles.big}
+                <div className={styles.field + ' ' + styles.button + ' ' + styles.big + ' ' + (transfer > 0 ? '' : styles.button_disabled)}
                      onClick={() => {
                          // explorerPos(props.isPoSCard.pos_id)
-
+                         props.setTransferList(props.isPoSCard.pos_id)
                      }}>
                     Transfer {ticker}
                 </div>

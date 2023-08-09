@@ -135,6 +135,10 @@ const getPosListAll = async ()=>{
     return await ENQWeb.Net.pos.get_pos_list_all()
 }
 
+const getUndelegatedList = async delegator=>{
+    return await ENQWeb.Enq.sendAPI(`get_undelegated_list?delegator=${delegator}`,[])
+}
+
 const apiController = {
     getBalance,
     getBalanceAll,
@@ -154,6 +158,7 @@ const apiController = {
     getCoinGeckoPrice,
     getPosListAll,
     getAccountDelegates,
+    getUndelegatedList,
     cacheTransactions,
     cacheTokenInfo,
     cacheAccountTransactions

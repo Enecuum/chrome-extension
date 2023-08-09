@@ -40,6 +40,7 @@ import { createGesture, Gesture } from '@ionic/react'
 import PoSList from './components/pos/PoSList'
 import PoSCard from './components/pos/PoSCard'
 import PosSend from "./components/pos/PosSend";
+import TransferList from "./components/pos/transferList";
 
 
 let net = localStorage.getItem(NET)
@@ -89,6 +90,7 @@ export default function App(props) {
     const [isPosList, setPosList] = useState(false)
     const [isPosCard, setPosCard] = useState(false)
     const [isPosSend, setPosSend] = useState(false)
+    const [isTransferList, setTransferList] = useState(false)
 
     let [deferredPrompt, setDeferredPrompt] = useState()
     let initPWA = () => {
@@ -501,12 +503,16 @@ export default function App(props) {
     }
 
     // ____________POS______________
+    if(isTransferList){
+        return <TransferList isTransferList={isTransferList} setTransferList={setTransferList} isPosCard={isPosCard} user={user} setTransactionRequest={setTransactionRequest} setPosCard={setPosCard} setPosList={setPosList}/>
+    }
+
     if (isPosSend){
         return <PosSend isPosSend={isPosSend} setPosSend={setPosSend} isPosCard={isPosCard} user={user} setTransactionRequest={setTransactionRequest} setPosCard={setPosCard} setPosList={setPosList}/>
     }
 
     if (isPosCard){
-        return <PoSCard isPoSCard={isPosCard} setPosCard={setPosCard} user={user} setPosSend={setPosSend} setTransactionRequest={setTransactionRequest} setPosList={setPosList}/>
+        return <PoSCard isPoSCard={isPosCard} setPosCard={setPosCard} user={user} setPosSend={setPosSend} setTransactionRequest={setTransactionRequest} setPosList={setPosList} setTransferList={setTransferList}/>
     }
 
     if (isPosList){
