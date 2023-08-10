@@ -451,7 +451,7 @@ async function taskHandler(taskId) {
             let buf = ENQWeb.Net.provider
             ENQWeb.Net.provider = account.net
             if (account.ledger !== undefined && account.type === 2) {
-                data.from = wallet.pubkey
+                data.from = data.from.length > 0 ? data.from : wallet.pubkey
                 data.amount = data.value ? Number(data.value) : Number(data.amount)
                 data.tokenHash = data.ticker ? data.ticker : data.tokenHash
                 data.value = ''
@@ -483,7 +483,7 @@ async function taskHandler(taskId) {
                 }
 
             } else {
-                data.from = wallet
+                data.from = data.from.length > 0 ? {pubkey: data.from, prvkey: wallet.prvkey} : wallet
                 data.amount = data.value ? Number(data.value) : Number(data.amount)
                 data.tokenHash = data.ticker ? data.ticker : data.tokenHash
                 data.value = ''
