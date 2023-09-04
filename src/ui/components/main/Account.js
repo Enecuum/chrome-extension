@@ -562,13 +562,16 @@ export default function Account(props) {
                         <div>Mining</div>
                     </div>}
 
-                <div className={styles.circle_button} onClick={isLoaded ? props.setPosList : () => {
-                }}>
-                    <div className={styles.icon_container}>
-                        <img className={styles.icon} src="./images/icons/16.png"/>
+                { props.user.token === getMainToken() &&
+                    <div className={styles.circle_button} onClick={isLoaded ? props.setPosList : () => {
+                    }}>
+                        <div className={styles.icon_container}>
+                            <img className={styles.icon} src="./images/icons/16.png"/>
+                        </div>
+                        <div>PoS</div>
                     </div>
-                    <div>PoS</div>
-                </div>
+                }
+
 
             </div>
 
