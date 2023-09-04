@@ -57,6 +57,10 @@ const explorerAddress = (hash) => {
     openTab('account', hash)
 }
 
+const explorerPos = (hash) => {
+    openTab('pos-contract', hash)
+}
+
 const openTab = (path, hash) => {
     if (ENQWeb.Net.currentProvider.includes('http'))
         chrome.tabs.create({url: ENQWeb.Net.currentProvider + '/#!/' + path + '/' + hash})
@@ -153,6 +157,25 @@ const copyToClipboard = (text) => {
     Clipboard.write({string: text}).then(r => {})
 }
 
+const createInternalTx = (tx)=>{
+    let sendObj = {
+        tx:tx,
+        type:"tx",
+        cb:{
+            taskId:ENQWeb.Net.provider+"/tx/"+Math.floor(Math.random()*1e10),
+            url:ENQWeb.Net.provider
+        },
+        data:{
+            fee_use:false,
+            fee_value:"",
+            net:ENQWeb.Net.provider,
+            date:Date.now(),
+            internal:true
+        }
+    }
+    return sendObj
+}
+
 
 let id = 0
 
@@ -203,6 +226,7 @@ module.exports = {
     shortHashLong,
     explorerTX,
     explorerAddress,
+    explorerPos,
     toggleFullScreen,
     generateIcon,
     copyToClipboard,
@@ -221,5 +245,6 @@ module.exports = {
     xor,
     DEFAULT_REFERRAL,
     REF_PREFIX,
-    XOR_STRING
+    XOR_STRING,
+    createInternalTx
 }
