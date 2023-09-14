@@ -18,6 +18,7 @@ export default function TransferList(props) {
         // TODO have to fix this in lib
         try {
             let undelegateList = await apiController.getUndelegatedList(props.user.publicKey)
+            console.log(undelegateList)
             let _cards = generateCard(undelegateList, ticker)
 
             setCards(_cards)
@@ -34,22 +35,24 @@ export default function TransferList(props) {
         tx.data = ENQWeb.Utils.dfo(data)
         let sendObj = createInternalTx(tx)
         let check = webBackground(sendObj, ENQWeb.Net.provider)
-        if(check){
+        if (check) {
             props.setTransactionRequest(sendObj)
             props.setTransferList(false)
             props.setPosCard(false)
             props.setPosList(false)
-        }else{
+        } else {
 
         }
     }
 
     let generateCard = (list, ticker) => {
         let _cards = []
+        list = list.reverse()
         for (let i in list) {
             if (list[i].pos_id === props.isTransferList) {
                 _cards.push(
-                    <div className={styles.card + " " + styles.small}>
+                    <div key={'transfer' + 'card' + i} className={styles.card + " " + styles.small}>
+                        <div className={styles.card_field}>#{Number(i) + 1}</div>
                         <div
                             className={styles.card_field + ' ' + styles.card_field_amount}>{(list[i].amount / 1e10) + " " + ticker}</div>
                         <div className={styles.card_field}>{shortHash(list[i].pos_id)}</div>

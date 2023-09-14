@@ -8,7 +8,6 @@ import {apiController} from "../../../utils/apiController";
 import {webBackground} from "../../../handler";
 
 
-
 export default function PoSCard(props) {
 
     const [info, setInfo] = useState({})
@@ -21,15 +20,15 @@ export default function PoSCard(props) {
 
     const [reward, setReward] = useState(0)
 
-    const getDecimalAmount = (amount)=>{
-        return amount/10**token.decimal
+    const getDecimalAmount = (amount) => {
+        return amount / 10 ** token.decimal
     }
 
-    const getInfo = async ()=>{
+    const getInfo = async () => {
         let accountStake = await apiController.getAccountDelegates(props.user.publicKey)
-        if(accountStake.length > 0 ){
-            for(let i in accountStake){
-                if(accountStake[i].pos_id === props.isPoSCard.pos_id){
+        if (accountStake.length > 0) {
+            for (let i in accountStake) {
+                if (accountStake[i].pos_id === props.isPoSCard.pos_id) {
                     console.log(accountStake[i])
                     setInfo(accountStake[i])
                     setReward(getDecimalAmount(accountStake[i].reward))
@@ -42,41 +41,41 @@ export default function PoSCard(props) {
 
     }
 
-    const sendTransferReward = async (type)=>{
+    const sendTransferReward = async (type) => {
         let tx = await (new ENQWeb.Utils.SmartContractGenerator.TransactionGenerator(ENQWeb.Net.provider))
         tx.from = props.user.publicKey
         tx.amount = tx.amount.toString()
         let data
-        if(type === "reward"){
+        if (type === "reward") {
             data = new ENQWeb.Utils.SmartContractGenerator.SCGenerators.pos.SmartContractPosReward(props.isPoSCard.pos_id)
         }
-        if (type === "transfer"){
+        if (type === "transfer") {
             data = new ENQWeb.Utils.SmartContractGenerator.SCGenerators.pos.SmartContractTransfer()
         }
         tx.data = ENQWeb.Utils.dfo(data)
         let sendObj = createInternalTx(tx)
         let check = webBackground(sendObj, ENQWeb.Net.provider)
-        if(check){
+        if (check) {
             props.setTransactionRequest(sendObj)
             props.setPosCard(false)
             props.setPosList(false)
         }
     }
 
-    const sendReward = ()=>{}
+    const sendReward = () => {
+    }
 
     useEffect(() => {
         console.log(props)
-        getInfo().then(()=>{
+        getInfo().then(() => {
 
-        }).catch(err=>{
+        }).catch(err => {
             console.warn(err)
         })
 
 
         //
     }, [])
-
 
 
     return (
@@ -100,40 +99,43 @@ export default function PoSCard(props) {
                      onClick={() => {
                          // explorerPos(props.isPoSCard.pos_id)
                          props.setPosSend({
-                             type:"delegate",
-                             hash:props.isPoSCard.pos_id
+                             type: "delegate",
+                             hash: props.isPoSCard.pos_id
                          })
                      }}>
                     Delegate {ticker}
                 </div>
 
-                <div className={styles.field + ' ' + styles.button + ' ' + styles.big + ' ' + (stake > 0 ? '' : styles.button_disabled)}
-                     onClick={() => {
-                         // explorerPos(props.isPoSCard.pos_id)
-                         props.setPosSend({
-                             type:"undelegate",
-                             delegated:stake,
-                             hash:props.isPoSCard.pos_id
-                         })
-                     }}>
+                <div
+                    className={styles.field + ' ' + styles.button + ' ' + styles.big + ' ' + (stake > 0 ? '' : styles.button_disabled)}
+                    onClick={() => {
+                        // explorerPos(props.isPoSCard.pos_id)
+                        props.setPosSend({
+                            type: "undelegate",
+                            delegated: stake,
+                            hash: props.isPoSCard.pos_id
+                        })
+                    }}>
                     Undelegate {ticker}
                 </div>
 
-                <div className={styles.field + ' ' + styles.button + ' ' + styles.big + ' ' + (reward > 0 ? '' : styles.button_disabled)}
-                     onClick={() => {
-                         // explorerPos(props.isPoSCard.pos_id)
-                         sendTransferReward('reward').then()
-                     }}>
+                <div
+                    className={styles.field + ' ' + styles.button + ' ' + styles.big + ' ' + (reward > 0 ? '' : styles.button_disabled)}
+                    onClick={() => {
+                        // explorerPos(props.isPoSCard.pos_id)
+                        sendTransferReward('reward').then()
+                    }}>
                     Take reward
                 </div>
 
                 <div className={styles.field}>Transfer {transfer} {ticker}</div>
 
-                <div className={styles.field + ' ' + styles.button + ' ' + styles.big + ' ' + (transfer > 0 ? '' : styles.button_disabled)}
-                     onClick={() => {
-                         // explorerPos(props.isPoSCard.pos_id)
-                         props.setTransferList(props.isPoSCard.pos_id)
-                     }}>
+                <div
+                    className={styles.field + ' ' + styles.button + ' ' + styles.big + ' ' + (transfer > 0 ? '' : styles.button_disabled)}
+                    onClick={() => {
+                        // explorerPos(props.isPoSCard.pos_id)
+                        props.setTransferList(props.isPoSCard.pos_id)
+                    }}>
                     Transfer {ticker}
                 </div>
 
@@ -143,7 +145,6 @@ export default function PoSCard(props) {
                      }}>
                     Show in blockchain explorer
                 </div>
-
 
 
             </div>
