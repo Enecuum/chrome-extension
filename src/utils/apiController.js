@@ -131,11 +131,11 @@ const getAccountDelegates = async (delegator)=>{
     return await ENQWeb.Enq.sendAPI(`get_delegated_list?delegator=${delegator}`, [])
 }
 
-const getPosListAll = async ()=>{
+const getPosListAll = async ()=> {
     return await ENQWeb.Net.pos.get_pos_list_all()
 }
 
-const getUndelegatedList = async delegator=>{
+const getUndelegatedList = async delegator => {
     return await ENQWeb.Enq.sendAPI(`get_undelegated_list?delegator=${delegator}`,[])
 }
 

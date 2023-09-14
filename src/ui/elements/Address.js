@@ -10,8 +10,8 @@ export default function Address(props) {
 
     let [status, setStatus] = useState('')
 
-    let [blockDate, setBlockDate] = useState(new Date(0))
-    let [blockN, setBlockN] = useState(0)
+    let [blockDate, setBlockDate] = useState(new Date(userStorage.block.getBlock().time !== undefined ? userStorage.block.getBlock().time * 1000 : 0))
+    let [blockN, setBlockN] = useState(userStorage.block.getBlock().n || 0)
 
     let [accountName, setAccountName] = useState(localStorage.getItem('accountName') || 'M1')
 
@@ -34,6 +34,7 @@ export default function Address(props) {
 
     let getBlock = async () => {
         let block = await apiController.getCurrentBlock()
+        userStorage.block.setBlock(block)
         setBlockN(block.n)
         setBlockDate(new Date(block.time * 1000))
     }

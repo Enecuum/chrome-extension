@@ -32,6 +32,8 @@ const STORAGE_NAME_POPUP = 'popup'
 const STORAGE_NAME_BACKGROUND = 'background'
 const STORAGE_NAME_WORKER = 'worker'
 
+const BLOCK = 'last_block'
+
 const versions = {
     EXTENSION: '', // Default, not used
     ELECTRON: ' electron',
@@ -72,5 +74,6 @@ module.exports = {
     STATE,
     REFERRAL,
     PASSWORD_VERSION,
-    WAKELOCK
+    WAKELOCK,
+    BLOCK
 }

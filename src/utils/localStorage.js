@@ -9,7 +9,7 @@ const {
     TOKENS,
     SITES,
     TRUSTED_TOKENS,
-    STATE
+    STATE, BLOCK
 } = require('./names')
 const indexDB = require('./indexDB')
 const {
@@ -421,6 +421,18 @@ let setState = (state) => {
     localStorage.setItem(STATE, JSON.stringify(state))
     return true
 }
+
+let getBlock = () =>{
+    let block = JSON.parse(localStorage.getItem(BLOCK))
+    if(!block)
+        return false
+    return block
+}
+
+let setBlock = (block)=>{
+    localStorage.setItem(BLOCK, JSON.stringify(block))
+    return true
+}
 // TODO constructor
 function Storage(name) {
 
@@ -488,6 +500,10 @@ function Storage(name) {
     this.state = {
         getState,
         setState
+    }
+    this.block = {
+        getBlock,
+        setBlock
     }
 }
 
