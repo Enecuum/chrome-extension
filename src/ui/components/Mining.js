@@ -21,6 +21,9 @@ let status = {
     10: 'DUPLICATE KEY',
 }
 
+const androidRegex = /android/
+const iosRegex = /ios/
+
 
 export default function Mining(props) {
 
@@ -352,9 +355,18 @@ export default function Mining(props) {
 
             <div className={styles.mining_status}>{status}</div>
 
-            <div className={styles.border_field} onClick={()=>{setBootNodeSelector(true)}}>
+            {(androidRegex.test(Capacitor.getPlatform()) || iosRegex.test(Capacitor.getPlatform())) &&
+            
+            <div className={styles.border_field} onClick={()=>{
+
+                setBootNodeSelector(true)
+                
+                }}>
                 {getPoaServer()}
             </div>
+            
+            }
+           
 
             {/*<Separator/>*/}
 
