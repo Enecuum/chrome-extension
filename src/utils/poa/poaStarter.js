@@ -83,7 +83,7 @@ let initPoa = async (account) => {
                 decimals: 10
             },
             referrer: refKey.length === 70 ? xor(XOR_STRING, refKey.substring(4)) : null,
-            net: netList[ENQWeb.Net.provider] || '95.216.246.116',
+            net:  netList[ENQWeb.Net.provider] || '95.216.246.116',
             type: "mnemonic",
             publisher: false
             // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}

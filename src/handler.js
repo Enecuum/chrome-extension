@@ -304,6 +304,7 @@ export function globalMessageHandler(msg, ENQWeb) {
         // Start all PoA
         if (msg.poa && msg.start) {
             console.log("start poa ")
+            console.log(msg)
             let miners = {}
             let accounts = []
             if (msg.account) {
@@ -376,12 +377,23 @@ export function globalMessageHandler(msg, ENQWeb) {
                         }).then(res => {})
 
                     } else {
+                        if(msg.poa === "DEFAULT"){
+                            test.start({
+                                data: JSON.stringify(accounts),
+                                net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : bitIP,
+                                port: "3000"
+                            }).then(res => {})
+                        }else{
+                            let localNetworks = JSON.parse(localStorage.getItem('networks')) || []
+                            let poaServer = localNetworks.find(el=>{if(el.name === msg.poa){return el}})
+                            // console.log(localNetworks.find(el=>{if(el.name === msg.poa){return el}}))
+                            test.start({
+                                data: JSON.stringify(accounts),
+                                net: poaServer.poa,
+                                port: poaServer.port
+                            }).then(res => {})
+                        }
 
-                        test.start({
-                            data: JSON.stringify(accounts),
-                            net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : bitIP,
-                            port: "3000"
-                        }).then(res => {})
                     }
                     // let miners = startBackgroundMining()
                     miningStatus.miningProcess = true
@@ -389,6 +401,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                     resolve({ response: true })
 
                 } else {
+                    console.log(handlerMiners)
                     miners = await startPoa(ENQWeb.Enq.User, handlerMiners, accounts)
                     console.log(miners)
                     // handlerMiners = miners

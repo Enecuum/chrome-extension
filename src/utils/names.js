@@ -34,6 +34,8 @@ const STORAGE_NAME_WORKER = 'worker'
 
 const BLOCK = 'last_block'
 
+const POA_SERVER = 'poa_server'
+
 const versions = {
     EXTENSION: '', // Default, not used
     ELECTRON: ' electron',
@@ -75,5 +77,6 @@ module.exports = {
     REFERRAL,
     PASSWORD_VERSION,
     WAKELOCK,
-    BLOCK
+    BLOCK,
+    POA_SERVER
 }

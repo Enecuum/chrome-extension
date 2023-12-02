@@ -8,7 +8,7 @@ const POA_PROTOCOL_VERSION = 4
 class Publisher {
 
 
-    constructor(account, token, connector = false, ip = "95.216.246.116") {
+    constructor(account, token, connector = false, ip = "95.216.246.116", port = "3000") {
 
         // this
 
@@ -19,7 +19,7 @@ class Publisher {
         let id = account.publicKey.slice(0, 6)
         this.connector = connector
         this.restart = true
-        this.ws = new WebSocket(`ws://${ip}:3000`)
+        this.ws = new WebSocket(`ws://${ip}:${port}`)
         this.account = account
         this.token = token
         this.ip = ip
@@ -34,11 +34,11 @@ class Publisher {
 
         this.init = init
 
-        this.init(this, id, ip, this.account, this.token)
+        this.init(this, id, ip, port, this.account, this.token)
     }
 }
 
-function init(_, id, ip, account, token) {
+function init(_, id, ip, port, account, token) {
     _.ws.onopen = () => {
         _.restart = true
         console.log(`${id} connected`)
@@ -69,8 +69,8 @@ function init(_, id, ip, account, token) {
         if (_.restart) {
             setTimeout(() => {
                 console.log(`${id} restarted`)
-                _.ws = new WebSocket(`ws://${ip}:3000`)
-                init(_, id, ip, account, token)
+                _.ws = new WebSocket(`ws://${ip}:${port}`)
+                init(_, id, ip, port, account, token)
             }, 5000)
         } else {
             _.status = 'Disconnected'

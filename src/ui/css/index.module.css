@@ -1636,3 +1636,34 @@ iframe {
     background-color: black;
     height: 400px;
 }
+
+.border_field {
+    border: 1px solid var(--color-blue);
+    font-size: var(--font-size-small);
+    border-radius: 3px;
+    padding: 5px;
+    text-align: center;
+    /*margin-top: 10px;*/
+    margin: 10px 20px 0px 20px;
+}
+
+.border_field:hover {
+    background: var(--color-blue);
+}
+
+.smallCheckbox {
+    width: 20px;
+    height: 20px;
+
+}
+
+.smallCheckboxText {
+
+}
+
+.smallCheckboxField {
+    margin: 10px 20px 0px 20px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
