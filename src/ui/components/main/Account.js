@@ -57,6 +57,8 @@ export default function Account(props) {
 
     const [isLoaded, setLoaded] = useState(false)
 
+    const [isStaked, setStaked] = useState(0)
+
     const clickMenu = () => {
         setMenu(!menu)
     }
@@ -102,7 +104,21 @@ export default function Account(props) {
             console.error(e)
         }
 
-
+        if(currentToken === mainToken){
+            await apiController.getBalance(props.user.publicKey, mainToken)
+                .then(res=>{
+                    try{
+                        if(res.delegated !== undefined){
+                            setStaked(res.delegated)
+                        }else{
+                            setStaked(0)
+                        }
+                    }catch (e) {
+                        console.warn("staked info wrong")
+                    }
+                })
+                .catch(e=>{})
+        }
         await apiController.getBalanceAll(props.user.publicKey)
             .then(async (res) => {
 
@@ -519,6 +535,17 @@ export default function Account(props) {
                     {' '}
                     {ticker}
                 </div>
+
+                { props.user.token === getMainToken() && isStaked > 0 &&
+
+                    // TODO сделать весь баланс жирным, здесь активный баланс. добавить транзитные транзы в трансфер.
+                    <div className={styles.usd}>
+                        Staked {' '}
+                        {(isStaked / amountDecimal).toFixed(0)}
+                        {' '}
+                        {ticker}
+                    </div>
+                }
                 <div className={styles.usd}>
                     $
                     {(Number(usd) / 1e10).toFixed(2)}
@@ -563,8 +590,8 @@ export default function Account(props) {
                     </div>}
 
                 { props.user.token === getMainToken() &&
-                    <div className={styles.circle_button} onClick={isLoaded ? props.setPosList : () => {
-                    }}>
+                    <div className={styles.circle_button}
+                         onClick={props.setPosList}>
                         <div className={styles.icon_container}>
                             <img className={styles.icon} src="./images/icons/16.png"/>
                         </div>

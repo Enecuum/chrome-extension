@@ -9,13 +9,14 @@ const {
     TOKENS,
     SITES,
     TRUSTED_TOKENS,
-    STATE
+    STATE, BLOCK, POA_SERVER
 } = require('./names')
 const indexDB = require('./indexDB')
 const {
     generateAccountData,
     account
 } = require('../user')
+const net = require("net");
 // import indexDB from './indexDB'
 // import {LIST, TASK, USER, LOCK, CONFIG, TOKENS} from "./names";
 
@@ -421,6 +422,39 @@ let setState = (state) => {
     localStorage.setItem(STATE, JSON.stringify(state))
     return true
 }
+
+let getBlock = () =>{
+    let block = JSON.parse(localStorage.getItem(BLOCK))
+    if(!block)
+        return false
+    return block
+}
+
+let setBlock = (block)=>{
+    localStorage.setItem(BLOCK, JSON.stringify(block))
+    return true
+}
+
+let getPoaServer = (network)=>{
+    let server = JSON.parse(localStorage.getItem(POA_SERVER))
+    if(!server){
+        server = {}
+    }
+    if(server[network] === undefined){
+        server[network] = false
+    }
+    return server
+}
+
+let setPoaServer = (network, poa)=>{
+    let server = getPoaServer(network)
+    if(server[network] === undefined){
+        server[network] = {}
+    }
+    server[network] = poa
+    localStorage.setItem(POA_SERVER, JSON.stringify(server))
+    return true
+}
 // TODO constructor
 function Storage(name) {
 
@@ -488,6 +522,14 @@ function Storage(name) {
     this.state = {
         getState,
         setState
+    }
+    this.block = {
+        getBlock,
+        setBlock
+    }
+    this.poa = {
+        getPoaServer,
+        setPoaServer
     }
 }
 

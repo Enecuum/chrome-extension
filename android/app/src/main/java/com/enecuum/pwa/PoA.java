@@ -46,6 +46,9 @@ public class PoA extends Plugin {
         String jsonString = call.getString("data");
         net = call.getString("net");
         port = call.getString("port");
+
+        Log.d(TAG, "network: " + net);
+        Log.d(TAG, "port: " + port);
         try {
             Intent PoAIntent = new Intent();
             PoAIntent.setAction(MainActivity.PoAservice);

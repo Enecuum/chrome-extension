@@ -5,6 +5,7 @@ import { regexToken, shortHash } from '../Utils'
 import Input from '../elements/Input'
 import { NET, NETWORKS } from '../../utils/names'
 import {chains} from "../../user";
+import Checkbox from "../elements/Checkbox";
 
 export default function Network(props) {
 
@@ -19,6 +20,28 @@ export default function Network(props) {
     let [localNetworks, setLocalNetworks] = useState(JSON.parse(localStorage.getItem('networks')) || [])
 
     let [showAdd, setShowAdd] = useState(false)
+
+    const [customPoa, setCustomPoa] = useState(false)
+    const [customPoaAddress, setCustomPoaAddress] = useState('')
+    const [poaServerCorrect, setPoaServerCorrect] = useState(false)
+
+    const [useCustomPoaPort, setUseCustomPoaPort] = useState(false)
+    const [customPoaPort, setCustomPoaPort] = useState('')
+    const [customPoaPortCorrect, setCustomPoaPortCorrect] = useState(false)
+
+    const validationPoa = ()=>{
+        let valid = true;
+
+        if(useCustomPoaPort){
+            valid = valid && customPoaPortCorrect
+        }
+
+        if(customPoa){
+            valid = valid && poaServerCorrect
+        }
+
+        return valid
+    }
 
     let checkHost = (url) => {
 
@@ -114,7 +137,7 @@ export default function Network(props) {
             return
         }
 
-        if (hostCorrect && name.length > 0 && tokenCorrect) {
+        if (hostCorrect && name.length > 0 && tokenCorrect && validationPoa()) {
         } else {
             return
         }
@@ -130,11 +153,23 @@ export default function Network(props) {
         // }
 
         if (!found) {
-            localNetworks.push({
-                name,
-                host,
-                token
-            })
+            if(!customPoa){
+                localNetworks.push({
+                    name,
+                    host,
+                    token,
+                    'poa':false,
+                    'port':'3000'
+                })
+            }else{
+                localNetworks.push({
+                    name,
+                    host,
+                    token,
+                    'poa':customPoaAddress,
+                    'port': customPoaPort.length > 0 ? customPoaPort : '3000'
+                })
+            }
             localStorage.setItem(NETWORKS, JSON.stringify(localNetworks))
         }
 
@@ -144,9 +179,15 @@ export default function Network(props) {
         setName('')
         setHost('')
         setToken('')
+        setCustomPoaAddress(false)
+        setUseCustomPoaPort(false)
 
         setHostCorrect(false)
         setTokenCorrect(false)
+        setPoaServerCorrect(false)
+        setCustomPoa(false)
+        setCustomPoaPort('')
+        setCustomPoaPortCorrect(false)
 
         let divCards = document.getElementById('network_cards')
         divCards.scrollLeft = divCards.scrollWidth - divCards.clientWidth
@@ -214,6 +255,27 @@ export default function Network(props) {
         return !!pattern.test(str)
     }
 
+    let validWsURL = (str) => {
+        // console.log(str)
+        let pattern = new RegExp('^(ws[s]?:\\/\\/)?' + // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*')// port and path
+
+        console.log(!!pattern.test(str))
+
+        return !!pattern.test(str)
+    }
+
+    let validWsPort = (str) => {
+        // console.log(str)
+        let pattern = new RegExp('(\\d)')// port
+
+        console.log(!!pattern.test(str))
+
+        return !!pattern.test(str)
+    }
+
     let renderCards = () => {
 
         // TODO have to fix this in lib
@@ -249,18 +311,32 @@ export default function Network(props) {
         for (let i = 0; i < localNetworks.length; i++) {
 
             let current = ENQWeb.Enq.provider === localNetworks[i].host
-
-            cards.push(
-                <div key={i + 'card'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
-                    <div className={styles.card_field}><b>{localNetworks[i].name}</b></div>
-                    <div className={styles.card_field}>{localNetworks[i].host}</div>
-                    <div className={styles.card_field}>{shortHash(localNetworks[i].token)}</div>
-                    <div className={styles.card_field_right_bottom} onClick={(current ? () => {
-                    } : () => setNet(localNetworks[i].host))}>{current ? 'CURRENT' : 'SELECT'}</div>
-                    <div className={styles.card_field_delete}
-                         onClick={() => removeNet(localNetworks[i].name)}>&#x2715;</div>
-                </div>
-            )
+            if(localNetworks[i].poa !== undefined && localNetworks[i].poa !== false){
+                cards.push(
+                    <div key={i + 'card'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
+                        <div className={styles.card_field}><b>{localNetworks[i].name}</b></div>
+                        <div className={styles.card_field}>{localNetworks[i].host}</div>
+                        <div className={styles.card_field}>{localNetworks[i].poa}:{localNetworks[i].port !== undefined ? localNetworks[i].port:"3000"}</div>
+                        <div className={styles.card_field}>{shortHash(localNetworks[i].token)}</div>
+                        <div className={styles.card_field_right_bottom} onClick={(current ? () => {
+                        } : () => setNet(localNetworks[i].host))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                        <div className={styles.card_field_delete}
+                             onClick={() => removeNet(localNetworks[i].name)}>&#x2715;</div>
+                    </div>
+                )
+            }else{
+                cards.push(
+                    <div key={i + 'card'} className={styles.card + ' ' + (current ? '' : styles.card_select)}>
+                        <div className={styles.card_field}><b>{localNetworks[i].name}</b></div>
+                        <div className={styles.card_field}>{localNetworks[i].host}</div>
+                        <div className={styles.card_field}>{shortHash(localNetworks[i].token)}</div>
+                        <div className={styles.card_field_right_bottom} onClick={(current ? () => {
+                        } : () => setNet(localNetworks[i].host))}>{current ? 'CURRENT' : 'SELECT'}</div>
+                        <div className={styles.card_field_delete}
+                             onClick={() => removeNet(localNetworks[i].name)}>&#x2715;</div>
+                    </div>
+                )
+            }
         }
 
         setNetworks(cards)
@@ -329,6 +405,55 @@ export default function Network(props) {
                        placeholder={'Token, something like 00000...'}
                 />
 
+                <Checkbox
+                    className={styles.smallCheckboxField}
+                    placeholder={"Use custom PoA server"}
+                    onChange={(e)=>{
+                        // console.log(e.target.checked)
+                        setCustomPoa(e.target.checked)
+                    }}
+                />
+
+                {customPoa &&
+                    <div>
+                        <Input type="text"
+                               spellCheck={false}
+                               onChange={(e) => {
+                                   setPoaServerCorrect(validWsURL(e.target.value))
+                                   setCustomPoaAddress((e.target.value))
+                                   // setTokenCorrect(regexToken.test(e.target.value))
+                               }}
+                            // disabled={tokenCorrect}
+                               className={styles.field + ' ' + (poaServerCorrect ? styles.field_correct : styles.field_incorrect)}
+                               placeholder={'Address of PoA server like 0.0.0.0 or example.com'}
+                        />
+
+                        <Checkbox
+                            className={styles.smallCheckboxField}
+                            placeholder={"Use custom PoA port"}
+                            onChange={(e)=>{
+                                // console.log(e.target.checked)
+                                setUseCustomPoaPort(e.target.checked)
+                            }}
+                        />
+
+                        {useCustomPoaPort &&
+                            <Input type="text"
+                                   spellCheck={false}
+                                   onChange={(e) => {
+                                       setCustomPoaPortCorrect(validWsPort(e.target.value))
+                                       setCustomPoaPort((e.target.value))
+                                       // setTokenCorrect(regexToken.test(e.target.value))
+                                   }}
+                                // disabled={tokenCorrect}
+                                   className={styles.field + ' ' + (customPoaPortCorrect ? styles.field_correct : styles.field_incorrect)}
+                                   placeholder={'Port of PoA server'}
+                            />
+                        }
+                    </div>
+
+                }
+
             </div>}
 
             {!showAdd && <div className={styles.cards_container}>
@@ -338,7 +463,7 @@ export default function Network(props) {
             </div>}
 
             <div onClick={addNet}
-                 className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect) ? styles.button_blue : '')}>Add
+                 className={styles.field + ' ' + styles.button + ' ' + ((hostCorrect && name.length > 0 && tokenCorrect && validationPoa()) ? styles.button_blue : '')}>Add
             </div>
 
             {/*<div className={styles.welcome3}>ETHEREUM NETWORKS / INFURA </div>*/}

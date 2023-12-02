@@ -9,7 +9,6 @@ import Input from "../../elements/Input";
 import {webBackground} from "../../../handler";
 
 
-
 export default function PosSend(props) {
 
     const [info, setInfo] = useState({})
@@ -23,71 +22,70 @@ export default function PosSend(props) {
     const [balance, setBalance] = useState(0)
 
 
-    const getDecimalAmount = (amount)=>{
-        return amount/10**token.decimal
+    const getDecimalAmount = (amount) => {
+        return amount / 10 ** token.decimal
     }
-    const getInfo = async ()=>{
-        if(props.isPosSend.type === "delegate"){
+    const getInfo = async () => {
+        if (props.isPosSend.type === "delegate") {
             setBalance(getDecimalAmount(token.amount))
-        }else{
+        } else {
             setBalance(props.isPosSend.delegated)
         }
 
 
     }
 
-    const handleAmountChange = e=>{
+    const handleAmountChange = e => {
         let decimals = token.decimal
-        if(e.target.value === ''){
+        if (e.target.value === '') {
             setAmount(0)
         }
-        if(e.target.value === '00'){
+        if (e.target.value === '00') {
             setAmount(0)
         }
         let _amount = Number(e.target.value)
-        if(_amount < 0 || _amount > balance){
+        if (_amount < 0 || _amount > balance) {
             return
         }
 
         setAmount(_amount)
     }
 
-    const submit = async ()=>{
+    const submit = async () => {
         let tx = await (new ENQWeb.Utils.SmartContractGenerator.TransactionGenerator(ENQWeb.Net.provider))
         tx.from = props.user.publicKey
         tx.amount = tx.amount.toString()
         let data
-        if(props.isPosSend.type === "delegate"){
-            data = new ENQWeb.Utils.SmartContractGenerator.SCGenerators.pos.SmartContractDelegate(props.isPosCard.pos_id, BigInt(amount*10**token.decimal))
-        }else if(props.isPosSend.type === "undelegate"){
-            data = new ENQWeb.Utils.SmartContractGenerator.SCGenerators.pos.SmartContractUndelegate(props.isPosCard.pos_id, BigInt(amount*10**token.decimal))
+        if (props.isPosSend.type === "delegate") {
+            data = new ENQWeb.Utils.SmartContractGenerator.SCGenerators.pos.SmartContractDelegate(props.isPosCard.pos_id, BigInt(amount * 10 ** token.decimal))
+        } else if (props.isPosSend.type === "undelegate") {
+            data = new ENQWeb.Utils.SmartContractGenerator.SCGenerators.pos.SmartContractUndelegate(props.isPosCard.pos_id, BigInt(amount * 10 ** token.decimal))
         }
         tx.data = ENQWeb.Utils.dfo(data)
         // console.log(tx)
         let sendObj = createInternalTx(tx)
         let check = webBackground(sendObj, ENQWeb.Net.provider)
-        if(check){
+        if (check) {
             props.setTransactionRequest(sendObj)
             props.setPosSend(false)
             props.setPosCard(false)
             props.setPosList(false)
-        }else{
+        } else {
 
         }
     }
 
     useEffect(() => {
         console.log(props)
-        getInfo().then(()=>{
+        getInfo().then(() => {
 
-        }).catch(err=>{
+        }).catch(err => {
             console.warn(err)
         })
 
 
         //
     }, [])
-
 
 
     return (
@@ -131,7 +129,7 @@ export default function PosSend(props) {
                 />
             </div>
             <div onClick={submit}
-                 className={styles.field + ' ' + styles.button + ' ' + ( amount > 0 ? styles.button_blue : styles.button_disabled)}>Send
+                 className={styles.field + ' ' + styles.button + ' ' + (amount > 0 ? styles.button_blue : styles.button_disabled)}>Send
             </div>
 
         </div>

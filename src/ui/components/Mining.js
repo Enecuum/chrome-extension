@@ -10,6 +10,7 @@ import {Publisher} from '../../utils/poa/publisher'
 import {apiController} from '../../utils/apiController'
 import {Capacitor} from '@capacitor/core'
 import {globalState} from '../../globalState'
+import BootNodeList from "./pos/BootNodeList";
 
 
 let status = {
@@ -34,7 +35,13 @@ export default function Mining(props) {
 
     let [keys, setKeys] = useState([])
 
+    const [bootNodeSelector, setBootNodeSelector] = useState(false)
+    const [bootNode, setBootNode] = useState('boot node')
+
     let interval_cursor
+
+    let network = ENQWeb.Enq.provider
+
 
     // userStorage.promise.sendPromise({poa: true, account: {publicKey, privateKey}}).then()
 
@@ -54,7 +61,7 @@ export default function Mining(props) {
     let startMining = () => {
 
         userStorage.promise.sendPromise({
-            poa: true,
+            poa: userStorage.poa.getPoaServer(network)[network],
             start: true
         })
             .then(miners => {
@@ -129,7 +136,7 @@ export default function Mining(props) {
     let onMiner = (publicKey) => {
 
         userStorage.promise.sendPromise({
-            poa: true,
+            poa: userStorage.poa.getPoaServer(network),
             account: {publicKey},
             mining: true,
             set: true,
@@ -152,6 +159,26 @@ export default function Mining(props) {
                 console.log(miners)
                 setAccounts([...miners])
             })
+    }
+
+    const openBootNodeSelector = ()=>{
+        if(bootNodeSelector){
+            return <BootNodeList setBootNodeSelector={setBootNodeSelector} saveBootNode={saveBootNode}/>
+        }
+    }
+
+    const saveBootNode = (node)=>{
+        setBootNode(node)
+        userStorage.poa.setPoaServer(network, node)
+    }
+
+    const getPoaServer = ()=>{
+        let poa = userStorage.poa.getPoaServer(network)
+        if(poa[network] === false){
+            userStorage.poa.setPoaServer(network, "DEFAULT")
+            return "DEFAULT"
+        }
+        return poa[network]
     }
 
     useEffect(() => {
@@ -317,13 +344,19 @@ export default function Mining(props) {
 
             {/*<Separator/>*/}
 
+            {openBootNodeSelector()}
+
             <div onClick={mining ? stopMining : startMining}
                  className={styles.button_round + ' ' + (mining ? styles.mining : '') + ' ' + (accounts.length > 0 ? '' : styles.button_disabled)}>{mining ? 'STOP' : 'START'}
             </div>
 
             <div className={styles.mining_status}>{status}</div>
 
-            <Separator/>
+            <div className={styles.border_field} onClick={()=>{setBootNodeSelector(true)}}>
+                {getPoaServer()}
+            </div>
+
+            {/*<Separator/>*/}
 
             <div className={styles.cards}>
                 {renderCards()}

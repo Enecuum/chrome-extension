@@ -30,10 +30,19 @@ export default function PoSList(props) {
         try {
             let globalStateBalances = globalState.getTokenBalance(ENQWeb.Enq.provider, props.user.publicKey, props.user.token)
             let ticker = globalStateBalances.ticker
-            let PosInfo = await apiController.getPosListAll()
+            // let PosInfo = await apiController.getPosListAll()
+            let PosInfo = globalState.getPosList(ENQWeb.Enq.provider)
             let posList = PosInfo.pos_contracts
 
-            let accountStake = await apiController.getAccountDelegates(props.user.publicKey)
+            // await globalState.updatePosList(ENQWeb.Enq.provider)
+            // console.log(globalState.getPosList(ENQWeb.Enq.provider))
+            //
+            // await globalState.updatePosAccount(ENQWeb.Enq.provider, props.user.publicKey)
+            // console.log(globalState.getPosAccount(ENQWeb.Enq.provider, props.user.publicKey))
+
+            // let accountStake = await apiController.getAccountDelegates(props.user.publicKey)
+            let accountStake = globalState.getPosAccount(ENQWeb.Enq.provider, props.user.publicKey)
+
 
             let _activePos = []
             let _notActivePos = []
@@ -42,10 +51,10 @@ export default function PoSList(props) {
             let pos_id_list = {}
             let _info = {}
 
-            for(let i in posList){
-                if(posList[i].active){
+            for (let i in posList) {
+                if (posList[i].active) {
                     _activePos.push(posList[i])
-                }else{
+                } else {
                     _notActivePos.push(posList[i])
                 }
                 pos_id_list[posList[i].pos_id] = posList[i].name
@@ -60,9 +69,9 @@ export default function PoSList(props) {
             setNotActiveCard(_notActiveCards)
 
 
-            if(accountStake.length > 0){
+            if (accountStake.length > 0) {
                 let _StakedList = {}
-                for(let i in accountStake){
+                for (let i in accountStake) {
                     _StakedList[accountStake[i].pos_id] = accountStake[i].delegated
                     accountStake[i].name = pos_id_list[accountStake[i].pos_id]
                     _stakedPos.push(accountStake[i])
@@ -70,27 +79,29 @@ export default function PoSList(props) {
                 setStakeList(_stakedPos)
                 setHaveStakedPos(true)
                 setStakedPos(_stakedPos.length)
-                let _stakedCards = generateCard(_stakedPos, ticker, {"stake":_StakedList, "names":pos_id_list})
+                let _stakedCards = generateCard(_stakedPos, ticker, {"stake": _StakedList, "names": pos_id_list})
                 setStakedCards(_stakedCards)
             }
             setInfo(_info)
             setCards(_activeCards)
-        }catch (e) {
+        } catch (e) {
             throw new Error(e)
         }
     }
 
-    let generateCard= (list, ticker, staked = false)=>{
+    let generateCard = (list, ticker, staked = false) => {
         let _cards = []
-        for(let i in list){
-            if(staked !== false){
+        for (let i in list) {
+            if (staked !== false) {
                 _cards.push(
                     <div key={'pos' + 'card' + list[i].rank} className={styles.card + " " + styles.small}>
                         <div className={styles.card_field}>{staked.names[list[i].pos_id]}</div>
-                        <div className={styles.card_field + ' ' + styles.card_field_amount}>{(list[i].stake / 1e10) + " " + ticker}</div>
-                        <div className={styles.card_field}>{shortHash( list[i].pos_id)}</div>
-                        <div className={styles.card_field + ' ' + styles.card_field_amount_second}>{(staked.stake[list[i].pos_id] / 1e10) + " " + ticker}</div>
-                        <div className={styles.card_field}>You stake: </div>
+                        <div
+                            className={styles.card_field + ' ' + styles.card_field_amount}>{(list[i].stake / 1e10) + " " + ticker}</div>
+                        <div className={styles.card_field}>{shortHash(list[i].pos_id)}</div>
+                        <div
+                            className={styles.card_field + ' ' + styles.card_field_amount_second}>{(staked.stake[list[i].pos_id] / 1e10) + " " + ticker}</div>
+                        <div className={styles.card_field}>You stake:</div>
                         {/*<div className={styles.card_field_right_bottom} onClick={()=>{}}></div>*/}
                         <div className={styles.card_button}>
                             <div onClick={() => {
@@ -103,12 +114,13 @@ export default function PoSList(props) {
                         </div>
                     </div>
                 )
-            }else{
+            } else {
                 _cards.push(
                     <div key={'pos' + 'card' + list[i].rank} className={styles.card + " " + styles.small}>
                         <div className={styles.card_field}>{list[i].name}</div>
-                        <div className={styles.card_field + ' ' + styles.card_field_amount}>{(list[i].stake / 1e10) + " " + ticker}</div>
-                        <div className={styles.card_field}>{shortHash( list[i].pos_id)}</div>
+                        <div
+                            className={styles.card_field + ' ' + styles.card_field_amount}>{(list[i].stake / 1e10) + " " + ticker}</div>
+                        <div className={styles.card_field}>{shortHash(list[i].pos_id)}</div>
                         {/*<div className={styles.card_field + ' ' + styles.card_field_amount_second}>{(list[i].stake / 1e10) + " " + ticker}</div>*/}
                         {/*<div className={styles.card_field}>You stake: </div>*/}
                         {/*<div className={styles.card_field_right_bottom} onClick={()=>{}}></div>*/}
@@ -129,8 +141,33 @@ export default function PoSList(props) {
         return _cards
     }
 
+    let updatePosInfo = () => {
+        return new Promise((resolve, reject) => {
+            let promiseArray = []
+            promiseArray.push(globalState.updatePosList(ENQWeb.Enq.provider).catch(err => {
+                reject(err)
+            }))
+            promiseArray.push(globalState.updatePosAccount(ENQWeb.Enq.provider, props.user.publicKey).catch(err => {
+                reject(err)
+            }))
+            Promise.all(promiseArray).then(() => {
+                globalState.save().then(() => {
+                    resolve()
+                })
+            }).catch(err => {
+                reject(err)
+            })
+        })
+
+    }
+
     useEffect(() => {
-        renderCards().then(()=>{
+        renderCards().then(() => {
+            updatePosInfo().then(()=>{
+                renderCards().then().catch()
+            }).catch(err=>{
+                console.error(err)
+            })
         }).catch(err => {
             console.log(err)
         })

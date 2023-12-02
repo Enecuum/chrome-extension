@@ -4,7 +4,9 @@ let baseNetwork = {
     balances: {},
     tokens: {},
     tickers: {},
-    history: {}
+    history: {},
+    posList:{},
+    pos:{}
 }
 
 let globalState = {
@@ -41,7 +43,9 @@ let globalState = {
             balances: {},
             tokens: {},
             tickers: {},
-            history: {}
+            history: {},
+            posList:{},
+            pos:{}
         }
         globalState.state[network].tokens[publicKey] = tokens
 
@@ -76,7 +80,9 @@ let globalState = {
                 balances: {},
                 tokens: {},
                 tickers: {},
-                history: {}
+                history: {},
+                posList:{},
+                pos:{}
             }
             globalState.state[network].tokens[publicKey] = globalState.state[network].tokens[publicKey] ? globalState.state[network].tokens[publicKey] : {}
 
@@ -101,7 +107,9 @@ let globalState = {
                 balances: {},
                 tokens: {},
                 tickers: {},
-                history: {}
+                history: {},
+                posList:{},
+                pos:{}
             }
             globalState.state[network].tokens[publicKey] = globalState.state[network].tokens[publicKey] ? globalState.state[network].tokens[publicKey] : {}
 
@@ -112,6 +120,82 @@ let globalState = {
                 .then(() => resolve())
         })
     },
+
+    setPosList: (network, posList) => {
+        return new Promise((resolve, reject)=>{
+            globalState.state[network] = globalState.state[network] ? globalState.state[network] : {
+                balances: {},
+                tokens: {},
+                tickers: {},
+                history: {},
+                posList:{},
+                pos:{}
+            }
+            if(globalState.state[network].posList === undefined){
+                globalState.state[network].posList = []
+            }
+            globalState.state[network].posList = posList
+
+            resolve()
+        });
+    },
+
+    setPosAccount: (network, publicKey, pos) => {
+        return new Promise((resolve, reject)=>{
+            globalState.state[network] = globalState.state[network] ? globalState.state[network] : {
+                balances: {},
+                tokens: {},
+                tickers: {},
+                history: {},
+                posList:{},
+                pos:{}
+            }
+            if(globalState.state[network].pos === undefined){
+                globalState.state[network].pos = {}
+            }
+            globalState.state[network].pos[publicKey] = pos
+
+            resolve()
+        });
+    },
+
+    updatePosList: (network)=>{
+        return new Promise((resolve, reject)=>{
+            apiController.getPosListAll()
+                .then(list => {
+                    globalState.setPosList(network, list).then(()=>{
+                        resolve()
+                    }).catch(err=>{
+                        console.error(err)
+                        reject()
+                    })
+                })
+                .catch(err=>{
+                    console.error(err)
+                    reject(err)
+                })
+        })
+    },
+    updatePosAccount: (network, publicKey)=>{
+        return new Promise((resolve, reject)=>{
+            apiController.getAccountDelegates(publicKey)
+                .then(accountPos => {
+                    globalState.setPosAccount(network, publicKey, accountPos)
+                        .then(()=>{
+                            resolve();
+                        })
+                        .catch(err=>{
+                            console.error(err)
+                            reject()
+                        })
+                })
+                .catch(err=>{
+                    console.error(err)
+                    reject(err)
+                })
+        })
+    },
+
 
     // GET STATE
 
@@ -152,6 +236,16 @@ let globalState = {
         return globalStateTokenObject
     },
 
+    getPosList: (network) => {
+        let posList = globalState.state[network].posList !== undefined ? globalState.state[network].posList : []
+        return posList
+    },
+    getPosAccount: (network, publicKey) => {
+        let pos = globalState.state[network].pos !== undefined ? globalState.state[network].pos : {}
+        let globalStatePos = pos[publicKey] !== undefined ? pos[publicKey] : []
+
+        return globalStatePos
+    },
 }
 
 let saveActive = false
