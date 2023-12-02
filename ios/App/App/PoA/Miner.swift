@@ -33,7 +33,11 @@ class Miner: NSObject {
                 self.account.referrer = ""
             }
             
+        }else {
+            self.account.referrer = ""
         }
+        
+//        debugPrint(self.account)
         
         self.publisher = Publisher(account: self.account, net: self.net)
         let wsUrl = "ws://"+net+":"+port
@@ -79,6 +83,8 @@ class Publisher: NSObject{
         var hail = Hail(id: self.account.publicKey, token: self.account.token!, referrer: account.referrer)
         hail.hash = Crypto.sha256(msg: self.net + hail.referrer + hail.token)
         hail.sign = Crypto.sign(hash: hail.hash!, privateKey: self.account.privateKey)
+        
+//        print(hail)
         do{
             let encoder = JSONEncoder()
             let block = BlockDataHail(method: Methods.hail, ver: Protocol_ver.protocol_version, data: hail)
@@ -94,27 +100,48 @@ class Publisher: NSObject{
     
     public func onBlock(block:Block) -> String {
         if(block.method == Methods.on_leader_beacon){
-            var publish = Publish(id: self.account.publicKey, token: self.account.token!, referrer: self.account.referrer, kblocks_hash: (block.data?.mblock_data?.kblocks_hash!)!, m_hash: (block.data?.m_hash!)!)
-            var hash = Crypto.sha256(msg: publish.m_hash + self.account.referrer + self.account.token!)
-            publish.sign = Crypto.sign(hash: hash, privateKey: self.account.privateKey)
-            do{
-                let encoder = JSONEncoder()
-                var send = BlockDataPublish(method: Methods.publish, ver: Protocol_ver.protocol_version, data: publish)
-                var sendBlock = try encoder.encode(send)
-                count += 1
-                StatusString = String(format: "Sign block (%d)", arguments: [count])
-                return String(data: sendBlock, encoding: .utf8)!
+            if(self.account.referrer.isEmpty == true){
+                var publish = PublishWithoutReferrer(id: self.account.publicKey, token: self.account.token!, kblocks_hash: (block.data?.mblock_data?.kblocks_hash!)!, m_hash: (block.data?.m_hash!)!)
+                let hash = Crypto.sha256(msg: publish.m_hash + self.account.referrer + self.account.token!)
+                publish.sign = Crypto.sign(hash: hash, privateKey: self.account.privateKey)
+                do{
+                    let encoder = JSONEncoder()
+                    let send = BlockDataPublishWithoutReferrer(method: Methods.publish, ver: Protocol_ver.protocol_version, data: publish)
+                    let sendBlock = try encoder.encode(send)
+                    count += 1
+                    StatusString = String(format: "Sign block (%d)", arguments: [count])
+                    return String(data: sendBlock, encoding: .utf8)!
+                }
+                catch{
+                    print("Error in on block")
+                    return ""
+                }
+            }else{
+                var publish = Publish(id: self.account.publicKey, token: self.account.token!, referrer: self.account.referrer, kblocks_hash: (block.data?.mblock_data?.kblocks_hash!)!, m_hash: (block.data?.m_hash!)!)
+                
+                let hash = Crypto.sha256(msg: publish.m_hash + self.account.referrer + self.account.token!)
+                publish.sign = Crypto.sign(hash: hash, privateKey: self.account.privateKey)
+                do{
+                    let encoder = JSONEncoder()
+                    let send = BlockDataPublish(method: Methods.publish, ver: Protocol_ver.protocol_version, data: publish)
+                    let sendBlock = try encoder.encode(send)
+                    count += 1
+                    StatusString = String(format: "Sign block (%d)", arguments: [count])
+                    return String(data: sendBlock, encoding: .utf8)!
+                }
+                catch{
+                    print("Error in on block")
+                    return ""
+                }
             }
-            catch{
-                print("Error in on block")
-                return ""
-            }
+            
             
         }
         if(block.method == Methods.ERR_DUPLICATE_KEY){
             print(String(format: "Error: %s : %s", self.account.publicKey.substring(start: 0, end: 5), Methods.ERR_DUPLICATE_KEY))
             self.status = false
             self.duplicated = true
+            return ""
         }
         return ""
     }
@@ -143,6 +170,15 @@ struct Publish: Codable {
     
 }
 
+struct PublishWithoutReferrer: Codable {
+    var id: String
+    var token: String
+    var sign: String?
+    var kblocks_hash: String
+    var m_hash: String
+    
+}
+
 struct BlockDataHail: Codable {
     var method: String?
     var ver: Int?
@@ -154,6 +190,13 @@ struct BlockDataPublish: Codable {
     var method: String?
     var ver: Int?
     var data: Publish?
+    var err: String?
+}
+
+struct BlockDataPublishWithoutReferrer: Codable {
+    var method: String?
+    var ver: Int?
+    var data: PublishWithoutReferrer?
     var err: String?
 }
 

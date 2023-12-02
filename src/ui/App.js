@@ -92,6 +92,8 @@ export default function App(props) {
     const [isPosSend, setPosSend] = useState(false)
     const [isTransferList, setTransferList] = useState(false)
 
+    const [isIntervalMinerGetter, setIsIntervalMinerGetter] = useState(false)
+
     let [deferredPrompt, setDeferredPrompt] = useState()
     let initPWA = () => {
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -468,7 +470,7 @@ export default function App(props) {
     }
 
     if (isMining) {
-        return <Mining setMining={setMining}/>
+        return <Mining setMining={setMining} setIsIntervalMinerGetter={setIsIntervalMinerGetter} isIntervalMinerGetter={isIntervalMinerGetter}/>
     }
 
     // if (isReceive) {

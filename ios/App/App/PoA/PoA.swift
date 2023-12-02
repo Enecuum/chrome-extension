@@ -27,9 +27,10 @@ public class PoA: CAPPlugin{
         let port = call.getString("port") ?? ""
         let jsonStringData = call.getString("data") ?? ""
         let data = jsonStringData.data(using: .utf8)!
+        print("network: \(net.utf8)")
+        print("port: \(port.utf8)")
         do{
             let accounts = try jsd.decode([Account].self, from: data)
-            print(net, port)
             var miners: [Miner] = []
             for account in accounts {
 //                print(account.publicKey, account.token?.utf8)

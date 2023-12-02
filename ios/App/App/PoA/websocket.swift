@@ -22,6 +22,7 @@ class WebSocket: NSObject, URLSessionWebSocketDelegate{
     }
     
     func start(){
+        print("WS start on: \(String(describing: url))")
         let session = URLSession(
             configuration: .default,
             delegate: self,
@@ -69,21 +70,23 @@ class WebSocket: NSObject, URLSessionWebSocketDelegate{
                     print("data:\(data)")
                 case .string(let str):
                     let jsd = JSONDecoder()
-                    print("str: \(str)")
+//                    print("str: \(str)")
                     do{
                         let data = try jsd.decode(Block.self, from: str.data(using: .utf8)!)
                         print(data.method ?? "no method")
                         if data.method == Methods.on_leader_beacon {
-                            var send = self?.publisher!.onBlock(block: data)
-                            print(send)
-                            self?.send(data: send!)
-                        } else if data.method == Methods.ERR_DUPLICATE_KEY {
+                            print("take a block")
+                        }
+                        if data.method == Methods.ERR_DUPLICATE_KEY {
                             print("duplicate miner")
                             self?.status = false
                             self?.close()
-                        } else {
-                            print("else block")
                         }
+                        let send = self?.publisher!.onBlock(block: data)
+                        if(send?.isEmpty == false){
+                            self?.send(data: send!)
+                        }
+                       
                     }
                     catch{
                         print("error in take block")
@@ -107,8 +110,8 @@ class WebSocket: NSObject, URLSessionWebSocketDelegate{
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
         print("open ws to \(String(describing: self.url))")
-        var hail = self.publisher!.hail()
-        print(hail)
+        let hail = self.publisher!.hail()
+//        print(hail)
         self.send(data: hail)
         receive()
     }

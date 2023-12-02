@@ -25,6 +25,8 @@ const androidRegex = /android/
 const iosRegex = /ios/
 
 
+const checkMobilePlatforms = true
+
 export default function Mining(props) {
 
     // let [readyState, setReadyState] = useState(global.publisher.ws.readyState)
@@ -73,18 +75,23 @@ export default function Mining(props) {
             })
 
         // TODO this is temp method
-        interval_cursor = setInterval(() => {
-            // console.dir(accounts)
-            userStorage.promise.sendPromise({
-                poa: true,
-                get: true,
-            })
-                .then(miners => {
-                    // console.log(miners)
-                    setAccounts([...miners])
-                })
-        }, 5000)
 
+        if(!props.isIntervalMinerGetter){
+            interval_cursor = setInterval(() => {
+                // console.dir(accounts)
+                userStorage.promise.sendPromise({
+                    poa: true,
+                    get: true,
+                })
+                    .then(miners => {
+                        // console.log(miners)
+                        setAccounts([...miners])
+                    })
+            }, 5000)
+    
+            props.setIsIntervalMinerGetter(interval_cursor)
+        }
+        
         setMining(true)
 
         setStatus('MINING')
@@ -103,7 +110,10 @@ export default function Mining(props) {
                 // setAccounts([...miners])
             })
 
-        clearInterval(interval_cursor)
+        if(props.isIntervalMinerGetter){
+            clearInterval(props.isIntervalMinerGetter)
+            props.setIsIntervalMinerGetter(false)
+        }
 
         setMining(false)
         setStatus('STOPPED')
@@ -139,7 +149,7 @@ export default function Mining(props) {
     let onMiner = (publicKey) => {
 
         userStorage.promise.sendPromise({
-            poa: userStorage.poa.getPoaServer(network),
+            poa: userStorage.poa.getPoaServer(network)[network],
             account: {publicKey},
             mining: true,
             set: true,
@@ -192,6 +202,21 @@ export default function Mining(props) {
             .then(status => {
                 console.log(status)
                 setMining(status.miningProcess)
+                if(status.miningProcess){
+                    interval_cursor = setInterval(() => {
+                        // console.dir(accounts)
+                        userStorage.promise.sendPromise({
+                            poa: true,
+                            get: true,
+                        })
+                            .then(miners => {
+                                // console.log(miners)
+                                setAccounts([...miners])
+                            })
+                    }, 5000)
+            
+                    props.setIsIntervalMinerGetter(interval_cursor)
+                }
                 setStatus(status.miningProcess ? 'MINING' : accounts.length > 0 ? 'READY' : 'LOADING')
                 userStorage.promise.sendPromise({
                     poa: true,
@@ -342,6 +367,8 @@ export default function Mining(props) {
 
             <div className={styles.field + ' ' + styles.pointer} onClick={() => {
                 props.setMining(false)
+                clearInterval(props.isIntervalMinerGetter)
+                props.setIsIntervalMinerGetter(false)
             }}>❮ Back
             </div>
 
@@ -355,7 +382,7 @@ export default function Mining(props) {
 
             <div className={styles.mining_status}>{status}</div>
 
-            {(androidRegex.test(Capacitor.getPlatform()) || iosRegex.test(Capacitor.getPlatform())) &&
+            {(checkMobilePlatforms ? (androidRegex.test(Capacitor.getPlatform()) || iosRegex.test(Capacitor.getPlatform())) : true ) &&
             
             <div className={styles.border_field} onClick={()=>{
 
@@ -364,7 +391,7 @@ export default function Mining(props) {
                 }}>
                 {getPoaServer()}
             </div>
-            
+
             }
            
 

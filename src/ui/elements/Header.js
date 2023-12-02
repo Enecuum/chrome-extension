@@ -21,7 +21,7 @@ export default function Header(props) {
                 Network: <div className={styles.network_name}>{
                 localNetworks.find(element => element.host === ENQWeb.Net.currentProvider) ?
                     localNetworks.find(element => element.host === ENQWeb.Net.currentProvider).name :
-                    net.replace('https://', '').replace('http://', '').toUpperCase()
+                    net.replace('https://', '').replace('//', '').toUpperCase()
                 }</div>
             </div>
 
