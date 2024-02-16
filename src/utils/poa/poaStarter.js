@@ -4,6 +4,7 @@ import {Publisher} from './publisher'
 import {getMnemonicPrivateKeyHex, showNotification, xor, XOR_STRING, xorBack} from '../../ui/Utils'
 import {apiController} from '../apiController'
 import {REFERRAL} from "../names";
+import { customNodeChecker } from '../../handler';
 
 let PoA_Worker;
 let answer = ''
@@ -58,8 +59,10 @@ let waitAnswer = (msg) => {
 //     publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {} -
 // }
 
-let initPoa = async (account) => {
+let initPoa = async (account, node = "DEFAULT") => {
 
+    const net = await customNodeChecker(node)
+    // console.log(net);
     let miners = []
     let duplicate = []
     for (let i = 0; i < account.seedAccountsArray.length; i++) {
@@ -83,7 +86,8 @@ let initPoa = async (account) => {
                 decimals: 10
             },
             referrer: refKey.length === 70 ? xor(XOR_STRING, refKey.substring(4)) : null,
-            net:  netList[ENQWeb.Net.provider] || '95.216.246.116',
+            net: net.ip,
+            port: net.port,
             type: "mnemonic",
             publisher: false
             // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}
@@ -107,7 +111,8 @@ let initPoa = async (account) => {
                     token: '',
                     decimals: 10
                 },
-                net: netList[ENQWeb.Net.provider] || '95.216.246.116',
+                net: net.ip,
+                port: net.port,
                 type: "private",
                 publisher: false
                 // publisher: tokens[0] ? new Publisher({publicKey, privateKey}, tokens[0].token) : {}

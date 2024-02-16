@@ -8,6 +8,7 @@
     "scripts": {
         "start": "webpack --watch",
         "make": "NODE_ENV=production webpack",
+        "make:rebuild": "NODE_ENV=production webpack --watch",
         "test": "mocha --require babel-mocha.js",
         "electron": "electron ./dist",
         "pack": "electron-builder --win --mac --linux -c.mac.identity=null \n cp 'desktop/Enecuum Setup 1.0.0.exe' download/enecuum.exe \n cp 'desktop/Enecuum-1.0.0-arm64.dmg' download/enecuum.dmg",

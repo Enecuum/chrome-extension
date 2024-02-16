@@ -5,6 +5,12 @@ let jsrsasign = require('jsrsasign')
 
 const POA_PROTOCOL_VERSION = 4
 
+const methods = {
+    'ERR_DUPLICATE_KEY':'ERR_DUPLICATE_KEY',
+    'on_leader_beacon':'on_leader_beacon',
+    'peer':'peer',
+}
+
 class Publisher {
 
 
@@ -23,6 +29,7 @@ class Publisher {
         this.account = account
         this.token = token
         this.ip = ip
+        this.port = port
         this.status = 'Initialisation'
 
         this.close = () => {
@@ -34,7 +41,7 @@ class Publisher {
 
         this.init = init
 
-        this.init(this, id, ip, port, this.account, this.token)
+        this.init(this, id, this.ip, this.port, this.account, this.token)
     }
 }
 
@@ -69,8 +76,8 @@ function init(_, id, ip, port, account, token) {
         if (_.restart) {
             setTimeout(() => {
                 console.log(`${id} restarted`)
-                _.ws = new WebSocket(`ws://${ip}:${port}`)
-                init(_, id, ip, port, account, token)
+                _.ws = new WebSocket(`ws://${_.ip}:${_.port}`)
+                init(_, id, _.ip, _.port, account, token)
             }, 5000)
         } else {
             _.status = 'Disconnected'
@@ -102,56 +109,65 @@ function init(_, id, ip, port, account, token) {
             // }
         }
 
-        if (msg.method !== 'on_leader_beacon') {
-            _.status = 'Leader beacon'
+        if (methods[msg.method] === undefined) {
+            _.status = 'Unknown method'
             return
         }
 
-        let data = msg.data
-        let isValid = true
-        let isCorrect = (hashBlock(data.mblock_data) === data.m_hash)
-
-        console.log(` ${id}  Sign: ${(isValid ? 'OK' : 'BAD')}  m_hash: ${data.m_hash}  ${(isCorrect ? 'OK' : 'BAD')}`)
-        //console.log(`poaId: ${poa.id}-${i}   Sign: ${(isValid?"OK":"BAD")}   ${(isCorrect?"OK":"BAD")}`);
-
-        if (!isValid) {
-            //console.log("Incorrect sign")
-            _.status = 'Incorrect sign'
-            return
-        }
-        if (!isCorrect) {
-            //console.log("Incorrect m_hash")
-            return
-        }
-
-        // let token = tokens[Math.random() >= 0.8 ? 1 : 0]
-        let forSign = data.m_hash + (account.hasOwnProperty('referrer') && regexAddress.test(account.referrer) ? account.referrer : '') + token
-
-        let res = {
-            'ver': POA_PROTOCOL_VERSION,
-            'method': 'publish',
-            'data': {
-                'kblocks_hash': data.mblock_data.kblocks_hash,
-                'm_hash': data.m_hash,
-                'token': token,
-                'sign': sign(account.privateKey, forSign),
-                'id': account.publicKey
-            }
-        }
-
-        if (account.hasOwnProperty('referrer') && regexAddress.test(account.referrer)) {
-            res.data.referrer = account.referrer
-        }
-
-        _.status = 'Sign block'
-
-        // if(_.connector != false){
-        //     _.connector(JSON.stringify({ method: 'notification', body:{title:'Mining reward',text:'Sign block by ' + shortHash(account.publicKey)}}))
-        // }else {
-        //     showNotification('Mining reward', 'Sign block by ' + shortHash(account.publicKey))
+        // if(msg.method === 'peer'){
+        //     _.ip = msg.data.ip
+        //     _.port = msg.data.port
+        //     _.status = "Peer change"
+        //     _.close()
         // }
 
-        _.ws.send(JSON.stringify(res))
+        if(msg.method === methods.on_leader_beacon){
+            let data = msg.data
+            let isValid = true
+            let isCorrect = (hashBlock(data.mblock_data) === data.m_hash)
+    
+            console.log(` ${id}  Sign: ${(isValid ? 'OK' : 'BAD')}  m_hash: ${data.m_hash}  ${(isCorrect ? 'OK' : 'BAD')}`)
+            //console.log(`poaId: ${poa.id}-${i}   Sign: ${(isValid?"OK":"BAD")}   ${(isCorrect?"OK":"BAD")}`);
+    
+            if (!isValid) {
+                //console.log("Incorrect sign")
+                _.status = 'Incorrect sign'
+                return
+            }
+            if (!isCorrect) {
+                //console.log("Incorrect m_hash")
+                return
+            }
+    
+            // let token = tokens[Math.random() >= 0.8 ? 1 : 0]
+            let forSign = data.m_hash + (account.hasOwnProperty('referrer') && regexAddress.test(account.referrer) ? account.referrer : '') + token
+    
+            let res = {
+                'ver': POA_PROTOCOL_VERSION,
+                'method': 'publish',
+                'data': {
+                    'kblocks_hash': data.mblock_data.kblocks_hash,
+                    'm_hash': data.m_hash,
+                    'token': token,
+                    'sign': sign(account.privateKey, forSign),
+                    'id': account.publicKey
+                }
+            }
+    
+            if (account.hasOwnProperty('referrer') && regexAddress.test(account.referrer)) {
+                res.data.referrer = account.referrer
+            }
+    
+            _.status = 'Sign block'
+    
+            // if(_.connector != false){
+            //     _.connector(JSON.stringify({ method: 'notification', body:{title:'Mining reward',text:'Sign block by ' + shortHash(account.publicKey)}}))
+            // }else {
+            //     showNotification('Mining reward', 'Sign block by ' + shortHash(account.publicKey))
+            // }
+    
+            _.ws.send(JSON.stringify(res))
+        }   
     }
 }
 

@@ -29,6 +29,7 @@ public class PoA: CAPPlugin{
         let data = jsonStringData.data(using: .utf8)!
         print("network: \(net.utf8)")
         print("port: \(port.utf8)")
+//        print("accounts json: \(jsonStringData.utf8)")
         do{
             let accounts = try jsd.decode([Account].self, from: data)
             var miners: [Miner] = []

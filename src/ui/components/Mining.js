@@ -11,6 +11,7 @@ import {apiController} from '../../utils/apiController'
 import {Capacitor} from '@capacitor/core'
 import {globalState} from '../../globalState'
 import BootNodeList from "./pos/BootNodeList";
+import { customNodeChecker } from '../../handler'
 
 
 let status = {
@@ -25,7 +26,8 @@ const androidRegex = /android/
 const iosRegex = /ios/
 
 
-const checkMobilePlatforms = true
+const checkMobilePlatforms = false
+const checkBootNodeWork = false
 
 export default function Mining(props) {
 
@@ -80,7 +82,7 @@ export default function Mining(props) {
             interval_cursor = setInterval(() => {
                 // console.dir(accounts)
                 userStorage.promise.sendPromise({
-                    poa: true,
+                    poa: getPoaServer(),
                     get: true,
                 })
                     .then(miners => {
@@ -196,7 +198,7 @@ export default function Mining(props) {
 
     useEffect(() => {
         userStorage.promise.sendPromise({
-            poa: true,
+            poa: getPoaServer(),
             status: true,
         })
             .then(status => {
@@ -206,7 +208,7 @@ export default function Mining(props) {
                     interval_cursor = setInterval(() => {
                         // console.dir(accounts)
                         userStorage.promise.sendPromise({
-                            poa: true,
+                            poa: getPoaServer(),
                             get: true,
                         })
                             .then(miners => {
@@ -219,13 +221,13 @@ export default function Mining(props) {
                 }
                 setStatus(status.miningProcess ? 'MINING' : accounts.length > 0 ? 'READY' : 'LOADING')
                 userStorage.promise.sendPromise({
-                    poa: true,
+                    poa: getPoaServer(),
                     get: true,
                 })
                     .then(miners => {
                         setAccounts(miners)
                         userStorage.promise.sendPromise({
-                            poa: true,
+                            poa: getPoaServer(),
                             update: true,
                             balance: true
                         })
@@ -390,6 +392,19 @@ export default function Mining(props) {
                 
                 }}>
                 {getPoaServer()}
+            </div>
+
+            }
+
+            {(checkBootNodeWork) &&
+            
+            <div className={styles.border_field} onClick={()=>{
+                    customNodeChecker("DEFAULT").then(data=>{
+                        console.log(data)
+                    })
+                }
+                }>
+                check bootNode
             </div>
 
             }

@@ -29,7 +29,7 @@ const iosRegex = /ios/
 
 let test = registerPlugin('PoA')
 
-let isBootNode = false
+let isBootNode = true
 
 export function globalMessageHandler(msg, ENQWeb) {
 
@@ -243,7 +243,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                 resolve({ response: handlerMiners })
             } else {
                 if (handlerMiners.length === 0) {
-                    handlerMiners = await initPoa(ENQWeb.Enq.User)
+                    handlerMiners = await initPoa(ENQWeb.Enq.User, msg.poa)
                     console.log(handlerMiners)
                     resolve({ response: handlerMiners })
                 } else {
@@ -270,14 +270,14 @@ export function globalMessageHandler(msg, ENQWeb) {
         //update mining pull
         if (msg.poa && msg.update && msg.pull) {
             console.log('Mining pull updated')
-            handlerMiners = await initPoa(ENQWeb.Enq.User)
+            handlerMiners = await initPoa(ENQWeb.Enq.User, msg.poa)
             resolve({ response: handlerMiners })
         }
 
         //update balances
         if (msg.poa && msg.update && msg.balance) {
             if (handlerMiners.length === 0) {
-                handlerMiners = await initPoa(ENQWeb.Enq.User)
+                handlerMiners = await initPoa(ENQWeb.Enq.User, msg.poa)
             }
             for (let i = 0; i < handlerMiners.length; i++) {
                 handlerMiners[i].token = await apiController.getBalance(handlerMiners[i].publicKey, handlerMiners[i].token.token)
@@ -291,7 +291,7 @@ export function globalMessageHandler(msg, ENQWeb) {
                 test.getServiceStatus()
                     .then(async data => {
                         if (handlerMiners.length == 0) {
-                            handlerMiners = await initPoa(ENQWeb.Enq.User)
+                            handlerMiners = await initPoa(ENQWeb.Enq.User, msg.poa)
                         }
                         miningStatus.miningProcess = data.status
                         resolve({ response: miningStatus })
@@ -304,7 +304,8 @@ export function globalMessageHandler(msg, ENQWeb) {
         // Start all PoA
         if (msg.poa && msg.start) {
             console.log("start poa ")
-            console.log(msg)
+            let net = await customNodeChecker(msg.poa)
+            console.log(net);
             let miners = {}
             let accounts = []
             if (msg.account) {
@@ -347,6 +348,7 @@ export function globalMessageHandler(msg, ENQWeb) {
 
                 if (androidRegex.test(Capacitor.getPlatform()) || iosRegex.test(Capacitor.getPlatform())) {
 
+
                     let refCode = localStorage.getItem(REFERRAL)
                     let netList = {
                         'https://bit.enecuum.com': bitIP,
@@ -364,37 +366,62 @@ export function globalMessageHandler(msg, ENQWeb) {
                     }
 
                     // console.log(accounts)
+                    console.log(net);
+                    console.log(` check net for mobile: ${net.ip} ${net.port}`);
+                    
+                    test.start({
+                        data: JSON.stringify(accounts),
+                        net: net.ip,
+                        port: net.port
+                    }).then(res => {})
 
+                    // if (isBootNode === true) {
+                    //     console.log("boot is work");
+                    //     if(msg.poa === "DEFAULT"){
+                    //         let network = JSON.parse((await bootNodeGetIP()).data)
+                    //         console.log(network)
+                    //         test.start({
+                    //             data: JSON.stringify(accounts),
+                    //             net: network.data.ip,
+                    //             port: network.data.port
+                    //         }).then(res => {})
 
-                    if (isBootNode) {
+                    //         // test.start({
+                    //         //     data: JSON.stringify(accounts),
+                    //         //     net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : bitIP,
+                    //         //     port: "3000"
+                    //         // }).then(res => {})
+                    //     }else{
+                    //         let localNetworks = JSON.parse(localStorage.getItem('networks')) || []
+                    //         let poaServer = localNetworks.find(el=>{if(el.name === msg.poa){return el}})
+                    //         // console.log(localNetworks.find(el=>{if(el.name === msg.poa){return el}}))
+                    //         test.start({
+                    //             data: JSON.stringify(accounts),
+                    //             net: poaServer.poa,
+                    //             port: poaServer.port
+                    //         }).then(res => {})
+                    //     }
+                        
+                    // } else {
+                        // if(msg.poa === "DEFAULT"){
+                        //     test.start({
+                        //         data: JSON.stringify(accounts),
+                        //         net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : bitIP,
+                        //         port: "3000"
+                        //     }).then(res => {})
+                        // }else{
+                        //     let localNetworks = JSON.parse(localStorage.getItem('networks')) || []
+                        //     let poaServer = localNetworks.find(el=>{if(el.name === msg.poa){return el}})
+                        //     // console.log(localNetworks.find(el=>{if(el.name === msg.poa){return el}}))
+                            // test.start({
+                            //     data: JSON.stringify(accounts),
+                            //     net: poaServer.poa,
+                            //     port: poaServer.port
+                            // }).then(res => {})
+                        // }
+                        
 
-                        let network = JSON.parse((await bootNodeGetIP()).data)
-                        console.log(network)
-                        test.start({
-                            data: JSON.stringify(accounts),
-                            net: network.data.ip,
-                            port: network.data.port
-                        }).then(res => {})
-
-                    } else {
-                        if(msg.poa === "DEFAULT"){
-                            test.start({
-                                data: JSON.stringify(accounts),
-                                net: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : bitIP,
-                                port: "3000"
-                            }).then(res => {})
-                        }else{
-                            let localNetworks = JSON.parse(localStorage.getItem('networks')) || []
-                            let poaServer = localNetworks.find(el=>{if(el.name === msg.poa){return el}})
-                            // console.log(localNetworks.find(el=>{if(el.name === msg.poa){return el}}))
-                            test.start({
-                                data: JSON.stringify(accounts),
-                                net: poaServer.poa,
-                                port: poaServer.port
-                            }).then(res => {})
-                        }
-
-                    }
+                    // }
                     // let miners = startBackgroundMining()
                     miningStatus.miningProcess = true
                     // resolve({ response: miners })
@@ -578,9 +605,9 @@ let createWebSession = (account) => {
 }
 
 
-let bootNodeGetIP = () => {
+const bootNodeGetIP = () => {
     return new Promise(resolve => {
-        let bootNodeIP = '95.217.17.178'
+        let bootNodeIP = 'bootnode.enecuum.com'
         let bitPort = '4000'
         let pulsePort = '4001'
         let portList = {
@@ -597,6 +624,40 @@ let bootNodeGetIP = () => {
         }
     })
 
+}
+
+const customNodeChecker = async (node)=>{
+    let netList = {
+        'https://bit.enecuum.com': bitIP,
+        'https://pulse.enecuum.com': pulseIP
+    }
+
+    let pulseIP = '95.216.68.221'
+    let bitIP = '95.216.246.116'
+    let f3IP = '95.216.207.173'
+
+    if(node === "DEFAULT"){
+        if(!isBootNode){
+            return {
+                ip: netList[ENQWeb.Net.provider] !== undefined ? netList[ENQWeb.Net.provider] : bitIP,
+                port:"3000"
+            }
+        }else{
+            let network = JSON.parse((await bootNodeGetIP()).data)
+            console.log(network);
+            return {
+                ip:network.data.ip,
+                port:network.data.port
+            }
+        }
+    }else{
+        let localNetworks = JSON.parse(localStorage.getItem('networks')) || []
+        let poaServer = localNetworks.find(el=>{if(el.name === node){return el}})
+        return {
+            ip:poaServer.poa,
+            port:poaServer.port
+        }
+    }
 }
 
 let lockTimer
@@ -932,5 +993,5 @@ function checkConnection() {
 }
 
 export {
-    createPopupWindow, createTabWindow, webBackground, taskHandler, ports, favoriteSites, enabledPorts, disconnectPorts, disconnectFavoriteSite, checkConnection
+    createPopupWindow, createTabWindow, webBackground, taskHandler, ports, favoriteSites, enabledPorts, disconnectPorts, disconnectFavoriteSite, checkConnection, customNodeChecker
 }

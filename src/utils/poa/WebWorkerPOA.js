@@ -14,7 +14,7 @@ onmessage = (msg) => {
                 publicKey: miners[i].publisher.account.publicKey,
                 privateKey: miners[i].publisher.account.privateKey,
                 referrer: miners[i].referrer
-            }, miners[i].publisher.token, postMessage, miners[i].net) : {}
+            }, miners[i].publisher.token, postMessage, miners[i].net, miners[i].port) : {}
         }
         postMessage(JSON.stringify({resolve: true, miners: miners}))
     }
